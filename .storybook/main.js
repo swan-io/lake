@@ -29,6 +29,9 @@ module.exports = {
       sourcemap: true,
       assetsDir: `assets/${version}`,
     };
-    return config;
+    return {
+      ...config,
+      base: "/storybook",
+    };
   },
 };
