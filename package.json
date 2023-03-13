@@ -20,6 +20,7 @@
     "lint": "eslint --ext ts,tsx packages/*/src",
     "build-storybook": "build-storybook --output-dir dist",
     "test": "vitest run",
+    "build": "tsc -p tsconfig.build.json",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "bump": "node scripts/version/version.mjs"

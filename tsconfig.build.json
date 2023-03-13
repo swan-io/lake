@@ -1,5 +1,5 @@
 {
-  "include": ["packages", "scripts"],
+  "include": ["packages"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "ESNext",

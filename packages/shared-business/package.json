@@ -12,10 +12,6 @@
     "README.md",
     "HISTORY.md"
   ],
-  "scripts": {
-    "prepack": "tsc --build",
-    "clean": "tsc --clean"
-  },
   "browserslist": [
     ">0.2%",
     "not op_mini all",
