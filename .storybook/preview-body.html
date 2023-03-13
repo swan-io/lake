@@ -1,0 +1,20 @@
+<!-- Reproduce HTML root elements as Dashboard and Web-banking -->
+<!-- See clients/banking/src/index.html -->
+<style>
+  body {
+    background-color: var(--color-background-light);
+  }
+  #root {
+    transition: 300ms ease-in-out transform, 300ms ease-in-out filter;
+  }
+  .ModalOpen #root {
+    transform: scale(0.98);
+    filter: blur(4px);
+  }
+</style>
+
+<div id="root"></div>
+<div id="full-page-layer-root"></div>
+<script>
+  window.global = window;
+</script>
