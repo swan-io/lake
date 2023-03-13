@@ -31,7 +31,7 @@ module.exports = {
     };
     return {
       ...config,
-      base: "/storybook",
+      base: "/lake",
     };
   },
 };
