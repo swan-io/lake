@@ -29,7 +29,6 @@
     "@formatjs/intl": "2.6.7",
     "@googlemaps/js-api-loader": "1.15.1",
     "@swan-io/boxed": "0.12.1",
-    "@swan-io/lake": "*",
     "react": "18.2.0",
     "react-atomic-state": "1.2.7",
     "react-dom": "18.2.0",
@@ -46,6 +45,10 @@
     "@types/react-native": "0.70.11",
     "@types/uuid": "9.0.1",
     "jsdom": "21.1.0",
-    "vitest": "0.29.2"
+    "vitest": "0.29.2",
+    "@swan-io/lake": "^1.2.4"
+  },
+  "peerDependencies": {
+    "@swan-io/lake": "^1.2.4"
   }
 }
