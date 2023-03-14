@@ -1,3 +1,9 @@
+# 1.2.5
+
+Changes:
+
+- Make lake a peer dependency for shared-business (2116bc8)
+
 # 1.2.4
 
 Changes:
