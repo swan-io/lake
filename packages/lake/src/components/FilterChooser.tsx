@@ -49,7 +49,7 @@ export function FilterChooser<FilterName extends string>({
   large = true,
   onAddFilter,
 }: {
-  filters: Partial<{ [K in FilterName]: string | string[] | undefined }>;
+  filters: Partial<Record<FilterName, unknown>>;
   openFilters: FilterName[];
   label: string;
   title: string;

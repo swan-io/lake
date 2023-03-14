@@ -2,14 +2,7 @@ import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { View } from "react-native";
 import { FilterChooser } from "../src/components/FilterChooser";
-import {
-  FilterCheckboxDef,
-  FilterDateDef,
-  FilterInputDef,
-  FilterRadioDef,
-  FiltersStack,
-  FiltersState,
-} from "../src/components/Filters";
+import { FilterCheckboxDef, FilterDateDef, FilterInputDef, FilterRadioDef, FiltersStack, FiltersState } from "../src/components/Filters";
 import { Space } from "../src/components/Space";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
 import { getRifmProps } from "../src/utils/rifm";
@@ -30,9 +23,7 @@ const mode: FilterRadioDef<"QES" | "Expert"> = {
   ],
 };
 
-const status: FilterCheckboxDef<
-  "Accepted" | "Canceled" | "Failed" | "Expired" | "CustomerRefused"
-> = {
+const status: FilterCheckboxDef<"Accepted" | "Canceled" | "Failed" | "Expired" | "CustomerRefused"> = {
   type: "checkbox",
   label: "Status",
   submitText: "Apply",

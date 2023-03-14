@@ -25,6 +25,7 @@ import {
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { typography } from "../constants/typography";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
@@ -115,6 +116,7 @@ const getItemLayout: <I>(
 });
 
 export type LakeComboboxProps<I> = {
+  inputRef?: RefObject<unknown>;
   value: string;
   items: AsyncData<Result<I[], unknown>>;
   ListFooterComponent?: ReactNode;
@@ -135,6 +137,7 @@ export type LakeComboboxRef = { close: () => void; open: () => void };
 
 const LakeComboboxWithRef = <I,>(
   {
+    inputRef,
     value,
     items,
     ListFooterComponent,
@@ -153,6 +156,8 @@ const LakeComboboxWithRef = <I,>(
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
   const ref = useRef<TextInput>(null);
+  // @ts-expect-error
+  const inputTextRef = useMergeRefs(ref, inputRef);
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
@@ -224,7 +229,8 @@ const LakeComboboxWithRef = <I,>(
   return (
     <View>
       <LakeTextInput
-        ref={ref}
+        // @ts-expect-error
+        ref={inputTextRef}
         style={styles.input}
         accessibilityExpanded={isFocused}
         accessibilityControls={isFocused ? suggestionsId : ""}
@@ -301,6 +307,7 @@ const LakeComboboxWithRef = <I,>(
                                 pressed && styles.pressedItem,
                               ]}
                               onPress={() => {
+                                window.clearTimeout(blurTimeoutId.current);
                                 setIsFetchingAdditionalInfo(true);
                                 Promise.resolve(onSelectItem(item)).finally(() => {
                                   setIsFetchingAdditionalInfo(false);

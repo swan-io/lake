@@ -31,7 +31,7 @@ const svgs = Array.keepMap(icons, name => {
 });
 
 fs.writeFileSync(
-  path.join(process.cwd(), "packages/web-common/src/icons/fluent-icons.json"),
+  path.join(process.cwd(), "packages/lake/src/icons/fluent-icons.json"),
   JSON.stringify(Object.fromEntries(svgs), null, 2) + EOL,
   "utf-8",
 );
