@@ -8,6 +8,7 @@
   "files": [
     "LICENSE",
     "src/assets",
+    "src/**/*.json",
     "src/**/*.js",
     "src/**/*.d.ts",
     "README.md"
