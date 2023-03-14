@@ -1,3 +1,9 @@
+# 1.2.1
+
+Changes:
+
+- Add assets to npm package (21513c9)
+
 # 1.2.0
 
 Changes:
