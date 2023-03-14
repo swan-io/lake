@@ -563,12 +563,24 @@ export type FilterInputDef = {
   validate?: (value: string) => ValidatorResult;
 };
 
-type Filter<T> = FilterCheckboxDef<T> | FilterRadioDef<T> | FilterDateDef | FilterInputDef;
+export type FilterBooleanDef = {
+  type: "boolean";
+  label: string;
+};
+
+type Filter<T> =
+  | FilterCheckboxDef<T>
+  | FilterRadioDef<T>
+  | FilterDateDef
+  | FilterInputDef
+  | FilterBooleanDef;
 
 type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox" }
   ? T["items"][number]["value"][] | undefined
   : T extends { type: "radio" }
   ? T["items"][number]["value"] | undefined
+  : T extends { type: "boolean" }
+  ? boolean | undefined
   : string | undefined;
 
 const getFilterValue = <T extends Filter<unknown>["type"]>(
@@ -690,6 +702,17 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   />
                 ),
               )
+              .with({ type: "boolean" }, ({ label }) => (
+                <Tag
+                  color="current"
+                  onPressRemove={() => {
+                    onChangeFilters({ ...filters, [filterName]: undefined });
+                    onChangeOpened(openedFilters.filter(f => f !== filterName));
+                  }}
+                >
+                  {label}
+                </Tag>
+              ))
               .exhaustive()}
           </View>
         );

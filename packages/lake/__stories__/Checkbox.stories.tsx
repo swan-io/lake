@@ -24,11 +24,11 @@ export default {
 const InteractiveCheckbox = ({
   defaultValue = false,
   ...props
-}: Omit<CheckboxProps, "value"> & { defaultValue?: boolean }) => {
+}: Omit<CheckboxProps, "value"> & { defaultValue?: CheckboxProps["value"] }) => {
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => {
-    setValue(v => !v);
+    setValue(v => (v === true ? false : true));
   };
 
   return (
@@ -41,11 +41,13 @@ const InteractiveCheckbox = ({
 const InteractiveLabelledCheckbox = ({
   defaultValue = false,
   ...props
-}: Omit<LabelledCheckboxProps, "value" | "onValueChange"> & { defaultValue?: boolean }) => {
+}: Omit<LabelledCheckboxProps, "value" | "onValueChange"> & {
+  defaultValue?: CheckboxProps["value"];
+}) => {
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => {
-    setValue(v => !v);
+    setValue(v => (v === true ? false : true));
   };
 
   return (
@@ -62,6 +64,10 @@ export const Variations = () => {
         <InteractiveCheckbox />
       </StoryPart>
 
+      <StoryPart title="Indeterminate">
+        <InteractiveCheckbox defaultValue="mixed" />
+      </StoryPart>
+
       <StoryPart title="Lablelled">
         <InteractiveLabelledCheckbox label="Enabled" />
       </StoryPart>
@@ -72,6 +78,10 @@ export const Variations = () => {
 
       <StoryPart title="Disabled checked">
         <InteractiveCheckbox defaultValue={true} disabled={true} />
+      </StoryPart>
+
+      <StoryPart title="Indeterminate checked">
+        <InteractiveCheckbox defaultValue="mixed" disabled={true} />
       </StoryPart>
 
       <StoryPart title="Error">

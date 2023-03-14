@@ -1,5 +1,6 @@
 import { ChangeEventHandler, forwardRef, ReactNode, useCallback, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   NativeSyntheticEvent,
   StyleSheet,
   TextInput,
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
 export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> & {
   error?: string;
   readOnly?: boolean;
+  validating?: boolean;
   valid?: boolean;
   disabled?: boolean;
   color?: ColorVariants;
@@ -157,6 +159,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
     {
       error,
       disabled = false,
+      validating = false,
       valid = false,
       readOnly = false,
       icon,
@@ -241,7 +244,15 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 ]}
               />
 
-              {hasError && (
+              {validating && (
+                <ActivityIndicator
+                  size="small"
+                  style={styles.endIcon}
+                  color={colors.current[500]}
+                />
+              )}
+
+              {!validating && hasError && (
                 <Icon
                   name="warning-regular"
                   size={20}
@@ -250,7 +261,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 />
               )}
 
-              {!hasError && valid && (
+              {!validating && !hasError && valid && (
                 <Icon
                   name="checkmark-filled"
                   size={20}

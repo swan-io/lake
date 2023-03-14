@@ -2,7 +2,7 @@ import { ComponentProps } from "react";
 import { Rifm } from "rifm";
 import { isNotNullish, isNullish } from "./nullish";
 
-export type Props = Required<
+export type RifmProps = Required<
   Pick<ComponentProps<typeof Rifm>, "accept" | "append" | "format" | "mask">
 >;
 
@@ -20,7 +20,7 @@ export const getRifmProps = ({
   accept: keyof typeof accepted;
   maxLength: number;
   charMap: Record<number, string>;
-}): Props => {
+}): RifmProps => {
   const charIndexes = Object.keys(charMap).map(Number);
 
   if (process.env.NODE_ENV === "development") {

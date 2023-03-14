@@ -15,6 +15,9 @@ const linkStyle: CSSProperties = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "flex-end",
+  },
   bar: {
     width: "100%",
     height: 4,
@@ -107,7 +110,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
   const activeStepIndex = stepIds.indexOf(activeStepId);
 
   return (
-    <Grid numColumns={steps.length} horizontalSpace={12} style={style}>
+    <Grid numColumns={steps.length} horizontalSpace={12} style={[styles.container, style]}>
       {steps.map((step, index) => {
         const stepNumber = index + 1;
         const currentId = match(step)

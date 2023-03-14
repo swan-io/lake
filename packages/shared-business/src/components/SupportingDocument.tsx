@@ -8,8 +8,8 @@ import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Space } from "@swan-io/lake/src/components/Space";
+import { UploadArea, UploadFileStatus } from "./UploadArea";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
-import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useForm, Validator } from "react-ux-form";
@@ -70,7 +70,7 @@ type Props = {
   requiredDocumentTypes: SupportingDocumentPurposeEnum[];
   onChange?: (documents: Document[]) => void;
   country?: CountryCCA3;
-  typeOfRepresentation?: TypeOfRepresentation;
+  withoutRepresentationRadio?: boolean;
 };
 
 const validateNotEmpty: Validator<FormValue> = value => {
@@ -91,10 +91,12 @@ const styles = StyleSheet.create({
 
 const Help = ({
   text,
+  label,
   width,
   onPress,
 }: {
   text: TranslationKey;
+  label?: string;
   width?: number;
   onPress?: () => void;
 }) => {
@@ -102,13 +104,16 @@ const Help = ({
     <LakeTooltip content={t(text)} width={width} togglableOnFocus={true} placement="top">
       <LakeButton
         mode="tertiary"
+        size="small"
         color="gray"
         icon="question-circle-regular"
         onPress={onPress}
         disabled={onPress == null}
         style={[styles.button, onPress == null && styles.buttonWithDefaultCursor]}
         accessibilityLabel={t("supportingDoc.whatIsThis")}
-      />
+      >
+        {label}
+      </LakeButton>
     </LakeTooltip>
   );
 };
@@ -119,7 +124,7 @@ export type SupportingDocumentRef = {
 
 export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
   (
-    { documents, getAwsUrl, onChange, requiredDocumentTypes, country, typeOfRepresentation },
+    { documents, getAwsUrl, onChange, requiredDocumentTypes, country, withoutRepresentationRadio },
     externalRef,
   ) => {
     const initialValues: Record<string, FormValue> = useMemo(
@@ -284,7 +289,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
 
     return (
       <Form>
-        {typeOfRepresentation == null && (
+        {withoutRepresentationRadio !== true && (
           <LakeLabel
             label={t("supportingDoc.whoAreYou")}
             render={() => (
@@ -401,15 +406,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.length === 0 && !isOther ? (
-          <>
-            <Space height={24} />
-            <LakeText>{t("supportingDoc.noRequiredDocuments")}</LakeText>
-            <Space height={24} />
-          </>
-        ) : null}
-
-        {typeOfRepresentation === "LegalRepresentative" || isOther ? (
+        {(requiredDocumentTypes.some(t => t === "ProofOfIdentity") || isOther) && (
           <>
             <LakeLabel
               label={t("supportingDoc.proofOfIdentity")}
@@ -436,12 +433,17 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
             />
 
             <Space height={24} />
+          </>
+        )}
 
+        {(requiredDocumentTypes.some(t => t === "PowerOfAttorney") || isOther) && (
+          <>
             <LakeLabel
               label={t("supportingDoc.powerAttornySigned")}
               help={
                 <Help
                   text="supportingDoc.powerAttornySigned.description"
+                  label={t("supportingDoc.whatIsThis")}
                   onPress={() => setShowPowerOfAttorneyModal(true)}
                 />
               }
@@ -466,31 +468,39 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
               )}
             />
 
-            <LakeModal
-              visible={showPowerOfAttorneyModal}
-              title={t("supportingDoc.powerAttorney")}
-              icon="document-regular"
-              onPressClose={() => setShowPowerOfAttorneyModal(false)}
-            >
-              <LakeText>{t("supportingDoc.powerAttornySigned.description")}</LakeText>
-              <Space height={16} />
+            <Space height={24} />
+          </>
+        )}
 
-              <LakeButtonGroup paddingBottom={0}>
-                <LakeButton
-                  grow={true}
-                  color="current"
-                  onPress={() =>
-                    window.open(
-                      `/power-of-attorney-template/${country === "FRA" ? "fr" : "en"}.pdf`,
-                    )
-                  }
-                >
-                  {t("supportingDoc.downloadTemplate")}
-                </LakeButton>
-              </LakeButtonGroup>
-            </LakeModal>
+        {requiredDocumentTypes.length === 0 && (!isOther || withoutRepresentationRadio === true) ? (
+          <>
+            <Space height={24} />
+            <LakeText>{t("supportingDoc.noRequiredDocuments")}</LakeText>
+            <Space height={24} />
           </>
         ) : null}
+
+        <LakeModal
+          visible={showPowerOfAttorneyModal}
+          title={t("supportingDoc.powerAttorney")}
+          icon="document-regular"
+          onPressClose={() => setShowPowerOfAttorneyModal(false)}
+        >
+          <LakeText>{t("supportingDoc.powerAttornySigned.description")}</LakeText>
+          <Space height={16} />
+
+          <LakeButtonGroup paddingBottom={0}>
+            <LakeButton
+              grow={true}
+              color="current"
+              onPress={() =>
+                window.open(`/power-of-attorney-template/${country === "FRA" ? "fr" : "en"}.pdf`)
+              }
+            >
+              {t("supportingDoc.downloadTemplate")}
+            </LakeButton>
+          </LakeButtonGroup>
+        </LakeModal>
       </Form>
     );
   },

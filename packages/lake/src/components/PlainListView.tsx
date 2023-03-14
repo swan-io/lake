@@ -403,7 +403,7 @@ export const PlainListView = <T, ExtraInfo>({
                     {items.map((item, index) => {
                       const key = keyExtractor(item, index);
                       const isActive = activeRowId === key;
-                      const isHovered = hoveredRow === key;
+                      const isHovered = isNotNullish(getRowLink) && hoveredRow === key;
 
                       const wrapper = createRowWrapper({ item, absoluteIndex: index, extraInfo });
 

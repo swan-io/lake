@@ -1,5 +1,5 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
-import { getRifmProps, Props } from "@swan-io/lake/src/utils/rifm";
+import { getRifmProps, RifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
 import dayjsLocaleEN from "dayjs/locale/en";
@@ -29,7 +29,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt"] as const;
-type SupportedLanguage = (typeof supportedLanguages)[number];
+type SupportedLanguage = typeof supportedLanguages[number];
 
 type TranslationParams = Record<string, string | number>;
 export type TranslationKey = keyof typeof translationEN;
@@ -143,7 +143,7 @@ export const formatNestedMessage = (
   );
 };
 
-export const rifmDateProps: Props = getRifmProps({
+export const rifmDateProps: RifmProps = getRifmProps({
   accept: "numeric",
   charMap: { 2: "/", 4: "/" },
   maxLength: 8,

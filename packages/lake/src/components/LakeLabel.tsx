@@ -7,13 +7,14 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
 import { commonStyles } from "../constants/commonStyles";
 import { colors, ColorVariants, fonts, spacings, texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";
-import { Space } from "./Space";
+import { Space, SpacingValue } from "./Space";
 
 const styles = StyleSheet.create({
   container: {
@@ -32,12 +33,14 @@ const styles = StyleSheet.create({
   },
 });
 
+type LabelType = "form" | "formSmall" | "view" | "viewSmall" | "radioGroup";
+
 type Props = {
   label: string;
   optionalLabel?: string;
   readOnlyColor?: string;
   color?: ColorVariants;
-  type?: "form" | "formSmall" | "view" | "viewSmall";
+  type?: LabelType;
   extra?: () => ReactNode;
   help?: ReactNode;
   render: (id: string) => ReactNode;
@@ -52,7 +55,7 @@ const Label = (
   return unstable_createElement("label", props);
 };
 
-export const defaultLabelType: NonNullable<Props["type"]> = "formSmall";
+export const defaultLabelType: LabelType = "formSmall";
 
 export const LakeLabel = ({
   label,
@@ -92,7 +95,7 @@ export const LakeLabel = ({
       <View style={commonStyles.fill} ref={containerRef}>
         <Box direction="row" justifyContent="spaceBetween" alignItems="center">
           <Box direction="row" style={styles.shrink}>
-            {type === "form" || type === "formSmall" ? (
+            {type === "form" || type === "formSmall" || type === "radioGroup" ? (
               <Label
                 onClick={onClick}
                 htmlFor={id}
@@ -136,7 +139,13 @@ export const LakeLabel = ({
           )}
         </Box>
 
-        <Space height={type === "formSmall" || type === "viewSmall" ? 4 : 8} />
+        <Space
+          height={match<LabelType, SpacingValue>(type)
+            .with("formSmall", "viewSmall", () => 4)
+            .with("form", "view", () => 8)
+            .with("radioGroup", () => 12)
+            .exhaustive()}
+        />
 
         <View accessibilityLabelledBy={type === "view" || type === "viewSmall" ? id : undefined}>
           {render(id)}

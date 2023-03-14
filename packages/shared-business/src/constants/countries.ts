@@ -2354,6 +2354,8 @@ const companyCountries = [
   "SVK",
   "SVN",
   "BGR",
+  "CYP",
+  "NOR",
 ] satisfies CountryCCA3[];
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];

@@ -16,9 +16,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  rowItem: {
+  withRightSpace: {
     // use margin instead of <Space /> to avoid line starting with <Space /> because of flex-wrap
     marginRight: 24,
+  },
+  // We need this bottom margin in case there are too much items and some of them are wrapped to next line
+  withBottomSpace: {
+    // use margin instead of <Space /> to avoid making height bigger than expected
+    marginBottom: 12,
   },
 });
 
@@ -60,7 +65,11 @@ export function RadioGroup<V>({
                   onValueChange(item.value);
                 }
               }}
-              style={[styles.item, direction === "row" && !isLast && styles.rowItem]}
+              style={[
+                styles.item,
+                direction === "row" && styles.withBottomSpace,
+                direction === "row" && !isLast && styles.withRightSpace,
+              ]}
             >
               <LakeRadio disabled={isDisabled} color={color} value={item.value === value} />
               <Space width={12} />
@@ -70,7 +79,7 @@ export function RadioGroup<V>({
               </LakeText>
             </Pressable>
 
-            {!isLast && <Space height={direction === "column" ? 12 : 32} />}
+            {!isLast && <Space height={direction === "column" ? 12 : undefined} />}
           </Fragment>
         );
       })}

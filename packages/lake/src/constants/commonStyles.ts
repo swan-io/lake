@@ -41,6 +41,7 @@ export const commonStyles = {
   center: { alignItems: "center", justifyContent: "center" },
   centerSelf: { marginHorizontal: "auto" },
   fill: { flexGrow: 1, flexShrink: 1 },
+  fillNoShrink: { flexGrow: 1, flexShrink: 0 },
   hidden: { visibility: "hidden" },
   view: viewStyle,
   visuallyHidden: visuallyHiddenStyle,

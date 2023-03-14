@@ -198,11 +198,7 @@ export const LakeModal = ({
                         <View style={styles.modalHeader}>
                           <View style={styles.modalIconTitle}>
                             {icon != null ? (
-                              <Icon
-                                name={icon}
-                                size={large ? 40 : 32}
-                                color={colors[color].primary}
-                              />
+                              <Icon name={icon} size={large ? 40 : 32} color={colors[color][500]} />
                             ) : null}
 
                             {icon != null && title != null ? <Space height={12} /> : null}
@@ -216,8 +212,6 @@ export const LakeModal = ({
                                 <Space height={12} />
                               </>
                             ) : null}
-
-                            {icon != null && title != null ? <Space height={8} /> : null}
                           </View>
 
                           {onPressClose != null ? (

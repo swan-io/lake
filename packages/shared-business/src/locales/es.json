@@ -17,6 +17,7 @@
   "businessActivity.realEstate": "Gestión de inmuebles",
   "businessActivity.scientificActivities": "Actividades específicas",
   "businessActivity.transportation": "Transporte",
+  "common.form.invalidTaxIdentificationNumber": "Este número de identificación fiscal no es válido",
   "common.skipToContent": "Saltar al contenido",
   "country.AUT": "Austria",
   "country.BEL": "Bélgica",

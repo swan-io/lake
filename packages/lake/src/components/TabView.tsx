@@ -5,7 +5,7 @@ import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Link } from "@swan-io/lake/src/components/Link";
 import { PressableText } from "@swan-io/lake/src/components/Pressable";
-import { Space } from "@swan-io/lake/src/components/Space";
+import { Space, SpacingValue } from "@swan-io/lake/src/components/Space";
 import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
 import {
   animations,
@@ -406,9 +406,10 @@ type Props = {
   tabs: Tab[];
   otherLabel: string;
   hideIfSingleItem?: boolean;
+  padding?: SpacingValue;
 };
 
-export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true }: Props) => {
+export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true, padding }: Props) => {
   const containerRef = useRef<View | null>(null);
   const placeholderRef = useRef<View | null>(null);
   const otherPlaceholderRef = useRef<View | null>(null);
@@ -433,7 +434,8 @@ export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true }: Props) =>
           node.measureLayout(
             container as unknown as number,
             (left, _, width) => {
-              setUnderlinePosition({ left, width });
+              const leftOffset = padding ?? 0;
+              setUnderlinePosition({ left: left - leftOffset, width });
             },
             noop,
           );
@@ -443,7 +445,7 @@ export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true }: Props) =>
     }
 
     setUnderlinePosition({ left: 0, width: 0 });
-  }, [path, kept, collapsed]);
+  }, [path, kept, collapsed, padding]);
 
   useEffect(() => {
     setHasRendered(width > 0);
@@ -572,7 +574,7 @@ export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true }: Props) =>
       direction="row"
       accessibilityRole="tablist"
       ref={containerRef}
-      style={styles.container}
+      style={[styles.container, { paddingHorizontal: padding }]}
     >
       <View
         style={styles.placeholder}

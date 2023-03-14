@@ -1,8 +1,8 @@
 import { forwardRef, memo, useEffect } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { Icon } from "./Icon";
 import { backgroundColor, colors, shadows } from "../constants/design";
 import { useAnimatedValue } from "../hooks/useAnimatedValue";
-import { Icon } from "./Icon";
 
 const WIDTH = 36;
 const BUTTON_SIZE = 16;

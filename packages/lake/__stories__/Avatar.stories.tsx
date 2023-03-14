@@ -1,6 +1,6 @@
 import { ComponentMeta } from "@storybook/react";
-import dedent from "ts-dedent";
 import { Avatar } from "../src/components/Avatar";
+import dedent from "ts-dedent";
 import { Box } from "../src/components/Box";
 import { Space } from "../src/components/Space";
 import { StoryBlock, StoryCodePart, StoryPart } from "./_StoriesComponents";

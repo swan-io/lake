@@ -1,7 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
-import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
