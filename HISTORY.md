@@ -1,3 +1,9 @@
+# 1.2.2
+
+Changes:
+
+- Add translations to npm package (74a1cbc)
+
 # 1.2.1
 
 Changes:
