@@ -42,6 +42,7 @@
     "eslint-plugin-react-native": "4.0.0",
     "eslint-plugin-react-native-a11y": "3.3.0",
     "eslint-plugin-swan": "file:scripts/eslint",
+    "semver": "7.3.8",
     "tsx": "3.12.5",
     "typescript": "4.9.5",
     "vitest": "0.29.2"
