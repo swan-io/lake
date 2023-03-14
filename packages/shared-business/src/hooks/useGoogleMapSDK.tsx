@@ -21,6 +21,7 @@ export const useGoogleMapSDK = ({ language, apiKey }: Props) => {
         void new Loader({
           apiKey,
           language,
+          libraries: ["places"],
         })
           .load()
           .then(google => sdk.set(AsyncData.Done(google)));
