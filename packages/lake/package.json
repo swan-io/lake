@@ -7,6 +7,7 @@
   },
   "files": [
     "LICENSE",
+    "src/assets",
     "src/**/*.js",
     "src/**/*.d.ts",
     "README.md"
