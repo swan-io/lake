@@ -1,3 +1,9 @@
+# 1.2.6
+
+Changes:
+
+- Load missing GMaps library (2aa7dbf)
+
 # 1.2.5
 
 Changes:
