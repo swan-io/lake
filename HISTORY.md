@@ -1,3 +1,9 @@
+# 1.2.3
+
+Changes:
+
+- Add icons to npm package (a152782)
+
 # 1.2.2
 
 Changes:
