@@ -6,6 +6,16 @@
     "node": ">=14.0.0",
     "yarn": "^1.20.0"
   },
+  "files": [
+    "LICENSE",
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "browserslist": [
     ">0.2%",
     "not op_mini all",

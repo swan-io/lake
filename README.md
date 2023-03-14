@@ -64,3 +64,7 @@ We generally collocate test files next to their implementation, in a `__tests__`
 ```
 
 We use [Vitest](https://vitest.dev/api/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+
+## Releasing
+
+First, write the changes in `HISTORY.md` and commit the release notes, then run `yarn bump`, after that you can `git push && git push --tags`
