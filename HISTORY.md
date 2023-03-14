@@ -1,3 +1,9 @@
+# 1.2.4
+
+Changes:
+
+- Add missing assets to npm package (08a48d8)
+
 # 1.2.3
 
 Changes:
