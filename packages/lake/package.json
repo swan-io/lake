@@ -1,7 +1,6 @@
 {
   "name": "@swan-io/lake",
   "version": "1.2.0",
-  "private": true,
   "engines": {
     "node": ">=14.0.0",
     "yarn": "^1.20.0"
