@@ -1,6 +1,6 @@
 import { Array, Option } from "@swan-io/boxed";
 import { forwardRef, MutableRefObject } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { animations, spacings } from "../constants/design";
 import { usePreviousValue } from "../hooks/usePreviousValue";
@@ -14,14 +14,8 @@ import { TransitionView } from "./TransitionView";
 
 const styles = StyleSheet.create({
   details: {
-    padding: spacings[24],
+    paddingBottom: spacings[24],
     paddingTop: spacings[12],
-    flexGrow: 1,
-  },
-  detailsLarge: {
-    paddingVertical: spacings[24],
-    paddingTop: spacings[12],
-    paddingHorizontal: spacings[40],
     flexGrow: 1,
   },
   detailsContents: {
@@ -30,7 +24,25 @@ const styles = StyleSheet.create({
   detailsContainer: {
     flexGrow: 1,
   },
+  content: {
+    paddingHorizontal: spacings[24],
+  },
+  contentLarge: {
+    paddingHorizontal: spacings[40],
+  },
 });
+
+export const ListRightPanelContent = ({
+  children,
+  large,
+  style,
+}: {
+  children: React.ReactNode;
+  large: boolean;
+  style?: StyleProp<ViewStyle>;
+}) => {
+  return <View style={[large ? styles.contentLarge : styles.content, style]}>{children}</View>;
+};
 
 type Props<T> = {
   items: T[];
@@ -101,8 +113,12 @@ const ListRightPanel_ = forwardRef<FocusTrapRef, Props<unknown>>(
     return (
       <RightPanel ref={ref} visible={activeItem != null} onPressClose={onClose}>
         {({ large }) => (
-          <View style={large ? styles.detailsLarge : styles.details}>
-            <Box direction="row" justifyContent="spaceBetween">
+          <View style={styles.details}>
+            <Box
+              direction="row"
+              justifyContent="spaceBetween"
+              style={large ? styles.contentLarge : styles.content}
+            >
               <LakeButton
                 mode="tertiary"
                 icon="lake-close"

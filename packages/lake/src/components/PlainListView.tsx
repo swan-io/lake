@@ -66,6 +66,7 @@ type Props<T, ExtraInfo> = {
     isLoading: boolean;
     count: number;
   };
+  breakpoint?: number;
 };
 
 const styles = StyleSheet.create({
@@ -228,6 +229,7 @@ export const PlainListView = <T, ExtraInfo>({
   onActiveRowChange,
   groupBy,
   loading,
+  breakpoint = breakpoints.large,
 }: Props<T, ExtraInfo>) => {
   const viewId = useId();
 
@@ -341,7 +343,7 @@ export const PlainListView = <T, ExtraInfo>({
   }, [activeRowId, onActiveRowChange]);
 
   return (
-    <ResponsiveContainer style={styles.root} breakpoint={breakpoints.large}>
+    <ResponsiveContainer style={styles.root} breakpoint={breakpoint}>
       {({ large }) => {
         const displayColumns = large ? columns : smallColumns;
         return (

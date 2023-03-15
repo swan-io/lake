@@ -108,7 +108,7 @@ export const FlowPresentation = ({ steps, mode }: Props) => {
 
           return (
             <Fragment key={index}>
-              <Box direction="row">
+              <Box direction="row" alignItems="center">
                 <Box alignItems="center" justifyContent="center" style={styles.mobileNumber}>
                   <LakeText
                     color={colors.current.primary}
