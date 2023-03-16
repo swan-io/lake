@@ -1,5 +1,5 @@
-import { Separator } from "@swan-io/lake/src/components/Separator";
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
+import { Separator } from "./Separator";
+import { isNotNullish } from "../utils/nullish";
 import { Children, ReactNode } from "react";
 import { View } from "react-native";
 

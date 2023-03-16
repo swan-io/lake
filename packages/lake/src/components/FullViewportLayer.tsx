@@ -1,6 +1,6 @@
-import { FocusTrap } from "@swan-io/lake/src/components/FocusTrap";
-import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
-import { backgroundColor } from "@swan-io/lake/src/constants/design";
+import { FocusTrap } from "./FocusTrap";
+import { TransitionView } from "./TransitionView";
+import { backgroundColor } from "../constants/design";
 import { ReactNode, Suspense, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { LoadingView } from "./LoadingView";

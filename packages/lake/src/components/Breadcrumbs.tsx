@@ -1,9 +1,9 @@
-import { FocusTrap } from "@swan-io/lake/src/components/FocusTrap";
-import { Icon } from "@swan-io/lake/src/components/Icon";
-import { LakeText } from "@swan-io/lake/src/components/LakeText";
-import { Link } from "@swan-io/lake/src/components/Link";
-import { Space } from "@swan-io/lake/src/components/Space";
-import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
+import { FocusTrap } from "./FocusTrap";
+import { Icon } from "./Icon";
+import { LakeText } from "./LakeText";
+import { Link } from "./Link";
+import { Space } from "./Space";
+import { TransitionView } from "./TransitionView";
 import {
   animations,
   backgroundColor,
@@ -13,10 +13,10 @@ import {
   shadows,
   spacings,
   texts,
-} from "@swan-io/lake/src/constants/design";
-import { useHover } from "@swan-io/lake/src/hooks/useHover";
-import { usePreviousValue } from "@swan-io/lake/src/hooks/usePreviousValue";
-import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+} from "../constants/design";
+import { useHover } from "../hooks/useHover";
+import { usePreviousValue } from "../hooks/usePreviousValue";
+import { isNotNullish, isNullish } from "../utils/nullish";
 import {
   createContext,
   Dispatch,

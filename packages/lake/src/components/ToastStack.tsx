@@ -1,6 +1,6 @@
-import { Box } from "@swan-io/lake/src/components/Box";
-import { Portal } from "@swan-io/lake/src/components/Portal";
-import { animations, colors, ColorVariants, shadows } from "@swan-io/lake/src/constants/design";
+import { Box } from "./Box";
+import { Portal } from "./Portal";
+import { animations, colors, ColorVariants, shadows } from "../constants/design";
 import { memo, useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
