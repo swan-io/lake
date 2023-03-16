@@ -591,9 +591,11 @@ const getFilterValue = <T extends Filter<unknown>["type"]>(
 
 type FiltersDefinition = Record<string, Filter<unknown>>;
 
-export type FiltersState<T extends FiltersDefinition> = Simplify<{
-  [K in keyof T]: Simplify<ExtractFilterValue<T[K]>>;
-}>;
+export type FiltersState<T extends FiltersDefinition> = Simplify<
+  {
+    [K in keyof T]: Simplify<ExtractFilterValue<T[K]>>;
+  }
+>;
 
 type FiltersStackProps<
   Definition extends FiltersDefinition,
