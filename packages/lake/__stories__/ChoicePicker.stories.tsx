@@ -23,8 +23,8 @@ export const Default = () => {
     "VirtualAndPhysical",
     "SingleUseVirtual",
   ];
-  const [value, setValue] = useState<(typeof items)[number]>();
-  const [largeValue, setLargeValue] = useState<(typeof items)[number]>();
+  const [value, setValue] = useState<typeof items[number]>();
+  const [largeValue, setLargeValue] = useState<typeof items[number]>();
 
   return (
     <StoryBlock title="Choice Picker">

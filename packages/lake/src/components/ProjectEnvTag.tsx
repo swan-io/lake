@@ -1,4 +1,4 @@
-import { Tag } from "@swan-io/lake/src/components/Tag";
+import { Tag } from "./Tag";
 import { match } from "ts-pattern";
 import { Icon } from "./Icon";
 

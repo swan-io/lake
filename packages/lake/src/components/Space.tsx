@@ -2,7 +2,7 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import { isNotNullish } from "../utils/nullish";
 
 export const spacingValues = [4, 8, 12, 16, 20, 24, 32, 40, 48, 72, 96] as const;
-export type SpacingValue = (typeof spacingValues)[number];
+export type SpacingValue = typeof spacingValues[number];
 
 const rawHeightStyles: { [key: number]: ViewStyle } = {};
 const rawWidthStyles: { [key: number]: ViewStyle } = {};
