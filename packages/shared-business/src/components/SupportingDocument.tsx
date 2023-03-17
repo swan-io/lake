@@ -13,9 +13,9 @@ import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useForm, Validator } from "react-ux-form";
-import { CountryCCA3 } from "../constants/countries";
+import { match } from "ts-pattern";
 import { MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE } from "../constants/uploads";
-import { t, TranslationKey } from "../utils/i18n";
+import { locale, t, TranslationKey } from "../utils/i18n";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
 const NO_ID_YET = "NO_ID_YET";
@@ -69,8 +69,8 @@ type Props = {
   documents: Document[];
   requiredDocumentTypes: SupportingDocumentPurposeEnum[];
   onChange?: (documents: Document[]) => void;
-  country?: CountryCCA3;
   withoutRepresentationRadio?: boolean;
+  onboardingLanguage?: string;
 };
 
 const validateNotEmpty: Validator<FormValue> = value => {
@@ -89,33 +89,47 @@ const styles = StyleSheet.create({
   },
 });
 
-const Help = ({
-  text,
-  label,
-  width,
-  onPress,
-}: {
-  text: TranslationKey;
-  label?: string;
-  width?: number;
-  onPress?: () => void;
-}) => {
-  return (
-    <LakeTooltip content={t(text)} width={width} togglableOnFocus={true} placement="top">
+type HelpProps =
+  | {
+      type: "tooltip";
+      text: TranslationKey;
+      width?: number;
+    }
+  | {
+      type: "button";
+      label: string;
+      onPress: () => void;
+    };
+
+const Help = (props: HelpProps) => {
+  return match(props)
+    .with({ type: "tooltip" }, ({ text, width }) => (
+      <LakeTooltip content={t(text)} width={width} togglableOnFocus={true} placement="top">
+        <LakeButton
+          mode="tertiary"
+          size="small"
+          color="gray"
+          icon="question-circle-regular"
+          disabled={true}
+          style={[styles.button, styles.buttonWithDefaultCursor]}
+          accessibilityLabel={t("supportingDoc.whatIsThis")}
+        />
+      </LakeTooltip>
+    ))
+    .with({ type: "button" }, ({ label, onPress }) => (
       <LakeButton
         mode="tertiary"
         size="small"
         color="gray"
         icon="question-circle-regular"
         onPress={onPress}
-        disabled={onPress == null}
-        style={[styles.button, onPress == null && styles.buttonWithDefaultCursor]}
+        style={styles.button}
         accessibilityLabel={t("supportingDoc.whatIsThis")}
       >
         {label}
       </LakeButton>
-    </LakeTooltip>
-  );
+    ))
+    .exhaustive();
 };
 
 export type SupportingDocumentRef = {
@@ -124,7 +138,14 @@ export type SupportingDocumentRef = {
 
 export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
   (
-    { documents, getAwsUrl, onChange, requiredDocumentTypes, country, withoutRepresentationRadio },
+    {
+      documents,
+      getAwsUrl,
+      onChange,
+      requiredDocumentTypes,
+      onboardingLanguage = locale.language,
+      withoutRepresentationRadio,
+    },
     externalRef,
   ) => {
     const initialValues: Record<string, FormValue> = useMemo(
@@ -320,7 +341,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           <>
             <LakeLabel
               label={t("supportingDoc.companyRegistration")}
-              help={<Help text="supportingDoc.companyRegistration.description" />}
+              help={<Help type="tooltip" text="supportingDoc.companyRegistration.description" />}
               render={() => (
                 <Field name="CompanyRegistration">
                   {({ value, onChange, error }) => (
@@ -350,7 +371,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           <>
             <LakeLabel
               label={t("supportingDoc.associationRegistration")}
-              help={<Help text="supportingDoc.associationRegistration.description" />}
+              help={
+                <Help type="tooltip" text="supportingDoc.associationRegistration.description" />
+              }
               render={() => (
                 <Field name="AssociationRegistration">
                   {({ value, onChange, error }) => (
@@ -380,7 +403,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           <>
             <LakeLabel
               label={t("supportingDoc.signedStatus")}
-              help={<Help text="supportingDoc.signedStatus.description" />}
+              help={<Help type="tooltip" text="supportingDoc.signedStatus.description" />}
               render={() => (
                 <Field name="SignedStatus">
                   {({ value, onChange, error }) => (
@@ -410,7 +433,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           <>
             <LakeLabel
               label={t("supportingDoc.proofOfIdentity")}
-              help={<Help width={600} text="supportingDoc.proofOfIdentity.description" />}
+              help={
+                <Help type="tooltip" width={600} text="supportingDoc.proofOfIdentity.description" />
+              }
               render={() => (
                 <Field name="ProofOfIdentity">
                   {({ value, onChange, error }) => (
@@ -442,7 +467,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
               label={t("supportingDoc.powerAttornySigned")}
               help={
                 <Help
-                  text="supportingDoc.powerAttornySigned.description"
+                  type="button"
                   label={t("supportingDoc.whatIsThis")}
                   onPress={() => setShowPowerOfAttorneyModal(true)}
                 />
@@ -494,7 +519,15 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
               grow={true}
               color="current"
               onPress={() =>
-                window.open(`/power-of-attorney-template/${country === "FRA" ? "fr" : "en"}.pdf`)
+                window.open(
+                  `/power-of-attorney-template/${match(
+                    onboardingLanguage,
+                  )
+                    .with("fr", () => "fr")
+                    .with("de", () => "de")
+                    .with("es", () => "es")
+                    .otherwise(() => "en")}.pdf`,
+                )
               }
             >
               {t("supportingDoc.downloadTemplate")}
