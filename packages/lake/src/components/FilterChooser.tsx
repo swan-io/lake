@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   availableFiltersTitle: {
     ...typography.bodyLarge,
-    color: colors.current.primary,
+    color: colors.current[500],
     paddingHorizontal: 24,
   },
   filterName: {

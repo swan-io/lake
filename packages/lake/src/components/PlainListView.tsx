@@ -11,16 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  LayoutChangeEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  PressableStateCallbackType,
-  ScrollView,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from "react-native";
+import { PressableStateCallbackType, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
 import { backgroundColor, breakpoints, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { isNotNullish, isNullish } from "../utils/nullish";
@@ -32,6 +23,7 @@ import {
 } from "./FixedListView";
 import { LakeHeading } from "./LakeHeading";
 import { ResponsiveContainer } from "./ResponsiveContainer";
+import { commonStyles } from "../constants/commonStyles";
 
 export type ColumnConfig<T, ExtraInfo> = {
   id: string;
@@ -67,6 +59,8 @@ type Props<T, ExtraInfo> = {
     count: number;
   };
   breakpoint?: number;
+  withoutScroll?: boolean;
+  stickyOffset?: number;
 };
 
 const styles = StyleSheet.create({
@@ -75,11 +69,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     flexGrow: 1,
     backgroundColor: backgroundColor.default,
-  },
-  container: {
-    height: 1,
-    alignSelf: "stretch",
-    flexGrow: 1,
   },
   contentContainer: {
     flexDirection: "column",
@@ -111,7 +100,6 @@ const styles = StyleSheet.create({
   },
   stickyHeader: {
     position: "sticky",
-    top: 0,
     backgroundColor: backgroundColor.default90Transparency,
     backdropFilter: "blur(4px)",
     zIndex: 10,
@@ -133,16 +121,18 @@ const styles = StyleSheet.create({
     textDecorationLine: "none",
   },
   emptyListContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...commonStyles.fill,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: spacings[48],
     backgroundColor: backgroundColor.default,
+  },
+  scrollTracker: {
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 });
 
@@ -230,8 +220,11 @@ export const PlainListView = <T, ExtraInfo>({
   groupBy,
   loading,
   breakpoint = breakpoints.large,
+  withoutScroll = false,
+  stickyOffset = 0,
 }: Props<T, ExtraInfo>) => {
   const viewId = useId();
+  const scrollTrackerRef = useRef<View>(null);
 
   const groups: Map<string | null, T[]> = useMemo(() => {
     if (groupBy == null) {
@@ -248,9 +241,7 @@ export const PlainListView = <T, ExtraInfo>({
   const totalHeight = rowHeight * originalData.length + groups.size * groupHeaderHeight;
 
   const isLoading = isNotNullish(loading) && loading.isLoading;
-
-  const hasEndReachedBeenCalled = useRef(false);
-  const lastKnownHeight = useRef(0);
+  const isEmpty = originalData.length === 0;
 
   const [hoveredRow, setHoveredRow] = useState<string | undefined>(undefined);
 
@@ -258,58 +249,23 @@ export const PlainListView = <T, ExtraInfo>({
     setHoveredRow(undefined);
   }, []);
 
-  const onLayout = useCallback(
-    ({
-      nativeEvent: {
-        layout: { height },
-      },
-    }: LayoutChangeEvent) => {
-      lastKnownHeight.current = height;
-      if (
-        isNotNullish(onEndReached) &&
-        !hasEndReachedBeenCalled.current &&
-        height >= totalHeight - onEndReachedThresholdPx
-      ) {
-        hasEndReachedBeenCalled.current = true;
-        onEndReached();
-      }
-    },
-    [onEndReached, onEndReachedThresholdPx, totalHeight],
-  );
-
   useEffect(() => {
-    if (
-      isNotNullish(onEndReached) &&
-      !hasEndReachedBeenCalled.current &&
-      lastKnownHeight.current >= totalHeight - onEndReachedThresholdPx
-    ) {
-      hasEndReachedBeenCalled.current = true;
-      onEndReached();
-      return;
+    const scrollTracker = scrollTrackerRef.current;
+    if (scrollTracker != null) {
+      const scrollTrackerElement = scrollTracker as unknown as HTMLElement;
+      const intersectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (isNotNullish(onEndReached)) {
+              onEndReached();
+            }
+          }
+        });
+      });
+      intersectionObserver.observe(scrollTrackerElement);
+      return () => intersectionObserver.unobserve(scrollTrackerElement);
     }
-    hasEndReachedBeenCalled.current = false;
-  }, [originalData, onEndReached, onEndReachedThresholdPx, totalHeight]);
-
-  const onScroll = useCallback(
-    ({
-      nativeEvent: {
-        contentOffset: { y },
-        layoutMeasurement: { height },
-        contentSize: { height: contentHeight },
-      },
-    }: NativeSyntheticEvent<NativeScrollEvent>) => {
-      lastKnownHeight.current = height;
-      if (
-        isNotNullish(onEndReached) &&
-        !hasEndReachedBeenCalled.current &&
-        y + height >= contentHeight - onEndReachedThresholdPx
-      ) {
-        hasEndReachedBeenCalled.current = true;
-        onEndReached();
-      }
-    },
-    [onEndReached, onEndReachedThresholdPx],
-  );
+  }, [onEndReached]);
 
   const createRowWrapper = useCallback(
     ({
@@ -342,8 +298,29 @@ export const PlainListView = <T, ExtraInfo>({
     }
   }, [activeRowId, onActiveRowChange]);
 
+  const listWrapper = useMemo(
+    () =>
+      withoutScroll ? (
+        <View style={styles.contentContainer} />
+      ) : (
+        <ScrollView
+          scrollEventThrottle={32}
+          contentContainerStyle={[
+            styles.contentContainer,
+            {
+              minHeight: totalHeight + (isLoading ? loading.count * rowHeight : 0),
+            },
+          ]}
+        />
+      ),
+    [isLoading, loading?.count, rowHeight, totalHeight, withoutScroll],
+  );
+
   return (
-    <ResponsiveContainer style={styles.root} breakpoint={breakpoint}>
+    <ResponsiveContainer
+      style={withoutScroll ? (isEmpty ? commonStyles.fill : undefined) : styles.root}
+      breakpoint={breakpoint}
+    >
       {({ large }) => {
         const displayColumns = large ? columns : smallColumns;
         return (
@@ -373,84 +350,87 @@ export const PlainListView = <T, ExtraInfo>({
               </View>
             ) : null}
 
-            <ScrollView
-              scrollEventThrottle={32}
-              style={styles.container}
-              onLayout={onLayout}
-              onScroll={onScroll}
-              contentContainerStyle={[
-                styles.contentContainer,
-                {
-                  minHeight: totalHeight + (isLoading ? loading.count * rowHeight : 0),
-                },
-              ]}
-            >
-              {Array.from(groups.entries()).map(([groupName, items]) => {
-                return (
-                  <Fragment key={groupName}>
-                    {groupName != null ? (
-                      <View
-                        style={[
-                          styles.stickyHeader,
-                          large && styles.stickyHeaderLarge,
-                          { height: groupHeaderHeight },
-                        ]}
-                      >
-                        <LakeHeading level={3} variant="h3">
-                          {groupName}
-                        </LakeHeading>
-                      </View>
-                    ) : null}
+            {cloneElement(listWrapper, {
+              children: (
+                <>
+                  {Array.from(groups.entries()).map(([groupName, items]) => {
+                    return (
+                      <Fragment key={groupName}>
+                        {groupName != null ? (
+                          <View
+                            style={[
+                              styles.stickyHeader,
+                              large && styles.stickyHeaderLarge,
+                              { height: groupHeaderHeight, top: stickyOffset },
+                            ]}
+                          >
+                            <LakeHeading level={3} variant="h3">
+                              {groupName}
+                            </LakeHeading>
+                          </View>
+                        ) : null}
 
-                    {items.map((item, index) => {
-                      const key = keyExtractor(item, index);
-                      const isActive = activeRowId === key;
-                      const isHovered = isNotNullish(getRowLink) && hoveredRow === key;
+                        {items.map((item, index) => {
+                          const key = keyExtractor(item, index);
+                          const isActive = activeRowId === key;
+                          const isHovered = isNotNullish(getRowLink) && hoveredRow === key;
 
-                      const wrapper = createRowWrapper({ item, absoluteIndex: index, extraInfo });
+                          const wrapper = createRowWrapper({
+                            item,
+                            absoluteIndex: index,
+                            extraInfo,
+                          });
 
-                      return cloneElement(wrapper, {
-                        style: { ...styles.rowLink, ...wrapper.props.style },
-                        key: index,
-                        ref: isActive ? activeItemRef : null,
-                        children: (
-                          <Row
-                            id={key}
-                            rowHeight={rowHeight}
-                            columns={displayColumns}
-                            item={item}
-                            index={index}
-                            extraInfo={extraInfo}
-                            isActive={isActive}
-                            isHovered={isHovered}
-                            large={large}
-                            onMouseEnter={setHoveredRow}
-                            onMouseLeave={removeHoveredRow}
-                          />
-                        ),
-                      });
-                    })}
-                  </Fragment>
-                );
-              })}
+                          return cloneElement(wrapper, {
+                            style: { ...styles.rowLink, ...wrapper.props.style },
+                            key: index,
+                            ref: isActive ? activeItemRef : null,
+                            children: (
+                              <Row
+                                id={key}
+                                rowHeight={rowHeight}
+                                columns={displayColumns}
+                                item={item}
+                                index={index}
+                                extraInfo={extraInfo}
+                                isActive={isActive}
+                                isHovered={isHovered}
+                                large={large}
+                                onMouseEnter={setHoveredRow}
+                                onMouseLeave={removeHoveredRow}
+                              />
+                            ),
+                          });
+                        })}
+                      </Fragment>
+                    );
+                  })}
 
-              <View>
-                <View accessibilityBusy={isLoading} style={styles.loadingPlaceholder}>
-                  {isLoading ? (
-                    <PlainListViewPlaceholder
-                      count={loading.count}
-                      rowHeight={rowHeight}
-                      rowVerticalSpacing={0}
-                      paddingHorizontal={0}
-                    />
+                  <View>
+                    <View accessibilityBusy={isLoading} style={styles.loadingPlaceholder}>
+                      {isLoading ? (
+                        <PlainListViewPlaceholder
+                          count={loading.count}
+                          rowHeight={rowHeight}
+                          rowVerticalSpacing={0}
+                          paddingHorizontal={0}
+                        />
+                      ) : null}
+                    </View>
+                  </View>
+
+                  {isEmpty && isNotNullish(renderEmptyList) && !isLoading ? (
+                    <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
                   ) : null}
-                </View>
-              </View>
-            </ScrollView>
 
-            {originalData.length === 0 && isNotNullish(renderEmptyList) && !isLoading ? (
-              <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
-            ) : null}
+                  <View
+                    pointerEvents="none"
+                    style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
+                    ref={scrollTrackerRef}
+                  />
+                </>
+              ),
+            })}
           </>
         );
       }}
