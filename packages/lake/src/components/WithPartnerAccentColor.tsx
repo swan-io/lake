@@ -7,6 +7,7 @@ import { isNotNullish } from "../utils/nullish";
 type Props = {
   color: string;
   children: ReactNode;
+  scoped?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -28,13 +29,20 @@ const getContrastColor = (color: string) => {
   return text;
 };
 
-export const WithPartnerAccentColor = ({ color, children }: Props) => {
+export const WithPartnerAccentColor = ({ color, scoped = false, children }: Props) => {
   const containerRef = useRef(null);
 
   useLayoutEffect(() => {
     try {
       if (isNotNullish(containerRef.current)) {
         const element = containerRef.current as unknown as HTMLElement;
+        let scalePower = 1;
+        while (
+          !meetsContrastGuidelines(setLightness(Math.pow(0.5, scalePower), color), "#fff").AALarge
+        ) {
+          scalePower += 0.1;
+        }
+
         const colorScale: ColorScale = {
           0: setLightness(1.0, color),
           50: setLightness(0.97, color),
@@ -117,11 +125,26 @@ export const WithPartnerAccentColor = ({ color, children }: Props) => {
           colorScale.contrast,
           "",
         );
+        const rootElement = scoped ? element : element.ownerDocument.documentElement;
+
+        rootElement.style.setProperty("--color-partner-900", colorScale[900], "");
+        rootElement.style.setProperty("--color-partner-800", colorScale[800], "");
+        rootElement.style.setProperty("--color-partner-700", colorScale[700], "");
+        rootElement.style.setProperty("--color-partner-600", colorScale[600], "");
+        rootElement.style.setProperty("--color-partner-500", colorScale[500], "");
+        rootElement.style.setProperty("--color-partner-400", colorScale[400], "");
+        rootElement.style.setProperty("--color-partner-300", colorScale[300], "");
+        rootElement.style.setProperty("--color-partner-200", colorScale[200], "");
+        rootElement.style.setProperty("--color-partner-100", colorScale[100], "");
+        rootElement.style.setProperty("--color-partner-50", colorScale[50], "");
+        rootElement.style.setProperty("--color-partner-primary", colorScale.primary, "");
+        rootElement.style.setProperty("--color-partner-secondary", colorScale.secondary, "");
+        rootElement.style.setProperty("--color-partner-contrast", colorScale.contrast, "");
       }
     } catch (err) {
       // will default to white label color
     }
-  }, [color]);
+  }, [color, scoped]);
 
   return (
     <View ref={containerRef} style={styles.container}>
