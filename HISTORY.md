@@ -1,3 +1,9 @@
+# 1.3.1
+
+Changes:
+
+- Fix color algorithm (ab6c103)
+
 # 1.3.0
 
 Changes:
