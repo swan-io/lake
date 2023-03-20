@@ -36,6 +36,9 @@ import { LayoutChangeEvent, NativeSyntheticEvent, StyleSheet, Text, View } from 
 import { match, P } from "ts-pattern";
 import { noop } from "../utils/function";
 
+const TABS_HEIGHT = 40;
+export const tabsViewHeight = TABS_HEIGHT + 1;
+
 type Tab = {
   label: string;
   url: string;
@@ -48,20 +51,21 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[100],
+    backgroundColor: backgroundColor.default,
     zIndex: 10,
   },
   link: {
     ...texts.medium,
     position: "relative",
     color: colors.gray[700],
-    height: 40,
+    height: TABS_HEIGHT,
     whiteSpace: "nowrap",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
   },
   activeLink: {
-    color: colors.current.primary,
+    color: colors.current[500],
     boxShadow: `inset 0 -2px ${colors.gray[700]}`,
   },
   hoveredLink: {
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: 2,
     width: 1,
-    backgroundColor: colors.current.primary,
+    backgroundColor: colors.current[500],
   },
   animatedUnderline: {
     transformOrigin: "0 0",
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
   },
   count: {
     ...texts.smallRegular,
-    color: colors.current.primary,
+    color: colors.current[500],
     backgroundColor: colors.current[50],
     borderColor: colors.current[100],
     borderWidth: 1,
@@ -139,6 +143,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: 1,
     backgroundColor: colors.gray[100],
+  },
+  sticky: {
+    position: "sticky",
+    top: -1,
   },
 });
 
@@ -407,9 +415,16 @@ type Props = {
   otherLabel: string;
   hideIfSingleItem?: boolean;
   padding?: SpacingValue;
+  sticky?: boolean;
 };
 
-export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true, padding }: Props) => {
+export const TabView = ({
+  tabs,
+  otherLabel,
+  hideIfSingleItem = true,
+  sticky = false,
+  padding,
+}: Props) => {
   const containerRef = useRef<View | null>(null);
   const placeholderRef = useRef<View | null>(null);
   const otherPlaceholderRef = useRef<View | null>(null);
@@ -574,7 +589,7 @@ export const TabView = ({ tabs, otherLabel, hideIfSingleItem = true, padding }: 
       direction="row"
       accessibilityRole="tablist"
       ref={containerRef}
-      style={[styles.container, { paddingHorizontal: padding }]}
+      style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >
       <View
         style={styles.placeholder}
