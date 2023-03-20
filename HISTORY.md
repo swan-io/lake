@@ -1,3 +1,9 @@
+# 1.3.0
+
+Changes:
+
+- Sync updates (3c1234c, aadcdad, a575e67)
+
 # 1.2.6
 
 Changes:
