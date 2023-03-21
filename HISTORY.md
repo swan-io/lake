@@ -1,3 +1,12 @@
+# 1.3.2
+
+Changes:
+
+- Add max char count indicator in LakeTextinput (a3230d5)
+- Make LakeSelect handle long value with ellipsis (a3230d5)
+- Improve partner color variations computation (a3230d5)
+- Sync translations (a3230d5)
+
 # 1.3.1
 
 Changes:
