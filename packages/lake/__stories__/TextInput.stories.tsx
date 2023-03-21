@@ -40,6 +40,10 @@ export const Variations = () => {
         <EditableInputText validating={true} />
       </StoryPart>
 
+      <StoryPart title="Valid">
+        <EditableInputText valid={true} />
+      </StoryPart>
+
       <StoryPart title="Invalid">
         <EditableInputText error="This input is invalid" />
       </StoryPart>
@@ -48,8 +52,15 @@ export const Variations = () => {
         <EditableInputText error="This input is invalid" hideErrors={true} />
       </StoryPart>
 
-      <StoryPart title="Valid">
-        <EditableInputText valid={true} />
+      <StoryPart title="With character counter">
+        <EditableInputText maxCharCount={15} />
+      </StoryPart>
+
+      <StoryPart title="Character counter with error message">
+        <EditableInputText
+          error="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque blandit semper ornare. "
+          maxCharCount={15}
+        />
       </StoryPart>
 
       <StoryPart title="Disabled">

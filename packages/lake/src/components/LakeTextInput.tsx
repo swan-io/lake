@@ -22,6 +22,8 @@ import { useHover } from "../hooks/useHover";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { useNativeProp } from "../hooks/useNativeProp";
 import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
+import { Box } from "./Box";
+import { Fill } from "./Fill";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 
@@ -111,9 +113,6 @@ const styles = StyleSheet.create({
     right: 0,
   },
 
-  errorText: {
-    paddingTop: spacings[4],
-  },
   unit: {
     backgroundColor: colors.gray[50],
     paddingHorizontal: spacings[16],
@@ -132,6 +131,12 @@ const styles = StyleSheet.create({
   focused: {
     borderColor: colors.gray[500],
     boxShadow: shadows.tile,
+  },
+  descriptionLimitation: {
+    flexShrink: 0,
+  },
+  errorContainer: {
+    paddingTop: spacings[4],
   },
 });
 
@@ -152,6 +157,7 @@ export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> &
   hideErrors?: boolean;
   style?: TextInputProps["style"];
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  maxCharCount?: number;
 };
 
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
@@ -176,6 +182,9 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       value,
       defaultValue,
       multiline = false,
+      //maxCharCount is different from maxLength(props inherited of TextInput), maxLength truncates the text in the limitation asked,
+      //maxCharCount doesn't have limitation but displays a counter of characters
+      maxCharCount,
       ...props
     }: LakeTextInputProps,
     forwardRef,
@@ -210,6 +219,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
     const mergedRef = useMergeRefs(inputRef, forwardRef);
     const isInteractive = !disabled && !readOnly;
     const hasError = isNotNullishOrEmpty(error);
+    const charCount = isNullish(value) ? 0 : value.length;
 
     return (
       <View style={commonStyles.fill}>
@@ -289,9 +299,23 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
         </View>
 
         {!hideErrors && (
-          <LakeText color={colors.negative[400]} style={styles.errorText}>
-            {error ?? " "}
-          </LakeText>
+          <Box direction="row" justifyContent="spaceBetween" style={styles.errorContainer}>
+            <LakeText color={colors.negative[400]}>{error ?? " "}</LakeText>
+
+            {isNotNullish(maxCharCount) && (
+              <>
+                <Fill minWidth={4} />
+
+                <LakeText
+                  variant="smallRegular"
+                  color={charCount > maxCharCount ? colors.negative[500] : colors.gray[400]}
+                  style={styles.descriptionLimitation}
+                >
+                  {charCount} / {maxCharCount}
+                </LakeText>
+              </>
+            )}
+          </Box>
         )}
       </View>
     );

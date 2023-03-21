@@ -27,6 +27,7 @@ const items = [
   { name: "Charlotte", value: 2 },
   { name: "Francis", value: 3 },
   { name: "Émilie", value: 4 },
+  { name: "Marie-Laure-Natasha-Valérie-Émilie", value: 17 },
   { name: "François", value: 5 },
   { name: "Laura", value: 6 },
   { name: "Marie-Anne", value: 7 },
