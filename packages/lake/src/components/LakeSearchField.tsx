@@ -13,10 +13,6 @@ const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
     flexShrink: 1,
-    // ResponsiveContainer uses a 200 breaking,
-    // we give the opportunity to the component to grow 2px more
-    // to trigger the change
-    maxWidth: 202,
     minWidth: 38,
   },
   container: {
@@ -74,7 +70,7 @@ type Props = {
   placeholder: string;
   onChangeText: (text: string) => void;
   debounceDuration?: number;
-  maxWidth?: number;
+  maxWidth?: number | `${number}%`;
 };
 
 type InternalProps = {
@@ -211,7 +207,10 @@ export const LakeSearchField = ({
   placeholder,
   onChangeText,
   debounceDuration = 500,
-  maxWidth,
+  // ResponsiveContainer uses a 200 breaking,
+  // we give the opportunity to the component to grow 2px more
+  // to trigger the change
+  maxWidth = 202,
 }: Props) => {
   const [hasFocus, setFocused] = useBoolean(false);
   const inputRef = useRef<TextInput>(null);

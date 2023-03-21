@@ -208,19 +208,16 @@ export const SimpleRegularTextCell = ({
   variant = "regular",
   text,
   textAlign = "left",
+  color = colors.gray[900],
 }: {
   variant?: TextVariant;
   text: string;
   textAlign?: "left" | "center" | "right";
+  color?: string;
 }) => {
   return (
     <View style={styles.cell}>
-      <LakeText
-        align={textAlign}
-        color={colors.gray[900]}
-        style={styles.regularText}
-        variant={variant}
-      >
+      <LakeText align={textAlign} color={color} style={styles.regularText} variant={variant}>
         {text}
       </LakeText>
     </View>

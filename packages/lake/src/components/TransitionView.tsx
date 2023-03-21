@@ -10,6 +10,7 @@ type Props = {
   pointerEvents?: ViewProps["pointerEvents"];
   children: ReactNode | null;
   onLeave?: () => void;
+  preventEnter?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -25,6 +26,7 @@ export const TransitionView = ({
   children,
   pointerEvents,
   onLeave,
+  preventEnter = false,
 }: Props) => {
   const viewRef = useRef<View>(null);
   const childrenForLeaveAnimationRef = useRef<ReactNode | null>(null);
@@ -67,7 +69,7 @@ export const TransitionView = ({
       style={[
         styles.base,
         style,
-        enter,
+        !preventEnter && enter,
         isNotNullish(childrenForLeaveAnimationRef.current) && leave,
       ]}
     >
