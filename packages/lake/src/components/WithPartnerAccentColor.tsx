@@ -44,87 +44,22 @@ export const WithPartnerAccentColor = ({ color, scoped = false, children }: Prop
         }
 
         const colorScale: ColorScale = {
-          0: setLightness(1.0, color),
-          50: setLightness(0.97, color),
-          100: setLightness(0.9, color),
-          200: setLightness(0.8, color),
-          300: setLightness(0.7, color),
-          400: setLightness(0.6, color),
-          500: setLightness(0.5, color),
-          600: setLightness(0.4, color),
-          700: setLightness(0.3, color),
-          800: setLightness(0.2, color),
-          900: setLightness(0.1, color),
+          0: setLightness(Math.pow(1.0, scalePower), color),
+          50: setLightness(Math.pow(0.97, scalePower), color),
+          100: setLightness(Math.pow(0.9, scalePower), color),
+          200: setLightness(Math.pow(0.8, scalePower), color),
+          300: setLightness(Math.pow(0.7, scalePower), color),
+          400: setLightness(Math.pow(0.6, scalePower), color),
+          500: setLightness(Math.pow(0.5, scalePower), color),
+          600: setLightness(Math.pow(0.4, scalePower), color),
+          700: setLightness(Math.pow(0.3, scalePower), color),
+          800: setLightness(Math.pow(0.2, scalePower), color),
+          900: setLightness(Math.pow(0.1, scalePower), color),
           primary: color,
           contrast: getContrastColor(color),
           secondary: shade(0.2, color),
         };
 
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-900",
-          colorScale[900],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-800",
-          colorScale[800],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-700",
-          colorScale[700],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-600",
-          colorScale[600],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-500",
-          colorScale[500],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-400",
-          colorScale[400],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-300",
-          colorScale[300],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-200",
-          colorScale[200],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-100",
-          colorScale[100],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-50",
-          colorScale[50],
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-primary",
-          colorScale.primary,
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-secondary",
-          colorScale.secondary,
-          "",
-        );
-        element.ownerDocument.documentElement.style.setProperty(
-          "--color-partner-contrast",
-          colorScale.contrast,
-          "",
-        );
         const rootElement = scoped ? element : element.ownerDocument.documentElement;
 
         rootElement.style.setProperty("--color-partner-900", colorScale[900], "");

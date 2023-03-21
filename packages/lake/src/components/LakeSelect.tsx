@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacings[24],
     paddingVertical: spacings[8],
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   itemHighlighted: {
@@ -103,9 +102,9 @@ const styles = StyleSheet.create({
     backgroundColor: invariantColors.transparent,
   },
   itemText: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
   },
   errorText: {
     paddingTop: spacings[4],
@@ -251,7 +250,7 @@ export function LakeSelect<V>({
             {mode === "normal" && <View style={[styles.shadowed, hovered && styles.hovered]} />}
 
             <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-              <Box direction="row" alignItems="center">
+              <Box direction="row" alignItems="center" style={commonStyles.fill}>
                 {icon && (
                   <>
                     <Icon color={colors[color].primary} name={icon} size={isSmall ? 16 : 18} />
@@ -260,11 +259,7 @@ export function LakeSelect<V>({
                 )}
 
                 {hasValue ? (
-                  <LakeText
-                    color={colors.gray[900]}
-                    variant={isSmall ? "smallRegular" : "regular"}
-                    style={[styles.itemText, valueStyle]}
-                  >
+                  <Box direction="row" alignItems="center" style={commonStyles.fill}>
                     {isNotNullish(itemValue?.icon) && (
                       <>
                         {itemValue?.icon}
@@ -273,11 +268,21 @@ export function LakeSelect<V>({
                       </>
                     )}
 
-                    {name}
-                  </LakeText>
+                    <LakeText
+                      color={colors.gray[900]}
+                      variant={isSmall ? "smallRegular" : "regular"}
+                      style={[styles.itemText, valueStyle]}
+                    >
+                      {name}
+                    </LakeText>
+                  </Box>
                 ) : (
                   <LakeText
-                    style={[styles.selectPlaceholder, isSmall && styles.selectSmallPlaceholder]}
+                    style={[
+                      styles.itemText,
+                      styles.selectPlaceholder,
+                      isSmall && styles.selectSmallPlaceholder,
+                    ]}
                   >
                     {placeholder ?? " "}
                   </LakeText>
@@ -373,21 +378,23 @@ export function LakeSelect<V>({
                   close();
                 }}
               >
+                {isNotNullish(item.icon) && (
+                  <>
+                    {item.icon}
+
+                    <Space width={12} />
+                  </>
+                )}
+
                 <LakeText
                   color={colors.gray[900]}
                   numberOfLines={1}
                   style={[styles.itemText, isSelected && styles.selected]}
                 >
-                  {isNotNullish(item.icon) && (
-                    <>
-                      {item.icon}
-
-                      <Space width={12} />
-                    </>
-                  )}
-
                   {item.name}
                 </LakeText>
+
+                <Fill minWidth={12} />
 
                 {isSelected && (
                   <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
