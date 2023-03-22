@@ -1,26 +1,6 @@
 {
+  "extends": "./tsconfig.json",
   "include": ["packages"],
-  "exclude": ["node_modules", "packages/lake/__stories__"],
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "jsx": "react-jsx",
-    "moduleResolution": "Node",
-
-    "declaration": true,
-    "allowJs": false,
-    "strict": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "incremental": false,
-    "esModuleInterop": true,
-
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["types", "node_modules/@types"]
-  }
+  "exclude": ["node_modules", "packages/lake/__stories__", "scripts"],
+  "references": []
 }

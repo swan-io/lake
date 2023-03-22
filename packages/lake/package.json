@@ -48,14 +48,11 @@
   },
   "devDependencies": {
     "@storybook/react": "^6.5.16",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/react-native": "^0.70.12",
     "@types/uuid": "^9.0.1",
     "jsdom": "^21.1.1",
-    "type-fest": "^3.6.1",
-    "vitest": "^0.29.7"
+    "type-fest": "^3.6.1"
   }
 }
