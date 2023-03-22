@@ -21,6 +21,9 @@
     "build-storybook": "build-storybook --output-dir dist",
     "test": "vitest run",
     "build": "tsc -p tsconfig.build.json",
+    "clean-build": "tsx scripts/clean/clean-build.ts",
+    "link-packages": "sh scripts/link-packages/link.sh",
+    "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "bump": "node scripts/version/version.mjs"
@@ -42,6 +45,7 @@
     "eslint-plugin-react-native": "4.0.0",
     "eslint-plugin-react-native-a11y": "3.3.0",
     "eslint-plugin-swan": "file:scripts/eslint",
+    "glob": "9.3.1",
     "semver": "7.3.8",
     "tsx": "3.12.5",
     "typescript": "4.9.5",

@@ -1,6 +1,6 @@
 {
   "include": ["packages"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "packages/lake/__stories__"],
   "compilerOptions": {
     "module": "ESNext",
     "target": "ESNext",
