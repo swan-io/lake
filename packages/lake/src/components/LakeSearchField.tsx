@@ -3,9 +3,13 @@ import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { animations, backgroundColor, colors, radii } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
 import { useDebounce } from "../hooks/useDebounce";
+import { isNotNullish } from "../utils/nullish";
+import { Box } from "./Box";
 import { LakeButton } from "./LakeButton";
-import { LakeTextInput } from "./LakeTextInput";
+import { LakeText } from "./LakeText";
+import { inputBackgroundColor, LakeTextInput } from "./LakeTextInput";
 import { ResponsiveContainer } from "./ResponsiveContainer";
+import { Space } from "./Space";
 import { Line, Svg } from "./Svg";
 import { TransitionView } from "./TransitionView";
 
@@ -63,6 +67,16 @@ const styles = StyleSheet.create({
     boxShadow: `0 0 20px 20px ${backgroundColor.default}`,
     borderRadius: radii[6],
   },
+  containerTotalCount: {
+    borderWidth: 1,
+    borderColor: colors.gray[200],
+    backgroundColor: colors.gray[100],
+    paddingHorizontal: 8,
+    borderRadius: 4,
+  },
+  containerClear: {
+    backgroundColor: inputBackgroundColor,
+  },
 });
 
 type Props = {
@@ -71,6 +85,7 @@ type Props = {
   onChangeText: (text: string) => void;
   debounceDuration?: number;
   maxWidth?: number | `${number}%`;
+  totalCount?: number;
 };
 
 type InternalProps = {
@@ -82,6 +97,7 @@ type InternalProps = {
   hasFocus: boolean;
   clear: () => void;
   currentValue: string;
+  totalCount?: number;
 };
 
 const CollapsibleSeachField = ({
@@ -93,6 +109,7 @@ const CollapsibleSeachField = ({
   hasFocus,
   clear,
   currentValue,
+  totalCount,
 }: InternalProps) => {
   return (
     <View>
@@ -122,6 +139,7 @@ const CollapsibleSeachField = ({
               hasFocus={hasFocus}
               clear={clear}
               currentValue={currentValue}
+              totalCount={totalCount}
             />
           </View>
         ) : null}
@@ -138,6 +156,7 @@ const ExpandedSearchField = ({
   setFocused,
   hasFocus,
   clear,
+  totalCount,
 }: InternalProps) => {
   const timeoutRef = useRef<number | null>(null);
   return (
@@ -174,29 +193,43 @@ const ExpandedSearchField = ({
         }}
         style={styles.clearButton}
       >
-        <Svg viewBox="0 0 16 16" style={styles.clear}>
-          <>
-            <Line
-              x1="0"
-              x2="16"
-              y1="0"
-              y2="16"
-              strokeLinecap="round"
-              stroke={colors.gray[500]}
-              strokeWidth={2}
-            />
+        <Box direction="row" alignItems="center" style={styles.containerClear}>
+          <Svg viewBox="0 0 16 16" style={styles.clear}>
+            <>
+              <Line
+                x1="0"
+                x2="16"
+                y1="0"
+                y2="16"
+                strokeLinecap="round"
+                stroke={colors.gray[500]}
+                strokeWidth={2}
+              />
 
-            <Line
-              x1="0"
-              x2="16"
-              y1="16"
-              y2="0"
-              strokeLinecap="round"
-              stroke={colors.gray[500]}
-              strokeWidth={2}
-            />
-          </>
-        </Svg>
+              <Line
+                x1="0"
+                x2="16"
+                y1="16"
+                y2="0"
+                strokeLinecap="round"
+                stroke={colors.gray[500]}
+                strokeWidth={2}
+              />
+            </>
+          </Svg>
+
+          {isNotNullish(totalCount) && (
+            <>
+              <Space width={12} />
+
+              <View style={styles.containerTotalCount}>
+                <LakeText align="center" color={colors.gray[900]}>
+                  {totalCount}
+                </LakeText>
+              </View>
+            </>
+          )}
+        </Box>
       </Pressable>
     </View>
   );
@@ -207,6 +240,7 @@ export const LakeSearchField = ({
   placeholder,
   onChangeText,
   debounceDuration = 500,
+  totalCount,
   // ResponsiveContainer uses a 200 breaking,
   // we give the opportunity to the component to grow 2px more
   // to trigger the change
@@ -244,6 +278,7 @@ export const LakeSearchField = ({
             hasFocus={hasFocus}
             clear={clear}
             currentValue={currentValue}
+            totalCount={totalCount}
           />
         ) : (
           <View style={styles.smallButtonContainer}>

@@ -28,6 +28,7 @@ import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 
 const TRANSPARENT = "transparent";
+export const inputBackgroundColor = backgroundColor.accented;
 
 const styles = StyleSheet.create({
   root: {

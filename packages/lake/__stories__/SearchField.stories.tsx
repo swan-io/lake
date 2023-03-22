@@ -38,6 +38,18 @@ export const Variations = () => {
         <Space height={12} />
         <LakeText>Debounced value: {text2}</LakeText>
       </StoryPart>
+
+      <StoryPart title="With total count" style={styles.container}>
+        <LakeSearchField
+          initialValue=""
+          placeholder="Placeholder"
+          onChangeText={setText1}
+          totalCount={10}
+        />
+
+        <Space height={12} />
+        <LakeText>Debounced value: {text1}</LakeText>
+      </StoryPart>
     </StoryBlock>
   );
 };
