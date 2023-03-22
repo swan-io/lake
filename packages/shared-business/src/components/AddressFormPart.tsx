@@ -1,5 +1,5 @@
-import { AddressSearchInput } from "@swan-io/shared-business/src/components/AddressSearchInput";
-import { CountryCCA3 } from "@swan-io/shared-business/src/constants/countries";
+import { AddressSearchInput } from "./AddressSearchInput";
+import { CountryCCA3 } from "../constants/countries";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
