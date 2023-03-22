@@ -22,11 +22,5 @@
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["types", "node_modules/@types"]
-  },
-  "references": [
-    {
-      "@swan-io/lake": "packages/lake",
-      "@swan-io/shared-business": "packages/shared-business"
-    }
-  ]
+  }
 }
