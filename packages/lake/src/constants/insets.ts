@@ -10,7 +10,7 @@ const left = `${cssFn}(safe-area-inset-left)`;
 const right = `${cssFn}(safe-area-inset-right)`;
 
 const addToX = (value: number | string, to: string) =>
-  isAvailable && (value > 0 || typeof value === "string")
+  isAvailable && (typeof value === "string" || value > 0)
     ? `calc(${to} + ${typeof value === "string" ? value : `${value}px`})`
     : value;
 
