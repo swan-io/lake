@@ -1,3 +1,9 @@
+## 1.4.1
+
+Fixes:
+
+- Fix changelog shape (86246ff)
+
 ## 1.4.0
 
 Changes:
