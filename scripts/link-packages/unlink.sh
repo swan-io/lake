@@ -16,4 +16,4 @@ cd node_modules/react-dom
 yarn unlink
 cd ../..
 
-echo "Don't forget to run `yarn install --force` where the packages are used"
+echo "Don't forget to run "yarn install --force" where the packages are used"
