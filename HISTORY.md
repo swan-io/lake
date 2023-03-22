@@ -1,3 +1,11 @@
+# 1.4.0
+
+Changes:
+
+- Don't build `__stories__` (0c8d18b)
+- Add script to link packages for local development (9fc09dd)
+- Fix dependencies versions (a8bc6a6)
+
 # 1.3.2
 
 Changes:
