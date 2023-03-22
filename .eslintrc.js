@@ -70,10 +70,7 @@ module.exports = {
       { argsIgnorePattern: "^_", ignoreRestSiblings: true },
     ],
 
-    "@typescript-eslint/ban-ts-comment": [
-      "error",
-      { "ts-check": true, "ts-expect-error": false },
-    ],
+    "@typescript-eslint/ban-ts-comment": ["error", { "ts-check": true, "ts-expect-error": false }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-base-to-string": "error",
     "@typescript-eslint/no-explicit-any": "error",
