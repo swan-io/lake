@@ -98,7 +98,7 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
     nextData,
     isForceReloading,
     reload: originalReload,
-  } = useUrqlQuery(
+  } = useUrqlQuery<Data, Variables>(
     { ...args, variables: { ...args.variables, after } as Variables },
     dependencyList,
   );
