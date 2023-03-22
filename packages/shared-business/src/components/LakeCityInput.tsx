@@ -1,5 +1,5 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { useGoogleMapSDK } from "@swan-io/shared-business/src/hooks/useGoogleMapSDK";
+import { useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxRef } from "@swan-io/lake/src/components/LakeCombobox";

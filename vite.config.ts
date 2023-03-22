@@ -1,10 +1,8 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   resolve: {
-    alias: {
-      "react-native": "react-native-web",
-    },
+    alias: { "react-native": "react-native-web" },
   },
   test: {
     setupFiles: ["scripts/tests/testSetup.ts"],

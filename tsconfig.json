@@ -1,6 +1,7 @@
 {
   "include": ["packages", "scripts"],
   "exclude": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "module": "ESNext",
     "target": "ESNext",
@@ -8,14 +9,14 @@
     "jsx": "react-jsx",
     "moduleResolution": "Node",
 
-    "declaration": true,
     "allowJs": false,
     "strict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "incremental": false,
     "isolatedModules": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "incremental": false,
-    "esModuleInterop": true,
 
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,

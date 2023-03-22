@@ -98,7 +98,10 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
     nextData,
     isForceReloading,
     reload: originalReload,
-  } = useUrqlQuery({ ...args, variables: { ...args.variables, after } }, dependencyList);
+  } = useUrqlQuery(
+    { ...args, variables: { ...args.variables, after } as Variables },
+    dependencyList,
+  );
 
   useEffect(() => {
     setAfter(undefined);

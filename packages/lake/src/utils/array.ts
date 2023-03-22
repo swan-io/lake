@@ -60,7 +60,7 @@ export const sortedIndexOf = <T>(array: T[], value: T) => {
       return searchIndex;
     }
 
-    if (typeof item === "number") {
+    if (typeof item === "number" && typeof value === "number") {
       if (item > value) {
         endIndex = searchIndex;
         continue;
