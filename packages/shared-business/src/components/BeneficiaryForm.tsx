@@ -68,6 +68,7 @@ type Props = {
   initialState?: EditorState;
   accountCountry: AccountCountry;
   step: BeneficiaryFormStep;
+  googleMapApiKey: string;
   onStepChange: (step: BeneficiaryFormStep) => void;
   onSave: (editorState: EditorState) => void | Promise<void>;
   onClose: () => void;
@@ -251,7 +252,7 @@ const requiredStepFields = [
 
 export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>(
   (
-    { initialState, accountCountry, step, onStepChange, onClose, onSave, onCityLoadError }: Props,
+    { initialState, accountCountry, step, googleMapApiKey, onStepChange, onClose, onSave, onCityLoadError }: Props,
     ref,
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
@@ -644,6 +645,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                     {({ country }) => (
                       <>
                         <AddressFormPart
+                          apiKey={googleMapApiKey}
                           initialAddress={initialState?.residencyAddressLine1 ?? ""}
                           initialCity={initialState?.residencyAddressCity ?? ""}
                           initialPostalCode={initialState?.residencyAddressPostalCode ?? ""}

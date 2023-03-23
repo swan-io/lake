@@ -62,7 +62,7 @@ type Props = {
   placeholder: string;
   shouldDisplaySuggestions?: boolean;
   emptyResultText: string;
-  apiKey?: string;
+  apiKey: string;
 };
 
 type State = AsyncData<Result<Suggestion[], unknown>>;

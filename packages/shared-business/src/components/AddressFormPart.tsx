@@ -26,6 +26,7 @@ type Props = {
   optionalLabel?: string;
   placeholder?: string;
   isLarge: boolean;
+  apiKey: string;
 } & FormProps;
 
 export const AddressFormPart = ({
@@ -40,6 +41,7 @@ export const AddressFormPart = ({
   setFieldValue,
   listenFields,
   isLarge,
+  apiKey,
 }: Props) => {
   const [manualModeEnabled, setManualMode] = useBoolean(
     initialAddress !== "" || initialCity !== "" || initialPostalCode !== "",
@@ -73,6 +75,7 @@ export const AddressFormPart = ({
             render={id => (
               <AddressSearchInput
                 inputRef={ref}
+                apiKey={apiKey}
                 emptyResultText={t("common.noResult")}
                 placeholder={placeholder ?? t("addressFormPart.placeholder")}
                 language={locale.language}
