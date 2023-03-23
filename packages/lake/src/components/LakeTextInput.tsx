@@ -164,6 +164,7 @@ export type LakeTextInputProps = Except<
   style?: TextInputProps["style"];
   onChange?: ChangeEventHandler<HTMLInputElement>;
   maxCharCount?: number;
+  help?: string;
 };
 
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
@@ -193,6 +194,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       //maxCharCount is different from maxLength(props inherited of TextInput), maxLength truncates the text in the limitation asked,
       //maxCharCount doesn't have limitation but displays a counter of characters
       maxCharCount,
+      help,
       ...props
     }: LakeTextInputProps,
     forwardRef,
@@ -309,10 +311,19 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
         </View>
 
         {!hideErrors && (
-          <Box direction="row" justifyContent="spaceBetween" style={styles.errorContainer}>
-            <LakeText variant="smallRegular" color={colors.negative[500]}>
-              {error ?? " "}
-            </LakeText>
+          <Box direction="row" style={styles.errorContainer}>
+            {isNotNullish(help) ? (
+              <LakeText
+                variant="smallRegular"
+                color={error != null ? colors.negative[500] : colors.gray[500]}
+              >
+                {help}
+              </LakeText>
+            ) : (
+              <LakeText variant="smallRegular" color={colors.negative[500]}>
+                {error ?? " "}
+              </LakeText>
+            )}
 
             {isNotNullish(maxCharCount) && (
               <>
