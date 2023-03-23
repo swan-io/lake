@@ -1,3 +1,9 @@
+## 1.4.3
+
+Fixes:
+
+- Fix `useUrqlMutation` hook input type (78e1c97)
+
 ## 1.4.2
 
 Changes:
