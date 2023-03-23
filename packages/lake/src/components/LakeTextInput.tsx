@@ -315,7 +315,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
             {isNotNullish(help) ? (
               <LakeText
                 variant="smallRegular"
-                color={error != null ? colors.negative[500] : colors.gray[500]}
+                color={isNotNullish(error) ? colors.negative[500] : colors.gray[500]}
               >
                 {help}
               </LakeText>
