@@ -67,4 +67,6 @@ We use [Vitest](https://vitest.dev/api/) and [React Testing Library](https://tes
 
 ## Releasing
 
-First, write the changes in `HISTORY.md` and commit the release notes, then run `yarn bump`, after that you can `git push && git push --tags`
+1. Write the changes in `HISTORY.md` and commit the release notes as `X.X.X release notes`.
+2. Run `yarn bump`, set the version according to what you set in `HISTORY.md`
+3. Run `git push && git push --tags`
