@@ -1,3 +1,9 @@
+## 1.4.2
+
+Changes:
+
+- Remove `graphql` dependency (cd48adf)
+
 ## 1.4.1
 
 Fixes:
