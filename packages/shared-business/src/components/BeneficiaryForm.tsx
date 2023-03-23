@@ -25,6 +25,10 @@ import {
 import { decodeBirthDate, encodeBirthDate } from "../utils/date";
 import { locale, rifmDateProps, t } from "../utils/i18n";
 import {
+  getIndividualTaxNumberHelp,
+  getIndividualTaxNumberPlaceholder,
+} from "../utils/templateTranslations";
+import {
   validateBooleanRequired,
   validateIndividualTaxNumber,
   validateNullableRequired,
@@ -129,7 +133,7 @@ export const validateUbo = (
     residencyAddressPostalCode: isAddressRequired
       ? (validateNullableRequired(editorState.residencyAddressPostalCode) as SyncValidationResult)
       : undefined,
-    taxIdentificationNumber: validateIndividualTaxNumber(
+    taxIdentificationNumber: validateIndividualTaxNumber(accountCountry)(
       editorState.taxIdentificationNumber ?? "",
     ) as SyncValidationResult,
     indirect:
@@ -351,7 +355,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         },
         taxIdentificationNumber: {
           initialValue: initialState?.taxIdentificationNumber,
-          validate: validateIndividualTaxNumber,
+          validate: validateIndividualTaxNumber(accountCountry),
           sanitize: value => value?.trim(),
         },
       });
@@ -685,9 +689,10 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   render={id => (
                                     <LakeTextInput
                                       id={id}
-                                      placeholder={t(
-                                        "beneficiaryForm.beneficiary.taxIdentificationNumberPlaceholder",
+                                      placeholder={getIndividualTaxNumberPlaceholder(
+                                        accountCountry,
                                       )}
+                                      help={getIndividualTaxNumberHelp(accountCountry)}
                                       value={value}
                                       error={error}
                                       valid={valid}
