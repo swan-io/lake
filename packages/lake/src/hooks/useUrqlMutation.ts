@@ -1,7 +1,6 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { DocumentNode } from "graphql";
 import { useCallback, useMemo } from "react";
-import { AnyVariables, CombinedError, TypedDocumentNode, useMutation } from "urql";
+import { AnyVariables, CombinedError, MutationProps, useMutation } from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
 const toResult = <Data>({
@@ -22,7 +21,7 @@ const toResult = <Data>({
 };
 
 export const useUrqlMutation = <Data, Variables extends AnyVariables>(
-  query: DocumentNode | TypedDocumentNode<Data, Variables> | string,
+  query: MutationProps<Data, Variables>["query"],
 ) => {
   const [{ fetching, data, error }, execute] = useMutation<Data, Variables>(query);
 

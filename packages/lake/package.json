@@ -30,7 +30,6 @@
     "@swan-io/boxed": "^0.12.1",
     "@swan-io/chicane": "^1.3.4",
     "dayjs": "^1.11.7",
-    "graphql": "^15.8.0",
     "polished": "^4.2.2",
     "prism-react-renderer": "^1.3.5",
     "react": "^18.2.0",
