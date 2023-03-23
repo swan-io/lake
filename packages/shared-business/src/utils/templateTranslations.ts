@@ -15,6 +15,12 @@ export const getCompanyTaxNumberPlaceholder = (accountCountry: AccountCountry) =
     .with("ESP", () => `${t('common.form.taxIdentificationNumber.placeholder')} (Número de Identificación Fiscal)`)
     .otherwise(() => t('common.form.taxIdentificationNumber.placeholder'));
 
+export const getTaxNumberTooltip = (accountCountry: AccountCountry) =>
+  match(accountCountry)
+    .with("DEU", () => t("common.form.taxIdentificationNumber.tooltip.deu"))
+    .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
+    .otherwise(() => '');
+
 export const getCompanyTaxNumberHelp = (accountCountry: AccountCountry) =>
   match(accountCountry)
     .with("DEU", () => t("common.form.help.nbDigits", { nbDigits: '10-11' }))

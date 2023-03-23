@@ -25,10 +25,6 @@ import {
 import { decodeBirthDate, encodeBirthDate } from "../utils/date";
 import { locale, rifmDateProps, t } from "../utils/i18n";
 import {
-  getIndividualTaxNumberHelp,
-  getIndividualTaxNumberPlaceholder,
-} from "../utils/templateTranslations";
-import {
   validateBooleanRequired,
   validateIndividualTaxNumber,
   validateNullableRequired,
@@ -37,6 +33,7 @@ import {
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
 import { GMapCityInput } from "./GMapCityInput";
+import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -583,6 +580,24 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                     </FieldsListener>
                   </Box>
 
+                  {accountCountry === "ESP" && (
+                    <>
+                      <Space height={12} />
+
+                      <Field name="taxIdentificationNumber">
+                        {({ value, error, valid, onChange }) => (
+                          <TaxIdentificationNumberInput
+                            value={value ?? ""}
+                            error={error}
+                            valid={valid}
+                            onChange={onChange}
+                            accountCountry={accountCountry}
+                          />
+                        )}
+                      </Field>
+                    </>
+                  )}
+
                   <Field name="type">
                     {({ value, onChange }) => (
                       <LakeLabel
@@ -683,22 +698,12 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
 
                             <Field name="taxIdentificationNumber">
                               {({ value, error, valid, onChange }) => (
-                                <LakeLabel
-                                  label={t("beneficiaryForm.beneficiary.taxIdentificationNumber")}
-                                  optionalLabel={t("common.optional")}
-                                  render={id => (
-                                    <LakeTextInput
-                                      id={id}
-                                      placeholder={getIndividualTaxNumberPlaceholder(
-                                        accountCountry,
-                                      )}
-                                      help={getIndividualTaxNumberHelp(accountCountry)}
-                                      value={value}
-                                      error={error}
-                                      valid={valid}
-                                      onChangeText={onChange}
-                                    />
-                                  )}
+                                <TaxIdentificationNumberInput
+                                  value={value ?? ""}
+                                  error={error}
+                                  valid={valid}
+                                  onChange={onChange}
+                                  accountCountry={accountCountry}
                                 />
                               )}
                             </Field>
