@@ -1,15 +1,12 @@
-import { Box } from "@swan-io/lake/src/components/Box";
 import { Form } from "@swan-io/lake/src/components/Form";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeModal } from "@swan-io/lake/src/components/LakeModal";
-import { LakeRadio } from "@swan-io/lake/src/components/LakeRadio";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
-import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { UploadArea, UploadFileStatus } from "./UploadArea";
-import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useForm, Validator } from "react-ux-form";
@@ -69,7 +66,6 @@ type Props = {
   documents: Document[];
   requiredDocumentTypes: SupportingDocumentPurposeEnum[];
   onChange?: (documents: Document[]) => void;
-  withoutRepresentationRadio?: boolean;
   onboardingLanguage?: string;
 };
 
@@ -138,14 +134,7 @@ export type SupportingDocumentRef = {
 
 export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
   (
-    {
-      documents,
-      getAwsUrl,
-      onChange,
-      requiredDocumentTypes,
-      onboardingLanguage = locale.language,
-      withoutRepresentationRadio,
-    },
+    { documents, getAwsUrl, onChange, requiredDocumentTypes, onboardingLanguage = locale.language },
     externalRef,
   ) => {
     const initialValues: Record<string, FormValue> = useMemo(
@@ -168,10 +157,6 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
     );
 
     const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
-
-    const [isOther, setIsOther] = useState(
-      isNotNullish(initialValues["Other"]) || isNotNullish(initialValues["ProofOfIdentity"]),
-    );
 
     const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<Form>({
       CompanyRegistration: {
@@ -310,33 +295,6 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
 
     return (
       <Form>
-        {withoutRepresentationRadio !== true && (
-          <LakeLabel
-            label={t("supportingDoc.whoAreYou")}
-            render={() => (
-              <LakeButtonGroup>
-                <Pressable onPress={() => setIsOther(false)}>
-                  <Box direction="row" alignItems="center">
-                    <LakeRadio value={!isOther} color="current" />
-                    <Space width={12} />
-                    <LakeText>{t("supportingDoc.legalRepresentative")}</LakeText>
-                  </Box>
-                </Pressable>
-
-                <Space width={24} />
-
-                <Pressable onPress={() => setIsOther(true)}>
-                  <Box direction="row" alignItems="center">
-                    <LakeRadio value={isOther} color="current" />
-                    <Space width={12} />
-                    <LakeText>{t("supportingDoc.other")}</LakeText>
-                  </Box>
-                </Pressable>
-              </LakeButtonGroup>
-            )}
-          />
-        )}
-
         {requiredDocumentTypes.some(t => t === "CompanyRegistration") && (
           <>
             <LakeLabel
@@ -429,7 +387,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {(requiredDocumentTypes.some(t => t === "ProofOfIdentity") || isOther) && (
+        {requiredDocumentTypes.some(t => t === "ProofOfIdentity") && (
           <>
             <LakeLabel
               label={t("supportingDoc.proofOfIdentity")}
@@ -461,7 +419,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {(requiredDocumentTypes.some(t => t === "PowerOfAttorney") || isOther) && (
+        {requiredDocumentTypes.some(t => t === "PowerOfAttorney") && (
           <>
             <LakeLabel
               label={t("supportingDoc.powerAttornySigned")}
@@ -497,7 +455,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.length === 0 && (!isOther || withoutRepresentationRadio === true) ? (
+        {requiredDocumentTypes.length === 0 ? (
           <>
             <Space height={24} />
             <LakeText>{t("supportingDoc.noRequiredDocuments")}</LakeText>
@@ -520,9 +478,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
               color="current"
               onPress={() =>
                 window.open(
-                  `/power-of-attorney-template/${match(
-                    onboardingLanguage,
-                  )
+                  `/power-of-attorney-template/${match(onboardingLanguage)
                     .with("fr", () => "fr")
                     .with("de", () => "de")
                     .with("es", () => "es")
