@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { colors, ColorVariants } from "../constants/design";
+import { ColorVariants, colors } from "../constants/design";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";

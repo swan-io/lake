@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { colors, ColorVariants } from "../constants/design";
+import { ColorVariants, colors } from "../constants/design";
 import { typography } from "../constants/typography";
 import { Icon } from "./Icon";
 

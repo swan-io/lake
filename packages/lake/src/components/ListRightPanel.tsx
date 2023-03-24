@@ -1,5 +1,5 @@
 import { Array, Option } from "@swan-io/boxed";
-import { forwardRef, MutableRefObject } from "react";
+import { MutableRefObject, forwardRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { animations, spacings } from "../constants/design";

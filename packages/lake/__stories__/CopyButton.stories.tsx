@@ -2,7 +2,7 @@ import { ComponentMeta } from "@storybook/react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
-import { copyButtondefaultSize, LakeCopyButton } from "../src/components/LakeCopyButton";
+import { LakeCopyButton, copyButtondefaultSize } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";

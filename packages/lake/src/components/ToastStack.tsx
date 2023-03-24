@@ -1,12 +1,12 @@
-import { Box } from "./Box";
-import { Portal } from "./Portal";
-import { animations, colors, ColorVariants, shadows } from "../constants/design";
 import { memo, useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
+import { animations, colors, ColorVariants, shadows } from "../constants/design";
 import { hideToast, ToastVariant, useToasts } from "../state/toasts";
+import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
+import { Portal } from "./Portal";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 import { TransitionGroupView } from "./TransitionGroupView";

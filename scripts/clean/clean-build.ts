@@ -1,5 +1,5 @@
-import glob from "glob";
 import chalk from "chalk";
+import glob from "glob";
 import fs from "node:fs/promises";
 
 async function main() {

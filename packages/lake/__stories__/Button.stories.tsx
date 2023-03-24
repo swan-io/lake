@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { ButtonProps, LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
-import { colors, ColorVariants } from "../src/constants/design";
+import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

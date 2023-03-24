@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { LakeSelect, SelectProps } from "../src/components/LakeSelect";
 import { LakeText } from "../src/components/LakeText";
-import { colors, ColorVariants } from "../src/constants/design";
+import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

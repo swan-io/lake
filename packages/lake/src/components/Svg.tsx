@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { StyleSheet, unstable_createElement as createElement, ViewProps } from "react-native";
+import { StyleSheet, ViewProps, unstable_createElement as createElement } from "react-native";
 
 const styles = StyleSheet.create({
   svg: {

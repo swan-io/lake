@@ -1,5 +1,5 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
-import { getRifmProps, RifmProps } from "@swan-io/lake/src/utils/rifm";
+import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
 import dayjsLocaleEN from "dayjs/locale/en";
@@ -12,7 +12,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
-import { cloneElement, isValidElement, ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
@@ -20,7 +20,7 @@ import translationFR from "../locales/fr.json";
 import translationIT from "../locales/it.json";
 import translationNL from "../locales/nl.json";
 import translationPT from "../locales/pt.json";
-import { getLanguagesHelpers, LANGUAGE_FALLBACK } from "./languages";
+import { LANGUAGE_FALLBACK, getLanguagesHelpers } from "./languages";
 
 // https://day.js.org/docs/en/plugin/plugin
 dayjs.extend(utc);
@@ -29,7 +29,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt"] as const;
-type SupportedLanguage = typeof supportedLanguages[number];
+type SupportedLanguage = (typeof supportedLanguages)[number];
 
 type TranslationParams = Record<string, string | number>;
 export type TranslationKey = keyof typeof translationEN;

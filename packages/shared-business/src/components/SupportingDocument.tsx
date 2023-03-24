@@ -5,14 +5,14 @@ import { LakeModal } from "@swan-io/lake/src/components/LakeModal";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { UploadArea, UploadFileStatus } from "./UploadArea";
 import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useForm, Validator } from "react-ux-form";
+import { Validator, useForm } from "react-ux-form";
 import { match } from "ts-pattern";
 import { MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE } from "../constants/uploads";
-import { locale, t, TranslationKey } from "../utils/i18n";
+import { TranslationKey, locale, t } from "../utils/i18n";
+import { UploadArea, UploadFileStatus } from "./UploadArea";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
 const NO_ID_YET = "NO_ID_YET";

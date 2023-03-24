@@ -2,7 +2,7 @@ import { Option } from "@swan-io/boxed";
 import { Link } from "@swan-io/chicane";
 import { CSSProperties, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { colors } from "../constants/design";
 import { Box } from "./Box";
 import { Grid } from "./Grid";

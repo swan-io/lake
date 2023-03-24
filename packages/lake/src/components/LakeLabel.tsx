@@ -3,14 +3,14 @@ import {
   StyleProp,
   StyleSheet,
   TextProps,
-  unstable_createElement,
   View,
   ViewStyle,
+  unstable_createElement,
 } from "react-native";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
 import { commonStyles } from "../constants/commonStyles";
-import { colors, ColorVariants, fonts, spacings, texts } from "../constants/design";
+import { ColorVariants, colors, fonts, spacings, texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";

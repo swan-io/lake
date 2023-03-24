@@ -1,7 +1,7 @@
+import { Loader } from "@googlemaps/js-api-loader";
 import { AsyncData } from "@swan-io/boxed";
 import { useEffect } from "react";
 import { atom, useAtom } from "react-atomic-state";
-import { Loader } from "@googlemaps/js-api-loader";
 
 type Props = {
   language?: string;

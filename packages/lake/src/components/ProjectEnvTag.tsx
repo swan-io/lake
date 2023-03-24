@@ -1,6 +1,6 @@
-import { Tag } from "./Tag";
 import { match } from "ts-pattern";
 import { Icon } from "./Icon";
+import { Tag } from "./Tag";
 
 type Props = {
   projectEnv: "Live" | "Sandbox";

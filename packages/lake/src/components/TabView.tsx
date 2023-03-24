@@ -1,12 +1,18 @@
 import { useLocation } from "@swan-io/chicane";
-import { Box } from "./Box";
-import { FocusTrap } from "./FocusTrap";
-import { Icon, IconName } from "./Icon";
-import { LakeText } from "./LakeText";
-import { Link } from "./Link";
-import { PressableText } from "./Pressable";
-import { Space, SpacingValue } from "./Space";
-import { TransitionView } from "./TransitionView";
+import {
+  Fragment,
+  Ref,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import { LayoutChangeEvent, NativeSyntheticEvent, StyleSheet, Text, View } from "react-native";
+import { P, match } from "ts-pattern";
 import {
   animations,
   backgroundColor,
@@ -19,22 +25,16 @@ import {
 } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { useMergeRefs } from "../hooks/useMergeRefs";
-import { isNotNullish, isNullish } from "../utils/nullish";
-import {
-  forwardRef,
-  Fragment,
-  Ref,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { LayoutChangeEvent, NativeSyntheticEvent, StyleSheet, Text, View } from "react-native";
-import { match, P } from "ts-pattern";
 import { noop } from "../utils/function";
+import { isNotNullish, isNullish } from "../utils/nullish";
+import { Box } from "./Box";
+import { FocusTrap } from "./FocusTrap";
+import { Icon, IconName } from "./Icon";
+import { LakeText } from "./LakeText";
+import { Link } from "./Link";
+import { PressableText } from "./Pressable";
+import { Space, SpacingValue } from "./Space";
+import { TransitionView } from "./TransitionView";
 
 const TABS_HEIGHT = 40;
 export const tabsViewHeight = TABS_HEIGHT + 1;
