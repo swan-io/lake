@@ -41,7 +41,7 @@
     "@storybook/addon-links": "^6.5.16",
     "@storybook/builder-vite": "^0.4.2",
     "@storybook/react": "^6.5.16",
-    "@swan-io/lokalise-sync-cli": "^1.0.2",
+    "@swan-io/lokalise-sync-cli": "^1.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
