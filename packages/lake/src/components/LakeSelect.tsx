@@ -304,7 +304,7 @@ export function LakeSelect<V>({
       </Pressable>
 
       {!hideErrors && (
-        <LakeText color={colors.negative[400]} style={styles.errorText}>
+        <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.errorText}>
           {error ?? " "}
         </LakeText>
       )}
