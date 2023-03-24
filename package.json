@@ -23,7 +23,6 @@
     "build": "tsc -p tsconfig.build.json",
     "clean-build": "tsx scripts/clean/clean-build.ts",
     "format": "prettier '**/*' --ignore-unknown --write",
-    "lokalise": "lokalise",
     "link-packages": "sh scripts/link-packages/link.sh",
     "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
