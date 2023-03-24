@@ -22,11 +22,18 @@
     "test": "vitest run",
     "build": "tsc -p tsconfig.build.json",
     "clean-build": "tsx scripts/clean/clean-build.ts",
+    "format": "prettier '**/*' --ignore-unknown --write",
     "link-packages": "sh scripts/link-packages/link.sh",
     "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "bump": "node scripts/version/version.mjs"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write",
+    "**/*.{js,ts,tsx}": "eslint --fix",
+    "clients/**/src/locales/*.json": "lokalise clean",
+    "clients/**/src/**/*.gql": "yarn graphql-codegen"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.5.16",
@@ -46,6 +53,9 @@
     "eslint-plugin-react-native-a11y": "^3.3.0",
     "eslint-plugin-swan": "file:scripts/eslint",
     "glob": "^9.3.1",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-organize-imports": "^3.2.2",
     "semver": "^7.3.8",
     "tsx": "^3.12.6",
     "typescript": "^5.0.2",
