@@ -300,7 +300,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
 
         {!hideErrors && (
           <Box direction="row" justifyContent="spaceBetween" style={styles.errorContainer}>
-            <LakeText variant="smallRegular" color={colors.negative[400]}>
+            <LakeText variant="smallRegular" color={colors.negative[500]}>
               {error ?? " "}
             </LakeText>
 
