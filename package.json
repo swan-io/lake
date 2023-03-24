@@ -32,8 +32,7 @@
   "lint-staged": {
     "*": "prettier --ignore-unknown --write",
     "**/*.{js,ts,tsx}": "eslint --fix",
-    "clients/**/src/locales/*.json": "lokalise clean",
-    "clients/**/src/**/*.gql": "yarn graphql-codegen"
+    "packages/**/src/locales/*.json": "lokalise clean"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.5.16",
