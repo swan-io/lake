@@ -379,7 +379,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
             const allStepsValues = { ...commonStepValues.current, ...values };
 
             if (hasDefinedKeys(allStepsValues, requiredStepFields)) {
-              const [direct, indirect] = getDirectAndIndirect(values.capitalType ?? "none");
+              const [direct, indirect] = getDirectAndIndirect(allStepsValues.capitalType ?? "none");
               return onSave({
                 reference,
                 firstName: allStepsValues.firstName,
