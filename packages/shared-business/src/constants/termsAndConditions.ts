@@ -32,9 +32,12 @@ export const getTermsAndConditionsPathByAccountCountryAndLocale = ({
   accountCountry?: string;
   locale: Locale;
 }) => {
+  const rootUrlWithSlash = rootUrl.endsWith("/") ? rootUrl : rootUrl + "/";
+
   if (accountCountry == null) {
-    return new URL(defaultTerms[locale], rootUrl).toString();
+    return rootUrlWithSlash + defaultTerms[locale];
   }
+
   const termsByLocale = termsAndConditions[accountCountry] ?? defaultTerms;
-  return new URL(termsByLocale[locale], rootUrl).toString();
+  return rootUrlWithSlash + termsByLocale[locale];
 };
