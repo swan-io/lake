@@ -5,7 +5,7 @@ import { atom, useAtom } from "react-atomic-state";
 
 type Props = {
   language?: string;
-  apiKey?: string;
+  apiKey: string;
 };
 
 const sdk = atom<AsyncData<typeof google>>(AsyncData.NotAsked());

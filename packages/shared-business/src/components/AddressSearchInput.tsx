@@ -1,44 +1,25 @@
-import { AsyncData, Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@swan-io/boxed";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
+import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { Box } from "@swan-io/lake/src/components/Box";
-import { LakeCombobox } from "@swan-io/lake/src/components/LakeCombobox";
-import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
-import { colors } from "@swan-io/lake/src/constants/colors";
-import { typography } from "@swan-io/lake/src/constants/typography";
-import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
 import {
   CountryCCA2,
   CountryCCA3,
   countriesWithMultipleCCA3,
   getCCA3forCCA2,
 } from "@swan-io/shared-business/src/constants/countries";
-import { MutableRefObject, RefObject, useEffect, useMemo, useRef, useState } from "react";
-import { StyleProp, StyleSheet, Text, TextInput, ViewStyle } from "react-native";
+import { MutableRefObject, useCallback, useMemo } from "react";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.png";
 import { useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 
 const styles = StyleSheet.create({
-  itemTitle: {
-    ...typography.bodyLarge,
-    lineHeight: typography.lineHeights.title,
-    userSelect: "none",
-  },
-  itemSubtitle: {
-    ...typography.bodySmall,
-    color: colors.gray[50],
-    userSelect: "none",
-  },
   poweredByGoogle: {
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
 });
-
-type Suggestion = {
-  value: string; // Google 'place_id; value.
-  prediction: google.maps.places.AutocompletePrediction;
-};
 
 export type PlaceDetail = {
   completeAddress: string;
@@ -46,6 +27,13 @@ export type PlaceDetail = {
   city: string;
   country: string;
   postalCode: string;
+};
+
+type Suggestion = {
+  id: string; // Google 'place_id; value.
+  title: string;
+  subtitle: string;
+  value: null;
 };
 
 type Props = {
@@ -65,7 +53,50 @@ type Props = {
   apiKey: string;
 };
 
-type State = AsyncData<Result<Suggestion[], unknown>>;
+const getPlaceDetails = (placeId: string): Future<Result<PlaceDetail, unknown>> => {
+  return Future.make<Result<PlaceDetail, unknown>>(resolve => {
+    const place = new google.maps.places.PlacesService(document.createElement("div"));
+
+    place.getDetails({ placeId }, placeDetail => {
+      if (placeDetail?.address_components == null) {
+        resolve(Result.Error("No place detail found"));
+        return;
+      }
+
+      const result = {
+        completeAddress: "",
+        streetNumber: "",
+        postalCode: "",
+        country: "",
+        city: "",
+      };
+
+      placeDetail.address_components.forEach(({ types, short_name, long_name }) => {
+        const type = types[0];
+        match(type)
+          .with("street_number", () => (result.streetNumber = long_name))
+          .with("route", () => (result.completeAddress = long_name))
+          .with("postal_code", () => (result.postalCode = short_name))
+          .with(
+            "country",
+            () => (result.country = getCCA3forCCA2(short_name as CountryCCA2) ?? short_name),
+          )
+          .with("locality", () => (result.city = long_name))
+          .otherwise(() => {});
+      });
+
+      if (result.streetNumber != "") {
+        if (placeDetail?.name === `${result.completeAddress} ${result.streetNumber}`) {
+          result.completeAddress = `${result.completeAddress} ${result.streetNumber}`;
+        } else {
+          result.completeAddress = `${result.streetNumber} ${result.completeAddress}`;
+        }
+      }
+
+      resolve(Result.Ok(result));
+    });
+  });
+};
 
 export const AddressSearchInput = ({
   inputRef,
@@ -73,7 +104,7 @@ export const AddressSearchInput = ({
   country,
   disabled,
   error,
-  value: initialValue,
+  value,
   onValueChange,
   onSuggestion,
   language,
@@ -82,12 +113,6 @@ export const AddressSearchInput = ({
   emptyResultText,
   apiKey,
 }: Props) => {
-  const isFirstMount = useFirstMountState();
-  const [state, setState] = useState<State>(AsyncData.NotAsked());
-  const [value, setValue] = useState(initialValue ?? "");
-
-  const showTriggerSearchRef = useRef(true);
-
   const sdk = useGoogleMapSDK({
     language,
     apiKey,
@@ -98,145 +123,61 @@ export const AddressSearchInput = ({
     [sdk],
   );
 
-  useEffect(() => {
-    if (!isFirstMount && initialValue != null) {
-      setValue(initialValue);
-    }
-  }, [isFirstMount, initialValue]);
-
-  useEffect(() => {
-    if (value.length <= 3 || !shouldDisplaySuggestions || showTriggerSearchRef.current === false) {
-      return setState(AsyncData.NotAsked());
-    }
-
-    setState(AsyncData.Loading());
-
-    const request = Future.make<Result<google.maps.places.AutocompleteResponse, unknown>>(
-      resolve => {
-        const timeoutId = setTimeout(() => {
-          if (autocomplete.isDone()) {
-            Future.fromPromise(
-              autocomplete.get().getPlacePredictions({
-                input: value,
-                componentRestrictions: { country: countriesWithMultipleCCA3[country] ?? [country] },
-                types: ["address"],
-              }),
-            ).onResolve(resolve);
-          }
-        }, 250);
-
-        return () => clearTimeout(timeoutId);
-      },
-    ).mapOk(
-      ({ predictions }) => predictions.map(p => ({ value: p.place_id, prediction: p })),
-      true,
-    );
-
-    request.onResolve(value => setState(AsyncData.Done(value)));
-
-    return () => request.cancel();
-  }, [country, value, autocomplete, shouldDisplaySuggestions]);
-
-  useEffect(() => {
-    showTriggerSearchRef.current = true;
-  }, [value]);
-
-  return sdk.match({
-    NotAsked: () => null,
-    Loading: () => null,
-    Done: google => {
-      if (shouldDisplaySuggestions) {
-        const place = new google.maps.places.PlacesService(document.createElement("div"));
-
-        const selectAddress = (suggestion: Suggestion) => {
-          place.getDetails({ placeId: suggestion.value }, placeDetail => {
-            const result = {
-              completeAddress: "",
-              streetNumber: "",
-              postalCode: "",
-              country: "",
-              city: "",
-            };
-
-            placeDetail?.address_components?.forEach(({ types, short_name, long_name }) => {
-              const type = types[0];
-              match(type)
-                .with("street_number", () => (result.streetNumber = long_name))
-                .with("route", () => (result.completeAddress = long_name))
-                .with("postal_code", () => (result.postalCode = short_name))
-                .with(
-                  "country",
-                  () => (result.country = getCCA3forCCA2(short_name as CountryCCA2) ?? short_name),
-                )
-                .with("locality", () => (result.city = long_name))
-                .otherwise(() => {});
-            });
-
-            if (result.streetNumber != "") {
-              if (placeDetail?.name === `${result.completeAddress} ${result.streetNumber}`) {
-                result.completeAddress = `${result.completeAddress} ${result.streetNumber}`;
-              } else {
-                result.completeAddress = `${result.streetNumber} ${result.completeAddress}`;
-              }
-            }
-
-            showTriggerSearchRef.current = false;
-            setValue(result.completeAddress);
-            onSuggestion?.(result);
-          });
-        };
-
-        return (
-          <LakeCombobox<Suggestion>
-            inputRef={inputRef}
-            id={id}
-            placeholder={placeholder}
-            value={value}
-            items={state}
-            icon="search-filled"
-            disabled={disabled}
-            error={error}
-            ListFooterComponent={
-              <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
-                <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
-              </Box>
-            }
-            onSelectItem={suggestion => selectAddress(suggestion)}
-            onValueChange={value => {
-              setValue(value);
-              onValueChange(value);
-            }}
-            keyExtractor={item => item.value}
-            emptyResultText={emptyResultText}
-            renderItem={item => (
-              <>
-                <Text numberOfLines={1} style={styles.itemTitle}>
-                  {item.prediction.structured_formatting.main_text}
-                </Text>
-
-                <Text numberOfLines={1} style={styles.itemSubtitle}>
-                  {item.prediction.structured_formatting.secondary_text}
-                </Text>
-              </>
-            )}
-          />
+  const loadSuggestions = useCallback(
+    (value: string): Future<Result<Suggestion[], unknown>> => {
+      if (autocomplete.isDone()) {
+        return Future.fromPromise(
+          autocomplete.get().getPlacePredictions({
+            input: value,
+            componentRestrictions: { country: countriesWithMultipleCCA3[country] ?? [country] },
+            types: ["address"],
+          }),
+        ).mapOk(
+          ({ predictions }) =>
+            predictions.map(p => ({
+              id: p.place_id,
+              title: p.structured_formatting.main_text,
+              subtitle: p.structured_formatting.secondary_text,
+              value: null,
+            })),
+          true,
         );
       }
-      return (
-        <LakeTextInput
-          ref={inputRef as RefObject<TextInput>}
-          id={id}
-          placeholder={placeholder}
-          value={value}
-          icon="search-filled"
-          disabled={disabled}
-          error={error}
-          onChangeText={value => {
-            setValue(value);
-            onValueChange(value);
-          }}
-        />
-      );
+
+      return Future.value(Result.Ok([] as Suggestion[]));
     },
-  });
+    [autocomplete, country],
+  );
+
+  const onSuggestionSelected = useCallback(
+    (suggestion: Suggestion) => {
+      getPlaceDetails(suggestion.id).onResolve(result => {
+        if (result.isOk()) {
+          onSuggestion?.(result.value);
+        }
+      });
+    },
+    [onSuggestion],
+  );
+
+  return (
+    <AutocompleteSearchInput
+      inputRef={inputRef}
+      value={value}
+      onValueChange={onValueChange}
+      disabled={disabled}
+      nativeID={id}
+      placeholder={placeholder}
+      error={error}
+      emptyResultText={emptyResultText}
+      ListFooterComponent={
+        <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
+          <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
+        </Box>
+      }
+      shouldDisplaySuggestions={shouldDisplaySuggestions}
+      loadSuggestions={loadSuggestions}
+      onSuggestion={onSuggestionSelected}
+    />
+  );
 };

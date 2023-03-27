@@ -252,7 +252,16 @@ const requiredStepFields = [
 
 export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>(
   (
-    { initialState, accountCountry, step, googleMapApiKey, onStepChange, onClose, onSave, onCityLoadError }: Props,
+    {
+      initialState,
+      accountCountry,
+      step,
+      googleMapApiKey,
+      onStepChange,
+      onClose,
+      onSave,
+      onCityLoadError,
+    }: Props,
     ref,
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
@@ -512,6 +521,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 render={id => (
                                   <LakeCityInput
                                     id={id}
+                                    apiKey={googleMapApiKey}
                                     error={error}
                                     country={birthCountryCode.value}
                                     value={value ?? ""}

@@ -203,7 +203,7 @@ const LakeComboboxWithRef = <I,>(
           const nextIndex = index + direction;
           event.preventDefault();
 
-          if (nextIndex === 0) {
+          if (nextIndex === -1) {
             ref.current?.focus();
           } else {
             focusableElements[nextIndex === focusableElements.length ? 0 : nextIndex]?.focus();

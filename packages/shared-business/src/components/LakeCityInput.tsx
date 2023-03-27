@@ -50,7 +50,7 @@ type Props = {
   placeholder?: string;
   onSuggestion?: (place: PlaceDetail) => void;
   onLoadError: (error: unknown) => void;
-  apiKey?: string;
+  apiKey: string;
 };
 
 type State = AsyncData<Result<Suggestion[], unknown>>;
