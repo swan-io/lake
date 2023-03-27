@@ -6,8 +6,9 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useCallback, useEffect } from "react";
 import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
+import { PlaceDetail } from "../hooks/useGoogleMapSDK";
 import { locale, t } from "../utils/i18n";
-import { AddressSearchInput, PlaceDetail } from "./AddressSearchInput";
+import { AddressSearchInput } from "./AddressSearchInput";
 
 type AddressField = {
   address: string;

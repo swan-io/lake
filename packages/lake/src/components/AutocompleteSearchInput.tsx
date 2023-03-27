@@ -17,7 +17,7 @@ type Props<T> = {
   value?: string;
   onValueChange: (value: string) => void;
   disabled?: boolean;
-  nativeID?: string;
+  id?: string;
   placeholder?: string;
   error?: string;
   emptyResultText: string;
@@ -35,7 +35,7 @@ export const AutocompleteSearchInput = <T,>({
   value: initialValue,
   onValueChange,
   disabled,
-  nativeID,
+  id,
   placeholder,
   error,
   emptyResultText,
@@ -80,7 +80,7 @@ export const AutocompleteSearchInput = <T,>({
   return (
     <LakeCombobox<Suggestion<T>>
       inputRef={inputRef}
-      nativeID={nativeID}
+      id={id}
       placeholder={placeholder}
       value={value}
       items={state}
