@@ -8,7 +8,7 @@ import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
 import { PlaceDetail } from "../hooks/useGoogleMapSDK";
 import { locale, t } from "../utils/i18n";
-import { AddressSearchInput } from "./AddressSearchInput";
+import { GMapAddressSearchInput } from "./GMapAddressSearchInput";
 
 type AddressField = {
   address: string;
@@ -74,7 +74,7 @@ export const AddressFormPart = ({
             label={label ?? t("addressFormPart.addressLabel")}
             optionalLabel={optionalLabel}
             render={id => (
-              <AddressSearchInput
+              <GMapAddressSearchInput
                 inputRef={ref}
                 apiKey={apiKey}
                 emptyResultText={t("common.noResult")}

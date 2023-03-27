@@ -32,7 +32,7 @@ import {
 } from "../utils/validation";
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
-import { LakeCityInput } from "./LakeCityInput";
+import { GMapCityInput } from "./GMapCityInput";
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -519,7 +519,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 label={t("beneficiaryForm.beneficiary.birthCity")}
                                 style={styles.inputContainer}
                                 render={id => (
-                                  <LakeCityInput
+                                  <GMapCityInput
                                     id={id}
                                     apiKey={googleMapApiKey}
                                     error={error}

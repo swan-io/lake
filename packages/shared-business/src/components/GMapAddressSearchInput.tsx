@@ -2,13 +2,14 @@ import { Future, Result } from "@swan-io/boxed";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { Box } from "@swan-io/lake/src/components/Box";
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { useCallback, useMemo } from "react";
-import { StyleSheet } from "react-native";
+import {
+  CountryCCA3,
+  countriesWithMultipleCCA3,
+} from "@swan-io/shared-business/src/constants/countries";
+import { MutableRefObject, useCallback, useMemo } from "react";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.png";
-import { CountryCCA3, countriesWithMultipleCCA3 } from "../constants/countries";
 import { PlaceDetail, getPlaceDetails, useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
-import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   poweredByGoogle: {
@@ -25,31 +26,41 @@ type Suggestion = {
 };
 
 type Props = {
-  value: string;
-  onValueChange: (value: string) => void;
-  country?: CountryCCA3;
+  inputRef?: MutableRefObject<unknown>;
+  id?: string;
+  country: CountryCCA3; // cca3 country
   disabled?: boolean;
   error?: string;
-  id?: string;
-  placeholder?: string;
-  onSuggestion?: (place: Pick<PlaceDetail, "city" | "postalCode">) => void;
-  onLoadError: (error: unknown) => void;
+  onSuggestion?: (suggestion: PlaceDetail) => void;
+  onValueChange: (value: string) => void;
+  style?: StyleProp<ViewStyle>;
+  value?: string;
+  language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt";
+  placeholder: string;
+  shouldDisplaySuggestions?: boolean;
+  emptyResultText: string;
   apiKey: string;
 };
 
-export const LakeCityInput = ({
-  value,
-  onValueChange,
+export const GMapAddressSearchInput = ({
+  inputRef,
+  id,
   country,
   disabled,
-  placeholder,
-  id,
   error,
+  value,
+  onValueChange,
   onSuggestion,
-  onLoadError,
+  language,
+  placeholder,
+  shouldDisplaySuggestions = true,
+  emptyResultText,
   apiKey,
 }: Props) => {
-  const sdk = useGoogleMapSDK({ apiKey });
+  const sdk = useGoogleMapSDK({
+    language,
+    apiKey,
+  });
 
   const autocomplete = useMemo(
     () => sdk.map(google => new google.maps.places.AutocompleteService()),
@@ -58,14 +69,12 @@ export const LakeCityInput = ({
 
   const loadSuggestions = useCallback(
     (value: string): Future<Result<Suggestion[], unknown>> => {
-      if (autocomplete.isDone() && isNotNullish(country)) {
+      if (autocomplete.isDone()) {
         return Future.fromPromise(
           autocomplete.get().getPlacePredictions({
             input: value,
-            componentRestrictions: {
-              country: [...(countriesWithMultipleCCA3[country] ?? "")],
-            },
-            types: ["(cities)"],
+            componentRestrictions: { country: countriesWithMultipleCCA3[country] ?? [country] },
+            types: ["address"],
           }),
         ).mapOk(
           ({ predictions }) =>
@@ -88,7 +97,6 @@ export const LakeCityInput = ({
     (suggestion: Suggestion) => {
       getPlaceDetails(suggestion.id).onResolve(result => {
         if (result.isOk()) {
-          console.log("result.value", result.value);
           onSuggestion?.(result.value);
         }
       });
@@ -98,21 +106,22 @@ export const LakeCityInput = ({
 
   return (
     <AutocompleteSearchInput
+      inputRef={inputRef}
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}
-      id={id}
+      nativeID={id}
       placeholder={placeholder}
       error={error}
-      emptyResultText={t("common.noResult")}
+      emptyResultText={emptyResultText}
       ListFooterComponent={
         <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
           <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
         </Box>
       }
+      shouldDisplaySuggestions={shouldDisplaySuggestions}
       loadSuggestions={loadSuggestions}
       onSuggestion={onSuggestionSelected}
-      onLoadError={onLoadError}
     />
   );
 };
