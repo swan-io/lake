@@ -1,3 +1,16 @@
+## 1.4.4
+
+Changes:
+
+- Remove radio in supported documents (51028b4)
+- Change input error size (5f5a844)
+- Add lint staged (edd2106)
+- Add upload icon (fb485f0)
+
+Fixes:
+
+- Fix UBO form payload (81deb88)
+
 ## 1.4.3
 
 Fixes:
