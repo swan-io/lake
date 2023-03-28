@@ -4,13 +4,12 @@ import { EOL } from "node:os";
 import path from "node:path";
 import { P, isMatching } from "ts-pattern";
 
+const iconsConfigPath = path.join(process.cwd(), "scripts/fluent-icons/icons.json");
 const isValidIconsConfiguration = isMatching(P.array(P.string));
-const iconsConfiguration: unknown = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), "scripts/fluent-icons/icons.json"), "utf-8"),
-);
+const iconsConfiguration: unknown = JSON.parse(fs.readFileSync(iconsConfigPath, "utf-8"));
 
 if (!isValidIconsConfiguration(iconsConfiguration)) {
-  throw new Error("Invalid icons.json file");
+  throw new Error(`Invalid icons file: ${iconsConfigPath}`);
 }
 
 const FLUENT_MODULE_NAME = "@fluentui/svg-icons/icons";
