@@ -1332,6 +1332,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.36.0.tgz#9837f768c03a1e4a30bd304a64fb8844f0e72efe"
   integrity sha512-lxJ9R5ygVm8ZWgYdUweoq5ownDlJ4upvoWmO4eLxBYHdMo+vZ/Rx0EN6MbKWDJOSUGrqJy2Gt+Dyv/VKml0fjg==
 
+"@fluentui/svg-icons@^1.1.198":
+  version "1.1.198"
+  resolved "https://registry.yarnpkg.com/@fluentui/svg-icons/-/svg-icons-1.1.198.tgz#9f73e6bd46db1a48b0be7cb724493191a3fb0900"
+  integrity sha512-mjbHwrosuWyFG3NWYLKXCK9FcXv4GCQYY1yELgg1a8yc3vcaslD9lvjXJM5qO7ht6q0zV9JyrCS2hA4hjTKhqw==
+
 "@formatjs/ecma402-abstract@1.14.3":
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-1.14.3.tgz#6428f243538a11126180d121ce8d4b2f17465738"
@@ -11389,6 +11394,11 @@ ts-pattern@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.2.1.tgz#d626da4c5755d78c1ae62b8f2675c94884a31a8c"
   integrity sha512-lXCmHZb01QOM9HdCLvisCGUH9ATdKPON9UaUvwe007gJAhuSBhRWIAIowys5QqNxEq6odWctfMIdI96vzjnOMQ==
+
+ts-pattern@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.2.2.tgz#e6fae2aa1ff1a7ff2ce3166f8c329a4f252f78d6"
+  integrity sha512-qzJMo2pbkUJWusRH5o8xR+xogn6RmvViyUgwBFTtRENLse470clCGjHDf6haWGZ1AOmk8XkEohUoBW8Uut6Scg==
 
 ts-pnp@^1.1.6:
   version "1.2.0"
