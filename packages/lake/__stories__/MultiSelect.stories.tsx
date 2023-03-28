@@ -2,7 +2,7 @@ import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { MultiSelect, MultiSelectItem, MultiSelectProps } from "../src/components/MultiSelect";
-import { colors, ColorVariants } from "../src/constants/design";
+import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

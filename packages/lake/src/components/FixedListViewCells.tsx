@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useState } from "react";
 import { Clipboard, GestureResponderEvent, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
-import { colors, ColorVariants, spacings } from "../constants/design";
+import { ColorVariants, colors, spacings } from "../constants/design";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";

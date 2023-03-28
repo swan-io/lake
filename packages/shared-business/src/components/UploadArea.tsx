@@ -1,9 +1,10 @@
-import { formatNestedMessage, t } from "../utils/i18n";
 import { Box } from "@swan-io/lake/src/components/Box";
+import { FileTile } from "@swan-io/lake/src/components/FileTile";
 import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
   backgroundColor,
   colors,
@@ -12,14 +13,13 @@ import {
   shadows,
   spacings,
 } from "@swan-io/lake/src/constants/design";
+import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
+import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
-import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
-import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
-import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
-import { FileTile } from "@swan-io/lake/src/components/FileTile";
+import { formatNestedMessage, t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   container: {

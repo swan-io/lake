@@ -1,7 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { LakeSlider, sliderBreakpoint, SliderProps } from "../src/components/LakeSlider";
+import { LakeSlider, SliderProps, sliderBreakpoint } from "../src/components/LakeSlider";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

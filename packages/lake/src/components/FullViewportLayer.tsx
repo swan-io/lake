@@ -1,10 +1,10 @@
-import { FocusTrap } from "./FocusTrap";
-import { TransitionView } from "./TransitionView";
-import { backgroundColor } from "../constants/design";
 import { ReactNode, Suspense, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { backgroundColor } from "../constants/design";
+import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
+import { TransitionView } from "./TransitionView";
 
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
 

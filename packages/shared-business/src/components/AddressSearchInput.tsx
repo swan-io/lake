@@ -1,10 +1,4 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import {
-  countriesWithMultipleCCA3,
-  CountryCCA2,
-  CountryCCA3,
-  getCCA3forCCA2,
-} from "@swan-io/shared-business/src/constants/countries";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox } from "@swan-io/lake/src/components/LakeCombobox";
@@ -12,6 +6,12 @@ import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { colors } from "@swan-io/lake/src/constants/colors";
 import { typography } from "@swan-io/lake/src/constants/typography";
 import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
+import {
+  CountryCCA2,
+  CountryCCA3,
+  countriesWithMultipleCCA3,
+  getCCA3forCCA2,
+} from "@swan-io/shared-business/src/constants/countries";
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
 import { match } from "ts-pattern";

@@ -1,7 +1,7 @@
 import { StyleProp, StyleSheet, Text, TextStyle } from "react-native";
-import { Space } from "./Space";
 import { colors } from "../constants/colors";
 import { typography } from "../constants/typography";
+import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   base: {

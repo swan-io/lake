@@ -1,28 +1,9 @@
-import { FocusTrap } from "./FocusTrap";
-import { Icon } from "./Icon";
-import { LakeText } from "./LakeText";
-import { Link } from "./Link";
-import { Space } from "./Space";
-import { TransitionView } from "./TransitionView";
 import {
-  animations,
-  backgroundColor,
-  colors,
-  gray75,
-  radii,
-  shadows,
-  spacings,
-  texts,
-} from "../constants/design";
-import { useHover } from "../hooks/useHover";
-import { usePreviousValue } from "../hooks/usePreviousValue";
-import { isNotNullish, isNullish } from "../utils/nullish";
-import {
-  createContext,
   Dispatch,
   MutableRefObject,
   ReactNode,
   SetStateAction,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -39,11 +20,30 @@ import {
   Text,
   View,
 } from "react-native";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { SetRequired } from "type-fest";
 import { v4 as uuid } from "uuid";
+import {
+  animations,
+  backgroundColor,
+  colors,
+  gray75,
+  radii,
+  shadows,
+  spacings,
+  texts,
+} from "../constants/design";
+import { useHover } from "../hooks/useHover";
+import { usePreviousValue } from "../hooks/usePreviousValue";
 import { noop } from "../utils/function";
+import { isNotNullish, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
+import { FocusTrap } from "./FocusTrap";
+import { Icon } from "./Icon";
+import { LakeText } from "./LakeText";
+import { Link } from "./Link";
+import { Space } from "./Space";
+import { TransitionView } from "./TransitionView";
 
 const styles = StyleSheet.create({
   container: {

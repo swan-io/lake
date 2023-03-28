@@ -1,13 +1,13 @@
-import { FocusTrap, FocusTrapRef } from "./FocusTrap";
-import { TransitionView } from "./TransitionView";
-import { backgroundColor, breakpoints } from "../constants/design";
-import { forwardRef, ReactNode, Suspense, useEffect, useState } from "react";
+import { ReactNode, Suspense, forwardRef, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { backgroundColor, breakpoints } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
+import { FocusTrap, FocusTrapRef } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
 import { Pressable } from "./Pressable";
 import { Context, ResponsiveContainer } from "./ResponsiveContainer";
+import { TransitionView } from "./TransitionView";
 
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
 

@@ -1,7 +1,7 @@
-import { Separator } from "./Separator";
-import { isNotNullish } from "../utils/nullish";
 import { Children, ReactNode } from "react";
 import { View } from "react-native";
+import { isNotNullish } from "../utils/nullish";
+import { Separator } from "./Separator";
 
 type Props = {
   children: ReactNode;

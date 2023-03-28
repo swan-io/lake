@@ -2,10 +2,10 @@ import { ReactNode, Suspense, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import {
+  ColorVariants,
   backgroundColor,
   breakpoints,
   colors,
-  ColorVariants,
   negativeSpacings,
   shadows,
   spacings,

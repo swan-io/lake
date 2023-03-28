@@ -1,5 +1,3 @@
-import { AddressSearchInput } from "./AddressSearchInput";
-import { CountryCCA3 } from "../constants/countries";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
@@ -7,8 +5,9 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useCallback, useEffect } from "react";
 import { Form } from "react-ux-form";
+import { CountryCCA3 } from "../constants/countries";
 import { locale, t } from "../utils/i18n";
-import { PlaceDetail } from "./AddressSearchInput";
+import { AddressSearchInput, PlaceDetail } from "./AddressSearchInput";
 
 type AddressField = {
   address: string;

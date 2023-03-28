@@ -9,9 +9,9 @@ import {
   useState,
 } from "react";
 import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, Text, View } from "react-native";
-import { hasDefinedKeys, useForm, ValidatorResult } from "react-ux-form";
+import { ValidatorResult, hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
-import { match, P } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
 import { colors, shadows, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
@@ -591,11 +591,9 @@ const getFilterValue = <T extends Filter<unknown>["type"]>(
 
 type FiltersDefinition = Record<string, Filter<unknown>>;
 
-export type FiltersState<T extends FiltersDefinition> = Simplify<
-  {
-    [K in keyof T]: Simplify<ExtractFilterValue<T[K]>>;
-  }
->;
+export type FiltersState<T extends FiltersDefinition> = Simplify<{
+  [K in keyof T]: Simplify<ExtractFilterValue<T[K]>>;
+}>;
 
 type FiltersStackProps<
   Definition extends FiltersDefinition,

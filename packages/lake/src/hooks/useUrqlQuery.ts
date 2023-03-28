@@ -1,6 +1,6 @@
 import { AsyncData, Result } from "@swan-io/boxed";
 import { DependencyList, useCallback, useEffect, useMemo, useState } from "react";
-import { AnyVariables, useQuery, UseQueryArgs } from "urql";
+import { AnyVariables, UseQueryArgs, useQuery } from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
 type Query<Data> = {

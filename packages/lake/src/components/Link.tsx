@@ -1,9 +1,9 @@
 import { useLinkProps } from "@swan-io/chicane";
-import { PressableText, PressableTextProps } from "./Pressable";
-import { isNotNullish } from "../utils/nullish";
 import { forwardRef, memo } from "react";
 import { HrefAttrs, PressableStateCallbackType, Text, TextProps } from "react-native";
 import { Except } from "type-fest";
+import { isNotNullish } from "../utils/nullish";
+import { PressableText, PressableTextProps } from "./Pressable";
 
 export type LinkProps = Except<
   PressableTextProps,

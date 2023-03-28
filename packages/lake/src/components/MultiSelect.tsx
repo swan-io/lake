@@ -14,7 +14,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { backgroundColor, colors, ColorVariants, radii, shadows, texts } from "../constants/design";
+import { ColorVariants, backgroundColor, colors, radii, shadows, texts } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";

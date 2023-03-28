@@ -1,5 +1,4 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxRef } from "@swan-io/lake/src/components/LakeCombobox";
@@ -10,7 +9,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, Text } from "react-native";
 import { match } from "ts-pattern";
 import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.png";
-import { countriesWithMultipleCCA3, CountryCCA3 } from "../constants/countries";
+import { CountryCCA3, countriesWithMultipleCCA3 } from "../constants/countries";
+import { useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({

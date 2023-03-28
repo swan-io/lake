@@ -1,6 +1,6 @@
 import { ReactElement, ReactFragment, ReactText } from "react";
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
-import { colors, ColorVariants, texts } from "../constants/design";
+import { ColorVariants, colors, texts } from "../constants/design";
 import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
