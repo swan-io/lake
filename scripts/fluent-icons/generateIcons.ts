@@ -2,19 +2,22 @@ import { Array, Option } from "@swan-io/boxed";
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "node:path";
-import { P, match } from "ts-pattern";
+import { P, isMatching } from "ts-pattern";
 
-const icons = match(
-  JSON.parse(fs.readFileSync(path.join(process.cwd(), "scripts/fluent-icons/icons.json"), "utf-8")),
-)
-  .with(P.array(P.string), value => value)
-  .otherwise(() => []);
+const isValidIconsConfiguration = isMatching(P.array(P.string));
+const iconsConfiguration: unknown = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), "scripts/fluent-icons/icons.json"), "utf-8"),
+);
+
+if (!isValidIconsConfiguration(iconsConfiguration)) {
+  throw new Error("Invalid icons.json file");
+}
 
 const FLUENT_MODULE_NAME = "@fluentui/svg-icons/icons";
 const SVG_START = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="`;
 const SVG_END = `"/></svg>`;
 
-const svgs = Array.keepMap(icons, name => {
+const svgs = Array.keepMap(iconsConfiguration, name => {
   const match = /(.+)-(regular|filled)/.exec(name);
   if (match == null) {
     throw new Error(`Invalid icon name: ${name}`);
