@@ -16,7 +16,12 @@ import { hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
-import { CountryCCA3, individualCountriesItems, isCountryCCA3 } from "../constants/countries";
+import {
+  CountryCCA3,
+  allCountriesItems,
+  individualCountriesItems,
+  isCountryCCA3,
+} from "../constants/countries";
 import { decodeBirthDate, encodeBirthDate } from "../utils/date";
 import { locale, rifmDateProps, t } from "../utils/i18n";
 import {
@@ -374,7 +379,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
             const allStepsValues = { ...commonStepValues.current, ...values };
 
             if (hasDefinedKeys(allStepsValues, requiredStepFields)) {
-              const [direct, indirect] = getDirectAndIndirect(values.capitalType ?? "none");
+              const [direct, indirect] = getDirectAndIndirect(allStepsValues.capitalType ?? "none");
               return onSave({
                 reference,
                 firstName: allStepsValues.firstName,
@@ -485,7 +490,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                               error={error}
                               value={value}
                               placeholder={t("beneficiaryForm.beneficiary.birthCountryPlaceholder")}
-                              items={individualCountriesItems}
+                              items={allCountriesItems}
                               onValueChange={onChange}
                             />
                           )}

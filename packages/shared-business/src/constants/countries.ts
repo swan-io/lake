@@ -2234,6 +2234,9 @@ export const getCCA2forCCA3 = (cca3: CountryCCA3) =>
 export const getCCA3forCCA2 = (cca2: CountryCCA2) =>
   countries.find(country => country.cca2 === cca2)?.cca3;
 
+const isTranslatedCountry = (value: unknown): value is CountryWithTranslation =>
+  Object.keys(names).includes(value as CountryWithTranslation);
+
 export const getCountryNameByCCA3 = (cca3: string) => {
   if (isTranslatedCountry(cca3)) {
     return names[cca3];
@@ -2279,6 +2282,14 @@ const names = {
 };
 
 type CountryWithTranslation = keyof typeof names;
+
+export const allCountriesItems: CountryItem<CountryCCA3>[] = countries
+  .map(country => ({
+    name: getCountryNameByCCA3(country.cca3),
+    cca3: country.cca3,
+    cca2: country.cca2,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 const individualCountries = [
   "AUT",
@@ -2387,9 +2398,6 @@ export const isCompanyCountryCCA3 = (value: unknown): value is CompanyCountryCCA
 
 export const isCompanyWithUboCountryCCA3 = (value: unknown): value is CompanyWithUboCountryCCA3 =>
   companyWithUboCountries.includes(value as CompanyWithUboCountryCCA3);
-
-const isTranslatedCountry = (value: unknown): value is CountryWithTranslation =>
-  Object.keys(names).includes(value as CountryWithTranslation);
 
 const getBestNavigatorCountryIndividual = (): IndividualCountryCCA3 => {
   const navigatorCountries = navigator.languages
