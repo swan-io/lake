@@ -1,11 +1,14 @@
 import { Array, Option } from "@swan-io/boxed";
 import fs from "node:fs";
+import { EOL } from "node:os";
 import path from "node:path";
-import { EOL } from "os";
+import { P, match } from "ts-pattern";
 
-const icons: string[] = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), "scripts/fluent-icons/icons.json"), "utf-8"),
-);
+const icons = match(
+  JSON.parse(fs.readFileSync(path.join(process.cwd(), "scripts/fluent-icons/icons.json"), "utf-8")),
+)
+  .with(P.array(P.string), value => value)
+  .otherwise(() => []);
 
 const FLUENT_MODULE_NAME = "@fluentui/svg-icons/icons";
 const SVG_START = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="`;
@@ -23,7 +26,7 @@ const svgs = Array.keepMap(icons, name => {
       .readFileSync(path.join(process.cwd(), "node_modules", FLUENT_MODULE_NAME, fileName))
       .toString("utf-8");
 
-    const pathString = svg.slice(SVG_START.length, -SVG_END.length).replace(/"\/>\<path d="/g, "");
+    const pathString = svg.slice(SVG_START.length, -SVG_END.length).replace(/"\/><path d="/g, "");
     return Option.Some([name, pathString]);
   } else {
     return Option.None();

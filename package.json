@@ -27,7 +27,8 @@
     "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
-    "bump": "node scripts/version/version.mjs"
+    "bump": "node scripts/version/version.mjs",
+    "icons": "tsx scripts/fluent-icons/generateIcons.ts"
   },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write",
@@ -35,6 +36,7 @@
     "packages/**/src/locales/*.json": "lokalise clean"
   },
   "devDependencies": {
+    "@fluentui/svg-icons": "^1.1.198",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-links": "^6.5.16",
@@ -56,6 +58,7 @@
     "prettier": "^2.8.7",
     "prettier-plugin-organize-imports": "^3.2.2",
     "semver": "^7.3.8",
+    "ts-pattern": "^4.2.2",
     "tsx": "^3.12.6",
     "typescript": "^5.0.2",
     "vitest": "^0.29.7"
