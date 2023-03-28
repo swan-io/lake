@@ -295,7 +295,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
 
     return (
       <Form>
-        {requiredDocumentTypes.some(t => t === "CompanyRegistration") && (
+        {requiredDocumentTypes.includes("CompanyRegistration") && (
           <>
             <LakeLabel
               label={t("supportingDoc.companyRegistration")}
@@ -325,7 +325,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.some(t => t === "AssociationRegistration") && (
+        {requiredDocumentTypes.includes("AssociationRegistration") && (
           <>
             <LakeLabel
               label={t("supportingDoc.associationRegistration")}
@@ -357,7 +357,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.some(t => t === "SignedStatus") && (
+        {requiredDocumentTypes.includes("SignedStatus") && (
           <>
             <LakeLabel
               label={t("supportingDoc.signedStatus")}
@@ -387,7 +387,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.some(t => t === "ProofOfIdentity") && (
+        {requiredDocumentTypes.includes("ProofOfIdentity") && (
           <>
             <LakeLabel
               label={t("supportingDoc.proofOfIdentity")}
@@ -419,7 +419,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           </>
         )}
 
-        {requiredDocumentTypes.some(t => t === "PowerOfAttorney") && (
+        {requiredDocumentTypes.includes("PowerOfAttorney") && (
           <>
             <LakeLabel
               label={t("supportingDoc.powerAttornySigned")}
