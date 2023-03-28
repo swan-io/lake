@@ -24,15 +24,6 @@ export type Document = {
   purpose: SupportingDocumentPurpose;
 };
 
-export type TypeOfRepresentation = "LegalRepresentative" | "PowerOfAttorney";
-
-export type SupportingDocumentPurpose =
-  | "AssociationRegistration"
-  | "CompanyRegistration"
-  | "ProofOfIdentity"
-  | "Other"
-  | "SignedStatus";
-
 type SupportingDocumentPurposeEnum =
   | "AssociationRegistration"
   | "Banking"
@@ -46,16 +37,29 @@ type SupportingDocumentPurposeEnum =
   | "ProofOfIndividualIncome"
   | "ProofOfOriginOfFunds"
   | "SignedStatus"
+  | "SwornStatement"
   | "UBODeclaration";
+
+export const uploadableDocumentTypes = [
+  "AssociationRegistration",
+  "CompanyRegistration",
+  "ProofOfIdentity",
+  "SignedStatus",
+  "PowerOfAttorney",
+  "SwornStatement",
+] satisfies SupportingDocumentPurposeEnum[];
+
+export type SupportingDocumentPurpose = (typeof uploadableDocumentTypes)[number];
 
 type FormValue = UploadFileStatus[];
 
-type Form = {
+type FormValues = {
   CompanyRegistration: FormValue;
   AssociationRegistration: FormValue;
   SignedStatus: FormValue;
   ProofOfIdentity: FormValue;
-  Other: FormValue;
+  PowerOfAttorney: FormValue;
+  SwornStatement: FormValue;
 };
 
 type Props = {
@@ -157,8 +161,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
     );
 
     const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
+    const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
 
-    const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<Form>({
+    const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<FormValues>({
       CompanyRegistration: {
         initialValue: initialValues["CompanyRegistration"] ?? [],
         validate: validateNotEmpty,
@@ -175,8 +180,12 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
         initialValue: initialValues["ProofOfIdentity"] ?? [],
         validate: validateNotEmpty,
       },
-      Other: {
-        initialValue: initialValues["Other"] ?? [],
+      PowerOfAttorney: {
+        initialValue: initialValues["PowerOfAttorney"] ?? [],
+        validate: validateNotEmpty,
+      },
+      SwornStatement: {
+        initialValue: initialValues["SwornStatement"] ?? [],
         validate: validateNotEmpty,
       },
     });
@@ -198,8 +207,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           "CompanyRegistration",
           "AssociationRegistration",
           "SignedStatus",
-          "Other",
           "ProofOfIdentity",
+          "PowerOfAttorney",
+          "SwornStatement",
         ],
         state => {
           let documents: Document[] = [];
@@ -431,13 +441,49 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                 />
               }
               render={() => (
-                <Field name="Other">
+                <Field name="PowerOfAttorney">
                   {({ value, onChange, error }) => (
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
                         onChange([...value, { id: NO_ID_YET }]);
-                        handleUpload(files, "Other");
+                        handleUpload(files, "PowerOfAttorney");
+                      }}
+                      error={error}
+                      documents={value}
+                      accept={ACCEPTED_FORMATS}
+                      icon="document-regular"
+                      description={t("supportingDoc.documentTypes")}
+                      maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Space height={24} />
+          </>
+        )}
+
+        {requiredDocumentTypes.includes("SwornStatement") && (
+          <>
+            <LakeLabel
+              label={t("supportingDoc.swornStatementDeclaration")}
+              help={
+                <Help
+                  type="button"
+                  label={t("supportingDoc.whatIsThis")}
+                  onPress={() => setShowSwornStatementModal(true)}
+                />
+              }
+              render={() => (
+                <Field name="SwornStatement">
+                  {({ value, onChange, error }) => (
+                    <UploadArea
+                      layout="horizontal"
+                      onDropAccepted={files => {
+                        onChange([...value, { id: NO_ID_YET }]);
+                        handleUpload(files, "SwornStatement");
                       }}
                       error={error}
                       documents={value}
@@ -485,6 +531,26 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     .otherwise(() => "en")}.pdf`,
                 )
               }
+            >
+              {t("supportingDoc.downloadTemplate")}
+            </LakeButton>
+          </LakeButtonGroup>
+        </LakeModal>
+
+        <LakeModal
+          visible={showSwornStatementModal}
+          title={t("supportingDoc.swornStatementDeclaration")}
+          icon="document-regular"
+          onPressClose={() => setShowSwornStatementModal(false)}
+        >
+          <LakeText>{t("supportingDoc.swornStatementDeclaration.description")}</LakeText>
+          <Space height={16} />
+
+          <LakeButtonGroup paddingBottom={0}>
+            <LakeButton
+              grow={true}
+              color="current"
+              onPress={() => window.open("/sworn-statement-template/es.pdf")}
             >
               {t("supportingDoc.downloadTemplate")}
             </LakeButton>
