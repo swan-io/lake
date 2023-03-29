@@ -1,8 +1,8 @@
 import { memo, useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
-import { animations, colors, ColorVariants, shadows } from "../constants/design";
-import { hideToast, ToastVariant, useToasts } from "../state/toasts";
+import { ColorVariants, animations, colors, shadows } from "../constants/design";
+import { ToastVariant, hideToast, useToasts } from "../state/toasts";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
