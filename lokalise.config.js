@@ -1,16 +1,10 @@
 const path = require("path");
 require("dotenv").config();
 
-const sharedBusinessProjectId = process.env.LOKALISE_SHARED_BUSINESS_PROJECT_ID;
-
-if (!sharedBusinessProjectId) {
-  throw new Error("Missing LOKALISE_SHARED_BUSINESS_PROJECT_ID env variable");
-}
-
 module.exports = [
   {
     name: "shared-business",
-    id: sharedBusinessProjectId,
+    id: "209582206299c613f25323.74831042",
     defaultLocale: "en",
     paths: {
       src: path.join(process.cwd(), "packages", "shared-business", "src"),
