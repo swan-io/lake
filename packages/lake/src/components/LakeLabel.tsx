@@ -55,7 +55,7 @@ const Label = (
   return unstable_createElement("label", props);
 };
 
-export const defaultLabelType: LabelType = "formSmall";
+const defaultLabelType: LabelType = "formSmall";
 
 export const LakeLabel = ({
   label,

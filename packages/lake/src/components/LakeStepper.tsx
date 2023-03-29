@@ -89,6 +89,7 @@ export type Step = {
   url: string;
   hasErrors?: boolean;
 };
+
 export type StepWithChildren = { label: string; children: Step[] };
 export type TopLevelStep = Step | StepWithChildren;
 

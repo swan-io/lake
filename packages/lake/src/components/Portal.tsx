@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useRef } from "react";
-import * as ReactDOM from "react-dom";
+import { createPortal } from "react-dom";
 import { CurrentColorContext, useCurrentColor } from "./WithCurrentColor";
 
 type Props = {
@@ -13,5 +13,5 @@ export const Portal = ({ children, container }: Props) => {
 
   useCurrentColor(containerRef, currentColor);
 
-  return ReactDOM.createPortal(children, container);
+  return createPortal(children, container);
 };
