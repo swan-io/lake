@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Registrierungsnummer",
   "registrationPage.withOrganismLabel": "Ist Ihre Firma bereits im {organismName} eingetragen?",
   "registrationPage.withoutOrganismNameLabel": "Sind Sie registriert?",
+  "supportingDoc.UBODeclaration": "Wirtschaftlicher Eigentümer Erklärung",
+  "supportingDoc.UBODeclaration.description": "Wirtschaftlicher Eigentümer Erklärung",
   "supportingDoc.associationRegistration": "Nachweis der Registrierung",
   "supportingDoc.associationRegistration.description": "Offizielles Dokument zum Nachweis der Registrierung Ihrer Vereinigung. (weniger als 3 Monate alt)",
   "supportingDoc.companyRegistration": "Nachweis der Unternehmensregistrierung (weniger als 3 Monate alt)",

@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Registration number",
   "registrationPage.withOrganismLabel": "Are you registered to {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Are you registered?",
+  "supportingDoc.UBODeclaration": "UBO Declaration",
+  "supportingDoc.UBODeclaration.description": "Ultimate Beneficial Owners declaration of the organization",
   "supportingDoc.associationRegistration": "Proof of registration",
   "supportingDoc.associationRegistration.description": "Official document proving the registration of your association. (< 3 months old)",
   "supportingDoc.companyRegistration": "Proof of company registration (< 3 months old)",

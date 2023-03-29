@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Registratienummer",
   "registrationPage.withOrganismLabel": "Bent u geregistreerd bij {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Bent u geregistreerd?",
+  "supportingDoc.UBODeclaration": "Uiteindelijk begunstigde verklaring",
+  "supportingDoc.UBODeclaration.description": "Uiteindelijk begunstigde verklaring",
   "supportingDoc.associationRegistration": "Bewijs van inschrijving",
   "supportingDoc.associationRegistration.description": "Officieel document waaruit de registratie van uw vereniging blijkt. (minder dan 3 maanden oud)",
   "supportingDoc.companyRegistration": "Uittreksel van het handelsregister (KVK document, minder dan 3 maanden oud)",

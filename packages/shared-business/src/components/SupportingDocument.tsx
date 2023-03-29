@@ -47,6 +47,7 @@ export const uploadableDocumentTypes = [
   "SignedStatus",
   "PowerOfAttorney",
   "SwornStatement",
+  "UBODeclaration",
 ] satisfies SupportingDocumentPurposeEnum[];
 
 export type SupportingDocumentPurpose = (typeof uploadableDocumentTypes)[number];
@@ -60,6 +61,7 @@ type FormValues = {
   ProofOfIdentity: FormValue;
   PowerOfAttorney: FormValue;
   SwornStatement: FormValue;
+  UBODeclaration: FormValue;
 };
 
 type Props = {
@@ -163,6 +165,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
     const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
     const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
 
+    const initialPowerOfAttorneyDocuments = initialValues["PowerOfAttorney"] ?? [];
+    const initialOtherDocuments = initialValues["Other"] ?? [];
+
     const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<FormValues>({
       CompanyRegistration: {
         initialValue: initialValues["CompanyRegistration"] ?? [],
@@ -180,8 +185,14 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
         initialValue: initialValues["ProofOfIdentity"] ?? [],
         validate: validateNotEmpty,
       },
+      UBODeclaration: {
+        initialValue: initialValues["UBODeclaration"] ?? [],
+        validate: validateNotEmpty,
+      },
       PowerOfAttorney: {
-        initialValue: initialValues["PowerOfAttorney"] ?? [],
+        // we keep initialOtherDocuments because it was the key for legacy onboarding
+        // this should be replaced by initialValues["PowerOfAttorney"] ?? [] in may 2023
+        initialValue: [...initialPowerOfAttorneyDocuments, ...initialOtherDocuments],
         validate: validateNotEmpty,
       },
       SwornStatement: {
@@ -202,33 +213,23 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
     });
 
     useEffect(() => {
-      const removeListener = listenFields(
-        [
-          "CompanyRegistration",
-          "AssociationRegistration",
-          "SignedStatus",
-          "ProofOfIdentity",
-          "PowerOfAttorney",
-          "SwornStatement",
-        ],
-        state => {
-          let documents: Document[] = [];
+      const removeListener = listenFields(uploadableDocumentTypes, state => {
+        let documents: Document[] = [];
 
-          Object.entries(state).forEach(([key, { value: values }]) => {
-            documents = [
-              ...documents,
-              ...(values ?? []).map(v => ({
-                id: v.id,
-                name: v.name,
-                downloadUrl: v.fileUrl,
-                purpose: key as SupportingDocumentPurpose,
-              })),
-            ];
-          });
+        Object.entries(state).forEach(([key, { value: values }]) => {
+          documents = [
+            ...documents,
+            ...(values ?? []).map(v => ({
+              id: v.id,
+              name: v.name,
+              downloadUrl: v.fileUrl,
+              purpose: key as SupportingDocumentPurpose,
+            })),
+          ];
+        });
 
-          onChange?.(documents);
-        },
-      );
+        onChange?.(documents);
+      });
 
       return () => removeListener();
     }, [listenFields, onChange]);
@@ -380,6 +381,36 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       onDropAccepted={files => {
                         onChange([...value, { id: NO_ID_YET }]);
                         handleUpload(files, "SignedStatus");
+                      }}
+                      error={error}
+                      documents={value}
+                      accept={ACCEPTED_FORMATS}
+                      icon="document-regular"
+                      description={t("supportingDoc.documentTypes")}
+                      maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Space height={24} />
+          </>
+        )}
+
+        {requiredDocumentTypes.includes("UBODeclaration") && (
+          <>
+            <LakeLabel
+              label={t("supportingDoc.UBODeclaration")}
+              help={<Help type="tooltip" text="supportingDoc.UBODeclaration.description" />}
+              render={() => (
+                <Field name="UBODeclaration">
+                  {({ value, onChange, error }) => (
+                    <UploadArea
+                      layout="horizontal"
+                      onDropAccepted={files => {
+                        onChange([...value, { id: NO_ID_YET }]);
+                        handleUpload(files, "UBODeclaration");
                       }}
                       error={error}
                       documents={value}

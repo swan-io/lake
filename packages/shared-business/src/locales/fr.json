@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Numéro d'immatriculation",
   "registrationPage.withOrganismLabel": "Êtes-vous immatriculé au {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Êtes-vous immatriculé?",
+  "supportingDoc.UBODeclaration": "Déclaration des bénéficiares effectifs",
+  "supportingDoc.UBODeclaration.description": "Déclaration des bénéficiares effectifs",
   "supportingDoc.associationRegistration": "Preuve d'enregistrement",
   "supportingDoc.associationRegistration.description": "Document officiel prouvant l'enregistrement de votre association. (de moins de 3 mois)",
   "supportingDoc.companyRegistration": "Preuve d'enregistrement de l'entreprise (de moins de 3 mois)",
