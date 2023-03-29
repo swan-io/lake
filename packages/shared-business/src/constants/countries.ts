@@ -2271,6 +2271,7 @@ const names = {
   LUX: t("country.LUX"),
   LVA: t("country.LVA"),
   MLT: t("country.MLT"),
+  MCO: t("country.MCO"),
   NLD: t("country.NLD"),
   NOR: t("country.NOR"),
   POL: t("country.POL"),
@@ -2323,6 +2324,7 @@ const individualCountries = [
   "ROU",
   "SWE",
   "BGR",
+  "MCO",
 ] satisfies CountryCCA3[];
 
 export type IndividualCountryCCA3 = (typeof individualCountries)[number];
@@ -2367,6 +2369,7 @@ const companyCountries = [
   "BGR",
   "CYP",
   "NOR",
+  "MCO",
 ] satisfies CountryCCA3[];
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
