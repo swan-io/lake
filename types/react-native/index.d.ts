@@ -1,4 +1,4 @@
-import "react-native";
+import * as ReactNative from "react-native";
 
 declare module "react-native" {
   export const unstable_createElement: <P>(
@@ -49,14 +49,15 @@ declare module "react-native" {
      * togglebutton -> <div role="togglebutton" />
      * toolbar -> <div role="toolbar" />
      */
-    | AccessibilityRole
+    | ReactNative.AccessibilityRole
     /**
      * Accessibility roles mapped to components
-     * @see https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/modules/AccessibilityUtil/propsToAccessibilityComponent.js
+     * @see https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/modules/AccessibilityUtil/propsToAccessibilityComponent.js
      */
     | "article" // <article />
     | "banner" // <header />
     | "blockquote" // <blockquote />
+    | "button" // <button />
     | "code" // <code />
     | "complementary" // <aside />
     | "contentinfo" // <footer />
@@ -66,9 +67,11 @@ declare module "react-native" {
     | "form" // <form />
     | "insertion" // <ins />
     | "label" // <label />
+    | "list" // <ul />
     | "listitem" // <li />
     | "main" // <main />
     | "navigation" // <nav />
+    | "paragraph" // <p />
     | "region" // <section />
     | "strong" // <strong />
     /**
@@ -110,7 +113,7 @@ declare module "react-native" {
     | "treegrid"
     | "treeitem";
 
-  export interface WebAccessibilityProps {
+  export interface AccessibilityProps {
     accessibilityActiveDescendant?: string;
     accessibilityAtomic?: boolean;
     accessibilityAutoComplete?: string;
@@ -158,7 +161,7 @@ declare module "react-native" {
     accessibilityValueText?: string;
   }
 
-  export interface ImageProps extends WebAccessibilityProps {
+  export interface ImageProps {
     accessibilityRole?: WebAccessibilityRole;
     defaultSource?: ImageSourcePropType | string;
     draggable?: boolean;
@@ -171,7 +174,7 @@ declare module "react-native" {
     readonly pressed: boolean;
   }
 
-  export interface PressableProps extends WebAccessibilityProps {
+  export interface PressableProps {
     accessibilityRole?: WebAccessibilityRole;
     onHoverIn?: (event: unknown) => void;
     onHoverOut?: (event: unknown) => void;
@@ -183,7 +186,7 @@ declare module "react-native" {
     target?: "blank" | "parent" | "self" | "top";
   };
 
-  export interface TextProps extends WebAccessibilityProps {
+  export interface TextProps {
     accessibilityRole?: WebAccessibilityRole;
     focusable?: boolean;
     href?: string;
@@ -191,7 +194,7 @@ declare module "react-native" {
     lang?: string;
   }
 
-  export interface TextInputProps extends WebAccessibilityProps {
+  export interface TextInputProps {
     accessibilityRole?: WebAccessibilityRole;
     lang?: string;
     initialValue?: string;
@@ -257,12 +260,12 @@ declare module "react-native" {
     keyCode: number;
   }
 
-  export interface TouchableWithoutFeedbackProps extends WebAccessibilityProps {
+  export interface TouchableWithoutFeedbackProps {
     accessibilityRole?: WebAccessibilityRole;
     focusable?: boolean;
   }
 
-  export interface ViewProps extends WebAccessibilityProps {
+  export interface ViewProps {
     accessibilityRole?: WebAccessibilityRole;
     onKeyDown?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;
     onKeyDownCapture?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;
@@ -270,9 +273,13 @@ declare module "react-native" {
     onKeyUpCapture?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;
   }
 
-  // https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/types/styles.js
+  // https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/types/styles.js
 
   type NumberOrString = number | string;
+
+  /**
+   * Animations and transitions
+   */
 
   type AnimationDirection = "alternate" | "alternate-reverse" | "normal" | "reverse";
   type AnimationFillMode = "none" | "forwards" | "backwards" | "both";
@@ -294,6 +301,10 @@ declare module "react-native" {
     transitionProperty?: string | string[];
     transitionTimingFunction?: string | string[];
   }
+
+  /**
+   * Interactions
+   */
 
   type CursorValue =
     | "alias"
@@ -348,8 +359,23 @@ declare module "react-native" {
     | "pan-y"
     | "pinch-zoom";
 
+  type UserSelect = "all" | "auto" | "contain" | "none" | "text";
+
+  export interface InteractionStyles {
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#Formal_syntax
+    cursor?: CursorValue;
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action#Formal_syntax
+    touchAction?: TouchActionValue;
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/user-select#Formal_syntax_2
+    userSelect?: UserSelect;
+    willChange?: string;
+  }
+
+  /**
+   * Layout
+   */
+
   type OverflowValue = "auto" | "hidden" | "scroll" | "visible";
-  type UserSelectValue = "all" | "auto" | "contain" | "none" | "text";
   type VisibilityValue = "hidden" | "visible";
 
   export interface FlexStyle {
@@ -367,15 +393,9 @@ declare module "react-native" {
     gridTemplateRows?: string;
   }
 
-  interface InteractionStyles {
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#Formal_syntax
-    cursor?: CursorValue;
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action#Formal_syntax
-    touchAction?: TouchActionValue;
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/user-select#Formal_syntax_2
-    userSelect?: UserSelectValue;
-    willChange?: string;
-  }
+  /**
+   * Transforms
+   */
 
   type TransformValue = (
     | { perspective: NumberOrString }
@@ -412,11 +432,12 @@ declare module "react-native" {
   type DisplayValue =
     | FlexStyle["display"]
     | "block"
+    | "grid"
     | "inline"
     | "inline-block"
-    | "inline-flex"
-    | "grid";
-  type PositionValue = FlexStyle["position"] | "sticky" | "static" | "fixed";
+    | "inline-flex";
+
+  type PositionValue = FlexStyle["position"] | "fixed" | "static" | "sticky";
 
   export interface ImageStyle extends AnimationStyles, InteractionStyles, TransformsStyle {
     display?: DisplayValue;
@@ -439,9 +460,9 @@ declare module "react-native" {
     boxShadow?: string;
     display?: DisplayValue;
     position?: PositionValue;
+    scrollBehavior?: "auto" | "smooth";
     transform?: TransformValue;
     visibility?: VisibilityValue;
-    scrollBehavior?: "auto" | "smooth";
   }
 
   /**
@@ -450,19 +471,19 @@ declare module "react-native" {
    * @see https://github.com/react-native-community/react-native-picker
    * @deprecated
    */
-  export interface PickerProps {
-    onValueChange?: (itemValue: any, itemPosition: number) => void;
+  interface PickerProps {
+    children?: React.ReactNode;
     enabled?: boolean;
     itemStyle?: StyleProp<TextStyle>;
     mode?: "dialog" | "dropdown";
+    onValueChange?: (itemValue: any, itemPosition: number) => void;
     prompt?: string;
     selectedValue?: string;
     style?: StyleProp<TextStyle>;
     testID?: string;
-    children?: React.ReactNode;
   }
 
-  export interface PickerItemProps {
+  interface PickerItemProps {
     color?: ColorValue;
     label: string;
     testID?: string;

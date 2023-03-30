@@ -1,4 +1,4 @@
-// https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/exports/Pressable/index.js
+// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/Pressable/index.js
 
 import {
   ComponentType,
@@ -30,9 +30,12 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { PressResponderConfig, usePressEvents } from "../hooks/usePressEvents";
 
 const styles = StyleSheet.create({
-  root: {
+  active: {
     cursor: "pointer",
     touchAction: "manipulation",
+  },
+  disabled: {
+    pointerEvents: "none",
   },
 });
 
@@ -89,8 +92,8 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       onKeyDown,
       onLongPress,
       onPress,
-      onPressMove,
       onPressIn,
+      onPressMove,
       onPressOut,
       style,
       testOnly_hovered,
@@ -195,7 +198,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
         onKeyDown={keyDownHandler}
         ref={setRef}
         style={[
-          !disabled && applyPressStyle && styles.root,
+          !disabled && applyPressStyle ? styles.active : styles.disabled,
           typeof style === "function" ? style(interactionState) : style,
         ]}
       >

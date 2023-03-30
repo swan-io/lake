@@ -39,7 +39,7 @@ export type BoxProps = ViewProps & {
 
 export const Box = forwardRef<View, BoxProps>(
   (
-    // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/exports/View/index.js#L133
+    // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/View/index.js#L146
     { alignItems = "stretch", direction = "column", justifyContent = "normal", style, ...props },
     forwardedRef,
   ) => (
