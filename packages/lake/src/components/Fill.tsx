@@ -30,7 +30,7 @@ type Props = {
 
 export const Fill = ({ minHeight, minWidth }: Props) => (
   <View
-    focusable={false}
+    tabIndex={-1}
     style={[
       styles.base,
       isNotNullish(minHeight) && heightStyles[minHeight],

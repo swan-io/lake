@@ -111,7 +111,7 @@ export const Modal = memo(
         >
           <Pressable
             accessibilityRole="none"
-            focusable={false}
+            tabIndex={-1}
             onPress={onDismiss}
             style={styles.blanket}
           />

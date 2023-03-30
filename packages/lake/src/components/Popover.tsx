@@ -278,7 +278,7 @@ export const Popover = memo<Props>(
                     onEscapeKey={onDismiss}
                     onClickOutside={underlay ? undefined : onClickOutside}
                   >
-                    <Pressable focusable={false} onPress={onPress} style={styles.defaultCursor}>
+                    <Pressable tabIndex={-1} onPress={onPress} style={styles.defaultCursor}>
                       {typeof children == "function" ? children({ mode: "dropdown" }) : children}
                     </Pressable>
                   </FocusTrap>

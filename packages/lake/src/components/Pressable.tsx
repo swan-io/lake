@@ -47,7 +47,6 @@ type Props<BaseProps extends TextProps | TextInputProps> = Merge<
     delayPressIn?: number;
     delayPressOut?: number;
     disabled?: boolean;
-    focusable?: boolean;
     onBlur?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
     onContextMenu?: (event: NativeSyntheticEvent<React.SyntheticEvent>) => void;
     onFocus?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
@@ -83,7 +82,6 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       delayPressIn,
       delayPressOut,
       disabled = false,
-      focusable,
       onBlur,
       onContextMenu,
       onFocus,
@@ -96,6 +94,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       onPressMove,
       onPressOut,
       style,
+      tabIndex,
       testOnly_hovered,
       testOnly_pressed,
       ...rest
@@ -186,12 +185,19 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       [onKeyDown, onKeyDownPress],
     );
 
+    let _tabIndex: 0 | -1 | undefined;
+
+    if (tabIndex !== undefined) {
+      _tabIndex = tabIndex;
+    } else {
+      _tabIndex = disabled ? -1 : 0;
+    }
+
     return (
       <Component
         {...rest}
         {...pressEventHandlers}
         accessibilityDisabled={disabled}
-        focusable={!disabled && focusable !== false}
         onBlur={blurHandler}
         onContextmenu={contextMenuHandler}
         onFocus={focusHandler}
@@ -201,6 +207,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
           !disabled && applyPressStyle ? styles.active : styles.disabled,
           typeof style === "function" ? style(interactionState) : style,
         ]}
+        tabIndex={_tabIndex}
       >
         {typeof children === "function" ? children(interactionState) : children}
       </Component>

@@ -91,7 +91,7 @@ export const CheckBox = memo(
           <Pressable
             ref={forwardedRef}
             accessibilityRole="checkbox"
-            focusable={false}
+            tabIndex={-1}
             accessibilityChecked={value}
             accessibilityDisabled={disabled}
             style={({ hovered }) => [

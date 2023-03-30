@@ -602,7 +602,7 @@ const BreadcrumbsDropdownItems = ({ crumbs }: { crumbs: CrumbWithIdAndPosition[]
             pressed && styles.itemPressed,
             openingStatus === "ForcedOpen" && styles.itemForcedOpen,
           ]}
-          focusable={true}
+          tabIndex={0}
           onFocus={onHandleFocus}
           onBlur={onAnyBlur}
           onPress={onPress}

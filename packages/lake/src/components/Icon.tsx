@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { AccessibilityProps, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle, WebAccessibilityProps } from "react-native";
 import { Path, Svg } from "./Svg";
 
 import customIcons from "../icons/custom-icons.json";
@@ -18,25 +18,17 @@ const styles = StyleSheet.create({
 
 export type IconName = keyof typeof paths;
 
-type Props = AccessibilityProps & {
+type Props = WebAccessibilityProps & {
   color?: string;
-  focusable?: boolean;
   name: IconName;
   size: number;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Icon = memo<Props>(
-  ({ name, color = "currentColor", focusable, size, style, ...props }) => (
-    <Svg
-      focusable={focusable}
-      viewBox="0 0 24 24"
-      style={[styles.inert, { height: size, width: size }, style]}
-      {...props}
-    >
-      <Path d={paths[name]} fill={color} />
-    </Svg>
-  ),
-);
+export const Icon = memo<Props>(({ name, color = "currentColor", size, style, ...props }) => (
+  <Svg viewBox="0 0 24 24" style={[styles.inert, { height: size, width: size }, style]} {...props}>
+    <Path d={paths[name]} fill={color} />
+  </Svg>
+));
 
 Icon.displayName = "Icon";

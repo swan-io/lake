@@ -38,7 +38,7 @@ export const Link = memo(
         target,
         to,
         ariaCurrentValue = "page",
-        focusable,
+        tabIndex,
         ...props
       },
       forwardedRef,
@@ -50,7 +50,7 @@ export const Link = memo(
           {...props}
           accessibilityRole={accessibilityRole}
           accessibilityDisabled={disabled}
-          focusable={isNotNullish(focusable) ? focusable : !disabled}
+          tabIndex={isNotNullish(tabIndex) ? tabIndex : disabled ? -1 : 0}
           accessibilityCurrent={active ? ariaCurrentValue : undefined}
           href={to}
           onPress={(event: unknown) => {

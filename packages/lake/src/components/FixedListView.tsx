@@ -527,8 +527,8 @@ const RowSegment = <T, ExtraInfo>({
   return cloneElement(
     wrapper,
     {
-      focusable: true,
       id: focusId,
+      tabIndex: 0,
       style: [
         styles.rowSegment,
         {
@@ -1234,7 +1234,7 @@ export const FixedListView = <T, ExtraInfo>({
 
   return (
     <View style={styles.root}>
-      <View ref={startFocusAnchorRef} focusable={true} />
+      <View ref={startFocusAnchorRef} tabIndex={0} />
 
       <ScrollView
         onKeyDown={onKeyDown}
@@ -1438,7 +1438,7 @@ export const FixedListView = <T, ExtraInfo>({
         <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
       ) : null}
 
-      <View ref={endFocusAnchorRef} focusable={true} />
+      <View ref={endFocusAnchorRef} tabIndex={0} />
     </View>
   );
 };

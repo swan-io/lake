@@ -158,7 +158,7 @@ export const Slider = memo(
 
     return (
       <View
-        focusable={!disabled}
+        tabIndex={disabled ? -1 : 0}
         style={[styles.container, disabled && styles.disabled]}
         onLayout={handleLayout}
         onKeyDown={handleKeyDown}
