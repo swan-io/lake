@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleProp,
   StyleSheet,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -68,11 +67,16 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingVertical: 32,
   },
-  dismissIcon: {
+  dismissButton: {
     padding: 20,
     right: 0,
+    transitionProperty: "opacity",
+    transitionDuration: "150ms",
   },
-  dismissIconDesktop: {
+  dismissButtonPressed: {
+    opacity: 0.5,
+  },
+  dismissButtonDesktop: {
     marginVertical: 12,
     marginRight: 20,
   },
@@ -134,14 +138,17 @@ export const Modal = memo(
                 )}
 
                 {onDismiss && (
-                  <TouchableOpacity
+                  <Pressable
                     accessibilityRole="button"
-                    activeOpacity={0.5}
-                    style={[styles.dismissIcon, desktop && styles.dismissIconDesktop]}
                     onPress={onDismiss}
+                    style={({ pressed }) => [
+                      styles.dismissButton,
+                      desktop && styles.dismissButtonDesktop,
+                      pressed && styles.dismissButtonPressed,
+                    ]}
                   >
                     <Icon name="dismiss-filled" size={18} color={colors.gray[500]} />
-                  </TouchableOpacity>
+                  </Pressable>
                 )}
               </Box>
 

@@ -260,11 +260,6 @@ declare module "react-native" {
     keyCode: number;
   }
 
-  export interface TouchableWithoutFeedbackProps {
-    accessibilityRole?: WebAccessibilityRole;
-    focusable?: boolean;
-  }
-
   export interface ViewProps {
     accessibilityRole?: WebAccessibilityRole;
     onKeyDown?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;

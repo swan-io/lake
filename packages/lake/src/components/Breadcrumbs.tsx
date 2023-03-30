@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: radii[6],
     transitionProperty: "opacity",
-    transitionDuration: "0.15s",
+    transitionDuration: "150ms",
   },
   itemPressed: {
     opacity: 0.2,
