@@ -125,7 +125,7 @@ export const LakeLabelledCheckbox = ({
       <LakeCheckbox value={value} color={color} disabled={disabled} isError={isError} />
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} selectable={false}>
+      <LakeText color={colors.gray[900]} userSelect="none">
         {label}
       </LakeText>
     </Pressable>

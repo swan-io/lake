@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
     ...typography.bodyLarge,
     fontWeight: typography.fontWeights.demi,
     lineHeight: 48,
+    userSelect: "none",
   },
   textSmall: {
     ...typography.bodySmall,
     fontWeight: typography.fontWeights.demi,
     lineHeight: 40,
+    userSelect: "none",
   },
   textDisabled: {
     color: colors.gray[50],
@@ -148,7 +150,6 @@ export const BorderedButton = memo(
           {hasText && (
             <Text
               numberOfLines={1}
-              selectable={false}
               style={[
                 isSmall ? styles.textSmall : styles.text,
                 disabled ? styles.textDisabled : { color },

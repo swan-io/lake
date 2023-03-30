@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 8,
   },
+  unselectable: {
+    userSelect: "none",
+  },
   dismiss: {
     justifyContent: "center",
     height: "100%",
@@ -88,7 +91,7 @@ export const Tag = ({
             { backgroundColor: tint100, borderColor: tint200 },
           ]}
         >
-          <Text numberOfLines={1} selectable={false} style={[styles.text, { color: primary }]}>
+          <Text numberOfLines={1} style={[styles.text, styles.unselectable, { color: primary }]}>
             {label}
           </Text>
         </Box>

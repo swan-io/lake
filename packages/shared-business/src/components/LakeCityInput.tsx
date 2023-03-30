@@ -17,10 +17,12 @@ const styles = StyleSheet.create({
   itemTitle: {
     ...typography.bodyLarge,
     lineHeight: typography.lineHeights.title,
+    userSelect: "none",
   },
   itemSubtitle: {
     ...typography.bodySmall,
     color: colors.gray[400],
+    userSelect: "none",
   },
   poweredByGoogle: {
     paddingVertical: 8,
@@ -159,11 +161,11 @@ export const LakeCityInput = ({
           keyExtractor={item => item.value}
           renderItem={item => (
             <>
-              <Text numberOfLines={1} selectable={false} style={styles.itemTitle}>
+              <Text numberOfLines={1} style={styles.itemTitle}>
                 {item.prediction.structured_formatting.main_text}
               </Text>
 
-              <Text numberOfLines={1} selectable={false} style={styles.itemSubtitle}>
+              <Text numberOfLines={1} style={styles.itemSubtitle}>
                 {item.prediction.structured_formatting.secondary_text}
               </Text>
             </>

@@ -53,10 +53,12 @@ const styles = StyleSheet.create({
   text: {
     ...typography.bodyLarge,
     fontWeight: typography.fontWeights.demi,
+    userSelect: "none",
   },
   textSmall: {
     ...typography.bodySmall,
     fontWeight: typography.fontWeights.demi,
+    userSelect: "none",
   },
   disabled: {
     cursor: "not-allowed",
@@ -132,7 +134,6 @@ export const Button = memo(
 
           <Text
             numberOfLines={1}
-            selectable={false}
             style={[isSmall ? styles.textSmall : styles.text, { color: computedColors.text }]}
           >
             {children}

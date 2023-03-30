@@ -87,8 +87,14 @@ const styles = StyleSheet.create({
     paddingRight: 20.5,
     paddingLeft: 21.5,
   },
-  text: texts.semibold,
-  textSmall: texts.smallSemibold,
+  text: {
+    ...texts.semibold,
+    userSelect: "none",
+  },
+  textSmall: {
+    ...texts.smallSemibold,
+    userSelect: "none",
+  },
   disabled: {
     cursor: "not-allowed",
     opacity: 0.3,
@@ -252,7 +258,6 @@ export const LakeButton = memo(
                 {isReactText(children) ? (
                   <LakeText
                     numberOfLines={1}
-                    selectable={false}
                     style={[isSmall ? styles.textSmall : styles.text, { color: textColor }]}
                   >
                     {children}

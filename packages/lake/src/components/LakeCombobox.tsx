@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     ...typography.bodyLarge,
+    userSelect: "none",
   },
   loader: {
     padding: spacings[24],
@@ -316,7 +317,7 @@ const LakeComboboxWithRef = <I,>(
                               }}
                             >
                               {isReactText(rendered) ? (
-                                <Text numberOfLines={1} selectable={false} style={styles.itemText}>
+                                <Text numberOfLines={1} style={styles.itemText}>
                                   {rendered}
                                 </Text>
                               ) : (

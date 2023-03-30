@@ -22,10 +22,12 @@ const styles = StyleSheet.create({
   itemTitle: {
     ...typography.bodyLarge,
     lineHeight: typography.lineHeights.title,
+    userSelect: "none",
   },
   itemSubtitle: {
     ...typography.bodySmall,
     color: colors.gray[50],
+    userSelect: "none",
   },
   poweredByGoogle: {
     paddingVertical: 8,
@@ -208,11 +210,11 @@ export const AddressSearchInput = ({
             emptyResultText={emptyResultText}
             renderItem={item => (
               <>
-                <Text numberOfLines={1} selectable={false} style={styles.itemTitle}>
+                <Text numberOfLines={1} style={styles.itemTitle}>
                   {item.prediction.structured_formatting.main_text}
                 </Text>
 
-                <Text numberOfLines={1} selectable={false} style={styles.itemSubtitle}>
+                <Text numberOfLines={1} style={styles.itemSubtitle}>
                   {item.prediction.structured_formatting.secondary_text}
                 </Text>
               </>

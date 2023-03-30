@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   placeholder: {
     ...texts.regular,
     color: colors.gray[300],
+    userSelect: "none",
   },
   list: {
     marginVertical: 4,
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
   },
   groupTitle: {
     ...texts.semibold,
+    userSelect: "none",
   },
   line: {
     ...texts.regular,
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     transitionDuration: "200ms",
     transitionProperty: "background-color",
+    userSelect: "none",
   },
   lineInGroup: {
     paddingLeft: 24,
@@ -342,12 +345,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                 </Tag>
               ))
             ) : placeholder !== "" ? (
-              <Text
-                accessibilityRole="label"
-                numberOfLines={1}
-                selectable={false}
-                style={styles.placeholder}
-              >
+              <Text accessibilityRole="label" numberOfLines={1} style={styles.placeholder}>
                 {placeholder}
               </Text>
             ) : null}
@@ -405,7 +403,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                       pressed && { backgroundColor: tint100 },
                     ]}
                   >
-                    <Text numberOfLines={1} selectable={false} style={styles.groupTitle}>
+                    <Text numberOfLines={1} style={styles.groupTitle}>
                       {title}
                     </Text>
 
@@ -478,7 +476,6 @@ const LineItem = ({ item, color, filter, handleSelectItem, style }: LineItemProp
       accessibilityRole="listitem"
       disabled={disabled}
       numberOfLines={1}
-      selectable={false}
       onPress={() => handleSelectItem(item)}
       style={({ hovered, pressed }) => [
         styles.line,
