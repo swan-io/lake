@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   input: {
-    width: 200,
+    minWidth: 200,
   },
   value: {
     maxWidth: 130,
