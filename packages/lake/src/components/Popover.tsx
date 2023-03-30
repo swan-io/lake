@@ -100,9 +100,10 @@ const FLEX_START = "flex-start";
 
 const animation: Animation = {
   ...animations.fadeAndSlideInFromBottom,
-  leave: StyleSheet.compose([animations.fadeAndSlideInFromBottom.leave], {
-    animationDuration: "100ms",
-  }) as unknown as AnimationStyles,
+  leave: [
+    animations.fadeAndSlideInFromBottom.leave,
+    { animationDuration: "100ms" },
+  ] as unknown as AnimationStyles,
 };
 
 export const VIEWPORT_WIDTH_THRESHOLD = 600;
