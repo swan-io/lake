@@ -15,7 +15,9 @@ type Props = {
   value: string;
   error: string | undefined;
   valid: boolean;
+  disabled?: boolean;
   onChange: (value: string) => void;
+  onBlur?: () => void;
   accountCountry: AccountCountry;
 };
 
@@ -23,7 +25,9 @@ export const TaxIdentificationNumberInput = ({
   value,
   error,
   valid,
+  disabled,
   onChange,
+  onBlur,
   accountCountry,
 }: Props) => {
   return (
@@ -34,13 +38,9 @@ export const TaxIdentificationNumberInput = ({
         <LakeTooltip
           content={getTaxNumberTooltip(accountCountry)}
           placement="top"
-          width={accountCountry === 'DEU' ? 800 : undefined}
+          width={accountCountry === "DEU" ? 800 : undefined}
         >
-          <Icon
-            name="question-circle-regular"
-            size={16}
-            color={colors.gray[600]}
-          />
+          <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
         </LakeTooltip>
       }
       render={id => (
@@ -51,7 +51,9 @@ export const TaxIdentificationNumberInput = ({
           value={value}
           error={error}
           valid={valid}
+          disabled={disabled}
           onChangeText={onChange}
+          onBlur={onBlur}
         />
       )}
     />
