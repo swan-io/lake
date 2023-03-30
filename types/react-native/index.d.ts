@@ -113,7 +113,7 @@ declare module "react-native" {
     | "treegrid"
     | "treeitem";
 
-  export interface AccessibilityProps {
+  export interface WebAccessibilityProps {
     accessibilityActiveDescendant?: string;
     accessibilityAtomic?: boolean;
     accessibilityAutoComplete?: string;
@@ -161,7 +161,7 @@ declare module "react-native" {
     accessibilityValueText?: string;
   }
 
-  export interface ImageProps {
+  export interface ImageProps extends WebAccessibilityProps {
     accessibilityRole?: WebAccessibilityRole;
     defaultSource?: ImageSourcePropType | string;
     draggable?: boolean;
@@ -174,7 +174,7 @@ declare module "react-native" {
     readonly pressed: boolean;
   }
 
-  export interface PressableProps {
+  export interface PressableProps extends WebAccessibilityProps {
     accessibilityRole?: WebAccessibilityRole;
     onHoverIn?: (event: unknown) => void;
     onHoverOut?: (event: unknown) => void;
@@ -186,7 +186,7 @@ declare module "react-native" {
     target?: "blank" | "parent" | "self" | "top";
   };
 
-  export interface TextProps {
+  export interface TextProps extends WebAccessibilityProps {
     accessibilityRole?: WebAccessibilityRole;
     focusable?: boolean;
     href?: string;
@@ -194,7 +194,7 @@ declare module "react-native" {
     lang?: string;
   }
 
-  export interface TextInputProps {
+  export interface TextInputProps extends WebAccessibilityProps {
     accessibilityRole?: WebAccessibilityRole;
     lang?: string;
     initialValue?: string;
