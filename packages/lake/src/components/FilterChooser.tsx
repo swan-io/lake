@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   list: {
     paddingVertical: 20,
     marginVertical: 4,
-    width: 250,
+    minWidth: 250,
     overflow: "hidden",
   },
   item: {
