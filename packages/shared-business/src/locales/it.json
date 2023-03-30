@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Numero di registrazione",
   "registrationPage.withOrganismLabel": "Sei registrato a {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Sei registrato?",
+  "supportingDoc.UBODeclaration": "Dichiarazione di titolare effettivo",
+  "supportingDoc.UBODeclaration.description": "Dichiarazione di titolare effettivo",
   "supportingDoc.associationRegistration": "Prova di registrazione",
   "supportingDoc.associationRegistration.description": "Documento ufficiale attestante la registrazione della tua associazione. (< 3 mesi)",
   "supportingDoc.companyRegistration": "Prova di registrazione della società (< 3 mesi)",

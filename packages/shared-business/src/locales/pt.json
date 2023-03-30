@@ -88,6 +88,8 @@
   "registrationPage.defaultNumberLabel": "Número de registo",
   "registrationPage.withOrganismLabel": "Você está registado no {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Você está registado?",
+  "supportingDoc.UBODeclaration": "Declaração dos beneficiários efetivos",
+  "supportingDoc.UBODeclaration.description": "Declaração dos beneficiários efetivos",
   "supportingDoc.associationRegistration": "Prova de registo",
   "supportingDoc.associationRegistration.description": "Documento oficial comprovando o registo da sua associação. (< 3 meses)",
   "supportingDoc.companyRegistration": "Prova de registo da empresa (< 3 meses)",
