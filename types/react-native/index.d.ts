@@ -180,6 +180,10 @@ declare module "react-native" {
     onHoverOut?: (event: unknown) => void;
   }
 
+  export interface ScrollViewProps extends WebAccessibilityProps {
+    accessibilityRole?: WebAccessibilityRole;
+  }
+
   type HrefAttrs = {
     download?: boolean;
     rel?: string;
