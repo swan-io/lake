@@ -226,7 +226,11 @@ type ExtraProps = {
 
 export type PressableViewProps = Except<Props<ViewProps>, "children">;
 export type PressableTextProps = Props<TextProps>;
-export type PressableTextInputProps = Except<Props<TextInputProps>, "children" | "keyboardType">;
+
+export type PressableTextInputProps = Except<
+  Props<TextInputProps>,
+  "children" | "editable" | "keyboardType"
+>;
 
 export const Pressable = memo(
   getPressable<PressableViewProps>(View, { applyPressStyle: true }),
