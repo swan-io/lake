@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useCallback, useRef } from "react";
+import { KeyboardEvent, ReactElement, ReactNode, useCallback, useRef } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -9,7 +9,6 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import {
   ColorVariants,
@@ -332,31 +331,23 @@ export function LakeSelect<V>({
           data={items}
           ref={listRef}
           contentContainerStyle={styles.listContent}
-          onKeyDown={e => {
-            match(e.nativeEvent.key)
-              .with("ArrowDown", () => {
-                e.preventDefault();
+          onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
+            const { key } = event.nativeEvent;
 
-                if (isNotNullish(e.currentTarget)) {
-                  const focusableElements = getFocusableElements(
-                    e.currentTarget as unknown as HTMLDivElement,
-                  );
-                  const current = focusableElements.indexOf(e.target as unknown as HTMLElement);
-                  focusableElements[current + 1]?.focus();
-                }
-              })
-              .with("ArrowUp", () => {
-                e.preventDefault();
+            if (key === "ArrowDown" || key === "ArrowUp") {
+              event.preventDefault();
 
-                if (isNotNullish(e.currentTarget)) {
-                  const focusableElements = getFocusableElements(
-                    e.currentTarget as unknown as HTMLDivElement,
-                  );
-                  const current = focusableElements.indexOf(e.target as unknown as HTMLElement);
-                  focusableElements[current - 1]?.focus();
-                }
-              })
-              .otherwise(() => {});
+              if (isNotNullish(event.currentTarget)) {
+                const focusableElements = getFocusableElements(
+                  event.currentTarget as unknown as HTMLDivElement,
+                );
+
+                const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
+                const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
+
+                focusableElements[nextIndex]?.focus();
+              }
+            }
           }}
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
