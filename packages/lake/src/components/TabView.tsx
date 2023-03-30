@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     overflow: "hidden",
+    pointerEvents: "none",
   },
   count: {
     ...texts.smallRegular,
@@ -595,7 +596,6 @@ export const TabView = ({
         style={styles.placeholder}
         accessibilityHidden={true}
         ref={placeholderRef}
-        pointerEvents="none"
         onLayout={onLayout}
       >
         {tabs.map(({ label, url, icon, count }) => (

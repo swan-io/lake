@@ -36,6 +36,7 @@ type Props = {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
+    pointerEvents: "none",
   },
   contents: {
     ...StyleSheet.absoluteFillObject,
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     cursor: "default",
   },
   underlay: {
+    pointerEvents: "auto",
     cursor: "default",
     position: "fixed",
     left: 0,
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   popover: {
+    pointerEvents: "auto",
     position: "absolute",
     display: "flex",
     flexDirection: "column",
@@ -229,7 +232,7 @@ export const Popover = memo<Props>(
 
     return (
       <Portal container={rootElement}>
-        <TransitionView pointerEvents="none" style={styles.container} {...animation}>
+        <TransitionView style={styles.container} {...animation}>
           {visible ? (
             <View style={styles.contents}>
               {underlay ? (
@@ -239,13 +242,11 @@ export const Popover = memo<Props>(
                   onPress={onPressUnderlay}
                   accessibilityRole="button"
                   accessibilityLabel="Close"
-                  pointerEvents="auto"
                 />
               ) : null}
 
               {availableHeight > 0 ? (
                 <ScrollView
-                  pointerEvents="auto"
                   style={[
                     styles.popover,
                     availableSpaceAbove <= availableSpaceBelow && { top },

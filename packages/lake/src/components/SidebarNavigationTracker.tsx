@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     width: 3,
   },
   marker: {
+    pointerEvents: "none",
     position: "absolute",
     top: 0,
     right: 0,
@@ -141,5 +142,5 @@ export const SidebarNavigationTrackerActiveMarker = ({ color }: MarkerProps) => 
     }
   }, [setLayoutReference, color]);
 
-  return <View ref={elementRef} onLayout={onLayout} style={styles.marker} pointerEvents="none" />;
+  return <View ref={elementRef} onLayout={onLayout} style={styles.marker} />;
 };

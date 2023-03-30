@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
   },
+  inert: {
+    pointerEvents: "none",
+  },
   fill: {
     ...StyleSheet.absoluteFillObject,
     animationFillMode: "forwards",
@@ -163,11 +166,7 @@ export const LakeModal = ({
 
   return (
     <Portal container={rootElement}>
-      <View
-        accessibilityModal={true}
-        style={styles.container}
-        pointerEvents={visible ? "auto" : "none"}
-      >
+      <View accessibilityModal={true} style={[styles.container, !visible && styles.inert]}>
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>

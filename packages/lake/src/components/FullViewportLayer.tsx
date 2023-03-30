@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     overflow: "hidden",
   },
+  inert: {
+    pointerEvents: "none",
+  },
   fill: {
     ...StyleSheet.absoluteFillObject,
     animationFillMode: "forwards",
@@ -99,7 +102,7 @@ export const FullViewportLayer = ({ visible, children }: Props) => {
 
   return (
     <Portal container={rootNode}>
-      <View style={styles.root} pointerEvents={visible ? "auto" : "none"}>
+      <View style={[styles.root, !visible && styles.inert]}>
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>

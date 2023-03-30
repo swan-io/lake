@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     backgroundImage: "linear-gradient(to right, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0))",
     opacity: 0,
     transition: "150ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   rightToLeftGradient: {
     position: "absolute",
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
     backgroundImage: "linear-gradient(to left, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0))",
     opacity: 0,
     transition: "150ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   horizontalScrollbar: {
     position: "sticky",
@@ -393,6 +395,7 @@ const styles = StyleSheet.create({
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor.default}, ${backgroundColor.defaultTransparent})`,
     opacity: 0,
     transition: "200ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   visibleTopGradient: {
     opacity: 1,
@@ -1304,11 +1307,7 @@ export const FixedListView = <T, ExtraInfo>({
                 />
 
                 <View style={styles.stickyColumnStartOverflow} />
-
-                <View
-                  style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                  pointerEvents="none"
-                />
+                <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
               <View style={[styles.stickyRow, { height: totalHeight }]}>{startRows}</View>
@@ -1345,10 +1344,7 @@ export const FixedListView = <T, ExtraInfo>({
                 />
               </ScrollView>
 
-              <View
-                style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                pointerEvents="none"
-              />
+              <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
             </View>
 
             <ScrollView
@@ -1382,7 +1378,6 @@ export const FixedListView = <T, ExtraInfo>({
 
             {stickedToStartColumns.length > 0 && hasHorizontalScroll ? (
               <View
-                pointerEvents="none"
                 style={[
                   styles.leftToRightGradient,
                   {
@@ -1397,7 +1392,6 @@ export const FixedListView = <T, ExtraInfo>({
 
             {stickedToEndColumns.length > 0 && hasHorizontalScroll ? (
               <View
-                pointerEvents="none"
                 style={[
                   styles.rightToLeftGradient,
                   {
@@ -1431,10 +1425,7 @@ export const FixedListView = <T, ExtraInfo>({
                   width={stickedToEndColumnsWidth}
                 />
 
-                <View
-                  style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                  pointerEvents="none"
-                />
+                <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
               <View style={[styles.stickyRow, { height: totalHeight }]}>{endRows}</View>

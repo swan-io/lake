@@ -1,6 +1,6 @@
 import { Array, Option } from "@swan-io/boxed";
 import { Children, ReactNode, useMemo, useReducer, useRef } from "react";
-import { AnimationStyles, StyleProp, View, ViewProps, ViewStyle } from "react-native";
+import { AnimationStyles, StyleProp, View, ViewStyle } from "react-native";
 import { P, match } from "ts-pattern";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { TransitionView } from "./TransitionView";
@@ -10,18 +10,10 @@ type Props = {
   leave?: AnimationStyles;
   style?: StyleProp<ViewStyle>;
   childStyle?: StyleProp<ViewStyle>;
-  pointerEvents?: ViewProps["pointerEvents"];
   children: ReactNode;
 };
 
-export const TransitionGroupView = ({
-  children,
-  enter,
-  leave,
-  style,
-  childStyle,
-  pointerEvents,
-}: Props) => {
+export const TransitionGroupView = ({ children, enter, leave, style, childStyle }: Props) => {
   const leavingKeysAndIndicesRef = useRef<
     {
       index: number;
@@ -85,7 +77,6 @@ export const TransitionGroupView = ({
             enter={enter}
             leave={leave}
             style={childStyle}
-            pointerEvents={pointerEvents}
             onLeave={() => onLeave(key)}
             key={key}
           >

@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor.default,
   },
   scrollTracker: {
+    pointerEvents: "none",
     position: "absolute",
     left: 0,
     bottom: 0,
@@ -424,7 +425,6 @@ export const PlainListView = <T, ExtraInfo>({
                   ) : null}
 
                   <View
-                    pointerEvents="none"
                     style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
                     ref={scrollTrackerRef}
                   />

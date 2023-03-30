@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   },
   outbox: {
     margin: 16,
+    pointerEvents: "box-none",
     flexGrow: 1,
     flexShrink: 1,
   },
@@ -115,7 +116,7 @@ export const Modal = memo(
             style={styles.blanket}
           />
 
-          <View pointerEvents="box-none" style={[styles.outbox, desktop && styles.desktopOutbox]}>
+          <View style={[styles.outbox, desktop && styles.desktopOutbox]}>
             <View
               style={[
                 styles.modal,

@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
   },
+  inert: {
+    pointerEvents: "none",
+  },
   fill: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -114,7 +117,7 @@ export const RightPanel = forwardRef<FocusTrapRef, Props>(
 
     return (
       <Portal container={rootNode}>
-        <View style={styles.root} pointerEvents={visible ? "auto" : "none"}>
+        <View style={[styles.root, !visible && styles.inert]}>
           <ResponsiveContainer style={styles.root} breakpoint={breakpoints.small}>
             {({ large }) => (
               <>
