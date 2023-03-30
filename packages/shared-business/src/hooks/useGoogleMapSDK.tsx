@@ -60,8 +60,6 @@ export const getPlaceDetails = (placeId: string): Future<Result<PlaceDetail, unk
         city: "",
       };
 
-      console.log(placeDetail.address_components);
-
       placeDetail.address_components.forEach(({ types, short_name, long_name }) => {
         const type = types[0];
         match(type)

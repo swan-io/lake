@@ -1,7 +1,6 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { MutableRefObject, ReactNode, useEffect, useRef, useState } from "react";
+import { MutableRefObject, ReactNode, useRef, useState } from "react";
 import { colors } from "../constants/design";
-import { useFirstMountState } from "../hooks/useFirstMountState";
 import { LakeCombobox } from "./LakeCombobox";
 import { LakeText } from "./LakeText";
 
@@ -32,7 +31,7 @@ type State<T> = AsyncData<Result<Suggestion<T>[], unknown>>;
 
 export const AutocompleteSearchInput = <T,>({
   inputRef,
-  value: initialValue,
+  value,
   onValueChange,
   disabled,
   id,
@@ -45,56 +44,41 @@ export const AutocompleteSearchInput = <T,>({
   onSuggestion,
   onLoadError,
 }: Props<T>) => {
-  const isFirstMount = useFirstMountState();
   const [state, setState] = useState<State<T>>(AsyncData.NotAsked());
-  const [value, setValue] = useState(initialValue ?? "");
-
-  const showTriggerSearchRef = useRef(true);
-
-  useEffect(() => {
-    if (!isFirstMount && initialValue != null) {
-      setValue(initialValue);
-    }
-  }, [isFirstMount, initialValue]);
-
-  useEffect(() => {
-    if (value.length <= 3 || !shouldDisplaySuggestions || showTriggerSearchRef.current === false) {
-      return setState(AsyncData.NotAsked());
-    }
-
-    setState(AsyncData.Loading());
-
-    const request = loadSuggestions(value);
-    if (onLoadError != null) {
-      request.tapError(onLoadError);
-    }
-    request.onResolve(value => setState(AsyncData.Done(value)));
-
-    return () => request.cancel();
-  }, [value, shouldDisplaySuggestions, loadSuggestions, onLoadError]);
-
-  useEffect(() => {
-    showTriggerSearchRef.current = true;
-  }, [value]);
+  const lastRequest = useRef<Future<Result<Suggestion<T>[], unknown>>>();
 
   return (
     <LakeCombobox<Suggestion<T>>
       inputRef={inputRef}
       id={id}
       placeholder={placeholder}
-      value={value}
+      value={value ?? ""}
       items={state}
       icon="search-filled"
       disabled={disabled}
       error={error}
       ListFooterComponent={ListFooterComponent}
       onSelectItem={item => {
-        showTriggerSearchRef.current = false;
         onSuggestion(item);
       }}
       onValueChange={value => {
-        setValue(value);
+        lastRequest.current?.cancel(); // cancel previous request to avoid race condition
+        lastRequest.current = undefined; // avoid to cancel twice the same request
+
         onValueChange(value);
+        if (value.length <= 3 || !shouldDisplaySuggestions) {
+          return setState(AsyncData.NotAsked());
+        }
+
+        setState(AsyncData.Loading());
+
+        const request = loadSuggestions(value);
+        lastRequest.current = request;
+
+        if (onLoadError != null) {
+          request.tapError(onLoadError);
+        }
+        request.onResolve(value => setState(AsyncData.Done(value)));
       }}
       keyExtractor={item => item.id}
       emptyResultText={emptyResultText}
