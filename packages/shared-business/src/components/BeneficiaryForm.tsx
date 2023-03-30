@@ -592,6 +592,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                             valid={valid}
                             onChange={onChange}
                             accountCountry={accountCountry}
+                            isCompany={false}
                           />
                         )}
                       </Field>
@@ -704,6 +705,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   valid={valid}
                                   onChange={onChange}
                                   accountCountry={accountCountry}
+                                  isCompany={false}
                                 />
                               )}
                             </Field>
