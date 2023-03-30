@@ -260,6 +260,9 @@ declare module "react-native" {
       | "transaction-currency"
       | "url"
       | "username";
+
+    // https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/TextInput/types.js#L32
+    enterKeyHint?: "enter" | "done" | "go" | "next" | "previous" | "search" | "send";
   }
 
   export interface TextInputKeyPressEventData {

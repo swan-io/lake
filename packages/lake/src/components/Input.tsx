@@ -1,7 +1,6 @@
 import { ChangeEventHandler, forwardRef, memo, ReactNode, useId, useRef } from "react";
 import {
   NativeSyntheticEvent,
-  ReturnKeyTypeOptions,
   StyleProp,
   StyleSheet,
   Text,
@@ -117,7 +116,7 @@ type Props = {
   inputContainerStyle?: StyleProp<ViewStyle>;
   role?: WebAccessibilityRole;
   inputMode?: TextInputProps["inputMode"];
-  returnKeyType?: ReturnKeyTypeOptions;
+  enterKeyHint?: TextInputProps["enterKeyHint"];
   maxLength?: number;
   label?: string;
   onFocus?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
@@ -150,7 +149,7 @@ export const Input = memo(
         inputContainerStyle,
         role,
         inputMode,
-        returnKeyType,
+        enterKeyHint,
         maxLength,
         label = "",
         onFocus,
@@ -204,7 +203,7 @@ export const Input = memo(
                 accessibilityRole={role}
                 editable={!readOnly && !disabled}
                 inputMode={inputMode}
-                returnKeyType={returnKeyType}
+                enterKeyHint={enterKeyHint}
                 multiline={false}
                 numberOfLines={1}
                 maxLength={maxLength}
