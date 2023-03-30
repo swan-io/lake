@@ -229,7 +229,7 @@ export type PressableTextProps = Props<TextProps>;
 
 export type PressableTextInputProps = Except<
   Props<TextInputProps>,
-  "children" | "editable" | "keyboardType"
+  "children" | "editable" | "keyboardType" | "numberOfLines"
 >;
 
 export const Pressable = memo(

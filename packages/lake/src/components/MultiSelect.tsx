@@ -280,7 +280,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
             autoComplete="off"
             inputMode="search"
             multiline={false}
-            numberOfLines={1}
+            rows={1}
             onChangeText={filterValue => setFilter(filterValue)}
             placeholder={filterPlaceholder}
             value={filter}
