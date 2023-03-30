@@ -1,5 +1,6 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
+import { Except } from "type-fest";
 import { RadioGroup, RadioGroupItem, RadioGroupProps } from "../src/components/RadioGroup";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -8,7 +9,7 @@ export default {
   component: RadioGroup,
 } as ComponentMeta<typeof RadioGroup>;
 
-function EditableRadioGroup<T>(props: Omit<RadioGroupProps<T>, "value" | "onValueChange">) {
+function EditableRadioGroup<T>(props: Except<RadioGroupProps<T>, "value" | "onValueChange">) {
   const [value, setValue] = useState<T>();
 
   return <RadioGroup {...props} value={value} onValueChange={setValue} />;

@@ -56,7 +56,7 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
                     value={dirtyValue}
                     onChangeText={setDirtyValue}
                     onBlur={sanitizeInput}
-                    keyboardType="decimal-pad"
+                    inputMode="decimal"
                   />
                 </View>
               </Box>
@@ -81,7 +81,7 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
                   value={dirtyValue}
                   onChangeText={setDirtyValue}
                   onBlur={sanitizeInput}
-                  keyboardType="decimal-pad"
+                  inputMode="decimal"
                 />
               )}
             />

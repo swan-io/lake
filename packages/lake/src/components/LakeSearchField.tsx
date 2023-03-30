@@ -152,7 +152,7 @@ const ExpandedSearchField = ({
         icon="search-filled"
         placeholder={placeholder}
         defaultValue={initialValue}
-        keyboardType="web-search"
+        inputMode="search"
         onChangeText={onChange}
         hideErrors={true}
         onFocus={() => {

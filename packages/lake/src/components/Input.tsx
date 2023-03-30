@@ -1,6 +1,5 @@
 import { ChangeEventHandler, forwardRef, memo, ReactNode, useId, useRef } from "react";
 import {
-  KeyboardTypeOptions,
   NativeSyntheticEvent,
   ReturnKeyTypeOptions,
   StyleProp,
@@ -117,7 +116,7 @@ type Props = {
   icon?: IconName;
   inputContainerStyle?: StyleProp<ViewStyle>;
   role?: WebAccessibilityRole;
-  keyboardType?: KeyboardTypeOptions;
+  inputMode?: TextInputProps["inputMode"];
   returnKeyType?: ReturnKeyTypeOptions;
   maxLength?: number;
   label?: string;
@@ -150,7 +149,7 @@ export const Input = memo(
         icon,
         inputContainerStyle,
         role,
-        keyboardType,
+        inputMode,
         returnKeyType,
         maxLength,
         label = "",
@@ -204,7 +203,7 @@ export const Input = memo(
                 autoComplete="off"
                 accessibilityRole={role}
                 editable={!readOnly && !disabled}
-                keyboardType={keyboardType}
+                inputMode={inputMode}
                 returnKeyType={returnKeyType}
                 multiline={false}
                 numberOfLines={1}

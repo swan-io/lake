@@ -2,6 +2,7 @@ import { ComponentMeta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { Except } from "type-fest";
 import { Box } from "../src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "../src/components/LakeCombobox";
 import { LakeText } from "../src/components/LakeText";
@@ -47,7 +48,7 @@ const loadFakeProducts = (search: string): Future<Result<ApiProduct[], unknown>>
   return Future.fromPromise(promise);
 };
 
-type EditableComboboxProps = Omit<
+type EditableComboboxProps = Except<
   LakeComboboxProps<ApiProduct>,
   | "value"
   | "items"

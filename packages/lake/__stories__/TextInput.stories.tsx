@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
 import { LakeTextInput, LakeTextInputProps } from "../src/components/LakeTextInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -15,7 +16,7 @@ export default {
   component: LakeTextInput,
 } as ComponentMeta<typeof LakeTextInput>;
 
-const EditableInputText = (props: Omit<LakeTextInputProps, "value" | "onChange">) => {
+const EditableInputText = (props: Except<LakeTextInputProps, "value" | "onChange">) => {
   const [value, setValue] = useState(props.defaultValue ?? "");
 
   return (
@@ -157,12 +158,7 @@ export const Numeric = () => {
       title="Numeric text input"
       description="This variation is an example for digit inputs. It displays digits only keyboard on mobile"
     >
-      <EditableInputText
-        placeholder="000000"
-        keyboardType="numeric"
-        pattern="[0-9]"
-        maxLength={6}
-      />
+      <EditableInputText placeholder="000000" inputMode="numeric" pattern="[0-9]" maxLength={6} />
     </StoryBlock>
   );
 };

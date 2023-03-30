@@ -278,7 +278,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
         <Box direction="row" alignItems="center" style={styles.filterContainer}>
           <PressableTextInput
             autoComplete="off"
-            keyboardType="web-search"
+            inputMode="search"
             multiline={false}
             numberOfLines={1}
             onChangeText={filterValue => setFilter(filterValue)}

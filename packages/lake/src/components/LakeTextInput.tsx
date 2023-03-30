@@ -8,6 +8,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
+import { Except } from "type-fest";
 import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
@@ -141,7 +142,10 @@ const styles = StyleSheet.create({
 });
 
 // The `onChange` type change is for compatibity with Rifm
-export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> & {
+export type LakeTextInputProps = Except<
+  TextInputProps,
+  "editable" | "keyboardType" | "onChange"
+> & {
   error?: string;
   readOnly?: boolean;
   validating?: boolean;
@@ -151,7 +155,7 @@ export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> &
   multiline?: boolean;
   icon?: IconName;
   unit?: string;
-  keyboardType?: TextInputProps["keyboardType"];
+  inputMode?: TextInputProps["inputMode"];
   pattern?: string;
   children?: ReactNode;
   hideErrors?: boolean;
@@ -172,7 +176,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       children,
       unit,
       color = "gray",
-      keyboardType = "default",
+      inputMode = "text",
       hideErrors = false,
       onChange,
       pattern,
@@ -227,7 +231,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
           <View style={styles.container}>
             <View style={styles.contents}>
               <TextInput
-                keyboardType={keyboardType}
+                inputMode={inputMode}
                 ref={mergedRef}
                 {...props}
                 defaultValue={defaultValue}

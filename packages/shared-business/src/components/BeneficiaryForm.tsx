@@ -591,7 +591,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   <LakeTextInput
                                     error={error}
                                     unit="%"
-                                    keyboardType="decimal-pad"
+                                    inputMode="decimal"
                                     accessibilityValueMin={0}
                                     accessibilityValueMax={100}
                                     id={id}

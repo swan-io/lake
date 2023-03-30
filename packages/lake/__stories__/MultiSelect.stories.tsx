@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { Except } from "type-fest";
 import { MultiSelect, MultiSelectItem, MultiSelectProps } from "../src/components/MultiSelect";
 import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -32,7 +33,7 @@ const items: MultiSelectItem[] = [
 const EditableMultiSelect = ({
   initialValues = [],
   ...props
-}: Omit<MultiSelectProps<MultiSelectItem>, "onValueChange" | "items" | "values"> & {
+}: Except<MultiSelectProps<MultiSelectItem>, "onValueChange" | "items" | "values"> & {
   items?: MultiSelectItem[];
   initialValues?: string[];
 }) => {
