@@ -264,7 +264,7 @@ declare module "react-native" {
     keyCode: number;
   }
 
-  export interface ViewProps {
+  export interface ViewProps extends WebAccessibilityProps {
     accessibilityRole?: WebAccessibilityRole;
     onKeyDown?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;
     onKeyDownCapture?: (event: NativeSyntheticEvent<React.KeyboardEvent>) => void;
