@@ -129,7 +129,7 @@ export type LakeComboboxProps<I> = {
   disabled?: boolean;
   emptyResultText: string;
   error?: string;
-  nativeID?: string;
+  id?: string;
   readOnly?: boolean;
 };
 
@@ -150,7 +150,7 @@ const LakeComboboxWithRef = <I,>(
     disabled = false,
     emptyResultText,
     readOnly,
-    nativeID,
+    id,
     error,
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
@@ -245,7 +245,7 @@ const LakeComboboxWithRef = <I,>(
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
-        nativeID={nativeID}
+        id={id}
         readOnly={readOnly}
       />
 

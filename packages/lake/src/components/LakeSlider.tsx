@@ -76,7 +76,7 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
               label={label}
               render={id => (
                 <LakeTextInput
-                  nativeID={id}
+                  id={id}
                   unit={unit}
                   value={dirtyValue}
                   onChangeText={setDirtyValue}

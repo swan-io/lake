@@ -166,7 +166,7 @@ export type MultiSelectProps<I> = {
   renderTagGroup?: (items: readonly MultiSelectItem[]) => string;
   style?: StyleProp<ViewStyle>;
   values: string[];
-  nativeID?: string;
+  id?: string;
 };
 
 const memo: <P extends Record<string, unknown>>(
@@ -190,7 +190,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     error,
     style,
     values,
-    nativeID,
+    id,
   }) => {
     const [filter, setFilter] = useState<string>("");
 
@@ -314,7 +314,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     return (
       <View style={style}>
         <Pressable
-          nativeID={nativeID}
+          id={id}
           ref={inputRef}
           accessibilityHasPopup="listbox"
           accessibilityRole="button"

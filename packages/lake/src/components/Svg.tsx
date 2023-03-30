@@ -15,7 +15,7 @@ type FillRule = "evenodd" | "nonzero";
 
 type CommonProps = Pick<
   ViewProps,
-  "accessibilityRole" | "focusable" | "nativeID" | "pointerEvents" | "style" | "testID"
+  "accessibilityRole" | "focusable" | "id" | "pointerEvents" | "style" | "testID"
 > &
   ChildrenProp;
 

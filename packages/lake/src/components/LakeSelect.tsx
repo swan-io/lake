@@ -143,7 +143,7 @@ export type SelectProps<V> = {
   value?: V;
   onValueChange: (value: V) => void;
   hideErrors?: boolean;
-  nativeID?: string;
+  id?: string;
   error?: string;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -159,7 +159,7 @@ export function LakeSelect<V>({
   mode = "normal",
   placeholder,
   readOnly = false,
-  nativeID,
+  id,
   matchReferenceWidth = true,
   value,
   error,
@@ -225,7 +225,7 @@ export function LakeSelect<V>({
   return (
     <View style={commonStyles.fill}>
       <Pressable
-        nativeID={nativeID}
+        id={id}
         ref={inputRef}
         accessibilityHasPopup="listbox"
         accessibilityRole="button"

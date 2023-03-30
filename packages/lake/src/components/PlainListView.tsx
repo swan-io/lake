@@ -192,7 +192,7 @@ const Row = <T, ExtraInfo>({
               flexGrow: width === "grow" ? ONE : ZERO,
             },
           ]}
-          nativeID={columnId}
+          id={columnId}
           key={columnId}
         >
           {renderCell({ columnId, item, index, extraInfo, isHovered })}
@@ -340,7 +340,7 @@ export const PlainListView = <T, ExtraInfo>({
                           height: headerHeight,
                         },
                       ]}
-                      nativeID={columnId}
+                      id={columnId}
                       key={columnId}
                     >
                       {renderTitle({ title, extraInfo, id })}

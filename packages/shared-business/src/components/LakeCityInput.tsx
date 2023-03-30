@@ -44,7 +44,7 @@ type Props = {
   country?: CountryCCA3;
   disabled?: boolean;
   error?: string;
-  nativeID?: string;
+  id?: string;
   placeholder?: string;
   onSuggestion?: (place: PlaceDetail) => void;
   onLoadError: (error: unknown) => void;
@@ -59,7 +59,7 @@ export const LakeCityInput = ({
   country,
   disabled,
   placeholder,
-  nativeID,
+  id,
   error,
   onSuggestion,
   onLoadError,
@@ -148,7 +148,7 @@ export const LakeCityInput = ({
           disabled={isNullish(country) || disabled}
           error={error}
           onValueChange={onValueChange}
-          nativeID={nativeID}
+          id={id}
           ListFooterComponent={
             <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
               <AutoWidthImage height={14} sourceUri={poweredByGoogle} />

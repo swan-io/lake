@@ -113,7 +113,7 @@ export const LakeLabel = ({
                 ) : null}
               </Label>
             ) : (
-              <LakeText variant="medium" color={readOnlyColor} nativeID={id}>
+              <LakeText variant="medium" color={readOnlyColor} id={id}>
                 {label}
 
                 {optionalLabel != null ? (

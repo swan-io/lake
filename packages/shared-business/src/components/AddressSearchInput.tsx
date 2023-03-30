@@ -187,7 +187,7 @@ export const AddressSearchInput = ({
         return (
           <LakeCombobox<Suggestion>
             inputRef={inputRef}
-            nativeID={id}
+            id={id}
             placeholder={placeholder}
             value={value}
             items={state}
@@ -224,7 +224,7 @@ export const AddressSearchInput = ({
         <LakeTextInput
           // @ts-expect-error
           ref={inputRef}
-          nativeID={id}
+          id={id}
           placeholder={placeholder}
           value={value}
           icon="search-filled"

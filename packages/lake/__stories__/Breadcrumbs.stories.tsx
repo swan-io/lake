@@ -189,7 +189,7 @@ export const Interactive = () => {
           }
           render={id => (
             <LakeTextInput
-              nativeID={id}
+              id={id}
               value={newCrumbLabel}
               onChange={event => setNewCrumbLabel(event.currentTarget.value)}
             />

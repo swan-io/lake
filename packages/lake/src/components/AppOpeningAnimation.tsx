@@ -57,7 +57,7 @@ export const AppOpeningAnimation = ({ accentColor, appLogo, playing = true, styl
 
   return (
     <Svg viewBox="0 0 442 860" style={style}>
-      <Mask nativeID="phoneScreen">
+      <Mask id="phoneScreen">
         <Rect x={0} y={0} width={442} height={860} fill="#000" />
         <Rect fill="#fff" x={25} y={21} width={392} height={817} rx={45} />
       </Mask>

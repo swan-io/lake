@@ -12,7 +12,7 @@ type Props<T extends CountryCCA3> = {
   error?: string;
   placeholder?: string;
   readOnly?: boolean;
-  nativeID?: string;
+  id?: string;
   disabled?: boolean;
   hideErrors?: boolean;
 };
@@ -22,7 +22,7 @@ export function CountryPicker<T extends CountryCCA3>({
   value,
   items,
   readOnly,
-  nativeID,
+  id,
   error,
   placeholder,
   disabled,
@@ -52,7 +52,7 @@ export function CountryPicker<T extends CountryCCA3>({
   return (
     <LakeSelect
       readOnly={readOnly}
-      nativeID={nativeID}
+      id={id}
       error={error}
       items={countries}
       placeholder={placeholder}

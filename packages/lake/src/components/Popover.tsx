@@ -264,7 +264,7 @@ export const Popover = memo<Props>(
                         availableSpaceAbove > availableSpaceBelow ? FLEX_END : FLEX_START,
                     },
                   ]}
-                  nativeID={id}
+                  id={id}
                   accessibilityRole={role}
                   accessibilityDescribedBy={describedBy}
                   accessibilityLabel={label}

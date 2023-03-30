@@ -525,7 +525,7 @@ const RowSegment = <T, ExtraInfo>({
     wrapper,
     {
       focusable: true,
-      nativeID: focusId,
+      id: focusId,
       style: [
         styles.rowSegment,
         {
@@ -571,7 +571,7 @@ const RowSegment = <T, ExtraInfo>({
               style={[styles.cell, { width }]}
               key={columnId}
               accessibilityDescribedBy={columnId}
-              nativeID={focusId}
+              id={focusId}
             >
               {renderCell({ columnId, item, index: absoluteIndex, extraInfo, isHovered })}
             </View>
@@ -603,7 +603,7 @@ const HeaderSegment = <T, ExtraInfo>({
         const columnId = `${viewId}_${id}`;
 
         return (
-          <View style={[styles.segmentHeaderCell, { width }]} nativeID={columnId} key={columnId}>
+          <View style={[styles.segmentHeaderCell, { width }]} id={columnId} key={columnId}>
             {renderTitle({ title, extraInfo, id })}
           </View>
         );

@@ -25,12 +25,6 @@ export const Label = ({ htmlFor, id, style, ...props }: Props) => {
   useNativeProp(ref, "for", htmlFor);
 
   return (
-    <Text
-      ref={ref}
-      nativeID={id}
-      accessibilityRole="label"
-      style={[styles.base, style]}
-      {...props}
-    />
+    <Text ref={ref} id={id} accessibilityRole="label" style={[styles.base, style]} {...props} />
   );
 };
