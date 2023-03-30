@@ -6,6 +6,8 @@ import { colors } from "@swan-io/lake/src/constants/design";
 import { t } from "../utils/i18n";
 import {
   AccountCountry,
+  getCompanyTaxNumberHelp,
+  getCompanyTaxNumberPlaceholder,
   getIndividualTaxNumberHelp,
   getIndividualTaxNumberPlaceholder,
   getTaxNumberTooltip,
@@ -19,6 +21,7 @@ type Props = {
   onChange: (value: string) => void;
   onBlur?: () => void;
   accountCountry: AccountCountry;
+  isCompany: boolean;
 };
 
 export const TaxIdentificationNumberInput = ({
@@ -29,6 +32,7 @@ export const TaxIdentificationNumberInput = ({
   onChange,
   onBlur,
   accountCountry,
+  isCompany,
 }: Props) => {
   return (
     <LakeLabel
@@ -46,8 +50,16 @@ export const TaxIdentificationNumberInput = ({
       render={id => (
         <LakeTextInput
           id={id}
-          placeholder={getIndividualTaxNumberPlaceholder(accountCountry)}
-          help={getIndividualTaxNumberHelp(accountCountry)}
+          placeholder={
+            isCompany
+              ? getCompanyTaxNumberPlaceholder(accountCountry)
+              : getIndividualTaxNumberPlaceholder(accountCountry)
+          }
+          help={
+            isCompany
+              ? getCompanyTaxNumberHelp(accountCountry)
+              : getIndividualTaxNumberHelp(accountCountry)
+          }
           value={value}
           error={error}
           valid={valid}
