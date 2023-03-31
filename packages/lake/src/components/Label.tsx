@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = Except<TextProps, "accessibilityRole"> & {
+type Props = Except<TextProps, "role"> & {
   children?: ReactNode;
   htmlFor?: string;
   id?: string;
@@ -24,7 +24,5 @@ export const Label = ({ htmlFor, id, style, ...props }: Props) => {
   const ref = useRef<Text>(null);
   useNativeProp(ref, "for", htmlFor);
 
-  return (
-    <Text ref={ref} id={id} accessibilityRole="label" style={[styles.base, style]} {...props} />
-  );
+  return <Text ref={ref} id={id} role="label" style={[styles.base, style]} {...props} />;
 };

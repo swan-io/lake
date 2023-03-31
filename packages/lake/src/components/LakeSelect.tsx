@@ -227,7 +227,7 @@ export function LakeSelect<V>({
         id={id}
         ref={inputRef}
         accessibilityHasPopup="listbox"
-        accessibilityRole="button"
+        role="button"
         accessibilityExpanded={visible}
         disabled={readOnly || disabled}
         style={({ focused }) => [
@@ -327,7 +327,7 @@ export function LakeSelect<V>({
         )}
 
         <FlatList
-          accessibilityRole="list"
+          role="list"
           data={items}
           ref={listRef}
           contentContainerStyle={styles.listContent}
@@ -362,7 +362,7 @@ export function LakeSelect<V>({
                   (hovered || isSelected) && styles.itemHighlighted,
                   focused && styles.itemFocused,
                 ]}
-                accessibilityRole="option"
+                role="option"
                 accessibilitySelected={true}
                 onPress={() => {
                   onValueChange(item.value);

@@ -90,7 +90,7 @@ export function FilterChooser<FilterName extends string>({
           <Space height={8} />
 
           <FlatList
-            accessibilityRole="list"
+            role="list"
             data={availableFilters}
             keyExtractor={(_, index) => `filter-item-${index}`}
             renderItem={({ item }: ListRenderItemInfo<{ name: FilterName; label: string }>) => {
@@ -98,7 +98,7 @@ export function FilterChooser<FilterName extends string>({
               return (
                 <Pressable
                   style={({ hovered }) => [styles.item, hovered && styles.itemHovered]}
-                  accessibilityRole="button"
+                  role="button"
                   disabled={isSet}
                   onPress={() => {
                     onAddFilter(item.name);

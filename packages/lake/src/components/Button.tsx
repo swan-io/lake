@@ -102,7 +102,7 @@ export const Button = memo(
 
       return (
         <Pressable
-          accessibilityRole="button"
+          role="button"
           accessibilityBusy={loading}
           accessibilityDisabled={disabled}
           disabled={loading || disabled}
@@ -141,7 +141,7 @@ export const Button = memo(
 
           {loading && (
             <View
-              accessibilityRole="none"
+              role="none"
               style={[styles.loaderContainer, { backgroundColor: computedColors.original }]}
             >
               <ActivityIndicator color={computedColors.text} size={iconSize} />

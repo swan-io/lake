@@ -259,7 +259,7 @@ export const CopyableRegularTextCell = ({
         containerStyle={styles.iconContainer}
       >
         <Pressable
-          accessibilityRole="button"
+          role="button"
           accessibilityLabel={copyWording}
           onPress={onPress}
           style={({ hovered }) => [styles.icon, hovered && styles.underline]}

@@ -174,7 +174,7 @@ const Dropdown = ({
   });
 
   return (
-    <View accessibilityRole="menu" style={styles.dropdown} ref={containerRef}>
+    <View role="menu" style={styles.dropdown} ref={containerRef}>
       {tabs.map(({ url, label }) => {
         return (
           <Link
@@ -183,7 +183,7 @@ const Dropdown = ({
             onFocus={onLinkFocus}
             onBlur={onLinkBlur}
             onPress={onLinkPress}
-            accessibilityRole="menuitem"
+            role="menuitem"
             ariaCurrentValue="location"
             style={({ active, hovered }) => [
               styles.dropdownLink,
@@ -369,7 +369,7 @@ const DropdownItems = forwardRef<
     <View style={styles.dropdownHandleContainer} ref={mergedRef}>
       <PressableText
         ref={handleRef}
-        accessibilityRole="button"
+        role="button"
         accessibilityExpanded={shouldOpen}
         accessibilityHasPopup="true"
         onFocus={onHandleFocus}
@@ -588,7 +588,7 @@ export const TabView = ({
     <Box
       alignItems="center"
       direction="row"
-      accessibilityRole="tablist"
+      role="tablist"
       ref={containerRef}
       style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >
@@ -645,7 +645,7 @@ export const TabView = ({
       {kept.map(({ label, url, icon, withSeparator, count }) => (
         <Fragment key={url}>
           <Link
-            accessibilityRole="tab"
+            role="tab"
             ref={ref => {
               if (linksRefs.current) {
                 linksRefs.current[url] = ref;
@@ -657,7 +657,7 @@ export const TabView = ({
               active ? styles.activeLink : hovered ? styles.hoveredLink : null,
             ]}
           >
-            {withSeparator === true && <View style={styles.separator} accessibilityRole="none" />}
+            {withSeparator === true && <View style={styles.separator} role="none" />}
 
             {isNotNullish(icon) && (
               <>

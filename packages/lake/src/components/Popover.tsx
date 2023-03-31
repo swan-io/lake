@@ -241,7 +241,7 @@ export const Popover = memo<Props>(
                   ref={underlayRef}
                   style={styles.underlay}
                   onPress={onPressUnderlay}
-                  accessibilityRole="button"
+                  role="button"
                   accessibilityLabel="Close"
                 />
               ) : null}
@@ -267,7 +267,7 @@ export const Popover = memo<Props>(
                     },
                   ]}
                   id={id}
-                  accessibilityRole={role}
+                  role={role}
                   accessibilityDescribedBy={describedBy}
                   accessibilityLabel={label}
                 >

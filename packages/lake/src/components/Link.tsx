@@ -28,7 +28,7 @@ export const Link = memo(
   forwardRef<Text, LinkProps>(
     (
       {
-        accessibilityRole = "link",
+        role = "link",
         children,
         disabled = false,
         onPress,
@@ -48,7 +48,7 @@ export const Link = memo(
       return (
         <PressableText
           {...props}
-          accessibilityRole={accessibilityRole}
+          role={role}
           accessibilityDisabled={disabled}
           tabIndex={isNotNullish(tabIndex) ? tabIndex : disabled ? -1 : 0}
           accessibilityCurrent={active ? ariaCurrentValue : undefined}

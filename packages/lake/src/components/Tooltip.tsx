@@ -242,7 +242,7 @@ export const Tooltip = memo(
               </View>
 
               <View
-                accessibilityRole="none"
+                role="none"
                 style={[
                   styles.arrowContainer,
                   state?.placement === "top" && styles.arrowContainerTop,

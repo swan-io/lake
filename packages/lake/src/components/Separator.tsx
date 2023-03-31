@@ -24,7 +24,7 @@ type Props = {
 
 export const Separator = ({ horizontal = false, space, style }: Props) => (
   <View
-    accessibilityRole="none"
+    role="none"
     style={
       horizontal
         ? [styles.horizontal, isNotNullish(space) && { marginHorizontal: space }, style]

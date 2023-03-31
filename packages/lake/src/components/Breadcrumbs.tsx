@@ -691,7 +691,7 @@ export const Breadcrumbs = () => {
   }, [cleanCrumbs]);
 
   return (
-    <View accessibilityRole="navigation" style={styles.container}>
+    <View role="navigation" style={styles.container}>
       {start.map(({ id, crumb, isFirst, isLast, isRootCrumb }) => (
         <BreadcrumbsItem
           key={id}

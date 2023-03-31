@@ -119,7 +119,7 @@ export const BorderedButton = memo(
 
       return (
         <Pressable
-          accessibilityRole="button"
+          role="button"
           accessibilityLabel={accessibilityLabel}
           accessibilityBusy={loading}
           accessibilityDisabled={disabled}
@@ -160,7 +160,7 @@ export const BorderedButton = memo(
           )}
 
           {loading && (
-            <View accessibilityRole="none" style={styles.loaderContainer}>
+            <View role="none" style={styles.loaderContainer}>
               <ActivityIndicator
                 color={disabled ? colors.gray[50] : colors.gray[100]}
                 size={iconSize}

@@ -413,7 +413,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           <>
             {match(step)
               .with("common", () => (
-                <View accessibilityRole="form">
+                <View role="form">
                   <Box direction={small ? "column" : "row"}>
                     <Field name="firstName">
                       {({ value, onChange, error }) => (
@@ -621,7 +621,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                 </View>
               ))
               .with("address", () => (
-                <View accessibilityRole="form">
+                <View role="form">
                   <Field name="country">
                     {({ value, onChange }) => (
                       <LakeLabel

@@ -100,7 +100,7 @@ export const SidebarNavigationTracker = ({ style, contentContainerStyle, childre
         onLayout={onLayout}
         style={style}
         contentContainerStyle={contentContainerStyle}
-        accessibilityRole="banner"
+        role="banner"
       >
         {children}
 

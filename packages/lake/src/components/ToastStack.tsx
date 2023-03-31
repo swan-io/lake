@@ -130,7 +130,7 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, on
             <Space height={24} />
 
             <Animated.View
-              accessibilityRole="progressbar"
+              role="progressbar"
               style={[
                 styles.progressBar,
                 { backgroundColor: colors[colorVariation][500] },

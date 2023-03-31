@@ -178,7 +178,7 @@ export const LakeButton = memo(
         <Pressable
           href={href}
           hrefAttrs={hrefAttrs}
-          accessibilityRole={href != null ? "link" : "button"}
+          role={href != null ? "link" : "button"}
           accessibilityBusy={loading}
           accessibilityDisabled={disabled}
           accessibilityControls={accessibilityControls}
@@ -271,7 +271,7 @@ export const LakeButton = memo(
 
                 {loading && (
                   <View
-                    accessibilityRole="none"
+                    role="none"
                     style={[
                       styles.loaderContainer,
                       {

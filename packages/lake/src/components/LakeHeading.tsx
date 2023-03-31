@@ -22,7 +22,7 @@ const variants = StyleSheet.create({
 type HeadingAlign = keyof typeof alignments;
 type HeadingVariant = keyof typeof variants;
 
-type Props = Except<TextProps, "accessibilityRole"> & {
+type Props = Except<TextProps, "role"> & {
   align?: HeadingAlign;
   children: ReactNode;
   color?: string;
@@ -38,7 +38,7 @@ export const LakeHeading = forwardRef<Text, Props>(
   ) => (
     <Text
       ref={forwardedRef}
-      accessibilityRole={level === "none" ? undefined : "header"}
+      role={level === "none" ? undefined : "heading"}
       accessibilityLevel={level === "none" ? undefined : level}
       style={[
         variants[variant],

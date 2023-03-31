@@ -31,7 +31,7 @@ const sizes = StyleSheet.create({
 type HeadingAlign = keyof typeof alignments;
 type HeadingSize = keyof typeof sizes;
 
-type Props = Except<TextProps, "accessibilityRole"> & {
+type Props = Except<TextProps, "role"> & {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   align?: HeadingAlign;
   size: HeadingSize;
@@ -42,7 +42,7 @@ export const Heading = forwardRef<Text, Props>(
   ({ children, align = "left", size, level, style, ...props }, forwardedRef) => (
     <Text
       ref={forwardedRef}
-      accessibilityRole="header"
+      role="heading"
       accessibilityLevel={level}
       style={[sizes[size], alignments[align], style]}
       {...props}

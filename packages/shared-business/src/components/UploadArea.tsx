@@ -335,7 +335,7 @@ export const UploadArea = ({
 
                 <Space width={20} />
 
-                <View accessibilityRole="progressbar" style={styles.progressBar}>
+                <View role="progressbar" style={styles.progressBar}>
                   <View style={[styles.progress, { width: `${progress}%` }]} />
                 </View>
               </Box>

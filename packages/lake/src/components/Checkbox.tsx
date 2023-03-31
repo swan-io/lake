@@ -90,7 +90,7 @@ export const CheckBox = memo(
         <View style={[styles.base, style]}>
           <Pressable
             ref={forwardedRef}
-            accessibilityRole="checkbox"
+            role="checkbox"
             tabIndex={-1}
             accessibilityChecked={value}
             accessibilityDisabled={disabled}
@@ -126,7 +126,7 @@ export const CheckBox = memo(
             <>
               <Space width={12} />
 
-              <Text accessibilityRole="label" ref={ref} style={styles.label}>
+              <Text role="label" ref={ref} style={styles.label}>
                 {children}
               </Text>
             </>

@@ -3,7 +3,7 @@ import { unstable_createElement as createElement, View, ViewProps } from "react-
 import { Except } from "type-fest";
 import { commonStyles } from "../constants/commonStyles";
 
-type Props = Except<ViewProps, "accessibilityRole"> & {
+type Props = Except<ViewProps, "role"> & {
   children?: ReactNode;
   onReset?: (event: React.FormEvent<HTMLElement>) => void;
   onSubmit?: (event: React.FormEvent<HTMLElement>) => void;

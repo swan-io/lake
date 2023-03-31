@@ -272,7 +272,7 @@ export const LakeTooltip = memo(
 
                   {!hideArrow && (
                     <View
-                      accessibilityRole="none"
+                      role="none"
                       style={[
                         state?.placement === "right" || state?.placement === "left"
                           ? styles.arrowContainerHorizontal

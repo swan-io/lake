@@ -135,7 +135,7 @@ export const Tag = ({
 
         {hasRemoveButton && (
           <Pressable
-            accessibilityRole="button"
+            role="button"
             onPress={onPressRemove}
             style={({ hovered, pressed }) => [
               styles.dismiss,

@@ -109,12 +109,7 @@ export const Modal = memo(
           onDismiss={onDismiss}
           onRequestClose={onDismiss}
         >
-          <Pressable
-            accessibilityRole="none"
-            tabIndex={-1}
-            onPress={onDismiss}
-            style={styles.blanket}
-          />
+          <Pressable role="none" tabIndex={-1} onPress={onDismiss} style={styles.blanket} />
 
           <View style={[styles.outbox, desktop && styles.desktopOutbox]}>
             <View
@@ -125,7 +120,7 @@ export const Modal = memo(
                 style,
               ]}
             >
-              <Box direction="row" accessibilityRole="banner" alignItems="center">
+              <Box direction="row" role="banner" alignItems="center">
                 {title !== "" ? (
                   <Heading
                     size={media({ mobile: 20, desktop: 24 })}
@@ -140,7 +135,7 @@ export const Modal = memo(
 
                 {onDismiss && (
                   <Pressable
-                    accessibilityRole="button"
+                    role="button"
                     onPress={onDismiss}
                     style={({ pressed }) => [
                       styles.dismissButton,

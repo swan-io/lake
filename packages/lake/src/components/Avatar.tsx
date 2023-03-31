@@ -38,7 +38,7 @@ export const Avatar = memo<Props>(({ initials = "", size }) => {
   const variant = initialsToVariant(initials);
   return (
     <View
-      accessibilityRole="image"
+      role="img"
       style={[
         commonStyles.center,
         styles.container,

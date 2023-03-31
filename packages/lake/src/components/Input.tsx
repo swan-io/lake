@@ -9,7 +9,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
-  WebAccessibilityRole,
+  WebRole,
 } from "react-native";
 import { colors } from "../constants/colors";
 import { commonStyles } from "../constants/commonStyles";
@@ -109,7 +109,7 @@ type Props = {
   error?: string;
   icon?: IconName;
   inputContainerStyle?: StyleProp<ViewStyle>;
-  role?: WebAccessibilityRole;
+  role?: WebRole;
   inputMode?: TextInputProps["inputMode"];
   enterKeyHint?: TextInputProps["enterKeyHint"];
   maxLength?: number;
@@ -195,7 +195,7 @@ export const Input = memo(
                 id={id}
                 allowFontScaling={false}
                 autoComplete="off"
-                accessibilityRole={role}
+                role={role}
                 readOnly={readOnly || disabled}
                 inputMode={inputMode}
                 enterKeyHint={enterKeyHint}

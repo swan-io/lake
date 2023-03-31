@@ -237,7 +237,7 @@ const LakeComboboxWithRef = <I,>(
         accessibilityControls={isFocused ? suggestionsId : ""}
         enterKeyHint="search"
         icon={icon}
-        accessibilityRole="combobox"
+        role="combobox"
         placeholder={placeholder}
         value={value}
         disabled={disabled}
@@ -289,7 +289,7 @@ const LakeComboboxWithRef = <I,>(
                         ref={listRef}
                         keyExtractor={keyExtractor}
                         getItemLayout={getItemLayout}
-                        accessibilityRole="list"
+                        role="list"
                         data={items}
                         style={styles.flatList}
                         renderItem={({ item }) => {
@@ -299,7 +299,7 @@ const LakeComboboxWithRef = <I,>(
                             <Pressable
                               onFocus={handleFocus}
                               onBlur={handleBlur}
-                              accessibilityRole="listitem"
+                              role="listitem"
                               onKeyDown={handleListItemKeyPress}
                               style={({ hovered, pressed, focused }) => [
                                 styles.item,

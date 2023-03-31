@@ -57,7 +57,7 @@ export const LakeCheckbox = ({
 
   return (
     <View
-      accessibilityRole="none"
+      role="none"
       style={[
         styles.container,
         disabled && styles.disabled,

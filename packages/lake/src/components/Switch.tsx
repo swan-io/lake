@@ -85,7 +85,7 @@ export const Switch = memo(
     return (
       <Pressable
         ref={ref}
-        accessibilityRole="switch"
+        role="switch"
         disabled={disabled}
         onPress={() => onValueChange?.(!value)}
       >

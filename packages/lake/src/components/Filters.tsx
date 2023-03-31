@@ -168,7 +168,7 @@ function FilterRadio<T>({
       >
         <View style={styles.dropdown}>
           <FlatList
-            accessibilityRole="list"
+            role="list"
             data={items}
             contentContainerStyle={styles.content}
             keyExtractor={(_, index) => `filter-item-${index}`}
@@ -177,7 +177,7 @@ function FilterRadio<T>({
 
               return (
                 <Pressable
-                  accessibilityRole="radio"
+                  role="radio"
                   accessibilityChecked={isSelected}
                   style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
                   onPress={() => {
@@ -279,7 +279,7 @@ function FilterCheckbox<T>({
       >
         <View style={styles.dropdown}>
           <FlatList
-            accessibilityRole="list"
+            role="list"
             data={listItems}
             contentContainerStyle={styles.content}
             keyExtractor={(_, index) => `filter-item-${index}`}
@@ -316,7 +316,7 @@ function FilterCheckbox<T>({
 
               return (
                 <Pressable
-                  accessibilityRole="radio"
+                  role="radio"
                   accessibilityChecked={isSelected}
                   style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
                   onPress={onPress}

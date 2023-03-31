@@ -45,7 +45,7 @@ export const LakeRadio = ({ value, disabled = false, color = "current" }: Props)
         borderColor: colors.gray[300],
       },
     ]}
-    accessibilityRole="none"
+    role="none"
   >
     <View
       accessibilityHidden={!value}
