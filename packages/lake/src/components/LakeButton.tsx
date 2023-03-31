@@ -93,6 +93,9 @@ const styles = StyleSheet.create({
     cursor: "not-allowed",
     opacity: 0.3,
   },
+  resetOpacity: {
+    opacity: 1,
+  },
   loaderContainer: {
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
@@ -195,6 +198,7 @@ export const LakeButton = memo(
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
             disabled && styles.disabled,
+            disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
 
             typeof style == "function" ? style({ hovered, pressed, focused }) : style,
@@ -219,7 +223,12 @@ export const LakeButton = memo(
                   ? backgroundColor.accented
                   : invariantColors.transparent,
                 borderWidth: 1,
-                borderColor: hovered ? colors[color][600] : colors[color][300],
+                borderColor:
+                  disabled && forceBackground
+                    ? colors[color][100]
+                    : hovered
+                    ? colors[color][600]
+                    : colors[color][300],
               }))
               .with("tertiary", () => ({
                 backgroundColor: pressed
@@ -234,7 +243,9 @@ export const LakeButton = memo(
           {({ pressed, hovered }) => {
             const textColor =
               mode === "secondary" || mode === "tertiary"
-                ? hovered || pressed
+                ? disabled && forceBackground
+                  ? colors[color][300]
+                  : hovered || pressed
                   ? colors[color][700]
                   : colors[color][600]
                 : colors[color].contrast;
