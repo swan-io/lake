@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from "react";
-import { Animated, LayoutChangeEvent, PanResponder, StyleSheet, View } from "react-native";
+import { LayoutChangeEvent, PanResponder, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { colors } from "../constants/colors";
 import { useAnimatedValue } from "../hooks/useAnimatedValue";
@@ -79,18 +79,35 @@ export const Slider = memo(
     const interacting = useRef(false);
     const left = useRef(0);
     const width = useRef(0);
-    const valueAnim = useAnimatedValue(value);
+    const animation = useAnimatedValue(value);
+    const barRef = useRef<View>(null);
+    const buttonRef = useRef<View>(null);
 
-    const barAnim = valueAnim.interpolate({
-      inputRange: [minimum, maximum],
-      outputRange: ["0%", "100%"],
-      extrapolate: "clamp",
-    });
+    useEffect(() => {
+      const convert = interpolate({
+        clamp: true,
+        inputRange: [minimum, maximum],
+        outputRange: [0, 100],
+      });
+
+      const id = animation.addListener(({ value }) => {
+        const converted = convert(value);
+
+        if (barRef.current instanceof HTMLElement) {
+          barRef.current.style.transform = `scaleX(${converted}%)`;
+        }
+        if (buttonRef.current instanceof HTMLElement) {
+          buttonRef.current.style.left = `${converted}%`;
+        }
+      });
+
+      return () => animation.removeListener(id);
+    }, [animation, minimum, maximum]);
 
     // Update position on value change
     useEffect(() => {
-      !interacting.current && valueAnim.setValue(value);
-    }, [valueAnim, value]);
+      !interacting.current && animation.setValue(value);
+    }, [animation, value]);
 
     // Update disabled ref for pan responder
     useEffect(() => {
@@ -132,7 +149,7 @@ export const Slider = memo(
             });
 
             onValueChange(nextValue);
-            valueAnim.setValue(nextValue);
+            animation.setValue(nextValue);
           }
         },
         onPanResponderRelease: event => {
@@ -150,7 +167,7 @@ export const Slider = memo(
             });
 
             onValueChange(nextValue);
-            valueAnim.setValue(nextValue);
+            animation.setValue(nextValue);
           }
         },
       }),
@@ -165,10 +182,10 @@ export const Slider = memo(
         {...panResponder.panHandlers}
       >
         <View style={styles.bar}>
-          <Animated.View style={[styles.barFill, { transform: [{ scaleX: barAnim }] }]} />
+          <View ref={barRef} style={styles.barFill} />
         </View>
 
-        <Animated.View style={[styles.button, { left: barAnim }]} />
+        <View ref={buttonRef} style={styles.button} />
       </View>
     );
   },

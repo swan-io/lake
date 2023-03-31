@@ -1,8 +1,9 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { ColorVariants, animations, colors, shadows } from "../constants/design";
 import { ToastVariant, hideToast, useToasts } from "../state/toasts";
+import { isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -63,12 +64,28 @@ type ToastProps = {
 };
 
 const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, onClose }) => {
+  const progressBarRef = useRef<View>(null);
+
   const colorVariation = match<ToastVariant, ColorVariants>(variant)
     .with("success", () => "positive")
     .with("error", () => "negative")
     .with("info", () => "shakespear")
     .with("warning", () => "warning")
     .exhaustive();
+
+  useEffect(() => {
+    if (isNullish(progress)) {
+      return;
+    }
+
+    const id = progress.addListener(({ value }) => {
+      if (progressBarRef.current instanceof HTMLElement) {
+        progressBarRef.current.style.transform = `scaleX(${value})`;
+      }
+    });
+
+    return () => progress.removeListener(id);
+  }, [progress]);
 
   return (
     <View style={styles.toastWrapper}>
@@ -129,13 +146,10 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, on
           <>
             <Space height={24} />
 
-            <Animated.View
+            <View
+              ref={progressBarRef}
               role="progressbar"
-              style={[
-                styles.progressBar,
-                { backgroundColor: colors[colorVariation][500] },
-                { transform: [{ scaleX: progress }] },
-              ]}
+              style={[styles.progressBar, { backgroundColor: colors[colorVariation][500] }]}
             />
           </>
         )}

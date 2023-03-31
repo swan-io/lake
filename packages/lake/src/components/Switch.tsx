@@ -1,7 +1,8 @@
-import { forwardRef, memo, useEffect } from "react";
+import { forwardRef, memo, useEffect, useRef } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, shadows } from "../constants/design";
 import { useAnimatedValue } from "../hooks/useAnimatedValue";
+import { interpolate } from "../utils/math";
 import { Icon } from "./Icon";
 
 const WIDTH = 36;
@@ -67,6 +68,22 @@ export const Switch = memo(
   forwardRef<View, Props>(({ value, disabled = false, onValueChange }, ref) => {
     const animatedValue = value ? 1 : 0;
     const animation = useAnimatedValue(animatedValue);
+    const buttonRef = useRef<View>(null);
+
+    useEffect(() => {
+      const convert = interpolate({
+        inputRange: [0, 1],
+        outputRange: [PADDING, WIDTH - BUTTON_SIZE - PADDING],
+      });
+
+      const id = animation.addListener(({ value }) => {
+        if (buttonRef.current instanceof HTMLElement) {
+          buttonRef.current.style.transform = `translateX(${convert(value)}px)`;
+        }
+      });
+
+      return () => animation.removeListener(id);
+    }, [animation]);
 
     useEffect(() => {
       Animated.spring(animation, {
@@ -76,11 +93,6 @@ export const Switch = memo(
         useNativeDriver: false,
       }).start();
     }, [animation, animatedValue]);
-
-    const translateX = animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [PADDING, WIDTH - BUTTON_SIZE - PADDING],
-    });
 
     return (
       <Pressable
@@ -94,14 +106,14 @@ export const Switch = memo(
             <View style={[styles.shadow, hovered && styles.opaque]} />
 
             <View style={[styles.base, value && styles.active, disabled && styles.disabled]}>
-              <Animated.View style={[styles.button, { transform: [{ translateX }] }]}>
+              <View ref={buttonRef} style={styles.button}>
                 <Icon
                   color={colors.positive[400]}
                   name="checkmark-filled"
                   size={10}
                   style={[styles.icon, value && styles.opaque]}
                 />
-              </Animated.View>
+              </View>
             </View>
           </>
         )}
