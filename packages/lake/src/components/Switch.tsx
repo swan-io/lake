@@ -71,18 +71,20 @@ export const Switch = memo(
     const buttonRef = useRef<View>(null);
 
     useEffect(() => {
-      const convert = interpolate({
+      const interpolateValue = interpolate({
         inputRange: [0, 1],
         outputRange: [PADDING, WIDTH - BUTTON_SIZE - PADDING],
       });
 
       const id = animation.addListener(({ value }) => {
         if (buttonRef.current instanceof HTMLElement) {
-          buttonRef.current.style.transform = `translateX(${convert(value)}px)`;
+          buttonRef.current.style.transform = `translateX(${interpolateValue(value)}px)`;
         }
       });
 
-      return () => animation.removeListener(id);
+      return () => {
+        animation.removeListener(id);
+      };
     }, [animation]);
 
     useEffect(() => {

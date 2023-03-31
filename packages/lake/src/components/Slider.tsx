@@ -84,24 +84,26 @@ export const Slider = memo(
     const buttonRef = useRef<View>(null);
 
     useEffect(() => {
-      const convert = interpolate({
-        clamp: true,
+      const interpolateValue = interpolate({
         inputRange: [minimum, maximum],
+        clamp: true,
         outputRange: [0, 100],
       });
 
       const id = animation.addListener(({ value }) => {
-        const converted = convert(value);
+        const interpolated = interpolateValue(value);
 
         if (barRef.current instanceof HTMLElement) {
-          barRef.current.style.transform = `scaleX(${converted}%)`;
+          barRef.current.style.transform = `scaleX(${interpolated})`;
         }
         if (buttonRef.current instanceof HTMLElement) {
-          buttonRef.current.style.left = `${converted}%`;
+          buttonRef.current.style.left = `${interpolated}%`;
         }
       });
 
-      return () => animation.removeListener(id);
+      return () => {
+        animation.removeListener(id);
+      };
     }, [animation, minimum, maximum]);
 
     // Update position on value change
