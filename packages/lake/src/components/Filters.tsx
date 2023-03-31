@@ -20,10 +20,11 @@ import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
-import { Input } from "./Input";
 import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
+import { LakeLabel } from "./LakeLabel";
 import { LakeRadio } from "./LakeRadio";
+import { LakeTextInput } from "./LakeTextInput";
 import { Popover } from "./Popover";
 import { Space } from "./Space";
 import { Stack } from "./Stack";
@@ -48,7 +49,6 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   dropdown: {
-    marginTop: 4,
     maxHeight: 400,
     minWidth: 200,
   },
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     height: 32,
     paddingHorizontal: 24,
   },
-  dateInput: {
+  input: {
     width: 200,
   },
   value: {
@@ -420,21 +420,25 @@ function FilterDate({
             {({ value, onChange, error }) => (
               <Rifm value={value} onChange={onChange} {...rifmProps}>
                 {({ value, onChange }) => (
-                  <Input
+                  <LakeLabel
                     label={label}
-                    error={error}
-                    size="small"
-                    style={styles.dateInput}
-                    placeholder={dateFormat}
-                    value={value}
-                    onChange={onChange}
+                    render={id => (
+                      <LakeTextInput
+                        nativeID={id}
+                        error={error}
+                        style={styles.input}
+                        placeholder={dateFormat}
+                        value={value}
+                        onChange={onChange}
+                      />
+                    )}
                   />
                 )}
               </Rifm>
             )}
           </Field>
 
-          <LakeButton color="current" onPress={onSubmit}>
+          <LakeButton color="current" size="small" onPress={onSubmit}>
             {submitText}
           </LakeButton>
         </View>
@@ -509,14 +513,18 @@ function FilterInput({
         <View style={[styles.dropdown, styles.inputContent]}>
           <Field name="input">
             {({ error, value, onChange }) => (
-              <Input
+              <LakeLabel
                 label={label}
-                size="small"
-                error={error}
-                style={styles.dateInput}
-                placeholder={placeholder}
-                value={value}
-                onValueChange={onChange}
+                render={id => (
+                  <LakeTextInput
+                    nativeID={id}
+                    error={error}
+                    style={styles.input}
+                    placeholder={placeholder}
+                    value={value}
+                    onChangeText={onChange}
+                  />
+                )}
               />
             )}
           </Field>

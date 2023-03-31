@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { colors } from "../constants/colors";
 import { commonStyles } from "../constants/commonStyles";
+import { shadows } from "../constants/design";
 import { typography } from "../constants/typography";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { isNotNullish } from "../utils/nullish";
@@ -49,10 +50,7 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderColor: colors.gray[20],
-    shadowColor: colors.gray[100],
-    shadowOpacity: 0.12,
-    shadowOffset: { height: 0, width: 0 },
-    shadowRadius: 2,
+    boxShadow: shadows.tile,
   },
   disabled: {
     backgroundColor: colors.gray[3],
@@ -60,10 +58,7 @@ const styles = StyleSheet.create({
     cursor: "not-allowed",
   },
   hovered: {
-    shadowColor: colors.gray[100],
-    shadowOpacity: 0.06,
-    shadowOffset: { height: 4, width: 0 },
-    shadowRadius: 8,
+    boxShadow: shadows.tile,
   },
   leftIcon: {
     position: "absolute",
