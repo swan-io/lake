@@ -117,7 +117,7 @@ export const LakeLabelledCheckbox = ({
 }: LabelledCheckboxProps) => {
   return (
     <Pressable
-      accessibilityChecked={value}
+      aria-checked={value}
       style={styles.labelled}
       onPress={() => onValueChange(value === true ? false : true)}
       disabled={disabled}

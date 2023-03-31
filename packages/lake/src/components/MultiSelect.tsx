@@ -319,9 +319,9 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
         <Pressable
           id={id}
           ref={inputRef}
-          accessibilityHasPopup="listbox"
+          aria-haspopup="listbox"
           role="button"
-          accessibilityExpanded={visible}
+          aria-expanded={visible}
           disabled={disabled}
           onPress={open}
           style={({ hovered, focused }) => [
@@ -382,7 +382,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
             {enableGroups ? (
               <SectionList
                 role="listbox"
-                accessibilityMultiSelectable={true}
+                aria-multiselectable={true}
                 keyExtractor={(item, index) => `group-field-${item.value}-${index}`}
                 extraData={filter}
                 ListHeaderComponent={ListHeaderComponent}

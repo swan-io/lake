@@ -178,7 +178,7 @@ function FilterRadio<T>({
               return (
                 <Pressable
                   role="radio"
-                  accessibilityChecked={isSelected}
+                  aria-checked={isSelected}
                   style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
                   onPress={() => {
                     onValueChange(item.value);
@@ -317,7 +317,7 @@ function FilterCheckbox<T>({
               return (
                 <Pressable
                   role="radio"
-                  accessibilityChecked={isSelected}
+                  aria-checked={isSelected}
                   style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
                   onPress={onPress}
                 >

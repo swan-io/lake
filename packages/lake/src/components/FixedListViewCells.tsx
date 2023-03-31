@@ -260,7 +260,7 @@ export const CopyableRegularTextCell = ({
       >
         <Pressable
           role="button"
-          accessibilityLabel={copyWording}
+          aria-label={copyWording}
           onPress={onPress}
           style={({ hovered }) => [styles.icon, hovered && styles.underline]}
         >

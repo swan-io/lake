@@ -242,7 +242,7 @@ export const Popover = memo<Props>(
                   style={styles.underlay}
                   onPress={onPressUnderlay}
                   role="button"
-                  accessibilityLabel="Close"
+                  aria-label="Close"
                 />
               ) : null}
 
@@ -268,8 +268,8 @@ export const Popover = memo<Props>(
                   ]}
                   id={id}
                   role={role}
-                  accessibilityDescribedBy={describedBy}
-                  accessibilityLabel={label}
+                  aria-describedby={describedBy}
+                  aria-label={label}
                 >
                   <FocusTrap
                     focusLock={true}

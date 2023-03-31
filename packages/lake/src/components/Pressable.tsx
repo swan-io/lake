@@ -197,7 +197,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       <Component
         {...rest}
         {...pressEventHandlers}
-        accessibilityDisabled={disabled}
+        aria-disabled={disabled}
         onBlur={blurHandler}
         onContextmenu={contextMenuHandler}
         onFocus={focusHandler}

@@ -122,9 +122,9 @@ const isReactText = (node: ReactNode): node is ReactText =>
   ["string", "number"].includes(typeof node);
 
 export type ButtonProps = {
-  accessibilityControls?: string;
-  accessibilityExpanded?: boolean;
-  accessibilityLabel?: string;
+  ariaControls?: string;
+  ariaExpanded?: boolean;
+  ariaLabel?: string;
   children?: ReactNode;
   color?: ColorVariants;
   disabled?: boolean;
@@ -146,9 +146,9 @@ export const LakeButton = memo(
   forwardRef<View, ButtonProps>(
     (
       {
-        accessibilityControls,
-        accessibilityExpanded,
-        accessibilityLabel,
+        ariaControls,
+        ariaExpanded,
+        ariaLabel,
         children,
         color = "gray",
         disabled = false,
@@ -179,11 +179,11 @@ export const LakeButton = memo(
           href={href}
           hrefAttrs={hrefAttrs}
           role={href != null ? "link" : "button"}
-          accessibilityBusy={loading}
-          accessibilityDisabled={disabled}
-          accessibilityControls={accessibilityControls}
-          accessibilityExpanded={accessibilityExpanded}
-          accessibilityLabel={accessibilityLabel}
+          aria-busy={loading}
+          aria-disabled={disabled}
+          aria-controls={ariaControls}
+          aria-expanded={ariaExpanded}
+          aria-label={ariaLabel}
           disabled={loading || disabled}
           ref={forwardedRef}
           onPress={onPress}

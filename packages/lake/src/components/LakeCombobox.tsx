@@ -3,6 +3,7 @@ import {
   ForwardedRef,
   ReactNode,
   ReactText,
+  Ref,
   RefObject,
   forwardRef,
   useCallback,
@@ -157,8 +158,8 @@ const LakeComboboxWithRef = <I,>(
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
   const ref = useRef<TextInput>(null);
-  // @ts-expect-error
-  const inputTextRef = useMergeRefs(ref, inputRef);
+
+  const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
@@ -230,11 +231,10 @@ const LakeComboboxWithRef = <I,>(
   return (
     <View>
       <LakeTextInput
-        // @ts-expect-error
-        ref={inputTextRef}
+        ref={inputTextRef as Ref<TextInput>}
         style={styles.input}
-        accessibilityExpanded={isFocused}
-        accessibilityControls={isFocused ? suggestionsId : ""}
+        ariaExpanded={isFocused}
+        ariaControls={isFocused ? suggestionsId : ""}
         enterKeyHint="search"
         icon={icon}
         role="combobox"

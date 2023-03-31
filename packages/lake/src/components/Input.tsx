@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  accessibilityControls?: string;
-  accessibilityExpanded?: boolean;
+  ariaControls?: string;
+  ariaExpanded?: boolean;
   disabled?: boolean;
   error?: string;
   icon?: IconName;
@@ -136,8 +136,8 @@ export const Input = memo(
   forwardRef<TextInput, Props>(
     (
       {
-        accessibilityControls,
-        accessibilityExpanded,
+        ariaControls,
+        ariaExpanded,
         disabled = false,
         error,
         icon,
@@ -189,9 +189,9 @@ export const Input = memo(
             <Box direction="row" alignItems="center" style={commonStyles.fill}>
               <PressableTextInput
                 ref={mergedRef}
-                accessibilityControls={accessibilityControls}
-                accessibilityExpanded={accessibilityExpanded}
-                accessibilityLabelledBy={labelId}
+                aria-controls={ariaControls}
+                aria-expanded={ariaExpanded}
+                aria-labelledby={labelId}
                 id={id}
                 allowFontScaling={false}
                 autoComplete="off"

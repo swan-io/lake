@@ -49,9 +49,9 @@ export const Link = memo(
         <PressableText
           {...props}
           role={role}
-          accessibilityDisabled={disabled}
+          aria-disabled={disabled}
           tabIndex={isNotNullish(tabIndex) ? tabIndex : disabled ? -1 : 0}
-          accessibilityCurrent={active ? ariaCurrentValue : undefined}
+          aria-current={active ? ariaCurrentValue : undefined}
           href={to}
           onPress={(event: unknown) => {
             const e = event as React.MouseEvent<HTMLAnchorElement>;

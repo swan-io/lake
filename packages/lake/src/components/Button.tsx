@@ -103,8 +103,8 @@ export const Button = memo(
       return (
         <Pressable
           role="button"
-          accessibilityBusy={loading}
-          accessibilityDisabled={disabled}
+          aria-busy={loading}
+          aria-disabled={disabled}
           disabled={loading || disabled}
           ref={forwardedRef}
           onPress={onPress}

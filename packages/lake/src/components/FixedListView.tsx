@@ -554,7 +554,7 @@ const RowSegment = <T, ExtraInfo>({
         },
       ]}
       ref={containerRef}
-      accessibilityHidden={false}
+      aria-hidden={false}
     >
       <View style={[styles.segmentOverflow, style]}>
         {columns.map(({ id, width, renderCell }, index) => {
@@ -573,7 +573,7 @@ const RowSegment = <T, ExtraInfo>({
             <View
               style={[styles.cell, { width }]}
               key={columnId}
-              accessibilityDescribedBy={columnId}
+              aria-describedby={columnId}
               id={focusId}
             >
               {renderCell({ columnId, item, index: absoluteIndex, extraInfo, isHovered })}
@@ -1253,7 +1253,7 @@ export const FixedListView = <T, ExtraInfo>({
         ]}
       >
         <View
-          accessibilityBusy={isLoading}
+          aria-busy={isLoading}
           style={[
             styles.loadingPlaceholder,
             {

@@ -48,7 +48,7 @@ export const LakeRadio = ({ value, disabled = false, color = "current" }: Props)
     role="none"
   >
     <View
-      accessibilityHidden={!value}
+      aria-hidden={!value}
       style={[
         styles.innerCircle,
         { backgroundColor: colors[color].primary },

@@ -103,7 +103,7 @@ const CollapsibleSeachField = ({
       <LakeButton
         mode="secondary"
         size="small"
-        accessibilityLabel={placeholder}
+        ariaLabel={placeholder}
         icon="search-filled"
         onPress={() => {
           setFocused.on();

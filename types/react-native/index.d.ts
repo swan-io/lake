@@ -51,54 +51,47 @@ declare module "react-native" {
     | "textbox";
 
   export interface WebAccessibilityProps {
-    accessibilityActiveDescendant?: string;
-    accessibilityAtomic?: boolean;
-    accessibilityAutoComplete?: string;
-    accessibilityBusy?: boolean;
-    accessibilityChecked?: boolean | "mixed";
-    accessibilityColumnCount?: number;
-    accessibilityColumnIndex?: number;
-    accessibilityColumnSpan?: number;
-    accessibilityControls?: string;
-    accessibilityCurrent?: boolean | "page" | "step" | "location" | "date" | "time";
-    accessibilityDescribedBy?: string;
-    accessibilityDetails?: string;
-    accessibilityDisabled?: boolean;
-    accessibilityErrorMessage?: string;
-    accessibilityExpanded?: boolean;
-    accessibilityFlowTo?: string;
-    accessibilityHasPopup?: string;
-    accessibilityHidden?: boolean;
-    accessibilityInvalid?: boolean;
-    accessibilityKeyShortcuts?: string[];
-    accessibilityLabel?: string;
-    accessibilityLabelledBy?: string;
-    accessibilityLevel?: number;
-    accessibilityLiveRegion?: "assertive" | "off" | "polite";
-    accessibilityModal?: boolean;
-    accessibilityMultiSelectable?: boolean;
-    accessibilityMultiline?: boolean;
-    accessibilityOrientation?: "horizontal" | "vertical";
-    accessibilityOwns?: string;
-    accessibilityPlaceholder?: string;
-    accessibilityPosInSet?: number;
-    accessibilityPressed?: boolean;
-    accessibilityReadOnly?: boolean;
-    accessibilityRequired?: boolean;
-    accessibilityRoleDescription?: string;
-    accessibilityRowCount?: number;
-    accessibilityRowIndex?: number;
-    accessibilityRowSpan?: number;
-    accessibilitySelected?: boolean;
-    accessibilitySetSize?: number;
-    accessibilitySort?: "ascending" | "descending" | "none" | "other";
-    accessibilityValueMax?: number;
-    accessibilityValueMin?: number;
-    accessibilityValueNow?: number;
-    accessibilityValueText?: string;
-
-    // Additional properties
+    /**
+     * Additional accessibility props
+     */
     tabIndex?: 0 | -1;
+
+    /**
+     * Aria props (additional, minus existants)
+     * @see https://necolas.github.io/react-native-web/docs/accessibility
+     * @see https://reactnative.dev/docs/accessibility#aria-valuemax
+     */
+    "aria-activedescendant"?: string;
+    "aria-atomic"?: boolean;
+    "aria-autocomplete"?: string;
+    "aria-colcount"?: number;
+    "aria-colindex"?: number;
+    "aria-colspan"?: number;
+    "aria-controls"?: string;
+    "aria-current"?: boolean | "page" | "step" | "location" | "date" | "time";
+    "aria-describedby"?: string;
+    "aria-details"?: string;
+    "aria-errormessage"?: string;
+    "aria-flowto"?: string;
+    "aria-haspopup"?: string;
+    "aria-invalid"?: boolean;
+    "aria-keyshortcuts"?: string;
+    "aria-level"?: number;
+    "aria-multiline"?: boolean;
+    "aria-multiselectable"?: boolean;
+    "aria-orientation"?: "horizontal" | "vertical";
+    "aria-owns"?: string;
+    "aria-placeholder"?: string;
+    "aria-posinset"?: number;
+    "aria-pressed"?: boolean;
+    "aria-readonly"?: boolean;
+    "aria-required"?: boolean;
+    "aria-roledescription"?: string;
+    "aria-rowcount"?: number;
+    "aria-rowindex"?: number;
+    "aria-rowspan"?: number;
+    "aria-setsize"?: number;
+    "aria-sort"?: "ascending" | "descending" | "none" | "other";
   }
 
   export interface ImageProps extends WebAccessibilityProps {

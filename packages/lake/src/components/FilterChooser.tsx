@@ -71,7 +71,7 @@ export function FilterChooser<FilterName extends string>({
           ref={inputRef}
           icon={large ? "chevron-down-filled" : "filter-filled"}
           iconPosition="end"
-          accessibilityLabel={label}
+          ariaLabel={label}
         >
           {large ? label : null}
         </LakeButton>

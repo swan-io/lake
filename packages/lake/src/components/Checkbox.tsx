@@ -92,8 +92,8 @@ export const CheckBox = memo(
             ref={forwardedRef}
             role="checkbox"
             tabIndex={-1}
-            accessibilityChecked={value}
-            accessibilityDisabled={disabled}
+            aria-checked={value}
+            aria-disabled={disabled}
             style={({ hovered }) => [
               styles.box,
               disabled && styles.disabled,

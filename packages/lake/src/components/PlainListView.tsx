@@ -408,7 +408,7 @@ export const PlainListView = <T, ExtraInfo>({
                   })}
 
                   <View>
-                    <View accessibilityBusy={isLoading} style={styles.loadingPlaceholder}>
+                    <View aria-busy={isLoading} style={styles.loadingPlaceholder}>
                       {isLoading ? (
                         <PlainListViewPlaceholder
                           count={loading.count}

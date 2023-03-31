@@ -147,7 +147,7 @@ export const LakeLabel = ({
             .exhaustive()}
         />
 
-        <View accessibilityLabelledBy={type === "view" || type === "viewSmall" ? id : undefined}>
+        <View aria-labelledby={type === "view" || type === "viewSmall" ? id : undefined}>
           {render(id)}
         </View>
       </View>

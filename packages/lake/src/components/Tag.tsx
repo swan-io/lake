@@ -54,7 +54,7 @@ type Props = {
   color?: ColorVariants;
   onPressRemove?: () => void;
   style?: StyleProp<ViewStyle>;
-  accessibilityLabel?: string;
+  ariaLabel?: string;
 };
 
 export const Tag = ({
@@ -64,7 +64,7 @@ export const Tag = ({
   size = "small",
   icon,
   iconSize = 16,
-  accessibilityLabel,
+  ariaLabel,
   onPressRemove,
   style,
 }: Props) => {
@@ -100,7 +100,7 @@ export const Tag = ({
       <Box
         alignItems="center"
         direction="row"
-        accessibilityLabel={accessibilityLabel}
+        aria-label={ariaLabel}
         style={[
           styles.base,
           size === "large" && styles.larger,

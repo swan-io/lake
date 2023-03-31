@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  accessibilityLabel?: string;
+  ariaLabel?: string;
   children?: ReactText;
   color?: string;
   disabled?: boolean;
@@ -101,7 +101,7 @@ export const BorderedButton = memo(
   forwardRef<View, Props>(
     (
       {
-        accessibilityLabel,
+        ariaLabel,
         children = "",
         color = colors.gray[100],
         disabled = false,
@@ -120,9 +120,9 @@ export const BorderedButton = memo(
       return (
         <Pressable
           role="button"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityBusy={loading}
-          accessibilityDisabled={disabled}
+          aria-label={ariaLabel}
+          aria-busy={loading}
+          aria-disabled={disabled}
           disabled={loading || disabled}
           ref={forwardedRef}
           onPress={onPress}

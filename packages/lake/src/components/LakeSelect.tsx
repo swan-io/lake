@@ -226,9 +226,9 @@ export function LakeSelect<V>({
       <Pressable
         id={id}
         ref={inputRef}
-        accessibilityHasPopup="listbox"
+        aria-haspopup="listbox"
         role="button"
-        accessibilityExpanded={visible}
+        aria-expanded={visible}
         disabled={readOnly || disabled}
         style={({ focused }) => [
           mode === "normal" ? styles.normal : styles.borderless,
@@ -242,7 +242,7 @@ export function LakeSelect<V>({
         ]}
         onPress={toggle}
         onKeyDown={onKeyDown}
-        accessibilityErrorMessage={error}
+        aria-errormessage={error}
       >
         {({ hovered }) => (
           <>
@@ -363,7 +363,7 @@ export function LakeSelect<V>({
                   focused && styles.itemFocused,
                 ]}
                 role="option"
-                accessibilitySelected={true}
+                aria-selected={true}
                 onPress={() => {
                   onValueChange(item.value);
                   close();

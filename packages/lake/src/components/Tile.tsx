@@ -162,7 +162,7 @@ export const Tile = ({
               )}
 
               {isNotNullish(title) && (
-                <Text style={styles.title} role="heading" accessibilityLevel={3}>
+                <Text style={styles.title} role="heading" aria-level={3}>
                   {title}
                 </Text>
               )}

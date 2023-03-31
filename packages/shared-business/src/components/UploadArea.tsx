@@ -191,6 +191,7 @@ export const UploadArea = ({
     <View style={commonStyles.fill}>
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
         <View
+          aria-errormessage={error != null ? error : fileRejections[0]?.errors.join(", ")}
           style={[
             styles.container,
             disabled && styles.disabled,
@@ -199,7 +200,6 @@ export const UploadArea = ({
             isDragActive && styles.activeContainer,
             (error != null || fileRejections.length > 0) && styles.errorContainer,
           ]}
-          accessibilityErrorMessage={error != null ? error : fileRejections[0]?.errors.join(", ")}
         >
           <input {...getInputProps()} />
 

@@ -39,7 +39,7 @@ export const LakeHeading = forwardRef<Text, Props>(
     <Text
       ref={forwardedRef}
       role={level === "none" ? undefined : "heading"}
-      accessibilityLevel={level === "none" ? undefined : level}
+      aria-level={level === "none" ? undefined : level}
       style={[
         variants[variant],
         alignments[align],

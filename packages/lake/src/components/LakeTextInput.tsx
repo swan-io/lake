@@ -227,7 +227,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
 
     return (
       <View style={commonStyles.fill}>
-        <View style={styles.root} accessibilityErrorMessage={error}>
+        <View style={styles.root} aria-errormessage={error}>
           <View style={styles.container}>
             <View style={styles.contents}>
               <TextInput

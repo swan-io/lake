@@ -43,7 +43,7 @@ export const Heading = forwardRef<Text, Props>(
     <Text
       ref={forwardedRef}
       role="heading"
-      accessibilityLevel={level}
+      aria-level={level}
       style={[sizes[size], alignments[align], style]}
       {...props}
     >

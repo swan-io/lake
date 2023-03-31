@@ -370,8 +370,8 @@ const DropdownItems = forwardRef<
       <PressableText
         ref={handleRef}
         role="button"
-        accessibilityExpanded={shouldOpen}
-        accessibilityHasPopup="true"
+        aria-expanded={shouldOpen}
+        aria-haspopup="true"
         onFocus={onHandleFocus}
         onBlur={onAnyBlur}
         onPress={onPress}
@@ -592,12 +592,7 @@ export const TabView = ({
       ref={containerRef}
       style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >
-      <View
-        style={styles.placeholder}
-        accessibilityHidden={true}
-        ref={placeholderRef}
-        onLayout={onLayout}
-      >
+      <View style={styles.placeholder} aria-hidden={true} ref={placeholderRef} onLayout={onLayout}>
         {tabs.map(({ label, url, icon, count }) => (
           <Fragment key={url}>
             <Link

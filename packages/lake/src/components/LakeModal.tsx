@@ -166,7 +166,7 @@ export const LakeModal = ({
 
   return (
     <Portal container={rootElement}>
-      <View accessibilityModal={true} style={[styles.container, !visible && styles.inert]}>
+      <View aria-modal={true} style={[styles.container, !visible && styles.inert]}>
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>

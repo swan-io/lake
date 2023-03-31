@@ -12,8 +12,8 @@ import {
   countriesWithMultipleCCA3,
   getCCA3forCCA2,
 } from "@swan-io/shared-business/src/constants/countries";
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
-import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
+import { MutableRefObject, RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { StyleProp, StyleSheet, Text, TextInput, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.png";
 import { useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
@@ -224,8 +224,7 @@ export const AddressSearchInput = ({
       }
       return (
         <LakeTextInput
-          // @ts-expect-error
-          ref={inputRef}
+          ref={inputRef as RefObject<TextInput>}
           id={id}
           placeholder={placeholder}
           value={value}
