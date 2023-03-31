@@ -146,6 +146,8 @@ export type LakeTextInputProps = Except<
   TextInputProps,
   "editable" | "keyboardType" | "onChange"
 > & {
+  ariaExpanded?: boolean;
+  ariaControls?: string;
   error?: string;
   readOnly?: boolean;
   validating?: boolean;
@@ -167,6 +169,8 @@ export type LakeTextInputProps = Except<
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
   (
     {
+      ariaExpanded,
+      ariaControls,
       error,
       disabled = false,
       validating = false,
@@ -231,6 +235,8 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
           <View style={styles.container}>
             <View style={styles.contents}>
               <TextInput
+                aria-expanded={ariaExpanded}
+                aria-controls={ariaControls}
                 inputMode={inputMode}
                 ref={mergedRef}
                 {...props}
