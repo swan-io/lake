@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     transitionTimingFunction: "ease-in-out",
   },
   sortIconReversed: {
-    transform: [{ rotate: "-180deg" }],
+    transform: "rotate(-180deg)",
   },
   cellAction: {
     paddingVertical: spacings[16],

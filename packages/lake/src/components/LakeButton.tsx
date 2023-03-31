@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     borderRadius: radii[6],
   },
   group: {

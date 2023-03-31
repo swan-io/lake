@@ -25,23 +25,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[100],
     overflow: "hidden",
     transformOrigin: "bottom",
-    transform: [{ scaleY: 0.5 }],
+    transform: "scaleY(0.5)",
     transitionDuration: "300ms",
     transitionProperty: "transform",
   },
   barActive: {
-    transform: [{ scaleY: 1 }],
+    transform: "scaleY(1)",
   },
   progressBar: {
     width: "100%",
     height: "100%",
     backgroundColor: colors.current[500],
     transformOrigin: "left",
-    transform: [{ scaleX: 0 }],
+    transform: "scaleX(0)",
     transitionDuration: "300ms",
   },
   progressBarDone: {
-    transform: [{ scaleX: 1 }],
+    transform: "scaleX(1)",
   },
   progressBarError: {
     backgroundColor: colors.negative[500],

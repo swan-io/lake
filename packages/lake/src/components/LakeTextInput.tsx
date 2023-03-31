@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: spacings[16],
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
   icon: {
     position: "absolute",
     left: spacings[16],
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
   readOnlyEndIcon: {
     right: 0,

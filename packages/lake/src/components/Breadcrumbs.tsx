@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     zIndex: 10,
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
   },
   item: {
     flexDirection: "row",
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   dropdown: {
     position: "absolute",
     left: "50%",
-    transform: [{ translateX: "-50%" }],
+    transform: "translateX(-50%)",
     top: "100%",
     backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   siblingsDropdown: {
     position: "absolute",
     left: "50%",
-    transform: [{ translateX: "-50%" }],
+    transform: "translateX(-50%)",
     top: "100%",
     backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "50%",
     right: spacings[16],
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
 });
 

@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     height: INNER_CIRCLE_SIZE,
     width: INNER_CIRCLE_SIZE,
     borderRadius: INNER_CIRCLE_SIZE / 2,
-    transform: [{ scale: 0 }],
+    transform: "scale(0)",
     transitionProperty: "transform",
     transitionDuration: "100ms",
   },
   innerCircleDisplay: {
-    transform: [{ scale: 1 }],
+    transform: "scale(1)",
   },
 });
 

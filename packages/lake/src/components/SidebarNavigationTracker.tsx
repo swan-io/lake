@@ -110,7 +110,7 @@ export const SidebarNavigationTracker = ({ style, contentContainerStyle, childre
               style={[
                 styles.trackIndicator,
                 {
-                  transform: [{ translateY: track.top }, { scaleY: track.height }],
+                  transform: `translateY(${track.top}px) scaleY(${track.height})`,
                   backgroundColor: track.color,
                 },
               ]}

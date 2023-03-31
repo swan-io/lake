@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
   },
   containerEnter: {
     animationKeyframes: {
-      "0%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 200 }] },
+      "0%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   containerLeave: {
     animationKeyframes: {
-      "100%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 200 }] },
+      "100%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -55,21 +55,21 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleSheet.absoluteFillObject,
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     flexDirection: "row",
     alignItems: "stretch",
     backgroundColor: backgroundColor.default,
   },
   contentsEnter: {
     animationKeyframes: {
-      "0%": { transform: [{ translateZ: 0 }, { translateX: 50 }] },
+      "0%": { transform: "translateZ(0px) translateX(50px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   contentsLeave: {
     animationKeyframes: {
-      "100%": { transform: [{ translateZ: 0 }, { translateX: 50 }] },
+      "100%": { transform: "translateZ(0px) translateX(50px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   contentsContainer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 2,
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     maxWidth: "100%",
   },
   contents: {

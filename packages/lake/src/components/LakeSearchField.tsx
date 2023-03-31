@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
     padding: 16,
   },
   clear: {

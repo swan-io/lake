@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.gray[10],
-    transform: [{ rotate: "45deg" }],
+    transform: "rotate(45deg)",
   },
 });
 
@@ -248,10 +248,9 @@ export const Tooltip = memo(
                   state?.placement === "top" && styles.arrowContainerTop,
                   state?.placement === "bottom" && styles.arrowContainerBottom,
                   {
-                    transform: [
-                      { translateX: -overflowOffset },
-                      { rotate: state?.placement === "bottom" ? "180deg" : "0deg" },
-                    ],
+                    transform: `translateX(${-overflowOffset}px) rotate(${
+                      state?.placement === "bottom" ? "180deg" : "0deg"
+                    })`,
                   },
                 ]}
               >

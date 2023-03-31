@@ -404,6 +404,7 @@ declare module "react-native" {
    * Transforms
    */
 
+  // TODO: Delete this once we migrated away from Animated
   type TransformValue = (
     | { perspective: NumberOrString }
     | { rotate: string }
@@ -424,9 +425,9 @@ declare module "react-native" {
   )[];
 
   export interface TransformsStyle {
-    perspective?: NumberOrString;
+    perspective?: number | string;
     perspectiveOrigin?: string;
-    transform?: TransformValue;
+    transform?: string | TransformValue;
     transformOrigin?: string;
     transformStyle?: "flat" | "preserve-3d";
   }
@@ -448,7 +449,7 @@ declare module "react-native" {
 
   export interface ImageStyle extends AnimationStyles, InteractionStyles, TransformsStyle {
     display?: DisplayValue;
-    transform?: TransformValue;
+    transform?: string | TransformValue;
   }
 
   export interface TextStyle extends AnimationStyles, InteractionStyles, TransformsStyle {
@@ -456,7 +457,7 @@ declare module "react-native" {
     fontFeatureSettings?: string;
     textOverflow?: "clip" | "ellipsis";
     textTransform?: "none" | "capitalize" | "uppercase" | "lowercase";
-    transform?: TransformValue;
+    transform?: string | TransformValue;
     whiteSpace?: "normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap";
     wordBreak?: "normal" | "break-all" | "keep-all";
   }
@@ -468,7 +469,7 @@ declare module "react-native" {
     display?: DisplayValue;
     position?: PositionValue;
     scrollBehavior?: "auto" | "smooth";
-    transform?: TransformValue;
+    transform?: string | TransformValue;
     visibility?: VisibilityValue;
   }
 

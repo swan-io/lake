@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     animationKeyframes: {
       "0%": {
         opacity: 0,
-        transform: [{ translateY: -20 }],
+        transform: "translateY(-20px)",
       },
     },
     animationDuration: "300ms",
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     animationKeyframes: {
       "100%": {
         opacity: 0,
-        transform: [{ translateY: -20 }],
+        transform: "translateY(-20px)",
       },
     },
     animationDuration: "300ms",
