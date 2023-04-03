@@ -1,3 +1,26 @@
+## 1.5.0
+
+Changes:
+
+- Update to `react-native-web` 0.19.1 (d867cdc)
+- Replace `nativeID` prop by `id` (8efe2c7)
+- Remove `Touchable*` components usage (6214e90)
+- Replace `pointerEvents` props by `pointerEvents` style (389b150)
+- Remove `StyleSheet.compose` usage (ab6f8a4)
+- Replace `selectable` prop by `userSelect` style (01384a3, 057e231)
+- Replace `focusable` prop by `tabIndex` (01538ca)
+- Replace `keyboardType` prop by `inputMode` (9b32717)
+- Replace `returnKeyType` prop by `enterKeyHint` (182484f)
+- Replace `editable` prop by `readOnly` (24646c5)
+- Replace `numberOfLines` `TextInput` prop by `rows` (6903c95)
+- Replace `transform` style array syntax with string one (9009406)
+- Replace `shadow*` styles with `boxShadow` (234da7a)
+- Replace `accessibilityRole` prop by `role` (2fdb7a0)
+- Remove `Animated.*` components usage (1e4487f)
+- Replace `accessibility*` props by `aria-*` (c04f789)
+- Remove `eslint-plugin-react-native-a11y` dependency (ac868ef)
+- Remove legacy `Button` and `CheckBox` components (ba44c02, a89cf0f)
+
 ## 1.4.4
 
 Changes:
