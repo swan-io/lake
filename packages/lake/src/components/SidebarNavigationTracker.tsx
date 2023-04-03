@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     right: 0,
     transformOrigin: "right top",
     transition: "150ms ease-in-out",
-    transitionProperty: ["transform", "background-color"],
+    transitionProperty: "transform, background-color",
   },
 });
 

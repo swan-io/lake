@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
     transitionDuration: "150ms",
-    transitionProperty: ["background-color", "color"],
+    transitionProperty: "background-color, color",
   },
   grow: {
     flexGrow: 1,

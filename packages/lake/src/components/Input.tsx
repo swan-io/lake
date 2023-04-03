@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     placeholderTextColor: colors.gray[30],
     textOverflow: "ellipsis",
     transitionDuration: "150ms",
-    transitionProperty: ["border-color", "box-shadow"],
+    transitionProperty: "border-color, box-shadow",
     whiteSpace: "nowrap",
     wordBreak: "keep-all",
   },
