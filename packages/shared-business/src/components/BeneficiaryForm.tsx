@@ -92,18 +92,23 @@ export const validateUbo = (
   accountCountry: AccountCountry,
 ): Partial<Record<keyof EditorState, string | undefined>> => {
   const isAddressRequired = accountCountry === "DEU";
+  const isBirthInfoRequired = accountCountry !== "DEU";
 
   return {
     firstName: validateNullableRequired(editorState.firstName) as SyncValidationResult,
     lastName: validateNullableRequired(editorState.lastName) as SyncValidationResult,
-    birthDate: validateNullableRequired(editorState.birthDate) as SyncValidationResult,
+    birthDate: isBirthInfoRequired
+      ? (validateNullableRequired(editorState.birthDate) as SyncValidationResult)
+      : undefined,
     birthCountryCode: validateNullableRequired(
       editorState.birthCountryCode,
     ) as SyncValidationResult,
-    birthCity: validateNullableRequired(editorState.birthCity) as SyncValidationResult,
-    birthCityPostalCode: validateNullableRequired(
-      editorState.birthCityPostalCode,
-    ) as SyncValidationResult,
+    birthCity: isBirthInfoRequired
+      ? (validateNullableRequired(editorState.birthCity) as SyncValidationResult)
+      : undefined,
+    birthCityPostalCode: isBirthInfoRequired
+      ? (validateNullableRequired(editorState.birthCityPostalCode) as SyncValidationResult)
+      : undefined,
     type: validateNullableRequired(editorState.type) as SyncValidationResult,
     totalCapitalPercentage:
       editorState.type === "HasCapital"
@@ -256,6 +261,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
     const isAddressRequired = accountCountry === "DEU";
+    const isBirthInfoRequired = accountCountry !== "DEU";
 
     const commonStepValues = useRef<FormValues>();
 
@@ -276,7 +282,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           initialValue: isNotNullishOrEmpty(initialBirthDate)
             ? decodeBirthDate(initialBirthDate)
             : "",
-          validate: validateNullableRequired,
+          validate: isBirthInfoRequired ? validateNullableRequired : undefined,
           sanitize: value => value?.trim(),
         },
         birthCountryCode: {
@@ -285,12 +291,12 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         },
         birthCity: {
           initialValue: initialState?.birthCity ?? "",
-          validate: validateNullableRequired,
+          validate: isBirthInfoRequired ? validateNullableRequired : undefined,
           sanitize: value => value?.trim(),
         },
         birthCityPostalCode: {
           initialValue: initialState?.birthCityPostalCode ?? "",
-          validate: validateNullableRequired,
+          validate: isBirthInfoRequired ? validateNullableRequired : undefined,
           sanitize: value => value?.trim(),
         },
         type: {
