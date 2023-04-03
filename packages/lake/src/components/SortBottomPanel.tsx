@@ -24,8 +24,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacings[12],
   },
   arrowDown: {
-    // TODO Adapt for react-native-web update
-    transform: [{ rotate: "180deg" }],
+    transform: "rotate(180deg)",
   },
   text: {
     ...commonStyles.fill,
