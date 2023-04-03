@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     cursor: "default",
     overflow: "hidden",
     transitionDuration: "150ms",
-    transitionProperty: ["border-color", "box-shadow"],
+    transitionProperty: "border-color, box-shadow",
   },
   errored: {
     borderColor: colors.negative[500],
