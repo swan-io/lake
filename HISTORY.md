@@ -1,3 +1,9 @@
+## 1.5.1
+
+Fixes:
+
+- Fix `transitionProperty` syntax (6b84764)
+
 ## 1.5.0
 
 Changes:
