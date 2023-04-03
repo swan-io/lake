@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
     padding: 16,
   },
   clear: {
@@ -103,7 +103,7 @@ const CollapsibleSeachField = ({
       <LakeButton
         mode="secondary"
         size="small"
-        accessibilityLabel={placeholder}
+        ariaLabel={placeholder}
         icon="search-filled"
         onPress={() => {
           setFocused.on();
@@ -152,7 +152,7 @@ const ExpandedSearchField = ({
         icon="search-filled"
         placeholder={placeholder}
         defaultValue={initialValue}
-        keyboardType="web-search"
+        inputMode="search"
         onChangeText={onChange}
         hideErrors={true}
         onFocus={() => {

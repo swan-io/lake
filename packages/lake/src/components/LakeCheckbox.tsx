@@ -57,7 +57,7 @@ export const LakeCheckbox = ({
 
   return (
     <View
-      accessibilityRole="none"
+      role="none"
       style={[
         styles.container,
         disabled && styles.disabled,
@@ -117,7 +117,7 @@ export const LakeLabelledCheckbox = ({
 }: LabelledCheckboxProps) => {
   return (
     <Pressable
-      accessibilityChecked={value}
+      aria-checked={value}
       style={styles.labelled}
       onPress={() => onValueChange(value === true ? false : true)}
       disabled={disabled}
@@ -125,7 +125,7 @@ export const LakeLabelledCheckbox = ({
       <LakeCheckbox value={value} color={color} disabled={disabled} isError={isError} />
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} selectable={false}>
+      <LakeText color={colors.gray[900]} userSelect="none">
         {label}
       </LakeText>
     </Pressable>

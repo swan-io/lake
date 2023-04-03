@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     width: 3,
   },
   marker: {
+    pointerEvents: "none",
     position: "absolute",
     top: 0,
     right: 0,
@@ -99,7 +100,7 @@ export const SidebarNavigationTracker = ({ style, contentContainerStyle, childre
         onLayout={onLayout}
         style={style}
         contentContainerStyle={contentContainerStyle}
-        accessibilityRole="banner"
+        role="banner"
       >
         {children}
 
@@ -109,7 +110,7 @@ export const SidebarNavigationTracker = ({ style, contentContainerStyle, childre
               style={[
                 styles.trackIndicator,
                 {
-                  transform: [{ translateY: track.top }, { scaleY: track.height }],
+                  transform: `translateY(${track.top}px) scaleY(${track.height})`,
                   backgroundColor: track.color,
                 },
               ]}
@@ -141,5 +142,5 @@ export const SidebarNavigationTrackerActiveMarker = ({ color }: MarkerProps) => 
     }
   }, [setLayoutReference, color]);
 
-  return <View ref={elementRef} onLayout={onLayout} style={styles.marker} pointerEvents="none" />;
+  return <View ref={elementRef} onLayout={onLayout} style={styles.marker} />;
 };

@@ -1,4 +1,4 @@
-// https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/modules/useHover/index.js
+// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/modules/useHover/index.js
 
 import { MutableRefObject } from "react";
 // @ts-expect-error

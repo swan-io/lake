@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { Except } from "type-fest";
 import { LakeSelect, SelectProps } from "../src/components/LakeSelect";
 import { LakeText } from "../src/components/LakeText";
 import { ColorVariants, colors } from "../src/constants/design";
@@ -45,7 +46,9 @@ const items = [
 const EditableSelect = ({
   initialValue,
   ...props
-}: Omit<SelectProps<number>, "value" | "onValueChange" | "items"> & { initialValue?: number }) => {
+}: Except<SelectProps<number>, "value" | "onValueChange" | "items"> & {
+  initialValue?: number;
+}) => {
   const [value, setValue] = useState(initialValue);
 
   return (

@@ -12,7 +12,7 @@ export const LakeDownloadButton = ({ url, filename }: Props) => {
     <Text
       href={url}
       hrefAttrs={{ download: filename as unknown as boolean, target: "blank" }}
-      accessibilityHint="download"
+      aria-label="download"
     >
       <Icon size={18} name="arrow-download-filled" />
     </Text>

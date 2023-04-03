@@ -17,10 +17,12 @@ const styles = StyleSheet.create({
   itemTitle: {
     ...typography.bodyLarge,
     lineHeight: typography.lineHeights.title,
+    userSelect: "none",
   },
   itemSubtitle: {
     ...typography.bodySmall,
     color: colors.gray[400],
+    userSelect: "none",
   },
   poweredByGoogle: {
     paddingVertical: 8,
@@ -44,7 +46,7 @@ type Props = {
   country?: CountryCCA3;
   disabled?: boolean;
   error?: string;
-  nativeID?: string;
+  id?: string;
   placeholder?: string;
   onSuggestion?: (place: PlaceDetail) => void;
   onLoadError: (error: unknown) => void;
@@ -59,7 +61,7 @@ export const LakeCityInput = ({
   country,
   disabled,
   placeholder,
-  nativeID,
+  id,
   error,
   onSuggestion,
   onLoadError,
@@ -148,7 +150,7 @@ export const LakeCityInput = ({
           disabled={isNullish(country) || disabled}
           error={error}
           onValueChange={onValueChange}
-          nativeID={nativeID}
+          id={id}
           ListFooterComponent={
             <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
               <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
@@ -159,11 +161,11 @@ export const LakeCityInput = ({
           keyExtractor={item => item.value}
           renderItem={item => (
             <>
-              <Text numberOfLines={1} selectable={false} style={styles.itemTitle}>
+              <Text numberOfLines={1} style={styles.itemTitle}>
                 {item.prediction.structured_formatting.main_text}
               </Text>
 
-              <Text numberOfLines={1} selectable={false} style={styles.itemSubtitle}>
+              <Text numberOfLines={1} style={styles.itemSubtitle}>
                 {item.prediction.structured_formatting.secondary_text}
               </Text>
             </>

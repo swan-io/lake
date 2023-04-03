@@ -112,7 +112,7 @@ export const AddressFormPart = ({
                 render={id => (
                   <LakeTextInput
                     ref={ref}
-                    nativeID={id}
+                    id={id}
                     value={value}
                     valid={valid}
                     error={error}
@@ -132,7 +132,7 @@ export const AddressFormPart = ({
                 render={id => (
                   <LakeTextInput
                     ref={ref}
-                    nativeID={id}
+                    id={id}
                     value={value}
                     valid={valid}
                     error={error}

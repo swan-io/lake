@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { Except } from "type-fest";
 import { Box } from "../src/components/Box";
 import { ButtonProps, LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
@@ -30,7 +31,7 @@ export default {
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const ButtonWithCounter = ({ ...props }: Omit<ButtonProps, "onPress" | "style">) => {
+const ButtonWithCounter = (props: Except<ButtonProps, "onPress" | "style">) => {
   const [counter, setCounter] = useState(0);
 
   return (

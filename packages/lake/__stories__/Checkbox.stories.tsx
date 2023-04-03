@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
 import {
   CheckboxProps,
   LabelledCheckboxProps,
@@ -24,7 +25,7 @@ export default {
 const InteractiveCheckbox = ({
   defaultValue = false,
   ...props
-}: Omit<CheckboxProps, "value"> & { defaultValue?: CheckboxProps["value"] }) => {
+}: Except<CheckboxProps, "value"> & { defaultValue?: CheckboxProps["value"] }) => {
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => {
@@ -41,7 +42,7 @@ const InteractiveCheckbox = ({
 const InteractiveLabelledCheckbox = ({
   defaultValue = false,
   ...props
-}: Omit<LabelledCheckboxProps, "value" | "onValueChange"> & {
+}: Except<LabelledCheckboxProps, "value" | "onValueChange"> & {
   defaultValue?: CheckboxProps["value"];
 }) => {
   const [value, setValue] = useState(defaultValue);

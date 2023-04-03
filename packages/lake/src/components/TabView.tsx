@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     overflow: "hidden",
+    pointerEvents: "none",
   },
   count: {
     ...texts.smallRegular,
@@ -173,7 +174,7 @@ const Dropdown = ({
   });
 
   return (
-    <View accessibilityRole="menu" style={styles.dropdown} ref={containerRef}>
+    <View role="menu" style={styles.dropdown} ref={containerRef}>
       {tabs.map(({ url, label }) => {
         return (
           <Link
@@ -182,7 +183,7 @@ const Dropdown = ({
             onFocus={onLinkFocus}
             onBlur={onLinkBlur}
             onPress={onLinkPress}
-            accessibilityRole="menuitem"
+            role="menuitem"
             ariaCurrentValue="location"
             style={({ active, hovered }) => [
               styles.dropdownLink,
@@ -368,9 +369,9 @@ const DropdownItems = forwardRef<
     <View style={styles.dropdownHandleContainer} ref={mergedRef}>
       <PressableText
         ref={handleRef}
-        accessibilityRole="button"
-        accessibilityExpanded={shouldOpen}
-        accessibilityHasPopup="true"
+        role="button"
+        aria-expanded={shouldOpen}
+        aria-haspopup="true"
         onFocus={onHandleFocus}
         onBlur={onAnyBlur}
         onPress={onPress}
@@ -587,17 +588,11 @@ export const TabView = ({
     <Box
       alignItems="center"
       direction="row"
-      accessibilityRole="tablist"
+      role="tablist"
       ref={containerRef}
       style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >
-      <View
-        style={styles.placeholder}
-        accessibilityHidden={true}
-        ref={placeholderRef}
-        pointerEvents="none"
-        onLayout={onLayout}
-      >
+      <View style={styles.placeholder} aria-hidden={true} ref={placeholderRef} onLayout={onLayout}>
         {tabs.map(({ label, url, icon, count }) => (
           <Fragment key={url}>
             <Link
@@ -645,7 +640,7 @@ export const TabView = ({
       {kept.map(({ label, url, icon, withSeparator, count }) => (
         <Fragment key={url}>
           <Link
-            accessibilityRole="tab"
+            role="tab"
             ref={ref => {
               if (linksRefs.current) {
                 linksRefs.current[url] = ref;
@@ -657,7 +652,7 @@ export const TabView = ({
               active ? styles.activeLink : hovered ? styles.hoveredLink : null,
             ]}
           >
-            {withSeparator === true && <View style={styles.separator} accessibilityRole="none" />}
+            {withSeparator === true && <View style={styles.separator} role="none" />}
 
             {isNotNullish(icon) && (
               <>
@@ -700,7 +695,7 @@ export const TabView = ({
           style={[
             styles.underline,
             styles.animatedUnderline,
-            { transform: [{ translateX: left }, { scaleX: width }] },
+            { transform: `translateX(${left}px) scaleX(${width})` },
           ]}
         />
       )}

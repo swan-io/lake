@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     borderRadius: radii[6],
   },
   group: {
@@ -122,9 +122,9 @@ const isReactText = (node: ReactNode): node is ReactText =>
   ["string", "number"].includes(typeof node);
 
 export type ButtonProps = {
-  accessibilityControls?: string;
-  accessibilityExpanded?: boolean;
-  accessibilityLabel?: string;
+  ariaControls?: string;
+  ariaExpanded?: boolean;
+  ariaLabel?: string;
   children?: ReactNode;
   color?: ColorVariants;
   disabled?: boolean;
@@ -146,9 +146,9 @@ export const LakeButton = memo(
   forwardRef<View, ButtonProps>(
     (
       {
-        accessibilityControls,
-        accessibilityExpanded,
-        accessibilityLabel,
+        ariaControls,
+        ariaExpanded,
+        ariaLabel,
         children,
         color = "gray",
         disabled = false,
@@ -178,12 +178,12 @@ export const LakeButton = memo(
         <Pressable
           href={href}
           hrefAttrs={hrefAttrs}
-          accessibilityRole={href != null ? "link" : "button"}
-          accessibilityBusy={loading}
-          accessibilityDisabled={disabled}
-          accessibilityControls={accessibilityControls}
-          accessibilityExpanded={accessibilityExpanded}
-          accessibilityLabel={accessibilityLabel}
+          role={href != null ? "link" : "button"}
+          aria-busy={loading}
+          aria-disabled={disabled}
+          aria-controls={ariaControls}
+          aria-expanded={ariaExpanded}
+          aria-label={ariaLabel}
           disabled={loading || disabled}
           ref={forwardedRef}
           onPress={onPress}
@@ -252,7 +252,7 @@ export const LakeButton = memo(
                 {isReactText(children) ? (
                   <LakeText
                     numberOfLines={1}
-                    selectable={false}
+                    userSelect="none"
                     style={[isSmall ? styles.textSmall : styles.text, { color: textColor }]}
                   >
                     {children}
@@ -271,7 +271,7 @@ export const LakeButton = memo(
 
                 {loading && (
                   <View
-                    accessibilityRole="none"
+                    role="none"
                     style={[
                       styles.loaderContainer,
                       {

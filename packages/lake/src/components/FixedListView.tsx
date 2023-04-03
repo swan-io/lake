@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     backgroundImage: "linear-gradient(to right, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0))",
     opacity: 0,
     transition: "150ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   rightToLeftGradient: {
     position: "absolute",
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
     backgroundImage: "linear-gradient(to left, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0))",
     opacity: 0,
     transition: "150ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   horizontalScrollbar: {
     position: "sticky",
@@ -393,6 +395,7 @@ const styles = StyleSheet.create({
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor.default}, ${backgroundColor.defaultTransparent})`,
     opacity: 0,
     transition: "200ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   visibleTopGradient: {
     opacity: 1,
@@ -524,8 +527,8 @@ const RowSegment = <T, ExtraInfo>({
   return cloneElement(
     wrapper,
     {
-      focusable: true,
-      nativeID: focusId,
+      id: focusId,
+      tabIndex: 0,
       style: [
         styles.rowSegment,
         {
@@ -551,7 +554,7 @@ const RowSegment = <T, ExtraInfo>({
         },
       ]}
       ref={containerRef}
-      accessibilityHidden={false}
+      aria-hidden={false}
     >
       <View style={[styles.segmentOverflow, style]}>
         {columns.map(({ id, width, renderCell }, index) => {
@@ -570,8 +573,8 @@ const RowSegment = <T, ExtraInfo>({
             <View
               style={[styles.cell, { width }]}
               key={columnId}
-              accessibilityDescribedBy={columnId}
-              nativeID={focusId}
+              aria-describedby={columnId}
+              id={focusId}
             >
               {renderCell({ columnId, item, index: absoluteIndex, extraInfo, isHovered })}
             </View>
@@ -603,7 +606,7 @@ const HeaderSegment = <T, ExtraInfo>({
         const columnId = `${viewId}_${id}`;
 
         return (
-          <View style={[styles.segmentHeaderCell, { width }]} nativeID={columnId} key={columnId}>
+          <View style={[styles.segmentHeaderCell, { width }]} id={columnId} key={columnId}>
             {renderTitle({ title, extraInfo, id })}
           </View>
         );
@@ -1231,7 +1234,7 @@ export const FixedListView = <T, ExtraInfo>({
 
   return (
     <View style={styles.root}>
-      <View ref={startFocusAnchorRef} focusable={true} />
+      <View ref={startFocusAnchorRef} tabIndex={0} />
 
       <ScrollView
         onKeyDown={onKeyDown}
@@ -1250,7 +1253,7 @@ export const FixedListView = <T, ExtraInfo>({
         ]}
       >
         <View
-          accessibilityBusy={isLoading}
+          aria-busy={isLoading}
           style={[
             styles.loadingPlaceholder,
             {
@@ -1304,11 +1307,7 @@ export const FixedListView = <T, ExtraInfo>({
                 />
 
                 <View style={styles.stickyColumnStartOverflow} />
-
-                <View
-                  style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                  pointerEvents="none"
-                />
+                <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
               <View style={[styles.stickyRow, { height: totalHeight }]}>{startRows}</View>
@@ -1345,10 +1344,7 @@ export const FixedListView = <T, ExtraInfo>({
                 />
               </ScrollView>
 
-              <View
-                style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                pointerEvents="none"
-              />
+              <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
             </View>
 
             <ScrollView
@@ -1382,7 +1378,6 @@ export const FixedListView = <T, ExtraInfo>({
 
             {stickedToStartColumns.length > 0 && hasHorizontalScroll ? (
               <View
-                pointerEvents="none"
                 style={[
                   styles.leftToRightGradient,
                   {
@@ -1397,7 +1392,6 @@ export const FixedListView = <T, ExtraInfo>({
 
             {stickedToEndColumns.length > 0 && hasHorizontalScroll ? (
               <View
-                pointerEvents="none"
                 style={[
                   styles.rightToLeftGradient,
                   {
@@ -1431,10 +1425,7 @@ export const FixedListView = <T, ExtraInfo>({
                   width={stickedToEndColumnsWidth}
                 />
 
-                <View
-                  style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-                  pointerEvents="none"
-                />
+                <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
               <View style={[styles.stickyRow, { height: totalHeight }]}>{endRows}</View>
@@ -1447,7 +1438,7 @@ export const FixedListView = <T, ExtraInfo>({
         <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
       ) : null}
 
-      <View ref={endFocusAnchorRef} focusable={true} />
+      <View ref={endFocusAnchorRef} tabIndex={0} />
     </View>
   );
 };

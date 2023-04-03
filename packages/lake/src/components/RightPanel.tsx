@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
   },
+  inert: {
+    pointerEvents: "none",
+  },
   fill: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -34,14 +37,14 @@ const styles = StyleSheet.create({
   },
   containerEnter: {
     animationKeyframes: {
-      "0%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 100 }] },
+      "0%": { opacity: 0, transform: "translateZ(0px) translateX(100px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   containerLeave: {
     animationKeyframes: {
-      "100%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 100 }] },
+      "100%": { opacity: 0, transform: "translateZ(0px) translateX(100px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -53,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
 
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     flexDirection: "row",
     alignItems: "stretch",
     backgroundColor: backgroundColor.default,
@@ -68,14 +71,14 @@ const styles = StyleSheet.create({
   fillMaxLarge: { maxWidth: 700 },
   contentsEnter: {
     animationKeyframes: {
-      "0%": { transform: [{ translateZ: 0 }, { translateX: 25 }] },
+      "0%": { transform: "translateZ(0px) translateX(25px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   contentsLeave: {
     animationKeyframes: {
-      "100%": { transform: [{ translateZ: 0 }, { translateX: 25 }] },
+      "100%": { transform: "translateZ(0px) translateX(25px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
   contentsContainer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 2,
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     maxWidth: "100%",
     flexGrow: 1,
   },
@@ -114,7 +117,7 @@ export const RightPanel = forwardRef<FocusTrapRef, Props>(
 
     return (
       <Portal container={rootNode}>
-        <View style={styles.root} pointerEvents={visible ? "auto" : "none"}>
+        <View style={[styles.root, !visible && styles.inert]}>
           <ResponsiveContainer style={styles.root} breakpoint={breakpoints.small}>
             {({ large }) => (
               <>

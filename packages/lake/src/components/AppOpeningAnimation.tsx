@@ -7,11 +7,11 @@ const styles = StyleSheet.create({
   circle: {
     opacity: 0,
     animationKeyframes: {
-      "0%": { opacity: 0, transform: [{ scale: 0.4 }] },
-      "30%": { opacity: 0, transform: [{ scale: 0.4 }] },
+      "0%": { opacity: 0, transform: "scale(0.4)" },
+      "30%": { opacity: 0, transform: "scale(0.4)" },
       "40%": { opacity: 1 },
-      "75%": { opacity: 0, transform: [{ scale: 1.5 }] },
-      "100%": { opacity: 0, transform: [{ scale: 1.5 }] },
+      "75%": { opacity: 0, transform: "scale(1.5)" },
+      "100%": { opacity: 0, transform: "scale(1.5)" },
     },
     animationDuration: "5000ms",
     animationTimingFunction: "ease-in-out",
@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     animationKeyframes: {
-      "0%": { transform: [{ scale: 1 }] },
-      "25%": { transform: [{ scale: 1 }] },
-      "35%": { transform: [{ translateY: 60 }, { scale: 10 }] },
-      "100%": { transform: [{ translateY: 60 }, { scale: 10 }] },
+      "0%": { transform: "scale(1)" },
+      "25%": { transform: "scale(1)" },
+      "35%": { transform: "translateY(60px) scale(10)" },
+      "100%": { transform: "translateY(60px) scale(10)" },
     },
     animationDuration: "5000ms",
     animationTimingFunction: "ease-in-out",
@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     animationKeyframes: {
-      "0%": { transform: [{ translateY: 0 }, { scale: 1 }] },
-      "25%": { transform: [{ translateY: 0 }, { scale: 1 }] },
-      "35%": { transform: [{ translateY: 72 }, { scale: 2 }] },
-      "100%": { transform: [{ translateY: 72 }, { scale: 2 }] },
+      "0%": { transform: "translateY(0px) scale(1)" },
+      "25%": { transform: "translateY(0px) scale(1)" },
+      "35%": { transform: "translateY(72px) scale(2)" },
+      "100%": { transform: "translateY(72px) scale(2)" },
     },
     animationDuration: "5000ms",
     animationTimingFunction: "ease-in-out",
@@ -57,7 +57,7 @@ export const AppOpeningAnimation = ({ accentColor, appLogo, playing = true, styl
 
   return (
     <Svg viewBox="0 0 442 860" style={style}>
-      <Mask nativeID="phoneScreen">
+      <Mask id="phoneScreen">
         <Rect x={0} y={0} width={442} height={860} fill="#000" />
         <Rect fill="#fff" x={25} y={21} width={392} height={817} rx={45} />
       </Mask>

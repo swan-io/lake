@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   placeholder: {
     ...texts.regular,
     color: colors.gray[300],
+    userSelect: "none",
   },
   list: {
     marginVertical: 4,
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
   },
   groupTitle: {
     ...texts.semibold,
+    userSelect: "none",
   },
   line: {
     ...texts.regular,
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     transitionDuration: "200ms",
     transitionProperty: "background-color",
+    userSelect: "none",
   },
   lineInGroup: {
     paddingLeft: 24,
@@ -166,7 +169,7 @@ export type MultiSelectProps<I> = {
   renderTagGroup?: (items: readonly MultiSelectItem[]) => string;
   style?: StyleProp<ViewStyle>;
   values: string[];
-  nativeID?: string;
+  id?: string;
 };
 
 const memo: <P extends Record<string, unknown>>(
@@ -190,7 +193,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     error,
     style,
     values,
-    nativeID,
+    id,
   }) => {
     const [filter, setFilter] = useState<string>("");
 
@@ -275,9 +278,9 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
         <Box direction="row" alignItems="center" style={styles.filterContainer}>
           <PressableTextInput
             autoComplete="off"
-            keyboardType="web-search"
+            inputMode="search"
             multiline={false}
-            numberOfLines={1}
+            rows={1}
             onChangeText={filterValue => setFilter(filterValue)}
             placeholder={filterPlaceholder}
             value={filter}
@@ -314,11 +317,11 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     return (
       <View style={style}>
         <Pressable
-          nativeID={nativeID}
+          id={id}
           ref={inputRef}
-          accessibilityHasPopup="listbox"
-          accessibilityRole="button"
-          accessibilityExpanded={visible}
+          aria-haspopup="listbox"
+          role="button"
+          aria-expanded={visible}
           disabled={disabled}
           onPress={open}
           style={({ hovered, focused }) => [
@@ -342,12 +345,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                 </Tag>
               ))
             ) : placeholder !== "" ? (
-              <Text
-                accessibilityRole="label"
-                numberOfLines={1}
-                selectable={false}
-                style={styles.placeholder}
-              >
+              <Text role="label" numberOfLines={1} style={styles.placeholder}>
                 {placeholder}
               </Text>
             ) : null}
@@ -356,7 +354,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
           <Box direction="row" alignItems="center" style={styles.actions}>
             {selectedTags.length >= 1 && !disabled && (
               <>
-                <Pressable accessibilityRole="button" onPress={handleClearAll}>
+                <Pressable role="button" onPress={handleClearAll}>
                   <Icon name="dismiss-filled" color={colors.gray.primary} size={15} />
                 </Pressable>
 
@@ -383,8 +381,8 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
           <View style={styles.list}>
             {enableGroups ? (
               <SectionList
-                accessibilityRole="listbox"
-                accessibilityMultiSelectable={true}
+                role="listbox"
+                aria-multiselectable={true}
                 keyExtractor={(item, index) => `group-field-${item.value}-${index}`}
                 extraData={filter}
                 ListHeaderComponent={ListHeaderComponent}
@@ -397,7 +395,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                   section: SectionListData<MultiSelectItem>;
                 }) => (
                   <Pressable
-                    accessibilityRole="listitem"
+                    role="listitem"
                     onPress={() => handleSelectGroup(data)}
                     style={({ hovered, pressed, focused }) => [
                       styles.groupTitleBase,
@@ -405,7 +403,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                       pressed && { backgroundColor: tint100 },
                     ]}
                   >
-                    <Text numberOfLines={1} selectable={false} style={styles.groupTitle}>
+                    <Text numberOfLines={1} style={styles.groupTitle}>
                       {title}
                     </Text>
 
@@ -427,7 +425,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
             ) : (
               <FlatList
                 ref={listRef}
-                accessibilityRole="list"
+                role="list"
                 data={filteredItems}
                 extraData={filter}
                 keyExtractor={item => `field-${item.value}`}
@@ -475,10 +473,9 @@ const LineItem = ({ item, color, filter, handleSelectItem, style }: LineItemProp
 
   return (
     <PressableText
-      accessibilityRole="listitem"
+      role="listitem"
       disabled={disabled}
       numberOfLines={1}
-      selectable={false}
       onPress={() => handleSelectItem(item)}
       style={({ hovered, pressed }) => [
         styles.line,

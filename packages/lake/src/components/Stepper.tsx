@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "100%",
     left: "50%",
-    transform: [{ translateX: "-50%" }, { translateY: 5 }],
+    transform: "translateX(-50%) translateY(5px)",
   },
   text: {
     whiteSpace: "nowrap",

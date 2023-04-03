@@ -50,14 +50,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     zIndex: 10,
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
   },
   item: {
     flexDirection: "row",
     alignItems: "center",
     borderRadius: radii[6],
     transitionProperty: "opacity",
-    transitionDuration: "0.15s",
+    transitionDuration: "150ms",
   },
   itemPressed: {
     opacity: 0.2,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   dropdown: {
     position: "absolute",
     left: "50%",
-    transform: [{ translateX: "-50%" }],
+    transform: "translateX(-50%)",
     top: "100%",
     backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   siblingsDropdown: {
     position: "absolute",
     left: "50%",
-    transform: [{ translateX: "-50%" }],
+    transform: "translateX(-50%)",
     top: "100%",
     backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "50%",
     right: spacings[16],
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
 });
 
@@ -602,7 +602,7 @@ const BreadcrumbsDropdownItems = ({ crumbs }: { crumbs: CrumbWithIdAndPosition[]
             pressed && styles.itemPressed,
             openingStatus === "ForcedOpen" && styles.itemForcedOpen,
           ]}
-          focusable={true}
+          tabIndex={0}
           onFocus={onHandleFocus}
           onBlur={onAnyBlur}
           onPress={onPress}
@@ -691,7 +691,7 @@ export const Breadcrumbs = () => {
   }, [cleanCrumbs]);
 
   return (
-    <View accessibilityRole="navigation" style={styles.container}>
+    <View role="navigation" style={styles.container}>
       {start.map(({ id, crumb, isFirst, isLast, isRootCrumb }) => (
         <BreadcrumbsItem
           key={id}

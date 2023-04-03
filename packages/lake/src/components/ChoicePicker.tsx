@@ -35,15 +35,15 @@ const styles = StyleSheet.create({
     flexBasis: "33.333%",
     maxWidth: 300,
     padding: spacings[12],
-    transform: [{ translateZ: 0 }],
+    transform: "translateZ(0px)",
     animationKeyframes: {
       from: {
         opacity: 0,
-        transform: [{ translateZ: 0 }, { translateX: 50 }],
+        transform: "translateZ(0px) translateX(50px)",
       },
       to: {
         opacity: 1,
-        transform: [{ translateZ: 0 }, { translateX: 0 }],
+        transform: "translateZ(0px) translateX(0px)",
       },
     },
     animationDuration: "200ms",
@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "50%",
     left: negativeSpacings[24],
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
   rightButton: {
     position: "absolute",
     top: "50%",
     right: negativeSpacings[24],
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
 });
 
@@ -112,7 +112,7 @@ export const ChoicePicker = <T,>({
           style={[
             styles.container,
             !desktop && styles.mobileContainer,
-            !desktop && { transform: [{ translateX: `-${100 * index}%` }] },
+            !desktop && { transform: `translateX(-${100 * index}%)` },
           ]}
         >
           {items.map((item, index) => (

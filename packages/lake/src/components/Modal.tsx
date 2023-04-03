@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleProp,
   StyleSheet,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -28,6 +27,7 @@ const styles = StyleSheet.create({
   },
   outbox: {
     margin: 16,
+    pointerEvents: "box-none",
     flexGrow: 1,
     flexShrink: 1,
   },
@@ -68,11 +68,16 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     paddingVertical: 32,
   },
-  dismissIcon: {
+  dismissButton: {
     padding: 20,
     right: 0,
+    transitionProperty: "opacity",
+    transitionDuration: "150ms",
   },
-  dismissIconDesktop: {
+  dismissButtonPressed: {
+    opacity: 0.5,
+  },
+  dismissButtonDesktop: {
     marginVertical: 12,
     marginRight: 20,
   },
@@ -104,14 +109,9 @@ export const Modal = memo(
           onDismiss={onDismiss}
           onRequestClose={onDismiss}
         >
-          <Pressable
-            accessibilityRole="none"
-            focusable={false}
-            onPress={onDismiss}
-            style={styles.blanket}
-          />
+          <Pressable role="none" tabIndex={-1} onPress={onDismiss} style={styles.blanket} />
 
-          <View pointerEvents="box-none" style={[styles.outbox, desktop && styles.desktopOutbox]}>
+          <View style={[styles.outbox, desktop && styles.desktopOutbox]}>
             <View
               style={[
                 styles.modal,
@@ -120,7 +120,7 @@ export const Modal = memo(
                 style,
               ]}
             >
-              <Box direction="row" accessibilityRole="banner" alignItems="center">
+              <Box direction="row" role="banner" alignItems="center">
                 {title !== "" ? (
                   <Heading
                     size={media({ mobile: 20, desktop: 24 })}
@@ -134,14 +134,17 @@ export const Modal = memo(
                 )}
 
                 {onDismiss && (
-                  <TouchableOpacity
-                    accessibilityRole="button"
-                    activeOpacity={0.5}
-                    style={[styles.dismissIcon, desktop && styles.dismissIconDesktop]}
+                  <Pressable
+                    role="button"
                     onPress={onDismiss}
+                    style={({ pressed }) => [
+                      styles.dismissButton,
+                      desktop && styles.dismissButtonDesktop,
+                      pressed && styles.dismissButtonPressed,
+                    ]}
                   >
                     <Icon name="dismiss-filled" size={18} color={colors.gray[500]} />
-                  </TouchableOpacity>
+                  </Pressable>
                 )}
               </Box>
 

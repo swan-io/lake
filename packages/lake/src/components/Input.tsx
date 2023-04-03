@@ -1,8 +1,6 @@
 import { ChangeEventHandler, forwardRef, memo, ReactNode, useId, useRef } from "react";
 import {
-  KeyboardTypeOptions,
   NativeSyntheticEvent,
-  ReturnKeyTypeOptions,
   StyleProp,
   StyleSheet,
   Text,
@@ -11,10 +9,11 @@ import {
   TextStyle,
   View,
   ViewStyle,
-  WebAccessibilityRole,
+  WebRole,
 } from "react-native";
 import { colors } from "../constants/colors";
 import { commonStyles } from "../constants/commonStyles";
+import { shadows } from "../constants/design";
 import { typography } from "../constants/typography";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { isNotNullish } from "../utils/nullish";
@@ -51,10 +50,7 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderColor: colors.gray[20],
-    shadowColor: colors.gray[100],
-    shadowOpacity: 0.12,
-    shadowOffset: { height: 0, width: 0 },
-    shadowRadius: 2,
+    boxShadow: shadows.tile,
   },
   disabled: {
     backgroundColor: colors.gray[3],
@@ -62,10 +58,7 @@ const styles = StyleSheet.create({
     cursor: "not-allowed",
   },
   hovered: {
-    shadowColor: colors.gray[100],
-    shadowOpacity: 0.06,
-    shadowOffset: { height: 4, width: 0 },
-    shadowRadius: 8,
+    boxShadow: shadows.tile,
   },
   leftIcon: {
     position: "absolute",
@@ -110,15 +103,15 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  accessibilityControls?: string;
-  accessibilityExpanded?: boolean;
+  ariaControls?: string;
+  ariaExpanded?: boolean;
   disabled?: boolean;
   error?: string;
   icon?: IconName;
   inputContainerStyle?: StyleProp<ViewStyle>;
-  role?: WebAccessibilityRole;
-  keyboardType?: KeyboardTypeOptions;
-  returnKeyType?: ReturnKeyTypeOptions;
+  role?: WebRole;
+  inputMode?: TextInputProps["inputMode"];
+  enterKeyHint?: TextInputProps["enterKeyHint"];
   maxLength?: number;
   label?: string;
   onFocus?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
@@ -143,15 +136,15 @@ export const Input = memo(
   forwardRef<TextInput, Props>(
     (
       {
-        accessibilityControls,
-        accessibilityExpanded,
+        ariaControls,
+        ariaExpanded,
         disabled = false,
         error,
         icon,
         inputContainerStyle,
         role,
-        keyboardType,
-        returnKeyType,
+        inputMode,
+        enterKeyHint,
         maxLength,
         label = "",
         onFocus,
@@ -196,18 +189,18 @@ export const Input = memo(
             <Box direction="row" alignItems="center" style={commonStyles.fill}>
               <PressableTextInput
                 ref={mergedRef}
-                accessibilityControls={accessibilityControls}
-                accessibilityExpanded={accessibilityExpanded}
-                accessibilityLabelledBy={labelId}
-                nativeID={id}
+                aria-controls={ariaControls}
+                aria-expanded={ariaExpanded}
+                aria-labelledby={labelId}
+                id={id}
                 allowFontScaling={false}
                 autoComplete="off"
-                accessibilityRole={role}
-                editable={!readOnly && !disabled}
-                keyboardType={keyboardType}
-                returnKeyType={returnKeyType}
+                role={role}
+                readOnly={readOnly || disabled}
+                inputMode={inputMode}
+                enterKeyHint={enterKeyHint}
                 multiline={false}
-                numberOfLines={1}
+                rows={1}
                 maxLength={maxLength}
                 onFocus={onFocus}
                 onBlur={onBlur}

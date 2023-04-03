@@ -3,6 +3,7 @@ import {
   ForwardedRef,
   ReactNode,
   ReactText,
+  Ref,
   RefObject,
   forwardRef,
   useCallback,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     ...typography.bodyLarge,
+    userSelect: "none",
   },
   loader: {
     padding: spacings[24],
@@ -129,7 +131,7 @@ export type LakeComboboxProps<I> = {
   disabled?: boolean;
   emptyResultText: string;
   error?: string;
-  nativeID?: string;
+  id?: string;
   readOnly?: boolean;
 };
 
@@ -150,14 +152,14 @@ const LakeComboboxWithRef = <I,>(
     disabled = false,
     emptyResultText,
     readOnly,
-    nativeID,
+    id,
     error,
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
   const ref = useRef<TextInput>(null);
-  // @ts-expect-error
-  const inputTextRef = useMergeRefs(ref, inputRef);
+
+  const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
@@ -229,14 +231,13 @@ const LakeComboboxWithRef = <I,>(
   return (
     <View>
       <LakeTextInput
-        // @ts-expect-error
-        ref={inputTextRef}
+        ref={inputTextRef as Ref<TextInput>}
         style={styles.input}
-        accessibilityExpanded={isFocused}
-        accessibilityControls={isFocused ? suggestionsId : ""}
-        returnKeyType="search"
+        ariaExpanded={isFocused}
+        ariaControls={isFocused ? suggestionsId : ""}
+        enterKeyHint="search"
         icon={icon}
-        accessibilityRole="combobox"
+        role="combobox"
         placeholder={placeholder}
         value={value}
         disabled={disabled}
@@ -245,7 +246,7 @@ const LakeComboboxWithRef = <I,>(
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
-        nativeID={nativeID}
+        id={id}
         readOnly={readOnly}
       />
 
@@ -288,7 +289,7 @@ const LakeComboboxWithRef = <I,>(
                         ref={listRef}
                         keyExtractor={keyExtractor}
                         getItemLayout={getItemLayout}
-                        accessibilityRole="list"
+                        role="list"
                         data={items}
                         style={styles.flatList}
                         renderItem={({ item }) => {
@@ -298,7 +299,7 @@ const LakeComboboxWithRef = <I,>(
                             <Pressable
                               onFocus={handleFocus}
                               onBlur={handleBlur}
-                              accessibilityRole="listitem"
+                              role="listitem"
                               onKeyDown={handleListItemKeyPress}
                               style={({ hovered, pressed, focused }) => [
                                 styles.item,
@@ -316,7 +317,7 @@ const LakeComboboxWithRef = <I,>(
                               }}
                             >
                               {isReactText(rendered) ? (
-                                <Text numberOfLines={1} selectable={false} style={styles.itemText}>
+                                <Text numberOfLines={1} style={styles.itemText}>
                                   {rendered}
                                 </Text>
                               ) : (

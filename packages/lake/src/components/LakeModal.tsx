@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
   },
+  inert: {
+    pointerEvents: "none",
+  },
   fill: {
     ...StyleSheet.absoluteFillObject,
     animationFillMode: "forwards",
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
     animationKeyframes: {
       "0%": {
         opacity: 0,
-        transform: [{ translateY: -20 }],
+        transform: "translateY(-20px)",
       },
     },
     animationDuration: "300ms",
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     animationKeyframes: {
       "100%": {
         opacity: 0,
-        transform: [{ translateY: -20 }],
+        transform: "translateY(-20px)",
       },
     },
     animationDuration: "300ms",
@@ -163,11 +166,7 @@ export const LakeModal = ({
 
   return (
     <Portal container={rootElement}>
-      <View
-        accessibilityModal={true}
-        style={styles.container}
-        pointerEvents={visible ? "auto" : "none"}
-      >
+      <View aria-modal={true} style={[styles.container, !visible && styles.inert]}>
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>

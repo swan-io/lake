@@ -132,7 +132,7 @@ export const Tile = ({
 }: Props) => {
   return (
     <View
-      accessibilityRole="region"
+      role="region"
       style={[
         styles.container,
         selected === false && styles.unselectedContainer,
@@ -162,7 +162,7 @@ export const Tile = ({
               )}
 
               {isNotNullish(title) && (
-                <Text style={styles.title} accessibilityRole="header" accessibilityLevel={3}>
+                <Text style={styles.title} role="heading" aria-level={3}>
                   {title}
                 </Text>
               )}

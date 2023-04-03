@@ -1,4 +1,4 @@
-// https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/modules/useMergeRefs/index.js
+// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/modules/useMergeRefs/index.js
 // https://github.com/theKashey/use-callback-ref (for typing)
 
 import { MutableRefObject, Ref } from "react";

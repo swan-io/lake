@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
 import { LakeSlider, SliderProps, sliderBreakpoint } from "../src/components/LakeSlider";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -22,7 +23,7 @@ export default {
 const EditableSlider = ({
   mobileSize = false,
   ...props
-}: Omit<SliderProps, "value" | "onChange"> & { mobileSize?: boolean }) => {
+}: Except<SliderProps, "value" | "onChange"> & { mobileSize?: boolean }) => {
   const [value, setValue] = useState(0);
 
   return (

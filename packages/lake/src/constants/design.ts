@@ -534,7 +534,7 @@ const fadeAndSlideInFromTop: Animation = StyleSheet.create({
     animationKeyframes: {
       from: {
         opacity: 0,
-        transform: [{ translateY: -10 }],
+        transform: "translateY(-10px)",
       },
     },
     animationDuration: "300ms",
@@ -544,7 +544,7 @@ const fadeAndSlideInFromTop: Animation = StyleSheet.create({
     animationKeyframes: {
       to: {
         opacity: 0,
-        transform: [{ translateY: -10 }],
+        transform: "translateY(-10px)",
       },
     },
     animationDuration: "300ms",
@@ -558,7 +558,7 @@ const fadeAndSlideInFromLeft: Animation = StyleSheet.create({
     animationKeyframes: {
       from: {
         opacity: 0,
-        transform: [{ translateX: -10 }],
+        transform: "translateX(-10px)",
       },
     },
     animationDuration: "300ms",
@@ -568,7 +568,7 @@ const fadeAndSlideInFromLeft: Animation = StyleSheet.create({
     animationKeyframes: {
       to: {
         opacity: 0,
-        transform: [{ translateX: -10 }],
+        transform: "translateX(-10px)",
       },
     },
     animationDuration: "300ms",
@@ -582,7 +582,7 @@ const fadeAndSlideInFromBottom: Animation = StyleSheet.create({
     animationKeyframes: {
       from: {
         opacity: 0,
-        transform: [{ translateY: 10 }],
+        transform: "translateY(10px)",
       },
     },
     animationDuration: "300ms",
@@ -592,7 +592,7 @@ const fadeAndSlideInFromBottom: Animation = StyleSheet.create({
     animationKeyframes: {
       to: {
         opacity: 0,
-        transform: [{ translateY: 10 }],
+        transform: "translateY(10px)",
       },
     },
     animationDuration: "300ms",
@@ -606,7 +606,7 @@ const fadeAndSlideInFromRight: Animation = StyleSheet.create({
     animationKeyframes: {
       from: {
         opacity: 0,
-        transform: [{ translateZ: 0 }, { translateX: 10 }],
+        transform: "translateZ(0px) translateX(10px)",
       },
     },
     animationDuration: "300ms",
@@ -616,7 +616,7 @@ const fadeAndSlideInFromRight: Animation = StyleSheet.create({
     animationKeyframes: {
       to: {
         opacity: 0,
-        transform: [{ translateZ: 0 }, { translateX: 10 }],
+        transform: "translateZ(0px) translateX(10px)",
       },
     },
     animationDuration: "300ms",
@@ -631,16 +631,16 @@ const shake = StyleSheet.create({
     animationKeyframes: [
       {
         "10%, 90%": {
-          transform: [{ translateX: -1 }],
+          transform: "translateX(-1px)",
         },
         "20%, 80%": {
-          transform: [{ translateX: 2 }],
+          transform: "translateX(2px)",
         },
         "30%, 50%, 70%": {
-          transform: [{ translateX: -4 }],
+          transform: "translateX(-4px)",
         },
         "40%, 60%": {
-          transform: [{ translateX: 4 }],
+          transform: "translateX(4px)",
         },
       },
     ],

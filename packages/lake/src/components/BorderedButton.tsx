@@ -66,11 +66,13 @@ const styles = StyleSheet.create({
     ...typography.bodyLarge,
     fontWeight: typography.fontWeights.demi,
     lineHeight: 48,
+    userSelect: "none",
   },
   textSmall: {
     ...typography.bodySmall,
     fontWeight: typography.fontWeights.demi,
     lineHeight: 40,
+    userSelect: "none",
   },
   textDisabled: {
     color: colors.gray[50],
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  accessibilityLabel?: string;
+  ariaLabel?: string;
   children?: ReactText;
   color?: string;
   disabled?: boolean;
@@ -99,7 +101,7 @@ export const BorderedButton = memo(
   forwardRef<View, Props>(
     (
       {
-        accessibilityLabel,
+        ariaLabel,
         children = "",
         color = colors.gray[100],
         disabled = false,
@@ -117,10 +119,10 @@ export const BorderedButton = memo(
 
       return (
         <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityBusy={loading}
-          accessibilityDisabled={disabled}
+          role="button"
+          aria-label={ariaLabel}
+          aria-busy={loading}
+          aria-disabled={disabled}
           disabled={loading || disabled}
           ref={forwardedRef}
           onPress={onPress}
@@ -148,7 +150,6 @@ export const BorderedButton = memo(
           {hasText && (
             <Text
               numberOfLines={1}
-              selectable={false}
               style={[
                 isSmall ? styles.textSmall : styles.text,
                 disabled ? styles.textDisabled : { color },
@@ -159,7 +160,7 @@ export const BorderedButton = memo(
           )}
 
           {loading && (
-            <View accessibilityRole="none" style={styles.loaderContainer}>
+            <View role="none" style={styles.loaderContainer}>
               <ActivityIndicator
                 color={disabled ? colors.gray[50] : colors.gray[100]}
                 size={iconSize}

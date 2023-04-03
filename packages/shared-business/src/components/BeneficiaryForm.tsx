@@ -413,7 +413,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           <>
             {match(step)
               .with("common", () => (
-                <View accessibilityRole="form">
+                <View role="form">
                   <Box direction={small ? "column" : "row"}>
                     <Field name="firstName">
                       {({ value, onChange, error }) => (
@@ -424,7 +424,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                             <LakeTextInput
                               error={error}
                               placeholder={t("beneficiaryForm.beneficiary.firstNamePlaceholder")}
-                              nativeID={id}
+                              id={id}
                               value={value}
                               onChangeText={onChange}
                             />
@@ -444,7 +444,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                             <LakeTextInput
                               error={error}
                               placeholder={t("beneficiaryForm.beneficiary.lastNamePlaceholder")}
-                              nativeID={id}
+                              id={id}
                               value={value}
                               onChangeText={onChange}
                             />
@@ -466,7 +466,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 <LakeTextInput
                                   error={error}
                                   placeholder={locale.datePlaceholder}
-                                  nativeID={id}
+                                  id={id}
                                   value={value}
                                   onChange={onChange}
                                 />
@@ -486,7 +486,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           style={styles.inputContainer}
                           render={id => (
                             <CountryPicker
-                              nativeID={id}
+                              id={id}
                               error={error}
                               value={value}
                               placeholder={t("beneficiaryForm.beneficiary.birthCountryPlaceholder")}
@@ -510,7 +510,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 style={styles.inputContainer}
                                 render={id => (
                                   <LakeCityInput
-                                    nativeID={id}
+                                    id={id}
                                     error={error}
                                     country={birthCountryCode.value}
                                     value={value ?? ""}
@@ -548,7 +548,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                             "beneficiaryForm.beneficiary.birthPostalCodePlaceholder",
                                           )
                                     }
-                                    nativeID={id}
+                                    id={id}
                                     disabled={birthCountryCode.value === undefined}
                                     value={value}
                                     onChangeText={onChange}
@@ -591,10 +591,10 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   <LakeTextInput
                                     error={error}
                                     unit="%"
-                                    keyboardType="decimal-pad"
-                                    accessibilityValueMin={0}
-                                    accessibilityValueMax={100}
-                                    nativeID={id}
+                                    inputMode="decimal"
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    id={id}
                                     value={value}
                                     onChangeText={onChange}
                                   />
@@ -621,14 +621,14 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                 </View>
               ))
               .with("address", () => (
-                <View accessibilityRole="form">
+                <View role="form">
                   <Field name="country">
                     {({ value, onChange }) => (
                       <LakeLabel
                         label={t("beneficiaryForm.beneficiary.country")}
                         render={id => (
                           <CountryPicker
-                            nativeID={id}
+                            id={id}
                             value={value}
                             items={individualCountriesItems}
                             onValueChange={onChange}
@@ -666,7 +666,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   optionalLabel={t("common.optional")}
                                   render={id => (
                                     <LakeTextInput
-                                      nativeID={id}
+                                      id={id}
                                       placeholder={t(
                                         "beneficiaryForm.beneficiary.taxIdentificationNumberPlaceholder",
                                       )}

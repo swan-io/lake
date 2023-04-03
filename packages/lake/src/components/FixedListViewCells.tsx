@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     transitionTimingFunction: "ease-in-out",
   },
   sortIconReversed: {
-    transform: [{ rotate: "-180deg" }],
+    transform: "rotate(-180deg)",
   },
   cellAction: {
     paddingVertical: spacings[16],
@@ -259,8 +259,8 @@ export const CopyableRegularTextCell = ({
         containerStyle={styles.iconContainer}
       >
         <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={copyWording}
+          role="button"
+          aria-label={copyWording}
           onPress={onPress}
           style={({ hovered }) => [styles.icon, hovered && styles.underline]}
         >

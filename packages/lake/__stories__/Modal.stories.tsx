@@ -1,6 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
 import { Grid } from "../src/components/Grid";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeModal, LakeModalProps } from "../src/components/LakeModal";
@@ -27,7 +28,9 @@ export default {
   component: LakeModal,
 } as ComponentMeta<typeof LakeModal>;
 
-type ButtonModalProps = Omit<LakeModalProps, "children" | "visible"> & { withCloseCross?: boolean };
+type ButtonModalProps = Except<LakeModalProps, "children" | "visible"> & {
+  withCloseCross?: boolean;
+};
 
 const ButtonModal = ({ withCloseCross = false, ...props }: ButtonModalProps) => {
   const [visible, setVisible] = useState(false);

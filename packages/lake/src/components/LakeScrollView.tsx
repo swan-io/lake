@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor.default}, ${backgroundColor.defaultTransparent})`,
     opacity: 0,
     transition: "200ms ease-in-out opacity",
+    pointerEvents: "none",
   },
   visibleTopGradient: {
     opacity: 1,
@@ -66,10 +67,7 @@ export const LakeScrollView = ({
         {children}
       </ScrollView>
 
-      <View
-        style={[styles.topGradient, isScrolled && styles.visibleTopGradient]}
-        pointerEvents="none"
-      />
+      <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
     </View>
   );
 };

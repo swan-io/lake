@@ -122,14 +122,14 @@ const ListRightPanel_ = forwardRef<FocusTrapRef, Props<unknown>>(
               <LakeButton
                 mode="tertiary"
                 icon="lake-close"
-                accessibilityLabel={closeLabel}
+                ariaLabel={closeLabel}
                 onPress={onClose}
               />
 
               <Box direction="row" justifyContent="spaceBetween">
                 <LakeButton
                   mode="tertiary"
-                  accessibilityLabel={previousLabel}
+                  ariaLabel={previousLabel}
                   icon="arrow-left-regular"
                   disabled={activeItemIndex === 0}
                   onPress={() => {
@@ -144,7 +144,7 @@ const ListRightPanel_ = forwardRef<FocusTrapRef, Props<unknown>>(
 
                 <LakeButton
                   mode="tertiary"
-                  accessibilityLabel={nextLabel}
+                  ariaLabel={nextLabel}
                   icon="arrow-right-regular"
                   disabled={activeItemIndex === items.length - 1}
                   onPress={() => {

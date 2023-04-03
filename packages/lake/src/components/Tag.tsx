@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 8,
   },
+  unselectable: {
+    userSelect: "none",
+  },
   dismiss: {
     justifyContent: "center",
     height: "100%",
@@ -51,7 +54,7 @@ type Props = {
   color?: ColorVariants;
   onPressRemove?: () => void;
   style?: StyleProp<ViewStyle>;
-  accessibilityLabel?: string;
+  ariaLabel?: string;
 };
 
 export const Tag = ({
@@ -61,7 +64,7 @@ export const Tag = ({
   size = "small",
   icon,
   iconSize = 16,
-  accessibilityLabel,
+  ariaLabel,
   onPressRemove,
   style,
 }: Props) => {
@@ -88,7 +91,7 @@ export const Tag = ({
             { backgroundColor: tint100, borderColor: tint200 },
           ]}
         >
-          <Text numberOfLines={1} selectable={false} style={[styles.text, { color: primary }]}>
+          <Text numberOfLines={1} style={[styles.text, styles.unselectable, { color: primary }]}>
             {label}
           </Text>
         </Box>
@@ -97,7 +100,7 @@ export const Tag = ({
       <Box
         alignItems="center"
         direction="row"
-        accessibilityLabel={accessibilityLabel}
+        aria-label={ariaLabel}
         style={[
           styles.base,
           size === "large" && styles.larger,
@@ -132,7 +135,7 @@ export const Tag = ({
 
         {hasRemoveButton && (
           <Pressable
-            accessibilityRole="button"
+            role="button"
             onPress={onPressRemove}
             style={({ hovered, pressed }) => [
               styles.dismiss,

@@ -28,7 +28,7 @@ export const Link = memo(
   forwardRef<Text, LinkProps>(
     (
       {
-        accessibilityRole = "link",
+        role = "link",
         children,
         disabled = false,
         onPress,
@@ -38,7 +38,7 @@ export const Link = memo(
         target,
         to,
         ariaCurrentValue = "page",
-        focusable,
+        tabIndex,
         ...props
       },
       forwardedRef,
@@ -48,10 +48,10 @@ export const Link = memo(
       return (
         <PressableText
           {...props}
-          accessibilityRole={accessibilityRole}
-          accessibilityDisabled={disabled}
-          focusable={isNotNullish(focusable) ? focusable : !disabled}
-          accessibilityCurrent={active ? ariaCurrentValue : undefined}
+          role={role}
+          aria-disabled={disabled}
+          tabIndex={isNotNullish(tabIndex) ? tabIndex : disabled ? -1 : 0}
+          aria-current={active ? ariaCurrentValue : undefined}
           href={to}
           onPress={(event: unknown) => {
             const e = event as React.MouseEvent<HTMLAnchorElement>;

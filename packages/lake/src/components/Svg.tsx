@@ -12,12 +12,7 @@ const styles = StyleSheet.create({
 
 type ChildrenProp = { children?: ReactNode };
 type FillRule = "evenodd" | "nonzero";
-
-type CommonProps = Pick<
-  ViewProps,
-  "accessibilityRole" | "focusable" | "nativeID" | "pointerEvents" | "style" | "testID"
-> &
-  ChildrenProp;
+type CommonProps = Pick<ViewProps, "id" | "role" | "style" | "tabIndex" | "testID"> & ChildrenProp;
 
 type SvgProps = CommonProps & {
   height?: number;

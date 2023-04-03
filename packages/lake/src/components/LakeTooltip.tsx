@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[900],
     borderWidth: 1,
     borderColor: colors.gray[900],
-    transform: [{ rotate: "45deg" }],
+    transform: "rotate(45deg)",
   },
   info: {
     flexGrow: 0,
@@ -272,7 +272,7 @@ export const LakeTooltip = memo(
 
                   {!hideArrow && (
                     <View
-                      accessibilityRole="none"
+                      role="none"
                       style={[
                         state?.placement === "right" || state?.placement === "left"
                           ? styles.arrowContainerHorizontal
@@ -282,16 +282,13 @@ export const LakeTooltip = memo(
                         state?.placement === "right" && styles.arrowContainerRight,
                         state?.placement === "left" && styles.arrowContainerLeft,
                         {
-                          transform: [
-                            { translateX: -overflowOffset },
-                            {
-                              rotate: match(state?.placement)
-                                .with("bottom", () => "180deg")
-                                .with("left", () => "-90deg")
-                                .with("right", () => "90deg")
-                                .otherwise(() => "0deg"),
-                            },
-                          ],
+                          transform: `translateX(${-overflowOffset}px) rotate(${match(
+                            state?.placement,
+                          )
+                            .with("bottom", () => "180deg")
+                            .with("left", () => "-90deg")
+                            .with("right", () => "90deg")
+                            .otherwise(() => "0deg")})`,
                         },
                       ]}
                     >

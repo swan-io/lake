@@ -8,6 +8,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
+import { Except } from "type-fest";
 import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
@@ -101,13 +102,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: spacings[16],
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
   icon: {
     position: "absolute",
     left: spacings[16],
     top: "50%",
-    transform: [{ translateY: "-50%" }],
+    transform: "translateY(-50%)",
   },
   readOnlyEndIcon: {
     right: 0,
@@ -141,7 +142,12 @@ const styles = StyleSheet.create({
 });
 
 // The `onChange` type change is for compatibity with Rifm
-export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> & {
+export type LakeTextInputProps = Except<
+  TextInputProps,
+  "editable" | "keyboardType" | "onChange"
+> & {
+  ariaExpanded?: boolean;
+  ariaControls?: string;
   error?: string;
   readOnly?: boolean;
   validating?: boolean;
@@ -151,7 +157,7 @@ export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> &
   multiline?: boolean;
   icon?: IconName;
   unit?: string;
-  keyboardType?: TextInputProps["keyboardType"];
+  inputMode?: TextInputProps["inputMode"];
   pattern?: string;
   children?: ReactNode;
   hideErrors?: boolean;
@@ -163,6 +169,8 @@ export type LakeTextInputProps = Omit<TextInputProps, "editable" | "onChange"> &
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
   (
     {
+      ariaExpanded,
+      ariaControls,
       error,
       disabled = false,
       validating = false,
@@ -172,7 +180,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       children,
       unit,
       color = "gray",
-      keyboardType = "default",
+      inputMode = "text",
       hideErrors = false,
       onChange,
       pattern,
@@ -223,18 +231,20 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
 
     return (
       <View style={commonStyles.fill}>
-        <View style={styles.root} accessibilityErrorMessage={error}>
+        <View style={styles.root} aria-errormessage={error}>
           <View style={styles.container}>
             <View style={styles.contents}>
               <TextInput
-                keyboardType={keyboardType}
+                aria-expanded={ariaExpanded}
+                aria-controls={ariaControls}
+                inputMode={inputMode}
                 ref={mergedRef}
                 {...props}
                 defaultValue={defaultValue}
                 value={isNullish(defaultValue) ? value ?? "" : value}
                 onFocus={onFocus}
                 onBlur={onBlur}
-                editable={isInteractive}
+                readOnly={!isInteractive}
                 onChange={onChange as TextInputProps["onChange"]}
                 multiline={multiline}
                 style={[

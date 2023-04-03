@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode } from "react";
-import { StyleSheet, Text, TextProps } from "react-native";
+import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
 import { Except } from "type-fest";
 import { texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -22,24 +22,31 @@ const variants = StyleSheet.create({
 type HeadingAlign = keyof typeof alignments;
 type HeadingVariant = keyof typeof variants;
 
-type Props = Except<TextProps, "accessibilityRole"> & {
+type Props = Except<TextProps, "role"> & {
   align?: HeadingAlign;
   children: ReactNode;
   color?: string;
   level: 1 | 2 | 3 | 4 | 5 | 6 | "none";
+  userSelect?: TextStyle["userSelect"];
   variant?: HeadingVariant;
 };
 
 export const LakeHeading = forwardRef<Text, Props>(
   (
-    { align = "left", children, color, level, style, variant = "h1", ...props }: Props,
+    { align = "left", children, color, level, style, userSelect, variant = "h1", ...props }: Props,
     forwardedRef,
   ) => (
     <Text
       ref={forwardedRef}
-      accessibilityRole={level === "none" ? undefined : "header"}
-      accessibilityLevel={level === "none" ? undefined : level}
-      style={[variants[variant], alignments[align], isNotNullish(color) && { color }, style]}
+      role={level === "none" ? undefined : "heading"}
+      aria-level={level === "none" ? undefined : level}
+      style={[
+        variants[variant],
+        alignments[align],
+        isNotNullish(color) && { color },
+        isNotNullish(userSelect) && { userSelect },
+        style,
+      ]}
       {...props}
     >
       {children}

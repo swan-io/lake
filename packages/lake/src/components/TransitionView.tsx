@@ -1,5 +1,5 @@
 import { ReactNode, useLayoutEffect, useReducer, useRef } from "react";
-import { AnimationStyles, StyleProp, StyleSheet, View, ViewProps, ViewStyle } from "react-native";
+import { AnimationStyles, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
@@ -7,7 +7,6 @@ type Props = {
   enter?: AnimationStyles;
   leave?: AnimationStyles;
   style?: StyleProp<ViewStyle>;
-  pointerEvents?: ViewProps["pointerEvents"];
   children: ReactNode | null;
   onLeave?: () => void;
 };
@@ -18,14 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const TransitionView = ({
-  enter,
-  leave,
-  style,
-  children,
-  pointerEvents,
-  onLeave,
-}: Props) => {
+export const TransitionView = ({ enter, leave, style, children, onLeave }: Props) => {
   const viewRef = useRef<View>(null);
   const childrenForLeaveAnimationRef = useRef<ReactNode | null>(null);
   const [, forceUpdate] = useReducer(() => [], []);
@@ -62,7 +54,6 @@ export const TransitionView = ({
 
   return hasChildrenToDisplay ? (
     <View
-      pointerEvents={pointerEvents}
       ref={viewRef}
       style={[
         styles.base,

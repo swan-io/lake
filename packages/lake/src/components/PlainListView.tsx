@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor.default,
   },
   scrollTracker: {
+    pointerEvents: "none",
     position: "absolute",
     left: 0,
     bottom: 0,
@@ -192,7 +193,7 @@ const Row = <T, ExtraInfo>({
               flexGrow: width === "grow" ? ONE : ZERO,
             },
           ]}
-          nativeID={columnId}
+          id={columnId}
           key={columnId}
         >
           {renderCell({ columnId, item, index, extraInfo, isHovered })}
@@ -340,7 +341,7 @@ export const PlainListView = <T, ExtraInfo>({
                           height: headerHeight,
                         },
                       ]}
-                      nativeID={columnId}
+                      id={columnId}
                       key={columnId}
                     >
                       {renderTitle({ title, extraInfo, id })}
@@ -407,7 +408,7 @@ export const PlainListView = <T, ExtraInfo>({
                   })}
 
                   <View>
-                    <View accessibilityBusy={isLoading} style={styles.loadingPlaceholder}>
+                    <View aria-busy={isLoading} style={styles.loadingPlaceholder}>
                       {isLoading ? (
                         <PlainListViewPlaceholder
                           count={loading.count}
@@ -424,7 +425,6 @@ export const PlainListView = <T, ExtraInfo>({
                   ) : null}
 
                   <View
-                    pointerEvents="none"
                     style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
                     ref={scrollTrackerRef}
                   />

@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     height: INNER_CIRCLE_SIZE,
     width: INNER_CIRCLE_SIZE,
     borderRadius: INNER_CIRCLE_SIZE / 2,
-    transform: [{ scale: 0 }],
+    transform: "scale(0)",
     transitionProperty: "transform",
     transitionDuration: "100ms",
   },
   innerCircleDisplay: {
-    transform: [{ scale: 1 }],
+    transform: "scale(1)",
   },
 });
 
@@ -45,10 +45,10 @@ export const LakeRadio = ({ value, disabled = false, color = "current" }: Props)
         borderColor: colors.gray[300],
       },
     ]}
-    accessibilityRole="none"
+    role="none"
   >
     <View
-      accessibilityHidden={!value}
+      aria-hidden={!value}
       style={[
         styles.innerCircle,
         { backgroundColor: colors[color].primary },

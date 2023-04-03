@@ -1,4 +1,4 @@
-// https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/exports/Pressable/index.js
+// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/Pressable/index.js
 
 import {
   ComponentType,
@@ -30,9 +30,12 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { PressResponderConfig, usePressEvents } from "../hooks/usePressEvents";
 
 const styles = StyleSheet.create({
-  root: {
+  active: {
     cursor: "pointer",
     touchAction: "manipulation",
+  },
+  disabled: {
+    pointerEvents: "none",
   },
 });
 
@@ -44,7 +47,6 @@ type Props<BaseProps extends TextProps | TextInputProps> = Merge<
     delayPressIn?: number;
     delayPressOut?: number;
     disabled?: boolean;
-    focusable?: boolean;
     onBlur?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
     onContextMenu?: (event: NativeSyntheticEvent<React.SyntheticEvent>) => void;
     onFocus?: (event: NativeSyntheticEvent<React.FocusEvent>) => void;
@@ -80,7 +82,6 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       delayPressIn,
       delayPressOut,
       disabled = false,
-      focusable,
       onBlur,
       onContextMenu,
       onFocus,
@@ -89,10 +90,11 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       onKeyDown,
       onLongPress,
       onPress,
-      onPressMove,
       onPressIn,
+      onPressMove,
       onPressOut,
       style,
+      tabIndex,
       testOnly_hovered,
       testOnly_pressed,
       ...rest
@@ -183,21 +185,29 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       [onKeyDown, onKeyDownPress],
     );
 
+    let _tabIndex: 0 | -1 | undefined;
+
+    if (tabIndex !== undefined) {
+      _tabIndex = tabIndex;
+    } else {
+      _tabIndex = disabled ? -1 : 0;
+    }
+
     return (
       <Component
         {...rest}
         {...pressEventHandlers}
-        accessibilityDisabled={disabled}
-        focusable={!disabled && focusable !== false}
+        aria-disabled={disabled}
         onBlur={blurHandler}
         onContextmenu={contextMenuHandler}
         onFocus={focusHandler}
         onKeyDown={keyDownHandler}
         ref={setRef}
         style={[
-          !disabled && applyPressStyle && styles.root,
+          !disabled && applyPressStyle ? styles.active : styles.disabled,
           typeof style === "function" ? style(interactionState) : style,
         ]}
+        tabIndex={_tabIndex}
       >
         {typeof children === "function" ? children(interactionState) : children}
       </Component>
@@ -216,7 +226,11 @@ type ExtraProps = {
 
 export type PressableViewProps = Except<Props<ViewProps>, "children">;
 export type PressableTextProps = Props<TextProps>;
-export type PressableTextInputProps = Except<Props<TextInputProps>, "children">;
+
+export type PressableTextInputProps = Except<
+  Props<TextInputProps>,
+  "children" | "editable" | "keyboardType" | "numberOfLines"
+>;
 
 export const Pressable = memo(
   getPressable<PressableViewProps>(View, { applyPressStyle: true }),

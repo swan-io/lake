@@ -114,7 +114,7 @@ const Help = (props: HelpProps) => {
           icon="question-circle-regular"
           disabled={true}
           style={[styles.button, styles.buttonWithDefaultCursor]}
-          accessibilityLabel={t("supportingDoc.whatIsThis")}
+          ariaLabel={t("supportingDoc.whatIsThis")}
         />
       </LakeTooltip>
     ))
@@ -126,7 +126,7 @@ const Help = (props: HelpProps) => {
         icon="question-circle-regular"
         onPress={onPress}
         style={styles.button}
-        accessibilityLabel={t("supportingDoc.whatIsThis")}
+        ariaLabel={t("supportingDoc.whatIsThis")}
       >
         {label}
       </LakeButton>

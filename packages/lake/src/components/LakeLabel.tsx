@@ -113,7 +113,7 @@ export const LakeLabel = ({
                 ) : null}
               </Label>
             ) : (
-              <LakeText variant="medium" color={readOnlyColor} nativeID={id}>
+              <LakeText variant="medium" color={readOnlyColor} id={id}>
                 {label}
 
                 {optionalLabel != null ? (
@@ -147,7 +147,7 @@ export const LakeLabel = ({
             .exhaustive()}
         />
 
-        <View accessibilityLabelledBy={type === "view" || type === "viewSmall" ? id : undefined}>
+        <View aria-labelledby={type === "view" || type === "viewSmall" ? id : undefined}>
           {render(id)}
         </View>
       </View>

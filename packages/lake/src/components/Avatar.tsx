@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     ...typography.bodyLarge,
     fontWeight: typography.fontWeights.demi,
     textAlign: "center",
+    userSelect: "none",
   },
   container: {
     borderWidth: 1,
@@ -37,7 +38,7 @@ export const Avatar = memo<Props>(({ initials = "", size }) => {
   const variant = initialsToVariant(initials);
   return (
     <View
-      accessibilityRole="image"
+      role="img"
       style={[
         commonStyles.center,
         styles.container,
@@ -51,10 +52,7 @@ export const Avatar = memo<Props>(({ initials = "", size }) => {
       ]}
     >
       {initials !== "" ? (
-        <Text
-          style={[styles.text, { color: colors[variant][500], fontSize: size * 0.4 }]}
-          selectable={false}
-        >
+        <Text style={[styles.text, { color: colors[variant][500], fontSize: size * 0.4 }]}>
           {initials}
         </Text>
       ) : (

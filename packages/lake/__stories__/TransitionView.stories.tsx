@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
   },
   enterAnimation: {
     animationKeyframes: {
-      "0%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 200 }] },
+      "0%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
     },
     animationDuration: "300ms",
   },
   leaveAnimation: {
     animationKeyframes: {
-      "100%": { opacity: 0, transform: [{ translateZ: 0 }, { translateX: 200 }] },
+      "100%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
     },
     animationDuration: "300ms",
   },

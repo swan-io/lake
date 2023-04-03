@@ -36,6 +36,7 @@ type Props = {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
+    pointerEvents: "none",
   },
   contents: {
     ...StyleSheet.absoluteFillObject,
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     cursor: "default",
   },
   underlay: {
+    pointerEvents: "auto",
     cursor: "default",
     position: "fixed",
     left: 0,
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   popover: {
+    pointerEvents: "auto",
     position: "absolute",
     display: "flex",
     flexDirection: "column",
@@ -97,9 +100,10 @@ const FLEX_START = "flex-start";
 
 const animation: Animation = {
   ...animations.fadeAndSlideInFromBottom,
-  leave: StyleSheet.compose([animations.fadeAndSlideInFromBottom.leave], {
-    animationDuration: "100ms",
-  }) as unknown as AnimationStyles,
+  leave: [
+    animations.fadeAndSlideInFromBottom.leave,
+    { animationDuration: "100ms" },
+  ] as unknown as AnimationStyles,
 };
 
 export const VIEWPORT_WIDTH_THRESHOLD = 600;
@@ -229,7 +233,7 @@ export const Popover = memo<Props>(
 
     return (
       <Portal container={rootElement}>
-        <TransitionView pointerEvents="none" style={styles.container} {...animation}>
+        <TransitionView style={styles.container} {...animation}>
           {visible ? (
             <View style={styles.contents}>
               {underlay ? (
@@ -237,15 +241,13 @@ export const Popover = memo<Props>(
                   ref={underlayRef}
                   style={styles.underlay}
                   onPress={onPressUnderlay}
-                  accessibilityRole="button"
-                  accessibilityLabel="Close"
-                  pointerEvents="auto"
+                  role="button"
+                  aria-label="Close"
                 />
               ) : null}
 
               {availableHeight > 0 ? (
                 <ScrollView
-                  pointerEvents="auto"
                   style={[
                     styles.popover,
                     availableSpaceAbove <= availableSpaceBelow && { top },
@@ -264,10 +266,10 @@ export const Popover = memo<Props>(
                         availableSpaceAbove > availableSpaceBelow ? FLEX_END : FLEX_START,
                     },
                   ]}
-                  nativeID={id}
-                  accessibilityRole={role}
-                  accessibilityDescribedBy={describedBy}
-                  accessibilityLabel={label}
+                  id={id}
+                  role={role}
+                  aria-describedby={describedBy}
+                  aria-label={label}
                 >
                   <FocusTrap
                     focusLock={true}
@@ -276,7 +278,7 @@ export const Popover = memo<Props>(
                     onEscapeKey={onDismiss}
                     onClickOutside={underlay ? undefined : onClickOutside}
                   >
-                    <Pressable focusable={false} onPress={onPress} style={styles.defaultCursor}>
+                    <Pressable tabIndex={-1} onPress={onPress} style={styles.defaultCursor}>
                       {typeof children == "function" ? children({ mode: "dropdown" }) : children}
                     </Pressable>
                   </FocusTrap>

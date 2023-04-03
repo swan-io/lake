@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useCallback, useRef } from "react";
+import { KeyboardEvent, ReactElement, ReactNode, useCallback, useRef } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -9,7 +9,6 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import {
   ColorVariants,
@@ -143,7 +142,7 @@ export type SelectProps<V> = {
   value?: V;
   onValueChange: (value: V) => void;
   hideErrors?: boolean;
-  nativeID?: string;
+  id?: string;
   error?: string;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -159,7 +158,7 @@ export function LakeSelect<V>({
   mode = "normal",
   placeholder,
   readOnly = false,
-  nativeID,
+  id,
   matchReferenceWidth = true,
   value,
   error,
@@ -225,11 +224,11 @@ export function LakeSelect<V>({
   return (
     <View style={commonStyles.fill}>
       <Pressable
-        nativeID={nativeID}
+        id={id}
         ref={inputRef}
-        accessibilityHasPopup="listbox"
-        accessibilityRole="button"
-        accessibilityExpanded={visible}
+        aria-haspopup="listbox"
+        role="button"
+        aria-expanded={visible}
         disabled={readOnly || disabled}
         style={({ focused }) => [
           mode === "normal" ? styles.normal : styles.borderless,
@@ -243,7 +242,7 @@ export function LakeSelect<V>({
         ]}
         onPress={toggle}
         onKeyDown={onKeyDown}
-        accessibilityErrorMessage={error}
+        aria-errormessage={error}
       >
         {({ hovered }) => (
           <>
@@ -328,35 +327,27 @@ export function LakeSelect<V>({
         )}
 
         <FlatList
-          accessibilityRole="list"
+          role="list"
           data={items}
           ref={listRef}
           contentContainerStyle={styles.listContent}
-          onKeyDown={e => {
-            match(e.nativeEvent.key)
-              .with("ArrowDown", () => {
-                e.preventDefault();
+          onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
+            const { key } = event.nativeEvent;
 
-                if (isNotNullish(e.currentTarget)) {
-                  const focusableElements = getFocusableElements(
-                    e.currentTarget as unknown as HTMLDivElement,
-                  );
-                  const current = focusableElements.indexOf(e.target as unknown as HTMLElement);
-                  focusableElements[current + 1]?.focus();
-                }
-              })
-              .with("ArrowUp", () => {
-                e.preventDefault();
+            if (key === "ArrowDown" || key === "ArrowUp") {
+              event.preventDefault();
 
-                if (isNotNullish(e.currentTarget)) {
-                  const focusableElements = getFocusableElements(
-                    e.currentTarget as unknown as HTMLDivElement,
-                  );
-                  const current = focusableElements.indexOf(e.target as unknown as HTMLElement);
-                  focusableElements[current - 1]?.focus();
-                }
-              })
-              .otherwise(() => {});
+              if (isNotNullish(event.currentTarget)) {
+                const focusableElements = getFocusableElements(
+                  event.currentTarget as unknown as HTMLDivElement,
+                );
+
+                const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
+                const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
+
+                focusableElements[nextIndex]?.focus();
+              }
+            }
           }}
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
@@ -371,8 +362,8 @@ export function LakeSelect<V>({
                   (hovered || isSelected) && styles.itemHighlighted,
                   focused && styles.itemFocused,
                 ]}
-                accessibilityRole="option"
-                accessibilitySelected={true}
+                role="option"
+                aria-selected={true}
                 onPress={() => {
                   onValueChange(item.value);
                   close();

@@ -1,10 +1,11 @@
-import { FlexStyle, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { isNotNullish } from "../utils/nullish";
 import { SpacingValue, spacingValues } from "./Space";
 
-const baseStyle: FlexStyle = {
+const baseStyle: ViewStyle = {
   flexGrow: 1,
   flexShrink: 1,
+  pointerEvents: "none",
 };
 
 const rawHeightStyles: Record<number, ViewStyle> = {};
@@ -29,8 +30,7 @@ type Props = {
 
 export const Fill = ({ minHeight, minWidth }: Props) => (
   <View
-    focusable={false}
-    pointerEvents="none"
+    tabIndex={-1}
     style={[
       styles.base,
       isNotNullish(minHeight) && heightStyles[minHeight],

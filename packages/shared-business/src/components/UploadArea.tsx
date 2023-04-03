@@ -61,28 +61,28 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: "50%",
     opacity: 0,
-    transform: [{ translateX: "-50%" }, { scale: 0.6 }],
+    transform: "translateX(-50%) scale(0.6)",
     transitionProperty: ["opacity", "transform"],
     transitionDuration: "300ms",
     transitionTimingFunction: "ease-in-out",
   },
   decorativeIconLeftHovered: {
     opacity: 0.3,
-    transform: [{ translateX: "-50%" }, { translateX: -24 }, { scale: 0.6 }, { rotate: "-5deg" }],
+    transform: "translateX(-50%) translateX(-24px) scale(0.6) rotate(-5deg)",
   },
   decorativeIconRight: {
     position: "absolute",
     bottom: 0,
     left: "50%",
     opacity: 0,
-    transform: [{ translateX: "-50%" }, { scale: 0.6 }],
+    transform: "translateX(-50%) scale(0.6)",
     transitionProperty: ["opacity", "transform"],
     transitionDuration: "300ms",
     transitionTimingFunction: "ease-in-out",
   },
   decorativeIconRightHovered: {
     opacity: 0.3,
-    transform: [{ translateX: "-50%" }, { translateX: 24 }, { scale: 0.6 }, { rotate: "5deg" }],
+    transform: "translateX(-50%) translateX(24px) scale(0.6) rotate(5deg)",
   },
   progressBar: {
     flex: 1,
@@ -191,6 +191,7 @@ export const UploadArea = ({
     <View style={commonStyles.fill}>
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
         <View
+          aria-errormessage={error != null ? error : fileRejections[0]?.errors.join(", ")}
           style={[
             styles.container,
             disabled && styles.disabled,
@@ -199,7 +200,6 @@ export const UploadArea = ({
             isDragActive && styles.activeContainer,
             (error != null || fileRejections.length > 0) && styles.errorContainer,
           ]}
-          accessibilityErrorMessage={error != null ? error : fileRejections[0]?.errors.join(", ")}
         >
           <input {...getInputProps()} />
 
@@ -335,7 +335,7 @@ export const UploadArea = ({
 
                 <Space width={20} />
 
-                <View accessibilityRole="progressbar" style={styles.progressBar}>
+                <View role="progressbar" style={styles.progressBar}>
                   <View style={[styles.progress, { width: `${progress}%` }]} />
                 </View>
               </Box>

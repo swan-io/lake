@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 });
 
 export const Stack = forwardRef<View, Props>(
-  // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.17.5/packages/react-native-web/src/exports/View/index.js#L133
+  // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/View/index.js#L146
   ({ children, space, wrap = false, ...props }, forwardedRef) => {
     const { direction = "column" } = props;
     const horizontal = direction === "row" || direction === "rowReverse";
