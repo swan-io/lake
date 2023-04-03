@@ -1,0 +1,23 @@
+name: Push new keys to Lokalise
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  test:
+    name: Push to lokalise
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Push keys
+        run: yarn lokalise sync
