@@ -6,8 +6,9 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useCallback, useEffect } from "react";
 import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
+import { PlaceDetail } from "../hooks/useGoogleMapSDK";
 import { locale, t } from "../utils/i18n";
-import { AddressSearchInput, PlaceDetail } from "./AddressSearchInput";
+import { GMapAddressSearchInput } from "./GMapAddressSearchInput";
 
 type AddressField = {
   address: string;
@@ -26,6 +27,7 @@ type Props = {
   optionalLabel?: string;
   placeholder?: string;
   isLarge: boolean;
+  apiKey: string;
 } & FormProps;
 
 export const AddressFormPart = ({
@@ -40,6 +42,7 @@ export const AddressFormPart = ({
   setFieldValue,
   listenFields,
   isLarge,
+  apiKey,
 }: Props) => {
   const [manualModeEnabled, setManualMode] = useBoolean(
     initialAddress !== "" || initialCity !== "" || initialPostalCode !== "",
@@ -71,8 +74,9 @@ export const AddressFormPart = ({
             label={label ?? t("addressFormPart.addressLabel")}
             optionalLabel={optionalLabel}
             render={id => (
-              <AddressSearchInput
+              <GMapAddressSearchInput
                 inputRef={ref}
+                apiKey={apiKey}
                 emptyResultText={t("common.noResult")}
                 placeholder={placeholder ?? t("addressFormPart.placeholder")}
                 language={locale.language}
