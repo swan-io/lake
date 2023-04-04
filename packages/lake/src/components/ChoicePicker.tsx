@@ -1,6 +1,7 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
+import { useFirstMountState } from "../hooks/useFirstMountState";
 import { useResponsive } from "../hooks/useResponsive";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
@@ -102,8 +103,16 @@ export const ChoicePicker = <T,>({
   value,
   onChange,
 }: Props<T>) => {
+  const isFirstMount = useFirstMountState();
   const { desktop } = useResponsive(breakpoints.medium);
   const [index, setIndex] = useState(0);
+
+  // On mobile, we set by select by default the first item
+  useEffect(() => {
+    if (isFirstMount && !desktop && items[0] != null) {
+      onChange(items[0]);
+    }
+  }, [isFirstMount, desktop, items, onChange]);
 
   return (
     <View>
@@ -150,7 +159,15 @@ export const ChoicePicker = <T,>({
             icon="chevron-left-filled"
             mode="secondary"
             forceBackground={true}
-            onPress={() => setIndex(Math.max(0, index - 1))}
+            onPress={() => {
+              const newIndex = Math.max(0, index - 1);
+              setIndex(newIndex);
+
+              const newItem = items[newIndex];
+              if (newItem != null) {
+                onChange(newItem);
+              }
+            }}
             disabled={index === 0}
           />
         </View>
@@ -162,7 +179,15 @@ export const ChoicePicker = <T,>({
             icon="chevron-right-filled"
             mode="secondary"
             forceBackground={true}
-            onPress={() => setIndex(Math.min(items.length - 1, index + 1))}
+            onPress={() => {
+              const newIndex = Math.min(items.length - 1, index + 1);
+              setIndex(newIndex);
+
+              const newItem = items[newIndex];
+              if (newItem != null) {
+                onChange(newItem);
+              }
+            }}
             disabled={index === items.length - 1}
           />
         </View>
