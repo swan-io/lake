@@ -6,6 +6,7 @@ import {
   backgroundColor,
   breakpoints,
   colors,
+  negativeSpacings,
   shadows,
   spacings,
 } from "../constants/design";
@@ -130,8 +131,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   closeButton: {
-    top: -16,
-    right: -17,
+    top: negativeSpacings[16],
+    right: negativeSpacings[16],
   },
 });
 
