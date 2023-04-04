@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   closeButton: {
-    top: negativeSpacings[4],
-    right: negativeSpacings[4],
+    top: negativeSpacings[16],
+    right: negativeSpacings[16],
   },
 });
 
