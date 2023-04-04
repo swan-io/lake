@@ -22,6 +22,7 @@ type Props = {
   onBlur?: () => void;
   accountCountry: AccountCountry;
   isCompany: boolean;
+  required?: boolean;
 };
 
 export const TaxIdentificationNumberInput = ({
@@ -33,11 +34,12 @@ export const TaxIdentificationNumberInput = ({
   onBlur,
   accountCountry,
   isCompany,
+  required,
 }: Props) => {
   return (
     <LakeLabel
       label={t("beneficiaryForm.beneficiary.taxIdentificationNumber")}
-      optionalLabel={t("common.optional")}
+      optionalLabel={required === true ? undefined : t("common.optional")}
       help={
         <LakeTooltip
           content={getTaxNumberTooltip(accountCountry)}

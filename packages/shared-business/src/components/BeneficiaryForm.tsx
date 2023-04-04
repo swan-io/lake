@@ -12,7 +12,7 @@ import { noop } from "@swan-io/lake/src/utils/function";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { hasDefinedKeys, useForm } from "react-ux-form";
+import { combineValidators, hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
@@ -95,6 +95,12 @@ export const validateUbo = (
 ): Partial<Record<keyof EditorState, string | undefined>> => {
   const isAddressRequired = accountCountry === "DEU";
   const isBirthInfoRequired = accountCountry !== "DEU";
+  const isTaxIdentificationNumberRequired =
+    accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU";
+
+  const validateTaxNumber = isTaxIdentificationNumberRequired
+    ? combineValidators(validateNullableRequired, validateIndividualTaxNumber(accountCountry))
+    : validateIndividualTaxNumber(accountCountry);
 
   return {
     firstName: validateNullableRequired(editorState.firstName) as SyncValidationResult,
@@ -130,7 +136,7 @@ export const validateUbo = (
     residencyAddressPostalCode: isAddressRequired
       ? (validateNullableRequired(editorState.residencyAddressPostalCode) as SyncValidationResult)
       : undefined,
-    taxIdentificationNumber: validateIndividualTaxNumber(accountCountry)(
+    taxIdentificationNumber: validateTaxNumber(
       editorState.taxIdentificationNumber ?? "",
     ) as SyncValidationResult,
     indirect:
@@ -352,7 +358,17 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         },
         taxIdentificationNumber: {
           initialValue: initialState?.taxIdentificationNumber,
-          validate: validateIndividualTaxNumber(accountCountry),
+          validate: (value, { getFieldState }) => {
+            const uboCountry = getFieldState("country").value;
+            if (accountCountry === "DEU" && uboCountry === "DEU") {
+              return combineValidators(
+                validateNullableRequired,
+                validateIndividualTaxNumber(accountCountry),
+              )(value);
+            }
+
+            return validateIndividualTaxNumber(accountCountry)(value);
+          },
           sanitize: value => value?.trim(),
         },
       });
@@ -596,6 +612,8 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           />
                         )}
                       </Field>
+
+                      <Space height={12} />
                     </>
                   )}
 
@@ -706,6 +724,8 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   onChange={onChange}
                                   accountCountry={accountCountry}
                                   isCompany={false}
+                                  // is mandatory for German accounts and UBO living in Germany
+                                  required={true}
                                 />
                               )}
                             </Field>
