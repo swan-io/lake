@@ -216,8 +216,13 @@ export const ChoicePicker = <T,>({
                 >
                   <View style={styles.tileContents}>
                     <View style={styles.tileRenderedContents}>{renderItem(item)}</View>
-                    <Space height={24} />
-                    <LakeRadio value={value != null && getId(item) === getId(value)} />
+
+                    {desktop && (
+                      <>
+                        <Space height={24} />
+                        <LakeRadio value={value != null && getId(item) === getId(value)} />
+                      </>
+                    )}
                   </View>
                 </Tile>
               )}
