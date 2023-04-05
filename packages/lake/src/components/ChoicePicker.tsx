@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { PanResponder, StyleSheet, View } from "react-native";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useFirstMountState } from "../hooks/useFirstMountState";
 import { useResponsive } from "../hooks/useResponsive";
@@ -107,6 +107,55 @@ export const ChoicePicker = <T,>({
   const { desktop } = useResponsive(breakpoints.medium);
   const [index, setIndex] = useState(0);
 
+  const panStartIndex = useRef(index);
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: () => !desktop,
+        onPanResponderGrant: event => {
+          // @ts-expect-error
+          const target: HTMLElement = event.currentTarget;
+
+          panStartIndex.current = index;
+          target.style.transitionDuration = "0ms";
+        },
+        onPanResponderMove: (event, gestureState) => {
+          // @ts-expect-error
+          const target: HTMLElement = event.currentTarget;
+          const width = target.offsetWidth;
+          const translateX = -width * panStartIndex.current + gestureState.dx;
+
+          target.style.transform = `translateX(${translateX}px)`;
+        },
+        onPanResponderRelease: (event, gestureState) => {
+          // @ts-expect-error
+          const target: HTMLElement = event.currentTarget;
+          const width = target.offsetWidth;
+
+          const decrementIndex = gestureState.dx > width / 2 || gestureState.vx > 0.5;
+          const incrementIndex = gestureState.dx < -width / 2 || gestureState.vx < -0.5;
+
+          const newIndex = decrementIndex
+            ? Math.max(0, panStartIndex.current - 1)
+            : incrementIndex
+            ? Math.min(items.length - 1, panStartIndex.current + 1)
+            : panStartIndex.current;
+
+          setIndex(newIndex);
+          const newItem = items[newIndex];
+          if (newIndex !== panStartIndex.current && newItem != null) {
+            onChange(newItem);
+          }
+
+          // @ts-expect-error
+          target.style.transitionDuration = null;
+          target.style.transform = `translateX(-${100 * newIndex}%)`;
+        },
+      }),
+    [desktop, index, items, onChange],
+  );
+
   // On mobile, we set by select by default the first item
   useEffect(() => {
     if (isFirstMount && !desktop && items[0] != null) {
@@ -118,6 +167,7 @@ export const ChoicePicker = <T,>({
     <View>
       <View style={styles.root}>
         <View
+          {...panResponder.panHandlers}
           style={[
             styles.container,
             !desktop && styles.mobileContainer,
