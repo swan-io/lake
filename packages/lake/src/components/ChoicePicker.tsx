@@ -1,20 +1,13 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { PanResponder, StyleSheet, View } from "react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { match } from "ts-pattern";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
-import { useFirstMountState } from "../hooks/useFirstMountState";
 import { useResponsive } from "../hooks/useResponsive";
-import { clampValue } from "../utils/math";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 import { Tile } from "./Tile";
-
-const ELASTIC_LENGTH = 60; // the maximum value you can reach
-const ELASTIC_STRENGTH = 0.008; // higher value, maximum value reached faster
-
-const CHANGE_INDEX_TILE_PERCENTAGE = 0.5; // between 0 and 1, lower value, more sensitive
-const SWIPE_VELOCITY = 0.5; // higher value, less sensitive
 
 const styles = StyleSheet.create({
   root: {
@@ -23,6 +16,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     overflow: "hidden",
     marginHorizontal: negativeSpacings[12],
+  },
+  scroll: {
+    scrollSnapType: "x mandatory",
   },
   container: {
     alignSelf: "stretch",
@@ -43,6 +39,8 @@ const styles = StyleSheet.create({
     flexBasis: "33.333%",
     maxWidth: 300,
     padding: spacings[12],
+  },
+  itemAnimation: {
     transform: "translateZ(0px)",
     animationKeyframes: {
       from: {
@@ -66,6 +64,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexBasis: "auto",
     maxWidth: "none",
+    scrollSnapAlign: "center",
   },
   tileContents: {
     alignItems: "center",
@@ -110,91 +109,91 @@ export const ChoicePicker = <T,>({
   value,
   onChange,
 }: Props<T>) => {
-  const isFirstMount = useFirstMountState();
+  const containerRef = useRef<ScrollView | null>(null);
   const { desktop } = useResponsive(breakpoints.medium);
-  const [index, setIndex] = useState(0);
+  const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 
-  const panStartIndex = useRef(index);
-
-  const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => !desktop,
-        onPanResponderGrant: event => {
-          // @ts-expect-error
-          const target: HTMLElement = event.currentTarget;
-
-          panStartIndex.current = index;
-          target.style.transitionDuration = "0ms";
-        },
-        onPanResponderMove: (event, gestureState) => {
-          // @ts-expect-error
-          const target: HTMLElement = event.currentTarget;
-          const width = target.offsetWidth;
-          const translateX = -width * panStartIndex.current + gestureState.dx;
-          const minTranslate = -width * (items.length - 1);
-
-          const leftOverflow = Math.max(translateX, 0);
-          const elasticLeftOffset =
-            ELASTIC_LENGTH * (1 - Math.exp(-ELASTIC_STRENGTH * leftOverflow));
-
-          const rightOverflow = -Math.min(translateX - minTranslate, 0);
-          const elasticRightOffset =
-            ELASTIC_LENGTH * (1 - Math.exp(-ELASTIC_STRENGTH * rightOverflow));
-
-          const clampedTranslateX = clampValue(minTranslate, 0)(translateX);
-          const finalTranslateX = clampedTranslateX + elasticLeftOffset - elasticRightOffset;
-
-          target.style.transform = `translateX(${finalTranslateX}px)`;
-        },
-        onPanResponderRelease: (event, gestureState) => {
-          // @ts-expect-error
-          const target: HTMLElement = event.currentTarget;
-          const width = target.offsetWidth;
-
-          const decrementIndex =
-            gestureState.dx > width * CHANGE_INDEX_TILE_PERCENTAGE ||
-            gestureState.vx > SWIPE_VELOCITY;
-          const incrementIndex =
-            gestureState.dx < -width * CHANGE_INDEX_TILE_PERCENTAGE ||
-            gestureState.vx < -SWIPE_VELOCITY;
-
-          const newIndex = decrementIndex
-            ? Math.max(0, panStartIndex.current - 1)
-            : incrementIndex
-            ? Math.min(items.length - 1, panStartIndex.current + 1)
-            : panStartIndex.current;
-
-          setIndex(newIndex);
-          const newItem = items[newIndex];
-          if (newIndex !== panStartIndex.current && newItem != null) {
-            onChange(newItem);
-          }
-
-          // @ts-expect-error
-          target.style.transitionDuration = null;
-          target.style.transform = `translateX(-${100 * newIndex}%)`;
-        },
-      }),
-    [desktop, index, items, onChange],
-  );
-
-  // On mobile, we select by default the first item
   useEffect(() => {
-    if (isFirstMount && !desktop && value == null && items[0] != null) {
+    if (desktop) {
+      return;
+    }
+
+    // auto scroll to selected value on mobile
+    const scrollContainer = containerRef.current;
+    const index = items.findIndex(item => value === item);
+    if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
+      const width = scrollContainer.offsetWidth;
+      scrollContainer.scrollTo({ x: index * width, animated: true });
+    }
+
+    // if no value is selected, select first item
+    if (value == null && items[0] != null) {
       onChange(items[0]);
     }
-  }, [isFirstMount, desktop, value, items, onChange]);
+    // disable exhaustive-deps because we only want to run this effect only when screen size go from desktop to mobile
+  }, [desktop]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onScroll = () => {
+    // prevent scroll event when we change screen size from mobile to desktop
+    if (desktop) {
+      return;
+    }
+
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+      const item = items[index];
+      if (item != null) {
+        onChange(item);
+      }
+
+      match(index)
+        .with(0, () => setMobilePosition("start"))
+        .with(items.length - 1, () => setMobilePosition("end"))
+        .otherwise(() => setMobilePosition("middle"));
+    }
+  };
+
+  const onPressPrevious = () => {
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+      const previousIndex = Math.max(0, index - 1);
+
+      containerRef.current?.scrollTo({ x: previousIndex * width, animated: true });
+    }
+  };
+
+  const onPressNext = () => {
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+      const nextIndex = Math.min(items.length - 1, index + 1);
+
+      containerRef.current?.scrollTo({ x: nextIndex * width, animated: true });
+    }
+  };
 
   return (
     <View>
       <View style={styles.root}>
-        <View
-          {...panResponder.panHandlers}
-          style={[
+        <ScrollView
+          ref={containerRef}
+          horizontal={!desktop}
+          scrollEnabled={!desktop}
+          onScroll={onScroll}
+          scrollEventThrottle={200}
+          style={styles.scroll}
+          contentContainerStyle={[
             styles.container,
             !desktop && styles.mobileContainer,
-            !desktop && { transform: `translateX(-${100 * index}%)` },
+            !desktop && { width: `${items.length * 100}%` },
           ]}
         >
           {items.map((item, index) => (
@@ -202,9 +201,11 @@ export const ChoicePicker = <T,>({
               key={String(index)}
               style={[
                 styles.item,
+                desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
+                desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
                 !desktop && styles.itemSmallViewport,
-                { animationDelay: `${200 + 100 * index}ms` },
+                !desktop && { width: `${100 / items.length}%` },
               ]}
               onPress={() => onChange(item)}
             >
@@ -223,7 +224,7 @@ export const ChoicePicker = <T,>({
               )}
             </Pressable>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       {!desktop && (
@@ -232,16 +233,8 @@ export const ChoicePicker = <T,>({
             icon="chevron-left-filled"
             mode="secondary"
             forceBackground={true}
-            onPress={() => {
-              const newIndex = Math.max(0, index - 1);
-              setIndex(newIndex);
-
-              const newItem = items[newIndex];
-              if (newItem != null) {
-                onChange(newItem);
-              }
-            }}
-            disabled={index === 0}
+            onPress={onPressPrevious}
+            disabled={mobilePosition === "start"}
           />
         </View>
       )}
@@ -252,16 +245,8 @@ export const ChoicePicker = <T,>({
             icon="chevron-right-filled"
             mode="secondary"
             forceBackground={true}
-            onPress={() => {
-              const newIndex = Math.min(items.length - 1, index + 1);
-              setIndex(newIndex);
-
-              const newItem = items[newIndex];
-              if (newItem != null) {
-                onChange(newItem);
-              }
-            }}
-            disabled={index === items.length - 1}
+            onPress={onPressNext}
+            disabled={mobilePosition === "end"}
           />
         </View>
       )}
