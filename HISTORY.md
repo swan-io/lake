@@ -1,3 +1,13 @@
+## 1.6.0
+
+- Add sort UI for mobile (0252fa1)
+- Update component using Google API name (1ea2f17)
+- Fix filters UI for mobile (2fe3054)
+- Update make field optional for german UBO (212d60e)
+- Fix button background with `forceBackground` + `disabled` (9b1ad9d)
+- Fix close button position in modal (0cc87b3)
+- Update refacto tax identification number validation and input (99d1f02)
+
 ## 1.5.1
 
 Fixes:
