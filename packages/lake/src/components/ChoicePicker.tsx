@@ -169,12 +169,12 @@ export const ChoicePicker = <T,>({
     [desktop, index, items, onChange],
   );
 
-  // On mobile, we set by select by default the first item
+  // On mobile, we select by default the first item
   useEffect(() => {
-    if (isFirstMount && !desktop && items[0] != null) {
+    if (isFirstMount && !desktop && value == null && items[0] != null) {
       onChange(items[0]);
     }
-  }, [isFirstMount, desktop, items, onChange]);
+  }, [isFirstMount, desktop, value, items, onChange]);
 
   return (
     <View>
