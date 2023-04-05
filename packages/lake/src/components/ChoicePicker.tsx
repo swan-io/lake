@@ -81,12 +81,16 @@ const styles = StyleSheet.create({
     top: "50%",
     left: negativeSpacings[24],
     transform: "translateY(-50%)",
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
   rightButton: {
     position: "absolute",
     top: "50%",
     right: negativeSpacings[24],
     transform: "translateY(-50%)",
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
   },
 });
 
@@ -232,27 +236,25 @@ export const ChoicePicker = <T,>({
       </View>
 
       {!desktop && (
-        <View style={styles.leftButton}>
-          <LakeButton
-            icon="chevron-left-filled"
-            mode="secondary"
-            forceBackground={true}
-            onPress={onPressPrevious}
-            disabled={mobilePosition === "start"}
-          />
-        </View>
+        <LakeButton
+          icon="chevron-left-filled"
+          mode="secondary"
+          forceBackground={true}
+          onPress={onPressPrevious}
+          disabled={mobilePosition === "start"}
+          style={styles.leftButton}
+        />
       )}
 
       {!desktop && (
-        <View style={styles.rightButton}>
-          <LakeButton
-            icon="chevron-right-filled"
-            mode="secondary"
-            forceBackground={true}
-            onPress={onPressNext}
-            disabled={mobilePosition === "end"}
-          />
-        </View>
+        <LakeButton
+          icon="chevron-right-filled"
+          mode="secondary"
+          forceBackground={true}
+          onPress={onPressNext}
+          disabled={mobilePosition === "end"}
+          style={styles.rightButton}
+        />
       )}
     </View>
   );
