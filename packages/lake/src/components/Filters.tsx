@@ -360,6 +360,7 @@ type FilterDateProps = {
   onPressRemove: () => void;
   autoOpen?: boolean;
 };
+
 function FilterDate({
   label,
   initialValue,
@@ -538,6 +539,22 @@ function FilterInput({
   );
 }
 
+type FilterBooleanTagProps = {
+  children: string;
+  onAdd: () => void;
+  onPressRemove: () => void;
+};
+
+function FilterBooleanTag({ children, onAdd, onPressRemove }: FilterBooleanTagProps) {
+  useEffect(onAdd, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <Tag color="current" onPressRemove={onPressRemove}>
+      {children}
+    </Tag>
+  );
+}
+
 export type FilterCheckboxDef<T> = {
   type: "checkbox";
   label: string;
@@ -711,15 +728,17 @@ export const FiltersStack = <T extends FiltersDefinition>({
                 ),
               )
               .with({ type: "boolean" }, ({ label }) => (
-                <Tag
-                  color="current"
+                <FilterBooleanTag
+                  onAdd={() => {
+                    onChangeFilters({ ...filters, [filterName]: true });
+                  }}
                   onPressRemove={() => {
                     onChangeFilters({ ...filters, [filterName]: undefined });
                     onChangeOpened(openedFilters.filter(f => f !== filterName));
                   }}
                 >
                   {label}
-                </Tag>
+                </FilterBooleanTag>
               ))
               .exhaustive()}
           </View>
