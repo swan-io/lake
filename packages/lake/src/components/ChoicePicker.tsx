@@ -10,7 +10,8 @@ import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 import { Tile } from "./Tile";
 
-const OFFSET_ELASTIC_FACTOR = 1.4;
+const ELASTIC_LENGTH = 60; // the maximum value you can reach
+const ELASTIC_STRENGTH = 0.008; // higher value, maximum value reached faster
 
 const styles = StyleSheet.create({
   root: {
@@ -131,10 +132,12 @@ export const ChoicePicker = <T,>({
           const minTranslate = -width * (items.length - 1);
 
           const leftOverflow = Math.max(translateX, 0);
-          const elasticLeftOffset = Math.pow(leftOverflow, 1 / OFFSET_ELASTIC_FACTOR);
+          const elasticLeftOffset =
+            ELASTIC_LENGTH * (1 - Math.exp(-ELASTIC_STRENGTH * leftOverflow));
 
           const rightOverflow = -Math.min(translateX - minTranslate, 0);
-          const elasticRightOffset = Math.pow(rightOverflow, 1 / OFFSET_ELASTIC_FACTOR);
+          const elasticRightOffset =
+            ELASTIC_LENGTH * (1 - Math.exp(-ELASTIC_STRENGTH * rightOverflow));
 
           const clampedTranslateX = clampValue(minTranslate, 0)(translateX);
           const finalTranslateX = clampedTranslateX + elasticLeftOffset - elasticRightOffset;
