@@ -13,6 +13,9 @@ import { Tile } from "./Tile";
 const ELASTIC_LENGTH = 60; // the maximum value you can reach
 const ELASTIC_STRENGTH = 0.008; // higher value, maximum value reached faster
 
+const CHANGE_INDEX_TILE_PERCENTAGE = 0.5; // between 0 and 1, lower value, more sensitive
+const SWIPE_VELOCITY = 0.5; // higher value, less sensitive
+
 const styles = StyleSheet.create({
   root: {
     alignSelf: "stretch",
@@ -149,8 +152,12 @@ export const ChoicePicker = <T,>({
           const target: HTMLElement = event.currentTarget;
           const width = target.offsetWidth;
 
-          const decrementIndex = gestureState.dx > width / 2 || gestureState.vx > 0.5;
-          const incrementIndex = gestureState.dx < -width / 2 || gestureState.vx < -0.5;
+          const decrementIndex =
+            gestureState.dx > width * CHANGE_INDEX_TILE_PERCENTAGE ||
+            gestureState.vx > SWIPE_VELOCITY;
+          const incrementIndex =
+            gestureState.dx < -width * CHANGE_INDEX_TILE_PERCENTAGE ||
+            gestureState.vx < -SWIPE_VELOCITY;
 
           const newIndex = decrementIndex
             ? Math.max(0, panStartIndex.current - 1)
