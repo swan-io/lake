@@ -186,7 +186,6 @@ export const ChoicePicker = <T,>({
         <ScrollView
           ref={containerRef}
           horizontal={!desktop}
-          scrollEnabled={!desktop}
           onScroll={onScroll}
           scrollEventThrottle={200}
           style={styles.scroll}
