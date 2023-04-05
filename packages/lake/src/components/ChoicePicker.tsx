@@ -3,11 +3,14 @@ import { PanResponder, StyleSheet, View } from "react-native";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useFirstMountState } from "../hooks/useFirstMountState";
 import { useResponsive } from "../hooks/useResponsive";
+import { clampValue } from "../utils/math";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 import { Tile } from "./Tile";
+
+const OFFSET_ELASTIC_FACTOR = 1.4;
 
 const styles = StyleSheet.create({
   root: {
@@ -125,8 +128,18 @@ export const ChoicePicker = <T,>({
           const target: HTMLElement = event.currentTarget;
           const width = target.offsetWidth;
           const translateX = -width * panStartIndex.current + gestureState.dx;
+          const minTranslate = -width * (items.length - 1);
 
-          target.style.transform = `translateX(${translateX}px)`;
+          const leftOverflow = Math.max(translateX, 0);
+          const elasticLeftOffset = Math.pow(leftOverflow, 1 / OFFSET_ELASTIC_FACTOR);
+
+          const rightOverflow = -Math.min(translateX - minTranslate, 0);
+          const elasticRightOffset = Math.pow(rightOverflow, 1 / OFFSET_ELASTIC_FACTOR);
+
+          const clampedTranslateX = clampValue(minTranslate, 0)(translateX);
+          const finalTranslateX = clampedTranslateX + elasticLeftOffset - elasticRightOffset;
+
+          target.style.transform = `translateX(${finalTranslateX}px)`;
         },
         onPanResponderRelease: (event, gestureState) => {
           // @ts-expect-error
