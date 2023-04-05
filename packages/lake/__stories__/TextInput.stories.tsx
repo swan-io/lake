@@ -64,6 +64,14 @@ export const Variations = () => {
         />
       </StoryPart>
 
+      <StoryPart title="With help">
+        <EditableInputText help="9 characters" />
+      </StoryPart>
+
+      <StoryPart title="With help and error">
+        <EditableInputText help="9 characters" error="Invalid" />
+      </StoryPart>
+
       <StoryPart title="Disabled">
         <EditableInputText disabled={true} />
       </StoryPart>

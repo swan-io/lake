@@ -1,5 +1,8 @@
+import { noop } from "@swan-io/lake/src/utils/function";
 import { Validator } from "react-ux-form";
+import { match } from "ts-pattern";
 import { t } from "./i18n";
+import { AccountCountry } from "./templateTranslations";
 
 const VAT_NUMBER_REGEX =
   /^((AT)?U[0-9]{8}|(BE)?0[0-9]{9}|(BG)?[0-9]{9,10}|(CY)?[0-9]{8}L|(CZ)?[0-9]{8,10}|(DE)?[0-9]{9}|(DK)?[0-9]{8}|(EE)?[0-9]{9}|(EL|GR)?[0-9]{9}|(ES)?[0-9A-Z][0-9]{7}[0-9A-Z]|(FI)?[0-9]{8}|(FR)?[0-9A-Z]{2}[0-9]{9}|(GB)?([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})|(HU)?[0-9]{8}|(IE)?[0-9]S[0-9]{5}L|(IT)?[0-9]{11}|(LT)?([0-9]{9}|[0-9]{12})|(LU)?[0-9]{8}|(LV)?[0-9]{11}|(MT)?[0-9]{8}|(NL)?[0-9]{9}B[0-9]{2}|(PL)?[0-9]{10}|(PT)?[0-9]{9}|(RO)?[0-9]{2,10}|(SE)?[0-9]{12}|(SI)?[0-9]{8}|(SK)?[0-9]{10})$/;
@@ -54,22 +57,50 @@ export const validateBooleanRequired: Validator<boolean | undefined> = value => 
   }
 };
 
-export const validateIndividualTaxNumber: Validator<string | undefined> = value => {
-  if (value == null || !value) {
-    return;
-  }
-  // accept 11 digits
-  if (!/^\d{11}$/.test(value)) {
-    return t("common.form.invalidTaxIdentificationNumber");
-  }
-};
 
-export const validateCompanyTaxNumber: Validator<string | undefined> = value => {
-  if (value == null || !value) {
-    return;
-  }
-  // accept 10 or 11 digits
-  if (!/^\d{10,11}$/.test(value)) {
-    return t("common.form.invalidTaxIdentificationNumber");
-  }
-};
+
+export const validateIndividualTaxNumber =
+  (accountCountry: AccountCountry): Validator<string | undefined> =>
+  value => {
+    if (value == null || !value) {
+      return;
+    }
+
+    return match(accountCountry)
+      .with("DEU", () => {
+        // accept 11 digits
+        if (!/^\d{11}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("ESP", () => {
+        // accept 9 characters
+        if (!/^[a-zA-Z0-9]{9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .otherwise(noop);
+  };
+
+export const validateCompanyTaxNumber =
+  (accountCountry: AccountCountry): Validator<string | undefined> =>
+  value => {
+    if (value == null || !value) {
+      return;
+    }
+
+    return match(accountCountry)
+      .with("DEU", () => {
+        // accept 10 or 11 digits
+        if (!/^\d{10,11}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("ESP", () => {
+        // accept 9 characters
+        if (!/^[a-zA-Z0-9]{9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .otherwise(noop);
+  };

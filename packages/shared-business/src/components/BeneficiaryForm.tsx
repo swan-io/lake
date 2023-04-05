@@ -12,7 +12,7 @@ import { noop } from "@swan-io/lake/src/utils/function";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { hasDefinedKeys, useForm } from "react-ux-form";
+import { combineValidators, hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
@@ -33,6 +33,7 @@ import {
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
 import { GMapCityInput } from "./GMapCityInput";
+import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -94,6 +95,12 @@ export const validateUbo = (
 ): Partial<Record<keyof EditorState, string | undefined>> => {
   const isAddressRequired = accountCountry === "DEU";
   const isBirthInfoRequired = accountCountry !== "DEU";
+  const isTaxIdentificationNumberRequired =
+    accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU";
+
+  const validateTaxNumber = isTaxIdentificationNumberRequired
+    ? combineValidators(validateNullableRequired, validateIndividualTaxNumber(accountCountry))
+    : validateIndividualTaxNumber(accountCountry);
 
   return {
     firstName: validateNullableRequired(editorState.firstName) as SyncValidationResult,
@@ -129,7 +136,7 @@ export const validateUbo = (
     residencyAddressPostalCode: isAddressRequired
       ? (validateNullableRequired(editorState.residencyAddressPostalCode) as SyncValidationResult)
       : undefined,
-    taxIdentificationNumber: validateIndividualTaxNumber(
+    taxIdentificationNumber: validateTaxNumber(
       editorState.taxIdentificationNumber ?? "",
     ) as SyncValidationResult,
     indirect:
@@ -351,7 +358,17 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         },
         taxIdentificationNumber: {
           initialValue: initialState?.taxIdentificationNumber,
-          validate: validateIndividualTaxNumber,
+          validate: (value, { getFieldState }) => {
+            const uboCountry = getFieldState("country").value;
+            if (accountCountry === "DEU" && uboCountry === "DEU") {
+              return combineValidators(
+                validateNullableRequired,
+                validateIndividualTaxNumber(accountCountry),
+              )(value);
+            }
+
+            return validateIndividualTaxNumber(accountCountry)(value);
+          },
           sanitize: value => value?.trim(),
         },
       });
@@ -579,6 +596,27 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                     </FieldsListener>
                   </Box>
 
+                  {accountCountry === "ESP" && (
+                    <>
+                      <Space height={12} />
+
+                      <Field name="taxIdentificationNumber">
+                        {({ value, error, valid, onChange }) => (
+                          <TaxIdentificationNumberInput
+                            value={value ?? ""}
+                            error={error}
+                            valid={valid}
+                            onChange={onChange}
+                            accountCountry={accountCountry}
+                            isCompany={false}
+                          />
+                        )}
+                      </Field>
+
+                      <Space height={12} />
+                    </>
+                  )}
+
                   <Field name="type">
                     {({ value, onChange }) => (
                       <LakeLabel
@@ -679,21 +717,15 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
 
                             <Field name="taxIdentificationNumber">
                               {({ value, error, valid, onChange }) => (
-                                <LakeLabel
-                                  label={t("beneficiaryForm.beneficiary.taxIdentificationNumber")}
-                                  optionalLabel={t("common.optional")}
-                                  render={id => (
-                                    <LakeTextInput
-                                      id={id}
-                                      placeholder={t(
-                                        "beneficiaryForm.beneficiary.taxIdentificationNumberPlaceholder",
-                                      )}
-                                      value={value}
-                                      error={error}
-                                      valid={valid}
-                                      onChangeText={onChange}
-                                    />
-                                  )}
+                                <TaxIdentificationNumberInput
+                                  value={value ?? ""}
+                                  error={error}
+                                  valid={valid}
+                                  onChange={onChange}
+                                  accountCountry={accountCountry}
+                                  isCompany={false}
+                                  // is mandatory for German accounts and UBO living in Germany
+                                  required={true}
                                 />
                               )}
                             </Field>
