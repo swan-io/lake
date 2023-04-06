@@ -3,6 +3,7 @@ import { PanResponder, Pressable, ScrollView, StyleSheet, View } from "react-nat
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
+import { limitElastic } from "../utils/math";
 import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
@@ -10,6 +11,11 @@ import { TransitionView } from "./TransitionView";
 
 const ELASTIC_LENGTH = 100; // the maximum value you can reach
 const ELASTIC_STRENGTH = 0.008; // higher value, maximum value reached faster
+
+const limitGrab = limitElastic({
+  elasticLength: ELASTIC_LENGTH,
+  elasticStrength: ELASTIC_STRENGTH,
+});
 
 const DELTA_Y_CLOSE_THRESHOLD = 100;
 const SWIPE_CLOSE_VELOCITY = 0.5;
@@ -135,8 +141,7 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
           }
         },
         onPanResponderMove: (_event, { dy }) => {
-          const translateY =
-            dy > 0 ? dy : -ELASTIC_LENGTH * (1 - Math.exp(-ELASTIC_STRENGTH * -dy));
+          const translateY = dy > 0 ? dy : -limitGrab(-dy);
 
           if (container.current instanceof HTMLElement) {
             container.current.style.transform = `translateY(${translateY}px)`;
