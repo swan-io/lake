@@ -1,8 +1,10 @@
 import { Box } from "@swan-io/lake/src/components/Box";
+import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeLabelledCheckbox } from "@swan-io/lake/src/components/LakeCheckbox";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
+import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { RadioGroup, RadioGroupItem } from "@swan-io/lake/src/components/RadioGroup";
 import { ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -209,6 +211,16 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
           isError={error != null}
         />
 
+        <Space width={4} />
+
+        <LakeTooltip
+          width={800}
+          content={t("beneficiaryForm.beneficiary.directly.info")}
+          placement="top"
+        >
+          <Icon name="info-regular" size={16} color={colors.gray[900]} />
+        </LakeTooltip>
+
         <Space width={24} />
 
         <LakeLabelledCheckbox
@@ -225,6 +237,16 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
           label={t("beneficiaryForm.beneficiary.indirectly")}
           isError={error != null}
         />
+
+        <Space width={4} />
+
+        <LakeTooltip
+          width={800}
+          content={t("beneficiaryForm.beneficiary.indirectly.info")}
+          placement="top"
+        >
+          <Icon name="info-regular" size={16} color={colors.gray[900]} />
+        </LakeTooltip>
       </Box>
 
       <Space height={4} />
