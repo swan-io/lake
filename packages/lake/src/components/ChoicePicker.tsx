@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
+import { clampValue } from "../utils/math";
 import { detectScrollAnimationEnd } from "../utils/viewport";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
@@ -148,7 +149,7 @@ export const ChoicePicker = <T,>({
     if (scrollContainer instanceof HTMLDivElement) {
       const scrollLeft = scrollContainer.scrollLeft;
       const width = scrollContainer.offsetWidth;
-      const index = Math.round(scrollLeft / width);
+      const index = clampValue(0, items.length - 1)(Math.round(scrollLeft / width));
       const item = items[index];
       if (item != null) {
         onChange(item);
