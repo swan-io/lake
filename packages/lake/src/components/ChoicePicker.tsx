@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
+import { detectScrollAnimationEnd } from "../utils/viewport";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
 import { Pressable } from "./Pressable";
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginHorizontal: negativeSpacings[12],
   },
-  scroll: {
+  scrollSnap: {
     scrollSnapType: "x mandatory",
   },
   container: {
@@ -127,7 +128,7 @@ export const ChoicePicker = <T,>({
     const index = items.findIndex(item => value === item);
     if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
       const width = scrollContainer.offsetWidth;
-      scrollContainer.scrollTo({ x: index * width, animated: true });
+      scrollContainer.scrollTo({ x: index * width, animated: false });
     }
 
     // if no value is selected, select first item
@@ -168,7 +169,14 @@ export const ChoicePicker = <T,>({
       const index = Math.round(scrollLeft / width);
       const previousIndex = Math.max(0, index - 1);
 
+      // remove scroll snap during scroll animation to avoid weird behavior on older browsers
+      scrollContainer.style.scrollSnapType = "none";
       containerRef.current?.scrollTo({ x: previousIndex * width, animated: true });
+      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+        // set back scroll snap
+        // @ts-expect-error
+        scrollContainer.style.scrollSnapType = null;
+      });
     }
   };
 
@@ -180,7 +188,14 @@ export const ChoicePicker = <T,>({
       const index = Math.round(scrollLeft / width);
       const nextIndex = Math.min(items.length - 1, index + 1);
 
+      // remove scroll snap during scroll animation to avoid weird behavior on older browsers
+      scrollContainer.style.scrollSnapType = "none";
       containerRef.current?.scrollTo({ x: nextIndex * width, animated: true });
+      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+        // set back scroll snap
+        // @ts-expect-error
+        scrollContainer.style.scrollSnapType = null;
+      });
     }
   };
 
@@ -192,7 +207,7 @@ export const ChoicePicker = <T,>({
           horizontal={!desktop}
           onScroll={onScroll}
           scrollEventThrottle={200}
-          style={styles.scroll}
+          style={styles.scrollSnap}
           contentContainerStyle={[
             styles.container,
             !desktop && styles.mobileContainer,
