@@ -201,8 +201,6 @@ export const LakeButton = memo(
             disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
 
-            typeof style == "function" ? style({ hovered, pressed, focused }) : style,
-
             match(mode)
               .with("primary", () => ({
                 backgroundColor:
@@ -238,6 +236,8 @@ export const LakeButton = memo(
                   : invariantColors.transparent,
               }))
               .exhaustive(),
+
+            typeof style == "function" ? style({ hovered, pressed, focused }) : style,
           ]}
         >
           {({ pressed, hovered }) => {
