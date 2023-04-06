@@ -15,7 +15,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "start-storybook",
+    "start": "start-storybook -p 6006",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --ext ts,tsx packages/*/src",
     "build-storybook": "build-storybook --output-dir dist",
