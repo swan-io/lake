@@ -1,10 +1,8 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeLabelledCheckbox } from "@swan-io/lake/src/components/LakeCheckbox";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
-import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { RadioGroup, RadioGroupItem } from "@swan-io/lake/src/components/RadioGroup";
 import { ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -35,6 +33,7 @@ import {
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
 import { GMapCityInput } from "./GMapCityInput";
+import { Help } from "./Help";
 import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
 const styles = StyleSheet.create({
@@ -213,13 +212,11 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
 
         <Space width={4} />
 
-        <LakeTooltip
-          width={800}
+        <Help
+          tooltipWidth={800}
+          title={t("beneficiaryForm.beneficiary.directly")}
           content={t("beneficiaryForm.beneficiary.directly.info")}
-          placement="top"
-        >
-          <Icon name="info-regular" size={16} color={colors.gray[900]} />
-        </LakeTooltip>
+        />
 
         <Space width={24} />
 
@@ -240,13 +237,11 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
 
         <Space width={4} />
 
-        <LakeTooltip
-          width={800}
+        <Help
+          tooltipWidth={800}
+          title={t("beneficiaryForm.beneficiary.indirectly")}
           content={t("beneficiaryForm.beneficiary.indirectly.info")}
-          placement="top"
-        >
-          <Icon name="info-regular" size={16} color={colors.gray[900]} />
-        </LakeTooltip>
+        />
       </Box>
 
       <Space height={4} />
