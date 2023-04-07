@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: radii[8],
     boxShadow: shadows.modal,
     alignSelf: "stretch",
-    marginTop: spacings[32],
   },
   pressableOverlay: {
     ...StyleSheet.absoluteFillObject,
