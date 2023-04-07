@@ -85,10 +85,8 @@ const styles = StyleSheet.create({
     transform: "translateY(-50%)",
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    borderWidth: 0,
-    borderRightWidth: 1,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderWidth: 1,
+    borderLeftWidth: 0,
   },
   rightButton: {
     position: "absolute",
@@ -97,10 +95,8 @@ const styles = StyleSheet.create({
     transform: "translateY(-50%)",
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    borderWidth: 0,
-    borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderWidth: 1,
+    borderRightWidth: 0,
   },
 });
 
