@@ -97,11 +97,21 @@ export const GMapAddressSearchInput = ({
     (suggestion: Suggestion) => {
       getPlaceDetails(suggestion.id).onResolve(result => {
         if (result.isOk()) {
-          onSuggestion?.(result.value);
+          const dependsOnCountriesWithMultipleCCA3 = countriesWithMultipleCCA3[country]?.includes(
+            result.value.country,
+          );
+
+          onSuggestion?.({
+            city: result.value.city,
+            completeAddress: result.value.completeAddress,
+            postalCode: result.value.postalCode,
+            streetNumber: result.value.streetNumber,
+            country: dependsOnCountriesWithMultipleCCA3 === true ? country : result.value.country,
+          });
         }
       });
     },
-    [onSuggestion],
+    [country, onSuggestion],
   );
 
   return (
