@@ -3,7 +3,9 @@ import "../packages/lake/src/assets/fonts/InterCard.css";
 import "../packages/lake/src/assets/main.css";
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: {
+    argTypesRegex: "^on[A-Z].*",
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,

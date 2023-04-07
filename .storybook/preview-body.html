@@ -3,22 +3,27 @@
 <style>
   body {
     background-color: var(--color-background-light);
+    overflow: auto !important;
   }
-  #root {
+  #storybook-root {
     transition: 300ms ease-in-out transform, 300ms ease-in-out filter;
   }
-  .BottomPanelOpen #root {
+  .BottomPanelOpen #storybook-root {
     transform: scale(0.98);
     filter: blur(4px);
   }
-  .ModalOpen #root {
-    transform: scale(0.98);
+  .ModalOpen #storybook-root {
     filter: blur(4px);
+    transform: scale(0.98);
   }
 </style>
 
-<div id="root"></div>
-<div id="full-page-layer-root"></div>
 <script>
   window.global = window;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const fullPageLayer = document.createElement("div");
+    fullPageLayer.setAttribute("id", "full-page-layer-root");
+    document.body.appendChild(fullPageLayer);
+  });
 </script>
