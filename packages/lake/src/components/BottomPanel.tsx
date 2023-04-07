@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   pressableOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...commonStyles.fill,
     outlineWidth: 0,
     // make focus indicator invisible on iOS (outline: none doesn't work)
     opacity: 0,
@@ -198,15 +198,15 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
                   {onPressClose != null ? (
                     <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
                   ) : null}
-                </FocusTrap>
 
-                <View style={styles.modal}>
-                  <View style={styles.grabContainer} {...panResponder.panHandlers}>
-                    <View style={styles.grabLine} />
+                  <View style={styles.modal}>
+                    <View style={styles.grabContainer} {...panResponder.panHandlers}>
+                      <View style={styles.grabLine} />
+                    </View>
+
+                    {children}
                   </View>
-
-                  {children}
-                </View>
+                </FocusTrap>
               </ScrollView>
 
               {/* use to expend white background on grab up */}
