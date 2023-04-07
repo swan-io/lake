@@ -98,6 +98,9 @@ const styles = StyleSheet.create({
   },
   pressableOverlay: {
     ...StyleSheet.absoluteFillObject,
+    outlineWidth: 0,
+    // make focus indicator invisible on iOS (outline: none doesn't work)
+    opacity: 0,
   },
   grabContainer: {
     paddingHorizontal: 128,
