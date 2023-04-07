@@ -3,9 +3,11 @@
 <style>
   body {
     background-color: var(--color-background-light);
-    overflow: auto !important;
   }
   #storybook-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     transition: 300ms ease-in-out transform, 300ms ease-in-out filter;
   }
   .BottomPanelOpen #storybook-root {
@@ -22,8 +24,14 @@
   window.global = window;
 
   window.addEventListener("DOMContentLoaded", () => {
-    const fullPageLayer = document.createElement("div");
-    fullPageLayer.setAttribute("id", "full-page-layer-root");
-    document.body.appendChild(fullPageLayer);
+    const storybookRoot = document.getElementById("storybook-root");
+
+    const root = document.createElement("div");
+    root.setAttribute("id", "root");
+    storybookRoot.appendChild(root);
+
+    const fullPageLayerRoot = document.createElement("div");
+    fullPageLayerRoot.setAttribute("id", "full-page-layer-root");
+    storybookRoot.appendChild(fullPageLayerRoot);
   });
 </script>
