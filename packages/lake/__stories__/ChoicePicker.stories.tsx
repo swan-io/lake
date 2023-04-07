@@ -4,11 +4,12 @@ import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { ChoicePicker } from "../src/components/ChoicePicker";
 import { Tag } from "../src/components/Tag";
+import { spacings } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
   part: {
-    padding: 32, // adds some padding to avoid overflow hidden caused by storybook canvas
+    padding: spacings[32], // adds some padding to avoid overflow hidden caused by storybook canvas
   },
 });
 
