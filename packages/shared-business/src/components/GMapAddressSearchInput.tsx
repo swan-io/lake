@@ -102,10 +102,7 @@ export const GMapAddressSearchInput = ({
           );
 
           onSuggestion?.({
-            city: result.value.city,
-            completeAddress: result.value.completeAddress,
-            postalCode: result.value.postalCode,
-            streetNumber: result.value.streetNumber,
+            ...result.value,
             country: dependsOnCountriesWithMultipleCCA3 === true ? country : result.value.country,
           });
         }
