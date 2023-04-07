@@ -28,6 +28,10 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      - name: Push translation keys
+        if: "contains('refs/heads/main', github.ref)"
+        run: yarn lokalise sync
+
       - name: Build Storybook
         run: yarn build-storybook
 
