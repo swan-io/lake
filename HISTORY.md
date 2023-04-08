@@ -1,4 +1,12 @@
+## 1.7.0
+
+Changes:
+
+- Update Boxed (20901a9)
+
 ## 1.6.0
+
+Changes:
 
 - Add sort UI for mobile (0252fa1)
 - Update component using Google API name (1ea2f17)
