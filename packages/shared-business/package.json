@@ -31,7 +31,7 @@
   "dependencies": {
     "@formatjs/intl": "^2.6.9",
     "@googlemaps/js-api-loader": "^1.15.1",
-    "@swan-io/boxed": "^0.12.1",
+    "@swan-io/boxed": "^0.13.0",
     "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-atomic-state": "^1.2.7",
