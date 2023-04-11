@@ -91,9 +91,11 @@ type SyncValidationResult = string | undefined;
 
 const validateCca3CountryCode: Validator<string | undefined> = value => {
   if (value == null) {
-    return;
+    return t("error.requiredField");
   }
   if (!isCountryCCA3(value)) {
+    // no need to set an error message because country picker contains only valid values
+    // this is used only for validateUbo function to display an error indicator without opening UBO modal
     return " ";
   }
 };
@@ -117,10 +119,7 @@ export const validateUbo = (
     birthDate: isBirthInfoRequired
       ? (validateNullableRequired(editorState.birthDate) as SyncValidationResult)
       : undefined,
-    birthCountryCode: combineValidators(
-      validateNullableRequired,
-      validateCca3CountryCode,
-    )(editorState.birthCountryCode) as SyncValidationResult,
+    birthCountryCode: validateCca3CountryCode(editorState.birthCountryCode) as SyncValidationResult,
     birthCity: isBirthInfoRequired
       ? (validateNullableRequired(editorState.birthCity) as SyncValidationResult)
       : undefined,
