@@ -1,10 +1,7 @@
 const { version } = require("../package.json");
 
 module.exports = {
-  stories: [
-    "../packages/**/__stories__/**/*.stories.mdx",
-    "../packages/**/__stories__/**/*.stories.@(js|jsx|ts|tsx)",
-  ],
+  stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
   framework: {
     name: "@storybook/react-vite",
