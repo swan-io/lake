@@ -57,8 +57,6 @@ export const validateBooleanRequired: Validator<boolean | undefined> = value => 
   }
 };
 
-
-
 export const validateIndividualTaxNumber =
   (accountCountry: AccountCountry): Validator<string | undefined> =>
   value => {
