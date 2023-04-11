@@ -5,7 +5,7 @@ module.exports = {
     "../packages/**/__stories__/**/*.stories.mdx",
     "../packages/**/__stories__/**/*.stories.@(js|jsx|ts|tsx)",
   ],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-mdx-gfm"],
+  addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
   framework: {
     name: "@storybook/react-vite",
     options: {},

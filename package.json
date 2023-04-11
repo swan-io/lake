@@ -40,7 +40,6 @@
     "@storybook/addon-actions": "^7.0.2",
     "@storybook/addon-essentials": "^7.0.2",
     "@storybook/addon-links": "^7.0.2",
-    "@storybook/addon-mdx-gfm": "^7.0.2",
     "@storybook/react": "^7.0.2",
     "@storybook/react-vite": "^7.0.2",
     "@swan-io/lokalise-sync-cli": "^1.0.3",
