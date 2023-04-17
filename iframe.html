@@ -358,7 +358,7 @@
   }
 </script>
 
-  <script type="module" crossorigin src="/lake/assets/1.8.0/iframe-3d5a02f3.js"></script>
+  <script type="module" crossorigin src="/lake/assets/1.7.0/iframe-4cc544cd.js"></script>
 </head>
 
 <body>
@@ -387,16 +387,23 @@
 <script>
   window.global = window;
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const storybookRoot = document.getElementById("storybook-root");
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.id == "storybook-root") {
+          const div = document.createElement("div");
+          div.setAttribute("id", "full-page-layer-root");
+          node.parentNode.appendChild(div);
 
-    const root = document.createElement("div");
-    root.setAttribute("id", "root");
-    storybookRoot.appendChild(root);
+          observer.disconnect();
+        }
+      });
+    });
+  });
 
-    const fullPageLayerRoot = document.createElement("div");
-    fullPageLayerRoot.setAttribute("id", "full-page-layer-root");
-    storybookRoot.appendChild(fullPageLayerRoot);
+  observer.observe(document.querySelector("body"), {
+    subtree: false,
+    childList: true,
   });
 </script>
 <div class="sb-preparing-story sb-wrapper">
