@@ -1,3 +1,11 @@
+## 1.8.0
+
+Changes:
+
+- Enforce CCA3 validity for UBOs (3d7fb44)
+- Improve mobile gestures (537f287, 4dd73d2)
+- Update Storybook (bece24e)
+
 ## 1.7.0
 
 Changes:
