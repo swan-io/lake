@@ -1,5 +1,6 @@
 const { version } = require("../package.json");
 
+/** @type {import('@storybook/react-vite').StorybookConfig} */
 module.exports = {
   stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
@@ -23,7 +24,7 @@ module.exports = {
       ...config.build,
       // The polyfill generates a bug on Safari, where it makes the module
       // always be invalidated due to credentials being sent (i.e. Cookies)
-      polyfillModulePreload: false,
+      modulePreload: { polyfill: true },
       sourcemap: true,
       assetsDir: `assets/${version}`,
     };
