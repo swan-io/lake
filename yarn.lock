@@ -1690,7 +1690,7 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@popperjs/core@^2.11.6", "@popperjs/core@^2.11.7":
+"@popperjs/core@^2.11.7":
   version "2.11.7"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.7.tgz#ccab5c8f7dc557a52ca3288c10075c9ccd37fff7"
   integrity sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==
@@ -2560,29 +2560,6 @@
     history "^5.3.0"
     use-sync-external-store "^1.2.0"
 
-"@swan-io/lake@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@swan-io/lake/-/lake-1.7.0.tgz#fe819ab65571e4077d688dbbf3ff785d815530c2"
-  integrity sha512-x02+3i4/NEL1zVVKUjIgBCfWnpr/PBL4rB+/RczkaaLm0evEo0fKpE1mwO6K74DjzhHtB+SuvE7LPWNGoUz5gg==
-  dependencies:
-    "@popperjs/core" "^2.11.6"
-    "@swan-io/boxed" "^0.13.0"
-    "@swan-io/chicane" "^1.3.4"
-    dayjs "^1.11.7"
-    polished "^4.2.2"
-    prism-react-renderer "^1.3.5"
-    react "^18.2.0"
-    react-atomic-state "^1.2.7"
-    react-dom "^18.2.0"
-    react-native-web "^0.19.1"
-    react-popper "^2.3.0"
-    react-ux-form "^1.3.0"
-    rifm "^0.12.1"
-    ts-dedent "^2.2.0"
-    ts-pattern "^4.2.1"
-    urql "^3.0.4"
-    uuid "^9.0.0"
-
 "@swan-io/lokalise-sync-cli@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@swan-io/lokalise-sync-cli/-/lokalise-sync-cli-1.0.3.tgz#39019899e788ca7a73a51f6aaca4c6a6f7ef94e1"
@@ -3112,13 +3089,6 @@
   dependencies:
     "@typescript-eslint/types" "5.58.0"
     eslint-visitor-keys "^3.3.0"
-
-"@urql/core@^3.2.0":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-3.2.2.tgz#2a44015b536d72981822f715c96393d8e0ddc576"
-  integrity sha512-i046Cz8cZ4xIzGMTyHZrbdgzcFMcKD7+yhCAH5FwWBRjcKrc+RjEOuR9X5AMuBvr8c6IAaE92xAqa4wmlGfWTQ==
-  dependencies:
-    wonka "^6.1.2"
 
 "@urql/core@^4.0.0":
   version "4.0.4"
@@ -10028,7 +9998,7 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-native-web@^0.19.1, react-native-web@^0.19.4:
+react-native-web@^0.19.4:
   version "0.19.4"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.19.4.tgz#3d99f268ff5567df8b11a2150905a7c262e22dcc"
   integrity sha512-laZjyzpTmsuuifAKTujp+VQRBA2ZcWga6MpxIw72QmeR/3spILNy4m/fdnCyO4E9UKH3d6vNMWbatZK3Nr6F+w==
@@ -11851,14 +11821,6 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-urql@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-3.0.4.tgz#f73dbd2e5b134b7328c14d5b8ab1f93f93db8990"
-  integrity sha512-okmQKQ9pF4t8O8iCC5gH9acqfFji5lkhW3nLBjx8WKDd2zZG7PXoUpUK19VQEMK87L6VFBOO/XZ52MMKFEI0AA==
-  dependencies:
-    "@urql/core" "^3.2.0"
-    wonka "^6.0.0"
-
 urql@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/urql/-/urql-4.0.0.tgz#ccef53de8da6dd4e09268ce2edfa5ce4200cd32b"
@@ -12316,7 +12278,7 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-wonka@^6.0.0, wonka@^6.1.2, wonka@^6.3.0:
+wonka@^6.3.0:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.3.1.tgz#315b2a91e134c4032980836e6d97e13d0927634d"
   integrity sha512-nJyGPcjuBiaLFn8QAlrHd+QjV9AlPO7snOWAhgx6aX0nQLMV6Wi0nqfrkmsXIH0efngbDOroOz2QyLnZMF16Hw==
