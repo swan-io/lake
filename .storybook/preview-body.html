@@ -4,21 +4,34 @@
   body {
     background-color: var(--color-background-light);
   }
-  #root {
+  #storybook-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     transition: 300ms ease-in-out transform, 300ms ease-in-out filter;
   }
-  .BottomPanelOpen #root {
+  .BottomPanelOpen #storybook-root {
     transform: scale(0.98);
     filter: blur(4px);
   }
-  .ModalOpen #root {
+  .ModalOpen #storybook-root {
     transform: scale(0.98);
     filter: blur(4px);
   }
 </style>
 
-<div id="root"></div>
-<div id="full-page-layer-root"></div>
 <script>
   window.global = window;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const storybookRoot = document.getElementById("storybook-root");
+
+    const root = document.createElement("div");
+    root.setAttribute("id", "root");
+    storybookRoot.appendChild(root);
+
+    const fullPageLayerRoot = document.createElement("div");
+    fullPageLayerRoot.setAttribute("id", "full-page-layer-root");
+    storybookRoot.appendChild(fullPageLayerRoot);
+  });
 </script>
