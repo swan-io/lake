@@ -381,6 +381,8 @@ declare module "react-native" {
     scrollBehavior?: "auto" | "smooth";
     transform?: string;
     visibility?: VisibilityValue;
+    scrollSnapType?: string;
+    scrollSnapAlign?: "start" | "end" | "center";
   }
 
   /**

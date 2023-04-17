@@ -4,11 +4,12 @@ import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { ChoicePicker } from "../src/components/ChoicePicker";
 import { Tag } from "../src/components/Tag";
+import { spacings } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
-  largePart: {
-    padding: 10, // adds some padding to avoid overflow hidden caused by storybook canvas
+  part: {
+    padding: spacings[32], // adds some padding to avoid overflow hidden caused by storybook canvas
   },
 });
 
@@ -28,7 +29,7 @@ export const Default = () => {
 
   return (
     <StoryBlock title="Choice Picker">
-      <StoryPart title="Default">
+      <StoryPart title="Default" style={styles.part}>
         <ChoicePicker
           items={items}
           value={value}
@@ -55,7 +56,7 @@ export const Default = () => {
         />
       </StoryPart>
 
-      <StoryPart title="Large" style={styles.largePart}>
+      <StoryPart title="Large" style={styles.part}>
         <ChoicePicker
           items={items}
           value={largeValue}

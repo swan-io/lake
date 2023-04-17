@@ -17,7 +17,7 @@ const getValue = (array: number[], index: number, name: string): number => {
   return value;
 };
 
-const clampValue =
+export const clampValue =
   (min: number, max: number) =>
   (value: number): number =>
     Math.max(Math.min(value, max), min);
