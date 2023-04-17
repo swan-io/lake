@@ -17,7 +17,7 @@ const getValue = (array: number[], index: number, name: string): number => {
   return value;
 };
 
-const clampValue =
+export const clampValue =
   (min: number, max: number) =>
   (value: number): number =>
     Math.max(Math.min(value, max), min);
@@ -72,3 +72,20 @@ export const interpolate = <T extends InterpolateTuple>({
     return outputValue;
   };
 };
+
+type ElasticParams = {
+  elasticLength?: number; // the maximum value you can reach
+  elasticStrength?: number; // higher value, maximum value reached faster
+};
+
+/**
+ * This function takes as input a number from 0 to Infinity and returns a number from 0 to elasticLength
+ * With an exponential curve giving a feeling of elasticity
+ * This kind of function can be used to:
+ *  - recreate effect like scroll bounce on iOS
+ *  - limit grab smoothly with touch interaction
+ */
+export const limitElastic =
+  ({ elasticLength = 100, elasticStrength = 0.008 }: ElasticParams) =>
+  (value: number): number =>
+    elasticLength * (1 - Math.exp(-elasticStrength * value));

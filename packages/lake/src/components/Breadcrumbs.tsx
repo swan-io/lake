@@ -256,9 +256,11 @@ const CHEVRON = (
 
 const BreadcrumbsSiblingsDropdown = ({
   siblings,
+  isLast,
   onPress,
 }: {
   siblings: NonNullable<Crumb["siblings"]>;
+  isLast: boolean;
   onPress: () => void;
 }) => {
   return (
@@ -270,7 +272,7 @@ const BreadcrumbsSiblingsDropdown = ({
             key={url}
             ariaCurrentValue="location"
             onPress={(event: React.MouseEvent<HTMLAnchorElement>) => {
-              if (isMatching) {
+              if (isMatching && isLast) {
                 event.preventDefault();
               }
               onPress();
@@ -379,6 +381,7 @@ const BreadcrumbsItem = ({
               >
                 <BreadcrumbsSiblingsDropdown
                   siblings={siblings}
+                  isLast={isLastItem}
                   onPress={() => setSiblings(null)}
                 />
               </FocusTrap>

@@ -12,7 +12,7 @@ import { noop } from "@swan-io/lake/src/utils/function";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { combineValidators, hasDefinedKeys, useForm } from "react-ux-form";
+import { Validator, combineValidators, hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
@@ -51,7 +51,7 @@ export type EditorState = {
   firstName: string;
   lastName: string;
   birthDate: string;
-  birthCountryCode: CountryCCA3;
+  birthCountryCode: CountryCCA3 | undefined;
   birthCity: string;
   birthCityPostalCode: string;
   type: BeneficiaryType;
@@ -89,6 +89,17 @@ export type BeneficiaryFormRef = { cancel: () => void; submit: () => void };
 
 type SyncValidationResult = string | undefined;
 
+const validateCca3CountryCode: Validator<string | undefined> = value => {
+  if (value == null) {
+    return t("error.requiredField");
+  }
+  if (!isCountryCCA3(value)) {
+    // no need to set an error message because country picker contains only valid values
+    // this is used only for validateUbo function to display an error indicator without opening UBO modal
+    return " ";
+  }
+};
+
 export const validateUbo = (
   editorState: EditorState,
   accountCountry: AccountCountry,
@@ -108,9 +119,7 @@ export const validateUbo = (
     birthDate: isBirthInfoRequired
       ? (validateNullableRequired(editorState.birthDate) as SyncValidationResult)
       : undefined,
-    birthCountryCode: validateNullableRequired(
-      editorState.birthCountryCode,
-    ) as SyncValidationResult,
+    birthCountryCode: validateCca3CountryCode(editorState.birthCountryCode) as SyncValidationResult,
     birthCity: isBirthInfoRequired
       ? (validateNullableRequired(editorState.birthCity) as SyncValidationResult)
       : undefined,

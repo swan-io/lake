@@ -1,7 +1,10 @@
-import { ReactNode, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { match } from "ts-pattern";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
+import { clampValue } from "../utils/math";
+import { detectScrollAnimationEnd } from "../utils/viewport";
 import { LakeButton } from "./LakeButton";
 import { LakeRadio } from "./LakeRadio";
 import { Pressable } from "./Pressable";
@@ -15,6 +18,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     overflow: "hidden",
     marginHorizontal: negativeSpacings[12],
+  },
+  scrollSnap: {
+    scrollSnapType: "x mandatory",
   },
   container: {
     alignSelf: "stretch",
@@ -35,6 +41,8 @@ const styles = StyleSheet.create({
     flexBasis: "33.333%",
     maxWidth: 300,
     padding: spacings[12],
+  },
+  itemAnimation: {
     transform: "translateZ(0px)",
     animationKeyframes: {
       from: {
@@ -58,6 +66,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexBasis: "auto",
     maxWidth: "none",
+    scrollSnapAlign: "center",
   },
   tileContents: {
     alignItems: "center",
@@ -74,12 +83,20 @@ const styles = StyleSheet.create({
     top: "50%",
     left: negativeSpacings[24],
     transform: "translateY(-50%)",
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    borderWidth: 1,
+    borderLeftWidth: 0,
   },
   rightButton: {
     position: "absolute",
     top: "50%",
     right: negativeSpacings[24],
     transform: "translateY(-50%)",
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderWidth: 1,
+    borderRightWidth: 0,
   },
 });
 
@@ -102,17 +119,104 @@ export const ChoicePicker = <T,>({
   value,
   onChange,
 }: Props<T>) => {
+  const containerRef = useRef<ScrollView | null>(null);
   const { desktop } = useResponsive(breakpoints.medium);
-  const [index, setIndex] = useState(0);
+  const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
+
+  useEffect(() => {
+    if (desktop) {
+      return;
+    }
+
+    // auto scroll to selected value on mobile
+    const scrollContainer = containerRef.current;
+    const index = items.findIndex(item => value === item);
+    if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
+      const width = scrollContainer.offsetWidth;
+      scrollContainer.scrollTo({ x: index * width, animated: false });
+    }
+
+    // if no value is selected, select first item
+    if (value == null && items[0] != null) {
+      onChange(items[0]);
+    }
+    // disable exhaustive-deps because we only want to run this effect only when screen size go from desktop to mobile
+  }, [desktop]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onScroll = () => {
+    // prevent scroll event when we change screen size from mobile to desktop
+    if (desktop) {
+      return;
+    }
+
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = clampValue(0, items.length - 1)(Math.round(scrollLeft / width));
+      const item = items[index];
+      if (item != null) {
+        onChange(item);
+      }
+
+      match(index)
+        .with(0, () => setMobilePosition("start"))
+        .with(items.length - 1, () => setMobilePosition("end"))
+        .otherwise(() => setMobilePosition("middle"));
+    }
+  };
+
+  const onPressPrevious = () => {
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+      const previousIndex = Math.max(0, index - 1);
+
+      // remove scroll snap during scroll animation to avoid weird behavior on older browsers
+      scrollContainer.style.scrollSnapType = "none";
+      containerRef.current?.scrollTo({ x: previousIndex * width, animated: true });
+      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+        // set back scroll snap
+        // @ts-expect-error
+        scrollContainer.style.scrollSnapType = null;
+      });
+    }
+  };
+
+  const onPressNext = () => {
+    const scrollContainer = containerRef.current;
+    if (scrollContainer instanceof HTMLDivElement) {
+      const scrollLeft = scrollContainer.scrollLeft;
+      const width = scrollContainer.offsetWidth;
+      const index = Math.round(scrollLeft / width);
+      const nextIndex = Math.min(items.length - 1, index + 1);
+
+      // remove scroll snap during scroll animation to avoid weird behavior on older browsers
+      scrollContainer.style.scrollSnapType = "none";
+      containerRef.current?.scrollTo({ x: nextIndex * width, animated: true });
+      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+        // set back scroll snap
+        // @ts-expect-error
+        scrollContainer.style.scrollSnapType = null;
+      });
+    }
+  };
 
   return (
     <View>
       <View style={styles.root}>
-        <View
-          style={[
+        <ScrollView
+          ref={containerRef}
+          horizontal={!desktop}
+          onScroll={onScroll}
+          scrollEventThrottle={200}
+          style={styles.scrollSnap}
+          contentContainerStyle={[
             styles.container,
             !desktop && styles.mobileContainer,
-            !desktop && { transform: `translateX(-${100 * index}%)` },
+            !desktop && { width: `${items.length * 100}%` },
           ]}
         >
           {items.map((item, index) => (
@@ -120,9 +224,11 @@ export const ChoicePicker = <T,>({
               key={String(index)}
               style={[
                 styles.item,
+                desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
+                desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
                 !desktop && styles.itemSmallViewport,
-                { animationDelay: `${200 + 100 * index}ms` },
+                !desktop && { width: `${100 / items.length}%` },
               ]}
               onPress={() => onChange(item)}
             >
@@ -134,38 +240,41 @@ export const ChoicePicker = <T,>({
                 >
                   <View style={styles.tileContents}>
                     <View style={styles.tileRenderedContents}>{renderItem(item)}</View>
-                    <Space height={24} />
-                    <LakeRadio value={value != null && getId(item) === getId(value)} />
+
+                    {desktop && (
+                      <>
+                        <Space height={24} />
+                        <LakeRadio value={value != null && getId(item) === getId(value)} />
+                      </>
+                    )}
                   </View>
                 </Tile>
               )}
             </Pressable>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       {!desktop && (
-        <View style={styles.leftButton}>
-          <LakeButton
-            icon="chevron-left-filled"
-            mode="secondary"
-            forceBackground={true}
-            onPress={() => setIndex(Math.max(0, index - 1))}
-            disabled={index === 0}
-          />
-        </View>
+        <LakeButton
+          icon="chevron-left-filled"
+          mode="secondary"
+          forceBackground={true}
+          onPress={onPressPrevious}
+          disabled={mobilePosition === "start"}
+          style={styles.leftButton}
+        />
       )}
 
       {!desktop && (
-        <View style={styles.rightButton}>
-          <LakeButton
-            icon="chevron-right-filled"
-            mode="secondary"
-            forceBackground={true}
-            onPress={() => setIndex(Math.min(items.length - 1, index + 1))}
-            disabled={index === items.length - 1}
-          />
-        </View>
+        <LakeButton
+          icon="chevron-right-filled"
+          mode="secondary"
+          forceBackground={true}
+          onPress={onPressNext}
+          disabled={mobilePosition === "end"}
+          style={styles.rightButton}
+        />
       )}
     </View>
   );

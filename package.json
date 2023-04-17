@@ -1,7 +1,7 @@
 {
   "name": "@swan-io/lake",
   "description": "Swan's component kit",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "engines": {
     "node": ">=18.0.0",
     "yarn": "^1.20.0"
@@ -15,7 +15,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "start-storybook",
+    "start": "start-storybook -p 6006",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --ext ts,tsx packages/*/src",
     "build-storybook": "build-storybook --output-dir dist",
