@@ -53,6 +53,17 @@ const styles = StyleSheet.create({
   dayNumberSelected: {
     backgroundColor: colors.current[500],
   },
+  todayIndicator: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: 4,
+    height: 4,
+    marginHorizontal: "auto",
+    borderRadius: 2,
+    backgroundColor: colors.current[500],
+  },
 });
 
 const NB_DAYS_IN_WEEK = 7;
@@ -162,6 +173,15 @@ export const isInRangeDate =
       date.year <= maxYear
     );
   };
+
+const isDateToday = (date: DatePickerDate): boolean => {
+  const today = new Date();
+  return (
+    date.day === today.getDate() &&
+    date.month === today.getMonth() &&
+    date.year === today.getFullYear()
+  );
+};
 
 const getMonthDates = (month: number, year: number): DatePickerDate[] => {
   const aggregate = (acc: DatePickerDate[], date: Date): DatePickerDate[] => {
@@ -287,6 +307,11 @@ const MonthCalendar = ({
               Some: date => isSelectedDate(date, value),
               None: () => false,
             });
+            const isToday = date.match({
+              Some: date => isDateToday(date),
+              None: () => false,
+            });
+
             return (
               <Pressable
                 key={dateIndex}
@@ -307,11 +332,15 @@ const MonthCalendar = ({
                       ? colors.current.contrast
                       : isDisabled
                       ? colors.gray[300]
+                      : isToday
+                      ? colors.current[500]
                       : colors.gray[900]
                   }
                 >
                   {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
                 </LakeText>
+
+                {isToday && <View style={styles.todayIndicator} />}
               </Pressable>
             );
           })}
