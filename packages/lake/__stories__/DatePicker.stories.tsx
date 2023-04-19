@@ -2,7 +2,7 @@ import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import { DatePicker, DatePickerProps } from "../src/components/DatePicker";
+import { DatePicker, DatePickerProps, isTodayOrFutureDate } from "../src/components/DatePicker";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -50,9 +50,9 @@ const dayNames = [
 
 export const Default = () => {
   return (
-    <StoryBlock title="DatePicker">
-      <StoryPart title="Default">
-        <WithPartnerAccentColor color="#0F6FDE">
+    <WithPartnerAccentColor color="#0F6FDE">
+      <StoryBlock title="DatePicker">
+        <StoryPart title="Default">
           <View style={styles.container}>
             <InteractiveDatePicker
               firstWeekDay="monday"
@@ -61,8 +61,31 @@ export const Default = () => {
               format="DD/MM/YYYY"
             />
           </View>
-        </WithPartnerAccentColor>
-      </StoryPart>
-    </StoryBlock>
+        </StoryPart>
+
+        <StoryPart title="Week starting sunday">
+          <View style={styles.container}>
+            <InteractiveDatePicker
+              firstWeekDay="sunday"
+              monthNames={monthNames}
+              weekDayNames={dayNames}
+              format="DD/MM/YYYY"
+            />
+          </View>
+        </StoryPart>
+
+        <StoryPart title="Selectable only in the future">
+          <View style={styles.container}>
+            <InteractiveDatePicker
+              firstWeekDay="sunday"
+              monthNames={monthNames}
+              weekDayNames={dayNames}
+              format="DD/MM/YYYY"
+              isSelectable={isTodayOrFutureDate}
+            />
+          </View>
+        </StoryPart>
+      </StoryBlock>
+    </WithPartnerAccentColor>
   );
 };

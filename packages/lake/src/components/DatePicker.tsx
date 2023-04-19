@@ -132,6 +132,37 @@ const padEnd = <T,>(input: T[], length: number, value: T): T[] => {
   return [...input, ...itemsToAppend];
 };
 
+export const isTodayOrFutureDate = (date: DatePickerDate): boolean => {
+  const today = new Date();
+
+  return (
+    date.year >= today.getFullYear() &&
+    date.month >= today.getMonth() &&
+    date.day >= today.getDate()
+  );
+};
+
+export const isInRangeDate =
+  (minDate: Date, maxDate: Date) =>
+  (date: DatePickerDate): boolean => {
+    const minDay = minDate.getDate();
+    const minMonth = minDate.getMonth();
+    const minYear = minDate.getFullYear();
+
+    const maxDay = maxDate.getDate();
+    const maxMonth = maxDate.getMonth();
+    const maxYear = maxDate.getFullYear();
+
+    return (
+      date.day >= minDay &&
+      date.month >= minMonth &&
+      date.year >= minYear &&
+      date.day <= maxDay &&
+      date.month <= maxMonth &&
+      date.year <= maxYear
+    );
+  };
+
 const getMonthDates = (month: number, year: number): DatePickerDate[] => {
   const aggregate = (acc: DatePickerDate[], date: Date): DatePickerDate[] => {
     const dateDay = date.getDate();
@@ -205,6 +236,7 @@ type MonthCalendarProps = {
   value: Option<DatePickerDate>;
   firstWeekDay: keyof typeof weekDayIndex;
   weekDayNames: WeekDayNames;
+  isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: DatePickerDate) => void;
 };
 
@@ -214,6 +246,7 @@ const MonthCalendar = ({
   value,
   firstWeekDay,
   weekDayNames,
+  isSelectable,
   onChange,
 }: MonthCalendarProps) => {
   const dayNames = useMemo(
@@ -246,6 +279,10 @@ const MonthCalendar = ({
           style={styles.weekRow}
         >
           {week.map((date, dateIndex) => {
+            const isDisabled = date.match({
+              Some: date => isNotNullish(isSelectable) && !isSelectable(date),
+              None: () => true,
+            });
             const isSelected = date.match({
               Some: date => isSelectedDate(date, value),
               None: () => false,
@@ -253,7 +290,7 @@ const MonthCalendar = ({
             return (
               <Pressable
                 key={dateIndex}
-                disabled={date.isNone()}
+                disabled={isDisabled}
                 onPress={() => date.match({ Some: onChange, None: noop })}
                 style={({ focused, hovered, pressed }) => [
                   styles.dayNumber,
@@ -265,7 +302,13 @@ const MonthCalendar = ({
               >
                 <LakeText
                   variant="smallRegular"
-                  color={isSelected ? colors.current.contrast : colors.gray[900]}
+                  color={
+                    isSelected
+                      ? colors.current.contrast
+                      : isDisabled
+                      ? colors.gray[300]
+                      : colors.gray[900]
+                  }
                 >
                   {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
                 </LakeText>
@@ -284,6 +327,7 @@ export type DatePickerProps = {
   firstWeekDay: keyof typeof weekDayIndex;
   monthNames: MonthNames;
   weekDayNames: WeekDayNames;
+  isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: string) => void;
 };
 
@@ -293,6 +337,7 @@ const DatePickerPopover = ({
   firstWeekDay,
   monthNames,
   weekDayNames,
+  isSelectable,
   onChange,
 }: DatePickerProps) => {
   const [{ month, year }, setMonthYear] = useState(() => {
@@ -416,6 +461,7 @@ const DatePickerPopover = ({
         value={isNotNullish(value) ? parseDate(value, format) : Option.None()}
         firstWeekDay={firstWeekDay}
         weekDayNames={weekDayNames}
+        isSelectable={isSelectable}
         onChange={handleChange}
       />
     </View>
@@ -428,6 +474,7 @@ export const DatePicker = ({
   firstWeekDay,
   monthNames,
   weekDayNames,
+  isSelectable,
   onChange,
 }: DatePickerProps) => {
   return (
@@ -444,6 +491,7 @@ export const DatePicker = ({
         firstWeekDay={firstWeekDay}
         monthNames={monthNames}
         weekDayNames={weekDayNames}
+        isSelectable={isSelectable}
         onChange={onChange}
       />
     </>
