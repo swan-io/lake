@@ -151,28 +151,28 @@ export const WithSeveralDocuments = ({ layout }: StoryArgs) => {
     {
       id: "1",
       name: "first-document.pdf",
-      status: "FINISHED",
+      status: "finished",
     },
     {
       id: "2",
       name: "second-document.png",
-      status: "FINISHED",
+      status: "finished",
     },
     {
       id: "3",
       name: "third-document.jpg",
-      status: "FINISHED",
+      status: "finished",
     },
     {
       id: "4",
       name: "fourth-document.xls",
-      status: "FINISHED",
+      status: "finished",
     },
     {
       id: "5",
       name: "last-document.png",
       progress: 60,
-      status: "UPLOADING",
+      status: "uploading",
     },
   ];
   return (
@@ -197,7 +197,7 @@ export const Interactive = ({ layout }: StoryArgs) => {
     const newDocuments: UploadFileStatus[] = files.map((file, index) => ({
       id: (new Date().getTime() + index).toString(),
       name: file.name,
-      status: "FINISHED",
+      status: "finished",
     }));
     setDocuments(currentDocuments => [...currentDocuments, ...newDocuments]);
   };
