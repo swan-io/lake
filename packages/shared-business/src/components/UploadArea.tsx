@@ -15,7 +15,7 @@ import {
 } from "@swan-io/lake/src/constants/design";
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
-import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
@@ -327,15 +327,15 @@ export const UploadArea = ({
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={isNullish(onRemoveFile) ? undefined : () => onRemoveFile(document.id)}
+                  onRemove={() => onRemoveFile?.(document.id)}
                 />
               ))
               .with({ status: "failed" }, ({ error }) => (
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={isNullish(onRemoveFile) ? undefined : () => onRemoveFile(document.id)}
-                  variant={"refused"}
+                  onRemove={() => onRemoveFile?.(document.id)}
+                  variant="refused"
                   title={error}
                 />
               ))
