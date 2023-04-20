@@ -15,10 +15,11 @@ import {
 } from "@swan-io/lake/src/constants/design";
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
-import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
+import { match } from "ts-pattern";
 import { formatNestedMessage, t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
@@ -114,12 +115,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export type UploadFileStatus = {
+export type UploadFileStatus = (
+  | { status: "uploading"; progress: number }
+  | { status: "finished" }
+  | { status: "failed"; error: string }
+) & {
+  fileUrl?: string;
   id: string;
   name?: string;
-  fileUrl?: string;
-  progress?: number;
-  finished?: boolean;
 };
 
 type Props = {
@@ -314,32 +317,42 @@ export const UploadArea = ({
         </View>
       </div>
 
-      {documents.map(({ finished = false, ...document }, index) => {
-        const progress = Math.max(document.progress ?? 0, 3);
-
+      {documents.map(({ ...document }, index) => {
         return (
           <Fragment key={document.id}>
             <Space height={index === 0 ? 8 : 4} />
 
-            {finished ? (
-              <FileTile
-                name={document.name ?? t("uploadArea.unknownFileName")}
-                url={document.fileUrl}
-                onRemove={isNullish(onRemoveFile) ? undefined : () => onRemoveFile(document.id)}
-              />
-            ) : (
-              <Box direction="row" alignItems="center" style={styles.item}>
-                <LakeText numberOfLines={1} color={colors.gray[700]}>
-                  {t("uploadArea.uploading")}
-                </LakeText>
+            {match(document)
+              .with({ status: "finished" }, () => (
+                <FileTile
+                  name={document.name ?? t("uploadArea.unknownFileName")}
+                  url={document.fileUrl}
+                  onRemove={() => onRemoveFile?.(document.id)}
+                />
+              ))
+              .with({ status: "failed" }, ({ error }) => (
+                <FileTile
+                  name={document.name ?? t("uploadArea.unknownFileName")}
+                  url={document.fileUrl}
+                  onRemove={() => onRemoveFile?.(document.id)}
+                  variant="refused"
+                  title={error}
+                />
+              ))
+              .with({ status: "uploading" }, ({ progress }) => (
+                <Box direction="row" alignItems="center" style={styles.item}>
+                  <LakeText numberOfLines={1} color={colors.gray[700]}>
+                    {t("uploadArea.uploading")}
+                  </LakeText>
 
-                <Space width={20} />
+                  <Space width={20} />
 
-                <View role="progressbar" style={styles.progressBar}>
-                  <View style={[styles.progress, { width: `${progress}%` }]} />
-                </View>
-              </Box>
-            )}
+                  <View role="progressbar" style={styles.progressBar}>
+                    <View style={[styles.progress, { width: `${progress}%` }]} />
+                  </View>
+                </Box>
+              ))
+              .exhaustive()}
           </Fragment>
         );
       })}
