@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
 });
 
 export type UploadFileStatus = (
-  | { status: "UPLOADING"; progress: number }
-  | { status: "FINISHED" }
-  | { status: "FAILED"; error: string }
+  | { status: "uploading"; progress: number }
+  | { status: "finished" }
+  | { status: "failed"; error: string }
 ) & {
   fileUrl?: string;
   id: string;
@@ -323,14 +323,14 @@ export const UploadArea = ({
             <Space height={index === 0 ? 8 : 4} />
 
             {match(document)
-              .with({ status: "FINISHED" }, () => (
+              .with({ status: "finished" }, () => (
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
                   onRemove={isNullish(onRemoveFile) ? undefined : () => onRemoveFile(document.id)}
                 />
               ))
-              .with({ status: "FAILED" }, ({ error }) => (
+              .with({ status: "failed" }, ({ error }) => (
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
@@ -339,7 +339,7 @@ export const UploadArea = ({
                   title={error}
                 />
               ))
-              .with({ status: "UPLOADING" }, ({ progress }) => (
+              .with({ status: "uploading" }, ({ progress }) => (
                 <Box direction="row" alignItems="center" style={styles.item}>
                   <LakeText numberOfLines={1} color={colors.gray[700]}>
                     {t("uploadArea.uploading")}

@@ -151,7 +151,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
             [doc.purpose]: [
               ...(acc[doc.purpose] ?? []),
               {
-                status: "FINISHED",
+                status: "finished",
                 id: doc.id,
                 name: doc.name,
                 fileUrl: doc.downloadUrl,
@@ -252,7 +252,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
             state.map(doc =>
               doc.id === NO_ID_YET
                 ? {
-                    status: "UPLOADING",
+                    status: "uploading",
                     progress: 0,
                     name: file.name,
                     id,
@@ -280,7 +280,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
               state.map(uploadState =>
                 uploadState.id === id
                   ? {
-                      status: "FAILED",
+                      status: "failed",
                       id: uploadState.id,
                       name: uploadState.name,
                       fileUrl: uploadState.fileUrl,
@@ -300,7 +300,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                 state.map(uploadState =>
                   uploadState.id === id
                     ? {
-                        status: "FAILED",
+                        status: "failed",
                         id: uploadState.id,
                         name: uploadState.name,
                         fileUrl: uploadState.fileUrl,
@@ -315,7 +315,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
             setFieldValue(
               fieldName,
               state.map(uploadState =>
-                uploadState.id === id ? { ...uploadState, status: "FINISHED" } : uploadState,
+                uploadState.id === id ? { ...uploadState, status: "finished" } : uploadState,
               ),
             );
           };
@@ -327,16 +327,14 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
           formData.append("file", file);
           xhr.send(formData);
         })
-        .catch(error => {
-          console.error(error);
-
+        .catch(() => {
           const state = getFieldState(fieldName).value;
           setFieldValue(
             fieldName,
             state.map(uploadState =>
               uploadState.id === NO_ID_YET
                 ? {
-                    status: "FAILED",
+                    status: "failed",
                     id: uploadState.id,
                     name: uploadState.name,
                     fileUrl: uploadState.fileUrl,
@@ -362,7 +360,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       layout="horizontal"
                       error={error}
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "CompanyRegistration");
                       }}
                       documents={value}
@@ -393,7 +391,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "AssociationRegistration");
                       }}
                       error={error}
@@ -423,7 +421,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "SignedStatus");
                       }}
                       error={error}
@@ -453,7 +451,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "UBODeclaration");
                       }}
                       error={error}
@@ -485,7 +483,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "ProofOfIdentity");
                       }}
                       error={error}
@@ -521,7 +519,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "PowerOfAttorney");
                       }}
                       error={error}
@@ -557,7 +555,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                     <UploadArea
                       layout="horizontal"
                       onDropAccepted={files => {
-                        onChange([...value, { id: NO_ID_YET, status: "UPLOADING", progress: 0 }]);
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "SwornStatement");
                       }}
                       error={error}
