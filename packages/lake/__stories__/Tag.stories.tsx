@@ -4,17 +4,17 @@ import { Box } from "../src/components/Box";
 import { ProjectEnvTag } from "../src/components/ProjectEnvTag";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
-import { colors, ColorVariants } from "../src/constants/design";
+import { colors, ColorVariants, spacings } from "../src/constants/design";
 import { noop } from "../src/utils/function";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexWrap: "wrap",
   },
   tag: {
-    marginRight: 12,
-    marginBottom: 12,
+    marginRight: spacings[12],
+    marginBottom: spacings[12],
   },
 });
 
