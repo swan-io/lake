@@ -1,3 +1,14 @@
+## 1.9.0
+
+Changes:
+
+- Improve file upload error management (2d53655)
+- Update `UploadFileStatus` type (2d53655)
+
+Fixes:
+
+- Fix `positive` colors (6bb6901)
+
 ## 1.8.0
 
 Changes:
