@@ -115,27 +115,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export type UploadFileStatus =
-  | {
-      status: "UPLOADING";
-      id: string;
-      name?: string;
-      fileUrl?: string;
-      progress: number;
-    }
-  | {
-      status: "FINISHED";
-      id: string;
-      name?: string;
-      fileUrl?: string;
-    }
-  | {
-      status: "FAILED";
-      id: string;
-      name?: string;
-      fileUrl?: string;
-      error: string;
-    };
+export type UploadFileStatus = (
+  | { status: "UPLOADING"; progress: number }
+  | { status: "FINISHED" }
+  | { status: "FAILED"; error: string }
+) & {
+  fileUrl?: string;
+  id: string;
+  name?: string;
+};
 
 type Props = {
   icon: IconName;
