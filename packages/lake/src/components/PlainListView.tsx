@@ -47,6 +47,7 @@ type Props<T, ExtraInfo> = {
   smallColumns?: ColumnConfig<T, ExtraInfo>[];
   onEndReached?: () => void;
   onEndReachedThresholdPx?: number;
+  rowStyle?: (item: T, large: boolean) => ViewStyle | null | undefined;
   getRowLink?: (
     config: LinkConfig<T, ExtraInfo>,
   ) => ReactElement<{ children: (state: PressableStateCallbackType) => React.ReactNode }>;
@@ -150,6 +151,7 @@ const Row = <T, ExtraInfo>({
   isActive,
   isHovered,
   large,
+  style,
   onMouseEnter,
   onMouseLeave,
 }: {
@@ -162,6 +164,7 @@ const Row = <T, ExtraInfo>({
   isActive: boolean;
   isHovered: boolean;
   large: boolean;
+  style?: (item: T, large: boolean) => ViewStyle | null | undefined;
   onMouseEnter: (id: string) => void;
   onMouseLeave: () => void;
 }) => {
@@ -179,6 +182,7 @@ const Row = <T, ExtraInfo>({
         styles.segment,
         large && styles.segmentLarge,
         styles.row,
+        style?.(item, large),
         isActive && styles.activeRow,
         isHovered && styles.hoveredRow,
         { minHeight: rowHeight },
@@ -214,6 +218,7 @@ export const PlainListView = <T, ExtraInfo>({
   extraInfo,
   onEndReached,
   onEndReachedThresholdPx = 200,
+  rowStyle,
   getRowLink,
   activeRowId,
   renderEmptyList,
@@ -397,6 +402,7 @@ export const PlainListView = <T, ExtraInfo>({
                                 isActive={isActive}
                                 isHovered={isHovered}
                                 large={large}
+                                style={rowStyle}
                                 onMouseEnter={setHoveredRow}
                                 onMouseLeave={removeHoveredRow}
                               />
