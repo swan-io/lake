@@ -1,3 +1,9 @@
+## 1.9.1
+
+Fixes:
+
+- Unfix `@swan-io/lake` peer dependency version (af90891)
+
 ## 1.9.0
 
 Changes:
