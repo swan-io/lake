@@ -45,9 +45,9 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.35",
+    "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
-    "@types/react-native": "^0.71.5",
+    "@types/react-native": "^0.71.6",
     "@types/uuid": "^9.0.1",
     "jsdom": "^21.1.1",
     "type-fest": "^3.8.0"
