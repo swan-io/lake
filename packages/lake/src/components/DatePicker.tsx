@@ -170,6 +170,23 @@ const stringifyDate = (value: DatePickerDate, format: DateFormat): string => {
   return date.format(format);
 };
 
+export const validateDateRangeOrder = (
+  value: { start: string; end: string },
+  format: DateFormat,
+) => {
+  const range = parseRange(value, format);
+
+  if (range.start.isNone() || range.end.isNone()) {
+    return true;
+  }
+
+  if (isDateAfter(range.start.value, range.end.value)) {
+    return false;
+  }
+
+  return true;
+};
+
 const range = (start: number, end: number): number[] => {
   const result = [];
   for (let i = start; i <= end; i++) {
@@ -982,7 +999,7 @@ export const DateRangePicker = ({
   );
 
   return (
-    <>
+    <View>
       <Box direction="row" alignItems="center">
         <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
           {({ value, onChange }) => (
@@ -1011,6 +1028,8 @@ export const DateRangePicker = ({
         </Rifm>
       </Box>
 
+      <Space height={4} />
+
       <LakeText variant="smallRegular" color={colors.negative[500]}>
         {error ?? " "}
       </LakeText>
@@ -1028,6 +1047,6 @@ export const DateRangePicker = ({
         cancelLabel={cancelLabel}
         confirmLabel={confirmLabel}
       />
-    </>
+    </View>
   );
 };

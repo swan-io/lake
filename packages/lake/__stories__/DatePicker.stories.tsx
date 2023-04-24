@@ -8,6 +8,7 @@ import {
   DateRangePicker,
   DateRangePickerProps,
   isTodayOrFutureDate,
+  validateDateRangeOrder,
 } from "../src/components/DatePicker";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -33,8 +34,16 @@ const InteractiveDateRangePicker = ({
   ...props
 }: Except<DateRangePickerProps, "value" | "onChange">) => {
   const [value, setValue] = useState({ start: "", end: "" });
+  const isRangeValid = validateDateRangeOrder(value, props.format);
 
-  return <DateRangePicker {...props} value={value} onChange={setValue} />;
+  return (
+    <DateRangePicker
+      {...props}
+      value={value}
+      error={isRangeValid ? undefined : "End date can't be before start date"}
+      onChange={setValue}
+    />
+  );
 };
 
 const monthNames = [
