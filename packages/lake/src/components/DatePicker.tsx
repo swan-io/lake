@@ -381,10 +381,11 @@ const getNewDateRange = (
   selectedDate: DatePickerDate,
 ): DatePickerRange => {
   const { start, end } = currentRange;
+
+  // Handle initial selection
   if (start.isNone()) {
     return { start: Option.Some(selectedDate), end: Option.None() };
   }
-
   if (end.isNone()) {
     if (isDateAfter(selectedDate, start.value)) {
       return { start, end: Option.Some(selectedDate) };
@@ -393,10 +394,18 @@ const getNewDateRange = (
     return { start: Option.Some(selectedDate), end: currentRange.start };
   }
 
+  // Handle selection outside of the current range
+  if (isDateBefore(selectedDate, start.value)) {
+    return { start: Option.Some(selectedDate), end: currentRange.end };
+  }
+  if (isDateAfter(selectedDate, end.value)) {
+    return { start: currentRange.start, end: Option.Some(selectedDate) };
+  }
+
+  // We change the closest date to the new date
   const startDistance = computeDateDistanceInDays(start.value, selectedDate);
   const endDistance = computeDateDistanceInDays(end.value, selectedDate);
 
-  // If both dates are already selected, we change the closest one to the new date
   if (startDistance < endDistance) {
     return { start: Option.Some(selectedDate), end: currentRange.end };
   }
