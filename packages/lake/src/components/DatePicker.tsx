@@ -166,7 +166,7 @@ const parseRange = (value: { start: string; end: string }, format: DateFormat): 
 };
 
 const stringifyDate = (value: DatePickerDate, format: DateFormat): string => {
-  const date = dayjs.utc().date(value.day).month(value.month).year(value.year);
+  const date = dayjs.utc().year(value.year).month(value.month).date(value.day);
   return date.format(format);
 };
 
@@ -623,7 +623,7 @@ const MonthCalendar = ({
             });
 
             return (
-              <View style={styles.dayContainer}>
+              <View key={dateIndex} style={styles.dayContainer}>
                 {rangeIndicator !== "none" && (
                   <View
                     style={[
@@ -635,7 +635,6 @@ const MonthCalendar = ({
                 )}
 
                 <Pressable
-                  key={dateIndex}
                   disabled={isDisabled}
                   onPress={() => date.match({ Some: onChange, None: noop })}
                   style={({ focused, hovered, pressed }) => [
