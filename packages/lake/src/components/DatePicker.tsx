@@ -794,8 +794,6 @@ export type DateRangePickerProps = {
   monthNames: MonthNames;
   weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
-  minDurationinDays?: number;
-  maxDurationinDays?: number;
   onChange: (date: { start: string; end: string }) => void;
   cancelLabel: string;
   confirmLabel: string;
@@ -808,8 +806,6 @@ const DateRangePickerPopover = ({
   monthNames,
   weekDayNames,
   isSelectable,
-  // minDurationinDays,
-  // maxDurationinDays,
   onChange,
   cancelLabel,
   confirmLabel,
@@ -978,8 +974,6 @@ export const DateRangePicker = ({
   monthNames,
   weekDayNames,
   isSelectable,
-  minDurationinDays,
-  maxDurationinDays,
   onChange,
   cancelLabel,
   confirmLabel,
@@ -1041,8 +1035,6 @@ export const DateRangePicker = ({
         monthNames={monthNames}
         weekDayNames={weekDayNames}
         isSelectable={isSelectable}
-        minDurationinDays={minDurationinDays}
-        maxDurationinDays={maxDurationinDays}
         onChange={onChange}
         cancelLabel={cancelLabel}
         confirmLabel={confirmLabel}
