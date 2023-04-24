@@ -811,6 +811,14 @@ const DateRangePickerPopover = ({
 
     if (startYearMonth.isSome()) {
       setPeriods(periods => {
+        const isStartAndEndSameMonth = isYearMonthEquals(startYearMonth.value, periods.end);
+        if (isStartAndEndSameMonth) {
+          return {
+            start: decrementYearMonth(periods.end),
+            end: periods.end,
+          };
+        }
+
         // change end period if it becomes before start period
         const endPeriod = maxYearMonth(periods.end, incrementYearMonth(startYearMonth.value));
 
