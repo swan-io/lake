@@ -48,10 +48,28 @@ const styles = StyleSheet.create({
     paddingVertical: spacings[4],
   },
   dayName: {
-    width: 32,
+    flex: 1,
     height: 32,
     alignItems: "center",
     justifyContent: "center",
+  },
+  dayContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  dayRangeIndicator: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: colors.current[100],
+  },
+  dayStartRangeIndicator: {
+    left: "50%",
+  },
+  dayEndRangeIndicator: {
+    right: "50%",
   },
   dayNumber: {
     width: 32,
@@ -67,9 +85,6 @@ const styles = StyleSheet.create({
   dayNumberPressed: {},
   dayNumberSelected: {
     backgroundColor: colors.current[500],
-  },
-  dayNumberInRange: {
-    backgroundColor: colors.current[100],
   },
   todayIndicator: {
     position: "absolute",
@@ -322,20 +337,35 @@ const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | Da
     .exhaustive();
 };
 
-const isBetweenRange = (date: DatePickerDate, value: Option<DatePickerDate> | DatePickerRange) => {
+const getRangeIndicatorType = (
+  date: DatePickerDate,
+  value: Option<DatePickerDate> | DatePickerRange,
+): "none" | "start" | "end" | "between" => {
   if (!isDateRange(value)) {
-    return false;
+    return "none";
   }
 
   const { start, end } = value;
   if (start.isNone() || end.isNone()) {
-    return false;
+    return "none";
   }
 
   const startDate = start.value;
   const endDate = end.value;
 
-  return isDateAfter(date, startDate) && isDateBefore(date, endDate);
+  if (isDateEquals(startDate, endDate)) {
+    return "none";
+  }
+  if (isDateEquals(date, startDate)) {
+    return "start";
+  }
+  if (isDateEquals(date, endDate)) {
+    return "end";
+  }
+  if (isDateAfter(date, startDate) && isDateBefore(date, endDate)) {
+    return "between";
+  }
+  return "none";
 };
 
 const computeDateDistanceInDays = (date1: DatePickerDate, date2: DatePickerDate): number => {
@@ -562,7 +592,7 @@ const MonthCalendar = ({
 
   return (
     <View>
-      <Box direction="row" alignItems="center" justifyContent="spaceAround" style={styles.weekRow}>
+      <Box direction="row" alignItems="center" style={styles.weekRow}>
         {dayNames.map(dayName => (
           <View key={dayName} style={styles.dayName}>
             <LakeText variant="medium" color={colors.gray[600]}>
@@ -573,13 +603,7 @@ const MonthCalendar = ({
       </Box>
 
       {weeks.map((week, weekIndex) => (
-        <Box
-          key={weekIndex}
-          direction="row"
-          alignItems="center"
-          justifyContent="spaceAround"
-          style={styles.weekRow}
-        >
+        <Box key={weekIndex} direction="row" alignItems="center" style={styles.weekRow}>
           {week.map((date, dateIndex) => {
             const isDisabled = date.match({
               Some: date => isNotNullish(isSelectable) && !isSelectable(date),
@@ -589,46 +613,57 @@ const MonthCalendar = ({
               Some: date => isSelectedDate(date, value),
               None: () => false,
             });
-            const isInRange = date.match({
-              Some: date => isBetweenRange(date, value),
-              None: () => false,
-            });
             const isToday = date.match({
               Some: date => isDateToday(date),
               None: () => false,
             });
+            const rangeIndicator = date.match({
+              Some: date => getRangeIndicatorType(date, value),
+              None: () => "none" as const,
+            });
 
             return (
-              <Pressable
-                key={dateIndex}
-                disabled={isDisabled}
-                onPress={() => date.match({ Some: onChange, None: noop })}
-                style={({ focused, hovered, pressed }) => [
-                  styles.dayNumber,
-                  focused && styles.dayNumberFocused,
-                  hovered && styles.dayNumberHover,
-                  pressed && styles.dayNumberPressed,
-                  isSelected && styles.dayNumberSelected,
-                  isInRange && styles.dayNumberInRange,
-                ]}
-              >
-                <LakeText
-                  variant="smallRegular"
-                  color={
-                    isSelected
-                      ? colors.current.contrast
-                      : isDisabled
-                      ? colors.gray[300]
-                      : isToday
-                      ? colors.current[500]
-                      : colors.gray[900]
-                  }
-                >
-                  {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
-                </LakeText>
+              <View style={styles.dayContainer}>
+                {rangeIndicator !== "none" && (
+                  <View
+                    style={[
+                      styles.dayRangeIndicator,
+                      rangeIndicator === "start" && styles.dayStartRangeIndicator,
+                      rangeIndicator === "end" && styles.dayEndRangeIndicator,
+                    ]}
+                  />
+                )}
 
-                {isToday && <View style={styles.todayIndicator} />}
-              </Pressable>
+                <Pressable
+                  key={dateIndex}
+                  disabled={isDisabled}
+                  onPress={() => date.match({ Some: onChange, None: noop })}
+                  style={({ focused, hovered, pressed }) => [
+                    styles.dayNumber,
+                    focused && styles.dayNumberFocused,
+                    hovered && styles.dayNumberHover,
+                    pressed && styles.dayNumberPressed,
+                    isSelected && styles.dayNumberSelected,
+                  ]}
+                >
+                  <LakeText
+                    variant="smallRegular"
+                    color={
+                      isSelected
+                        ? colors.current.contrast
+                        : isDisabled
+                        ? colors.gray[300]
+                        : isToday
+                        ? colors.current[500]
+                        : colors.gray[900]
+                    }
+                  >
+                    {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
+                  </LakeText>
+
+                  {isToday && <View style={styles.todayIndicator} />}
+                </Pressable>
+              </View>
             );
           })}
         </Box>
