@@ -3,17 +3,20 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Rifm } from "rifm";
+import { P, match } from "ts-pattern";
 import { colors, invariantColors, radii, spacings } from "../constants/design";
 import { noop } from "../utils/function";
-import { isNotNullish, isNullish } from "../utils/nullish";
+import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
+import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { Item, LakeSelect } from "./LakeSelect";
 import { LakeText } from "./LakeText";
 import { LakeTextInput } from "./LakeTextInput";
 import { Pressable } from "./Pressable";
+import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
@@ -22,6 +25,18 @@ const styles = StyleSheet.create({
     padding: spacings[24],
     backgroundColor: invariantColors.white,
     borderRadius: radii[8],
+  },
+  rangePopoverContainer: {
+    alignSelf: "flex-start", // to remove when popover is setup
+    padding: spacings[24],
+    backgroundColor: invariantColors.white,
+    borderRadius: radii[8],
+  },
+  rangePopoverPart: {
+    width: 330,
+  },
+  button: {
+    flex: 1,
   },
   monthSelect: {
     width: 130,
@@ -52,6 +67,9 @@ const styles = StyleSheet.create({
   dayNumberPressed: {},
   dayNumberSelected: {
     backgroundColor: colors.current[500],
+  },
+  dayNumberInRange: {
+    backgroundColor: colors.current[100],
   },
   todayIndicator: {
     position: "absolute",
@@ -84,6 +102,11 @@ type MonthNames = readonly [
 ];
 type WeekDayNames = readonly [string, string, string, string, string, string, string];
 
+type YearMonth = {
+  year: number;
+  month: number;
+};
+
 const weekDayIndex = {
   sunday: 0,
   monday: 1,
@@ -100,6 +123,11 @@ export type DatePickerDate = {
   year: number;
 };
 
+export type DatePickerRange = {
+  start: Option<DatePickerDate>;
+  end: Option<DatePickerDate>;
+};
+
 type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 
 const rifmDateProps = getRifmProps({
@@ -113,6 +141,13 @@ const parseDate = (value: string, format: DateFormat): Option<DatePickerDate> =>
   return date.isValid()
     ? Option.Some({ day: date.date(), month: date.month(), year: date.year() })
     : Option.None();
+};
+
+const parseRange = (value: { start: string; end: string }, format: DateFormat): DatePickerRange => {
+  return {
+    start: parseDate(value.start, format),
+    end: parseDate(value.end, format),
+  };
 };
 
 const stringifyDate = (value: DatePickerDate, format: DateFormat): string => {
@@ -153,7 +188,7 @@ export const isTodayOrFutureDate = (date: DatePickerDate): boolean => {
   );
 };
 
-export const isInRangeDate =
+export const isDateInRange =
   (minDate: Date, maxDate: Date) =>
   (date: DatePickerDate): boolean => {
     const minDay = minDate.getDate();
@@ -216,7 +251,6 @@ const getMonthWeeks = (
       ? monthFirstWeekDay - firstWeekDayIndex
       : NB_DAYS_IN_WEEK - firstWeekDayIndex + monthFirstWeekDay;
 
-  // TODO Fix this when first week day if monday
   for (let i = 0; i < nbDaysToPrepend; i++) {
     monthDates.unshift(Option.None());
   }
@@ -243,17 +277,265 @@ const getWeekDayNames = (
   return [...firstWeekDayNames, ...lastWeekDayNames];
 };
 
-const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate>) => {
-  return value.match({
-    Some: value => value.day === date.day && value.month === date.month && value.year === date.year,
-    None: () => false,
-  });
+const isDateEquals = (date1: DatePickerDate, date2: DatePickerDate): boolean => {
+  return date1.day === date2.day && date1.month === date2.month && date1.year === date2.year;
+};
+
+const isDateBefore = (date1: DatePickerDate, date2: DatePickerDate): boolean => {
+  return (
+    date1.year < date2.year ||
+    (date1.year === date2.year && date1.month < date2.month) ||
+    (date1.year === date2.year && date1.month === date2.month && date1.day < date2.day)
+  );
+};
+
+const isDateAfter = (date1: DatePickerDate, date2: DatePickerDate): boolean => {
+  return (
+    date1.year > date2.year ||
+    (date1.year === date2.year && date1.month > date2.month) ||
+    (date1.year === date2.year && date1.month === date2.month && date1.day > date2.day)
+  );
+};
+
+const isDateRange = (value: Option<DatePickerDate> | DatePickerRange): value is DatePickerRange => {
+  return match(value)
+    .with({ start: P._, end: P._ }, () => true)
+    .otherwise(() => false);
+};
+
+const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | DatePickerRange) => {
+  return match(value)
+    .with(Option.pattern.Some(P.select()), value => isDateEquals(value, date))
+    .with(Option.pattern.None, () => false)
+    .with(
+      P.when(isDateRange),
+      ({ start, end }) =>
+        start.match({
+          Some: start => isDateEquals(start, date),
+          None: () => false,
+        }) ||
+        end.match({
+          Some: end => isDateEquals(end, date),
+          None: () => false,
+        }),
+    )
+    .exhaustive();
+};
+
+const isBetweenRange = (date: DatePickerDate, value: Option<DatePickerDate> | DatePickerRange) => {
+  if (!isDateRange(value)) {
+    return false;
+  }
+
+  const { start, end } = value;
+  if (start.isNone() || end.isNone()) {
+    return false;
+  }
+
+  const startDate = start.value;
+  const endDate = end.value;
+
+  return isDateAfter(date, startDate) && isDateBefore(date, endDate);
+};
+
+const computeDateDistanceInDays = (date1: DatePickerDate, date2: DatePickerDate): number => {
+  const date1Date = new Date(date1.year, date1.month, date1.day);
+  const date2Date = new Date(date2.year, date2.month, date2.day);
+
+  const diffInMs = Math.abs(date2Date.getTime() - date1Date.getTime());
+  return Math.round(diffInMs / (1000 * 3600 * 24));
+};
+
+const getNewDateRange = (
+  currentRange: DatePickerRange,
+  selectedDate: DatePickerDate,
+): DatePickerRange => {
+  const { start, end } = currentRange;
+  if (start.isNone()) {
+    return { start: Option.Some(selectedDate), end: Option.None() };
+  }
+
+  if (end.isNone()) {
+    if (isDateAfter(selectedDate, start.value)) {
+      return { start, end: Option.Some(selectedDate) };
+    }
+
+    return { start: Option.Some(selectedDate), end: currentRange.start };
+  }
+
+  const startDistance = computeDateDistanceInDays(start.value, selectedDate);
+  const endDistance = computeDateDistanceInDays(end.value, selectedDate);
+
+  // If both dates are already selected, we change the closest one to the new date
+  if (startDistance < endDistance) {
+    return { start: Option.Some(selectedDate), end: currentRange.end };
+  }
+  return { start: currentRange.start, end: Option.Some(selectedDate) };
+};
+
+const getTodayYearMonth = (): YearMonth => ({
+  month: new Date().getMonth(),
+  year: new Date().getFullYear(),
+});
+
+const getYearMonth = (value: string | undefined, format: DateFormat): Option<YearMonth> => {
+  if (isNullishOrEmpty(value)) {
+    return Option.None();
+  }
+  return parseDate(value, format);
+};
+
+const isYearMonthBefore = (date1: YearMonth, date2: YearMonth): boolean => {
+  return date1.year < date2.year || (date1.year === date2.year && date1.month < date2.month);
+};
+
+const isYearMonthEquals = (date1: YearMonth, date2: YearMonth): boolean => {
+  return date1.year === date2.year && date1.month === date2.month;
+};
+
+const minYearMonth = (date1: YearMonth, date2: YearMonth): YearMonth => {
+  return isYearMonthBefore(date1, date2) ? date1 : date2;
+};
+
+const maxYearMonth = (date1: YearMonth, date2: YearMonth): YearMonth => {
+  return isYearMonthBefore(date1, date2) ? date2 : date1;
+};
+
+const incrementYearMonth = ({ month, year }: YearMonth): YearMonth => {
+  if (month === 11) {
+    return { month: 0, year: year + 1 };
+  }
+  return { month: month + 1, year };
+};
+
+const decrementYearMonth = ({ month, year }: YearMonth): YearMonth => {
+  if (month === 0) {
+    return { month: 11, year: year - 1 };
+  }
+  return { month: month - 1, year };
+};
+
+type YearMonthSelectProps = {
+  monthNames: MonthNames;
+  value: YearMonth;
+  arrowsPosition?: "around" | "right";
+  minValue?: YearMonth;
+  maxValue?: YearMonth;
+  onChange: (value: YearMonth) => void;
+};
+
+const YearMonthSelect = ({
+  monthNames,
+  value,
+  minValue,
+  maxValue,
+  arrowsPosition = "right",
+  onChange,
+}: YearMonthSelectProps) => {
+  const monthItems = useMemo<Item<number>[]>(
+    () => monthNames.map((name, index) => ({ name, value: index })),
+    [monthNames],
+  );
+
+  const yearItems = useMemo<Item<number>[]>(
+    () =>
+      range(value.year - 5, value.year + 5).map(year => ({
+        name: year.toString(),
+        value: year,
+      })),
+    [value.year],
+  );
+
+  const selectMonth = (month: number) => {
+    onChange({ year: value.year, month });
+  };
+
+  const selectYear = (year: number) => {
+    onChange({ year, month: value.month });
+  };
+
+  const setPreviousMonth = () => {
+    onChange(decrementYearMonth(value));
+  };
+
+  const setNextMonth = () => {
+    onChange(incrementYearMonth(value));
+  };
+
+  const isPreviousDisabled = !minValue
+    ? false
+    : value.year <= minValue.year && value.month <= minValue.month;
+  const isNextDisabled = !maxValue
+    ? false
+    : value.year >= maxValue.year && value.month >= maxValue.month;
+
+  return (
+    <Box direction="row" alignItems="center">
+      {arrowsPosition === "around" && (
+        <>
+          <LakeButton
+            size="small"
+            mode="tertiary"
+            icon="arrow-left-filled"
+            disabled={isPreviousDisabled}
+            onPress={setPreviousMonth}
+          />
+
+          <Fill minWidth={12} />
+        </>
+      )}
+
+      <LakeSelect
+        items={monthItems}
+        value={value.month}
+        onValueChange={selectMonth}
+        mode="borderless"
+        size="small"
+        hideErrors={true}
+        style={styles.monthSelect}
+      />
+
+      <LakeSelect
+        items={yearItems}
+        value={value.year}
+        onValueChange={selectYear}
+        mode="borderless"
+        size="small"
+        hideErrors={true}
+        style={styles.yearSelect}
+      />
+
+      <Fill minWidth={12} />
+
+      {arrowsPosition === "right" && (
+        <>
+          <LakeButton
+            size="small"
+            mode="tertiary"
+            icon="arrow-left-filled"
+            disabled={isPreviousDisabled}
+            onPress={setPreviousMonth}
+          />
+
+          <Space width={12} />
+        </>
+      )}
+
+      <LakeButton
+        size="small"
+        mode="tertiary"
+        icon="arrow-right-filled"
+        disabled={isNextDisabled}
+        onPress={setNextMonth}
+      />
+    </Box>
+  );
 };
 
 type MonthCalendarProps = {
   month: number;
   year: number;
-  value: Option<DatePickerDate>;
+  value: Option<DatePickerDate> | DatePickerRange;
   firstWeekDay: keyof typeof weekDayIndex;
   weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
@@ -307,6 +589,10 @@ const MonthCalendar = ({
               Some: date => isSelectedDate(date, value),
               None: () => false,
             });
+            const isInRange = date.match({
+              Some: date => isBetweenRange(date, value),
+              None: () => false,
+            });
             const isToday = date.match({
               Some: date => isDateToday(date),
               None: () => false,
@@ -323,6 +609,7 @@ const MonthCalendar = ({
                   hovered && styles.dayNumberHover,
                   pressed && styles.dayNumberPressed,
                   isSelected && styles.dayNumberSelected,
+                  isInRange && styles.dayNumberInRange,
                 ]}
               >
                 <LakeText
@@ -352,6 +639,7 @@ const MonthCalendar = ({
 
 export type DatePickerProps = {
   value?: string;
+  error?: string;
   format: DateFormat;
   firstWeekDay: keyof typeof weekDayIndex;
   monthNames: MonthNames;
@@ -369,74 +657,17 @@ const DatePickerPopover = ({
   isSelectable,
   onChange,
 }: DatePickerProps) => {
-  const [{ month, year }, setMonthYear] = useState(() => {
-    if (isNullish(value)) {
-      return {
-        month: new Date().getMonth(),
-        year: new Date().getFullYear(),
-      };
-    }
-    const parsed = parseDate(value, format);
-    return parsed.match({
-      Some: ({ month, year }) => ({ month, year }),
-      None: () => ({
-        month: new Date().getMonth(),
-        year: new Date().getFullYear(),
-      }),
-    });
-  });
+  const [monthYear, setMonthYear] = useState(() =>
+    getYearMonth(value, format).getWithDefault(getTodayYearMonth()),
+  );
 
+  // Automatically change displayed year and month when user change the value with text input
   useEffect(() => {
-    if (isNullish(value)) {
-      return;
+    const yearMonth = getYearMonth(value, format);
+    if (yearMonth.isSome()) {
+      setMonthYear(yearMonth.value);
     }
-    const parsed = parseDate(value, format);
-    if (parsed.isNone()) {
-      return;
-    }
-    const { month, year } = parsed.value;
-    setMonthYear({ month, year });
   }, [value, format]);
-
-  const monthItems = useMemo<Item<number>[]>(
-    () => monthNames.map((name, index) => ({ name, value: index })),
-    [monthNames],
-  );
-
-  const yearItems = useMemo<Item<number>[]>(
-    () =>
-      range(year - 5, year + 5).map(year => ({
-        name: year.toString(),
-        value: year,
-      })),
-    [year],
-  );
-
-  const selectMonth = useCallback((month: number) => {
-    setMonthYear(({ year }) => ({ month, year }));
-  }, []);
-
-  const selectYear = useCallback((year: number) => {
-    setMonthYear(({ month }) => ({ month, year }));
-  }, []);
-
-  const setPreviousMonth = useCallback(() => {
-    setMonthYear(({ month, year }) => {
-      if (month === 0) {
-        return { month: 11, year: year - 1 };
-      }
-      return { month: month - 1, year };
-    });
-  }, []);
-
-  const setNextMonth = useCallback(() => {
-    setMonthYear(({ month, year }) => {
-      if (month === 11) {
-        return { month: 0, year: year + 1 };
-      }
-      return { month: month + 1, year };
-    });
-  }, []);
 
   const handleChange = useCallback(
     (date: DatePickerDate) => {
@@ -448,46 +679,13 @@ const DatePickerPopover = ({
 
   return (
     <View style={styles.popoverContainer}>
-      <Box direction="row" alignItems="center">
-        <LakeSelect
-          items={monthItems}
-          value={month}
-          onValueChange={selectMonth}
-          mode="borderless"
-          size="small"
-          hideErrors={true}
-          style={styles.monthSelect}
-        />
-
-        <LakeSelect
-          items={yearItems}
-          value={year}
-          onValueChange={selectYear}
-          mode="borderless"
-          size="small"
-          hideErrors={true}
-          style={styles.yearSelect}
-        />
-
-        <Fill minWidth={12} />
-
-        <LakeButton
-          size="small"
-          mode="tertiary"
-          icon="arrow-left-filled"
-          onPress={setPreviousMonth}
-        />
-
-        <Space width={12} />
-        <LakeButton size="small" mode="tertiary" icon="arrow-right-filled" onPress={setNextMonth} />
-      </Box>
-
+      <YearMonthSelect monthNames={monthNames} value={monthYear} onChange={setMonthYear} />
       <Space height={24} />
 
       <MonthCalendar
-        month={month}
-        year={year}
-        value={isNotNullish(value) ? parseDate(value, format) : Option.None()}
+        month={monthYear.month}
+        year={monthYear.year}
+        value={isNotNullishOrEmpty(value) ? parseDate(value, format) : Option.None()}
         firstWeekDay={firstWeekDay}
         weekDayNames={weekDayNames}
         isSelectable={isSelectable}
@@ -499,6 +697,7 @@ const DatePickerPopover = ({
 
 export const DatePicker = ({
   value,
+  error,
   format,
   firstWeekDay,
   monthNames,
@@ -510,7 +709,7 @@ export const DatePicker = ({
     <>
       <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
         {({ value, onChange }) => (
-          <LakeTextInput placeholder={format} value={value} onChange={onChange} />
+          <LakeTextInput placeholder={format} value={value} error={error} onChange={onChange} />
         )}
       </Rifm>
 
@@ -522,6 +721,261 @@ export const DatePicker = ({
         weekDayNames={weekDayNames}
         isSelectable={isSelectable}
         onChange={onChange}
+      />
+    </>
+  );
+};
+
+export type DateRangePickerProps = {
+  value: { start: string; end: string };
+  error?: string;
+  format: DateFormat;
+  firstWeekDay: keyof typeof weekDayIndex;
+  monthNames: MonthNames;
+  weekDayNames: WeekDayNames;
+  isSelectable?: (date: DatePickerDate) => boolean;
+  minDurationinDays?: number;
+  maxDurationinDays?: number;
+  onChange: (date: { start: string; end: string }) => void;
+  cancelLabel: string;
+  confirmLabel: string;
+};
+
+const DateRangePickerPopover = ({
+  value,
+  format,
+  firstWeekDay,
+  monthNames,
+  weekDayNames,
+  isSelectable,
+  // minDurationinDays,
+  // maxDurationinDays,
+  onChange,
+  cancelLabel,
+  confirmLabel,
+}: DateRangePickerProps) => {
+  const [periods, setPeriods] = useState(() => {
+    const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
+    const endYearMonth = getYearMonth(value.end, format).getWithDefault(
+      incrementYearMonth(startYearMonth),
+    );
+    return { start: startYearMonth, end: endYearMonth };
+  });
+
+  // Automatically change displayed year and month when start date changes
+  useEffect(() => {
+    const startYearMonth = getYearMonth(value.start, format);
+
+    if (startYearMonth.isSome()) {
+      setPeriods(periods => {
+        // change end period if it becomes before start period
+        const endPeriod = maxYearMonth(periods.end, incrementYearMonth(startYearMonth.value));
+
+        return {
+          start: startYearMonth.value,
+          end: endPeriod,
+        };
+      });
+    }
+  }, [value.start, format]);
+
+  // Automatically change displayed year and month when end date changes
+  useEffect(() => {
+    const endYearMonth = getYearMonth(value.end, format);
+
+    if (endYearMonth.isSome()) {
+      setPeriods(periods => {
+        const isStartAndEndSameMonth = isYearMonthEquals(periods.start, endYearMonth.value);
+        if (isStartAndEndSameMonth) {
+          return {
+            start: periods.start,
+            end: incrementYearMonth(periods.start),
+          };
+        }
+
+        // change start period if it becomes after end period
+        const startPeriod = minYearMonth(periods.start, decrementYearMonth(endYearMonth.value));
+
+        return {
+          start: startPeriod,
+          end: endYearMonth.value,
+        };
+      });
+    }
+  }, [value.end, format]);
+
+  const setStartPeriod = useCallback((yearMonth: YearMonth) => {
+    setPeriods(periods => ({
+      ...periods,
+      start: yearMonth,
+    }));
+  }, []);
+
+  const setEndPeriod = useCallback((yearMonth: YearMonth) => {
+    setPeriods(periods => ({
+      ...periods,
+      end: yearMonth,
+    }));
+  }, []);
+
+  const dateRange = useMemo(() => parseRange(value, format), [value, format]);
+
+  const handleSelectDate = (date: DatePickerDate) => {
+    const newRange = getNewDateRange(dateRange, date);
+    const newValue = {
+      start: newRange.start.match({
+        Some: date => stringifyDate(date, format),
+        None: () => value.start,
+      }),
+      end: newRange.end.match({
+        Some: date => stringifyDate(date, format),
+        None: () => value.end,
+      }),
+    };
+    onChange(newValue);
+  };
+
+  return (
+    <View style={styles.rangePopoverContainer}>
+      <Box direction="row" alignItems="start">
+        <View style={styles.rangePopoverPart}>
+          <YearMonthSelect
+            monthNames={monthNames}
+            value={periods.start}
+            maxValue={decrementYearMonth(periods.end)}
+            arrowsPosition="around"
+            onChange={setStartPeriod}
+          />
+
+          <Space height={24} />
+
+          <MonthCalendar
+            month={periods.start.month}
+            year={periods.start.year}
+            value={dateRange}
+            firstWeekDay={firstWeekDay}
+            weekDayNames={weekDayNames}
+            isSelectable={isSelectable}
+            onChange={handleSelectDate}
+          />
+        </View>
+
+        <Separator space={24} horizontal={true} />
+
+        <View style={styles.rangePopoverPart}>
+          <YearMonthSelect
+            monthNames={monthNames}
+            value={periods.end}
+            minValue={incrementYearMonth(periods.start)}
+            arrowsPosition="around"
+            onChange={setEndPeriod}
+          />
+
+          <Space height={24} />
+
+          <MonthCalendar
+            month={periods.end.month}
+            year={periods.end.year}
+            value={dateRange}
+            firstWeekDay={firstWeekDay}
+            weekDayNames={weekDayNames}
+            isSelectable={isSelectable}
+            onChange={handleSelectDate}
+          />
+        </View>
+      </Box>
+
+      <Space height={24} />
+
+      <Box direction="row" alignItems="start">
+        <LakeButton size="small" mode="secondary" style={styles.button}>
+          {cancelLabel}
+        </LakeButton>
+
+        <Space width={48} />
+
+        <LakeButton size="small" mode="primary" color="current" style={styles.button}>
+          {confirmLabel}
+        </LakeButton>
+      </Box>
+    </View>
+  );
+};
+
+export const DateRangePicker = ({
+  value,
+  error,
+  format,
+  firstWeekDay,
+  monthNames,
+  weekDayNames,
+  isSelectable,
+  minDurationinDays,
+  maxDurationinDays,
+  onChange,
+  cancelLabel,
+  confirmLabel,
+}: DateRangePickerProps) => {
+  const handleStartChange = useCallback(
+    (start: string) => {
+      onChange({ start, end: value.end });
+    },
+    [value, onChange],
+  );
+
+  const handleEndChange = useCallback(
+    (end: string) => {
+      onChange({ start: value.start, end });
+    },
+    [value, onChange],
+  );
+
+  return (
+    <>
+      <Box direction="row" alignItems="center">
+        <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
+          {({ value, onChange }) => (
+            <LakeTextInput
+              placeholder={format}
+              value={value}
+              onChange={onChange}
+              hideErrors={true}
+            />
+          )}
+        </Rifm>
+
+        <Space width={12} />
+        <Icon name="arrow-right-filled" size={20} />
+        <Space width={12} />
+
+        <Rifm value={value.end} onChange={handleEndChange} {...rifmDateProps}>
+          {({ value, onChange }) => (
+            <LakeTextInput
+              placeholder={format}
+              value={value}
+              onChange={onChange}
+              hideErrors={true}
+            />
+          )}
+        </Rifm>
+      </Box>
+
+      <LakeText variant="smallRegular" color={colors.negative[500]}>
+        {error ?? " "}
+      </LakeText>
+
+      <DateRangePickerPopover
+        value={value}
+        format={format}
+        firstWeekDay={firstWeekDay}
+        monthNames={monthNames}
+        weekDayNames={weekDayNames}
+        isSelectable={isSelectable}
+        minDurationinDays={minDurationinDays}
+        maxDurationinDays={maxDurationinDays}
+        onChange={onChange}
+        cancelLabel={cancelLabel}
+        confirmLabel={confirmLabel}
       />
     </>
   );

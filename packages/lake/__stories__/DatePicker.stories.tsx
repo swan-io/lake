@@ -2,7 +2,13 @@ import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import { DatePicker, DatePickerProps, isTodayOrFutureDate } from "../src/components/DatePicker";
+import {
+  DatePicker,
+  DatePickerProps,
+  DateRangePicker,
+  DateRangePickerProps,
+  isTodayOrFutureDate,
+} from "../src/components/DatePicker";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -21,6 +27,14 @@ const InteractiveDatePicker = ({ ...props }: Except<DatePickerProps, "value" | "
   const [value, setValue] = useState<string>();
 
   return <DatePicker {...props} value={value} onChange={setValue} />;
+};
+
+const InteractiveDateRangePicker = ({
+  ...props
+}: Except<DateRangePickerProps, "value" | "onChange">) => {
+  const [value, setValue] = useState({ start: "", end: "" });
+
+  return <DateRangePicker {...props} value={value} onChange={setValue} />;
 };
 
 const monthNames = [
@@ -84,6 +98,25 @@ export const Default = () => {
               isSelectable={isTodayOrFutureDate}
             />
           </View>
+        </StoryPart>
+      </StoryBlock>
+    </WithPartnerAccentColor>
+  );
+};
+
+export const Range = () => {
+  return (
+    <WithPartnerAccentColor color="#0F6FDE">
+      <StoryBlock title="DateRangePicker">
+        <StoryPart title="Default">
+          <InteractiveDateRangePicker
+            firstWeekDay="monday"
+            monthNames={monthNames}
+            weekDayNames={dayNames}
+            format="DD/MM/YYYY"
+            cancelLabel="Cancel"
+            confirmLabel="Select"
+          />
         </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>
