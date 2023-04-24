@@ -849,14 +849,14 @@ const DateRangePickerPopover = ({
 
   const setStartPeriod = useCallback((yearMonth: YearMonth) => {
     setPeriods(periods => ({
-      ...periods,
       start: yearMonth,
+      end: maxYearMonth(periods.end, incrementYearMonth(yearMonth)),
     }));
   }, []);
 
   const setEndPeriod = useCallback((yearMonth: YearMonth) => {
     setPeriods(periods => ({
-      ...periods,
+      start: minYearMonth(periods.start, decrementYearMonth(yearMonth)),
       end: yearMonth,
     }));
   }, []);
