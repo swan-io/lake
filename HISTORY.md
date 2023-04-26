@@ -1,3 +1,9 @@
+## 2.0.0
+
+Changes:
+
+- Update Boxed (0a2bd62)
+
 ## 1.9.1
 
 Fixes:
