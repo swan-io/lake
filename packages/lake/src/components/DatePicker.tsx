@@ -1,7 +1,7 @@
 import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { colors, invariantColors, radii, spacings } from "../constants/design";
@@ -13,6 +13,7 @@ import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
+import { LakeLabel } from "./LakeLabel";
 import { Item, LakeSelect } from "./LakeSelect";
 import { LakeText } from "./LakeText";
 import { LakeTextInput } from "./LakeTextInput";
@@ -22,15 +23,15 @@ import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
+  popover: {
+    padding: spacings[24],
+  },
   popoverContainer: {
     width: 430,
-    padding: spacings[24],
     backgroundColor: invariantColors.white,
     borderRadius: radii[8],
   },
   rangePopoverContainer: {
-    alignSelf: "flex-start", // to remove when popover is setup
-    padding: spacings[24],
     backgroundColor: invariantColors.white,
     borderRadius: radii[8],
   },
@@ -718,15 +719,16 @@ export type DatePickerProps = {
   onChange: (date: string) => void;
 };
 
-const DatePickerPopover = ({
+const DatePickerPopoverContent = ({
   value,
   format,
   firstWeekDay,
   monthNames,
   weekDayNames,
+  style,
   isSelectable,
   onChange,
-}: DatePickerProps) => {
+}: DatePickerProps & { style?: StyleProp<ViewStyle> }) => {
   const [monthYear, setMonthYear] = useState(() =>
     getYearMonth(value, format).getWithDefault(getTodayYearMonth()),
   );
@@ -748,7 +750,7 @@ const DatePickerPopover = ({
   );
 
   return (
-    <View style={styles.popoverContainer}>
+    <View style={[styles.popoverContainer, style]}>
       <YearMonthSelect monthNames={monthNames} value={monthYear} onChange={setMonthYear} />
       <Space height={24} />
 
@@ -801,7 +803,7 @@ export const DatePicker = ({
 
       <Popover
         id={popoverId}
-        role="listbox"
+        role="dialog"
         onDismiss={close}
         referenceRef={ref}
         autoFocus={true}
@@ -810,17 +812,118 @@ export const DatePicker = ({
         underlay={false}
         forcedMode="Dropdown"
       >
-        <DatePickerPopover
+        <DatePickerPopoverContent
           value={value}
           format={format}
           firstWeekDay={firstWeekDay}
           monthNames={monthNames}
           weekDayNames={weekDayNames}
+          style={styles.popover}
           isSelectable={isSelectable}
           onChange={onChange}
         />
       </Popover>
     </>
+  );
+};
+
+type DatePickerPopoverProps = DatePickerProps & {
+  id?: string;
+  visible: boolean;
+  referenceRef: React.RefObject<unknown>;
+  inputLabel: string;
+  cancelLabel: string;
+  confirmLabel: string;
+  onDissmiss: () => void;
+};
+
+export const DatePickerPopover = ({
+  value,
+  error,
+  format,
+  firstWeekDay,
+  monthNames,
+  weekDayNames,
+  isSelectable,
+  onChange,
+  id,
+  visible,
+  referenceRef,
+  inputLabel,
+  cancelLabel,
+  confirmLabel,
+  onDissmiss,
+}: DatePickerPopoverProps) => {
+  const [localeValue, setLocaleValue] = useState(value);
+
+  useEffect(() => {
+    setLocaleValue(value);
+  }, [value]);
+
+  const handleCancel = () => {
+    setLocaleValue(value);
+    onDissmiss();
+  };
+
+  const handleConfirm = () => {
+    if (isNotNullishOrEmpty(localeValue)) {
+      onChange(localeValue);
+    }
+    onDissmiss();
+  };
+
+  return (
+    <Popover
+      id={id}
+      role="dialog"
+      onDismiss={handleCancel}
+      referenceRef={referenceRef}
+      autoFocus={true}
+      returnFocus={false}
+      visible={visible}
+    >
+      <View style={styles.popover}>
+        <LakeLabel
+          label={inputLabel}
+          render={() => (
+            <Rifm value={localeValue ?? ""} onChange={setLocaleValue} {...rifmDateProps}>
+              {({ value, onChange }) => (
+                <LakeTextInput
+                  placeholder={format}
+                  value={value}
+                  error={error}
+                  onChange={onChange}
+                />
+              )}
+            </Rifm>
+          )}
+        />
+
+        <DatePickerPopoverContent
+          value={localeValue}
+          format={format}
+          firstWeekDay={firstWeekDay}
+          monthNames={monthNames}
+          weekDayNames={weekDayNames}
+          isSelectable={isSelectable}
+          onChange={setLocaleValue}
+        />
+
+        <Space height={24} />
+
+        <Box direction="row" alignItems="center">
+          <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
+            {cancelLabel}
+          </LakeButton>
+
+          <Space width={24} />
+
+          <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
+            {confirmLabel}
+          </LakeButton>
+        </Box>
+      </View>
+    </Popover>
   );
 };
 
@@ -835,15 +938,16 @@ export type DateRangePickerProps = {
   onChange: (date: { start: string; end: string }) => void;
 };
 
-const DateRangePickerPopover = ({
+const DateRangePickerPopoverContent = ({
   value,
   format,
   firstWeekDay,
   monthNames,
   weekDayNames,
+  style,
   isSelectable,
   onChange,
-}: DateRangePickerProps) => {
+}: DateRangePickerProps & { style?: StyleProp<ViewStyle> }) => {
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
     const endYearMonth = getYearMonth(value.end, format).getWithDefault(
@@ -934,7 +1038,7 @@ const DateRangePickerPopover = ({
   };
 
   return (
-    <View style={styles.rangePopoverContainer}>
+    <View style={[styles.rangePopoverContainer, style]}>
       <Box direction="row" alignItems="start">
         <View style={styles.rangePopoverPart}>
           <YearMonthSelect
@@ -1069,12 +1173,13 @@ export const DateRangePicker = ({
         underlay={false}
         forcedMode="Dropdown"
       >
-        <DateRangePickerPopover
+        <DateRangePickerPopoverContent
           value={value}
           format={format}
           firstWeekDay={firstWeekDay}
           monthNames={monthNames}
           weekDayNames={weekDayNames}
+          style={styles.popover}
           isSelectable={isSelectable}
           onChange={onChange}
         />
