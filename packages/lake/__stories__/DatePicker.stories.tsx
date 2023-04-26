@@ -137,14 +137,14 @@ export const Range = () => {
     <WithPartnerAccentColor color="#0F6FDE">
       <StoryBlock title="DateRangePicker">
         <StoryPart title="Default">
-          <InteractiveDateRangePicker
-            firstWeekDay="monday"
-            monthNames={monthNames}
-            weekDayNames={dayNames}
-            format="DD/MM/YYYY"
-            cancelLabel="Cancel"
-            confirmLabel="Select"
-          />
+          <View style={styles.container}>
+            <InteractiveDateRangePicker
+              firstWeekDay="monday"
+              monthNames={monthNames}
+              weekDayNames={dayNames}
+              format="DD/MM/YYYY"
+            />
+          </View>
         </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>

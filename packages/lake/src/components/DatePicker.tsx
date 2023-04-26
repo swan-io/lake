@@ -833,8 +833,6 @@ export type DateRangePickerProps = {
   weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: { start: string; end: string }) => void;
-  cancelLabel: string;
-  confirmLabel: string;
 };
 
 const DateRangePickerPopover = ({
@@ -845,8 +843,6 @@ const DateRangePickerPopover = ({
   weekDayNames,
   isSelectable,
   onChange,
-  cancelLabel,
-  confirmLabel,
 }: DateRangePickerProps) => {
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
@@ -986,20 +982,6 @@ const DateRangePickerPopover = ({
           />
         </View>
       </Box>
-
-      <Space height={24} />
-
-      <Box direction="row" alignItems="start">
-        <LakeButton size="small" mode="secondary" style={styles.button}>
-          {cancelLabel}
-        </LakeButton>
-
-        <Space width={48} />
-
-        <LakeButton size="small" mode="primary" color="current" style={styles.button}>
-          {confirmLabel}
-        </LakeButton>
-      </Box>
     </View>
   );
 };
@@ -1013,9 +995,11 @@ export const DateRangePicker = ({
   weekDayNames,
   isSelectable,
   onChange,
-  cancelLabel,
-  confirmLabel,
 }: DateRangePickerProps) => {
+  const ref = useRef<TextInput>(null);
+  const [isOpened, { open, close }] = useDisclosure(false);
+  const popoverId = useId();
+
   const handleStartChange = useCallback(
     (start: string) => {
       onChange({ start, end: value.end });
@@ -1036,11 +1020,13 @@ export const DateRangePicker = ({
         <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
           {({ value, onChange }) => (
             <LakeTextInput
+              ref={ref}
               placeholder={format}
               value={value}
               onChange={onChange}
               error={error}
               hideErrors={true}
+              ariaExpanded={isOpened}
             />
           )}
         </Rifm>
@@ -1057,9 +1043,13 @@ export const DateRangePicker = ({
               onChange={onChange}
               error={error}
               hideErrors={true}
+              ariaExpanded={isOpened}
             />
           )}
         </Rifm>
+
+        <Space width={12} />
+        <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
       </Box>
 
       <Space height={4} />
@@ -1068,17 +1058,27 @@ export const DateRangePicker = ({
         {error ?? " "}
       </LakeText>
 
-      <DateRangePickerPopover
-        value={value}
-        format={format}
-        firstWeekDay={firstWeekDay}
-        monthNames={monthNames}
-        weekDayNames={weekDayNames}
-        isSelectable={isSelectable}
-        onChange={onChange}
-        cancelLabel={cancelLabel}
-        confirmLabel={confirmLabel}
-      />
+      <Popover
+        id={popoverId}
+        role="dialog"
+        onDismiss={close}
+        referenceRef={ref}
+        autoFocus={true}
+        returnFocus={false}
+        visible={isOpened}
+        underlay={false}
+        forcedMode="Dropdown"
+      >
+        <DateRangePickerPopover
+          value={value}
+          format={format}
+          firstWeekDay={firstWeekDay}
+          monthNames={monthNames}
+          weekDayNames={weekDayNames}
+          isSelectable={isSelectable}
+          onChange={onChange}
+        />
+      </Popover>
     </View>
   );
 };
