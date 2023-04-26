@@ -78,7 +78,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
           color: { theme: accentColor ?? "#26232f" },
           webWidget: {
             contactForm: {
-              fields: Array.keepMap(values, ([key, value]) =>
+              fields: Array.filterMap(values, ([key, value]) =>
                 value != null
                   ? Option.Some({
                       id: zendeskFieldMapping[key],

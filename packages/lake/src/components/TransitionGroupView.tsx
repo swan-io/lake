@@ -32,7 +32,7 @@ export const TransitionGroupView = ({ children, enter, leave, style, childStyle 
 
   const cleanedUpChildren = useMemo(
     () =>
-      Array.keepMap(Children.toArray(children), child =>
+      Array.filterMap(Children.toArray(children), child =>
         match(child)
           .with({ key: P.string }, child => Option.Some({ key: child.key, child }))
           .otherwise(() => Option.None()),
@@ -45,7 +45,7 @@ export const TransitionGroupView = ({ children, enter, leave, style, childStyle 
   const newKeys = new Set(cleanedUpChildren.map(item => item.key));
   leavingKeysAndIndicesRef.current = [
     ...leavingKeysAndIndicesRef.current,
-    ...Array.keepMap(
+    ...Array.filterMap(
       previousChildren.map((item, index) => ({ item, index })),
       ({ item, index }) =>
         newKeys.has(item.key) ||

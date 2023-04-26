@@ -16,7 +16,7 @@ const FLUENT_MODULE_NAME = "@fluentui/svg-icons/icons";
 const SVG_START = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="`;
 const SVG_END = `"/></svg>`;
 
-const svgs = Array.keepMap(iconsConfiguration, name => {
+const svgs = Array.filterMap(iconsConfiguration, name => {
   const match = /(.+)-(regular|filled)/.exec(name);
   if (match == null) {
     throw new Error(`Invalid icon name: ${name}`);

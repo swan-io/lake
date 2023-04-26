@@ -41,7 +41,7 @@ export const useUrqlMutation = <Data, Variables extends AnyVariables>(
       (input: Variables): Future<Result<Data, Error | CombinedError>> =>
         Future.fromPromise(execute(input))
           .mapError(error => error as Error) // Only used to cast error
-          .mapResult(toResult),
+          .mapOkToResult(toResult),
       [execute],
     ),
   ] as const;

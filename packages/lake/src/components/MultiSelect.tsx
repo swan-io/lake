@@ -266,7 +266,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     }, [filter, items, values]);
 
     const sections = useMemo(() => {
-      return Array.keepMap(
+      return Array.filterMap(
         Dict.entries(groupBy(filteredItems, ({ group }) => group)),
         ([groupName, data]) =>
           data === undefined ? Option.None() : Option.Some({ title: groupName, data }),

@@ -73,7 +73,7 @@ const ListRightPanel_ = forwardRef<FocusTrapRef, Props<unknown>>(
   ) => {
     const activeItem = items.find(item => keyExtractor(item) === activeId);
     // use `Array.getIndexBy` instead of `Array.findIndex` to avoid -1 value
-    const activeItemIndex = Array.getIndexBy(
+    const activeItemIndex = Array.findIndex(
       items,
       item => keyExtractor(item) === activeId,
     ).toUndefined();
