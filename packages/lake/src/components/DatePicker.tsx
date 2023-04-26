@@ -1,10 +1,11 @@
 import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { colors, invariantColors, radii, spacings } from "../constants/design";
+import { useDisclosure } from "../hooks/useDisclosure";
 import { noop } from "../utils/function";
 import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
@@ -15,6 +16,7 @@ import { LakeButton } from "./LakeButton";
 import { Item, LakeSelect } from "./LakeSelect";
 import { LakeText } from "./LakeText";
 import { LakeTextInput } from "./LakeTextInput";
+import { Popover } from "./Popover";
 import { Pressable } from "./Pressable";
 import { Separator } from "./Separator";
 import { Space } from "./Space";
@@ -773,23 +775,51 @@ export const DatePicker = ({
   isSelectable,
   onChange,
 }: DatePickerProps) => {
+  const ref = useRef<TextInput>(null);
+  const [isOpened, { open, close }] = useDisclosure(false);
+  const popoverId = useId();
+
   return (
     <>
-      <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
-        {({ value, onChange }) => (
-          <LakeTextInput placeholder={format} value={value} error={error} onChange={onChange} />
-        )}
-      </Rifm>
+      <Box direction="row">
+        <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
+          {({ value, onChange }) => (
+            <LakeTextInput
+              ref={ref}
+              placeholder={format}
+              value={value}
+              error={error}
+              onChange={onChange}
+              ariaExpanded={isOpened}
+            />
+          )}
+        </Rifm>
 
-      <DatePickerPopover
-        value={value}
-        format={format}
-        firstWeekDay={firstWeekDay}
-        monthNames={monthNames}
-        weekDayNames={weekDayNames}
-        isSelectable={isSelectable}
-        onChange={onChange}
-      />
+        <Space width={12} />
+        <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+      </Box>
+
+      <Popover
+        id={popoverId}
+        role="listbox"
+        onDismiss={close}
+        referenceRef={ref}
+        autoFocus={true}
+        returnFocus={false}
+        visible={isOpened}
+        underlay={false}
+        forcedMode="Dropdown"
+      >
+        <DatePickerPopover
+          value={value}
+          format={format}
+          firstWeekDay={firstWeekDay}
+          monthNames={monthNames}
+          weekDayNames={weekDayNames}
+          isSelectable={isSelectable}
+          onChange={onChange}
+        />
+      </Popover>
     </>
   );
 };
