@@ -211,34 +211,33 @@ const padEnd = <T,>(input: T[], length: number, value: T): T[] => {
 };
 
 export const isTodayOrFutureDate = (date: DatePickerDate): boolean => {
-  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
 
-  return (
-    date.year >= today.getFullYear() &&
-    date.month >= today.getMonth() &&
-    date.day >= today.getDate()
-  );
+  const yesterdayDate: DatePickerDate = {
+    day: yesterday.getDate(),
+    month: yesterday.getMonth(),
+    year: yesterday.getFullYear(),
+  };
+
+  return isDateAfter(date, yesterdayDate);
 };
 
 export const isDateInRange =
   (minDate: Date, maxDate: Date) =>
   (date: DatePickerDate): boolean => {
-    const minDay = minDate.getDate();
-    const minMonth = minDate.getMonth();
-    const minYear = minDate.getFullYear();
+    const min: DatePickerDate = {
+      day: minDate.getDate(),
+      month: minDate.getMonth(),
+      year: minDate.getFullYear(),
+    };
+    const max: DatePickerDate = {
+      day: maxDate.getDate(),
+      month: maxDate.getMonth(),
+      year: maxDate.getFullYear(),
+    };
 
-    const maxDay = maxDate.getDate();
-    const maxMonth = maxDate.getMonth();
-    const maxYear = maxDate.getFullYear();
-
-    return (
-      date.day >= minDay &&
-      date.month >= minMonth &&
-      date.year >= minYear &&
-      date.day <= maxDay &&
-      date.month <= maxMonth &&
-      date.year <= maxYear
-    );
+    return isDateAfter(date, min) && isDateBefore(date, max);
   };
 
 const isDateToday = (date: DatePickerDate): boolean => {

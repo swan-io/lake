@@ -7,6 +7,7 @@ import {
   DatePickerProps,
   DateRangePicker,
   DateRangePickerProps,
+  isDateInRange,
   isTodayOrFutureDate,
   validateDateRangeOrder,
 } from "../src/components/DatePicker";
@@ -18,6 +19,12 @@ const styles = StyleSheet.create({
     width: 430,
   },
 });
+
+const FIFTEEN_DAYS_AGO = new Date();
+FIFTEEN_DAYS_AGO.setDate(FIFTEEN_DAYS_AGO.getDate() - 15);
+
+const FIFTEEN_DAYS_LATER = new Date();
+FIFTEEN_DAYS_LATER.setDate(FIFTEEN_DAYS_LATER.getDate() + 15);
 
 export default {
   title: "Forms/DatePicker",
@@ -105,6 +112,18 @@ export const Default = () => {
               weekDayNames={dayNames}
               format="DD/MM/YYYY"
               isSelectable={isTodayOrFutureDate}
+            />
+          </View>
+        </StoryPart>
+
+        <StoryPart title="Selectable only in a range (15 days before or after today)">
+          <View style={styles.container}>
+            <InteractiveDatePicker
+              firstWeekDay="sunday"
+              monthNames={monthNames}
+              weekDayNames={dayNames}
+              format="DD/MM/YYYY"
+              isSelectable={isDateInRange(FIFTEEN_DAYS_AGO, FIFTEEN_DAYS_LATER)}
             />
           </View>
         </StoryPart>
