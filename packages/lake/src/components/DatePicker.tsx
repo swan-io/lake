@@ -339,9 +339,13 @@ const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | Da
   return match(value)
     .with(Option.pattern.Some(P.select()), value => isDateEquals(value, date))
     .with(Option.pattern.None, () => false)
-    .with(
-      P.when(isDateRange),
-      ({ start, end }) =>
+    .with(P.when(isDateRange), ({ start, end }) => {
+      // if range is invalid, we don't display any selection
+      if (start.isSome() && end.isSome() && isDateAfter(start.value, end.value)) {
+        return false;
+      }
+
+      return (
         start.match({
           Some: start => isDateEquals(start, date),
           None: () => false,
@@ -349,8 +353,9 @@ const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | Da
         end.match({
           Some: end => isDateEquals(end, date),
           None: () => false,
-        }),
-    )
+        })
+      );
+    })
     .exhaustive();
 };
 
@@ -370,6 +375,10 @@ const getRangeIndicatorType = (
   const startDate = start.value;
   const endDate = end.value;
 
+  // no interval indicator if range is invalid
+  if (isDateAfter(startDate, endDate)) {
+    return "none";
+  }
   if (isDateEquals(startDate, endDate)) {
     return "none";
   }
@@ -1001,6 +1010,7 @@ export const DateRangePicker = ({
               placeholder={format}
               value={value}
               onChange={onChange}
+              error={error}
               hideErrors={true}
             />
           )}
@@ -1016,6 +1026,7 @@ export const DateRangePicker = ({
               placeholder={format}
               value={value}
               onChange={onChange}
+              error={error}
               hideErrors={true}
             />
           )}
