@@ -7,6 +7,7 @@ import {
   DatePickerPopover,
   DatePickerProps,
   DateRangePicker,
+  DateRangePickerPopover,
   DateRangePickerProps,
   isDateInRange,
   isTodayOrFutureDate,
@@ -194,6 +195,46 @@ export const Range = () => {
               format="DD/MM/YYYY"
             />
           </View>
+        </StoryPart>
+      </StoryBlock>
+    </WithPartnerAccentColor>
+  );
+};
+
+export const ButtonWithRangePopover = () => {
+  const buttonRef = useRef<View | null>(null);
+  const [value, setValue] = useState({ start: "", end: "" });
+  const [isOpened, setIsOpened] = useState(false);
+
+  return (
+    <WithPartnerAccentColor color="#0F6FDE">
+      <StoryBlock title="DatePicker Popover">
+        <StoryPart title="Default">
+          <LakeText>
+            Selected date: {value.start} - {value.end}
+          </LakeText>
+
+          <Space height={20} />
+
+          <LakeButton ref={buttonRef} style={styles.button} onPress={() => setIsOpened(true)}>
+            Open date range picker
+          </LakeButton>
+
+          <DateRangePickerPopover
+            visible={isOpened}
+            monthNames={monthNames}
+            weekDayNames={dayNames}
+            referenceRef={buttonRef}
+            value={value}
+            firstWeekDay="monday"
+            format="DD/MM/YYYY"
+            startLabel="Start date"
+            endLabel="End date"
+            confirmLabel="Select"
+            cancelLabel="Cancel"
+            onChange={setValue}
+            onDissmiss={() => setIsOpened(false)}
+          />
         </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>

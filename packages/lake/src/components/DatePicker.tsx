@@ -1283,3 +1283,151 @@ export const DateRangePicker = ({
     </View>
   );
 };
+
+type DateRangePickerPopoverProps = DateRangePickerProps & {
+  id?: string;
+  visible: boolean;
+  referenceRef: React.RefObject<unknown>;
+  cancelLabel: string;
+  confirmLabel: string;
+  onDissmiss: () => void;
+};
+
+export const DateRangePickerPopover = ({
+  value,
+  error,
+  format,
+  firstWeekDay,
+  monthNames,
+  weekDayNames,
+  isSelectable,
+  onChange,
+  id,
+  visible,
+  referenceRef,
+  startLabel,
+  endLabel,
+  cancelLabel,
+  confirmLabel,
+  onDissmiss,
+}: DateRangePickerPopoverProps) => {
+  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
+  const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
+  const [localeValue, setLocaleValue] = useState(value);
+
+  useEffect(() => {
+    setLocaleValue(value);
+  }, [value]);
+
+  const handleStartChange = (start: string) => {
+    setLocaleValue({ start, end: localeValue.end });
+  };
+
+  const handleEndChange = (end: string) => {
+    setLocaleValue({ start: localeValue.start, end });
+  };
+
+  const handleCancel = () => {
+    setLocaleValue(value);
+    onDissmiss();
+  };
+
+  const handleConfirm = () => {
+    onChange(localeValue);
+    onDissmiss();
+  };
+
+  return (
+    <Popover
+      id={id}
+      role="dialog"
+      onDismiss={handleCancel}
+      referenceRef={referenceRef}
+      autoFocus={true}
+      returnFocus={false}
+      visible={visible}
+    >
+      <View style={desktop ? styles.popoverDesktop : styles.popover}>
+        <View>
+          <Box direction="row" alignItems="end">
+            <LakeLabel
+              label={startLabel}
+              style={styles.label}
+              render={() => (
+                <Rifm value={localeValue.start} onChange={handleStartChange} {...rifmDateProps}>
+                  {({ value, onChange }) => (
+                    <LakeTextInput
+                      placeholder={format}
+                      value={value}
+                      onChange={onChange}
+                      error={error}
+                      hideErrors={true}
+                    />
+                  )}
+                </Rifm>
+              )}
+            />
+
+            <Space width={12} />
+
+            <Box style={styles.arrowContainer} justifyContent="center">
+              <Icon name="arrow-right-filled" size={20} />
+            </Box>
+
+            <Space width={12} />
+
+            <LakeLabel
+              label={endLabel}
+              style={styles.label}
+              render={() => (
+                <Rifm value={localeValue.end} onChange={handleEndChange} {...rifmDateProps}>
+                  {({ value, onChange }) => (
+                    <LakeTextInput
+                      placeholder={format}
+                      value={value}
+                      onChange={onChange}
+                      error={error}
+                      hideErrors={true}
+                    />
+                  )}
+                </Rifm>
+              )}
+            />
+          </Box>
+
+          <Space height={4} />
+
+          <LakeText variant="smallRegular" color={colors.negative[500]}>
+            {error ?? " "}
+          </LakeText>
+        </View>
+
+        <DateRangePickerPopoverContent
+          value={localeValue}
+          format={format}
+          firstWeekDay={firstWeekDay}
+          monthNames={monthNames}
+          weekDayNames={weekDayNames}
+          desktop={desktop}
+          displayTwoCalendar={displayTwoCalendar}
+          isSelectable={isSelectable}
+          onChange={setLocaleValue}
+        />
+
+        <Space height={24} />
+
+        <Box direction="row" alignItems="center">
+          <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
+            {cancelLabel}
+          </LakeButton>
+
+          <Space width={24} />
+
+          <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
+            {confirmLabel}
+          </LakeButton>
+        </Box>
+      </View>
+    </Popover>
+  );
+};
