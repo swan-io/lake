@@ -1,11 +1,12 @@
 import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { colors, invariantColors, radii, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
 import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
@@ -24,18 +25,19 @@ import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   popover: {
+    padding: spacings[12],
+  },
+  popoverDesktop: {
     padding: spacings[24],
   },
-  popoverContainer: {
-    width: 430,
+  calendarContainer: {
+    minWidth: 264, // value to fit with 320 width screen
+  },
+  rangeCalendarContainer: {
     backgroundColor: invariantColors.white,
     borderRadius: radii[8],
   },
-  rangePopoverContainer: {
-    backgroundColor: invariantColors.white,
-    borderRadius: radii[8],
-  },
-  rangePopoverPart: {
+  rangeCalendarSide: {
     width: 330,
   },
   button: {
@@ -486,6 +488,7 @@ type YearMonthSelectProps = {
   monthNames: MonthNames;
   value: YearMonth;
   arrowsPosition?: "around" | "right";
+  hideArrows?: boolean;
   minValue?: YearMonth;
   maxValue?: YearMonth;
   onChange: (value: YearMonth) => void;
@@ -494,9 +497,10 @@ type YearMonthSelectProps = {
 const YearMonthSelect = ({
   monthNames,
   value,
+  arrowsPosition = "right",
+  hideArrows,
   minValue,
   maxValue,
-  arrowsPosition = "right",
   onChange,
 }: YearMonthSelectProps) => {
   const monthItems = useMemo<Item<number>[]>(
@@ -538,7 +542,7 @@ const YearMonthSelect = ({
 
   return (
     <Box direction="row" alignItems="center">
-      {arrowsPosition === "around" && (
+      {arrowsPosition === "around" && hideArrows !== true && (
         <>
           <LakeButton
             size="small"
@@ -572,29 +576,33 @@ const YearMonthSelect = ({
         style={styles.yearSelect}
       />
 
-      <Fill minWidth={12} />
-
-      {arrowsPosition === "right" && (
+      {hideArrows !== true && (
         <>
+          <Fill minWidth={12} />
+
+          {arrowsPosition === "right" && (
+            <>
+              <LakeButton
+                size="small"
+                mode="tertiary"
+                icon="arrow-left-filled"
+                disabled={isPreviousDisabled}
+                onPress={setPreviousMonth}
+              />
+
+              <Space width={12} />
+            </>
+          )}
+
           <LakeButton
             size="small"
             mode="tertiary"
-            icon="arrow-left-filled"
-            disabled={isPreviousDisabled}
-            onPress={setPreviousMonth}
+            icon="arrow-right-filled"
+            disabled={isNextDisabled}
+            onPress={setNextMonth}
           />
-
-          <Space width={12} />
         </>
       )}
-
-      <LakeButton
-        size="small"
-        mode="tertiary"
-        icon="arrow-right-filled"
-        disabled={isNextDisabled}
-        onPress={setNextMonth}
-      />
     </Box>
   );
 };
@@ -725,10 +733,10 @@ const DatePickerPopoverContent = ({
   firstWeekDay,
   monthNames,
   weekDayNames,
-  style,
+  desktop,
   isSelectable,
   onChange,
-}: DatePickerProps & { style?: StyleProp<ViewStyle> }) => {
+}: DatePickerProps & { desktop: boolean }) => {
   const [monthYear, setMonthYear] = useState(() =>
     getYearMonth(value, format).getWithDefault(getTodayYearMonth()),
   );
@@ -750,8 +758,14 @@ const DatePickerPopoverContent = ({
   );
 
   return (
-    <View style={[styles.popoverContainer, style]}>
-      <YearMonthSelect monthNames={monthNames} value={monthYear} onChange={setMonthYear} />
+    <View style={styles.calendarContainer}>
+      <YearMonthSelect
+        monthNames={monthNames}
+        value={monthYear}
+        hideArrows={!desktop}
+        onChange={setMonthYear}
+      />
+
       <Space height={24} />
 
       <MonthCalendar
@@ -767,6 +781,8 @@ const DatePickerPopoverContent = ({
   );
 };
 
+const DATE_PICKER_MOBILE_THRESHOLD = 450;
+
 export const DatePicker = ({
   value,
   error,
@@ -777,6 +793,7 @@ export const DatePicker = ({
   isSelectable,
   onChange,
 }: DatePickerProps) => {
+  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
   const ref = useRef<TextInput>(null);
   const [isOpened, { open, close }] = useDisclosure(false);
   const popoverId = useId();
@@ -806,22 +823,21 @@ export const DatePicker = ({
         role="dialog"
         onDismiss={close}
         referenceRef={ref}
-        autoFocus={true}
-        returnFocus={false}
         visible={isOpened}
-        underlay={false}
         forcedMode="Dropdown"
       >
-        <DatePickerPopoverContent
-          value={value}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
-          style={styles.popover}
-          isSelectable={isSelectable}
-          onChange={onChange}
-        />
+        <View style={desktop ? styles.popoverDesktop : styles.popover}>
+          <DatePickerPopoverContent
+            value={value}
+            format={format}
+            firstWeekDay={firstWeekDay}
+            monthNames={monthNames}
+            weekDayNames={weekDayNames}
+            desktop={desktop}
+            isSelectable={isSelectable}
+            onChange={onChange}
+          />
+        </View>
       </Popover>
     </>
   );
@@ -944,10 +960,9 @@ const DateRangePickerPopoverContent = ({
   firstWeekDay,
   monthNames,
   weekDayNames,
-  style,
   isSelectable,
   onChange,
-}: DateRangePickerProps & { style?: StyleProp<ViewStyle> }) => {
+}: DateRangePickerProps) => {
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
     const endYearMonth = getYearMonth(value.end, format).getWithDefault(
@@ -1038,9 +1053,9 @@ const DateRangePickerPopoverContent = ({
   };
 
   return (
-    <View style={[styles.rangePopoverContainer, style]}>
+    <View style={styles.rangeCalendarContainer}>
       <Box direction="row" alignItems="start">
-        <View style={styles.rangePopoverPart}>
+        <View style={styles.rangeCalendarSide}>
           <YearMonthSelect
             monthNames={monthNames}
             value={periods.start}
@@ -1064,7 +1079,7 @@ const DateRangePickerPopoverContent = ({
 
         <Separator space={24} horizontal={true} />
 
-        <View style={styles.rangePopoverPart}>
+        <View style={styles.rangeCalendarSide}>
           <YearMonthSelect
             monthNames={monthNames}
             value={periods.end}
@@ -1179,7 +1194,6 @@ export const DateRangePicker = ({
           firstWeekDay={firstWeekDay}
           monthNames={monthNames}
           weekDayNames={weekDayNames}
-          style={styles.popover}
           isSelectable={isSelectable}
           onChange={onChange}
         />

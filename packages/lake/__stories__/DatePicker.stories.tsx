@@ -20,7 +20,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
   container: {
-    width: 430,
+    maxWidth: 430,
   },
   button: {
     alignSelf: "flex-start",
