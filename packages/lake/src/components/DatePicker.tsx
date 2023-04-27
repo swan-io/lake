@@ -721,6 +721,7 @@ const MonthCalendar = ({
 };
 
 export type DatePickerProps = {
+  label: string;
   value?: string;
   error?: string;
   format: DateFormat;
@@ -729,6 +730,10 @@ export type DatePickerProps = {
   weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: string) => void;
+};
+
+type DatePickerPopoverContentProps = Except<DatePickerProps, "label" | "error"> & {
+  desktop: boolean;
 };
 
 const DatePickerPopoverContent = ({
@@ -740,7 +745,7 @@ const DatePickerPopoverContent = ({
   desktop,
   isSelectable,
   onChange,
-}: DatePickerProps & { desktop: boolean }) => {
+}: DatePickerPopoverContentProps) => {
   const [monthYear, setMonthYear] = useState(() =>
     getYearMonth(value, format).getWithDefault(getTodayYearMonth()),
   );
@@ -786,6 +791,7 @@ const DatePickerPopoverContent = ({
 };
 
 export const DatePicker = ({
+  label,
   value,
   error,
   format,
@@ -802,22 +808,28 @@ export const DatePicker = ({
 
   return (
     <>
-      <Box direction="row">
-        <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
-          {({ value, onChange }) => (
-            <LakeTextInput
-              ref={ref}
-              placeholder={format}
-              value={value}
-              error={error}
-              onChange={onChange}
-              ariaExpanded={isOpened}
-            />
+      <Box direction="row" alignItems="end">
+        <LakeLabel
+          label={label}
+          style={styles.label}
+          actions={
+            <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+          }
+          render={() => (
+            <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
+              {({ value, onChange }) => (
+                <LakeTextInput
+                  ref={ref}
+                  placeholder={format}
+                  value={value}
+                  error={error}
+                  onChange={onChange}
+                  ariaExpanded={isOpened}
+                />
+              )}
+            </Rifm>
           )}
-        </Rifm>
-
-        <Space width={12} />
-        <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+        />
       </Box>
 
       <Popover id={popoverId} role="dialog" onDismiss={close} referenceRef={ref} visible={isOpened}>
@@ -842,7 +854,6 @@ type DatePickerPopoverProps = DatePickerProps & {
   id?: string;
   visible: boolean;
   referenceRef: React.RefObject<unknown>;
-  inputLabel: string;
   cancelLabel: string;
   confirmLabel: string;
   onDissmiss: () => void;
@@ -860,7 +871,7 @@ export const DatePickerPopover = ({
   id,
   visible,
   referenceRef,
-  inputLabel,
+  label,
   cancelLabel,
   confirmLabel,
   onDissmiss,
@@ -896,7 +907,7 @@ export const DatePickerPopover = ({
     >
       <View style={desktop ? styles.popoverDesktop : styles.popover}>
         <LakeLabel
-          label={inputLabel}
+          label={label}
           render={() => (
             <Rifm value={localeValue ?? ""} onChange={setLocaleValue} {...rifmDateProps}>
               {({ value, onChange }) => (
@@ -955,7 +966,7 @@ export type DateRangePickerProps = {
 
 type DateRangePickerPopoverContentProps = Except<
   DateRangePickerProps,
-  "startLabel" | "endLabel"
+  "startLabel" | "endLabel" | "error"
 > & {
   desktop: boolean;
   displayTwoCalendar: boolean;

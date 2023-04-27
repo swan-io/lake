@@ -92,6 +92,7 @@ export const Default = () => {
         <StoryPart title="Default">
           <View style={styles.container}>
             <InteractiveDatePicker
+              label="Select a date"
               firstWeekDay="monday"
               monthNames={monthNames}
               weekDayNames={dayNames}
@@ -103,6 +104,7 @@ export const Default = () => {
         <StoryPart title="Week starting sunday">
           <View style={styles.container}>
             <InteractiveDatePicker
+              label="Select a date"
               firstWeekDay="sunday"
               monthNames={monthNames}
               weekDayNames={dayNames}
@@ -114,6 +116,7 @@ export const Default = () => {
         <StoryPart title="Selectable only in the future">
           <View style={styles.container}>
             <InteractiveDatePicker
+              label="Select a date"
               firstWeekDay="sunday"
               monthNames={monthNames}
               weekDayNames={dayNames}
@@ -126,6 +129,7 @@ export const Default = () => {
         <StoryPart title="Selectable only in a range (15 days before or after today)">
           <View style={styles.container}>
             <InteractiveDatePicker
+              label="Select a date"
               firstWeekDay="sunday"
               monthNames={monthNames}
               weekDayNames={dayNames}
@@ -163,7 +167,7 @@ export const ButtonWithPopover = () => {
             value={value}
             firstWeekDay="monday"
             format="DD/MM/YYYY"
-            inputLabel="Select a date"
+            label="Select a date"
             confirmLabel="Select"
             cancelLabel="Cancel"
             onChange={setValue}
