@@ -4,6 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
+import { Except } from "type-fest";
 import { colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useFirstMountState } from "../hooks/useFirstMountState";
@@ -25,6 +26,12 @@ import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
+  label: {
+    flex: 1,
+  },
+  arrowContainer: {
+    height: 40, // input height
+  },
   popover: {
     padding: spacings[12],
   },
@@ -937,11 +944,21 @@ export type DateRangePickerProps = {
   value: { start: string; end: string };
   error?: string;
   format: DateFormat;
+  startLabel: string;
+  endLabel: string;
   firstWeekDay: keyof typeof weekDayIndex;
   monthNames: MonthNames;
   weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: { start: string; end: string }) => void;
+};
+
+type DateRangePickerPopoverContentProps = Except<
+  DateRangePickerProps,
+  "startLabel" | "endLabel"
+> & {
+  desktop: boolean;
+  displayTwoCalendar: boolean;
 };
 
 const DateRangePickerPopoverContent = ({
@@ -954,7 +971,7 @@ const DateRangePickerPopoverContent = ({
   displayTwoCalendar,
   isSelectable,
   onChange,
-}: DateRangePickerProps & { desktop: boolean; displayTwoCalendar: boolean }) => {
+}: DateRangePickerPopoverContentProps) => {
   const isFirstMount = useFirstMountState();
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
@@ -1140,6 +1157,8 @@ export const DateRangePicker = ({
   value,
   error,
   format,
+  startLabel,
+  endLabel,
   firstWeekDay,
   monthNames,
   weekDayNames,
@@ -1168,37 +1187,53 @@ export const DateRangePicker = ({
 
   return (
     <View>
-      <Box direction="row" alignItems="center">
-        <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
-          {({ value, onChange }) => (
-            <LakeTextInput
-              ref={ref}
-              placeholder={format}
-              value={value}
-              onChange={onChange}
-              error={error}
-              hideErrors={true}
-              ariaExpanded={isOpened}
-            />
+      <Box direction="row" alignItems="end">
+        <LakeLabel
+          label={startLabel}
+          style={styles.label}
+          render={() => (
+            <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
+              {({ value, onChange }) => (
+                <LakeTextInput
+                  ref={ref}
+                  placeholder={format}
+                  value={value}
+                  onChange={onChange}
+                  error={error}
+                  hideErrors={true}
+                  ariaExpanded={isOpened}
+                />
+              )}
+            </Rifm>
           )}
-        </Rifm>
+        />
 
         <Space width={12} />
-        <Icon name="arrow-right-filled" size={20} />
+
+        <Box style={styles.arrowContainer} justifyContent="center">
+          <Icon name="arrow-right-filled" size={20} />
+        </Box>
+
         <Space width={12} />
 
-        <Rifm value={value.end} onChange={handleEndChange} {...rifmDateProps}>
-          {({ value, onChange }) => (
-            <LakeTextInput
-              placeholder={format}
-              value={value}
-              onChange={onChange}
-              error={error}
-              hideErrors={true}
-              ariaExpanded={isOpened}
-            />
+        <LakeLabel
+          label={endLabel}
+          style={styles.label}
+          render={() => (
+            <Rifm value={value.end} onChange={handleEndChange} {...rifmDateProps}>
+              {({ value, onChange }) => (
+                <LakeTextInput
+                  placeholder={format}
+                  value={value}
+                  onChange={onChange}
+                  error={error}
+                  hideErrors={true}
+                  ariaExpanded={isOpened}
+                />
+              )}
+            </Rifm>
           )}
-        </Rifm>
+        />
 
         <Space width={12} />
         <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />

@@ -182,6 +182,8 @@ export const Range = () => {
         <StoryPart title="Default">
           <View style={styles.container}>
             <InteractiveDateRangePicker
+              startLabel="Start date"
+              endLabel="End date"
               firstWeekDay="monday"
               monthNames={monthNames}
               weekDayNames={dayNames}
