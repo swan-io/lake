@@ -1,6 +1,6 @@
 import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
@@ -12,11 +12,13 @@ import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
 import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
+import { BottomPanel } from "./BottomPanel";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeLabel } from "./LakeLabel";
+import { LakeModal } from "./LakeModal";
 import { Item, LakeSelect } from "./LakeSelect";
 import { LakeText } from "./LakeText";
 import { LakeTextInput } from "./LakeTextInput";
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     padding: spacings[24],
   },
   rangeCalendarSide: {
-    width: 330,
+    flex: 1,
   },
   button: {
     flex: 1,
@@ -105,6 +107,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const MODALE_MOBILE_THRESHOLD = 600;
 const DATE_PICKER_MOBILE_THRESHOLD = 400;
 const DATE_RANGE_PICKER_THRESHOLD = 800;
 
@@ -953,6 +956,40 @@ export const DatePickerPopover = ({
   );
 };
 
+type DateRangeModalProps = {
+  children: ReactNode;
+  visible: boolean;
+  withCloseButton?: boolean;
+  onPressClose: () => void;
+};
+
+const DateRangeModal = ({
+  children,
+  visible,
+  withCloseButton,
+  onPressClose,
+}: DateRangeModalProps) => {
+  const { desktop } = useResponsive(MODALE_MOBILE_THRESHOLD);
+
+  if (desktop) {
+    return (
+      <LakeModal
+        visible={visible}
+        maxWidth={900}
+        onPressClose={withCloseButton === true ? onPressClose : undefined}
+      >
+        {children}
+      </LakeModal>
+    );
+  }
+
+  return (
+    <BottomPanel visible={visible} onPressClose={onPressClose}>
+      <View style={styles.popover}>{children}</View>
+    </BottomPanel>
+  );
+};
+
 export type DateRangePickerProps = {
   value: { start: string; end: string };
   error?: string;
@@ -966,7 +1003,7 @@ export type DateRangePickerProps = {
   onChange: (date: { start: string; end: string }) => void;
 };
 
-type DateRangePickerPopoverContentProps = Except<
+type DateRangePickerModalContentProps = Except<
   DateRangePickerProps,
   "startLabel" | "endLabel" | "error"
 > & {
@@ -974,7 +1011,7 @@ type DateRangePickerPopoverContentProps = Except<
   displayTwoCalendar: boolean;
 };
 
-const DateRangePickerPopoverContent = ({
+const DateRangePickerModalContent = ({
   value,
   format,
   firstWeekDay,
@@ -984,7 +1021,7 @@ const DateRangePickerPopoverContent = ({
   displayTwoCalendar,
   isSelectable,
   onChange,
-}: DateRangePickerPopoverContentProps) => {
+}: DateRangePickerModalContentProps) => {
   const isFirstMount = useFirstMountState();
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
@@ -1182,7 +1219,6 @@ export const DateRangePicker = ({
   const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
   const ref = useRef<TextInput>(null);
   const [isOpened, { open, close }] = useDisclosure(false);
-  const popoverId = useId();
 
   const handleStartChange = useCallback(
     (start: string) => {
@@ -1260,44 +1296,31 @@ export const DateRangePicker = ({
         {error ?? " "}
       </LakeText>
 
-      <Popover
-        id={popoverId}
-        role="dialog"
-        onDismiss={close}
-        referenceRef={ref}
-        autoFocus={true}
-        returnFocus={false}
-        visible={isOpened}
-        underlay={false}
-      >
-        <View style={desktop ? styles.popoverDesktop : styles.popover}>
-          <DateRangePickerPopoverContent
-            value={value}
-            format={format}
-            firstWeekDay={firstWeekDay}
-            monthNames={monthNames}
-            weekDayNames={weekDayNames}
-            desktop={desktop}
-            displayTwoCalendar={displayTwoCalendar}
-            isSelectable={isSelectable}
-            onChange={onChange}
-          />
-        </View>
-      </Popover>
+      <DateRangeModal visible={isOpened} withCloseButton={true} onPressClose={close}>
+        <DateRangePickerModalContent
+          value={value}
+          format={format}
+          firstWeekDay={firstWeekDay}
+          monthNames={monthNames}
+          weekDayNames={weekDayNames}
+          desktop={desktop}
+          displayTwoCalendar={displayTwoCalendar}
+          isSelectable={isSelectable}
+          onChange={onChange}
+        />
+      </DateRangeModal>
     </View>
   );
 };
 
-type DateRangePickerPopoverProps = DateRangePickerProps & {
-  id?: string;
+type DateRangePickerModalProps = DateRangePickerProps & {
   visible: boolean;
-  referenceRef: React.RefObject<unknown>;
   cancelLabel: string;
   confirmLabel: string;
   onDissmiss: () => void;
 };
 
-export const DateRangePickerPopover = ({
+export const DateRangePickerModal = ({
   value,
   error,
   format,
@@ -1306,16 +1329,14 @@ export const DateRangePickerPopover = ({
   weekDayNames,
   isSelectable,
   onChange,
-  id,
   visible,
-  referenceRef,
   startLabel,
   endLabel,
   cancelLabel,
   confirmLabel,
   onDissmiss,
-}: DateRangePickerPopoverProps) => {
-  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
+}: DateRangePickerModalProps) => {
+  const { desktop } = useResponsive(MODALE_MOBILE_THRESHOLD);
   const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
   const [localeValue, setLocaleValue] = useState(value);
 
@@ -1342,98 +1363,88 @@ export const DateRangePickerPopover = ({
   };
 
   return (
-    <Popover
-      id={id}
-      role="dialog"
-      onDismiss={handleCancel}
-      referenceRef={referenceRef}
-      autoFocus={true}
-      returnFocus={false}
-      visible={visible}
-    >
-      <View style={desktop ? styles.popoverDesktop : styles.popover}>
-        <View>
-          <Box direction="row" alignItems="end">
-            <LakeLabel
-              label={startLabel}
-              style={styles.label}
-              render={id => (
-                <Rifm value={localeValue.start} onChange={handleStartChange} {...rifmDateProps}>
-                  {({ value, onChange }) => (
-                    <LakeTextInput
-                      id={id}
-                      placeholder={format}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      hideErrors={true}
-                    />
-                  )}
-                </Rifm>
-              )}
-            />
+    <DateRangeModal visible={visible} onPressClose={handleCancel}>
+      <View>
+        <Box direction="row" alignItems="end">
+          <LakeLabel
+            label={startLabel}
+            style={styles.label}
+            render={id => (
+              <Rifm value={localeValue.start} onChange={handleStartChange} {...rifmDateProps}>
+                {({ value, onChange }) => (
+                  <LakeTextInput
+                    id={id}
+                    placeholder={format}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                    hideErrors={true}
+                  />
+                )}
+              </Rifm>
+            )}
+          />
 
-            <Space width={12} />
+          <Space width={12} />
 
-            <Box style={styles.arrowContainer} justifyContent="center">
-              <Icon name="arrow-right-filled" size={20} />
-            </Box>
-
-            <Space width={12} />
-
-            <LakeLabel
-              label={endLabel}
-              style={styles.label}
-              render={id => (
-                <Rifm value={localeValue.end} onChange={handleEndChange} {...rifmDateProps}>
-                  {({ value, onChange }) => (
-                    <LakeTextInput
-                      id={id}
-                      placeholder={format}
-                      value={value}
-                      onChange={onChange}
-                      error={error}
-                      hideErrors={true}
-                    />
-                  )}
-                </Rifm>
-              )}
-            />
+          <Box style={styles.arrowContainer} justifyContent="center">
+            <Icon name="arrow-right-filled" size={20} />
           </Box>
 
-          <Space height={4} />
+          <Space width={12} />
 
-          <LakeText variant="smallRegular" color={colors.negative[500]}>
-            {error ?? " "}
-          </LakeText>
-        </View>
-
-        <DateRangePickerPopoverContent
-          value={localeValue}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
-          desktop={desktop}
-          displayTwoCalendar={displayTwoCalendar}
-          isSelectable={isSelectable}
-          onChange={setLocaleValue}
-        />
-
-        <Space height={24} />
-
-        <Box direction="row" alignItems="center">
-          <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
-            {cancelLabel}
-          </LakeButton>
-
-          <Space width={24} />
-
-          <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
-            {confirmLabel}
-          </LakeButton>
+          <LakeLabel
+            label={endLabel}
+            style={styles.label}
+            render={id => (
+              <Rifm value={localeValue.end} onChange={handleEndChange} {...rifmDateProps}>
+                {({ value, onChange }) => (
+                  <LakeTextInput
+                    id={id}
+                    placeholder={format}
+                    value={value}
+                    onChange={onChange}
+                    error={error}
+                    hideErrors={true}
+                  />
+                )}
+              </Rifm>
+            )}
+          />
         </Box>
+
+        <Space height={4} />
+
+        <LakeText variant="smallRegular" color={colors.negative[500]}>
+          {error ?? " "}
+        </LakeText>
       </View>
-    </Popover>
+
+      <DateRangePickerModalContent
+        value={localeValue}
+        format={format}
+        firstWeekDay={firstWeekDay}
+        monthNames={monthNames}
+        weekDayNames={weekDayNames}
+        desktop={desktop}
+        displayTwoCalendar={displayTwoCalendar}
+        isSelectable={isSelectable}
+        onChange={setLocaleValue}
+      />
+
+      <Space height={24} />
+
+      <Box direction="row" alignItems="center">
+        <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
+          {cancelLabel}
+        </LakeButton>
+
+        <Space width={24} />
+
+        <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
+          {confirmLabel}
+        </LakeButton>
+      </Box>
+    </DateRangeModal>
   );
 };

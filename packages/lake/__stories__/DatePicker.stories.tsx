@@ -7,7 +7,7 @@ import {
   DatePickerPopover,
   DatePickerProps,
   DateRangePicker,
-  DateRangePickerPopover,
+  DateRangePickerModal,
   DateRangePickerProps,
   isDateInRange,
   isTodayOrFutureDate,
@@ -202,7 +202,6 @@ export const Range = () => {
 };
 
 export const ButtonWithRangePopover = () => {
-  const buttonRef = useRef<View | null>(null);
   const [value, setValue] = useState({ start: "", end: "" });
   const [isOpened, setIsOpened] = useState(false);
 
@@ -216,15 +215,14 @@ export const ButtonWithRangePopover = () => {
 
           <Space height={20} />
 
-          <LakeButton ref={buttonRef} style={styles.button} onPress={() => setIsOpened(true)}>
+          <LakeButton style={styles.button} onPress={() => setIsOpened(true)}>
             Open date range picker
           </LakeButton>
 
-          <DateRangePickerPopover
+          <DateRangePickerModal
             visible={isOpened}
             monthNames={monthNames}
             weekDayNames={dayNames}
-            referenceRef={buttonRef}
             value={value}
             firstWeekDay="monday"
             format="DD/MM/YYYY"
