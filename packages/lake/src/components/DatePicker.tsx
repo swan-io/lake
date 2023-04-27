@@ -30,9 +30,6 @@ const styles = StyleSheet.create({
   popoverDesktop: {
     padding: spacings[24],
   },
-  calendarContainer: {
-    minWidth: 264, // value to fit with 320 width screen
-  },
   rangeCalendarContainer: {
     backgroundColor: invariantColors.white,
     borderRadius: radii[8],
@@ -758,7 +755,7 @@ const DatePickerPopoverContent = ({
   );
 
   return (
-    <View style={styles.calendarContainer}>
+    <>
       <YearMonthSelect
         monthNames={monthNames}
         value={monthYear}
@@ -777,11 +774,11 @@ const DatePickerPopoverContent = ({
         isSelectable={isSelectable}
         onChange={handleChange}
       />
-    </View>
+    </>
   );
 };
 
-const DATE_PICKER_MOBILE_THRESHOLD = 450;
+const DATE_PICKER_MOBILE_THRESHOLD = 400;
 
 export const DatePicker = ({
   value,
@@ -818,14 +815,7 @@ export const DatePicker = ({
         <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
       </Box>
 
-      <Popover
-        id={popoverId}
-        role="dialog"
-        onDismiss={close}
-        referenceRef={ref}
-        visible={isOpened}
-        forcedMode="Dropdown"
-      >
+      <Popover id={popoverId} role="dialog" onDismiss={close} referenceRef={ref} visible={isOpened}>
         <View style={desktop ? styles.popoverDesktop : styles.popover}>
           <DatePickerPopoverContent
             value={value}
@@ -870,6 +860,7 @@ export const DatePickerPopover = ({
   confirmLabel,
   onDissmiss,
 }: DatePickerPopoverProps) => {
+  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
   const [localeValue, setLocaleValue] = useState(value);
 
   useEffect(() => {
@@ -898,7 +889,7 @@ export const DatePickerPopover = ({
       returnFocus={false}
       visible={visible}
     >
-      <View style={styles.popover}>
+      <View style={desktop ? styles.popoverDesktop : styles.popover}>
         <LakeLabel
           label={inputLabel}
           render={() => (
@@ -921,6 +912,7 @@ export const DatePickerPopover = ({
           firstWeekDay={firstWeekDay}
           monthNames={monthNames}
           weekDayNames={weekDayNames}
+          desktop={desktop}
           isSelectable={isSelectable}
           onChange={setLocaleValue}
         />
