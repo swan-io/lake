@@ -815,11 +815,12 @@ export const DatePicker = ({
           actions={
             <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
           }
-          render={() => (
+          render={id => (
             <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
               {({ value, onChange }) => (
                 <LakeTextInput
                   ref={ref}
+                  id={id}
                   placeholder={format}
                   value={value}
                   error={error}
@@ -908,10 +909,11 @@ export const DatePickerPopover = ({
       <View style={desktop ? styles.popoverDesktop : styles.popover}>
         <LakeLabel
           label={label}
-          render={() => (
+          render={id => (
             <Rifm value={localeValue ?? ""} onChange={setLocaleValue} {...rifmDateProps}>
               {({ value, onChange }) => (
                 <LakeTextInput
+                  id={id}
                   placeholder={format}
                   value={value}
                   error={error}
@@ -1202,11 +1204,12 @@ export const DateRangePicker = ({
         <LakeLabel
           label={startLabel}
           style={styles.label}
-          render={() => (
+          render={id => (
             <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
               {({ value, onChange }) => (
                 <LakeTextInput
                   ref={ref}
+                  id={id}
                   placeholder={format}
                   value={value}
                   onChange={onChange}
@@ -1230,10 +1233,11 @@ export const DateRangePicker = ({
         <LakeLabel
           label={endLabel}
           style={styles.label}
-          render={() => (
+          render={id => (
             <Rifm value={value.end} onChange={handleEndChange} {...rifmDateProps}>
               {({ value, onChange }) => (
                 <LakeTextInput
+                  id={id}
                   placeholder={format}
                   value={value}
                   onChange={onChange}
@@ -1353,10 +1357,11 @@ export const DateRangePickerPopover = ({
             <LakeLabel
               label={startLabel}
               style={styles.label}
-              render={() => (
+              render={id => (
                 <Rifm value={localeValue.start} onChange={handleStartChange} {...rifmDateProps}>
                   {({ value, onChange }) => (
                     <LakeTextInput
+                      id={id}
                       placeholder={format}
                       value={value}
                       onChange={onChange}
@@ -1379,10 +1384,11 @@ export const DateRangePickerPopover = ({
             <LakeLabel
               label={endLabel}
               style={styles.label}
-              render={() => (
+              render={id => (
                 <Rifm value={localeValue.end} onChange={handleEndChange} {...rifmDateProps}>
                   {({ value, onChange }) => (
                     <LakeTextInput
+                      id={id}
                       placeholder={format}
                       value={value}
                       onChange={onChange}
