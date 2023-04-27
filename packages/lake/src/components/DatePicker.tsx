@@ -6,6 +6,7 @@ import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { useFirstMountState } from "../hooks/useFirstMountState";
 import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
 import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
@@ -954,16 +955,26 @@ const DateRangePickerPopoverContent = ({
   isSelectable,
   onChange,
 }: DateRangePickerProps & { desktop: boolean; displayTwoCalendar: boolean }) => {
+  const isFirstMount = useFirstMountState();
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
     const endYearMonth = getYearMonth(value.end, format).getWithDefault(
       incrementYearMonth(startYearMonth),
     );
-    return { start: startYearMonth, end: endYearMonth };
+    return {
+      start: startYearMonth,
+      end: isYearMonthEquals(startYearMonth, endYearMonth)
+        ? incrementYearMonth(startYearMonth)
+        : endYearMonth,
+    };
   });
 
   // Automatically change displayed year and month when start date changes
   useEffect(() => {
+    if (isFirstMount) {
+      return;
+    }
+
     const startYearMonth = getYearMonth(value.start, format);
 
     if (startYearMonth.isSome()) {
@@ -985,10 +996,14 @@ const DateRangePickerPopoverContent = ({
         };
       });
     }
-  }, [value.start, format]);
+  }, [isFirstMount, value.start, format]);
 
   // Automatically change displayed year and month when end date changes
   useEffect(() => {
+    if (isFirstMount) {
+      return;
+    }
+
     const endYearMonth = getYearMonth(value.end, format);
 
     if (endYearMonth.isSome()) {
@@ -1010,7 +1025,7 @@ const DateRangePickerPopoverContent = ({
         };
       });
     }
-  }, [value.end, format]);
+  }, [isFirstMount, value.end, format]);
 
   const setStartPeriod = useCallback((yearMonth: YearMonth) => {
     setPeriods(periods => ({
