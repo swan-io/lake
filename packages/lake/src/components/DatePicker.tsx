@@ -4,7 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
-import { colors, invariantColors, radii, spacings } from "../constants/design";
+import { colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
@@ -29,10 +29,6 @@ const styles = StyleSheet.create({
   },
   popoverDesktop: {
     padding: spacings[24],
-  },
-  rangeCalendarContainer: {
-    backgroundColor: invariantColors.white,
-    borderRadius: radii[8],
   },
   rangeCalendarSide: {
     width: 330,
@@ -100,6 +96,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.current[500],
   },
 });
+
+const DATE_PICKER_MOBILE_THRESHOLD = 400;
+const DATE_RANGE_PICKER_THRESHOLD = 800;
 
 const NB_DAYS_IN_WEEK = 7;
 
@@ -778,8 +777,6 @@ const DatePickerPopoverContent = ({
   );
 };
 
-const DATE_PICKER_MOBILE_THRESHOLD = 400;
-
 export const DatePicker = ({
   value,
   error,
@@ -952,9 +949,11 @@ const DateRangePickerPopoverContent = ({
   firstWeekDay,
   monthNames,
   weekDayNames,
+  desktop,
+  displayTwoCalendar,
   isSelectable,
   onChange,
-}: DateRangePickerProps) => {
+}: DateRangePickerProps & { desktop: boolean; displayTwoCalendar: boolean }) => {
   const [periods, setPeriods] = useState(() => {
     const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
     const endYearMonth = getYearMonth(value.end, format).getWithDefault(
@@ -1044,8 +1043,33 @@ const DateRangePickerPopoverContent = ({
     onChange(newValue);
   };
 
+  if (!displayTwoCalendar) {
+    return (
+      <>
+        <YearMonthSelect
+          monthNames={monthNames}
+          value={periods.start}
+          hideArrows={!desktop}
+          onChange={setStartPeriod}
+        />
+
+        <Space height={24} />
+
+        <MonthCalendar
+          month={periods.start.month}
+          year={periods.start.year}
+          value={dateRange}
+          firstWeekDay={firstWeekDay}
+          weekDayNames={weekDayNames}
+          isSelectable={isSelectable}
+          onChange={handleSelectDate}
+        />
+      </>
+    );
+  }
+
   return (
-    <View style={styles.rangeCalendarContainer}>
+    <View>
       <Box direction="row" alignItems="start">
         <View style={styles.rangeCalendarSide}>
           <YearMonthSelect
@@ -1107,6 +1131,8 @@ export const DateRangePicker = ({
   isSelectable,
   onChange,
 }: DateRangePickerProps) => {
+  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
+  const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
   const ref = useRef<TextInput>(null);
   const [isOpened, { open, close }] = useDisclosure(false);
   const popoverId = useId();
@@ -1178,17 +1204,20 @@ export const DateRangePicker = ({
         returnFocus={false}
         visible={isOpened}
         underlay={false}
-        forcedMode="Dropdown"
       >
-        <DateRangePickerPopoverContent
-          value={value}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
-          isSelectable={isSelectable}
-          onChange={onChange}
-        />
+        <View style={desktop ? styles.popoverDesktop : styles.popover}>
+          <DateRangePickerPopoverContent
+            value={value}
+            format={format}
+            firstWeekDay={firstWeekDay}
+            monthNames={monthNames}
+            weekDayNames={weekDayNames}
+            desktop={desktop}
+            displayTwoCalendar={displayTwoCalendar}
+            isSelectable={isSelectable}
+            onChange={onChange}
+          />
+        </View>
       </Popover>
     </View>
   );
