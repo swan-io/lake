@@ -326,7 +326,7 @@ export const PlainListView = <T, ExtraInfo>({
         const displayColumns = large ? columns : smallColumns;
         return (
           <>
-            {large ? (
+            {!isEmpty && large ? (
               <View style={[styles.segment, large && styles.segmentLarge]}>
                 {displayColumns.map(({ id, width, title, renderTitle }) => {
                   const columnId = `${viewId}_${id}`;
