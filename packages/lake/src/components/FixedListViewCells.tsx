@@ -18,14 +18,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  balanceCellContainer: {
+    width: "100%",
+  },
   cell: {
     display: "flex",
     paddingHorizontal: spacings[16],
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
-    width: 1,
-    alignSelf: "stretch",
   },
   icon: {
     alignSelf: "stretch",
@@ -283,36 +284,54 @@ export const CopyableRegularTextCell = ({
 export const BalanceCell = ({
   value,
   currency,
+  originalValue,
   formatCurrency,
   textAlign = "right",
 }: {
   value: number;
   currency: string;
+  originalValue?: { value: number; currency: string };
   formatCurrency: (value: number, currency: string) => string;
   textAlign?: "left" | "center" | "right";
 }) => {
   return (
-    <View style={styles.cell}>
-      <LakeText
-        align={textAlign}
-        color={colors.gray[900]}
-        variant="medium"
-        style={[
-          styles.mediumText,
-          {
-            justifyContent: match(textAlign)
-              .with("left", () => "flex-start" as const)
-              .with("center", () => "center" as const)
-              .with("right", () => "flex-end" as const)
-              .exhaustive(),
-          },
-          value > 0 && { color: colors.positive.primary },
-          value < 0 && { color: colors.negative.primary },
-        ]}
-      >
-        {value > 0 && "+"}
-        {formatCurrency(value, currency)}
-      </LakeText>
+    <View style={styles.balanceCellContainer}>
+      <View style={styles.cell}>
+        <LakeText
+          align={textAlign}
+          color={colors.gray[900]}
+          variant="medium"
+          style={[
+            styles.mediumText,
+            {
+              justifyContent: match(textAlign)
+                .with("left", () => "flex-start" as const)
+                .with("center", () => "center" as const)
+                .with("right", () => "flex-end" as const)
+                .exhaustive(),
+            },
+            value > 0 && { color: colors.positive.primary },
+            value < 0 && { color: colors.negative.primary },
+          ]}
+        >
+          {value > 0 && "+"}
+          {formatCurrency(value, currency)}
+        </LakeText>
+      </View>
+
+      {isNotNullish(originalValue) && originalValue.currency !== currency && (
+        <View style={styles.cell}>
+          <LakeText
+            style={styles.mediumText}
+            align={textAlign}
+            color={colors.gray[500]}
+            variant="smallRegular"
+          >
+            {originalValue.value > 0 && "+"}
+            {formatCurrency(originalValue.value, originalValue.currency)}
+          </LakeText>
+        </View>
+      )}
     </View>
   );
 };
