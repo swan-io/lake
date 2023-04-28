@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { Box } from "../src/components/Box";
 import { Breadcrumbs, BreadcrumbsRoot, Crumb, useCrumb } from "../src/components/Breadcrumbs";
@@ -11,7 +11,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Interactivity/Breadcrumbs",
   component: BreadcrumbsRoot,
-} as ComponentMeta<typeof BreadcrumbsRoot>;
+} as Meta<typeof BreadcrumbsRoot>;
 
 export const Variations = () => {
   return (

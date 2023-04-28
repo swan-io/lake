@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, Text, View } from "react-native";
 import { Grid } from "../src/components/Grid";
 import { LakeCopyButton } from "../src/components/LakeCopyButton";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/Label",
   component: LakeLabel,
-} as ComponentMeta<typeof LakeLabel>;
+} as Meta<typeof LakeLabel>;
 
 const label = "Creditor IBAN";
 export const ReadOnly = () => {

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Animations/TransitionView",
   component: TransitionView,
-} as ComponentMeta<typeof TransitionView>;
+} as Meta<typeof TransitionView>;
 
 export const Default = () => {
   const [showBlock, setShowBlock] = useState(false);

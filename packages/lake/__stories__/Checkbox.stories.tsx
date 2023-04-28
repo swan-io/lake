@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/Checkbox",
   component: LakeCheckbox,
-} as ComponentMeta<typeof LakeCheckbox>;
+} as Meta<typeof LakeCheckbox>;
 
 const InteractiveCheckbox = ({
   defaultValue = false,

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { Separator } from "../src/components/Separator";
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/Separator",
   component: Separator,
-} as ComponentMeta<typeof Separator>;
+} as Meta<typeof Separator>;
 
 export const Directions = () => {
   return (

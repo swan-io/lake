@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
@@ -10,7 +10,7 @@ import { StoryBlock } from "./_StoriesComponents";
 export default {
   title: "Forms/ReadOnlyFieldList",
   component: ReadOnlyFieldList,
-} as ComponentMeta<typeof ReadOnlyFieldList>;
+} as Meta<typeof ReadOnlyFieldList>;
 
 export const Default = () => {
   return (

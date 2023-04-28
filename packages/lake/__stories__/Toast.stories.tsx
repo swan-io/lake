@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { LakeButton } from "../src/components/LakeButton";
 import { Space } from "../src/components/Space";
 import { ToastStack } from "../src/components/ToastStack";
@@ -14,7 +14,7 @@ const styles = {
 export default {
   title: "Interactivity/Toast",
   component: ToastStack,
-} as ComponentMeta<typeof ToastStack>;
+} as Meta<typeof ToastStack>;
 
 export const Default = () => {
   return (

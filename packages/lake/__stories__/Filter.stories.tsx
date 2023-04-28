@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { View } from "react-native";
 import { FilterChooser } from "../src/components/FilterChooser";
@@ -93,7 +93,7 @@ const availableFilters: { name: keyof State; label: string }[] = [
 export default {
   title: "Forms/Filter",
   component: FilterChooser,
-} as ComponentMeta<typeof FilterChooser>;
+} as Meta<typeof FilterChooser>;
 
 export const All = () => {
   const [openFilters, setOpenFilters] = useState<(keyof State)[]>([]);

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import dedent from "ts-dedent";
 import { Avatar } from "../src/components/Avatar";
 import { Box } from "../src/components/Box";
@@ -8,7 +8,7 @@ import { StoryBlock, StoryCodePart, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Informations/Avatar",
   component: Avatar,
-} as ComponentMeta<typeof Avatar>;
+} as Meta<typeof Avatar>;
 
 export const Variants = () => {
   return (

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Interactivity/SidebarNavigationTracker",
   component: SidebarNavigationTracker,
-} as ComponentMeta<typeof SidebarNavigationTracker>;
+} as Meta<typeof SidebarNavigationTracker>;
 
 const generateInterval = (start: number, end: number) =>
   new Array(end - start + 1).fill(0).map((_, index) => start + index);

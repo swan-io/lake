@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/ResponsiveContainer",
   component: ResponsiveContainer,
-} as ComponentMeta<typeof ResponsiveContainer>;
+} as Meta<typeof ResponsiveContainer>;
 
 export const Default = () => {
   const [forceMobileWidth, setForceMobileWidth] = useState(false);

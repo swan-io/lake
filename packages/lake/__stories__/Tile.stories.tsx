@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet } from "react-native";
 import { Icon } from "../src/components/Icon";
 import { LakeAlert } from "../src/components/LakeAlert";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/Tile",
   component: Tile,
-} as ComponentMeta<typeof Tile>;
+} as Meta<typeof Tile>;
 
 export const Default = () => {
   return (

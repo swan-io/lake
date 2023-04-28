@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/ChoicePicker",
   component: ChoicePicker,
-} as ComponentMeta<typeof ChoicePicker>;
+} as Meta<typeof ChoicePicker>;
 
 export const Default = () => {
   const items: ["Virtual", "VirtualAndPhysical", "SingleUseVirtual"] = [

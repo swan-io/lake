@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Interactivity/Tooltip",
   component: LakeTooltip,
-} as ComponentMeta<typeof LakeTooltip>;
+} as Meta<typeof LakeTooltip>;
 
 export const Placements = () => {
   return (

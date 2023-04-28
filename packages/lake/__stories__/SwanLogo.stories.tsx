@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { Space } from "../src/components/Space";
 import { SwanLogo } from "../src/components/SwanLogo";
 import { colors } from "../src/constants/design";
@@ -7,7 +7,7 @@ import { StoryBlock } from "./_StoriesComponents";
 export default {
   title: "Informations/SwanLogo",
   component: SwanLogo,
-} as ComponentMeta<typeof SwanLogo>;
+} as Meta<typeof SwanLogo>;
 
 export const Colors = () => {
   return (

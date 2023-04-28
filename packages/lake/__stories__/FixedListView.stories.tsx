@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
@@ -23,7 +23,7 @@ import { Tag } from "../src/components/Tag";
 export default {
   title: "Layout/FixedListView",
   component: FixedListView,
-} as ComponentMeta<typeof FixedListView>;
+} as Meta<typeof FixedListView>;
 
 type TestRow = {
   id: string;
@@ -219,15 +219,15 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
   );
 };
 
-export const Primary: ComponentStory<typeof FixedListView> = () => {
+export const Primary: StoryFn<typeof FixedListView> = () => {
   return <EditableFixedListView />;
 };
 
-export const WithoutBackground: ComponentStory<typeof FixedListView> = () => {
+export const WithoutBackground: StoryFn<typeof FixedListView> = () => {
   return <EditableFixedListView mode="plain" />;
 };
 
-export const Placeholder: ComponentStory<typeof FixedListView> = () => {
+export const Placeholder: StoryFn<typeof FixedListView> = () => {
   return (
     <FixedListViewPlaceholder rowHeight={48} rowVerticalSpacing={4} headerHeight={48} count={3} />
   );

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/Select",
   component: LakeSelect,
-} as ComponentMeta<typeof LakeSelect>;
+} as Meta<typeof LakeSelect>;
 
 const items = [
   { name: "Camille", value: 1 },
@@ -63,7 +63,7 @@ const EditableSelect = ({
   );
 };
 
-export const Variations: ComponentStory<typeof LakeSelect> = () => {
+export const Variations: StoryFn<typeof LakeSelect> = () => {
   return (
     <StoryBlock title="Select variations">
       <StoryPart title="Default">

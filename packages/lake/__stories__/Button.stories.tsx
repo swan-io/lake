@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Interactivity/Button",
   component: LakeButton,
-} as ComponentMeta<typeof LakeButton>;
+} as Meta<typeof LakeButton>;
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 

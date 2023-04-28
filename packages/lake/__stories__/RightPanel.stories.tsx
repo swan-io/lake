@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/RightPanel",
   component: RightPanel,
-} as ComponentMeta<typeof RightPanel>;
+} as Meta<typeof RightPanel>;
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState(false);

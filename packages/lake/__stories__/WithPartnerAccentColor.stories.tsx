@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Utilities/WithPartnerAccentColor",
   component: WithPartnerAccentColor,
-} as ComponentMeta<typeof WithPartnerAccentColor>;
+} as Meta<typeof WithPartnerAccentColor>;
 
 type StoryArgs = {
   color: string;

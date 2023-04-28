@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Animations/TransitionGroupView",
   component: TransitionGroupView,
-} as ComponentMeta<typeof TransitionGroupView>;
+} as Meta<typeof TransitionGroupView>;
 
 export const Default = () => {
   const [items, setItems] = useState<string[]>([]);

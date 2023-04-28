@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { FlowPresentation } from "../src/components/FlowPresentation";
 import { Space } from "../src/components/Space";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
@@ -7,7 +7,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Informations/FlowPresentation",
   component: FlowPresentation,
-} as ComponentMeta<typeof FlowPresentation>;
+} as Meta<typeof FlowPresentation>;
 
 export const Default = () => {
   return (

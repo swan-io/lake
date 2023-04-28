@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { LakeHeading } from "../src/components/LakeHeading";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
@@ -7,7 +7,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Typography/Heading",
   component: LakeHeading,
-} as ComponentMeta<typeof LakeHeading>;
+} as Meta<typeof LakeHeading>;
 
 export const Variations = () => {
   return (

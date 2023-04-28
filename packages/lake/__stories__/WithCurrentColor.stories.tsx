@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Utilities/WithCurrentColor",
   component: WithCurrentColor,
-} as ComponentMeta<typeof WithCurrentColor>;
+} as Meta<typeof WithCurrentColor>;
 
 export const Colors = () => {
   return (

@@ -1,11 +1,11 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { TabView } from "../src/components/TabView";
 import { StoryBlock } from "./_StoriesComponents";
 
 export default {
   title: "Interactivity/TabView",
   component: TabView,
-} as ComponentMeta<typeof TabView>;
+} as Meta<typeof TabView>;
 
 export const Default = () => {
   return (

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { LakeButton } from "../src/components/LakeButton";
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/SortBottomPanel",
   component: SortBottomPanel,
-} as ComponentMeta<typeof SortBottomPanel>;
+} as Meta<typeof SortBottomPanel>;
 
 type FieldName = "status" | "type" | "amount" | "executionDate";
 

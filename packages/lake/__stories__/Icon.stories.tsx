@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { BorderedIcon } from "../src/components/BorderedIcon";
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Informations/Icon",
   component: BorderedIcon,
-} as ComponentMeta<typeof BorderedIcon>;
+} as Meta<typeof BorderedIcon>;
 
 const getKeys = <T extends string>(obj: Record<T, unknown>): T[] => Object.keys(obj) as T[];
 

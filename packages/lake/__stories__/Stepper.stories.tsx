@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { match, P } from "ts-pattern";
 import { Box } from "../src/components/Box";
@@ -12,7 +12,7 @@ import { StoryBlock } from "./_StoriesComponents";
 export default {
   title: "Forms/Stepper",
   component: LakeStepper,
-} as ComponentMeta<typeof LakeStepper>;
+} as Meta<typeof LakeStepper>;
 
 const steps: TopLevelStep[] = [
   {

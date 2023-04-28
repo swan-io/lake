@@ -1,11 +1,11 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { TileGridPlaceholder, TilePlaceholder } from "../src/components/TilePlaceholder";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
   title: "Layout/TilePlaceholder",
   component: TilePlaceholder,
-} as ComponentMeta<typeof TilePlaceholder>;
+} as Meta<typeof TilePlaceholder>;
 
 export const Default = () => {
   return (

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
@@ -13,7 +13,7 @@ import { Tag } from "../src/components/Tag";
 export default {
   title: "Layout/PlainListView",
   component: PlainListView,
-} as ComponentMeta<typeof PlainListView>;
+} as Meta<typeof PlainListView>;
 
 type TestRow = {
   id: string;
@@ -62,7 +62,7 @@ const generateItem = (index: number): TestRow => {
   };
 };
 
-export const Primary: ComponentStory<typeof PlainListView> = () => {
+export const Primary: StoryFn<typeof PlainListView> = () => {
   const [sort, setSort] = useState<SortInfo>({ key: "name", order: "Desc" });
   const [endReachedTimes, setEndReachedTimes] = useState(0);
   const [withInfiniteScroll, setWithInfiniteScroll] = useState(false);
