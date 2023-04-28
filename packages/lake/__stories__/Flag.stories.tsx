@@ -40,6 +40,7 @@ export const Default = () => {
       <StoryPart title="Flags">
         <Box direction="row" alignItems="center" style={styles.container}>
           {countries
+            .get()
             .filter(({ deburr }) => deburr.includes(search))
             .map(({ cca3, name, uid }) => (
               <Box

@@ -532,7 +532,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                               error={error}
                               value={value}
                               placeholder={t("beneficiaryForm.beneficiary.birthCountryPlaceholder")}
-                              items={allCountriesItems}
+                              items={allCountriesItems.get()}
                               onValueChange={onChange}
                             />
                           )}
@@ -694,7 +694,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           <CountryPicker
                             id={id}
                             value={value}
-                            items={individualCountriesItems}
+                            items={individualCountriesItems.get()}
                             onValueChange={onChange}
                           />
                         )}

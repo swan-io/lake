@@ -27,7 +27,7 @@ export const Flag = ({ icon, width }: Props) => {
   }, []);
 
   const flag = useMemo(() => {
-    const cca2 = countries.find(item => item.cca3 === icon)?.cca2;
+    const cca2 = countries.get().find(item => item.cca3 === icon)?.cca2;
     if (cca2 == null) {
       return null;
     }
