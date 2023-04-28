@@ -385,6 +385,13 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     const hasBeenSubmittedOnce = useRef(false);
 
     useEffect(() => {
+      if (initialState != null) {
+        // submit form to validate all fields
+        submitForm(noop);
+      }
+    }, [initialState, submitForm]);
+
+    useEffect(() => {
       return listenFields(["type"], () => {
         if (hasBeenSubmittedOnce.current) {
           // The setTimeout is needed here so that the `validateField`
