@@ -385,6 +385,28 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     const hasBeenSubmittedOnce = useRef(false);
 
     useEffect(() => {
+      if (initialState != null) {
+        // validate all fields on mount to display errors on edition open
+        Promise.all([
+          validateField("firstName"),
+          validateField("lastName"),
+          validateField("birthDate"),
+          validateField("birthCountryCode"),
+          validateField("birthCity"),
+          validateField("birthCityPostalCode"),
+          validateField("type"),
+          validateField("capitalType"),
+          validateField("totalCapitalPercentage"),
+          validateField("address"),
+          validateField("city"),
+          validateField("postalCode"),
+          validateField("country"),
+          validateField("taxIdentificationNumber"),
+        ]).catch(noop);
+      }
+    }, [initialState, validateField]);
+
+    useEffect(() => {
       return listenFields(["type"], () => {
         if (hasBeenSubmittedOnce.current) {
           // The setTimeout is needed here so that the `validateField`
