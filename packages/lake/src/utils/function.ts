@@ -1,12 +1,10 @@
-export const stubTrue = (): true => {
-  return true;
-};
+import { Dict } from "@swan-io/boxed";
 
-export const identity = <T>(value: T): T => {
-  return value;
-};
-
+export const identity = <T>(value: T): T => value;
 export const noop = () => {};
+export const stubFalse = (): false => false;
+export const stubTrue = (): true => true;
+export const unionToArray = <T extends PropertyKey>(object: Record<T, true>) => Dict.keys(object);
 
 export const memoize = <Input extends Array<unknown>, Output>(
   func: (...input: Input) => Output,
