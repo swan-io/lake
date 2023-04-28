@@ -386,25 +386,10 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
 
     useEffect(() => {
       if (initialState != null) {
-        // validate all fields on mount to display errors on edition open
-        Promise.all([
-          validateField("firstName"),
-          validateField("lastName"),
-          validateField("birthDate"),
-          validateField("birthCountryCode"),
-          validateField("birthCity"),
-          validateField("birthCityPostalCode"),
-          validateField("type"),
-          validateField("capitalType"),
-          validateField("totalCapitalPercentage"),
-          validateField("address"),
-          validateField("city"),
-          validateField("postalCode"),
-          validateField("country"),
-          validateField("taxIdentificationNumber"),
-        ]).catch(noop);
+        // submit form to validate all fields
+        submitForm(noop);
       }
-    }, [initialState, validateField]);
+    }, [initialState, submitForm]);
 
     useEffect(() => {
       return listenFields(["type"], () => {
