@@ -30,7 +30,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
-import { LakeTextInput } from "./LakeTextInput";
+import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
 import { LoadingView } from "./LoadingView";
 import { Popover } from "./Popover";
 import { Space } from "./Space";
@@ -122,6 +122,7 @@ export type LakeComboboxProps<I> = {
   value: string;
   items: AsyncData<Result<I[], unknown>>;
   ListFooterComponent?: ReactNode;
+  onChange?: LakeTextInputProps["onChange"];
   onValueChange: (value: string) => void;
   onSelectItem: (value: I) => void | Promise<unknown>;
   renderItem: (item: I) => ReactNode | null;
@@ -143,6 +144,7 @@ const LakeComboboxWithRef = <I,>(
     value,
     items,
     ListFooterComponent,
+    onChange,
     onValueChange,
     onSelectItem,
     renderItem,
@@ -243,6 +245,7 @@ const LakeComboboxWithRef = <I,>(
         disabled={disabled}
         error={error}
         onChangeText={onValueChange}
+        onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
