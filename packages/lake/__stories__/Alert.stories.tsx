@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet } from "react-native";
 import { LakeAlert } from "../src/components/LakeAlert";
 import { LakeButton } from "../src/components/LakeButton";
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Informations/Alert",
   component: LakeAlert,
-} as ComponentMeta<typeof LakeAlert>;
+} as Meta<typeof LakeAlert>;
 
 export const Variants = () => {
   return (

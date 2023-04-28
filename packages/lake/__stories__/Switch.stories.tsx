@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useCallback, useState } from "react";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
@@ -10,7 +10,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Forms/Switch",
   component: Switch,
-} as ComponentMeta<typeof Switch>;
+} as Meta<typeof Switch>;
 
 export const Default = () => {
   const [value, setValue] = useState<boolean>(true);

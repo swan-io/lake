@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/FullViewportLayer",
   component: FullViewportLayer,
-} as ComponentMeta<typeof FullViewportLayer>;
+} as Meta<typeof FullViewportLayer>;
 
 export const Default = () => {
   const [visible, setVisible] = useState(false);

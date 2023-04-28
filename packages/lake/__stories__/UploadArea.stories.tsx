@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
@@ -15,7 +15,7 @@ const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
 export default {
   title: "Forms/UploadArea",
   component: UploadArea,
-} as ComponentMeta<typeof UploadArea>;
+} as Meta<typeof UploadArea>;
 
 type StoryArgs = {
   layout: "vertical" | "horizontal";

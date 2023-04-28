@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { Except } from "type-fest";
 import { RadioGroup, RadioGroupItem, RadioGroupProps } from "../src/components/RadioGroup";
@@ -7,7 +7,7 @@ import { StoryBlock, StoryPart } from "./_StoriesComponents";
 export default {
   title: "Forms/RadioGroup",
   component: RadioGroup,
-} as ComponentMeta<typeof RadioGroup>;
+} as Meta<typeof RadioGroup>;
 
 function EditableRadioGroup<T>(props: Except<RadioGroupProps<T>, "value" | "onValueChange">) {
   const [value, setValue] = useState<T>();

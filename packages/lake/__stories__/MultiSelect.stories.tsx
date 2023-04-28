@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/MultiSelect",
   component: MultiSelect,
-} as ComponentMeta<typeof MultiSelect>;
+} as Meta<typeof MultiSelect>;
 
 const items: MultiSelectItem[] = [
   { label: "Camille", value: "camille", group: "C" },

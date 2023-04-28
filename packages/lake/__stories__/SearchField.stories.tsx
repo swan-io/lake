@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { LakeSearchField } from "../src/components/LakeSearchField";
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/SearchField",
   component: LakeSearchField,
-} as ComponentMeta<typeof LakeSearchField>;
+} as Meta<typeof LakeSearchField>;
 
 export const Variations = () => {
   const [text1, setText1] = useState<string>();

@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Interactivity/CopyButton",
   component: LakeCopyButton,
-} as ComponentMeta<typeof LakeCopyButton>;
+} as Meta<typeof LakeCopyButton>;
 
 const getTime = () => {
   const date = new Date();

@@ -1,11 +1,11 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { LakeRadio } from "../src/components/LakeRadio";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
   title: "Forms/Radio",
   component: LakeRadio,
-} as ComponentMeta<typeof LakeRadio>;
+} as Meta<typeof LakeRadio>;
 
 export const Variations = () => {
   return (

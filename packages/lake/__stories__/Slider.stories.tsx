@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/Slider",
   component: LakeSlider,
-} as ComponentMeta<typeof LakeSlider>;
+} as Meta<typeof LakeSlider>;
 
 const EditableSlider = ({
   mobileSize = false,

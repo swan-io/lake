@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { LakeScrollView } from "../src/components/LakeScrollView";
 import { LakeText } from "../src/components/LakeText";
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/ScrollView",
   component: LakeScrollView,
-} as ComponentMeta<typeof LakeScrollView>;
+} as Meta<typeof LakeScrollView>;
 
 export const Default = () => {
   return (

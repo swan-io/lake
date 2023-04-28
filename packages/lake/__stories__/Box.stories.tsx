@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box, BoxProps } from "../src/components/Box";
 import { Space } from "../src/components/Space";
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Layout/Box",
   component: Box,
-} as ComponentMeta<typeof Box>;
+} as Meta<typeof Box>;
 
 type StoryArgs = Pick<BoxProps, "direction" | "alignItems" | "justifyContent">;
 

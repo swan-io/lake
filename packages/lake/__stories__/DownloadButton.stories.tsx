@@ -1,11 +1,11 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { LakeDownloadButton } from "../src/components/LakeDownloadButton";
 import { StoryBlock } from "./_StoriesComponents";
 
 export default {
   title: "Interactivity/DownloadButton",
   component: LakeDownloadButton,
-} as ComponentMeta<typeof LakeDownloadButton>;
+} as Meta<typeof LakeDownloadButton>;
 
 export const Default = () => {
   return (

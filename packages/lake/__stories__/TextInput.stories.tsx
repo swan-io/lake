@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/TextInput",
   component: LakeTextInput,
-} as ComponentMeta<typeof LakeTextInput>;
+} as Meta<typeof LakeTextInput>;
 
 const EditableInputText = (props: Except<LakeTextInputProps, "value" | "onChange">) => {
   const [value, setValue] = useState(props.defaultValue ?? "");

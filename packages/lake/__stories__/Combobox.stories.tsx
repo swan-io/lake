@@ -1,4 +1,4 @@
-import { ComponentMeta } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 export default {
   title: "Forms/Combobox",
   component: LakeCombobox,
-} as ComponentMeta<typeof LakeCombobox>;
+} as Meta<typeof LakeCombobox>;
 
 type ApiResponse = {
   products: ApiProduct[];
