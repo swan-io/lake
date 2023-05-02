@@ -10,37 +10,37 @@
       {
         "group": "shared-business",
         "lang": "en",
-        "pattern": "clients/shared-business/src/locales/en.json"
+        "pattern": "packages/shared-business/src/locales/en.json"
       },
       {
         "group": "shared-business",
         "lang": "de",
-        "pattern": "clients/shared-business/src/locales/de.json"
+        "pattern": "packages/shared-business/src/locales/de.json"
       },
       {
         "group": "shared-business",
         "lang": "es",
-        "pattern": "clients/shared-business/src/locales/es.json"
+        "pattern": "packages/shared-business/src/locales/es.json"
       },
       {
         "group": "shared-business",
         "lang": "fr",
-        "pattern": "clients/shared-business/src/locales/fr.json"
+        "pattern": "packages/shared-business/src/locales/fr.json"
       },
       {
         "group": "shared-business",
         "lang": "it",
-        "pattern": "clients/shared-business/src/locales/it.json"
+        "pattern": "packages/shared-business/src/locales/it.json"
       },
       {
         "group": "shared-business",
         "lang": "nl",
-        "pattern": "clients/shared-business/src/locales/nl.json"
+        "pattern": "packages/shared-business/src/locales/nl.json"
       },
       {
         "group": "shared-business",
         "lang": "pt",
-        "pattern": "clients/shared-business/src/locales/pt.json"
+        "pattern": "packages/shared-business/src/locales/pt.json"
       }
     ]
   },
@@ -50,7 +50,7 @@
     "files": [
       {
         "group": "shared-business",
-        "output": "clients/shared-business/src/locales/${lang}.json"
+        "output": "packages/shared-business/src/locales/${lang}.json"
       }
     ]
   }
