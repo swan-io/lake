@@ -44,7 +44,6 @@
     "@storybook/addon-links": "^7.0.17",
     "@storybook/react": "^7.0.17",
     "@storybook/react-vite": "^7.0.17",
-    "@swan-io/lokalise-sync-cli": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.7",
     "@vitejs/plugin-react-swc": "^3.3.1",
