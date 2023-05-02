@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@fluentui/svg-icons": "^1.1.198",
+    "@localazy/cli": "^1.7.1",
     "@storybook/addon-actions": "^7.0.17",
     "@storybook/addon-essentials": "^7.0.17",
     "@storybook/addon-links": "^7.0.17",
