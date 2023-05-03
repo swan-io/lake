@@ -132,6 +132,7 @@ export type LakeComboboxProps<I> = {
   disabled?: boolean;
   emptyResultText: string;
   error?: string;
+  hideErrors?: boolean;
   id?: string;
   readOnly?: boolean;
 };
@@ -156,6 +157,7 @@ const LakeComboboxWithRef = <I,>(
     readOnly,
     id,
     error,
+    hideErrors,
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
@@ -244,6 +246,7 @@ const LakeComboboxWithRef = <I,>(
         value={value}
         disabled={disabled}
         error={error}
+        hideErrors={hideErrors}
         onChangeText={onValueChange}
         onChange={onChange}
         onFocus={handleFocus}
