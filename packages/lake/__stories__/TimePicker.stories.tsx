@@ -59,6 +59,8 @@ export const RangePicker = () => {
           <InteractiveTimeRangePicker
             startLabel="Start"
             endLabel="End"
+            minutesLabel="Mins"
+            hoursLabel="Hours"
             noSuggestionLabel="No time available"
             intervalInMinutes={15}
           />

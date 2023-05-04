@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import { Rifm } from "rifm";
 import { colors } from "../constants/design";
-import { identity, noop } from "../utils/function";
+import { noop } from "../utils/function";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
 import { Box } from "./Box";
@@ -93,6 +93,17 @@ const minutesToTime = (minutes: number): Time => {
   };
 };
 
+const addMinutes = (time: Time, minutes: number): Time => {
+  return minutesToTime(timeToMinutes(time) + minutes);
+};
+
+const floorTime = (time: Time, intervalInMinutes: number): Time => {
+  const minutes = timeToMinutes(time);
+  const flooredMinutes = Math.floor(minutes / intervalInMinutes) * intervalInMinutes;
+
+  return minutesToTime(flooredMinutes);
+};
+
 export const validateTime = (time: Time): boolean => {
   return time.hour >= 0 && time.hour <= 23 && time.minute >= 0 && time.minute <= 59;
 };
@@ -109,17 +120,29 @@ export const validateTimeRange = (range: { start: Option<Time>; end: Option<Time
   return isTimeBefore(range.start.value, range.end.value);
 };
 
-const generateTimeList = (start: Time, end: Time, intervalInMinutes: number): string[] => {
+const generateTimeList = (start: Time, end: Time, intervalInMinutes: number): Time[] => {
   const startMinutes = timeToMinutes(start);
   const endMinutes = timeToMinutes(end);
 
   const timeList = [];
   for (let i = startMinutes; i <= endMinutes; i += intervalInMinutes) {
     const time = minutesToTime(i);
-    timeList.push(stringifyTime(time));
+    timeList.push(time);
   }
 
   return timeList;
+};
+
+const formatTimeDuration = (time: Time, minutesLabel: string, hoursLabel: string): string => {
+  if (time.hour === 0) {
+    return `${time.minute} ${minutesLabel}`;
+  }
+
+  if (time.minute === 0) {
+    return `${time.hour} ${hoursLabel}`;
+  }
+
+  return `${time.hour} ${hoursLabel} ${time.minute} ${minutesLabel}`;
 };
 
 export type TimePickerProps = {
@@ -129,6 +152,7 @@ export type TimePickerProps = {
   suggestionEnd?: Time;
   intervalInMinutes?: number;
   nbMaxSuggestions?: number;
+  suggestionSuffix?: (option: Time) => string;
   readOnly?: boolean;
   disabled?: boolean;
   error?: string;
@@ -143,6 +167,7 @@ export const TimePicker = ({
   suggestionEnd = DEFAULT_END_TIME,
   intervalInMinutes = DEFAULT_INTERVAL_IN_MINUTES,
   nbMaxSuggestions,
+  suggestionSuffix,
   readOnly,
   disabled,
   error,
@@ -178,14 +203,17 @@ export const TimePicker = ({
     <Rifm value={value ?? ""} onChange={onChangeText} {...rifmTimeProps}>
       {({ value, onChange }) => (
         <LakeCombobox
-          keyExtractor={identity}
+          keyExtractor={stringifyTime}
           placeholder="HH:MM"
           value={value}
           items={items}
           itemHeight={40}
           nbItemsDisplayed={4.5}
-          renderItem={option => {
-            const selected = option === value;
+          renderItem={item => {
+            const text = stringifyTime(item);
+            const selected = text === value;
+            const suffix = suggestionSuffix?.(item);
+            const label = isNotNullishOrEmpty(suffix) ? `${text} ${suffix}` : text;
 
             return (
               <Box direction="row" alignItems="center">
@@ -193,7 +221,7 @@ export const TimePicker = ({
                   color={selected ? colors.gray[700] : colors.gray[900]}
                   variant={selected ? "smallRegular" : "medium"}
                 >
-                  {option}
+                  {label}
                 </LakeText>
 
                 <Fill minWidth={8} />
@@ -211,7 +239,7 @@ export const TimePicker = ({
           emptyResultText={noSuggestionLabel}
           onChange={onChange}
           onValueChange={noop}
-          onSelectItem={onChangeText}
+          onSelectItem={item => onChangeText(stringifyTime(item))}
         />
       )}
     </Rifm>
@@ -228,6 +256,8 @@ export type TimeRangePickerProps = {
   error?: string;
   startLabel: string;
   endLabel: string;
+  minutesLabel: string;
+  hoursLabel: string;
   noSuggestionLabel: string;
 };
 
@@ -241,8 +271,12 @@ export const TimeRangePicker = ({
   error,
   startLabel,
   endLabel,
+  minutesLabel,
+  hoursLabel,
   noSuggestionLabel,
 }: TimeRangePickerProps) => {
+  const start = parseTime(value.start ?? "");
+
   const handleStartChange = (startValue: string) => {
     onChange({
       start: startValue,
@@ -294,6 +328,24 @@ export const TimeRangePicker = ({
               value={value.end}
               intervalInMinutes={intervalInMinutes}
               nbMaxSuggestions={nbMaxSuggestions}
+              suggestionStart={start
+                .map(time => floorTime(time, intervalInMinutes))
+                .map(time => addMinutes(time, intervalInMinutes))
+                .match({
+                  Some: time => time,
+                  None: () => undefined,
+                })}
+              suggestionSuffix={time => {
+                if (start.isNone()) {
+                  return "";
+                }
+                const durationInMinutes = timeToMinutes(time) - timeToMinutes(start.value);
+                if (durationInMinutes > 0 && durationInMinutes <= 60) {
+                  const timeDuration = minutesToTime(durationInMinutes);
+                  return `(${formatTimeDuration(timeDuration, minutesLabel, hoursLabel)})`;
+                }
+                return "";
+              }}
               error={error}
               hideErrors={true}
               disabled={disabled}
