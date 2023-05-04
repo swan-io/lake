@@ -182,16 +182,28 @@ export const TimePicker = ({
           placeholder="HH:MM"
           value={value}
           items={items}
-          renderItem={option => (
-            <Box direction="row" alignItems="center">
-              <LakeText>{option}</LakeText>
-              <Fill minWidth={8} />
+          itemHeight={40}
+          nbItemsDisplayed={4.5}
+          renderItem={option => {
+            const selected = option === value;
 
-              {option === value && (
-                <Icon name="checkmark-filled" color={colors.positive[500]} size={16} />
-              )}
-            </Box>
-          )}
+            return (
+              <Box direction="row" alignItems="center">
+                <LakeText
+                  color={selected ? colors.gray[700] : colors.gray[900]}
+                  variant={selected ? "smallRegular" : "medium"}
+                >
+                  {option}
+                </LakeText>
+
+                <Fill minWidth={8} />
+
+                {selected && (
+                  <Icon name="checkmark-filled" color={colors.positive[500]} size={16} />
+                )}
+              </Box>
+            );
+          }}
           readOnly={readOnly}
           disabled={disabled}
           error={error}
