@@ -7,6 +7,8 @@ import {
   TimePickerProps,
   TimeRangePicker,
   TimeRangePickerProps,
+  parseTimeRange,
+  validateTimeRange,
 } from "../src/components/TimePicker";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -35,8 +37,10 @@ const InteractiveTimePicker = (props: Except<TimePickerProps, "value" | "onChang
 
 const InteractiveTimeRangePicker = (props: Except<TimeRangePickerProps, "value" | "onChange">) => {
   const [value, setValue] = useState<TimeRangePickerProps["value"]>({});
+  const parsed = parseTimeRange(value);
+  const error = validateTimeRange(parsed) ? undefined : "Start time must be before end time";
 
-  return <TimeRangePicker {...props} value={value} onChange={setValue} />;
+  return <TimeRangePicker {...props} value={value} onChange={setValue} error={error} />;
 };
 
 export const Default = () => {
