@@ -59,9 +59,9 @@ export const parseTimeRange = (value: {
 };
 
 const parseTypingHours = (time: string): Option<number> => {
-  const [hours] = time.split(":");
+  const [hours, minutes] = time.split(":");
 
-  if (isNullish(hours) || hours?.length !== 2) {
+  if (isNullish(hours) || hours?.length !== 2 || isNotNullishOrEmpty(minutes)) {
     return Option.None();
   }
 
@@ -118,6 +118,18 @@ export const validateTimeRange = (range: { start: Option<Time>; end: Option<Time
   }
 
   return isTimeBefore(range.start.value, range.end.value);
+};
+
+const minTime = (...times: Time[]): Time => {
+  const timesInMinutes = times.map(timeToMinutes);
+  const minTimeInMinutes = Math.min(...timesInMinutes);
+  return minutesToTime(minTimeInMinutes);
+};
+
+const maxTime = (...times: Time[]): Time => {
+  const timesInMinutes = times.map(timeToMinutes);
+  const maxTimeInMinutes = Math.max(...timesInMinutes);
+  return minutesToTime(maxTimeInMinutes);
 };
 
 const generateTimeList = (start: Time, end: Time, intervalInMinutes: number): Time[] => {
@@ -180,8 +192,8 @@ export const TimePicker = ({
     () =>
       typingHour.match({
         Some: hour => [
-          { hour, minute: 0 },
-          { hour, minute: 59 },
+          maxTime({ hour, minute: 0 }, suggestionStart),
+          minTime({ hour, minute: 59 }, suggestionEnd),
         ],
         None: () => [suggestionStart, suggestionEnd],
       }),
