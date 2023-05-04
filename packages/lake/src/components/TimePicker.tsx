@@ -7,6 +7,7 @@ import { identity, noop } from "../utils/function";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { getRifmProps } from "../utils/rifm";
 import { Box } from "./Box";
+import { Fill } from "./Fill";
 import { Icon } from "./Icon";
 import { LakeCombobox } from "./LakeCombobox";
 import { LakeLabel } from "./LakeLabel";
@@ -181,7 +182,16 @@ export const TimePicker = ({
           placeholder="HH:MM"
           value={value}
           items={items}
-          renderItem={identity}
+          renderItem={option => (
+            <Box direction="row" alignItems="center">
+              <LakeText>{option}</LakeText>
+              <Fill minWidth={8} />
+
+              {option === value && (
+                <Icon name="checkmark-filled" color={colors.positive[500]} size={16} />
+              )}
+            </Box>
+          )}
           readOnly={readOnly}
           disabled={disabled}
           error={error}
