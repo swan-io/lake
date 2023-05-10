@@ -12,14 +12,32 @@ import {
 } from "../src/components/Filters";
 import { Space } from "../src/components/Space";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
-import { getRifmProps } from "../src/utils/rifm";
 import { StoryBlock } from "./_StoriesComponents";
 
-const rifmDateProps = getRifmProps({
-  accept: "numeric",
-  charMap: { 2: "/", 4: "/" },
-  maxLength: 8,
-});
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+const dayNames = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+] as const;
 
 const mode: FilterRadioDef<"QES" | "Expert"> = {
   type: "radio",
@@ -48,10 +66,12 @@ const status: FilterCheckboxDef<
 const startDate: FilterDateDef = {
   type: "date",
   label: "Start Date",
+  cancelText: "Cancel",
   submitText: "Save",
   noValueText: "None",
   dateFormat: "DD/MM/YYYY",
-  rifmProps: rifmDateProps,
+  dayNames,
+  monthNames,
 };
 
 const resourceId: FilterInputDef = {

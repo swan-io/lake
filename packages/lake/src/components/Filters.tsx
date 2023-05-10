@@ -1,16 +1,7 @@
 import dayjs from "dayjs";
-import {
-  ComponentProps,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, Text, View } from "react-native";
 import { ValidatorResult, hasDefinedKeys, useForm } from "react-ux-form";
-import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
 import { colors, shadows, spacings } from "../constants/design";
@@ -19,6 +10,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
+import { DateFormat, DatePickerPopover, MonthNames, WeekDayNames } from "./DatePicker";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
@@ -353,17 +345,15 @@ function FilterCheckbox<T>({
   );
 }
 
-type RifmProps = Required<
-  Pick<ComponentProps<typeof Rifm>, "accept" | "append" | "format" | "mask">
->;
-
 type FilterDateProps = {
   label: string;
+  monthNames: MonthNames;
+  dayNames: WeekDayNames;
   noValueText: string;
+  cancelText: string;
   submitText: string;
+  dateFormat: DateFormat;
   validate?: (val: string) => ValidatorResult;
-  rifmProps: RifmProps;
-  dateFormat: string;
   initialValue?: string;
   onSave: (val: string) => void;
   onPressRemove: () => void;
@@ -372,11 +362,13 @@ type FilterDateProps = {
 
 function FilterDate({
   label,
+  monthNames,
+  dayNames,
   initialValue,
   noValueText,
+  cancelText,
   submitText,
   dateFormat,
-  rifmProps,
   validate,
   onSave,
   onPressRemove,
@@ -417,42 +409,28 @@ function FilterDate({
         value={isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : noValueText}
       />
 
-      <Popover
-        role="listbox"
-        matchReferenceWidth={false}
-        onDismiss={close}
-        referenceRef={inputRef}
-        returnFocus={false}
-        visible={visible}
-      >
-        <View style={[styles.dropdown, styles.inputContent]}>
-          <Field name="date">
-            {({ value, onChange, error }) => (
-              <Rifm value={value} onChange={onChange} {...rifmProps}>
-                {({ value, onChange }) => (
-                  <LakeLabel
-                    label={label}
-                    render={id => (
-                      <LakeTextInput
-                        nativeID={id}
-                        error={error}
-                        style={styles.input}
-                        placeholder={dateFormat}
-                        value={value}
-                        onChange={onChange}
-                      />
-                    )}
-                  />
-                )}
-              </Rifm>
-            )}
-          </Field>
-
-          <LakeButton color="current" size="small" onPress={onSubmit}>
-            {submitText}
-          </LakeButton>
-        </View>
-      </Popover>
+      <Field name="date">
+        {({ value, onChange, error }) => (
+          <DatePickerPopover
+            visible={visible}
+            referenceRef={inputRef}
+            monthNames={monthNames}
+            weekDayNames={dayNames}
+            format={dateFormat}
+            firstWeekDay="monday"
+            label={label}
+            cancelLabel={cancelText}
+            confirmLabel={submitText}
+            value={value}
+            error={error}
+            onChange={value => {
+              onChange(value);
+              onSubmit();
+            }}
+            onDissmiss={close}
+          />
+        )}
+      </Field>
     </View>
   );
 }
@@ -583,10 +561,12 @@ export type FilterRadioDef<T> = {
 export type FilterDateDef = {
   type: "date";
   label: string;
+  monthNames: MonthNames;
+  dayNames: WeekDayNames;
+  cancelText: string;
   submitText: string;
   noValueText: string;
-  dateFormat: string;
-  rifmProps: RifmProps;
+  dateFormat: DateFormat;
   validate?: (value: string) => ValidatorResult;
 };
 
@@ -706,14 +686,26 @@ export const FiltersStack = <T extends FiltersDefinition>({
               )
               .with(
                 { type: "date" },
-                ({ type, label, noValueText, submitText, dateFormat, rifmProps, validate }) => (
+                ({
+                  type,
+                  label,
+                  monthNames,
+                  dayNames,
+                  noValueText,
+                  cancelText,
+                  submitText,
+                  dateFormat,
+                  validate,
+                }) => (
                   <FilterDate
                     label={label}
+                    monthNames={monthNames}
+                    dayNames={dayNames}
                     noValueText={noValueText}
+                    cancelText={cancelText}
                     submitText={submitText}
-                    autoOpen={lastOpenedFilter === filterName}
                     dateFormat={dateFormat}
-                    rifmProps={rifmProps}
+                    autoOpen={lastOpenedFilter === filterName}
                     validate={validate}
                     initialValue={getFilterValue(type, filters, filterName)}
                     onSave={value => onChangeFilters({ ...filters, [filterName]: value })}

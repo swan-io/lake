@@ -113,7 +113,7 @@ const DATE_RANGE_PICKER_THRESHOLD = 800;
 
 const NB_DAYS_IN_WEEK = 7;
 
-type MonthNames = readonly [
+export type MonthNames = readonly [
   string,
   string,
   string,
@@ -127,7 +127,7 @@ type MonthNames = readonly [
   string,
   string,
 ];
-type WeekDayNames = readonly [string, string, string, string, string, string, string];
+export type WeekDayNames = readonly [string, string, string, string, string, string, string];
 
 type YearMonth = {
   year: number;
@@ -155,7 +155,7 @@ export type DatePickerRange = {
   end: Option<DatePickerDate>;
 };
 
-type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
+export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 
 const rifmDateProps = getRifmProps({
   accept: "numeric",
