@@ -1,7 +1,7 @@
 import { Array, Option } from "@swan-io/boxed";
 import fs from "node:fs";
 import { EOL } from "node:os";
-import path from "node:path";
+import path from "pathe";
 import { P, isMatching } from "ts-pattern";
 
 const iconsConfigPath = path.join(process.cwd(), "scripts/fluent-icons/icons.json");

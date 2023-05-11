@@ -54,6 +54,7 @@
     "eslint-plugin-swan": "file:scripts/eslint",
     "glob": "^10.2.2",
     "lint-staged": "^13.2.2",
+    "pathe": "^1.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^3.2.2",
     "react": "^18.2.0",
