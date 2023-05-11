@@ -538,7 +538,7 @@ export type FilterRadioDef<T> = {
   width?: number;
 };
 
-export type FilterDateDef = {
+export type FilterDateDef<Values = unknown> = {
   type: "date";
   label: string;
   monthNames: MonthNames;
@@ -547,7 +547,7 @@ export type FilterDateDef = {
   submitText: string;
   noValueText: string;
   dateFormat: DateFormat;
-  validate?: (value: string) => ValidatorResult;
+  validate?: (value: string, filters: Values) => ValidatorResult;
 };
 
 export type FilterInputDef = {
@@ -686,7 +686,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     submitText={submitText}
                     dateFormat={dateFormat}
                     autoOpen={lastOpenedFilter === filterName}
-                    validate={validate}
+                    validate={validate ? value => validate(value, filters) : undefined}
                     initialValue={getFilterValue(type, filters, filterName)}
                     onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
                     onPressRemove={() => {
