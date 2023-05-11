@@ -883,7 +883,7 @@ export const DatePickerPopover = ({
   onDissmiss,
 }: DatePickerPopoverProps) => {
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
-  const { Field, submitForm, setFieldValue } = useForm({
+  const { Field, submitForm, setFieldValue, resetField } = useForm({
     date: {
       initialValue: value ?? "",
       validate,
@@ -903,6 +903,12 @@ export const DatePickerPopover = ({
       onDissmiss();
     });
   };
+
+  useEffect(() => {
+    if (!visible) {
+      resetField("date");
+    }
+  }, [visible, resetField]);
 
   return (
     <Popover
