@@ -10,7 +10,13 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
-import { DateFormat, DatePickerPopover, MonthNames, WeekDayNames } from "./DatePicker";
+import {
+  DateFormat,
+  DatePickerDate,
+  DatePickerPopover,
+  MonthNames,
+  WeekDayNames,
+} from "./DatePicker";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
@@ -353,6 +359,7 @@ type FilterDateProps = {
   cancelText: string;
   submitText: string;
   dateFormat: DateFormat;
+  isSelectable?: (date: DatePickerDate) => boolean;
   validate?: (val: string) => ValidatorResult;
   initialValue?: string;
   onSave: (val: string) => void;
@@ -369,6 +376,7 @@ function FilterDate({
   cancelText,
   submitText,
   dateFormat,
+  isSelectable,
   validate,
   onSave,
   onPressRemove,
@@ -404,6 +412,7 @@ function FilterDate({
         cancelLabel={cancelText}
         confirmLabel={submitText}
         value={value}
+        isSelectable={isSelectable}
         validate={validate}
         onChange={value => {
           const formattedValue = dayjs(value, dateFormat, true).toJSON();
@@ -547,6 +556,7 @@ export type FilterDateDef<Values = unknown> = {
   submitText: string;
   noValueText: string;
   dateFormat: DateFormat;
+  isSelectable?: (date: DatePickerDate, filters: Values) => boolean;
   validate?: (value: string, filters: Values) => ValidatorResult;
 };
 
@@ -675,6 +685,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   cancelText,
                   submitText,
                   dateFormat,
+                  isSelectable,
                   validate,
                 }) => (
                   <FilterDate
@@ -686,6 +697,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     submitText={submitText}
                     dateFormat={dateFormat}
                     autoOpen={lastOpenedFilter === filterName}
+                    isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
                     validate={validate ? value => validate(value, filters) : undefined}
                     initialValue={getFilterValue(type, filters, filterName)}
                     onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
