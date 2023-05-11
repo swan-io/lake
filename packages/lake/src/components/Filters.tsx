@@ -377,26 +377,10 @@ function FilterDate({
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
-  const { Field, submitForm, setFieldValue } = useForm<{ date: string }>({
-    date: {
-      initialValue: isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : "",
-      validate,
-    },
-  });
-
-  useEffect(() => {
-    setFieldValue("date", isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : "");
-  }, [initialValue, dateFormat, setFieldValue]);
-
-  const onSubmit = () => {
-    submitForm(values => {
-      if (hasDefinedKeys(values, ["date"])) {
-        const date = dayjs(values.date, dateFormat, true).toJSON();
-        onSave(date);
-        close();
-      }
-    });
-  };
+  const value = useMemo(
+    () => (isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : ""),
+    [initialValue, dateFormat],
+  );
 
   return (
     <View style={styles.container}>
@@ -409,28 +393,24 @@ function FilterDate({
         value={isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : noValueText}
       />
 
-      <Field name="date">
-        {({ value, onChange, error }) => (
-          <DatePickerPopover
-            visible={visible}
-            referenceRef={inputRef}
-            monthNames={monthNames}
-            weekDayNames={dayNames}
-            format={dateFormat}
-            firstWeekDay="monday"
-            label={label}
-            cancelLabel={cancelText}
-            confirmLabel={submitText}
-            value={value}
-            error={error}
-            onChange={value => {
-              onChange(value);
-              onSubmit();
-            }}
-            onDissmiss={close}
-          />
-        )}
-      </Field>
+      <DatePickerPopover
+        visible={visible}
+        referenceRef={inputRef}
+        monthNames={monthNames}
+        weekDayNames={dayNames}
+        format={dateFormat}
+        firstWeekDay="monday"
+        label={label}
+        cancelLabel={cancelText}
+        confirmLabel={submitText}
+        value={value}
+        validate={validate}
+        onChange={value => {
+          const formattedValue = dayjs(value, dateFormat, true).toJSON();
+          onSave(formattedValue);
+        }}
+        onDissmiss={close}
+      />
     </View>
   );
 }

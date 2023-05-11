@@ -2,6 +2,7 @@ import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
+import { ValidatorResult, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
@@ -854,18 +855,18 @@ export const DatePicker = ({
   );
 };
 
-type DatePickerPopoverProps = DatePickerProps & {
+type DatePickerPopoverProps = Except<DatePickerProps, "error"> & {
   id?: string;
   visible: boolean;
   referenceRef: React.RefObject<unknown>;
   cancelLabel: string;
   confirmLabel: string;
+  validate?: (value: string) => ValidatorResult;
   onDissmiss: () => void;
 };
 
 export const DatePickerPopover = ({
   value,
-  error,
   format,
   firstWeekDay,
   monthNames,
@@ -878,25 +879,29 @@ export const DatePickerPopover = ({
   label,
   cancelLabel,
   confirmLabel,
+  validate,
   onDissmiss,
 }: DatePickerPopoverProps) => {
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
-  const [localeValue, setLocaleValue] = useState(value);
-
-  useEffect(() => {
-    setLocaleValue(value);
-  }, [value]);
+  const { Field, submitForm, setFieldValue } = useForm({
+    date: {
+      initialValue: value ?? "",
+      validate,
+    },
+  });
 
   const handleCancel = () => {
-    setLocaleValue(value);
+    setFieldValue("date", value ?? "");
     onDissmiss();
   };
 
   const handleConfirm = () => {
-    if (isNotNullishOrEmpty(localeValue)) {
-      onChange(localeValue);
-    }
-    onDissmiss();
+    submitForm(({ date }) => {
+      if (isNotNullishOrEmpty(date)) {
+        onChange(date);
+      }
+      onDissmiss();
+    });
   };
 
   return (
@@ -910,33 +915,41 @@ export const DatePickerPopover = ({
       visible={visible}
     >
       <View style={desktop ? styles.popoverDesktop : styles.popover}>
-        <LakeLabel
-          label={label}
-          render={id => (
-            <Rifm value={localeValue ?? ""} onChange={setLocaleValue} {...rifmDateProps}>
-              {({ value, onChange }) => (
-                <LakeTextInput
-                  id={id}
-                  placeholder={format}
-                  value={value}
-                  error={error}
-                  onChange={onChange}
-                />
-              )}
-            </Rifm>
-          )}
-        />
+        <Field name="date">
+          {({ ref, value, error, onBlur, onChange }) => (
+            <>
+              <LakeLabel
+                label={label}
+                render={id => (
+                  <Rifm value={value} onChange={onChange} {...rifmDateProps}>
+                    {({ value, onChange }) => (
+                      <LakeTextInput
+                        ref={ref}
+                        id={id}
+                        placeholder={format}
+                        value={value}
+                        error={error}
+                        onBlur={onBlur}
+                        onChange={onChange}
+                      />
+                    )}
+                  </Rifm>
+                )}
+              />
 
-        <DatePickerPopoverContent
-          value={localeValue}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
-          desktop={desktop}
-          isSelectable={isSelectable}
-          onChange={setLocaleValue}
-        />
+              <DatePickerPopoverContent
+                value={value}
+                format={format}
+                firstWeekDay={firstWeekDay}
+                monthNames={monthNames}
+                weekDayNames={weekDayNames}
+                desktop={desktop}
+                isSelectable={isSelectable}
+                onChange={onChange}
+              />
+            </>
+          )}
+        </Field>
 
         <Space height={24} />
 
