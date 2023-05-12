@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { useFirstMountState } from "../hooks/useFirstMountState";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
@@ -37,7 +38,19 @@ type Props = {
 };
 
 export const Accordion = ({ trigger, children }: Props) => {
+  const isFirstMount = useFirstMountState();
+  const content = useRef<View | null>(null);
   const [isOpen, { toggle }] = useDisclosure(false);
+
+  useEffect(() => {
+    if (!isFirstMount && content.current instanceof HTMLDivElement) {
+      if (isOpen) {
+        console.log("OPEN ANIMATION");
+      } else {
+        console.log("CLOSE ANIMATION");
+      }
+    }
+  }, [isFirstMount, isOpen]);
 
   return (
     <View>
@@ -60,7 +73,9 @@ export const Accordion = ({ trigger, children }: Props) => {
         )}
       </Pressable>
 
-      <View style={[styles.content, isOpen && styles.contentDisplayed]}>{children}</View>
+      <View ref={content} style={[styles.content, isOpen && styles.contentDisplayed]}>
+        {children}
+      </View>
     </View>
   );
 };
