@@ -194,11 +194,9 @@ export const SimpleTitleCell = ({
   <View style={styles.cell}>
     <LakeText
       numberOfLines={1}
-      color={colors.gray[900]}
+      color={isHighlighted ? colors.current.primary : colors.gray[900]}
+      style={styles.regularText}
       variant="medium"
-      {...(isHighlighted && {
-        color: colors.current.primary,
-      })}
     >
       {text}
     </LakeText>
