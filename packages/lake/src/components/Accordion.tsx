@@ -81,9 +81,7 @@ export const Accordion = ({ trigger, children }: Props) => {
         });
 
         return () => {
-          if (contentElement instanceof HTMLDivElement) {
-            contentElement.removeEventListener("transitionend", handleTransitionEnd);
-          }
+          contentElement.removeEventListener("transitionend", handleTransitionEnd);
         };
       }
     }
