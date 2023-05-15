@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useId, useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
@@ -42,6 +42,7 @@ type Props = {
 };
 
 export const Accordion = ({ trigger, children }: Props) => {
+  const id = useId();
   const isFirstMount = useFirstMountState();
   const content = useRef<View | null>(null);
   const [isOpen, { toggle }] = useDisclosure(false);
@@ -49,7 +50,7 @@ export const Accordion = ({ trigger, children }: Props) => {
   useEffect(() => {
     const contentElement = content.current;
 
-    if (!isFirstMount && contentElement instanceof HTMLDivElement) {
+    if (!isFirstMount && contentElement instanceof HTMLElement) {
       const handleTransitionEnd = () => {
         contentElement.removeAttribute("style"); // remove inline styles after transition
         contentElement.removeEventListener("transitionend", handleTransitionEnd);
@@ -89,7 +90,7 @@ export const Accordion = ({ trigger, children }: Props) => {
 
   return (
     <View>
-      <Pressable style={styles.trigger} onPress={toggle}>
+      <Pressable aria-expanded={isOpen} aria-controls={id} style={styles.trigger} onPress={toggle}>
         <Icon
           name="chevron-right-filled"
           size={12}
@@ -110,6 +111,9 @@ export const Accordion = ({ trigger, children }: Props) => {
 
       <View
         ref={content}
+        aria-labelledby={id}
+        aria-hidden={!isOpen}
+        role="region"
         style={[styles.contentContainer, isOpen && styles.contentContainerDisplayed]}
       >
         <View style={styles.content}>{children}</View>
