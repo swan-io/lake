@@ -22,13 +22,17 @@ const styles = StyleSheet.create({
   arrowOpen: {
     transform: "rotate(90deg)",
   },
-  content: {
+  contentContainer: {
     display: "none",
+    overflow: "hidden",
+    transitionDuration: "300ms",
+  },
+  contentContainerDisplayed: {
+    display: "flex",
+  },
+  content: {
     paddingVertical: spacings[12],
     paddingHorizontal: spacings[20],
-  },
-  contentDisplayed: {
-    display: "flex",
   },
 });
 
@@ -43,11 +47,44 @@ export const Accordion = ({ trigger, children }: Props) => {
   const [isOpen, { toggle }] = useDisclosure(false);
 
   useEffect(() => {
-    if (!isFirstMount && content.current instanceof HTMLDivElement) {
+    const contentElement = content.current;
+
+    if (!isFirstMount && contentElement instanceof HTMLDivElement) {
+      const handleTransitionEnd = () => {
+        contentElement.removeAttribute("style"); // remove inline styles after transition
+        contentElement.removeEventListener("transitionend", handleTransitionEnd);
+      };
+
+      contentElement.addEventListener("transitionend", handleTransitionEnd);
+
       if (isOpen) {
-        console.log("OPEN ANIMATION");
+        const contentHeight = contentElement.clientHeight;
+        contentElement.style.height = "0px";
+
+        requestAnimationFrame(() => {
+          // wait for rerender to set height and enable css transition
+          contentElement.style.height = `${contentHeight}px`;
+        });
       } else {
-        console.log("CLOSE ANIMATION");
+        // we must set display to flex before we can get the height
+        contentElement.style.display = "flex";
+
+        requestAnimationFrame(() => {
+          // wait for rerender to get height
+          const contentHeight = contentElement.clientHeight;
+          contentElement.style.height = `${contentHeight}px`;
+
+          requestAnimationFrame(() => {
+            // wait rerender to set height to 0 and enable css transition
+            contentElement.style.height = "0px";
+          });
+        });
+
+        return () => {
+          if (contentElement instanceof HTMLDivElement) {
+            contentElement.removeEventListener("transitionend", handleTransitionEnd);
+          }
+        };
       }
     }
   }, [isFirstMount, isOpen]);
@@ -73,8 +110,11 @@ export const Accordion = ({ trigger, children }: Props) => {
         )}
       </Pressable>
 
-      <View ref={content} style={[styles.content, isOpen && styles.contentDisplayed]}>
-        {children}
+      <View
+        ref={content}
+        style={[styles.contentContainer, isOpen && styles.contentContainerDisplayed]}
+      >
+        <View style={styles.content}>{children}</View>
       </View>
     </View>
   );
