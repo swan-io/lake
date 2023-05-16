@@ -47,11 +47,11 @@ export type QuickAction = {
 
 type Props = {
   actions: QuickAction[];
-  showTooltip?: boolean;
+  tooltipDisabled?: boolean;
   tooltipText?: string;
 };
 
-export const QuickActions = ({ actions, showTooltip, tooltipText }: Props) => {
+export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: Props) => {
   return (
     <View style={styles.container}>
       {actions.map((action, index) => (
@@ -59,13 +59,13 @@ export const QuickActions = ({ actions, showTooltip, tooltipText }: Props) => {
           content={tooltipText}
           placement="bottom"
           key={index}
-          showTooltip={showTooltip === false}
+          disabled={tooltipDisabled}
         >
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={showTooltip === false ? styles.action : styles.disabled}
-            disabled={action.isLoading === true || showTooltip === true}
+            style={tooltipDisabled ? styles.disabled : styles.action}
+            disabled={action.isLoading === true || !tooltipDisabled}
           >
             <View
               style={[
