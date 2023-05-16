@@ -109,6 +109,7 @@ type Props = {
   width?: number;
   togglableOnFocus?: boolean;
   containerStyle?: ViewStyle;
+  showTooltip?: boolean;
 };
 
 type TooltipRef = {
@@ -133,6 +134,7 @@ export const LakeTooltip = memo(
         width,
         togglableOnFocus = false,
         containerStyle,
+        showTooltip = false,
       },
       forwardedRef,
     ) => {
@@ -148,7 +150,7 @@ export const LakeTooltip = memo(
       }));
 
       useHover(referenceRef, {
-        disabled: !canHover,
+        disabled: showTooltip || !canHover,
         onHoverChange: nextVisible => {
           nextVisible ? onShow?.() : onHide?.();
           setVisible(nextVisible);
