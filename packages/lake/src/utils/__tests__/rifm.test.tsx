@@ -4,10 +4,10 @@ import { Rifm } from "rifm";
 import { afterEach, expect, test } from "vitest";
 import { getRifmProps } from "../rifm";
 
-const typeInInput = (input: HTMLElement, value: string) =>
+const typeInInput = (input: HTMLInputElement, value: string) =>
   fireEvent.input(input, { target: { value } });
 
-const clearInput = (input: HTMLElement) => fireEvent.input(input, { target: { value: "" } });
+const clearInput = (input: HTMLInputElement) => fireEvent.input(input, { target: { value: "" } });
 
 afterEach(() => {
   cleanup();
@@ -32,18 +32,18 @@ test('it respects accept: "alpha" param', async () => {
 
   const utils = render(<Test />);
 
-  const input = await utils.findByRole("textbox");
+  const input = (await utils.findByRole("textbox")) as HTMLInputElement;
 
   typeInInput(input, "test");
-  expect(input).toHaveValue("te st/");
+  expect(input.value).toBe("te st/");
   clearInput(input);
 
   typeInInput(input, "1234");
-  expect(input).toHaveValue("");
+  expect(input.value).toBe("");
   clearInput(input);
 
   typeInInput(input, "te34");
-  expect(input).toHaveValue("te ");
+  expect(input.value).toBe("te ");
   clearInput(input);
 });
 
@@ -66,18 +66,18 @@ test('it respects accept: "numeric" param', async () => {
 
   const utils = render(<Test />);
 
-  const input = await utils.findByRole("textbox");
+  const input = (await utils.findByRole("textbox")) as HTMLInputElement;
 
   typeInInput(input, "test");
-  expect(input).toHaveValue("");
+  expect(input.value).toBe("");
   clearInput(input);
 
   typeInInput(input, "1234");
-  expect(input).toHaveValue("12 34/");
+  expect(input.value).toBe("12 34/");
   clearInput(input);
 
   typeInInput(input, "te34");
-  expect(input).toHaveValue("34 ");
+  expect(input.value).toBe("34 ");
   clearInput(input);
 });
 
@@ -100,22 +100,22 @@ test('it respects accept: "alphanumeric" param', async () => {
 
   const utils = render(<Test />);
 
-  const input = await utils.findByRole("textbox");
+  const input = (await utils.findByRole("textbox")) as HTMLInputElement;
 
   typeInInput(input, "test");
-  expect(input).toHaveValue("te st/");
+  expect(input.value).toBe("te st/");
   clearInput(input);
 
   typeInInput(input, "1234");
-  expect(input).toHaveValue("12 34/");
+  expect(input.value).toBe("12 34/");
   clearInput(input);
 
   typeInInput(input, "te34");
-  expect(input).toHaveValue("te 34/");
+  expect(input.value).toBe("te 34/");
   clearInput(input);
 
   typeInInput(input, "t__4");
-  expect(input).toHaveValue("t4 ");
+  expect(input.value).toBe("t4 ");
   clearInput(input);
 });
 
@@ -138,18 +138,18 @@ test("it appends characters at given indexes", async () => {
 
   const utils = render(<Test />);
 
-  const input = await utils.findByRole("textbox");
+  const input = (await utils.findByRole("textbox")) as HTMLInputElement;
 
   typeInInput(input, "12");
-  expect(input).toHaveValue("12 ");
+  expect(input.value).toBe("12 ");
   clearInput(input);
 
   typeInInput(input, "1234");
-  expect(input).toHaveValue("12 34/");
+  expect(input.value).toBe("12 34/");
   clearInput(input);
 
   typeInInput(input, "123456");
-  expect(input).toHaveValue("12 34/56");
+  expect(input.value).toBe("12 34/56");
   clearInput(input);
 });
 
@@ -172,17 +172,17 @@ test("it truncates the formatted text to the maximum length", async () => {
 
   const utils = render(<Test />);
 
-  const input = await utils.findByRole("textbox");
+  const input = (await utils.findByRole("textbox")) as HTMLInputElement;
 
   typeInInput(input, "1234");
-  expect(input).toHaveValue("12 34/");
+  expect(input.value).toBe("12 34/");
   clearInput(input);
 
   typeInInput(input, "123456");
-  expect(input).toHaveValue("12 34/56");
+  expect(input.value).toBe("12 34/56");
   clearInput(input);
 
   typeInInput(input, "12345678");
-  expect(input).toHaveValue("12 34/56");
+  expect(input.value).toBe("12 34/56");
   clearInput(input);
 });
