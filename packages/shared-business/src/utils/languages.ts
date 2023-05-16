@@ -35,7 +35,9 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
     setPreferredLanguage: (language: SupportedLanguage) => {
       try {
         localStorage.setItem(PREFERRED_LANGUAGE_KEY, language);
-        window.location.reload();
+        const url = new URL(window.location.href);
+        url.searchParams.delete("lang");
+        window.location.replace(url.toString());
       } catch {
         return;
       }
