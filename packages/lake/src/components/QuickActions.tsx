@@ -58,14 +58,14 @@ export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: 
       {actions.map((action, index) => (
         <LakeTooltip
           content={tooltipText}
-          placement="bottom"
+          placement="top"
           key={index}
           disabled={tooltipDisabled || isNullishOrEmpty(tooltipText)}
         >
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={tooltipDisabled ? styles.disabled : styles.action}
+            style={tooltipDisabled ? styles.action : styles.disabled}
             disabled={action.isLoading === true || !tooltipDisabled}
           >
             <View
