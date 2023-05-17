@@ -43,6 +43,7 @@ export type QuickAction = {
   icon: IconName;
   label: string;
   onPress: () => void;
+  disabled?: boolean;
   isLoading?: boolean;
   backgroundColor?: string;
   color?: string;
@@ -68,8 +69,8 @@ export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: 
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={[styles.action, !tooltipDisabled && styles.disabled]}
-            disabled={action.isLoading === true || !tooltipDisabled}
+            style={action.disabled === true ? styles.disabled : styles.action}
+            disabled={action.isLoading === true || action.disabled === true}
           >
             <View
               style={[
