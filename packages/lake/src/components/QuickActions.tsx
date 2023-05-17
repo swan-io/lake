@@ -1,5 +1,6 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { colors, spacings } from "../constants/design";
+import { isNullishOrEmpty } from "../utils/nullish";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
@@ -59,7 +60,7 @@ export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: 
           content={tooltipText}
           placement="bottom"
           key={index}
-          disabled={tooltipDisabled}
+          disabled={tooltipDisabled || isNullishOrEmpty(tooltipText)}
         >
           <Pressable
             key={index}
