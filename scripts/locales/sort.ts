@@ -3,7 +3,9 @@ import os from "node:os";
 import path from "pathe";
 
 const isStringRecord = (value: unknown): value is Record<string, string> =>
-  value != null && Object.values(value).every(item => typeof item === "string");
+  String(value) === "[object Object]" &&
+  value != null &&
+  Object.values(value).every(item => typeof item === "string");
 
 const localesPath = path.resolve(__dirname, "../src/locales");
 const files = fs.readdirSync(localesPath).map(file => path.join(localesPath, file));
