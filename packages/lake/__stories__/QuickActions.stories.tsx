@@ -24,7 +24,18 @@ const actions: QuickAction[] = [
   {
     icon: "document-regular",
     label: "Document",
+    tooltipText: "Add a new document",
     disabled: true,
+    onPress: () => console.log("Click on Document"),
+    backgroundColor: colors.live.primary,
+    color: colors.live.contrast,
+  },
+  {
+    icon: "document-regular",
+    label: "Document",
+    tooltipText: "Add a new document",
+    tooltipDisabled: true,
+    disabled: false,
     onPress: () => console.log("Click on Document"),
     backgroundColor: colors.live.primary,
     color: colors.live.contrast,
@@ -42,24 +53,8 @@ const actions: QuickAction[] = [
 export const Default = () => {
   return (
     <StoryBlock title="QuickActions">
-      <StoryPart title="Without any action">
-        <QuickActions actions={[]} />
-      </StoryPart>
-
-      <StoryPart title="Without 1 action">
-        <QuickActions actions={actions.slice(0, 1)} />
-      </StoryPart>
-
-      <StoryPart title="Without several actions">
+      <StoryPart title="With several actions">
         <QuickActions actions={actions} />
-      </StoryPart>
-
-      <StoryPart title="With tooltip">
-        <QuickActions actions={actions} tooltipText="Actions" />
-      </StoryPart>
-
-      <StoryPart title="With tooltip disabled">
-        <QuickActions actions={actions} tooltipText="Actions" tooltipDisabled={true} />
       </StoryPart>
     </StoryBlock>
   );
