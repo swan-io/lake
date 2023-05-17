@@ -15,7 +15,7 @@ import { usePopper } from "react-popper";
 import { match } from "ts-pattern";
 import { colors, shadows } from "../constants/design";
 import { useHover } from "../hooks/useHover";
-import { isNullish } from "../utils/nullish";
+import { isNotNullish } from "../utils/nullish";
 import { getRootElement, matchReferenceWidthModifier } from "../utils/popper";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -109,6 +109,7 @@ type Props = {
   width?: number;
   togglableOnFocus?: boolean;
   containerStyle?: ViewStyle;
+  disabled?: boolean;
 };
 
 type TooltipRef = {
@@ -133,6 +134,7 @@ export const LakeTooltip = memo(
         width,
         togglableOnFocus = false,
         containerStyle,
+        disabled = false,
       },
       forwardedRef,
     ) => {
@@ -242,7 +244,7 @@ export const LakeTooltip = memo(
             {children}
           </View>
 
-          {isNullish(rootElement) || !visible ? null : (
+          {isNotNullish(rootElement) && visible && !disabled && (
             <Portal container={rootElement}>
               <div
                 ref={setPopperElement}

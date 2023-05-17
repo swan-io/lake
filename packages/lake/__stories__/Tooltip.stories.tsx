@@ -118,6 +118,20 @@ export const Behaviors = () => {
           </LakeTooltip>
         </Box>
       </StoryPart>
+
+      <StoryPart title="Disabled">
+        <Box direction="row" justifyContent="center">
+          <LakeTooltip
+            content="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+            placement="bottom"
+            disabled={true}
+          >
+            <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
+              <LakeText>Tooltip should not be displayed on hover</LakeText>
+            </Box>
+          </LakeTooltip>
+        </Box>
+      </StoryPart>
     </StoryBlock>
   );
 };
