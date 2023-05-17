@@ -1,3 +1,12 @@
+## 2.0.2
+
+Changes:
+
+- Add ellipsis style in SimpleTileCell (37a146a)
+- Remove language from URL (3ef12f2)
+- Remove testing-library/jest-dom (eb01cd1)
+- Add disabled prop in LakeTooltip (c9142de)
+
 ## 2.0.1
 
 Changes:
