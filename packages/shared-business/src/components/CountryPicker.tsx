@@ -2,6 +2,7 @@ import { Flag } from "@swan-io/lake/src/components/Flag";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { useMemo } from "react";
 import { CountryCCA2, CountryCCA3 } from "../constants/countries";
+import { locale } from "../utils/i18n";
 
 export type CountryItem<T extends CountryCCA3> = { cca3: T; cca2?: CountryCCA2; name: string };
 
@@ -31,8 +32,8 @@ export function CountryPicker<T extends CountryCCA3>({
   const countries = useMemo(() => {
     const hasIntl = "Intl" in window && "DisplayNames" in window.Intl;
     const countryResolver =
-      hasIntl && Intl.DisplayNames.supportedLocalesOf(["en"]).length
-        ? new Intl.DisplayNames(["en"], { type: "region" })
+      hasIntl && Intl.DisplayNames.supportedLocalesOf([locale.language]).length
+        ? new Intl.DisplayNames([locale.language], { type: "region" })
         : undefined;
     const seen = new Set();
     return items
