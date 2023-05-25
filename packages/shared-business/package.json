@@ -50,7 +50,7 @@
     "@types/google.maps": "^3.53.2",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
-    "@types/react-native": "^0.71.7",
+    "@types/react-native": "^0.72.1",
     "@types/uuid": "^9.0.1",
     "jsdom": "^22.0.0",
     "vitest": "^0.31.1"

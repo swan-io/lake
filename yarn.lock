@@ -1496,6 +1496,14 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.7.tgz#ccab5c8f7dc557a52ca3288c10075c9ccd37fff7"
   integrity sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==
 
+"@react-native/virtualized-lists@^0.72.4":
+  version "0.72.5"
+  resolved "https://registry.yarnpkg.com/@react-native/virtualized-lists/-/virtualized-lists-0.72.5.tgz#a7b261357ec7e0e5aa97a24d4acab1d903811e09"
+  integrity sha512-AtKE3dez3lf89O87wC2ZglV5aPsifopQgn/UmFhXAwi18Yp1BJfEGh3sUqOPNgZNByYPAGxFANeZq44VATXeJA==
+  dependencies:
+    invariant "^2.2.4"
+    nullthrows "^1.1.1"
+
 "@rollup/pluginutils@^4.2.0":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
@@ -2578,11 +2586,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@^0.71.7":
-  version "0.71.7"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.71.7.tgz#b6ce1c512097fc2047bacd01cc18ce2b8ca2920a"
-  integrity sha512-SYlf5Vw2qX4qDQfdcCEdfskoMG6yn0T/jWwvBNR1xZJ3qEobcGNHuOTZQdfu4TNK+VFkH5rSXZraRlio1/bvcA==
+"@types/react-native@^0.72.1":
+  version "0.72.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.1.tgz#a732ba4fabc15eee26cfbe4b00a12baa3a86cf44"
+  integrity sha512-lwhhvMKPvH2AJOKkvHVamD/7pFsEmcZG1AoSnsOegKvTl6irWKWTPmTqgAi33Wl91efDYrh61nC48/AgcPo7SA==
   dependencies:
+    "@react-native/virtualized-lists" "^0.72.4"
     "@types/react" "*"
 
 "@types/react@*", "@types/react@>=16", "@types/react@^18.2.7":
@@ -5202,6 +5211,13 @@ intl-messageformat@10.3.5:
     "@formatjs/fast-memoize" "2.0.1"
     "@formatjs/icu-messageformat-parser" "2.4.0"
     tslib "^2.4.0"
+
+invariant@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
+  dependencies:
+    loose-envify "^1.0.0"
 
 ip@^2.0.0:
   version "2.0.0"
