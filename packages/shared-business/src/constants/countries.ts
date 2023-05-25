@@ -1,6 +1,5 @@
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { CountryItem } from "../components/CountryPicker";
-import { t } from "../utils/i18n";
+import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { locale, t } from "../utils/i18n";
 
 export const france = {
   name: "France",
@@ -2237,13 +2236,6 @@ export const getCCA3forCCA2 = (cca2: CountryCCA2) =>
 const isTranslatedCountry = (value: unknown): value is CountryWithTranslation =>
   Object.keys(names).includes(value as CountryWithTranslation);
 
-export const getCountryNameByCCA3 = (cca3: string) => {
-  if (isTranslatedCountry(cca3)) {
-    return names[cca3];
-  }
-  return countries.find(country => country.cca3 === cca3)?.name ?? cca3;
-};
-
 export const companyWithUboCountries = ["BEL", "DEU", "FRA", "ITA", "LTU", "LUX", "NLD"] as const;
 
 export type CompanyWithUboCountryCCA3 = (typeof companyWithUboCountries)[number];
@@ -2284,15 +2276,9 @@ const names = {
 
 type CountryWithTranslation = keyof typeof names;
 
-export const allCountriesItems: CountryItem<CountryCCA3>[] = countries
-  .map(country => ({
-    name: getCountryNameByCCA3(country.cca3),
-    cca3: country.cca3,
-    cca2: country.cca2,
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+export const allCountries = countries.map(country => country.cca3);
 
-const individualCountries = [
+export const individualCountries = [
   "AUT",
   "BEL",
   "CYP",
@@ -2329,15 +2315,7 @@ const individualCountries = [
 
 export type IndividualCountryCCA3 = (typeof individualCountries)[number];
 
-export const individualCountriesItems: CountryItem<IndividualCountryCCA3>[] = individualCountries
-  .map(cca3 => ({
-    name: names[cca3],
-    cca3,
-    cca2: getCCA2forCCA3(cca3),
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name));
-
-const companyCountries = [
+export const companyCountries = [
   "BEL",
   "DEU",
   "FRA",
@@ -2374,14 +2352,6 @@ const companyCountries = [
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
 
-export const companyCountriesItems: CountryItem<CompanyCountryCCA3>[] = companyCountries
-  .map(cca3 => ({
-    name: names[cca3],
-    cca3,
-    cca2: getCCA2forCCA3(cca3),
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name));
-
 // Google API accepts only 5 country codes
 export const countriesWithMultipleCCA3: Partial<Record<CountryCCA3, string[]>> = {
   FRA: ["FRA", "GUF", "REU", "MTQ", "GLP"], // France, French Guiana, Réunion, Martinique, Guadeloupe
@@ -2408,18 +2378,46 @@ const getBestNavigatorCountryIndividual = (): IndividualCountryCCA3 => {
     .filter(isNotNullish);
 
   const cca2 = navigatorCountries.find(isCountryCCA2) ?? "FR";
-  const country = individualCountriesItems.find(country => country.cca2 === cca2);
+  const country = individualCountries.find(country => getCCA2forCCA3(country) === cca2);
 
-  return country ? country.cca3 : "FRA";
+  return country ?? "FRA";
 };
 
 const getBestNavigatorCountryCompany = (): CompanyCountryCCA3 => {
   const navigatorCountries = navigator.languages.map(lang => lang.split("-")[1]);
   const cca2 = navigatorCountries.find(isCountryCCA2) ?? "FR";
-  const country = companyCountriesItems.find(country => country.cca2 === cca2);
+  const country = companyCountries.find(country => getCCA2forCCA3(country) === cca2);
 
-  return country ? country.cca3 : "FRA";
+  return country ?? "FRA";
 };
 
 export const individualFallbackCountry = getBestNavigatorCountryIndividual();
 export const companyFallbackCountry = getBestNavigatorCountryCompany();
+
+const hasIntl = "Intl" in window && "DisplayNames" in window.Intl;
+const countryNameResolver =
+  hasIntl && Intl.DisplayNames.supportedLocalesOf([locale.language]).length
+    ? new Intl.DisplayNames([locale.language], { type: "region" })
+    : undefined;
+
+export const getCountryName = (cca3: CountryCCA3): string => {
+  const cca2 = getCCA2forCCA3(cca3);
+
+  if (isNullish(cca2)) {
+    if (isTranslatedCountry(cca3)) {
+      return names[cca3];
+    }
+    return countries.find(country => country.cca3 === cca3)?.name ?? cca3;
+  }
+
+  const resolvedName = countryNameResolver?.of(cca2);
+
+  if (isNotNullish(resolvedName)) {
+    return resolvedName;
+  }
+
+  if (isTranslatedCountry(cca3)) {
+    return names[cca3];
+  }
+  return countries.find(country => country.cca3 === cca3)?.name ?? cca3;
+};

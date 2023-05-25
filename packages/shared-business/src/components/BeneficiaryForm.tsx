@@ -18,8 +18,8 @@ import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
 import {
   CountryCCA3,
-  allCountriesItems,
-  individualCountriesItems,
+  allCountries,
+  individualCountries,
   isCountryCCA3,
 } from "../constants/countries";
 import { decodeBirthDate, encodeBirthDate } from "../utils/date";
@@ -539,7 +539,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                               error={error}
                               value={value}
                               placeholder={t("beneficiaryForm.beneficiary.birthCountryPlaceholder")}
-                              items={allCountriesItems}
+                              countries={allCountries}
                               onValueChange={onChange}
                             />
                           )}
@@ -701,7 +701,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           <CountryPicker
                             id={id}
                             value={value}
-                            items={individualCountriesItems}
+                            countries={individualCountries}
                             onValueChange={onChange}
                           />
                         )}
