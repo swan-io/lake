@@ -1,15 +1,12 @@
 import { Flag } from "@swan-io/lake/src/components/Flag";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { useMemo } from "react";
-import { CountryCCA2, CountryCCA3 } from "../constants/countries";
-import { locale } from "../utils/i18n";
-
-export type CountryItem<T extends CountryCCA3> = { cca3: T; cca2?: CountryCCA2; name: string };
+import { CountryCCA3, getCountryName } from "../constants/countries";
 
 type Props<T extends CountryCCA3> = {
   onValueChange: (country: T) => void;
   value: T | undefined;
-  items: CountryItem<T>[];
+  countries: T[];
   error?: string;
   placeholder?: string;
   readOnly?: boolean;
@@ -18,10 +15,15 @@ type Props<T extends CountryCCA3> = {
   hideErrors?: boolean;
 };
 
+const removeDuplicated = <T,>(items: T[]): T[] => {
+  const set = new Set(items);
+  return Array.from(set);
+};
+
 export function CountryPicker<T extends CountryCCA3>({
   onValueChange,
   value,
-  items,
+  countries,
   readOnly,
   id,
   error,
@@ -29,33 +31,22 @@ export function CountryPicker<T extends CountryCCA3>({
   disabled,
   hideErrors,
 }: Props<T>) {
-  const countries = useMemo(() => {
-    const hasIntl = "Intl" in window && "DisplayNames" in window.Intl;
-    const countryResolver =
-      hasIntl && Intl.DisplayNames.supportedLocalesOf([locale.language]).length
-        ? new Intl.DisplayNames([locale.language], { type: "region" })
-        : undefined;
-    const seen = new Set();
-    return items
-      .filter(item => {
-        const hasBeenSeen = seen.has(item.cca3);
-        seen.add(item.cca3);
-        return !hasBeenSeen;
-      })
-      .map(country => ({
-        name: countryResolver?.of(country.cca2 ?? "") ?? country.name,
-        icon: <Flag width={14} icon={country.cca3} />,
-        value: country.cca3,
+  const items = useMemo(() => {
+    return removeDuplicated(countries)
+      .map(cca3 => ({
+        name: getCountryName(cca3),
+        icon: <Flag width={14} icon={cca3} />,
+        value: cca3,
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [items]);
+  }, [countries]);
 
   return (
     <LakeSelect
       readOnly={readOnly}
       id={id}
       error={error}
-      items={countries}
+      items={items}
       placeholder={placeholder}
       value={value}
       onValueChange={onValueChange}
