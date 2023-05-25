@@ -105,7 +105,7 @@ const isReactText = (node: ReactNode): node is ReactText =>
   ["string", "number"].includes(typeof node);
 
 const getItemLayout: <I>(
-  data: I[] | null | undefined,
+  data: ArrayLike<I> | null | undefined,
   index: number,
 ) => {
   length: number;

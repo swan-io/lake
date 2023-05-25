@@ -1,8 +1,7 @@
-import Highlight, { Prism } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/github";
-import { memo, ReactNode, useMemo } from "react";
-import { ScrollView, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
-import { match, P } from "ts-pattern";
+import { Highlight, themes } from "prism-react-renderer";
+import { CSSProperties, ReactNode, memo, useMemo } from "react";
+import { ScrollView, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { P, match } from "ts-pattern";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
 import { Separator } from "../src/components/Separator";
@@ -118,18 +117,30 @@ type TsCodeHighlightProps = {
   children: string;
 };
 
+const codeStyle: CSSProperties = {
+  fontFamily:
+    'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+  fontSize: 14,
+  whiteSpace: "pre-wrap",
+  lineHeight: 1.65,
+};
+
 const TsCodeBlock = memo<TsCodeHighlightProps>(({ children }) => {
   return (
-    <Highlight Prism={Prism} theme={theme} code={children} language="tsx">
+    <Highlight theme={themes.github} code={children} language="tsx">
       {({ tokens, getLineProps, getTokenProps }) => (
         <View style={styles.codeBlock}>
-          {tokens.map((line, i) => (
-            <Text {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                <Text {...getTokenProps({ token, key })} />
-              ))}
-            </Text>
-          ))}
+          {tokens.map((line, i) => {
+            const { style, ...props } = getLineProps({ line });
+
+            return (
+              <code key={i} {...props} style={{ ...style, ...codeStyle }}>
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </code>
+            );
+          })}
         </View>
       )}
     </Highlight>
