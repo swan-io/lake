@@ -15,11 +15,6 @@ type Props<T extends CountryCCA3> = {
   hideErrors?: boolean;
 };
 
-const removeDuplicated = <T,>(items: T[]): T[] => {
-  const set = new Set(items);
-  return Array.from(set);
-};
-
 export function CountryPicker<T extends CountryCCA3>({
   onValueChange,
   value,
@@ -32,7 +27,8 @@ export function CountryPicker<T extends CountryCCA3>({
   hideErrors,
 }: Props<T>) {
   const items = useMemo(() => {
-    return removeDuplicated(countries)
+    return countries
+      .filter((item, index, array) => array.indexOf(item) === index) // deduplicate
       .map(cca3 => ({
         name: getCountryName(cca3),
         icon: <Flag width={14} icon={cca3} />,
