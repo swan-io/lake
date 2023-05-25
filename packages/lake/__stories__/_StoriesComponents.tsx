@@ -121,8 +121,8 @@ const codeStyle: CSSProperties = {
   fontFamily:
     'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
   fontSize: 14,
-  whiteSpace: "pre-wrap",
   lineHeight: 1.65,
+  whiteSpace: "pre-wrap",
 };
 
 const TsCodeBlock = memo<TsCodeHighlightProps>(({ children }) => {
