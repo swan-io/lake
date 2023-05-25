@@ -1,5 +1,5 @@
 import { Highlight, themes } from "prism-react-renderer";
-import { ReactNode, memo, useMemo } from "react";
+import { CSSProperties, ReactNode, memo, useMemo } from "react";
 import { ScrollView, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { P, match } from "ts-pattern";
 import { Box } from "../src/components/Box";
@@ -117,8 +117,13 @@ type TsCodeHighlightProps = {
   children: string;
 };
 
-const monospacedFontFamily =
-  'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace';
+const codeStyle: CSSProperties = {
+  fontFamily:
+    'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+  fontSize: 14,
+  whiteSpace: "pre-wrap",
+  lineHeight: 1.65,
+};
 
 const TsCodeBlock = memo<TsCodeHighlightProps>(({ children }) => {
   return (
@@ -129,7 +134,7 @@ const TsCodeBlock = memo<TsCodeHighlightProps>(({ children }) => {
             const { style, ...props } = getLineProps({ line });
 
             return (
-              <code key={i} {...props} style={{ ...style, fontFamily: monospacedFontFamily }}>
+              <code key={i} {...props} style={{ ...style, ...codeStyle }}>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token })} />
                 ))}
