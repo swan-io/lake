@@ -1,3 +1,9 @@
+## 2.0.3
+
+Changes:
+
+- Update dependencies (7f5bf89)
+
 ## 2.0.2
 
 Changes:
