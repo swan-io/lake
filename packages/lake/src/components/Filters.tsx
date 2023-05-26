@@ -68,6 +68,11 @@ const styles = StyleSheet.create({
     height: 32,
     paddingHorizontal: 24,
   },
+  itemLabel: {
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+  },
   input: {
     minWidth: 200,
   },
@@ -129,6 +134,7 @@ const FilterTag = forwardRef<View, TagProps>(
 type FilterRadioProps<T> = {
   autoOpen?: boolean;
   items: Item<T>[];
+  width?: number;
   label: string;
   value: T | undefined;
   onPressRemove: () => void;
@@ -138,6 +144,7 @@ type FilterRadioProps<T> = {
 function FilterRadio<T>({
   label,
   items,
+  width,
   value,
   onValueChange,
   onPressRemove,
@@ -166,7 +173,7 @@ function FilterRadio<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={styles.dropdown}>
+        <View style={[styles.dropdown, { width }]}>
           <FlatList
             role="list"
             data={items}
@@ -187,7 +194,7 @@ function FilterRadio<T>({
                 >
                   <LakeRadio value={isSelected} />
                   <Space width={12} />
-                  <Text>{item.label}</Text>
+                  <Text style={styles.itemLabel}>{item.label}</Text>
                 </Pressable>
               );
             }}
@@ -201,6 +208,7 @@ function FilterRadio<T>({
 type FilterCheckboxProps<T> = {
   label: string;
   items: Item<T>[];
+  width?: number;
   onValueChange: (value: T[] | undefined) => void;
   value: T[] | undefined;
   onPressRemove: () => void;
@@ -217,6 +225,7 @@ type CheckAllItem = {
 function FilterCheckbox<T>({
   label,
   items,
+  width,
   checkAllLabel,
   value,
   onValueChange,
@@ -277,7 +286,7 @@ function FilterCheckbox<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={styles.dropdown}>
+        <View style={[styles.dropdown, { width }]}>
           <FlatList
             role="list"
             data={listItems}
@@ -323,7 +332,7 @@ function FilterCheckbox<T>({
                 >
                   <LakeCheckbox value={isSelected} />
                   <Space width={12} />
-                  <Text>{item.label}</Text>
+                  <Text style={styles.itemLabel}>{item.label}</Text>
                 </Pressable>
               );
             }}
@@ -559,6 +568,7 @@ export type FilterCheckboxDef<T> = {
   type: "checkbox";
   label: string;
   items: Item<T>[];
+  width?: number;
   submitText: string;
   checkAllLabel?: string;
 };
@@ -567,6 +577,7 @@ export type FilterRadioDef<T> = {
   type: "radio";
   label: string;
   items: Item<T>[];
+  width?: number;
 };
 
 export type FilterDateDef = {
@@ -660,10 +671,11 @@ export const FiltersStack = <T extends FiltersDefinition>({
         return (
           <View key={filterName}>
             {match<Filter<unknown>>(filterDefinition)
-              .with({ type: "radio" }, ({ type, label, items }) => (
+              .with({ type: "radio" }, ({ type, label, items, width }) => (
                 <FilterRadio
                   label={label}
                   items={items}
+                  width={width}
                   autoOpen={lastOpenedFilter === filterName}
                   onPressRemove={() => {
                     onChangeFilters({ ...filters, [filterName]: undefined });
@@ -673,21 +685,25 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                 />
               ))
-              .with({ type: "checkbox" }, ({ type, label, items, checkAllLabel, submitText }) => (
-                <FilterCheckbox
-                  label={label}
-                  items={items}
-                  checkAllLabel={checkAllLabel}
-                  autoOpen={lastOpenedFilter === filterName}
-                  applyButtonLabel={submitText}
-                  value={getFilterValue(type, filters, filterName)}
-                  onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
-                  onPressRemove={() => {
-                    onChangeFilters({ ...filters, [filterName]: undefined });
-                    onChangeOpened(openedFilters.filter(f => f !== filterName));
-                  }}
-                />
-              ))
+              .with(
+                { type: "checkbox" },
+                ({ type, label, items, width, checkAllLabel, submitText }) => (
+                  <FilterCheckbox
+                    label={label}
+                    items={items}
+                    width={width}
+                    checkAllLabel={checkAllLabel}
+                    autoOpen={lastOpenedFilter === filterName}
+                    applyButtonLabel={submitText}
+                    value={getFilterValue(type, filters, filterName)}
+                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
+                    onPressRemove={() => {
+                      onChangeFilters({ ...filters, [filterName]: undefined });
+                      onChangeOpened(openedFilters.filter(f => f !== filterName));
+                    }}
+                  />
+                ),
+              )
               .with(
                 { type: "date" },
                 ({ type, label, noValueText, submitText, dateFormat, rifmProps, validate }) => (
