@@ -30,7 +30,11 @@ const registrationNumbersConfigByCountry: Partial<
       registrationNumberLabel: "RNA",
     },
     HomeOwnerAssociation: {
-      showRegistrationQuestion: false,
+      showRegistrationQuestion: true,
+      organismName: t("registrationPage.withOrganismLabel", {
+        organismName: "RCS",
+      }),
+      registrationNumberLabel: "SIREN",
     },
     Other: {
       showRegistrationQuestion: true,
