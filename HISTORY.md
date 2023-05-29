@@ -1,3 +1,10 @@
+## 2.1.0
+
+Changes:
+
+- Refacto country picker (3d507d4)
+- Change registration number condition (0f5f28a)
+
 ## 2.0.3
 
 Changes:
