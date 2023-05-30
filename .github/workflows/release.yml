@@ -14,7 +14,6 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          always-auth: true
           node-version: lts/*
 
       - name: Install dependencies
@@ -33,9 +32,12 @@ jobs:
         run: yarn build
 
       - name: Publish
-        run: yarn workspace @swan-io/lake publish && yarn workspace @swan-io/shared-business publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          yarn workspace @swan-io/lake publish
+          yarn workspace @swan-io/shared-business publish
 
       - name: Get changelog
         id: changelog
