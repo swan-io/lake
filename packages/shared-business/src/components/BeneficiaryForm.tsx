@@ -288,6 +288,11 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     const [reference] = useState(() => initialState?.reference ?? uuid());
     const isAddressRequired = accountCountry === "DEU";
     const isBirthInfoRequired = accountCountry !== "DEU";
+    const initialAddress = useRef({
+      residencyAddressLine1: initialState?.residencyAddressLine1,
+      residencyAddressCity: initialState?.residencyAddressCity,
+      residencyAddressPostalCode: initialState?.residencyAddressPostalCode,
+    });
 
     const commonStepValues = useRef<FormValues>();
 
@@ -390,6 +395,18 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         submitForm(noop);
       }
     }, [initialState, submitForm]);
+
+    useEffect(() => {
+      // store address values on change to set initial values when user use cancel button and go back
+      // without this, address form part initial values stays empty and city and postal code aren't automatically mounted
+      return listenFields(["address", "city", "postalCode"], ({ address, city, postalCode }) => {
+        initialAddress.current = {
+          residencyAddressLine1: address?.value,
+          residencyAddressCity: city?.value,
+          residencyAddressPostalCode: postalCode?.value,
+        };
+      });
+    });
 
     useEffect(() => {
       return listenFields(["type"], () => {
@@ -716,9 +733,11 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                       <>
                         <AddressFormPart
                           apiKey={googleMapApiKey}
-                          initialAddress={initialState?.residencyAddressLine1 ?? ""}
-                          initialCity={initialState?.residencyAddressCity ?? ""}
-                          initialPostalCode={initialState?.residencyAddressPostalCode ?? ""}
+                          initialAddress={initialAddress.current.residencyAddressLine1 ?? ""}
+                          initialCity={initialAddress.current.residencyAddressCity ?? ""}
+                          initialPostalCode={
+                            initialAddress.current.residencyAddressPostalCode ?? ""
+                          }
                           country={country?.value ?? accountCountry}
                           label={t("beneficiaryForm.beneficiary.address")}
                           Field={Field}
