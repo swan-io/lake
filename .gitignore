@@ -7,3 +7,5 @@ packages/*/src/**/*.d.ts
 dist/
 
 .env
+
+localazy.keys.*.json

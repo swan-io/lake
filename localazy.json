@@ -1,0 +1,57 @@
+{
+  "$schema": "https://raw.githubusercontent.com/localazy/cli-schema/master/localazy.json",
+
+  "upload": {
+    "type": "json",
+    "importAsNew": true,
+    "deprecateMissing": true,
+
+    "files": [
+      {
+        "group": "shared-business",
+        "lang": "en",
+        "pattern": "packages/shared-business/src/locales/en.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "de",
+        "pattern": "packages/shared-business/src/locales/de.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "es",
+        "pattern": "packages/shared-business/src/locales/es.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "fr",
+        "pattern": "packages/shared-business/src/locales/fr.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "it",
+        "pattern": "packages/shared-business/src/locales/it.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "nl",
+        "pattern": "packages/shared-business/src/locales/nl.json"
+      },
+      {
+        "group": "shared-business",
+        "lang": "pt",
+        "pattern": "packages/shared-business/src/locales/pt.json"
+      }
+    ]
+  },
+
+  "download": {
+    "includeSourceLang": true,
+    "files": [
+      {
+        "group": "shared-business",
+        "output": "packages/shared-business/src/locales/${lang}.json"
+      }
+    ]
+  }
+}

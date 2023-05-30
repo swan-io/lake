@@ -37,8 +37,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
 
-      - name: Push translation keys
+      - name: Push shared-business translation keys
         if: "contains('refs/heads/main', github.ref)"
-        run: yarn lokalise sync
-        env:
-          LOKALISE_API_KEY: ${{ secrets.LOKALISE_API_KEY }}
+        run: yarn localazy upload shared-business  -r ${{ secrets.LOCALAZY_SHARED_BUSINESS_READ_KEY }} -w ${{ secrets.LOCALAZY_SHARED_BUSINESS_WRITE_KEY }}
