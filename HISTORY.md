@@ -1,3 +1,9 @@
+## 2.1.1
+
+Fixes:
+
+- Beneficiary form, keep address fields mounted if user already fill it and go to previous step (ead55cf)
+
 ## 2.1.0
 
 Changes:
