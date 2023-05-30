@@ -174,7 +174,7 @@ export function LakeSelect<V>({
   const currentlyTypedRef = useRef<string | undefined>(undefined);
   const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
 
-  const [visible, { close, toggle }] = useDisclosure(false);
+  const [visible, { close, open }] = useDisclosure(false);
 
   const hasValue = isNotNullish(value);
   const isSmall = size === "small";
@@ -182,7 +182,10 @@ export function LakeSelect<V>({
 
   const onKeyDown = useCallback(
     (event: NativeSyntheticEvent<React.KeyboardEvent>) => {
+      // this made a search not visible for user as the native select component
       if (event.nativeEvent.key.length === 1) {
+        event.nativeEvent.stopPropagation();
+
         const currentlyTyped = `${
           currentlyTypedRef.current ?? ""
         }${event.nativeEvent.key.toLowerCase()}`;
@@ -240,7 +243,7 @@ export function LakeSelect<V>({
           (disabled || readOnly) && mode === "borderless" && styles.inputBorderlessDisabled,
           style,
         ]}
-        onPress={toggle}
+        onPress={open}
         onKeyDown={onKeyDown}
         aria-errormessage={error}
       >
