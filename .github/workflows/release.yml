@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
-        always-auth: true
         with:
+          always-auth: true
           node-version: lts/*
 
       - name: Install dependencies
