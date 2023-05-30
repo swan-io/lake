@@ -31,10 +31,16 @@ jobs:
       - name: Pack
         run: yarn build
 
+      - name: Get version
+        id: version
+        run: echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+
       - name: Publish
-        run: yarn workspace @swan-io/lake publish && yarn workspace @swan-io/shared-business publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn workspace @swan-io/lake publish --new-version ${{ steps.version.outputs.version }}
+          yarn workspace @swan-io/shared-business publish --new-version ${{ steps.version.outputs.version }}
 
       - name: Get changelog
         id: changelog
@@ -44,10 +50,6 @@ jobs:
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           echo "$(head -100 HISTORY.md)" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Get version
-        id: version
-        run: echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
 
       - name: Notify on Slack
         uses: bloodyowl/slack-message-release-action@v1.1.5
