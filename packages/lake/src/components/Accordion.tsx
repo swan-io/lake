@@ -1,8 +1,7 @@
-import { ReactNode, useEffect, useId, useRef } from "react";
+import { ReactNode, useId } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
-import { useFirstMountState } from "../hooks/useFirstMountState";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
@@ -23,12 +22,16 @@ const styles = StyleSheet.create({
     transform: "rotate(90deg)",
   },
   contentContainer: {
-    display: "none",
-    overflow: "hidden",
+    display: "grid",
+    gridTemplateRows: "0fr",
+    transitionProperty: "grid-template-rows",
     transitionDuration: "300ms",
   },
   contentContainerDisplayed: {
-    display: "flex",
+    gridTemplateRows: "1fr",
+  },
+  contentInner: {
+    overflow: "hidden",
   },
   content: {
     paddingVertical: spacings[12],
@@ -43,50 +46,7 @@ type Props = {
 
 export const Accordion = ({ trigger, children }: Props) => {
   const id = useId();
-  const isFirstMount = useFirstMountState();
-  const content = useRef<View | null>(null);
   const [isOpen, { toggle }] = useDisclosure(false);
-
-  useEffect(() => {
-    const contentElement = content.current;
-
-    if (!isFirstMount && contentElement instanceof HTMLElement) {
-      const handleTransitionEnd = () => {
-        contentElement.removeAttribute("style"); // remove inline styles after transition
-        contentElement.removeEventListener("transitionend", handleTransitionEnd);
-      };
-
-      contentElement.addEventListener("transitionend", handleTransitionEnd);
-
-      if (isOpen) {
-        const contentHeight = contentElement.clientHeight;
-        contentElement.style.height = "0px";
-
-        requestAnimationFrame(() => {
-          // wait for rerender to set height and enable css transition
-          contentElement.style.height = `${contentHeight}px`;
-        });
-      } else {
-        // we must set display to flex before we can get the height
-        contentElement.style.display = "flex";
-
-        requestAnimationFrame(() => {
-          // wait for rerender to get height
-          const contentHeight = contentElement.clientHeight;
-          contentElement.style.height = `${contentHeight}px`;
-
-          requestAnimationFrame(() => {
-            // wait rerender to set height to 0 and enable css transition
-            contentElement.style.height = "0px";
-          });
-        });
-
-        return () => {
-          contentElement.removeEventListener("transitionend", handleTransitionEnd);
-        };
-      }
-    }
-  }, [isFirstMount, isOpen]);
 
   return (
     <View>
@@ -110,13 +70,14 @@ export const Accordion = ({ trigger, children }: Props) => {
       </Pressable>
 
       <View
-        ref={content}
         aria-labelledby={id}
         aria-hidden={!isOpen}
         role="region"
         style={[styles.contentContainer, isOpen && styles.contentContainerDisplayed]}
       >
-        <View style={styles.content}>{children}</View>
+        <View style={styles.contentInner}>
+          <View style={styles.content}>{children}</View>
+        </View>
       </View>
     </View>
   );
