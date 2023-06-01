@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
+    flexWrap: "wrap",
   },
   icon: {
     borderColor: colors.gray[300],
@@ -21,15 +22,16 @@ const styles = StyleSheet.create({
     paddingVertical: spacings[12],
     borderRadius: 32,
   },
+  actionContainer: {
+    flex: 1,
+    minWidth: 100,
+  },
   action: {
     alignItems: "center",
     paddingHorizontal: spacings[12],
-    flexBasis: "30%",
+    paddingVertical: spacings[8],
   },
   disabled: {
-    alignItems: "center",
-    paddingHorizontal: spacings[12],
-    flexBasis: "30%",
     opacity: 0.4,
   },
   label: {
@@ -61,11 +63,12 @@ export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: 
           placement="top"
           key={index}
           disabled={tooltipDisabled || isNullishOrEmpty(tooltipText)}
+          containerStyle={styles.actionContainer}
         >
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={tooltipDisabled ? styles.action : styles.disabled}
+            style={[styles.action, !tooltipDisabled && styles.disabled]}
             disabled={action.isLoading === true || !tooltipDisabled}
           >
             <View

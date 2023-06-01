@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 import { usePopper } from "react-popper";
 import { match } from "ts-pattern";
 import { colors, shadows } from "../constants/design";
@@ -108,7 +108,7 @@ type Props = {
   placement: "left" | "top" | "bottom" | "right";
   width?: number;
   togglableOnFocus?: boolean;
-  containerStyle?: ViewStyle;
+  containerStyle?: ViewProps["style"];
   disabled?: boolean;
 };
 
