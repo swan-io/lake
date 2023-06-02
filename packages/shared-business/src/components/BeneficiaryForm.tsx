@@ -33,6 +33,7 @@ import {
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
 import { GMapCityInput } from "./GMapCityInput";
+import { Help } from "./Help";
 import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
 const styles = StyleSheet.create({
@@ -189,6 +190,7 @@ const getDirectAndIndirect = (capitalType: CapitalType): [boolean, boolean] => {
 type CapitalTypeCheckboxesProps = {
   value: CapitalType;
   onChange: (value: CapitalType) => void;
+  large: boolean;
   error?: string;
 };
 
@@ -199,41 +201,61 @@ type CapitalTypeCheckboxesProps = {
  * Another way is combining direct and indirect values with `formStatus` but the error appears or disappears too early
  * So with this component we need only 1 validator making possible the best UX without caveats
  */
-const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxesProps) => {
+const CapitalTypeCheckboxes = ({ value, error, large, onChange }: CapitalTypeCheckboxesProps) => {
   return (
     <View>
-      <Box direction="row" alignItems="center">
-        <LakeLabelledCheckbox
-          value={value === "direct" || value === "both"}
-          onValueChange={direct => {
-            match({ direct, value })
-              .with({ direct: true, value: "none" }, () => onChange("direct"))
-              .with({ direct: true, value: "indirect" }, () => onChange("both"))
-              .with({ direct: false, value: "direct" }, () => onChange("none"))
-              .with({ direct: false, value: "both" }, () => onChange("indirect"))
-              // other cases are impossible so we don't need to handle them
-              .otherwise(noop);
-          }}
-          label={t("beneficiaryForm.beneficiary.directly")}
-          isError={error != null}
-        />
+      <Box direction={large ? "row" : "column"} alignItems={large ? "center" : "start"}>
+        <Box direction="row" alignItems="center">
+          <LakeLabelledCheckbox
+            value={value === "direct" || value === "both"}
+            onValueChange={direct => {
+              match({ direct, value })
+                .with({ direct: true, value: "none" }, () => onChange("direct"))
+                .with({ direct: true, value: "indirect" }, () => onChange("both"))
+                .with({ direct: false, value: "direct" }, () => onChange("none"))
+                .with({ direct: false, value: "both" }, () => onChange("indirect"))
+                // other cases are impossible so we don't need to handle them
+                .otherwise(noop);
+            }}
+            label={t("beneficiaryForm.beneficiary.directly")}
+            isError={error != null}
+          />
+
+          <Space width={4} />
+
+          <Help
+            tooltipWidth={800}
+            title={t("beneficiaryForm.beneficiary.directly")}
+            content={t("beneficiaryForm.beneficiary.directly.info")}
+          />
+        </Box>
 
         <Space width={24} />
 
-        <LakeLabelledCheckbox
-          value={value === "indirect" || value === "both"}
-          onValueChange={indirect => {
-            match({ indirect, value })
-              .with({ indirect: true, value: "none" }, () => onChange("indirect"))
-              .with({ indirect: true, value: "direct" }, () => onChange("both"))
-              .with({ indirect: false, value: "indirect" }, () => onChange("none"))
-              .with({ indirect: false, value: "both" }, () => onChange("direct"))
-              // other cases are impossible so we don't need to handle them
-              .otherwise(noop);
-          }}
-          label={t("beneficiaryForm.beneficiary.indirectly")}
-          isError={error != null}
-        />
+        <Box direction="row" alignItems="center">
+          <LakeLabelledCheckbox
+            value={value === "indirect" || value === "both"}
+            onValueChange={indirect => {
+              match({ indirect, value })
+                .with({ indirect: true, value: "none" }, () => onChange("indirect"))
+                .with({ indirect: true, value: "direct" }, () => onChange("both"))
+                .with({ indirect: false, value: "indirect" }, () => onChange("none"))
+                .with({ indirect: false, value: "both" }, () => onChange("direct"))
+                // other cases are impossible so we don't need to handle them
+                .otherwise(noop);
+            }}
+            label={t("beneficiaryForm.beneficiary.indirectly")}
+            isError={error != null}
+          />
+
+          <Space width={4} />
+
+          <Help
+            tooltipWidth={800}
+            title={t("beneficiaryForm.beneficiary.indirectly")}
+            content={t("beneficiaryForm.beneficiary.indirectly.info")}
+          />
+        </Box>
       </Box>
 
       <Space height={4} />
@@ -698,6 +720,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                               <CapitalTypeCheckboxes
                                 value={value ?? "none"}
                                 error={error}
+                                large={large}
                                 onChange={onChange}
                               />
                             )}
