@@ -62,7 +62,7 @@ type Locale = keyof typeof locales;
 const baseLocale: Locale = "en";
 
 const appTranslationsPaths = {
-  'shared-business': path.join(process.cwd(), "packages", "shared-business", "src", "locales"),
+  "shared-business": path.join(process.cwd(), "packages", "shared-business", "src", "locales"),
 };
 
 type AppName = keyof typeof appTranslationsPaths;
