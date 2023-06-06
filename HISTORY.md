@@ -1,3 +1,9 @@
+## 2.1.2
+
+Changes:
+
+- Update dependencies (820f939)
+
 ## 2.1.1
 
 Fixes:
