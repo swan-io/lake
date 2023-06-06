@@ -29,8 +29,9 @@
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "bump": "node scripts/version/version.mjs",
     "icons": "tsx scripts/fluent-icons/generateIcons.ts",
-    "ai-translate": "tsx -r dotenv/config scripts/ai-translate/index.ts",
-    "sort-locales": "tsx scripts/locales/sort.ts"
+    "ai-translate": "tsx -r dotenv/config scripts/locales/ai-translate.ts",
+    "sort-locales": "tsx scripts/locales/sort.ts",
+    "remove-unused-locales": "tsx scripts/locales/remove-unused.ts"
   },
   "lint-staged": {
     "packages/**/src/locales/*.json": "yarn sort-locales",
