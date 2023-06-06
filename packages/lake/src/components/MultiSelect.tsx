@@ -1,5 +1,5 @@
 import { Array, Dict, Option } from "@swan-io/boxed";
-import { memo as reactMemo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -171,13 +171,6 @@ export type MultiSelectProps<I> = {
   values: string[];
   id?: string;
 };
-
-const memo: <P extends Record<string, unknown>>(
-  Component: (props: P) => JSX.Element | null,
-  propsAreEqual?: (prevProps: P, nextProps: P) => boolean,
-) => (<I extends MultiSelectItem>(props: MultiSelectProps<I>) => JSX.Element | null) & {
-  displayName?: string;
-} = reactMemo;
 
 export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
   ({
