@@ -1606,10 +1606,10 @@
     intl-messageformat "10.4.0"
     tslib "^2.4.0"
 
-"@googlemaps/js-api-loader@^1.16.0":
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.16.1.tgz#db74c851f8e26a50f578a07c195a87e1fb60ae90"
-  integrity sha512-x6M48e2nkIrp1KGNwXEVMRTCzruBw/w1HItlhVXL6Lp5pKuTcJEfOCE4tjPk3n6kLcMuJYXE8aluYMmakn7tTw==
+"@googlemaps/js-api-loader@1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.16.0.tgz#eddbc163b247976237b035534d9e6b3f6117ffd1"
+  integrity sha512-5KT0titYui0iu5uBsLZ09+qtyZYdckt5zu87FHYLeDYMGmhrfaQtyiBKwGjae/LzY7RlE+RcbHuxUVeaQ4lRKA==
   dependencies:
     fast-deep-equal "^3.1.3"
 
