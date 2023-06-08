@@ -1,3 +1,9 @@
+## 2.1.3
+
+Changes:
+
+- Handle GMaps breaking change (08e13dcb)
+
 ## 2.1.2
 
 Changes:
