@@ -320,6 +320,24 @@ export const interFontStyle = {
   letterSpacing: "-0.011em" as unknown as number,
 };
 
+export const ayuthayaFontStyle = {
+  fontFamily: [
+    "Ayuthaya",
+    "Inter",
+    "-apple-system",
+    "system-ui",
+    "BlinkMacSystemFont",
+    "Segoe UI",
+    "Helvetica",
+    "Arial",
+    "sans-serif",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji",
+  ].join(","),
+};
+
 const asTextStyle = (x: { [K in keyof TextStyle]: CSSVariable | string | number }) => {
   return x as unknown as TextStyle;
 };
