@@ -24,6 +24,7 @@ export const useGoogleMapSDK = ({ language, apiKey }: Props) => {
           apiKey,
           language,
           libraries: ["places"],
+          authReferrerPolicy: "origin",
         })
           .load()
           .then(google => sdk.set(AsyncData.Done(google)));
