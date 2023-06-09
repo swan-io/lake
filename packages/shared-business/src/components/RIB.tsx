@@ -15,7 +15,8 @@ import {
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
-import { t } from "../../utils/i18n";
+import { match } from "ts-pattern";
+import { t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 26;
 const LOGO_MAX_WIDTH = 200;
@@ -73,7 +74,8 @@ type Address = {
   country: string;
 };
 
-export type RIBv1Props = {
+type RIBv1Props = {
+  version: "v1";
   partnerColor: string;
   partnerLogoUrl: string;
   iban: string;
@@ -86,7 +88,14 @@ export type RIBv1Props = {
   accountHolderAddress: Address;
 };
 
-export const RIBv1 = ({
+export type RIBProps = RIBv1Props;
+
+export const RIB = (props: RIBProps) =>
+  match(props)
+    .with({ version: "v1" }, props => <RIBv1 {...props} />)
+    .exhaustive();
+
+const RIBv1 = ({
   partnerColor,
   partnerLogoUrl,
   iban,
@@ -97,7 +106,7 @@ export const RIBv1 = ({
   bankKey,
   bankAddress,
   accountHolderAddress,
-}: RIBv1Props) => {
+}: RIBProps) => {
   return (
     <WithPartnerAccentColor color={partnerColor}>
       <View style={styles.container}>

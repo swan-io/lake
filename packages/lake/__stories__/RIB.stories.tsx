@@ -1,16 +1,17 @@
 import { Meta } from "@storybook/react";
-import { RIBv1 } from "../../shared-business/src/components/RIB/RIBv1";
+import { RIB } from "../../shared-business/src/components/RIB";
 import { StoryBlock } from "./_StoriesComponents";
 
 export default {
   title: "Informations/RIB",
-  component: RIBv1,
-} as Meta<typeof RIBv1>;
+  component: RIB,
+} as Meta<typeof RIB>;
 
 export const Colors = () => {
   return (
     <StoryBlock title="RIB">
-      <RIBv1
+      <RIB
+        version="v1"
         partnerColor="#0f6fde"
         partnerLogoUrl="https://s3.eu-west-1.amazonaws.com/data.master.oina.ws/7a90851b-40f8-479d-9e0e-86d12fb001b5/SANDBOX/logo-749a2fb5-230b-4ae6-98bd-65bdb3c987c9.png"
         iban="FR76 3000 1007 1600 0000 0000 123"
