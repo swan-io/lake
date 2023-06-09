@@ -14,6 +14,7 @@ import {
   radii,
   spacings,
 } from "@swan-io/lake/src/constants/design";
+import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
@@ -60,6 +61,10 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: colors.gray[500],
   },
+  defaultLogo: {
+    height: LOGO_MAX_HEIGHT,
+    width: 115,
+  },
   swanLogo: {
     width: 26,
     height: 6,
@@ -77,7 +82,7 @@ type Address = {
 type RIBv1Props = {
   version: "v1";
   partnerColor: string;
-  partnerLogoUrl: string;
+  partnerLogoUrl?: string;
   iban: string;
   bic: string;
   bank: string;
@@ -112,12 +117,16 @@ const RIBv1 = ({
       <View style={styles.container}>
         <View style={styles.part}>
           <Box direction="row" alignItems="center">
-            <AutoWidthImage
-              sourceUri={partnerLogoUrl}
-              height={LOGO_MAX_HEIGHT}
-              maxWidth={LOGO_MAX_WIDTH}
-              resizeMode="contain"
-            />
+            {isNotNullishOrEmpty(partnerLogoUrl) ? (
+              <AutoWidthImage
+                sourceUri={partnerLogoUrl}
+                height={LOGO_MAX_HEIGHT}
+                maxWidth={LOGO_MAX_WIDTH}
+                resizeMode="contain"
+              />
+            ) : (
+              <SwanLogo style={styles.defaultLogo} />
+            )}
 
             <Fill minWidth={24} />
 
