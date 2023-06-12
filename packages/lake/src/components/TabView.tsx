@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[100],
-    backgroundColor: backgroundColor.default,
     zIndex: 10,
   },
   link: {
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[100],
   },
   sticky: {
+    backgroundColor: backgroundColor.default,
     position: "sticky",
     top: -1,
   },
