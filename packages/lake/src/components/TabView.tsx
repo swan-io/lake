@@ -11,15 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  LayoutChangeEvent,
-  NativeSyntheticEvent,
-  StyleProp,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
+import { LayoutChangeEvent, NativeSyntheticEvent, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import {
   animations,
@@ -59,7 +51,6 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: 1,
     borderBottomColor: colors.gray[100],
-    backgroundColor: backgroundColor.default,
     zIndex: 10,
   },
   link: {
@@ -154,6 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[100],
   },
   sticky: {
+    backgroundColor: backgroundColor.default,
     position: "sticky",
     top: -1,
   },
@@ -425,7 +417,6 @@ type Props = {
   hideIfSingleItem?: boolean;
   padding?: SpacingValue;
   sticky?: boolean;
-  style?: StyleProp<ViewStyle>;
 };
 
 export const TabView = ({
@@ -434,7 +425,6 @@ export const TabView = ({
   hideIfSingleItem = true,
   sticky = false,
   padding,
-  style,
 }: Props) => {
   const containerRef = useRef<View | null>(null);
   const placeholderRef = useRef<View | null>(null);
