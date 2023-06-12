@@ -11,7 +11,15 @@ import {
   useRef,
   useState,
 } from "react";
-import { LayoutChangeEvent, NativeSyntheticEvent, StyleSheet, Text, View } from "react-native";
+import {
+  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import { P, match } from "ts-pattern";
 import {
   animations,
@@ -417,6 +425,7 @@ type Props = {
   hideIfSingleItem?: boolean;
   padding?: SpacingValue;
   sticky?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const TabView = ({
@@ -425,6 +434,7 @@ export const TabView = ({
   hideIfSingleItem = true,
   sticky = false,
   padding,
+  style,
 }: Props) => {
   const containerRef = useRef<View | null>(null);
   const placeholderRef = useRef<View | null>(null);
@@ -590,7 +600,7 @@ export const TabView = ({
       direction="row"
       role="tablist"
       ref={containerRef}
-      style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
+      style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }, style]}
     >
       <View style={styles.placeholder} aria-hidden={true} ref={placeholderRef} onLayout={onLayout}>
         {tabs.map(({ label, url, icon, count }) => (
