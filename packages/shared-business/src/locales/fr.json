@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Document officiel prouvant l'enregistrement de votre association. (de moins de 3 mois)",
   "supportingDoc.companyRegistration": "Preuve d'enregistrement de l'entreprise (de moins de 3 mois)",
   "supportingDoc.companyRegistration.description": "Document officiel prouvant l'existence légale d'une entreprise et fournissant des informations sur sa personnalité juridique.\n(de moins de 3 mois)",
-  "supportingDoc.documentTypes": "Documents pris en charge : .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Documents pris en charge : .pdf, .png, .jpg\nMax : {maxSizeMB} Mo",
   "supportingDoc.downloadTemplate": "Télécharger un modèle",
   "supportingDoc.errorUpload": "Échec du téléversement du fichier",
   "supportingDoc.noRequiredDocuments": "Nous n'avons besoin d'aucun document de votre part. Vous pouvez continuer.",

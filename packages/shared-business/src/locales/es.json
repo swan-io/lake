@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Documento oficial que acredite el registro de tu asociación. (< 3 meses)",
   "supportingDoc.companyRegistration": "Comprobante de registro de la empresa (< 3 meses de antigüedad)",
   "supportingDoc.companyRegistration.description": "Documento oficial que acredite la existencia legal de una empresa y proporcione información sobre su personalidad jurídica.\n(< 3 meses)",
-  "supportingDoc.documentTypes": "Documentos admitidos: .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Documentos admitidos: .pdf, .png, .jpg\nMáximo: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Descargar una plantilla",
   "supportingDoc.errorUpload": "Error al subir el archivo",
   "supportingDoc.noRequiredDocuments": "No necesitamos ningún documento de ti. Puedes continuar.",

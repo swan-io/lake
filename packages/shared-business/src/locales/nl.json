@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Officieel document waaruit de registratie van uw vereniging blijkt. (minder dan 3 maanden oud)",
   "supportingDoc.companyRegistration": "Uittreksel van het handelsregister (KVK document, minder dan 3 maanden oud)",
   "supportingDoc.companyRegistration.description": "Een officieel uittreksel van het handelsregister dat niet ouder is dan 3 maanden. Je kunt via de website van KVK een recent uittreksel downloaden.",
-  "supportingDoc.documentTypes": "Ondersteunde documenten: .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Ondersteunde documenten: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Een sjabloon downloaden",
   "supportingDoc.errorUpload": "Bestand uploaden mislukt",
   "supportingDoc.noRequiredDocuments": "We hebben geen documenten van u nodig. U kunt verder gaan.",
