@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Official document proving the registration of your association. (< 3 months old)",
   "supportingDoc.companyRegistration": "Proof of company registration (< 3 months old)",
   "supportingDoc.companyRegistration.description": "Official document proving the legal existence of a company and providing info about its legal personality.\n(< 3 months old)",
-  "supportingDoc.documentTypes": "Supported documents: .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Supported documents: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Download a template",
   "supportingDoc.errorUpload": "Failed to upload file",
   "supportingDoc.noRequiredDocuments": "We don't need any documents from you. You can continue.",

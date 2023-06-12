@@ -10,7 +10,10 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "r
 import { StyleSheet } from "react-native";
 import { Validator, useForm } from "react-ux-form";
 import { match } from "ts-pattern";
-import { MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE } from "../constants/uploads";
+import {
+  MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE,
+  MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+} from "../constants/uploads";
 import { TranslationKey, locale, t } from "../utils/i18n";
 import { UploadArea, UploadFileStatus } from "./UploadArea";
 
@@ -366,7 +369,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -398,7 +403,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -428,7 +435,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -458,7 +467,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -490,7 +501,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -526,7 +539,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
@@ -562,7 +577,9 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       documents={value}
                       accept={ACCEPTED_FORMATS}
                       icon="document-regular"
-                      description={t("supportingDoc.documentTypes")}
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
                       maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
                     />
                   )}
