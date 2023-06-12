@@ -590,7 +590,7 @@ export const TabView = ({
       direction="row"
       role="tablist"
       ref={containerRef}
-      style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }, style]}
+      style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >
       <View style={styles.placeholder} aria-hidden={true} ref={placeholderRef} onLayout={onLayout}>
         {tabs.map(({ label, url, icon, count }) => (
