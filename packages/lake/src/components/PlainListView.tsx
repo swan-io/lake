@@ -47,6 +47,7 @@ type Props<T, ExtraInfo> = {
   smallColumns?: ColumnConfig<T, ExtraInfo>[];
   onEndReached?: () => void;
   onEndReachedThresholdPx?: number;
+  headerStyle?: ViewStyle | null | undefined;
   rowStyle?: (item: T, large: boolean) => ViewStyle | null | undefined;
   getRowLink?: (
     config: LinkConfig<T, ExtraInfo>,
@@ -218,6 +219,7 @@ export const PlainListView = <T, ExtraInfo>({
   extraInfo,
   onEndReached,
   onEndReachedThresholdPx = 200,
+  headerStyle,
   rowStyle,
   getRowLink,
   activeRowId,
@@ -332,7 +334,7 @@ export const PlainListView = <T, ExtraInfo>({
         return (
           <>
             {!isEmpty && large ? (
-              <View style={[styles.segment, large && styles.segmentLarge]}>
+              <View style={[styles.segment, styles.segmentLarge, headerStyle]}>
                 {displayColumns.map(({ id, width, title, renderTitle }) => {
                   const columnId = `${viewId}_${id}`;
 
