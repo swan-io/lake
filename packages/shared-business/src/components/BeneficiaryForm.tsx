@@ -104,7 +104,7 @@ export const validateUbo = (
   editorState: EditorState,
   accountCountry: AccountCountry,
 ): Partial<Record<keyof EditorState, string | undefined>> => {
-  const isAddressRequired = accountCountry === "DEU";
+  const isAddressRequired = accountCountry === "DEU" || accountCountry === "ESP";
   const isBirthInfoRequired = accountCountry !== "DEU";
   const isTaxIdentificationNumberRequired =
     accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU";
@@ -286,7 +286,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     ref,
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
-    const isAddressRequired = accountCountry === "DEU";
+    const isAddressRequired = accountCountry === "DEU" || accountCountry === "ESP";
     const isBirthInfoRequired = accountCountry !== "DEU";
     const initialAddress = useRef({
       residencyAddressLine1: initialState?.residencyAddressLine1,
@@ -629,27 +629,6 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                     </FieldsListener>
                   </Box>
 
-                  {accountCountry === "ESP" && (
-                    <>
-                      <Space height={12} />
-
-                      <Field name="taxIdentificationNumber">
-                        {({ value, error, valid, onChange }) => (
-                          <TaxIdentificationNumberInput
-                            value={value ?? ""}
-                            error={error}
-                            valid={valid}
-                            onChange={onChange}
-                            accountCountry={accountCountry}
-                            isCompany={false}
-                          />
-                        )}
-                      </Field>
-
-                      <Space height={12} />
-                    </>
-                  )}
-
                   <Field name="type">
                     {({ value, onChange }) => (
                       <LakeLabel
@@ -746,7 +725,8 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           isLarge={large}
                         />
 
-                        {country?.value === "DEU" && (
+                        {((accountCountry === "DEU" && country?.value === "DEU") ||
+                          accountCountry === "ESP") && (
                           <>
                             <Space height={12} />
 
@@ -760,7 +740,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   accountCountry={accountCountry}
                                   isCompany={false}
                                   // is mandatory for German accounts and UBO living in Germany
-                                  required={true}
+                                  required={accountCountry === "DEU" && country?.value === "DEU"}
                                 />
                               )}
                             </Field>
