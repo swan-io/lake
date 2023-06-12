@@ -1,3 +1,9 @@
+## 2.1.4
+
+Changes:
+
+- Add residency address for spanish iban (f45ec524)
+
 ## 2.1.3
 
 Changes:
