@@ -24,7 +24,7 @@ react-popper | 2.3.0 | MIT | https://github.com/popperjs/react-popper | https://
 react-ux-form | 1.3.0 | MIT | https://github.com/swan-io/react-ux-form.git | https://github.com/swan-io/react-ux-form#readme | Mathieu Acthernoene
 rifm | 0.12.1 | MIT | https://github.com/istarkov/rifm.git | Unknown | istarkov
 ts-dedent | 2.2.0 | MIT | https://github.com/tamino-martinius/node-ts-dedent.git | Unknown | Tamino Martinius
-ts-pattern | 5.0.0 | MIT | ssh://git@github.com/gvergnaud/ts-pattern.git | https://github.com/gvergnaud/ts-pattern#readme | Gabriel Vergnaud
+ts-pattern | 5.0.1 | MIT | ssh://git@github.com/gvergnaud/ts-pattern.git | https://github.com/gvergnaud/ts-pattern#readme | Gabriel Vergnaud
 urql | 4.0.4 | MIT | https://github.com/urql-graphql/urql.git | https://formidable.com/open-source/urql/docs/ | Unknown
 uuid | 9.0.0 | MIT | https://github.com/uuidjs/uuid.git | Unknown | Unknown
 vitest | 0.32.0 | MIT | https://github.com/vitest-dev/vitest.git | https://github.com/vitest-dev/vitest#readme | Anthony Fu
