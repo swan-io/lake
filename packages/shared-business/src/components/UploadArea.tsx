@@ -327,14 +327,14 @@ export const UploadArea = ({
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={() => onRemoveFile?.(document.id)}
+                  onRemove={onRemoveFile ? () => onRemoveFile(document.id) : undefined}
                 />
               ))
               .with({ status: "failed" }, ({ error }) => (
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={() => onRemoveFile?.(document.id)}
+                  onRemove={() => (onRemoveFile ? onRemoveFile(document.id) : undefined)}
                   variant="refused"
                   title={error}
                 />
