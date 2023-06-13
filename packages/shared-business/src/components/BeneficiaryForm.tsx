@@ -178,7 +178,8 @@ const getCapitalType = (
 };
 
 const getDirectAndIndirect = (capitalType: CapitalType): [boolean, boolean] => {
-  return match<CapitalType, [boolean, boolean]>(capitalType)
+  return match(capitalType)
+    .returnType<[boolean, boolean]>()
     .with("both", () => [true, true])
     .with("direct", () => [true, false])
     .with("indirect", () => [false, true])

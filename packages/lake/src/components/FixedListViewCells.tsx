@@ -111,7 +111,8 @@ export const SimpleHeaderCell = ({
     <Pressable
       onPress={() => {
         onPress?.(
-          match<SortDirection | undefined, SortDirection>(sort)
+          match(sort)
+            .returnType<SortDirection>()
             .with("Desc", () => "Asc")
             .with("Asc", () => "Desc")
             .otherwise(() => "Desc"),

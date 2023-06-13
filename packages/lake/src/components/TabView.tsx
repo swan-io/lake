@@ -217,8 +217,8 @@ const DropdownItems = forwardRef<
 >(({ tabs, otherLabel, currentUrl }, ref) => {
   const [openingStatus, dispatch] = useReducer(
     (state: DropdownOpeningState, action: DropdownAction): DropdownOpeningState => {
-      const input = [action, state] as const;
-      return match<typeof input, DropdownOpeningState>(input)
+      return match([action, state])
+        .returnType<DropdownOpeningState>()
         .with(
           ["ForceToggle", "Closed"],
           ["ForceToggle", "Open"],

@@ -8242,10 +8242,10 @@ ts-dedent@^2.0.0, ts-dedent@^2.2.0:
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
 
-ts-pattern@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.3.0.tgz#7a995b39342f1b00d1507c2d2f3b90ea16e178a6"
-  integrity sha512-pefrkcd4lmIVR0LA49Imjf9DYLK8vtWhqBPA3Ya1ir8xCW0O2yjL9dsCVvI7pCodLC5q7smNpEtDR2yVulQxOg==
+ts-pattern@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.0.tgz#5971254f4f68b69d83956c2ce4e823edb5fd6d13"
+  integrity sha512-FDTdTujq2GvMmrwYM0Om6pMilRAUKvBApEN+YniTQui/HGjFwaI6WAx9SepD+yDBf4q29JLf6yqGB8uvdzysEg==
 
 tslib@^1.8.1:
   version "1.14.1"
