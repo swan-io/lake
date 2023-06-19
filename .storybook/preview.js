@@ -1,4 +1,3 @@
-import "../packages/lake/src/assets/fonts/Ayuthaya.css";
 import "../packages/lake/src/assets/fonts/Inter.css";
 import "../packages/lake/src/assets/fonts/InterCard.css";
 import "../packages/lake/src/assets/main.css";

@@ -323,6 +323,7 @@ body {
     sans-serif;
   --font-family-card-font: "Inter Card", monospace;
   --font-family-code: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  --font-family-iban: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 
   --heading-color: var(--color-gray-900);
   --heading-line-height: 1.25;
