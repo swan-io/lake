@@ -525,6 +525,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                       {({ value, onChange, error }) => (
                         <LakeLabel
                           label={t("beneficiaryForm.beneficiary.birthDate")}
+                          optionalLabel={isBirthInfoRequired ? undefined : t("common.optional")}
                           style={styles.inputContainer}
                           render={id => (
                             <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
@@ -573,6 +574,9 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                             {({ value, onChange, error }) => (
                               <LakeLabel
                                 label={t("beneficiaryForm.beneficiary.birthCity")}
+                                optionalLabel={
+                                  isBirthInfoRequired ? undefined : t("common.optional")
+                                }
                                 style={styles.inputContainer}
                                 render={id => (
                                   <GMapCityInput
@@ -604,6 +608,9 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                             {({ value, onChange, error }) => (
                               <LakeLabel
                                 label={t("beneficiaryForm.beneficiary.birthPostalCode")}
+                                optionalLabel={
+                                  isBirthInfoRequired ? undefined : t("common.optional")
+                                }
                                 style={styles.inputContainer}
                                 render={id => (
                                   <LakeTextInput
