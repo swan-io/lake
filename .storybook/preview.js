@@ -1,5 +1,6 @@
 import "../packages/lake/src/assets/fonts/Inter.css";
 import "../packages/lake/src/assets/fonts/InterCard.css";
+import "../packages/lake/src/assets/fonts/RobotoMono.css";
 import "../packages/lake/src/assets/main.css";
 
 export const parameters = {
