@@ -2,6 +2,6 @@
   font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url("RobotoMono-Regular.ttf") format("truetype");
 }
