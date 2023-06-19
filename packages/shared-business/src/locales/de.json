@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Offizielles Dokument zum Nachweis der Registrierung Ihrer Vereinigung. (weniger als 3 Monate alt)",
   "supportingDoc.companyRegistration": "Nachweis der Unternehmensregistrierung (weniger als 3 Monate alt)",
   "supportingDoc.companyRegistration.description": "Offizielles Dokument, das die rechtliche Existenz eines Unternehmens nachweist und Auskunft über seine Rechtspersönlichkeit gibt.\n(weniger als 3 Monate alt)",
-  "supportingDoc.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Vorlage herunterladen",
   "supportingDoc.errorUpload": "Fehler beim Hochladen der Datei",
   "supportingDoc.noRequiredDocuments": "Wir brauchen keine Dokumente von Ihnen. Sie können fortfahren.",

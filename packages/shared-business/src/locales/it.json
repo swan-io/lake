@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Documento ufficiale attestante la registrazione della tua associazione. (< 3 mesi)",
   "supportingDoc.companyRegistration": "Prova di registrazione della società (< 3 mesi)",
   "supportingDoc.companyRegistration.description": "Documento ufficiale che attesta l'esistenza legale di una società e fornisce informazioni sulla sua personalità giuridica.\n(< 3 mesi)",
-  "supportingDoc.documentTypes": "Documenti supportati: .pdf, .png, .jpg",
+  "supportingDoc.documentTypes": "Documenti supportati: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Scarica un modello",
   "supportingDoc.errorUpload": "Caricamento del file non riuscito",
   "supportingDoc.noRequiredDocuments": "Non abbiamo bisogno di alcun documento da parte tua. Puoi proseguire.",

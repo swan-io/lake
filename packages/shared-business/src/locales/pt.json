@@ -98,7 +98,7 @@
   "supportingDoc.associationRegistration.description": "Documento oficial comprovando o registo da sua associação. (< 3 meses)",
   "supportingDoc.companyRegistration": "Prova de registo da empresa (< 3 meses)",
   "supportingDoc.companyRegistration.description": "\"Documento oficial comprovando a existência legal de uma empresa e fornecendo informações sobre a sua personalidade jurídica. (< 3 meses)\"",
-  "supportingDoc.documentTypes": "Representante legal",
+  "supportingDoc.documentTypes": "Documentos suportados: .pdf, .png, .jpg\nMáximo: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Outro",
   "supportingDoc.errorUpload": "Falha ao carregar ficheiro",
   "supportingDoc.noRequiredDocuments": "Não necessitamos quaisquer documentos da sua parte. Pode continuar.",
