@@ -168,9 +168,6 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
     const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
     const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
 
-    const initialPowerOfAttorneyDocuments = initialValues["PowerOfAttorney"] ?? [];
-    const initialOtherDocuments = initialValues["Other"] ?? [];
-
     const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<FormValues>({
       CompanyRegistration: {
         initialValue: initialValues["CompanyRegistration"] ?? [],
@@ -193,9 +190,7 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
         validate: validateNotEmpty,
       },
       PowerOfAttorney: {
-        // we keep initialOtherDocuments because it was the key for legacy onboarding
-        // this should be replaced by initialValues["PowerOfAttorney"] ?? [] in may 2023
-        initialValue: [...initialPowerOfAttorneyDocuments, ...initialOtherDocuments],
+        initialValue: initialValues["PowerOfAttorney"] ?? [],
         validate: validateNotEmpty,
       },
       SwornStatement: {
