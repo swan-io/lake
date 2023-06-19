@@ -1,3 +1,17 @@
+## 2.2.0
+
+Changes:
+
+- Set background color on TabView only when position is sticky (471710a)
+- New component `RIB` (98b0300)
+- Add optional label in BeneficiaryForm (fbb9c35)
+- Add max file max size in SupportingDocuments (ec2ab4d)
+- Don't handle any more document with `Other` tag as `PowerOfAttorney` document (70baf79)
+
+Fixes:
+
+- Hide delete button in FileTile when `onRemoveFile` is undefined (4b9000b)
+
 ## 2.1.4
 
 Changes:
