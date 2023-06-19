@@ -7,8 +7,8 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartnerAccentColor";
 import {
-  ayuthayaFontStyle,
   colors,
+  fonts,
   interFontStyle,
   invariantColors,
   radii,
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   mainInfo: {
-    ...ayuthayaFontStyle,
+    fontFamily: fonts.iban,
     fontSize: 12,
     color: colors.gray[900],
   },
   smallInfo: {
-    ...ayuthayaFontStyle,
+    fontFamily: fonts.iban,
     fontSize: 10,
     color: colors.gray[900],
   },
