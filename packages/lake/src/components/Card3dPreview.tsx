@@ -75,6 +75,13 @@ type CardGLTFResult = GLTF & {
 
 type CardProps = JSX.IntrinsicElements["group"] & CardParams;
 
+// Set color space to sRGB for textures
+const setTextureColorSpace = (texture: THREE.Texture | THREE.Texture[]) => {
+  if (!Array.isArray(texture)) {
+    texture.colorSpace = THREE.SRGBColorSpace;
+  }
+};
+
 export const Card = ({
   ownerName,
   cardNumber,
@@ -85,10 +92,10 @@ export const Card = ({
 }: CardProps) => {
   const { nodes, materials } = useGLTF(cardGltfUrl) as CardGLTFResult;
 
-  const silverTexture = useTexture(colorSilverUrl);
-  const blackTexture = useTexture(colorBlackUrl);
-  const bandRoughnessTexture = useTexture(bandRoughnessUrl);
-  const chipTexture = useTexture(chipUrl);
+  const silverTexture = useTexture(colorSilverUrl, setTextureColorSpace);
+  const blackTexture = useTexture(colorBlackUrl, setTextureColorSpace);
+  const chipTexture = useTexture(chipUrl, setTextureColorSpace);
+  const bandRoughnessTexture = useTexture(bandRoughnessUrl); // keep default color space because it's grayscale
 
   useEffect(() => {
     materials.black_band.roughnessMap = bandRoughnessTexture;
