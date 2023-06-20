@@ -57,3 +57,44 @@ export const Card = () => {
     </StoryBlock>
   );
 };
+
+export const AutoRotation = () => {
+  const [name, setName] = useState("John Doe");
+  const [color, setColor] = useState<"Silver" | "Black">("Silver");
+
+  return (
+    <StoryBlock title="Card">
+      <StoryPart title="Default">
+        <LakeLabel
+          label="Name"
+          render={() => <LakeTextInput value={name} onChangeText={setName} />}
+        />
+
+        <LakeLabel
+          label="Color"
+          render={() => (
+            <RadioGroup
+              value={color}
+              onValueChange={setColor}
+              items={[
+                { name: "Silver", value: "Silver" },
+                { name: "Black", value: "Black" },
+              ]}
+            />
+          )}
+        />
+
+        <View style={styles.canvasContainer}>
+          <Card3dPreview
+            autoRotationDuration={10}
+            color={color}
+            ownerName={name}
+            cardNumber="1234 5678 9012 3456"
+            expirationDate="12/24"
+            cvv="123"
+          />
+        </View>
+      </StoryPart>
+    </StoryBlock>
+  );
+};
