@@ -26,7 +26,7 @@ const setCause = (error: Error, cause: Error): void => {
 
   const recurse = (error: Error, cause: Error): void => {
     if (seen.has(error)) {
-      return; // Prevent a stack overflow due to a recursive loop
+      return; // Prevent a stack overflow caused by a possible recursive loop
     }
 
     if (error.cause != null) {
