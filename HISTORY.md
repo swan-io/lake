@@ -1,3 +1,9 @@
+## 2.2.1
+
+Changes:
+
+- Update dependencies (cfef368)
+
 ## 2.2.0
 
 Changes:
