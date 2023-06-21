@@ -24,6 +24,8 @@ type CardParams = {
   expirationDate: string;
   cvv: string;
   color: "Silver" | "Black";
+  logo: SVGElement | null;
+  logoScale: number;
 };
 
 type Props = CardParams & {
@@ -105,7 +107,7 @@ const setTextureColorSpace = (texture: THREE.Texture | THREE.Texture[]) => {
 };
 
 export const Card = forwardRef<THREE.Group, CardProps>(
-  ({ ownerName, cardNumber, expirationDate, cvv, color, ...props }, ref) => {
+  ({ ownerName, cardNumber, expirationDate, cvv, color, logo, logoScale, ...props }, ref) => {
     const { nodes, materials } = useGLTF(cardGltfUrl) as CardGLTFResult;
 
     const silverTexture = useTexture(colorSilverUrl, setTextureColorSpace);
