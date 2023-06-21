@@ -43,7 +43,7 @@ const setCause = (error: Error, cause: Error): void => {
 type Props = {
   children: ReactNode;
   fallback: (data: { error: Error; resetError: () => void }) => ReactElement;
-  onError?: (error: Error, componentStack: ErrorInfo["componentStack"]) => void;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 };
 
 type State = {
@@ -61,19 +61,19 @@ export class ErrorBoundary extends Component<Props, State> {
     return { error };
   }
 
-  componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const { onError } = this.props;
 
     if (isError(error)) {
       const cause = new Error(error.message);
       cause.name = `ErrorBoundary ${cause.name}`;
-      cause.stack = componentStack;
+      cause.stack = errorInfo.componentStack;
 
       setCause(error, cause);
     }
 
     if (onError != null) {
-      onError(error, componentStack);
+      onError(error, errorInfo);
     }
   }
 
