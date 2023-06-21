@@ -92,7 +92,7 @@ type Props = CardParams & {
 // Use export default for React.lazy
 export default (props: Props) => {
   return (
-    <Canvas camera={{ position: [0, 0, 8] }}>
+    <Canvas camera={{ position: [0, 0, 12], fov: 50 }}>
       <OrbitControls />
       <CardScene {...props} />
     </Canvas>
