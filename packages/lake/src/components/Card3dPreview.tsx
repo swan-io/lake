@@ -10,6 +10,8 @@ import envNzUrl from "../assets/3d-card/environment/nz.png?url";
 import envPxUrl from "../assets/3d-card/environment/px.png?url";
 import envPyUrl from "../assets/3d-card/environment/py.png?url";
 import envPzUrl from "../assets/3d-card/environment/pz.png?url";
+import fontMaisonNeueBookUrl from "../assets/3d-card/model/MaisonNeue-Book.woff?url";
+import fontMarkProRegularUrl from "../assets/3d-card/model/MarkPro-Regular.ttf?url";
 import bandRoughnessUrl from "../assets/3d-card/model/band_roughness.jpg?url";
 import cardGltfUrl from "../assets/3d-card/model/card.gltf?url";
 import chipUrl from "../assets/3d-card/model/chip.jpg?url";
@@ -154,13 +156,25 @@ export const Card = forwardRef<THREE.Group, CardProps>(
           {/* Front face text */}
           <group position={[0, 0, 0.04]}>
             {/* Card owner name */}
-            <Text anchorX="left" anchorY={"bottom"} fontSize={0.2} position={[-3.4, -1.95, 0]}>
+            <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.2}
+              anchorX="left"
+              anchorY={"bottom"}
+              position={[-3.4, -1.95, 0]}
+            >
               {ownerName}
               {mainTextMaterial}
             </Text>
 
             {/* TM next to master card logo */}
-            <Text anchorX="left" anchorY={"bottom"} fontSize={0.03} position={[3.85, -2.15, 0]}>
+            <Text
+              font={fontMarkProRegularUrl}
+              fontSize={0.03}
+              anchorX="left"
+              anchorY={"bottom"}
+              position={[3.85, -2.15, 0]}
+            >
               TM
               {mainTextMaterial}
             </Text>
@@ -170,6 +184,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
           <group position={[0, 0, -0.04]}>
             {/* Support address */}
             <Text
+              font={fontMarkProRegularUrl}
               anchorX="left"
               anchorY={"bottom"}
               fontSize={0.1}
@@ -182,6 +197,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Idemia */}
             <Text
+              font={fontMarkProRegularUrl}
               anchorX="right"
               anchorY={"bottom"}
               fontSize={0.1}
@@ -194,9 +210,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Identifier */}
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.17}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.17}
               rotation={[0, Math.PI, 0]}
               position={[4, 0.7, 0]}
             >
@@ -206,9 +223,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Issue by */}
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.147}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.147}
               rotation={[0, Math.PI, 0]}
               position={[4, 0.2, 0]}
             >
@@ -217,9 +235,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             </Text>
 
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.147}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.147}
               rotation={[0, Math.PI, 0]}
               position={[4, -0.1, 0]}
             >
@@ -229,9 +248,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Card number */}
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.36}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.36}
               rotation={[0, Math.PI, 0]}
               position={[4, -1.85, 0]}
             >
@@ -241,9 +261,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Expire date */}
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.19}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.19}
               rotation={[0, Math.PI, 0]}
               position={[4, -2.3, 0]}
             >
@@ -253,9 +274,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* CVC */}
             <Text
+              font={fontMaisonNeueBookUrl}
+              fontSize={0.19}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.19}
               rotation={[0, Math.PI, 0]}
               position={[2.55, -2.3, 0]}
             >
@@ -265,6 +287,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Debit */}
             <Text
+              font={fontMarkProRegularUrl}
               anchorX="center"
               anchorY={"bottom"}
               fontSize={0.25}
