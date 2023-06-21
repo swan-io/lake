@@ -150,7 +150,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
     const secondaryTextMaterial = (
       <meshStandardMaterial
-        color={0x222222}
+        color={0x666666}
         metalness={0.1}
         roughness={0.55}
         envMapIntensity={ENV_MAP_INTENSITY}
