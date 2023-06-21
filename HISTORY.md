@@ -1,3 +1,9 @@
+## 2.3.0
+
+Changes:
+
+- New component `ErrorBoundary` (9f43de6)
+
 ## 2.2.1
 
 Changes:
