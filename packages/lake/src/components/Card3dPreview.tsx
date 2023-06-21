@@ -93,7 +93,7 @@ type Props = CardParams & {
 export default (props: Props) => {
   return (
     <Canvas camera={{ position: [0, 0, 12], fov: 50 }}>
-      <OrbitControls />
+      <OrbitControls enablePan={false} enableZoom={false} />
       <CardScene {...props} />
     </Canvas>
   );
