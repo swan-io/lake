@@ -52,8 +52,8 @@ const CardScene = ({ autoRotationDuration, ...props }: Props) => {
   return (
     <>
       <ambientLight color={0xffffff} intensity={1} />
-      <pointLight intensity={2} decay={2} position={[-100, 10, -21]} />
-      <pointLight intensity={2} decay={2} position={[100, 10, 21]} />
+      <pointLight intensity={0.2} decay={2} position={[-10, -10, -21]} />
+      <pointLight intensity={0.2} decay={2} position={[10, 10, 21]} />
       <Environment files={[envPxUrl, envNxUrl, envPyUrl, envNyUrl, envPzUrl, envNzUrl]} />
       <Card ref={card} {...props} />
     </>
@@ -112,6 +112,12 @@ export const Card = forwardRef<THREE.Group, CardProps>(
     const blackTexture = useTexture(colorBlackUrl, setTextureColorSpace);
     const chipTexture = useTexture(chipUrl, setTextureColorSpace);
     const bandRoughnessTexture = useTexture(bandRoughnessUrl); // keep default color space because it's grayscale
+
+    useEffect(() => {
+      Object.values(materials).forEach(material => {
+        material.envMapIntensity = ENV_MAP_INTENSITY;
+      });
+    }, [materials]);
 
     useEffect(() => {
       materials.black_band.roughnessMap = bandRoughnessTexture;
