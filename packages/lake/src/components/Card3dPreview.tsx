@@ -273,9 +273,9 @@ export const Card = forwardRef<THREE.Group, CardProps>(
               font={fontMarkProRegularUrl}
               anchorX="left"
               anchorY={"bottom"}
-              fontSize={0.1}
+              fontSize={0.12}
               rotation={[0, Math.PI, 0]}
-              position={[4, 2.4, 0]}
+              position={[4, 2.38, 0]}
             >
               support@swan.io
               {secondaryTextMaterial}
@@ -286,9 +286,9 @@ export const Card = forwardRef<THREE.Group, CardProps>(
               font={fontMarkProRegularUrl}
               anchorX="right"
               anchorY={"bottom"}
-              fontSize={0.1}
+              fontSize={0.12}
               rotation={[0, Math.PI, 0]}
-              position={[-4, 2.4, 0]}
+              position={[-4, 2.38, 0]}
             >
               IDEMIA 9 1212121L 09/21
               {secondaryTextMaterial}
@@ -297,11 +297,11 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             {/* Identifier */}
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.17}
+              fontSize={0.24}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
-              position={[4, 0.7, 0]}
+              position={[4, 0.68, 0]}
             >
               Identifier: 0000000000
               {mainTextMaterial}
@@ -310,11 +310,11 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             {/* Issue by */}
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.147}
+              fontSize={0.2}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
-              position={[4, 0.2, 0]}
+              position={[4, 0.15, 0]}
             >
               This card is issued by Swan, pursuant to license
               {secondaryTextMaterial}
@@ -322,11 +322,11 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.147}
+              fontSize={0.2}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
-              position={[4, -0.1, 0]}
+              position={[4, -0.15, 0]}
             >
               by Mastercard international.
               {secondaryTextMaterial}
@@ -335,7 +335,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             {/* Card number */}
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.36}
+              fontSize={0.48}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
@@ -348,7 +348,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             {/* Expire date */}
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.19}
+              fontSize={0.29}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
@@ -361,7 +361,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             {/* CVC */}
             <Text
               font={fontMaisonNeueBookUrl}
-              fontSize={0.19}
+              fontSize={0.29}
               anchorX="left"
               anchorY={"bottom"}
               rotation={[0, Math.PI, 0]}
@@ -376,7 +376,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
               font={fontMarkProRegularUrl}
               anchorX="center"
               anchorY={"bottom"}
-              fontSize={0.25}
+              fontSize={0.36}
               rotation={[0, Math.PI, 0]}
               position={[-2.35, -1.15, 0]}
             >
