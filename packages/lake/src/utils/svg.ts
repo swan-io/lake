@@ -52,6 +52,7 @@ const getImageSize = (size: Size): Size => {
     const height = width / ratio;
     return { width, height };
   } else {
+    // because of logo max height, we don't need to go higher than 256px
     // we set height at 256px and adapt width
     const height = 256;
     const width = height * ratio;

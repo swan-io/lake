@@ -20,6 +20,23 @@ import colorSilverUrl from "../assets/3d-card/model/color_silver.jpg?url";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
+/*
+This Module exports 2 components:
+- default export: A react-three-fiber scene which can be integrated in any react project
+(We use default export to be able to use React.lazy to load this component asynchronously without impacting bundle size)
+- Card component: which can be use for developers who already have a react-three-fiber scene or want to create there own scene
+
+Here are some details about choices made for this components:
+:one: Textures
+Textures aren't integrated in gltf export because it will force all developers to put texture files in their public folder.
+By using ?url import and `useTexture` hook, Vite will put textures in dist folder for all developers who use this component.
+
+:two: Logo integration
+There is an SVGLoader for threejs but it doesn't support all svg features.
+So to be sure to support all svg features, we transform the SVG into Image element to create a texture.
+And this texture is used as an alpha map on a plane.
+*/
+
 const ENV_MAP_INTENSITY = 3;
 const CARD_WIDTH = 8.56;
 const CARD_HEIGHT = 5.4;
