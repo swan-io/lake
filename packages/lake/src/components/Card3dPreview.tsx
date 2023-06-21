@@ -17,6 +17,7 @@ import cardGltfUrl from "../assets/3d-card/model/card.gltf?url";
 import chipUrl from "../assets/3d-card/model/chip.jpg?url";
 import colorBlackUrl from "../assets/3d-card/model/color_black.jpg?url";
 import colorSilverUrl from "../assets/3d-card/model/color_silver.jpg?url";
+import shinyColorFragmentShader from "../assets/3d-card/shaders/shinyColorFragment.glsl?raw";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
@@ -35,6 +36,10 @@ By using ?url import and `useTexture` hook, Vite will put textures in dist folde
 There is an SVGLoader for threejs but it doesn't support all svg features.
 So to be sure to support all svg features, we transform the SVG into Image element to create a texture.
 And this texture is used as an alpha map on a plane.
+
+:three: Mastercard shiny text on back of card
+To reproduce the shiny effect on the back of the card, we inject a custom shader in rainbow_mastercard material.
+This custom shader chunk change the diffuse color depending on camera position.
 */
 
 const ENV_MAP_INTENSITY = 3;
@@ -178,6 +183,16 @@ export const Card = forwardRef<THREE.Group, CardProps>(
         material.envMapIntensity = ENV_MAP_INTENSITY;
       });
     }, [materials]);
+
+    // Set rainbow mastercard text custom fragment shader
+    useEffect(() => {
+      materials.rainbow_mastercard.onBeforeCompile = shader => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          "#include <color_fragment>",
+          shinyColorFragmentShader,
+        );
+      };
+    }, [materials.rainbow_mastercard]);
 
     // Set band roughness and chip texture
     useEffect(() => {

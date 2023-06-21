@@ -27,7 +27,7 @@ export default {
   component: Card3dPreview,
 } as Meta<typeof Card3dPreview>;
 
-export const convertSvgFileToString = (file: File): Future<Result<string, string>> =>
+const convertSvgFileToString = (file: File): Future<Result<string, string>> =>
   Future.make(resolve => {
     if (file.type !== "image/svg+xml") {
       resolve(Result.Error("BAD_FORMAT"));
@@ -48,7 +48,7 @@ export const convertSvgFileToString = (file: File): Future<Result<string, string
     reader.readAsText(file);
   });
 
-export const convertStringToSvg = (content: string): Result<SVGElement, string> => {
+const convertStringToSvg = (content: string): Result<SVGElement, string> => {
   // deburr file content to avoid base64 encoding errors (for example with french accent)
   const cleanedContent = deburr(content);
   const parser = new DOMParser();
