@@ -120,6 +120,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
     }, [materials]);
 
     useEffect(() => {
+      materials.black_band.roughness = 0.8;
       materials.black_band.roughnessMap = bandRoughnessTexture;
       materials.chip.map = chipTexture;
     }, [materials.black_band, materials.chip, bandRoughnessTexture, chipTexture]);
