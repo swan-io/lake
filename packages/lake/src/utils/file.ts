@@ -4,7 +4,8 @@ import type { IconName } from "../components/Icon";
 export const getIconNameFromFilename = (filename: string): IconName => {
   const ext = filename.split(".").pop()?.toLowerCase();
 
-  return match<string | undefined, IconName>(ext)
+  return match(ext)
+    .returnType<IconName>()
     .with("png", () => "lake-document-png")
     .with("xls", () => "lake-document-xls")
     .with("pdf", () => "lake-document-pdf")

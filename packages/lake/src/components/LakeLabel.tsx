@@ -140,7 +140,8 @@ export const LakeLabel = ({
         </Box>
 
         <Space
-          height={match<LabelType, SpacingValue>(type)
+          height={match(type)
+            .returnType<SpacingValue>()
             .with("formSmall", "viewSmall", () => 4)
             .with("form", "view", () => 8)
             .with("radioGroup", () => 12)

@@ -66,7 +66,8 @@ type ToastProps = {
 const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, onClose }) => {
   const progressBarRef = useRef<View>(null);
 
-  const colorVariation = match<ToastVariant, ColorVariants>(variant)
+  const colorVariation = match(variant)
+    .returnType<ColorVariants>()
     .with("success", () => "positive")
     .with("error", () => "negative")
     .with("info", () => "shakespear")

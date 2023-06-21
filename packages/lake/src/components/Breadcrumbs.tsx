@@ -454,8 +454,8 @@ const SHOULD_LOCK_FOCUS = new Set<DropdownOpeningState>(["ForcedOpen"]);
 const BreadcrumbsDropdownItems = ({ crumbs }: { crumbs: CrumbWithIdAndPosition[] }) => {
   const [openingStatus, dispatch] = useReducer(
     (state: DropdownOpeningState, action: DropdownAction): DropdownOpeningState => {
-      const input = [action, state] as const;
-      return match<typeof input, DropdownOpeningState>(input)
+      return match([action, state])
+        .returnType<DropdownOpeningState>()
         .with(
           ["ForceToggle", "Closed"],
           ["ForceToggle", "Open"],
