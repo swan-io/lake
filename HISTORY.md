@@ -1,3 +1,9 @@
+## 2.3.1
+
+Changes:
+
+- Pass the whole errorInfo object to `ErrorBoundary` `onError` (6d1ac33)
+
 ## 2.3.0
 
 Changes:
