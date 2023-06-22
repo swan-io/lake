@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 });
 
 type BeneficiaryType = "HasCapital" | "LegalRepresentative" | "Other";
-type AccountCountry = "DEU" | "ESP" | "FRA";
+type AccountCountry = "DEU" | "ESP" | "FRA" | "NLD";
 
 export type BeneficiaryFormStep = "common" | "address";
 
