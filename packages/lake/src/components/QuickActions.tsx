@@ -69,7 +69,7 @@ export const QuickActions = ({ actions }: Props) => {
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={action.disabled === true ? styles.disabled : styles.action}
+            style={[styles.action, action.disabled === true && styles.disabled]}
             disabled={action.isLoading === true || action.disabled === true}
           >
             <View
