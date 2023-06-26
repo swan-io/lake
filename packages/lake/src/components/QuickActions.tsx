@@ -42,7 +42,10 @@ const styles = StyleSheet.create({
 export type QuickAction = {
   icon: IconName;
   label: string;
+  tooltipText?: string;
+  tooltipDisabled?: boolean;
   onPress: () => void;
+  disabled?: boolean;
   isLoading?: boolean;
   backgroundColor?: string;
   color?: string;
@@ -50,26 +53,24 @@ export type QuickAction = {
 
 type Props = {
   actions: QuickAction[];
-  tooltipDisabled?: boolean;
-  tooltipText?: string;
 };
 
-export const QuickActions = ({ actions, tooltipDisabled = false, tooltipText }: Props) => {
+export const QuickActions = ({ actions }: Props) => {
   return (
     <View style={styles.container}>
       {actions.map((action, index) => (
         <LakeTooltip
-          content={tooltipText}
+          content={action.tooltipText}
           placement="top"
           key={index}
-          disabled={tooltipDisabled || isNullishOrEmpty(tooltipText)}
           containerStyle={styles.actionContainer}
+          disabled={action.tooltipDisabled === true || isNullishOrEmpty(action.tooltipText)}
         >
           <Pressable
             key={index}
             onPress={action.onPress}
-            style={[styles.action, !tooltipDisabled && styles.disabled]}
-            disabled={action.isLoading === true || !tooltipDisabled}
+            style={[styles.action, action.disabled === true && styles.disabled]}
+            disabled={action.isLoading === true || action.disabled === true}
           >
             <View
               style={[
