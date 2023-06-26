@@ -238,7 +238,7 @@ const getNewMessages = (
   targetLocaleKeys: Record<string, string>,
 ): Record<string, string> => {
   const alreadyTranslatedKeys = Object.keys(baseLocaleKeys).filter(
-    key => targetLocaleKeys[key] != null,
+    key => targetLocaleKeys[key] != null && targetLocaleKeys[key] !== "",
   );
 
   return omit(baseLocaleKeys, alreadyTranslatedKeys);
