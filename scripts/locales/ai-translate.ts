@@ -6,8 +6,6 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import ora from "ora";
 import os from "os";
 import path from "path";
-import prompts from "prompts";
-import tiktoken from "tiktoken-node";
 import type { Except } from "type-fest";
 
 /**
@@ -16,11 +14,7 @@ import type { Except } from "type-fest";
  * - For each tuple, we generate a prompt
  *   - this prompt contains as context some translated keys with the translation we use. (This explain to openai how we translated other keys and help it to generate consistent translations)
  *   - creating a context is just a list of message where we can say "When I ask you this, you should answer this"
- * - Once the prompt is generated, we compute a price approximation
- *   - first we count the number of tokens in the prompt (because proce is based on number of tokens) https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them
- *     (it uses tiktoken-node, after a few test results wasn't 100% accurate, but it's close enough for approximating the price)
- *   - then we apply openai api price per token and display a prompt to confirm if we want to call openai api
- * - If the user confirms, we call openai api and wait for the result with a spinner because it can take a while (~1 second per key to translate)
+ * - Once the prompt is generated, we call openai api and wait for the result with a spinner because it can take a while (~1 second per key to translate)
  * - Once we have the result, we parse it and edit the translation file
  */
 
@@ -31,7 +25,6 @@ if (OPENAI_API_KEY == null) {
 
 const MODEL = "gpt-3.5-turbo";
 const MODEL_TOKEN_PRICE = 0.002; // $/1000 tokens https://openai.com/pricing
-const tokenEncoder = tiktoken.encodingForModel(MODEL);
 const openai = new OpenAIApi(
   new Configuration({
     apiKey: OPENAI_API_KEY,
@@ -220,23 +213,6 @@ const computePrice = (nbTokens: number): number => {
   return (nbTokens * MODEL_TOKEN_PRICE) / 1000;
 };
 
-/**
- * This counts the number of tokens into a string
- * Giving us the possibility to get a price approximation before calling OpenAI
- * The result isn't 100% accurate but it's good enough for approximating the price
- */
-const countTokens = (text: string) => {
-  const tokenized = tokenEncoder.encode(text);
-  return tokenized.length;
-};
-
-/**
- * This counts the number of tokens into a list of messages
- */
-const countInputTokens = (input: ChatCompletionRequestMessage[]): number => {
-  return input.reduce((acc, { content }) => acc + countTokens(content ?? ""), 0);
-};
-
 const NB_MAX_KEYS_FOR_CONTEXT = 30;
 /**
  * To limit context size we send to openai
@@ -277,7 +253,6 @@ const getChatPrompt = (
   targetLocale: Locale,
 ): Option<{
   messages: ChatCompletionRequestMessage[];
-  approximatedPrice: number;
   nbKeys: number;
 }> => {
   const jsonToTranslate = getNewMessages(baseLocaleJson, targetLocaleJson);
@@ -315,13 +290,7 @@ const getChatPrompt = (
     },
   ];
 
-  const nbInputTokens = countInputTokens(messages);
-  // we do the hypothesis that the output will be approximately the same size as the input
-  const approximatedOutputTokens = countTokens(JSON.stringify(jsonToTranslate));
-  const approximatedNbTokens = nbInputTokens + approximatedOutputTokens;
-  const approximatedPrice = computePrice(approximatedNbTokens);
-
-  return Option.Some({ messages, approximatedPrice, nbKeys: Object.keys(jsonToTranslate).length });
+  return Option.Some({ messages, nbKeys: Object.keys(jsonToTranslate).length });
 };
 
 /**
@@ -392,10 +361,7 @@ const translateApp = async (
   app: keyof typeof appTranslationsPaths,
   targetLocale: Locale,
 ): Promise<
-  Result<
-    { cost: Option<number>; duration: number; nbTranslatedKeys: number; cancelled?: boolean },
-    Error | OpenAIError
-  >
+  Result<{ cost: Option<number>; duration: number; nbTranslatedKeys: number }, Error | OpenAIError>
 > => {
   const baseJson = await readLocaleFile(app, baseLocale);
   const targetJson = await readLocaleFile(app, targetLocale);
@@ -413,24 +379,12 @@ const translateApp = async (
     return Result.Ok({ cost: Option.None(), duration: 0, nbTranslatedKeys: 0 });
   }
 
-  const { messages, approximatedPrice, nbKeys } = promptOption.value;
-
-  const response = await prompts({
-    type: "confirm",
-    name: "confirmed",
-    message: `Translate ${nbKeys} keys of ${printAppName(app)} into ${printLocale(
-      targetLocale,
-    )}? This will cost ${printCost(approximatedPrice)}`,
-  });
-
-  const confirmed = response.confirmed === true;
-
-  if (!confirmed) {
-    return Result.Ok({ cost: Option.None(), cancelled: true, duration: 0, nbTranslatedKeys: 0 });
-  }
+  const { messages, nbKeys } = promptOption.value;
 
   const stopSpinner = startSpinner(
-    `Translating ${printAppName(app)} to ${printLocale(targetLocale)}`,
+    `Translating ${printNbKeys(nbKeys)} keys in ${printAppName(app)} to ${printLocale(
+      targetLocale,
+    )}`,
   );
   const chatCompletion = await createChatCompletion(messages);
   stopSpinner();
@@ -466,13 +420,7 @@ const main = async () => {
     const result = await translateApp(app, targetLocale);
 
     result.match({
-      Ok: ({ cost, duration, nbTranslatedKeys, cancelled }) => {
-        if (cancelled === true) {
-          console.log(
-            `Cancelled translation of ${printAppName(app)} into ${printLocale(targetLocale)}`,
-          );
-          return;
-        }
+      Ok: ({ cost, duration, nbTranslatedKeys }) => {
         cost.match({
           Some: cost =>
             console.log(
