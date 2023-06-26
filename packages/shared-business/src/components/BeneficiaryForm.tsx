@@ -16,12 +16,7 @@ import { Validator, combineValidators, hasDefinedKeys, useForm } from "react-ux-
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
-import {
-  CountryCCA3,
-  allCountries,
-  individualCountries,
-  isCountryCCA3,
-} from "../constants/countries";
+import { CountryCCA3, allCountries, isCountryCCA3 } from "../constants/countries";
 import { decodeBirthDate, encodeBirthDate } from "../utils/date";
 import { locale, rifmDateProps, t } from "../utils/i18n";
 import {
@@ -705,7 +700,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                           <CountryPicker
                             id={id}
                             value={value}
-                            countries={individualCountries}
+                            countries={allCountries}
                             onValueChange={onChange}
                           />
                         )}
