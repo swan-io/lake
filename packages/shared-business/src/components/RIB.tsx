@@ -1,4 +1,3 @@
-import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { Fill } from "@swan-io/lake/src/components/Fill";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
@@ -15,12 +14,18 @@ import {
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 26;
 const LOGO_MAX_WIDTH = 200;
+
+const imageStyle: CSSProperties = {
+  objectFit: "contain",
+  objectPosition: "left",
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -118,11 +123,11 @@ const RIBv1 = ({
         <View style={styles.part}>
           <Box direction="row" alignItems="center">
             {isNotNullishOrEmpty(partnerLogoUrl) ? (
-              <AutoWidthImage
-                sourceUri={partnerLogoUrl}
+              <img
+                src={partnerLogoUrl}
+                width={LOGO_MAX_WIDTH}
                 height={LOGO_MAX_HEIGHT}
-                maxWidth={LOGO_MAX_WIDTH}
-                resizeMode="contain"
+                style={imageStyle}
               />
             ) : (
               <SwanLogo style={styles.defaultLogo} />
