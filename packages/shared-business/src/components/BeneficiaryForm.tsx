@@ -77,11 +77,11 @@ type Props = {
 };
 
 const beneficiaryTypes: RadioGroupItem<BeneficiaryType>[] = [
+  { value: "HasCapital", name: t("beneficiaryForm.beneficiary.ownershipOfCapital") },
   {
     value: "LegalRepresentative",
     name: t("beneficiaryForm.beneficiary.legalRepresentative"),
   },
-  { value: "HasCapital", name: t("beneficiaryForm.beneficiary.ownershipOfCapital") },
   { value: "Other", name: t("beneficiaryForm.beneficiary.other") },
 ];
 
@@ -332,7 +332,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           sanitize: value => value?.trim(),
         },
         type: {
-          initialValue: initialState?.type ?? "LegalRepresentative",
+          initialValue: initialState?.type ?? "HasCapital",
           validate: validateRequired,
         },
         capitalType: {
