@@ -1,3 +1,18 @@
+## 2.4.0
+
+Changes:
+
+- Defaut type of control in beneficiary form (7dee3a6)
+- Add Dutch account country (65eed14)
+- Add countries in UBO residency address select (695a420)
+- Add style options for `PlainListView` and add `lake-card-filled` icon (a8bca34)
+- Add `width` option in FilterRadio and FilterCheckbox (6081a72)
+- Change QuickActions API (116a352)
+
+Fixes:
+
+- Partner logo in RIB (ecac003)
+
 ## 2.3.1
 
 Changes:
