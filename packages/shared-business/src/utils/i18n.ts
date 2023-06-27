@@ -1,4 +1,5 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
+import type { DateFormat } from "@swan-io/lake/src/components/DatePicker";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
@@ -38,7 +39,7 @@ type Locale = {
   language: SupportedLanguage;
   translations: Record<string, string>;
   dayjsLocale: ILocale;
-  dateFormat: string;
+  dateFormat: DateFormat;
   datePlaceholder: string;
   timeFormat: string;
   timePlaceholder: string;

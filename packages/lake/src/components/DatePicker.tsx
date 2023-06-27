@@ -2,6 +2,7 @@ import { Option } from "@swan-io/boxed";
 import dayjs from "dayjs";
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
+import { ValidatorResult, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
@@ -113,7 +114,7 @@ const DATE_RANGE_PICKER_THRESHOLD = 800;
 
 const NB_DAYS_IN_WEEK = 7;
 
-type MonthNames = readonly [
+export type MonthNames = readonly [
   string,
   string,
   string,
@@ -127,7 +128,7 @@ type MonthNames = readonly [
   string,
   string,
 ];
-type WeekDayNames = readonly [string, string, string, string, string, string, string];
+export type WeekDayNames = readonly [string, string, string, string, string, string, string];
 
 type YearMonth = {
   year: number;
@@ -155,7 +156,7 @@ export type DatePickerRange = {
   end: Option<DatePickerDate>;
 };
 
-type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
+export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 
 const rifmDateProps = getRifmProps({
   accept: "numeric",
@@ -854,128 +855,134 @@ export const DatePicker = ({
   );
 };
 
-type DatePickerPopoverProps = DatePickerProps & {
-  id?: string;
+type DatePickerModalProps = Except<DatePickerProps, "error"> & {
   visible: boolean;
-  referenceRef: React.RefObject<unknown>;
   cancelLabel: string;
   confirmLabel: string;
+  validate?: (value: string) => ValidatorResult;
   onDissmiss: () => void;
 };
 
-export const DatePickerPopover = ({
+export const DatePickerModal = ({
   value,
-  error,
   format,
   firstWeekDay,
   monthNames,
   weekDayNames,
   isSelectable,
   onChange,
-  id,
   visible,
-  referenceRef,
   label,
   cancelLabel,
   confirmLabel,
+  validate,
   onDissmiss,
-}: DatePickerPopoverProps) => {
+}: DatePickerModalProps) => {
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
-  const [localeValue, setLocaleValue] = useState(value);
-
-  useEffect(() => {
-    setLocaleValue(value);
-  }, [value]);
+  const { Field, submitForm, setFieldValue, resetField } = useForm({
+    date: {
+      initialValue: value ?? "",
+      validate,
+    },
+  });
 
   const handleCancel = () => {
-    setLocaleValue(value);
+    setFieldValue("date", value ?? "");
     onDissmiss();
   };
 
   const handleConfirm = () => {
-    if (isNotNullishOrEmpty(localeValue)) {
-      onChange(localeValue);
-    }
-    onDissmiss();
+    submitForm(({ date }) => {
+      if (isNotNullishOrEmpty(date)) {
+        onChange(date);
+      }
+      onDissmiss();
+    });
   };
 
+  useEffect(() => {
+    if (!visible) {
+      resetField("date");
+    }
+  }, [visible, resetField]);
+
   return (
-    <Popover
-      id={id}
-      role="dialog"
-      onDismiss={handleCancel}
-      referenceRef={referenceRef}
-      autoFocus={true}
-      returnFocus={false}
-      visible={visible}
-    >
-      <View style={desktop ? styles.popoverDesktop : styles.popover}>
-        <LakeLabel
-          label={label}
-          render={id => (
-            <Rifm value={localeValue ?? ""} onChange={setLocaleValue} {...rifmDateProps}>
-              {({ value, onChange }) => (
-                <LakeTextInput
-                  id={id}
-                  placeholder={format}
-                  value={value}
-                  error={error}
-                  onChange={onChange}
-                />
+    <DateModal visible={visible} maxWidth={500} onPressClose={handleCancel}>
+      <Field name="date">
+        {({ ref, value, error, onBlur, onChange }) => (
+          <>
+            <LakeLabel
+              label={label}
+              render={id => (
+                <Rifm value={value} onChange={onChange} {...rifmDateProps}>
+                  {({ value, onChange }) => (
+                    <LakeTextInput
+                      ref={ref}
+                      id={id}
+                      placeholder={format}
+                      value={value}
+                      error={error}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                    />
+                  )}
+                </Rifm>
               )}
-            </Rifm>
-          )}
-        />
+            />
 
-        <DatePickerPopoverContent
-          value={localeValue}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
-          desktop={desktop}
-          isSelectable={isSelectable}
-          onChange={setLocaleValue}
-        />
+            <DatePickerPopoverContent
+              value={value}
+              format={format}
+              firstWeekDay={firstWeekDay}
+              monthNames={monthNames}
+              weekDayNames={weekDayNames}
+              desktop={desktop}
+              isSelectable={isSelectable}
+              onChange={onChange}
+            />
+          </>
+        )}
+      </Field>
 
-        <Space height={24} />
+      <Space height={24} />
 
-        <Box direction="row" alignItems="center">
-          <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
-            {cancelLabel}
-          </LakeButton>
+      <Box direction="row" alignItems="center">
+        <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
+          {cancelLabel}
+        </LakeButton>
 
-          <Space width={24} />
+        <Space width={24} />
 
-          <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
-            {confirmLabel}
-          </LakeButton>
-        </Box>
-      </View>
-    </Popover>
+        <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
+          {confirmLabel}
+        </LakeButton>
+      </Box>
+    </DateModal>
   );
 };
 
-type DateRangeModalProps = {
+type DateModalProps = {
   children: ReactNode;
   visible: boolean;
+  maxWidth: number;
   withCloseButton?: boolean;
   onPressClose: () => void;
 };
 
-const DateRangeModal = ({
+const DateModal = ({
   children,
   visible,
+  maxWidth,
   withCloseButton,
   onPressClose,
-}: DateRangeModalProps) => {
+}: DateModalProps) => {
   const { desktop } = useResponsive(MODALE_MOBILE_THRESHOLD);
 
   if (desktop) {
     return (
       <LakeModal
         visible={visible}
-        maxWidth={900}
+        maxWidth={maxWidth}
         onPressClose={withCloseButton === true ? onPressClose : undefined}
       >
         {children}
@@ -1296,7 +1303,7 @@ export const DateRangePicker = ({
         {error ?? " "}
       </LakeText>
 
-      <DateRangeModal visible={isOpened} withCloseButton={true} onPressClose={close}>
+      <DateModal visible={isOpened} maxWidth={900} withCloseButton={true} onPressClose={close}>
         <DateRangePickerModalContent
           value={value}
           format={format}
@@ -1308,7 +1315,7 @@ export const DateRangePicker = ({
           isSelectable={isSelectable}
           onChange={onChange}
         />
-      </DateRangeModal>
+      </DateModal>
     </View>
   );
 };
@@ -1363,7 +1370,7 @@ export const DateRangePickerModal = ({
   };
 
   return (
-    <DateRangeModal visible={visible} onPressClose={handleCancel}>
+    <DateModal visible={visible} maxWidth={900} onPressClose={handleCancel}>
       <View>
         <Box direction="row" alignItems="end">
           <LakeLabel
@@ -1445,6 +1452,6 @@ export const DateRangePickerModal = ({
           {confirmLabel}
         </LakeButton>
       </Box>
-    </DateRangeModal>
+    </DateModal>
   );
 };
