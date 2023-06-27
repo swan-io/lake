@@ -30,24 +30,22 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
-import { LakeTextInput } from "./LakeTextInput";
+import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
 import { LoadingView } from "./LoadingView";
 import { Popover } from "./Popover";
 import { Space } from "./Space";
 
-const ELEMENT_HEIGHT = 64;
-const NB_SUGGESTION_DISPLAYED = 3.5;
+const DEFAULT_ELEMENT_HEIGHT = 64;
+const DEFAULT_NB_SUGGESTION_DISPLAYED = 3.5;
 
 const styles = StyleSheet.create({
   list: {
-    maxHeight: ELEMENT_HEIGHT * NB_SUGGESTION_DISPLAYED,
     marginVertical: spacings[8],
   },
   flatList: { scrollBehavior: "smooth" },
   item: {
     flexShrink: 1,
     flexGrow: 1,
-    height: ELEMENT_HEIGHT,
     justifyContent: "center",
     paddingHorizontal: spacings[24],
     paddingVertical: 0,
@@ -112,8 +110,8 @@ const getItemLayout: <I>(
   offset: number;
   index: number;
 } = (_data, index) => ({
-  length: ELEMENT_HEIGHT,
-  offset: ELEMENT_HEIGHT * index,
+  length: DEFAULT_ELEMENT_HEIGHT,
+  offset: DEFAULT_ELEMENT_HEIGHT * index,
   index,
 });
 
@@ -121,7 +119,10 @@ export type LakeComboboxProps<I> = {
   inputRef?: RefObject<unknown>;
   value: string;
   items: AsyncData<Result<I[], unknown>>;
+  itemHeight?: number;
+  nbItemsDisplayed?: number;
   ListFooterComponent?: ReactNode;
+  onChange?: LakeTextInputProps["onChange"];
   onValueChange: (value: string) => void;
   onSelectItem: (value: I) => void | Promise<unknown>;
   renderItem: (item: I) => ReactNode | null;
@@ -131,6 +132,7 @@ export type LakeComboboxProps<I> = {
   disabled?: boolean;
   emptyResultText: string;
   error?: string;
+  hideErrors?: boolean;
   id?: string;
   readOnly?: boolean;
 };
@@ -142,7 +144,10 @@ const LakeComboboxWithRef = <I,>(
     inputRef,
     value,
     items,
+    itemHeight = DEFAULT_ELEMENT_HEIGHT,
+    nbItemsDisplayed = DEFAULT_NB_SUGGESTION_DISPLAYED,
     ListFooterComponent,
+    onChange,
     onValueChange,
     onSelectItem,
     renderItem,
@@ -154,6 +159,7 @@ const LakeComboboxWithRef = <I,>(
     readOnly,
     id,
     error,
+    hideErrors,
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
@@ -242,7 +248,9 @@ const LakeComboboxWithRef = <I,>(
         value={value}
         disabled={disabled}
         error={error}
+        hideErrors={hideErrors}
         onChangeText={onValueChange}
+        onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
@@ -262,7 +270,7 @@ const LakeComboboxWithRef = <I,>(
         underlay={false}
         forcedMode="Dropdown"
       >
-        <View style={styles.list}>
+        <View style={[styles.list, { maxHeight: itemHeight * nbItemsDisplayed }]}>
           {items.match({
             NotAsked: () => null,
             Loading: () => <LoadingView style={styles.loader} />,
@@ -306,6 +314,7 @@ const LakeComboboxWithRef = <I,>(
                                 hovered && styles.hoveredItem,
                                 focused && styles.focusedItem,
                                 pressed && styles.pressedItem,
+                                { height: itemHeight },
                               ]}
                               onPress={() => {
                                 window.clearTimeout(blurTimeoutId.current);
