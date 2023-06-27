@@ -1,3 +1,14 @@
+## 2.5.0
+
+Changes:
+
+- Datepicker component (aea7df7)
+- Add bank icon (bac7d40)
+- Timepicker component (2c0ab99)
+- 3d Card preview component (4ddfe30)
+- Date picker in date filter (ac40253)
+- Add check icon (9a6dd66)
+
 ## 2.4.0
 
 Changes:
