@@ -4,7 +4,6 @@ import { backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
-import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
@@ -43,10 +42,9 @@ const styles = StyleSheet.create({
 type Props = {
   trigger: ReactNode;
   children: ReactNode;
-  withSeparator?: boolean;
 };
 
-export const Accordion = ({ trigger, children, withSeparator }: Props) => {
+export const Accordion = ({ trigger, children }: Props) => {
   const id = useId();
   const [isOpen, { toggle }] = useDisclosure(false);
 
@@ -81,8 +79,6 @@ export const Accordion = ({ trigger, children, withSeparator }: Props) => {
           <View style={styles.content}>{children}</View>
         </View>
       </View>
-
-      {withSeparator === true && <Separator />}
     </View>
   );
 };
