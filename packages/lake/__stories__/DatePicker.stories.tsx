@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import {
   DatePicker,
-  DatePickerPopover,
+  DatePickerModal,
   DatePickerProps,
   DateRangePicker,
   DateRangePickerModal,
@@ -144,14 +144,14 @@ export const Default = () => {
   );
 };
 
-export const ButtonWithPopover = () => {
+export const ButtonWithModal = () => {
   const buttonRef = useRef<View | null>(null);
   const [value, setValue] = useState("");
   const [isOpened, setIsOpened] = useState(false);
 
   return (
     <WithPartnerAccentColor color="#0F6FDE">
-      <StoryBlock title="DatePicker Popover">
+      <StoryBlock title="DatePicker Modal">
         <StoryPart title="Default">
           <LakeText>Selected date: {value}</LakeText>
           <Space height={20} />
@@ -160,11 +160,10 @@ export const ButtonWithPopover = () => {
             Open date picker
           </LakeButton>
 
-          <DatePickerPopover
+          <DatePickerModal
             visible={isOpened}
             monthNames={monthNames}
             weekDayNames={dayNames}
-            referenceRef={buttonRef}
             value={value}
             firstWeekDay="monday"
             format="DD/MM/YYYY"

@@ -13,7 +13,7 @@ import { Box } from "./Box";
 import {
   DateFormat,
   DatePickerDate,
-  DatePickerPopover,
+  DatePickerModal,
   MonthNames,
   WeekDayNames,
 } from "./DatePicker";
@@ -401,9 +401,8 @@ function FilterDate({
         value={isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : noValueText}
       />
 
-      <DatePickerPopover
+      <DatePickerModal
         visible={visible}
-        referenceRef={inputRef}
         monthNames={monthNames}
         weekDayNames={dayNames}
         format={dateFormat}
