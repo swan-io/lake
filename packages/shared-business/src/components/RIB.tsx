@@ -90,13 +90,29 @@ type RIBv1Props = {
   partnerLogoUrl?: string;
   iban: string;
   bic: string;
-  bank: string;
-  agency: string;
-  bankNumber: string;
-  bankKey: string;
   bankAddress: Address;
   accountHolderAddress: Address;
-};
+} & (
+  | {
+      accountCountry: "FRA";
+      bank: string;
+      agency: string;
+      bankNumber: string;
+      bankKey: string;
+    }
+  | {
+      accountCountry: "DEU";
+      bank: string;
+      accountNumber: string;
+    }
+  | {
+      accountCountry: "ESP";
+      bank: string;
+      agency: string;
+      nationalCode: string;
+      bankNumber: string;
+    }
+);
 
 export type RIBProps = RIBv1Props;
 
@@ -105,18 +121,9 @@ export const RIB = (props: RIBProps) =>
     .with({ version: "v1" }, props => <RIBv1 {...props} />)
     .exhaustive();
 
-const RIBv1 = ({
-  partnerColor,
-  partnerLogoUrl,
-  iban,
-  bic,
-  bank,
-  agency,
-  bankNumber,
-  bankKey,
-  bankAddress,
-  accountHolderAddress,
-}: RIBProps) => {
+const RIBv1 = (props: RIBProps) => {
+  const { partnerColor, partnerLogoUrl, iban, bic, bankAddress, accountHolderAddress } = props;
+
   return (
     <WithPartnerAccentColor color={partnerColor}>
       <View style={styles.container}>
@@ -151,13 +158,63 @@ const RIBv1 = ({
           <Space height={8} />
 
           <Box direction="row" alignItems="center">
-            <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.number")} value={bankNumber} />
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+            {match(props)
+              .with({ accountCountry: "FRA" }, ({ bank, agency, bankNumber, bankKey }) => (
+                <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.number")}
+                    value={bankNumber}
+                  />
+
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+                </>
+              ))
+              .with({ accountCountry: "DEU" }, ({ bank, accountNumber }) => (
+                <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.accountNumber")}
+                    value={accountNumber}
+                  />
+                </>
+              ))
+              .with({ accountCountry: "ESP" }, ({ bank, agency, nationalCode, bankNumber }) => (
+                <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.nationalCode")}
+                    value={nationalCode}
+                  />
+
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.number")}
+                    value={bankNumber}
+                  />
+                </>
+              ))
+              .exhaustive()}
           </Box>
         </View>
 
