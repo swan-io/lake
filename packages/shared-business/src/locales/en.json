@@ -112,6 +112,7 @@
   "registrationPage.withOrganismLabel": "Are you registered to {organismName}?",
   "registrationPage.withoutOrganismNameLabel": "Are you registered?",
   "rib.accountHolder": "Account holder",
+  "rib.accountNumber": "Account number",
   "rib.address": "Address",
   "rib.agency": "Agency",
   "rib.bank": "Bank",

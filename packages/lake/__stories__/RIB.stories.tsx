@@ -89,7 +89,7 @@ export const AccountCountries = () => {
           iban="DE89 3704 0044 0532 0130 00"
           bic="COBADEFFXXX"
           bank="COMMERZBANK AG"
-          bankNumber="37040044"
+          accountNumber="37040044"
           bankAddress={bankAddress}
           accountHolderAddress={accountHolderAddress}
         />

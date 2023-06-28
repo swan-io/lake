@@ -16,7 +16,7 @@ import {
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
-import { P, match } from "ts-pattern";
+import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 26;
@@ -103,7 +103,7 @@ type RIBv1Props = {
   | {
       accountCountry: "DEU";
       bank: string;
-      bankNumber: string;
+      accountNumber: string;
     }
   | {
       accountCountry: "ESP";
@@ -122,16 +122,7 @@ export const RIB = (props: RIBProps) =>
     .exhaustive();
 
 const RIBv1 = (props: RIBProps) => {
-  const {
-    partnerColor,
-    partnerLogoUrl,
-    iban,
-    bic,
-    bank,
-    bankNumber,
-    bankAddress,
-    accountHolderAddress,
-  } = props;
+  const { partnerColor, partnerLogoUrl, iban, bic, bankAddress, accountHolderAddress } = props;
 
   return (
     <WithPartnerAccentColor color={partnerColor}>
@@ -167,20 +158,43 @@ const RIBv1 = (props: RIBProps) => {
           <Space height={8} />
 
           <Box direction="row" alignItems="center">
-            <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
-
             {match(props)
-              .with({ agency: P.string }, ({ agency }) => (
+              .with({ accountCountry: "FRA" }, ({ bank, agency, bankNumber, bankKey }) => (
                 <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
                   <Space width={24} />
                   <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.number")}
+                    value={bankNumber}
+                  />
+
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
                 </>
               ))
-              .otherwise(() => null)}
-
-            {match(props)
-              .with({ nationalCode: P.string }, ({ nationalCode }) => (
+              .with({ accountCountry: "DEU" }, ({ bank, accountNumber }) => (
                 <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.accountNumber")}
+                    value={accountNumber}
+                  />
+                </>
+              ))
+              .with({ accountCountry: "ESP" }, ({ bank, agency, nationalCode, bankNumber }) => (
+                <>
+                  <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
                   <Space width={24} />
 
                   <RibValue
@@ -189,21 +203,18 @@ const RIBv1 = (props: RIBProps) => {
                     label={t("rib.nationalCode")}
                     value={nationalCode}
                   />
-                </>
-              ))
-              .otherwise(() => null)}
 
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.number")} value={bankNumber} />
-
-            {match(props)
-              .with({ bankKey: P.string }, ({ bankKey }) => (
-                <>
                   <Space width={24} />
-                  <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.number")}
+                    value={bankNumber}
+                  />
                 </>
               ))
-              .otherwise(() => null)}
+              .exhaustive()}
           </Box>
         </View>
 
