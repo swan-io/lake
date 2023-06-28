@@ -16,7 +16,7 @@ import {
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
-import { match } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 26;
@@ -90,13 +90,29 @@ type RIBv1Props = {
   partnerLogoUrl?: string;
   iban: string;
   bic: string;
-  bank: string;
-  agency: string;
-  bankNumber: string;
-  bankKey: string;
   bankAddress: Address;
   accountHolderAddress: Address;
-};
+} & (
+  | {
+      accountCountry: "FRA";
+      bank: string;
+      agency: string;
+      bankNumber: string;
+      bankKey: string;
+    }
+  | {
+      accountCountry: "DEU";
+      bank: string;
+      bankNumber: string;
+    }
+  | {
+      accountCountry: "ESP";
+      bank: string;
+      agency: string;
+      nationalCode: string;
+      bankNumber: string;
+    }
+);
 
 export type RIBProps = RIBv1Props;
 
@@ -105,18 +121,18 @@ export const RIB = (props: RIBProps) =>
     .with({ version: "v1" }, props => <RIBv1 {...props} />)
     .exhaustive();
 
-const RIBv1 = ({
-  partnerColor,
-  partnerLogoUrl,
-  iban,
-  bic,
-  bank,
-  agency,
-  bankNumber,
-  bankKey,
-  bankAddress,
-  accountHolderAddress,
-}: RIBProps) => {
+const RIBv1 = (props: RIBProps) => {
+  const {
+    partnerColor,
+    partnerLogoUrl,
+    iban,
+    bic,
+    bank,
+    bankNumber,
+    bankAddress,
+    accountHolderAddress,
+  } = props;
+
   return (
     <WithPartnerAccentColor color={partnerColor}>
       <View style={styles.container}>
@@ -152,12 +168,42 @@ const RIBv1 = ({
 
           <Box direction="row" alignItems="center">
             <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+
+            {match(props)
+              .with({ agency: P.string }, ({ agency }) => (
+                <>
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                </>
+              ))
+              .otherwise(() => null)}
+
+            {match(props)
+              .with({ nationalCode: P.string }, ({ nationalCode }) => (
+                <>
+                  <Space width={24} />
+
+                  <RibValue
+                    type="smallInfo"
+                    color="gray"
+                    label={t("rib.nationalCode")}
+                    value={nationalCode}
+                  />
+                </>
+              ))
+              .otherwise(() => null)}
+
             <Space width={24} />
             <RibValue type="smallInfo" color="gray" label={t("rib.number")} value={bankNumber} />
-            <Space width={24} />
-            <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+
+            {match(props)
+              .with({ bankKey: P.string }, ({ bankKey }) => (
+                <>
+                  <Space width={24} />
+                  <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+                </>
+              ))
+              .otherwise(() => null)}
           </Box>
         </View>
 

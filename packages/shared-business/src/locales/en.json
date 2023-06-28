@@ -119,6 +119,7 @@
   "rib.bic": "BIC / SWIFT",
   "rib.iban": "IBAN",
   "rib.key": "Key",
+  "rib.nationalCode": "National code",
   "rib.number": "Number",
   "rib.partnership": "In partnership with",
   "supportingDoc.UBODeclaration": "UBO Declaration",
