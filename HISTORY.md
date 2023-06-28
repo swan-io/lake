@@ -1,3 +1,10 @@
+## 2.6.0
+
+Features:
+
+- Make RIB template country-aware (ad9e66e3)
+- Add PressableText to TabView (60f88200)
+
 ## 2.5.0
 
 Changes:
