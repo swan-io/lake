@@ -255,9 +255,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
   },
-  stickyRow: {
-    // overflow: "hidden",
-  },
   evenRow: {
     backgroundColor: backgroundColor.accented,
   },
@@ -1319,7 +1316,7 @@ export const FixedListView = <T, ExtraInfo>({
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
-              <View style={[styles.stickyRow, { height: totalHeight }]}>{startRows}</View>
+              <View style={{ height: totalHeight }}>{startRows}</View>
             </View>
           ) : null}
 
@@ -1452,7 +1449,7 @@ export const FixedListView = <T, ExtraInfo>({
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
-              <View style={[styles.stickyRow, { height: totalHeight }]}>{endRows}</View>
+              <View style={{ height: totalHeight }}>{endRows}</View>
             </View>
           ) : null}
         </View>
