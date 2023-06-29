@@ -132,7 +132,7 @@ export type FixedListViewProps<T, ExtraInfo> = {
 };
 
 const HORIZONTAL_SAFE_AREA = 10;
-const SCROLLBAR_RESERVED_SPACE = 20;
+export const SCROLLBAR_RESERVED_SPACE = 20;
 
 const styles = StyleSheet.create({
   root: {
@@ -665,7 +665,8 @@ export const FixedListView = <T, ExtraInfo>({
   const centerColumnsRef = useRef<ScrollView | null>(null);
   const horizontalScrollbarRef = useRef<ScrollView | null>(null);
   const totalRowHeight = rowHeight + rowVerticalSpacing;
-  const totalHeight = originalData.length * totalRowHeight + headerHeight;
+  const rowsHeight = originalData.length * totalRowHeight;
+  const totalHeight = headerHeight + rowsHeight;
   // It might seem off to use the range in state instead of storing scroll/layout and deriving it,
   // but it saves a lot of render phases by allowing to bail out from rendering when the range doesn't change
   const [
@@ -1003,7 +1004,7 @@ export const FixedListView = <T, ExtraInfo>({
         horizontalScrollbar.removeEventListener("scroll", onScrollbarScroll);
       };
     }
-  }, []);
+  }, [horizontalPadding]);
 
   const onKeyDown = useCallback(
     (event: NativeSyntheticEvent<React.KeyboardEvent>) => {
@@ -1252,7 +1253,7 @@ export const FixedListView = <T, ExtraInfo>({
           style={[
             styles.loadingPlaceholder,
             {
-              top: totalHeight,
+              top: rowsHeight,
               marginLeft: horizontalPadding * 2,
               marginRight: horizontalPadding * 2,
             },
@@ -1316,7 +1317,7 @@ export const FixedListView = <T, ExtraInfo>({
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
-              <View style={{ height: totalHeight }}>{startRows}</View>
+              <View style={{ height: rowsHeight }}>{startRows}</View>
             </View>
           ) : null}
 
@@ -1449,7 +1450,7 @@ export const FixedListView = <T, ExtraInfo>({
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
-              <View style={{ height: totalHeight }}>{endRows}</View>
+              <View style={{ height: rowsHeight }}>{endRows}</View>
             </View>
           ) : null}
         </View>
