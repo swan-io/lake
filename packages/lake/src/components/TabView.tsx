@@ -49,21 +49,12 @@ import { TransitionView } from "./TransitionView";
 const TABS_HEIGHT = 40;
 export const tabsViewHeight = TABS_HEIGHT + 1;
 
-type Tab =
-  | {
-      label: string;
-      url: string;
-      icon?: IconName;
-      withSeparator?: boolean;
-      count?: number;
-    }
-  | {
-      label: string;
-      icon?: IconName;
-      withSeparator?: boolean;
-      count?: number;
-      id: string;
-    };
+type Tab = ({ id: string } | { url: string }) & {
+  count?: number;
+  icon?: IconName;
+  label: string;
+  withSeparator?: boolean;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -191,8 +182,7 @@ const TabViewLink = forwardRef<Text, TabViewLinkProps>(
         </Link>
       ))
       .with({ id: P.string }, ({ id }) => {
-        const tabId = getTabId(tab);
-        const isActive = tabId === activeTabId;
+        const isActive = id === activeTabId;
 
         return (
           <PressableText
@@ -435,8 +425,9 @@ const DropdownItems = forwardRef<
 
   const mergedRef = useMergeRefs(containerRef, ref);
 
-  const activeTab = tabs.find(tab =>
-    isTabActive({ activeTabId, currentLocationURL: currentUrl, tab }),
+  const activeTab = useMemo(
+    () => tabs.find(tab => isTabActive({ activeTabId, currentLocationURL: currentUrl, tab })),
+    [activeTabId, currentUrl, tabs],
   );
 
   return (
