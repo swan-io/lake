@@ -191,6 +191,7 @@ export const Card = () => {
 
         <View style={styles.canvasContainer}>
           <Card3dPreview
+            assetsUrl="https://raw.githubusercontent.com/swan-io/lake/main/packages/lake/src/assets/3d-card"
             color={config.color}
             ownerName={config.ownerName}
             logo={config.svgLogo}
@@ -220,6 +221,7 @@ export const AutoRotation = () => {
 
         <View style={styles.canvasContainer}>
           <Card3dPreview
+            assetsUrl="https://raw.githubusercontent.com/swan-io/lake/main/packages/lake/src/assets/3d-card"
             autoRotationDuration={10}
             color={config.color}
             ownerName={config.ownerName}

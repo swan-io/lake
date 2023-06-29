@@ -4,20 +4,6 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
 import { match } from "ts-pattern";
-import envNxUrl from "../assets/3d-card/environment/nx.png?url";
-import envNyUrl from "../assets/3d-card/environment/ny.png?url";
-import envNzUrl from "../assets/3d-card/environment/nz.png?url";
-import envPxUrl from "../assets/3d-card/environment/px.png?url";
-import envPyUrl from "../assets/3d-card/environment/py.png?url";
-import envPzUrl from "../assets/3d-card/environment/pz.png?url";
-import fontMaisonNeueBookUrl from "../assets/3d-card/model/MaisonNeue-Book.woff?url";
-import fontMarkProRegularUrl from "../assets/3d-card/model/MarkPro-Regular.ttf?url";
-import bandRoughnessUrl from "../assets/3d-card/model/band_roughness.jpg?url";
-import cardGltfUrl from "../assets/3d-card/model/card.gltf?url";
-import chipUrl from "../assets/3d-card/model/chip.jpg?url";
-import colorBlackUrl from "../assets/3d-card/model/color_black.jpg?url";
-import colorSilverUrl from "../assets/3d-card/model/color_silver.jpg?url";
-import shinyColorFragmentShader from "../assets/3d-card/shaders/shinyColorFragment.glsl?raw";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
@@ -42,6 +28,20 @@ To reproduce the shiny effect on the back of the card, we inject a custom shader
 This custom shader chunk change the diffuse color depending on camera position.
 */
 
+const shinyColorFragmentShader = `
+float red = cameraPosition.x * cameraPosition.z;
+float green = cameraPosition.y * cameraPosition.z;
+float blue = 0.1;
+
+red = sin(red / 5.0) + 1.0 / 2.0;
+green = sin(green / 5.0) + 1.0 / 2.0;
+
+vec3 shinyColor = vec3(red, green, blue);
+float shinyFactor = 0.35;
+
+diffuseColor.rgb = mix(diffuseColor.rgb, shinyColor, shinyFactor);
+`;
+
 const ENV_MAP_INTENSITY = 3;
 const CARD_WIDTH = 8.56;
 const CARD_HEIGHT = 5.4;
@@ -60,6 +60,7 @@ type CardParams = {
   color: "Silver" | "Black";
   logo: SVGElement | null;
   logoScale: number;
+  assetsUrl: string;
   onSvgError?: (code: string) => void;
 };
 
@@ -86,6 +87,7 @@ const computeCardLogoSize = (logoSize: {
 };
 
 type Props = CardParams & {
+  assetsUrl: string;
   autoRotationDuration?: number; // duration for a full rotation in seconds
 };
 
@@ -113,7 +115,12 @@ const CardScene = ({ autoRotationDuration, ...props }: Props) => {
       <ambientLight color={0xffffff} intensity={1} />
       <pointLight intensity={0.2} decay={2} position={[-10, -10, -21]} />
       <pointLight intensity={0.2} decay={2} position={[10, 10, 21]} />
-      <Environment files={[envPxUrl, envNxUrl, envPyUrl, envNyUrl, envPzUrl, envNzUrl]} />
+
+      <Environment
+        path={`${props.assetsUrl}/environment`}
+        files={["/px.png", "/nx.png", "/py.png", "/ny.png", "/pz.png", "/nz.png"]}
+      />
+
       <Card ref={card} {...props} />
     </>
   );
@@ -163,9 +170,28 @@ const setTextureColorSpace = (texture: THREE.Texture | THREE.Texture[]) => {
 
 export const Card = forwardRef<THREE.Group, CardProps>(
   (
-    { ownerName, cardNumber, expirationDate, cvv, color, logo, logoScale, onSvgError, ...props },
+    {
+      ownerName,
+      cardNumber,
+      expirationDate,
+      cvv,
+      color,
+      logo,
+      logoScale,
+      assetsUrl,
+      onSvgError,
+      ...props
+    },
     ref,
   ) => {
+    const fontMaisonNeueBookUrl = `${assetsUrl}/model/MaisonNeue-Book.woff`;
+    const fontMarkProRegularUrl = `${assetsUrl}/model/MarkPro-Regular.ttf`;
+    const cardGltfUrl = `${assetsUrl}/model/card.gltf`;
+    const bandRoughnessUrl = `${assetsUrl}/model/band_roughness.jpg`;
+    const chipUrl = `${assetsUrl}/model/chip.jpg`;
+    const colorBlackUrl = `${assetsUrl}/model/color_black.jpg`;
+    const colorSilverUrl = `${assetsUrl}/model/color_silver.jpg`;
+
     const { nodes, materials } = useGLTF(cardGltfUrl) as CardGLTFResult;
     const [logoData, setLogoData] = useState<{
       size: [number, number];
