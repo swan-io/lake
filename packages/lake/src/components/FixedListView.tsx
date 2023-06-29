@@ -114,6 +114,7 @@ export type FixedListViewProps<T, ExtraInfo> = {
   headerHeight: number;
   rowHeight: number;
   rowVerticalSpacing: number;
+  horizontalPadding?: number;
   extraInfo: ExtraInfo;
   stickedToStartColumns?: ColumnConfig<T, ExtraInfo>[];
   columns: ColumnConfig<T, ExtraInfo>[];
@@ -178,7 +179,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     right: "100%",
-    width: HORIZONTAL_SAFE_AREA,
     backgroundColor: backgroundColor.default,
   },
   stickyColumnEndOverflow: {
@@ -186,7 +186,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     left: "100%",
-    width: HORIZONTAL_SAFE_AREA,
     backgroundColor: backgroundColor.default,
   },
   rowSegment: {
@@ -651,6 +650,7 @@ export const FixedListView = <T, ExtraInfo>({
   highlightedRowId,
   rowHeight,
   rowVerticalSpacing,
+  horizontalPadding = HORIZONTAL_SAFE_AREA,
   headerHeight,
   renderThreshold = 1000,
   stickedToStartColumns: initialStickedToStartColumns = EMPTY_COLUMNS,
@@ -956,7 +956,7 @@ export const FixedListView = <T, ExtraInfo>({
           const scrollLeft = centerColumns.scrollLeft;
           setShouldShowStartGradient(scrollLeft > 0);
           setShouldShowEndGradient(
-            centerColumns.scrollWidth - HORIZONTAL_SAFE_AREA * 2 >=
+            centerColumns.scrollWidth - horizontalPadding * 2 >=
               scrollLeft + centerColumns.clientWidth,
           );
           centerHeaders.scrollLeft = scrollLeft;
@@ -973,7 +973,7 @@ export const FixedListView = <T, ExtraInfo>({
           const scrollLeft = centerHeaders.scrollLeft;
           setShouldShowStartGradient(scrollLeft > 0);
           setShouldShowEndGradient(
-            centerHeaders.scrollWidth - HORIZONTAL_SAFE_AREA * 2 >=
+            centerHeaders.scrollWidth - horizontalPadding * 2 >=
               scrollLeft + centerHeaders.clientWidth,
           );
           centerColumns.scrollLeft = scrollLeft;
@@ -990,7 +990,7 @@ export const FixedListView = <T, ExtraInfo>({
           const scrollLeft = horizontalScrollbar.scrollLeft;
           setShouldShowStartGradient(scrollLeft > 0);
           setShouldShowEndGradient(
-            horizontalScrollbar.scrollWidth - HORIZONTAL_SAFE_AREA * 2 >=
+            horizontalScrollbar.scrollWidth - horizontalPadding * 2 >=
               scrollLeft + horizontalScrollbar.clientWidth,
           );
           centerHeaders.scrollLeft = scrollLeft;
@@ -1257,8 +1257,8 @@ export const FixedListView = <T, ExtraInfo>({
             styles.loadingPlaceholder,
             {
               top: totalHeight,
-              marginLeft: HORIZONTAL_SAFE_AREA * 2,
-              marginRight: HORIZONTAL_SAFE_AREA * 2,
+              marginLeft: horizontalPadding * 2,
+              marginRight: horizontalPadding * 2,
             },
           ]}
         >
@@ -1292,8 +1292,8 @@ export const FixedListView = <T, ExtraInfo>({
               style={[
                 styles.stickyColumn,
                 {
-                  width: stickedToStartColumnsWidth + HORIZONTAL_SAFE_AREA,
-                  paddingLeft: HORIZONTAL_SAFE_AREA,
+                  width: stickedToStartColumnsWidth + horizontalPadding,
+                  paddingLeft: horizontalPadding,
                 },
               ]}
             >
@@ -1305,7 +1305,7 @@ export const FixedListView = <T, ExtraInfo>({
                   width={stickedToStartColumnsWidth}
                 />
 
-                <View style={styles.stickyColumnStartOverflow} />
+                <View style={[styles.stickyColumnStartOverflow, { width: horizontalPadding }]} />
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
@@ -1317,8 +1317,8 @@ export const FixedListView = <T, ExtraInfo>({
             style={[
               styles.centerColumnsContainer,
               {
-                paddingLeft: stickedToStartColumns.length === 0 ? HORIZONTAL_SAFE_AREA : ZERO,
-                paddingRight: stickedToEndColumns.length === 0 ? HORIZONTAL_SAFE_AREA : ZERO,
+                paddingLeft: stickedToStartColumns.length === 0 ? horizontalPadding : ZERO,
+                paddingRight: stickedToEndColumns.length === 0 ? horizontalPadding : ZERO,
               },
             ]}
           >
@@ -1331,8 +1331,8 @@ export const FixedListView = <T, ExtraInfo>({
                 contentContainerStyle={{
                   minWidth:
                     centerColumnsWidth +
-                    (stickedToStartColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0) +
-                    (stickedToEndColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0),
+                    (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
+                    (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
                 }}
               >
                 <HeaderSegment
@@ -1355,8 +1355,8 @@ export const FixedListView = <T, ExtraInfo>({
                 {
                   minWidth:
                     centerColumnsWidth +
-                    (stickedToStartColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0) +
-                    (stickedToEndColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0),
+                    (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
+                    (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
                 },
               ]}
             >
@@ -1370,8 +1370,8 @@ export const FixedListView = <T, ExtraInfo>({
               contentContainerStyle={{
                 minWidth:
                   centerColumnsWidth +
-                  (stickedToStartColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0) +
-                  (stickedToEndColumns.length === 0 ? HORIZONTAL_SAFE_AREA : 0),
+                  (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
+                  (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
               }}
             />
 
@@ -1409,13 +1409,13 @@ export const FixedListView = <T, ExtraInfo>({
               style={[
                 styles.stickyColumn,
                 {
-                  width: stickedToEndColumnsWidth + HORIZONTAL_SAFE_AREA,
-                  paddingRight: HORIZONTAL_SAFE_AREA,
+                  width: stickedToEndColumnsWidth + horizontalPadding,
+                  paddingRight: horizontalPadding,
                 },
               ]}
             >
               <View style={[styles.headingSegment, { height: headerHeight }]}>
-                <View style={styles.stickyColumnEndOverflow} />
+                <View style={[styles.stickyColumnEndOverflow, { width: horizontalPadding }]} />
 
                 <HeaderSegment
                   columns={stickedToEndColumns}
