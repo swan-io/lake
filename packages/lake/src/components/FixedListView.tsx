@@ -307,7 +307,6 @@ const styles = StyleSheet.create({
     transitionTimingFunction: "ease-in-out",
   },
   rowBackgroundContainerPlain: {
-    backgroundColor: backgroundColor.default,
     left: -10,
     right: -10,
     boxShadow: `inset 0 -1px ${colors.gray[100]}`,
