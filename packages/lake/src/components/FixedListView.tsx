@@ -111,6 +111,7 @@ export type FixedListViewProps<T, ExtraInfo> = {
   data: T[];
   keyExtractor: (item: T, index: number) => string;
   highlightedRowId?: string;
+  headerBackgroundColor?: string;
   headerHeight: number;
   rowHeight: number;
   rowVerticalSpacing: number;
@@ -179,14 +180,12 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     right: "100%",
-    backgroundColor: backgroundColor.default,
   },
   stickyColumnEndOverflow: {
     position: "absolute",
     top: 0,
     bottom: 0,
     left: "100%",
-    backgroundColor: backgroundColor.default,
   },
   rowSegment: {
     position: "absolute",
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     zIndex: 2,
-    backgroundColor: backgroundColor.default,
   },
   segment: {
     flexDirection: "row",
@@ -651,6 +649,7 @@ export const FixedListView = <T, ExtraInfo>({
   rowHeight,
   rowVerticalSpacing,
   horizontalPadding = HORIZONTAL_SAFE_AREA,
+  headerBackgroundColor = backgroundColor.default,
   headerHeight,
   renderThreshold = 1000,
   stickedToStartColumns: initialStickedToStartColumns = EMPTY_COLUMNS,
@@ -1297,7 +1296,12 @@ export const FixedListView = <T, ExtraInfo>({
                 },
               ]}
             >
-              <View style={[styles.headingSegment, { height: headerHeight }]}>
+              <View
+                style={[
+                  styles.headingSegment,
+                  { height: headerHeight, backgroundColor: headerBackgroundColor },
+                ]}
+              >
                 <HeaderSegment
                   columns={stickedToStartColumns}
                   extraInfo={extraInfo}
@@ -1305,7 +1309,13 @@ export const FixedListView = <T, ExtraInfo>({
                   width={stickedToStartColumnsWidth}
                 />
 
-                <View style={[styles.stickyColumnStartOverflow, { width: horizontalPadding }]} />
+                <View
+                  style={[
+                    styles.stickyColumnStartOverflow,
+                    { width: horizontalPadding, backgroundColor: headerBackgroundColor },
+                  ]}
+                />
+
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
@@ -1322,7 +1332,12 @@ export const FixedListView = <T, ExtraInfo>({
               },
             ]}
           >
-            <View style={[styles.headingSegment, { height: headerHeight }]}>
+            <View
+              style={[
+                styles.headingSegment,
+                { height: headerHeight, backgroundColor: headerBackgroundColor },
+              ]}
+            >
               <ScrollView
                 ref={centerHeadersRef}
                 horizontal={true}
@@ -1414,8 +1429,18 @@ export const FixedListView = <T, ExtraInfo>({
                 },
               ]}
             >
-              <View style={[styles.headingSegment, { height: headerHeight }]}>
-                <View style={[styles.stickyColumnEndOverflow, { width: horizontalPadding }]} />
+              <View
+                style={[
+                  styles.headingSegment,
+                  { height: headerHeight, backgroundColor: headerBackgroundColor },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.stickyColumnEndOverflow,
+                    { width: horizontalPadding, backgroundColor: headerBackgroundColor },
+                  ]}
+                />
 
                 <HeaderSegment
                   columns={stickedToEndColumns}
