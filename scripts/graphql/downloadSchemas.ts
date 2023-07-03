@@ -13,7 +13,6 @@ export const getIntrospection = (url: string) =>
     .then(res => res.data)
     .then(res => buildClientSchema(res))
     .then(res => printSchema(res))
-
     .catch(err => {
       console.error(err);
       process.exit(1);
