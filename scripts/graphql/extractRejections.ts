@@ -72,7 +72,7 @@ const run = async () => {
           });
 
     const keys = [...nonRejectionKeys, ...filteredRejectionKeys];
-    keys.sort();
+    keys.sort(); // sort in place
 
     const nextJson = Object.fromEntries(keys.map(key => [key, currentJson[key] ?? ""]));
     const nextText = JSON.stringify(nextJson, null, 2) + os.EOL;
