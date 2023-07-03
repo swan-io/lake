@@ -1,3 +1,10 @@
+## 2.6.1
+
+Changes:
+
+- Improve Switch / Checkboxes A11Y (c2a4dd7)
+- Update dependencies (3622e5e)
+
 ## 2.6.0
 
 Features:
