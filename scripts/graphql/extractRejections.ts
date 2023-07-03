@@ -18,7 +18,7 @@ const isStringRecord = (value: unknown): value is Record<string, string> =>
   value != null &&
   Object.values(value).every(item => typeof item === "string");
 
-const localesPath = path.resolve(__dirname, "../../../lake/packages/shared-business/src/locales");
+const localesPath = path.resolve(__dirname, "../../packages/shared-business/src/locales");
 
 const run = async () => {
   const keys: string[] = [];
