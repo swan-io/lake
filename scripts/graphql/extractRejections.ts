@@ -21,7 +21,7 @@ const isStringRecord = (value: unknown): value is Record<string, string> =>
 const localesPath = path.resolve(__dirname, "../../packages/shared-business/src/locales");
 
 const run = async () => {
-  const keys: string[] = [];
+  const rejectionKeys: string[] = [];
 
   const visitor: ASTVisitor = {
     [Kind.OBJECT_TYPE_DEFINITION]: {
@@ -32,8 +32,8 @@ const run = async () => {
         if (implementsRejection) {
           const key = `rejection.${node.name.value}`;
 
-          if (!keys.includes(key)) {
-            keys.push(key);
+          if (!rejectionKeys.includes(key)) {
+            rejectionKeys.push(key);
           }
         }
       },
@@ -50,7 +50,7 @@ const run = async () => {
     }),
   );
 
-  keys.sort(); // sort in place
+  rejectionKeys.sort(); // sort in place
 
   fs.readdirSync(localesPath).map(file => {
     const filePath = path.join(localesPath, file);
@@ -61,15 +61,20 @@ const run = async () => {
       throw new Error(`Invalid JSON: ${file}`);
     }
 
-    const filteredKeys =
+    const nonRejectionKeys = Object.keys(currentJson).filter(key => !key.startsWith("rejection."));
+
+    const filteredRejectionKeys =
       file === "en.json"
-        ? keys
-        : keys.filter(key => {
+        ? rejectionKeys
+        : rejectionKeys.filter(key => {
             const value = currentJson[key];
             return value != null && value.trim() !== "";
           });
 
-    const nextJson = Object.fromEntries(filteredKeys.map(key => [key, currentJson[key] ?? ""]));
+    const keys = [...nonRejectionKeys, ...filteredRejectionKeys];
+    keys.sort();
+
+    const nextJson = Object.fromEntries(keys.map(key => [key, currentJson[key] ?? ""]));
     const nextText = JSON.stringify(nextJson, null, 2) + os.EOL;
 
     if (nextText !== currentText) {
