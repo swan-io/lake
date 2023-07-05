@@ -66,14 +66,14 @@ const styles = StyleSheet.create({
     width: (45 / 10) * LOGO_MAX_HEIGHT,
   },
   swanLogo: {
-    width: 26,
     height: 6,
+    width: (45 / 10) * 6,
   },
 });
 
-type ValueProps = {
-  color: "partner" | "gray";
-  kind: "main" | "small" | "address";
+type ItemProps = {
+  color?: "partner" | "gray";
+  kind: "address" | "main" | "small";
   label: string;
   value: string | string[];
 };
@@ -84,7 +84,7 @@ const kindStyles = {
   small: styles.smallText,
 };
 
-const Value = ({ color, kind, label, value }: ValueProps) => (
+const Item = ({ color = "gray", kind, label, value }: ItemProps) => (
   <View>
     <Text style={[styles.label, color === "partner" && styles.partnerLabel]}>{label}</Text>
     <Space height={4} />
@@ -179,9 +179,9 @@ const RIBv1 = ({
         <Space height={24} />
 
         <Box direction="row" alignItems="center">
-          <Value kind="main" color="partner" label={t("rib.iban")} value={iban} />
+          <Item kind="main" color="partner" label={t("rib.iban")} value={iban} />
           <Space width={24} />
-          <Value kind="main" color="partner" label={t("rib.bic")} value={bic} />
+          <Item kind="main" color="partner" label={t("rib.bic")} value={bic} />
         </Box>
 
         <Space height={8} />
@@ -190,44 +190,31 @@ const RIBv1 = ({
           {match(props)
             .with({ accountCountry: "FRA" }, ({ agency, bankKey, bankNumber }) => (
               <>
-                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
+                <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <Value kind="small" color="gray" label={t("rib.agency")} value={agency} />
+                <Item kind="small" label={t("rib.agency")} value={agency} />
                 <Space width={24} />
-                <Value kind="small" color="gray" label={t("rib.number")} value={bankNumber} />
+                <Item kind="small" label={t("rib.number")} value={bankNumber} />
                 <Space width={24} />
-                <Value kind="small" color="gray" label={t("rib.key")} value={bankKey} />
+                <Item kind="small" label={t("rib.key")} value={bankKey} />
               </>
             ))
             .with({ accountCountry: "DEU" }, ({ accountNumber }) => (
               <>
-                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
+                <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-
-                <Value
-                  kind="small"
-                  color="gray"
-                  label={t("rib.accountNumber")}
-                  value={accountNumber}
-                />
+                <Item kind="small" label={t("rib.accountNumber")} value={accountNumber} />
               </>
             ))
             .with({ accountCountry: "ESP" }, ({ agency, bankNumber, nationalCode }) => (
               <>
-                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
+                <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <Value kind="small" color="gray" label={t("rib.agency")} value={agency} />
+                <Item kind="small" label={t("rib.agency")} value={agency} />
                 <Space width={24} />
-
-                <Value
-                  kind="small"
-                  color="gray"
-                  label={t("rib.nationalCode")}
-                  value={nationalCode}
-                />
-
+                <Item kind="small" label={t("rib.nationalCode")} value={nationalCode} />
                 <Space width={24} />
-                <Value kind="small" color="gray" label={t("rib.number")} value={bankNumber} />
+                <Item kind="small" label={t("rib.number")} value={bankNumber} />
               </>
             ))
             .exhaustive()}
@@ -238,7 +225,7 @@ const RIBv1 = ({
 
       <View style={styles.part}>
         <Box direction="row" alignItems="center">
-          <Value
+          <Item
             kind="address"
             color="partner"
             label={t("rib.address")}
@@ -252,7 +239,7 @@ const RIBv1 = ({
 
           <Space width={24} />
 
-          <Value
+          <Item
             kind="address"
             color="partner"
             label={t("rib.accountHolder")}
