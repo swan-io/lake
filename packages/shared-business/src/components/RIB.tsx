@@ -15,60 +15,55 @@ import {
 } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TextStyle, View } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
 
-const LOGO_MAX_HEIGHT = 26;
-const LOGO_MAX_WIDTH = 200;
+const LOGO_MAX_HEIGHT = 24;
+const LOGO_MAX_WIDTH = 150;
 
-const imageStyle: CSSProperties = {
-  objectFit: "contain",
-  objectPosition: "left",
-};
+const getTextStyle = (type: "serif" | "mono", fontSize: number): TextStyle => ({
+  ...(type === "mono" ? { fontFamily: fonts.iban } : interFontStyle),
+  color: colors.gray[900],
+  fontSize,
+  lineHeight: fontSize * 1.25,
+  fontWeight: "400",
+});
 
 const styles = StyleSheet.create({
   container: {
-    width: 470,
     borderRadius: radii[8],
-    backgroundColor: invariantColors.white,
-    borderWidth: 1,
     borderColor: colors.gray[100],
+    borderWidth: 1,
+    backgroundColor: invariantColors.white,
+    width: 470,
   },
   part: {
     padding: spacings[24],
   },
   label: {
-    ...interFontStyle,
-    fontSize: 10,
+    ...getTextStyle("serif", 10),
   },
-  labelPartner: {
+  addressText: {
+    ...getTextStyle("serif", 12),
+  },
+  mainText: {
+    ...getTextStyle("mono", 12),
+  },
+  smallText: {
+    ...getTextStyle("mono", 10),
+  },
+  partnershipText: {
+    ...getTextStyle("serif", 8),
+    color: colors.gray[500],
+  },
+  partnerLabel: {
     color: colors.partner[500],
     fontWeight: "500",
   },
-  mainInfo: {
-    fontFamily: fonts.iban,
-    fontSize: 12,
-    color: colors.gray[900],
-  },
-  smallInfo: {
-    fontFamily: fonts.iban,
-    fontSize: 10,
-    color: colors.gray[900],
-  },
-  addressInfo: {
-    ...interFontStyle,
-    fontSize: 12,
-    color: colors.gray[900],
-  },
-  partnershipText: {
-    ...interFontStyle,
-    fontSize: 8,
-    color: colors.gray[500],
-  },
   defaultLogo: {
     height: LOGO_MAX_HEIGHT,
-    width: 115,
+    width: (45 / 10) * LOGO_MAX_HEIGHT,
   },
   swanLogo: {
     width: 26,
@@ -76,39 +71,43 @@ const styles = StyleSheet.create({
   },
 });
 
-type Address = {
-  name: string;
-  address: string;
-  zipCode: string;
-  city: string;
-  country: string;
-};
-
-type RibValueProps = {
+type ValueProps = {
   color: "partner" | "gray";
+  kind: "main" | "small" | "address";
   label: string;
-  type: "mainInfo" | "smallInfo" | "addressInfo";
   value: string | string[];
 };
 
-const typeStyles = {
-  addressInfo: styles.addressInfo,
-  mainInfo: styles.mainInfo,
-  smallInfo: styles.smallInfo,
+const kindStyles = {
+  address: styles.addressText,
+  main: styles.mainText,
+  small: styles.smallText,
 };
 
-const RibValue = ({ color, label, type, value }: RibValueProps) => (
+const Value = ({ color, kind, label, value }: ValueProps) => (
   <View>
-    <Text style={[styles.label, color === "partner" && styles.labelPartner]}>{label}</Text>
+    <Text style={[styles.label, color === "partner" && styles.partnerLabel]}>{label}</Text>
     <Space height={4} />
 
-    {(typeof value === "string" ? [value] : value).map((line, index) => (
-      <Text key={index} style={typeStyles[type]}>
-        {line}
-      </Text>
-    ))}
+    {typeof value === "string" ? (
+      <Text style={kindStyles[kind]}>{value}</Text>
+    ) : (
+      value.map((line, index) => (
+        <Text key={index} style={kindStyles[kind]}>
+          {line}
+        </Text>
+      ))
+    )}
   </View>
 );
+
+type Address = {
+  address: string;
+  city: string;
+  country: string;
+  name: string;
+  zipCode: string;
+};
 
 type RIBv1Props = {
   version: "v1";
@@ -138,6 +137,11 @@ type RIBv1Props = {
     }
 );
 
+const baseLogoStyle: CSSProperties = {
+  objectFit: "contain",
+  objectPosition: "left",
+};
+
 const RIBv1 = ({
   accountHolderAddress,
   bank,
@@ -154,10 +158,12 @@ const RIBv1 = ({
         <Box direction="row" alignItems="center">
           {isNotNullishOrEmpty(partnerLogoUrl) ? (
             <img
-              height={LOGO_MAX_HEIGHT}
               src={partnerLogoUrl}
-              style={imageStyle}
-              width={LOGO_MAX_WIDTH}
+              style={{
+                ...baseLogoStyle,
+                maxWidth: LOGO_MAX_WIDTH,
+                height: LOGO_MAX_HEIGHT,
+              }}
             />
           ) : (
             <SwanLogo style={styles.defaultLogo} />
@@ -165,7 +171,7 @@ const RIBv1 = ({
 
           <Fill minWidth={24} />
 
-          <LakeHeading level={2} variant="h3" color={colors.gray[900]}>
+          <LakeHeading align="right" level={2} variant="h3" color={colors.gray[900]}>
             {t("rib.bankDetails")}
           </LakeHeading>
         </Box>
@@ -173,9 +179,9 @@ const RIBv1 = ({
         <Space height={24} />
 
         <Box direction="row" alignItems="center">
-          <RibValue type="mainInfo" color="partner" label={t("rib.iban")} value={iban} />
+          <Value kind="main" color="partner" label={t("rib.iban")} value={iban} />
           <Space width={24} />
-          <RibValue type="mainInfo" color="partner" label={t("rib.bic")} value={bic} />
+          <Value kind="main" color="partner" label={t("rib.bic")} value={bic} />
         </Box>
 
         <Space height={8} />
@@ -184,29 +190,22 @@ const RIBv1 = ({
           {match(props)
             .with({ accountCountry: "FRA" }, ({ agency, bankKey, bankNumber }) => (
               <>
-                <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                <Value kind="small" color="gray" label={t("rib.agency")} value={agency} />
                 <Space width={24} />
-
-                <RibValue
-                  type="smallInfo"
-                  color="gray"
-                  label={t("rib.number")}
-                  value={bankNumber}
-                />
-
+                <Value kind="small" color="gray" label={t("rib.number")} value={bankNumber} />
                 <Space width={24} />
-                <RibValue type="smallInfo" color="gray" label={t("rib.key")} value={bankKey} />
+                <Value kind="small" color="gray" label={t("rib.key")} value={bankKey} />
               </>
             ))
             .with({ accountCountry: "DEU" }, ({ accountNumber }) => (
               <>
-                <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
 
-                <RibValue
-                  type="smallInfo"
+                <Value
+                  kind="small"
                   color="gray"
                   label={t("rib.accountNumber")}
                   value={accountNumber}
@@ -215,26 +214,20 @@ const RIBv1 = ({
             ))
             .with({ accountCountry: "ESP" }, ({ agency, bankNumber, nationalCode }) => (
               <>
-                <RibValue type="smallInfo" color="gray" label={t("rib.bank")} value={bank} />
+                <Value kind="small" color="gray" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <RibValue type="smallInfo" color="gray" label={t("rib.agency")} value={agency} />
+                <Value kind="small" color="gray" label={t("rib.agency")} value={agency} />
                 <Space width={24} />
 
-                <RibValue
-                  type="smallInfo"
+                <Value
+                  kind="small"
                   color="gray"
                   label={t("rib.nationalCode")}
                   value={nationalCode}
                 />
 
                 <Space width={24} />
-
-                <RibValue
-                  type="smallInfo"
-                  color="gray"
-                  label={t("rib.number")}
-                  value={bankNumber}
-                />
+                <Value kind="small" color="gray" label={t("rib.number")} value={bankNumber} />
               </>
             ))
             .exhaustive()}
@@ -245,8 +238,8 @@ const RIBv1 = ({
 
       <View style={styles.part}>
         <Box direction="row" alignItems="center">
-          <RibValue
-            type="addressInfo"
+          <Value
+            kind="address"
             color="partner"
             label={t("rib.address")}
             value={[
@@ -259,8 +252,8 @@ const RIBv1 = ({
 
           <Space width={24} />
 
-          <RibValue
-            type="addressInfo"
+          <Value
+            kind="address"
             color="partner"
             label={t("rib.accountHolder")}
             value={[
