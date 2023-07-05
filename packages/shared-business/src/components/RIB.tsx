@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: invariantColors.white,
     width: 470,
   },
-  part: {
+  half: {
     padding: spacings[24],
   },
   label: {
@@ -154,7 +154,7 @@ const RIBv1 = ({
 }: RIBv1Props) => (
   <WithPartnerAccentColor color={partnerColor}>
     <View style={styles.container}>
-      <View style={styles.part}>
+      <View style={styles.half}>
         <Box direction="row" alignItems="center">
           {isNotNullishOrEmpty(partnerLogoUrl) ? (
             <img
@@ -223,7 +223,7 @@ const RIBv1 = ({
 
       <Separator />
 
-      <View style={styles.part}>
+      <View style={styles.half}>
         <Box direction="row" alignItems="center">
           <Item
             kind="address"
