@@ -1,10 +1,10 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { Fill } from "@swan-io/lake/src/components/Fill";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartnerAccentColor";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
   colors,
   fonts,
@@ -137,7 +137,7 @@ type RIBv1Props = {
     }
 );
 
-const baseLogoStyle: CSSProperties = {
+const logoStyle: CSSProperties = {
   objectFit: "contain",
   objectPosition: "left",
 };
@@ -159,19 +159,21 @@ const RIBv1 = ({
           {isNotNullishOrEmpty(partnerLogoUrl) ? (
             <img
               src={partnerLogoUrl}
-              style={{
-                ...baseLogoStyle,
-                maxWidth: LOGO_MAX_WIDTH,
-                height: LOGO_MAX_HEIGHT,
-              }}
+              style={{ ...logoStyle, height: LOGO_MAX_HEIGHT, maxWidth: LOGO_MAX_WIDTH }}
             />
           ) : (
             <SwanLogo style={styles.defaultLogo} />
           )}
 
-          <Fill minWidth={24} />
+          <Space width={24} />
 
-          <LakeHeading align="right" level={2} variant="h3" color={colors.gray[900]}>
+          <LakeHeading
+            align="right"
+            color={colors.gray[900]}
+            level={2}
+            style={commonStyles.fill}
+            variant="h3"
+          >
             {t("rib.bankDetails")}
           </LakeHeading>
         </Box>
