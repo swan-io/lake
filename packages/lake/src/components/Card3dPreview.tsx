@@ -4,20 +4,6 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
 import { match } from "ts-pattern";
-import envNxUrl from "../assets/3d-card/environment/nx.png?url";
-import envNyUrl from "../assets/3d-card/environment/ny.png?url";
-import envNzUrl from "../assets/3d-card/environment/nz.png?url";
-import envPxUrl from "../assets/3d-card/environment/px.png?url";
-import envPyUrl from "../assets/3d-card/environment/py.png?url";
-import envPzUrl from "../assets/3d-card/environment/pz.png?url";
-import fontMaisonNeueBookUrl from "../assets/3d-card/model/MaisonNeue-Book.woff?url";
-import fontMarkProRegularUrl from "../assets/3d-card/model/MarkPro-Regular.ttf?url";
-import bandRoughnessUrl from "../assets/3d-card/model/band_roughness.jpg?url";
-import cardGltfUrl from "../assets/3d-card/model/card.gltf?url";
-import chipUrl from "../assets/3d-card/model/chip.jpg?url";
-import colorBlackUrl from "../assets/3d-card/model/color_black.jpg?url";
-import colorSilverUrl from "../assets/3d-card/model/color_silver.jpg?url";
-import shinyColorFragmentShader from "../assets/3d-card/shaders/shinyColorFragment.glsl?raw";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
@@ -42,6 +28,20 @@ To reproduce the shiny effect on the back of the card, we inject a custom shader
 This custom shader chunk change the diffuse color depending on camera position.
 */
 
+const shinyColorFragmentShader = `
+float red = cameraPosition.x * cameraPosition.z;
+float green = cameraPosition.y * cameraPosition.z;
+float blue = 0.1;
+
+red = sin(red / 5.0) + 1.0 / 2.0;
+green = sin(green / 5.0) + 1.0 / 2.0;
+
+vec3 shinyColor = vec3(red, green, blue);
+float shinyFactor = 0.35;
+
+diffuseColor.rgb = mix(diffuseColor.rgb, shinyColor, shinyFactor);
+`;
+
 const ENV_MAP_INTENSITY = 3;
 const CARD_WIDTH = 8.56;
 const CARD_HEIGHT = 5.4;
@@ -52,6 +52,22 @@ const LOGO_MARGIN_RIGHT = 0.3;
 const LOGO_MAX_WIDTH = 5; // in cm
 const LOGO_MAX_HEIGHT = 1; // in cm
 
+export type Card3dAssetsUrls = {
+  envNx: string;
+  envNy: string;
+  envNz: string;
+  envPx: string;
+  envPy: string;
+  envPz: string;
+  fontMaisonNeueBook: string;
+  fontMarkProRegular: string;
+  bandRoughness: string;
+  cardGltf: string;
+  chipTexture: string;
+  colorBlack: string;
+  colorSilver: string;
+};
+
 type CardParams = {
   ownerName: string;
   cardNumber: string;
@@ -60,6 +76,7 @@ type CardParams = {
   color: "Silver" | "Black";
   logo: SVGElement | null;
   logoScale: number;
+  assetsUrls: Card3dAssetsUrls;
   onSvgError?: (code: string) => void;
 };
 
@@ -100,6 +117,7 @@ export default (props: Props) => {
 };
 
 const CardScene = ({ autoRotationDuration, ...props }: Props) => {
+  const { assetsUrls } = props;
   const card = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
@@ -113,7 +131,18 @@ const CardScene = ({ autoRotationDuration, ...props }: Props) => {
       <ambientLight color={0xffffff} intensity={1} />
       <pointLight intensity={0.2} decay={2} position={[-10, -10, -21]} />
       <pointLight intensity={0.2} decay={2} position={[10, 10, 21]} />
-      <Environment files={[envPxUrl, envNxUrl, envPyUrl, envNyUrl, envPzUrl, envNzUrl]} />
+
+      <Environment
+        files={[
+          assetsUrls.envPx,
+          assetsUrls.envNx,
+          assetsUrls.envPy,
+          assetsUrls.envNy,
+          assetsUrls.envPz,
+          assetsUrls.envNz,
+        ]}
+      />
+
       <Card ref={card} {...props} />
     </>
   );
@@ -163,19 +192,30 @@ const setTextureColorSpace = (texture: THREE.Texture | THREE.Texture[]) => {
 
 export const Card = forwardRef<THREE.Group, CardProps>(
   (
-    { ownerName, cardNumber, expirationDate, cvv, color, logo, logoScale, onSvgError, ...props },
+    {
+      ownerName,
+      cardNumber,
+      expirationDate,
+      cvv,
+      color,
+      logo,
+      logoScale,
+      assetsUrls,
+      onSvgError,
+      ...props
+    },
     ref,
   ) => {
-    const { nodes, materials } = useGLTF(cardGltfUrl) as CardGLTFResult;
+    const { nodes, materials } = useGLTF(assetsUrls.cardGltf) as CardGLTFResult;
     const [logoData, setLogoData] = useState<{
       size: [number, number];
       alphaMap: THREE.Texture;
     } | null>(null);
 
-    const silverTexture = useTexture(colorSilverUrl, setTextureColorSpace);
-    const blackTexture = useTexture(colorBlackUrl, setTextureColorSpace);
-    const chipTexture = useTexture(chipUrl, setTextureColorSpace);
-    const bandRoughnessTexture = useTexture(bandRoughnessUrl); // keep default color space because it's grayscale
+    const silverTexture = useTexture(assetsUrls.colorSilver, setTextureColorSpace);
+    const blackTexture = useTexture(assetsUrls.colorBlack, setTextureColorSpace);
+    const chipTexture = useTexture(assetsUrls.chipTexture, setTextureColorSpace);
+    const bandRoughnessTexture = useTexture(assetsUrls.bandRoughness); // keep default color space because it's grayscale
 
     // Set environment map intensity for all materials
     useEffect(() => {
@@ -275,7 +315,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
           <group position={[0, 0, FRONT_TEXT_POSITION]}>
             {/* Card owner name */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.2}
               anchorX="left"
               anchorY={"bottom"}
@@ -287,7 +327,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* TM next to master card logo */}
             <Text
-              font={fontMarkProRegularUrl}
+              font={assetsUrls.fontMarkProRegular}
               fontSize={0.03}
               anchorX="left"
               anchorY={"bottom"}
@@ -302,7 +342,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
           <group position={[0, 0, BACK_TEXT_POSITION]}>
             {/* Support address */}
             <Text
-              font={fontMarkProRegularUrl}
+              font={assetsUrls.fontMarkProRegular}
               anchorX="left"
               anchorY={"bottom"}
               fontSize={0.12}
@@ -315,7 +355,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Idemia */}
             <Text
-              font={fontMarkProRegularUrl}
+              font={assetsUrls.fontMarkProRegular}
               anchorX="right"
               anchorY={"bottom"}
               fontSize={0.12}
@@ -328,7 +368,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Identifier */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.24}
               anchorX="left"
               anchorY={"bottom"}
@@ -341,7 +381,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Issue by */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.2}
               anchorX="left"
               anchorY={"bottom"}
@@ -353,7 +393,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
             </Text>
 
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.2}
               anchorX="left"
               anchorY={"bottom"}
@@ -366,7 +406,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Card number */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.48}
               anchorX="left"
               anchorY={"bottom"}
@@ -379,7 +419,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Expire date */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.29}
               anchorX="left"
               anchorY={"bottom"}
@@ -392,7 +432,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* CVC */}
             <Text
-              font={fontMaisonNeueBookUrl}
+              font={assetsUrls.fontMaisonNeueBook}
               fontSize={0.29}
               anchorX="left"
               anchorY={"bottom"}
@@ -405,7 +445,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
 
             {/* Debit */}
             <Text
-              font={fontMarkProRegularUrl}
+              font={assetsUrls.fontMarkProRegular}
               anchorX="center"
               anchorY={"bottom"}
               fontSize={0.36}
