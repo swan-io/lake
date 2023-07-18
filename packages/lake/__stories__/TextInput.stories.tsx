@@ -94,9 +94,9 @@ export const Variations = () => {
         <EditableInputText unit="$" />
       </StoryPart>
 
-      <StoryPart title="With custom injected component">
+      <StoryPart title="With end icon and custom injected component">
         <EditableInputText
-          error="teest"
+          error="Hey"
           renderEnd={() => (
             <>
               <LakeCopyButton copyText="Copy" copiedText="Copied" valueToCopy="Copy me" />
