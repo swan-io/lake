@@ -77,13 +77,13 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: colors.gray[50],
-    // borderColor: colors.gray[50],
+    borderColor: colors.gray[50],
     color: colors.gray[900],
     cursor: "not-allowed",
   },
   readOnly: {
     backgroundColor: colors.gray[50],
-    // borderColor: colors.gray[50],
+    borderColor: colors.gray[50],
     color: colors.gray[900],
   },
   error: {
@@ -178,7 +178,6 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       valid = false,
       readOnly = false,
       icon,
-      count,
       children,
       unit,
       color = "gray",
@@ -242,18 +241,14 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
               style={[
                 styles.contents,
                 isHovered && isInteractive && styles.hovered,
-                isFocused && styles.focused,
                 isFocused && { borderColor: colors[color][500] },
-
                 readOnly && hasError && styles.readOnlyError,
                 disabled && styles.disabled,
                 readOnly && styles.readOnly,
-
+                isFocused && styles.focused,
                 isNotNullish(unit) && styles.inputWithUnit,
-
                 hasError && styles.error,
                 valid && styles.valid,
-
                 stylesFromProps,
               ]}
             >
