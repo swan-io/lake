@@ -312,15 +312,15 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
 
         {!hideErrors && (
           <Box direction="row" style={styles.errorContainer}>
-            {isNullish(help) || isNotNullish(error) ? (
+            {isNotNullish(error) ? (
               <LakeText variant="smallRegular" color={colors.negative[500]}>
-                {error ?? " "}
+                {error}
               </LakeText>
-            ) : isNotNullish(help) ? (
+            ) : (
               <LakeText variant="smallRegular" color={colors.gray[500]}>
-                {help}
+                {help ?? " "}
               </LakeText>
-            ) : null}
+            )}
 
             {isNotNullish(maxCharCount) && (
               <>
