@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { LakeSearchField } from "../src/components/LakeSearchField";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
+import { Tag } from "../src/components/Tag";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -37,6 +38,15 @@ export const Variations = () => {
 
         <Space height={12} />
         <LakeText>Debounced value: {text2}</LakeText>
+      </StoryPart>
+
+      <StoryPart title="With counter">
+        <LakeSearchField
+          initialValue="Initial value"
+          placeholder="Placeholder"
+          onChangeText={setText2}
+          renderEnd={() => <Tag>44</Tag>}
+        />
       </StoryPart>
     </StoryBlock>
   );
