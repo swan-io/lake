@@ -1,3 +1,14 @@
+## 2.7.0
+
+Features:
+
+- Add rejections translations to shared-business (71ad0fc4, 25af8227)
+- Add ability to add a counter to TextInput (0da31f23)
+
+Changes:
+
+- Improve RIB template (a0355627)
+
 ## 2.6.1
 
 Changes:
