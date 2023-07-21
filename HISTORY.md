@@ -1,3 +1,9 @@
+## 2.7.2
+
+Fixes:
+
+- Fixed a bug that caused an infinite loop on FixedListView tab navigation (dde7ca17)
+
 ## 2.7.1
 
 Changes:
