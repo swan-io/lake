@@ -298,8 +298,6 @@ export const gradients = {
   oblique: "var(--gradient-oblique)",
 } as const;
 
-type CSSVariable = `var(--${string})`;
-
 export const interFontStyle = {
   fontFamily: [
     "Inter",
@@ -320,7 +318,7 @@ export const interFontStyle = {
   letterSpacing: "-0.011em" as unknown as number,
 };
 
-const asTextStyle = (x: { [K in keyof TextStyle]: CSSVariable | string | number }) => {
+const asTextStyle = (x: { [K in keyof TextStyle]: string | number }) => {
   return x as unknown as TextStyle;
 };
 

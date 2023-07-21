@@ -194,7 +194,7 @@ export const UploadArea = ({
     <View style={commonStyles.fill}>
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
         <View
-          aria-errormessage={error != null ? error : fileRejections[0]?.errors.join(", ")}
+          aria-errormessage={error ?? fileRejections[0]?.errors.join(", ")}
           style={[
             styles.container,
             disabled && styles.disabled,
