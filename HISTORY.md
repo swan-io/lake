@@ -1,3 +1,9 @@
+## 2.7.1
+
+Changes:
+
+- Update dependencies (fae5dc8)
+
 ## 2.7.0
 
 Features:
