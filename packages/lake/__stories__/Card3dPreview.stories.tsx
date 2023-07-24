@@ -3,8 +3,21 @@ import { Future, Result } from "@swan-io/boxed";
 import { UploadArea } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import envNxUrl from "../src/assets/3d-card/environment/nx.png?url";
+import envNyUrl from "../src/assets/3d-card/environment/ny.png?url";
+import envNzUrl from "../src/assets/3d-card/environment/nz.png?url";
+import envPxUrl from "../src/assets/3d-card/environment/px.png?url";
+import envPyUrl from "../src/assets/3d-card/environment/py.png?url";
+import envPzUrl from "../src/assets/3d-card/environment/pz.png?url";
+import fontMaisonNeueBookUrl from "../src/assets/3d-card/model/MaisonNeue-Book.woff?url";
+import fontMarkProRegularUrl from "../src/assets/3d-card/model/MarkPro-Regular.ttf?url";
+import bandRoughnessUrl from "../src/assets/3d-card/model/band_roughness.jpg?url";
+import cardGltfUrl from "../src/assets/3d-card/model/card.gltf?url";
+import chipUrl from "../src/assets/3d-card/model/chip.jpg?url";
+import colorBlackUrl from "../src/assets/3d-card/model/color_black.jpg?url";
+import colorSilverUrl from "../src/assets/3d-card/model/color_silver.jpg?url";
 import { Box } from "../src/components/Box";
-import Card3dPreview from "../src/components/Card3dPreview";
+import Card3dPreview, { Card3dAssetsUrls } from "../src/components/Card3dPreview";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeSlider } from "../src/components/LakeSlider";
 import { LakeTextInput } from "../src/components/LakeTextInput";
@@ -12,6 +25,22 @@ import { RadioGroup } from "../src/components/RadioGroup";
 import { Space } from "../src/components/Space";
 import { deburr } from "../src/utils/string";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+
+const assetsUrls: Card3dAssetsUrls = {
+  envNx: envNxUrl,
+  envNy: envNyUrl,
+  envNz: envNzUrl,
+  envPx: envPxUrl,
+  envPy: envPyUrl,
+  envPz: envPzUrl,
+  fontMaisonNeueBook: fontMaisonNeueBookUrl,
+  fontMarkProRegular: fontMarkProRegularUrl,
+  bandRoughness: bandRoughnessUrl,
+  cardGltf: cardGltfUrl,
+  chipTexture: chipUrl,
+  colorBlack: colorBlackUrl,
+  colorSilver: colorSilverUrl,
+};
 
 const styles = StyleSheet.create({
   canvasContainer: {
@@ -191,6 +220,7 @@ export const Card = () => {
 
         <View style={styles.canvasContainer}>
           <Card3dPreview
+            assetsUrls={assetsUrls}
             color={config.color}
             ownerName={config.ownerName}
             logo={config.svgLogo}
@@ -220,6 +250,7 @@ export const AutoRotation = () => {
 
         <View style={styles.canvasContainer}>
           <Card3dPreview
+            assetsUrls={assetsUrls}
             autoRotationDuration={10}
             color={config.color}
             ownerName={config.ownerName}
