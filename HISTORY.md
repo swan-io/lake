@@ -1,3 +1,9 @@
+## 2.7.3
+
+Fixes:
+
+- Fixed focus management on tab navigation on Combobox (069f3271)
+
 ## 2.7.2
 
 Fixes:
