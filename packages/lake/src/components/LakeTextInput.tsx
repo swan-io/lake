@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     placeholderTextColor: colors.gray[400],
     color: colors.gray[900],
     paddingHorizontal: spacings[8],
-    height: 40,
+    height: 38,
     minWidth: 0,
   },
   multilineInput: {
