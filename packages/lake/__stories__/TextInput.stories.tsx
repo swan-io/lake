@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   input: {
     maxWidth: 400,
   },
+  fixedHeightInput: { height: 128 },
 });
 
 export default {
@@ -84,6 +85,14 @@ export const Variations = () => {
 
       <StoryPart title="Multi line">
         <EditableInputText multiline={true} />
+      </StoryPart>
+
+      <StoryPart title="Multi line">
+        <EditableInputText
+          multiline={true}
+          style={styles.fixedHeightInput}
+          placeholder="Placeholder"
+        />
       </StoryPart>
 
       <StoryPart title="With icon">
