@@ -2,13 +2,16 @@ import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
+import { LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeTextInput, LakeTextInputProps } from "../src/components/LakeTextInput";
+import { Tag } from "../src/components/Tag";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
   input: {
     maxWidth: 400,
   },
+  fixedHeightInput: { height: 128 },
 });
 
 export default {
@@ -84,12 +87,32 @@ export const Variations = () => {
         <EditableInputText multiline={true} />
       </StoryPart>
 
+      <StoryPart title="Multi line">
+        <EditableInputText
+          multiline={true}
+          style={styles.fixedHeightInput}
+          placeholder="Placeholder"
+        />
+      </StoryPart>
+
       <StoryPart title="With icon">
         <EditableInputText icon="chat-help-regular" />
       </StoryPart>
 
       <StoryPart title="With unit">
         <EditableInputText unit="$" />
+      </StoryPart>
+
+      <StoryPart title="With end icon and custom injected component">
+        <EditableInputText
+          error="Hey"
+          renderEnd={() => (
+            <>
+              <LakeCopyButton copyText="Copy" copiedText="Copied" valueToCopy="Copy me" />
+              <Tag>Example tag</Tag>
+            </>
+          )}
+        />
       </StoryPart>
     </StoryBlock>
   );

@@ -60,8 +60,7 @@ export const showToast = ({ variant, title, description, autoClose }: ToastConte
   }
 
   // by default, only info and success toasts are auto-closing
-  const isAutoClosingToast =
-    autoClose != null ? autoClose : variant === "info" || variant === "success";
+  const isAutoClosingToast = autoClose ?? (variant === "info" || variant === "success");
 
   const progress = isAutoClosingToast ? new Animated.Value(1) : undefined;
 

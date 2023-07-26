@@ -100,6 +100,7 @@ export const Switch = memo(
       <Pressable
         ref={ref}
         role="switch"
+        aria-checked={value}
         disabled={disabled}
         onPress={() => onValueChange?.(!value)}
       >

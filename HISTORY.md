@@ -1,3 +1,39 @@
+## 2.7.3
+
+Fixes:
+
+- Fixed focus management on tab navigation on Combobox (069f3271)
+
+## 2.7.2
+
+Fixes:
+
+- Fixed a bug that caused an infinite loop on FixedListView tab navigation (dde7ca17)
+
+## 2.7.1
+
+Changes:
+
+- Update dependencies (fae5dc8)
+
+## 2.7.0
+
+Features:
+
+- Add rejections translations to shared-business (71ad0fc4, 25af8227)
+- Add ability to add a counter to TextInput (0da31f23)
+
+Changes:
+
+- Improve RIB template (a0355627)
+
+## 2.6.1
+
+Changes:
+
+- Improve Switch / Checkboxes A11Y (c2a4dd7)
+- Update dependencies (3622e5e)
+
 ## 2.6.0
 
 Features:

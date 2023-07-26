@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    flexShrink: 1,
     flexDirection: "row",
     alignItems: "stretch",
   },
@@ -45,24 +44,28 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     flexDirection: "row",
-    alignItems: "stretch",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radii[6],
+    backgroundColor: backgroundColor.accented,
+    borderColor: colors.gray[100],
+    borderWidth: 1,
+    paddingHorizontal: spacings[8],
   },
   input: {
     ...texts.regular,
-    paddingHorizontal: spacings[16],
+    flexGrow: 1,
     outlineStyle: "none",
-    height: 40,
-    borderColor: colors.gray[100],
     placeholderTextColor: colors.gray[400],
-    borderWidth: 1,
-    borderRadius: radii[6],
-    backgroundColor: backgroundColor.accented,
     color: colors.gray[900],
-    width: "100%",
-    flexShrink: 1,
+    paddingHorizontal: spacings[8],
+    height: 38,
+    minWidth: 0,
   },
   multilineInput: {
-    height: "auto",
+    height: "100%",
     padding: spacings[8],
   },
   inputWithUnit: {
@@ -83,37 +86,33 @@ const styles = StyleSheet.create({
     borderColor: colors.gray[50],
     color: colors.gray[900],
   },
-  withIcon: {
-    paddingLeft: spacings[48],
-  },
   error: {
     borderColor: colors.negative[400],
-    paddingRight: spacings[48],
   },
   valid: {
     borderColor: colors.positive[500],
-    paddingRight: spacings[48],
   },
   readOnlyError: {
     borderColor: TRANSPARENT,
     paddingRight: spacings[32],
   },
   endIcon: {
-    position: "absolute",
-    right: spacings[16],
-    top: "50%",
-    transform: "translateY(-50%)",
+    marginHorizontal: spacings[8],
+  },
+  endComponents: {
+    flexDirection: "row",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: spacings[8],
   },
   icon: {
-    position: "absolute",
-    left: spacings[16],
-    top: "50%",
-    transform: "translateY(-50%)",
+    marginLeft: spacings[8],
+    margiRight: spacings[4],
   },
   readOnlyEndIcon: {
     right: 0,
   },
-
   unit: {
     backgroundColor: colors.gray[50],
     paddingHorizontal: spacings[16],
@@ -165,6 +164,7 @@ export type LakeTextInputProps = Except<
   onChange?: ChangeEventHandler<HTMLInputElement>;
   maxCharCount?: number;
   help?: string;
+  renderEnd?: () => ReactNode;
 };
 
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
@@ -191,10 +191,12 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       value,
       defaultValue,
       multiline = false,
-      //maxCharCount is different from maxLength(props inherited of TextInput), maxLength truncates the text in the limitation asked,
+      //maxCharCount is different from maxLength(props inherited of TextInput)
+      //maxLength truncates the text in the limitation asked,
       //maxCharCount doesn't have limitation but displays a counter of characters
       maxCharCount,
       help,
+      renderEnd,
       ...props
     }: LakeTextInputProps,
     forwardRef,
@@ -235,7 +237,25 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       <View style={commonStyles.fill}>
         <View style={styles.root} aria-errormessage={error}>
           <View style={styles.container}>
-            <View style={styles.contents}>
+            <View
+              style={[
+                styles.contents,
+                isHovered && isInteractive && styles.hovered,
+                isFocused && { borderColor: colors[color][500] },
+                readOnly && hasError && styles.readOnlyError,
+                disabled && styles.disabled,
+                readOnly && styles.readOnly,
+                isFocused && styles.focused,
+                isNotNullish(unit) && styles.inputWithUnit,
+                hasError && styles.error,
+                valid && styles.valid,
+                stylesFromProps,
+              ]}
+            >
+              {isNotNullish(icon) && (
+                <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
+              )}
+
               <TextInput
                 aria-expanded={ariaExpanded}
                 aria-controls={ariaControls}
@@ -252,19 +272,13 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 style={[
                   styles.input,
                   multiline && styles.multilineInput,
-                  hasError && styles.error,
-                  valid && styles.valid,
-                  isNotNullish(icon) && styles.withIcon,
                   readOnly && hasError && styles.readOnlyError,
                   disabled && styles.disabled,
                   readOnly && styles.readOnly,
-                  isHovered && isInteractive && styles.hovered,
-                  isNotNullish(unit) && styles.inputWithUnit,
-                  isFocused && styles.focused,
-                  isFocused && { borderColor: colors[color][500] },
-                  stylesFromProps,
                 ]}
               />
+
+              {isNotNullish(renderEnd) && <View style={styles.endComponents}>{renderEnd()}</View>}
 
               {validating && (
                 <ActivityIndicator
@@ -291,10 +305,6 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                   style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
                 />
               )}
-
-              {isNotNullish(icon) && (
-                <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
-              )}
             </View>
 
             {isNotNullish(unit) && (
@@ -312,16 +322,13 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
 
         {!hideErrors && (
           <Box direction="row" style={styles.errorContainer}>
-            {isNotNullish(help) ? (
-              <LakeText
-                variant="smallRegular"
-                color={isNotNullish(error) ? colors.negative[500] : colors.gray[500]}
-              >
-                {help}
+            {isNotNullish(error) ? (
+              <LakeText variant="smallRegular" color={colors.negative[500]}>
+                {error}
               </LakeText>
             ) : (
-              <LakeText variant="smallRegular" color={colors.negative[500]}>
-                {error ?? " "}
+              <LakeText variant="smallRegular" color={colors.gray[500]}>
+                {help ?? " "}
               </LakeText>
             )}
 

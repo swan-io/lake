@@ -264,8 +264,8 @@ const LakeComboboxWithRef = <I,>(
         matchReferenceWidth={true}
         onDismiss={close}
         referenceRef={ref}
-        autoFocus={true}
-        returnFocus={false}
+        autoFocus={false}
+        returnFocus={true}
         visible={isFocused && !items.isNotAsked()}
         underlay={false}
         forcedMode="Dropdown"
@@ -319,7 +319,7 @@ const LakeComboboxWithRef = <I,>(
                               onPress={() => {
                                 window.clearTimeout(blurTimeoutId.current);
                                 setIsFetchingAdditionalInfo(true);
-                                Promise.resolve(onSelectItem(item)).finally(() => {
+                                void Promise.resolve(onSelectItem(item)).finally(() => {
                                   setIsFetchingAdditionalInfo(false);
                                   close();
                                 });

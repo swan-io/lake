@@ -63,6 +63,7 @@ const baseLocale: Locale = "en";
 
 const appTranslationsPaths = {
   "shared-business": path.join(process.cwd(), "packages", "shared-business", "src", "locales"),
+  rejections: path.join(process.cwd(), "scripts", "graphql", "locales"),
 };
 
 type AppName = keyof typeof appTranslationsPaths;
