@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   multilineInput: {
-    height: "auto",
+    height: "100%",
     padding: spacings[8],
   },
   inputWithUnit: {
