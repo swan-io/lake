@@ -1,4 +1,12 @@
-import { ChangeEventHandler, forwardRef, ReactNode, useCallback, useRef, useState } from "react";
+import {
+  ChangeEventHandler,
+  forwardRef,
+  ReactNode,
+  Ref,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -165,6 +173,7 @@ export type LakeTextInputProps = Except<
   maxCharCount?: number;
   help?: string;
   renderEnd?: () => ReactNode;
+  containerRef?: Ref<View>;
 };
 
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
@@ -191,6 +200,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       value,
       defaultValue,
       multiline = false,
+      containerRef,
       //maxCharCount is different from maxLength(props inherited of TextInput)
       //maxLength truncates the text in the limitation asked,
       //maxCharCount doesn't have limitation but displays a counter of characters
@@ -251,6 +261,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 valid && styles.valid,
                 stylesFromProps,
               ]}
+              ref={containerRef}
             >
               {isNotNullish(icon) && (
                 <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
@@ -260,7 +271,6 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 aria-expanded={ariaExpanded}
                 aria-controls={ariaControls}
                 inputMode={inputMode}
-                ref={mergedRef}
                 {...props}
                 defaultValue={defaultValue}
                 value={isNullish(defaultValue) ? value ?? "" : value}
@@ -269,6 +279,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 readOnly={!isInteractive}
                 onChange={onChange as TextInputProps["onChange"]}
                 multiline={multiline}
+                ref={mergedRef}
                 style={[
                   styles.input,
                   multiline && styles.multilineInput,

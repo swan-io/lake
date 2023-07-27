@@ -163,10 +163,10 @@ const LakeComboboxWithRef = <I,>(
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
-  const containerRef = useRef<View>(null);
   const ref = useRef<TextInput>(null);
 
   const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
+
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
@@ -236,9 +236,9 @@ const LakeComboboxWithRef = <I,>(
   }, [close]);
 
   return (
-    <View ref={containerRef}>
+    <View>
       <LakeTextInput
-        ref={inputTextRef as Ref<TextInput>}
+        containerRef={inputTextRef as Ref<View>}
         style={styles.input}
         ariaExpanded={isFocused}
         ariaControls={isFocused ? suggestionsId : ""}
@@ -264,7 +264,7 @@ const LakeComboboxWithRef = <I,>(
         role="listbox"
         matchReferenceWidth={true}
         onDismiss={close}
-        referenceRef={containerRef}
+        referenceRef={ref}
         autoFocus={false}
         returnFocus={true}
         visible={isFocused && !items.isNotAsked()}
