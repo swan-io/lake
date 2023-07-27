@@ -1,4 +1,12 @@
-import { ChangeEventHandler, forwardRef, ReactNode, Ref, useCallback, useRef, useState } from "react";
+import {
+  ChangeEventHandler,
+  forwardRef,
+  ReactNode,
+  Ref,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -165,7 +173,7 @@ export type LakeTextInputProps = Except<
   maxCharCount?: number;
   help?: string;
   renderEnd?: () => ReactNode;
-  containerRef?: Ref<View>,
+  containerRef?: Ref<View>;
 };
 
 export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(

@@ -166,10 +166,7 @@ const LakeComboboxWithRef = <I,>(
 ) => {
   const ref = useRef<TextInput>(null);
 
-  const inputTextRef = useMergeRefs(
-    ref,
-    inputRef as RefObject<unknown>,
-  );
+  const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
 
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
