@@ -163,6 +163,7 @@ const LakeComboboxWithRef = <I,>(
   }: LakeComboboxProps<I>,
   externalRef: ForwardedRef<LakeComboboxRef>,
 ) => {
+  const containerRef = useRef<View>(null);
   const ref = useRef<TextInput>(null);
 
   const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
@@ -235,7 +236,7 @@ const LakeComboboxWithRef = <I,>(
   }, [close]);
 
   return (
-    <View>
+    <View ref={containerRef}>
       <LakeTextInput
         ref={inputTextRef as Ref<TextInput>}
         style={styles.input}
@@ -263,7 +264,7 @@ const LakeComboboxWithRef = <I,>(
         role="listbox"
         matchReferenceWidth={true}
         onDismiss={close}
-        referenceRef={ref}
+        referenceRef={containerRef}
         autoFocus={false}
         returnFocus={true}
         visible={isFocused && !items.isNotAsked()}
