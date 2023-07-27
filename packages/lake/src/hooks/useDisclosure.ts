@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 export const useDisclosure = (
   initialValue: boolean,
+  onClose?: () => void,
 ): [
   visible: boolean,
   fns: {
@@ -17,7 +18,10 @@ export const useDisclosure = (
     useMemo(
       () => ({
         open: () => setValue(true),
-        close: () => setValue(false),
+        close: () => {
+          setValue(false);
+          onClose?.();
+        },
         toggle: () => setValue(prevValue => !prevValue),
       }),
       [],
