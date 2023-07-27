@@ -1,2 +1,0 @@
-import{r as t}from"./index-76fb7be0.js";import{r as s}from"./index-d3ea75b5.js";import{C as c,u as l}from"./WithCurrentColor-1700af49.js";const o=({children:r,container:e})=>{const a=t.useContext(c),n=t.useRef(e);return l(n,a),s.createPortal(r,e)};try{o.displayName="Portal",o.__docgenInfo={description:"",displayName:"Portal",props:{container:{defaultValue:null,description:"",name:"container",required:!0,type:{name:"Element"}}}}}catch{}export{o as P};
-//# sourceMappingURL=Portal-e25724c3.js.map
