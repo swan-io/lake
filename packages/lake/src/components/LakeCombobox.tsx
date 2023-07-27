@@ -117,7 +117,6 @@ const getItemLayout: <I>(
 
 export type LakeComboboxProps<I> = {
   inputRef?: RefObject<unknown>;
-  inputContainerRef?: RefObject<unknown>;
   value: string;
   items: AsyncData<Result<I[], unknown>>;
   itemHeight?: number;
