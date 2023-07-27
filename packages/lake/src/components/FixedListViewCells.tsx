@@ -283,12 +283,14 @@ export const BalanceCell = ({
   originalValue,
   formatCurrency,
   textAlign = "right",
+  variant = "medium",
 }: {
   value: number;
   currency: string;
   originalValue?: { value: number; currency: string };
   formatCurrency: (value: number, currency: string) => string;
   textAlign?: "left" | "center" | "right";
+  variant?: TextVariant;
 }) => {
   return (
     <View style={styles.balanceCellContainer}>
@@ -296,7 +298,7 @@ export const BalanceCell = ({
         <LakeText
           align={textAlign}
           color={colors.gray[900]}
-          variant="medium"
+          variant={variant}
           style={[
             styles.mediumText,
             {
