@@ -117,6 +117,7 @@ const getItemLayout: <I>(
 
 export type LakeComboboxProps<I> = {
   inputRef?: RefObject<unknown>;
+  inputContainerRef?: RefObject<unknown>;
   value: string;
   items: AsyncData<Result<I[], unknown>>;
   itemHeight?: number;
@@ -165,7 +166,11 @@ const LakeComboboxWithRef = <I,>(
 ) => {
   const ref = useRef<TextInput>(null);
 
-  const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
+  const inputTextRef = useMergeRefs(
+    ref,
+    inputRef as RefObject<unknown>,
+  );
+
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
@@ -237,7 +242,7 @@ const LakeComboboxWithRef = <I,>(
   return (
     <View>
       <LakeTextInput
-        ref={inputTextRef as Ref<TextInput>}
+        containerRef={inputTextRef as Ref<View>}
         style={styles.input}
         ariaExpanded={isFocused}
         ariaControls={isFocused ? suggestionsId : ""}
