@@ -336,10 +336,12 @@ export const LinkCell = ({
   children,
   external = false,
   onPress,
+  variant = "medium",
 }: {
   children: ReactNode;
   onPress: () => void;
   external?: boolean;
+  variant?: TextVariant
 }) => {
   return (
     <View style={styles.cell}>
@@ -355,7 +357,7 @@ export const LinkCell = ({
 
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} variant="medium" style={styles.mediumText}>
+      <LakeText color={colors.gray[900]} variant={variant} style={styles.mediumText}>
         {children}
       </LakeText>
     </View>
