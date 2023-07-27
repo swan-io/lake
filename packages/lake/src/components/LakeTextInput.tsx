@@ -251,6 +251,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 valid && styles.valid,
                 stylesFromProps,
               ]}
+              ref={mergedRef}
             >
               {isNotNullish(icon) && (
                 <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
@@ -260,7 +261,6 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 aria-expanded={ariaExpanded}
                 aria-controls={ariaControls}
                 inputMode={inputMode}
-                ref={mergedRef}
                 {...props}
                 defaultValue={defaultValue}
                 value={isNullish(defaultValue) ? value ?? "" : value}
