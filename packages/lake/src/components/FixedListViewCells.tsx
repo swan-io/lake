@@ -283,12 +283,14 @@ export const BalanceCell = ({
   originalValue,
   formatCurrency,
   textAlign = "right",
+  variant = "medium",
 }: {
   value: number;
   currency: string;
   originalValue?: { value: number; currency: string };
   formatCurrency: (value: number, currency: string) => string;
   textAlign?: "left" | "center" | "right";
+  variant?: TextVariant;
 }) => {
   return (
     <View style={styles.balanceCellContainer}>
@@ -296,7 +298,7 @@ export const BalanceCell = ({
         <LakeText
           align={textAlign}
           color={colors.gray[900]}
-          variant="medium"
+          variant={variant}
           style={[
             styles.mediumText,
             {
@@ -336,10 +338,12 @@ export const LinkCell = ({
   children,
   external = false,
   onPress,
+  variant = "medium",
 }: {
   children: ReactNode;
   onPress: () => void;
   external?: boolean;
+  variant?: TextVariant
 }) => {
   return (
     <View style={styles.cell}>
@@ -355,7 +359,7 @@ export const LinkCell = ({
 
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} variant="medium" style={styles.mediumText}>
+      <LakeText color={colors.gray[900]} variant={variant} style={styles.mediumText}>
         {children}
       </LakeText>
     </View>

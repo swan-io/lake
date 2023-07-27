@@ -1,3 +1,18 @@
+## 2.7.4
+
+Features:
+
+- Add `variant` prop to balance & link cell (123e3e2, b2b137e)
+
+Changes:
+
+- Make inputs 42px tall (8966470)
+- Refactored FixedListView (3d2095f)
+
+Fixes:
+
+- Fix multiline input height (b21ac08)
+
 ## 2.7.3
 
 Fixes:
