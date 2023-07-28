@@ -170,8 +170,9 @@ const LakeComboboxWithRef = <I,>(
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
-  const [isFocused, { open, close }] = useDisclosure(false);
+  const [isFocused, { open, close }] = useDisclosure(false, () => setHasChanged(false));
   const [isFetchingAdditionalInfo, setIsFetchingAdditionalInfo] = useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
 
   useImperativeHandle(externalRef, () => {
     return {
@@ -251,7 +252,10 @@ const LakeComboboxWithRef = <I,>(
         error={error}
         hideErrors={hideErrors}
         onChangeText={onValueChange}
-        onChange={onChange}
+        onChange={event => {
+          setHasChanged(true);
+          onChange?.(event);
+        }}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
@@ -267,7 +271,7 @@ const LakeComboboxWithRef = <I,>(
         referenceRef={ref}
         autoFocus={false}
         returnFocus={true}
-        visible={isFocused && !items.isNotAsked()}
+        visible={isFocused && !items.isNotAsked() && hasChanged}
         underlay={false}
         forcedMode="Dropdown"
       >
