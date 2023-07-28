@@ -30,7 +30,7 @@ export const All = () => {
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
             <Tag key={color} style={styles.tag} color={color as ColorVariants}>
-              Value
+              Value ({color})
             </Tag>
           ))}
         </Box>
@@ -40,7 +40,7 @@ export const All = () => {
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
             <Tag key={color} label="Label" style={styles.tag} color={color as ColorVariants}>
-              Value
+              Value ({color})
             </Tag>
           ))}
         </Box>
@@ -50,7 +50,7 @@ export const All = () => {
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
             <Tag key={color} onPressRemove={noop} style={styles.tag} color={color as ColorVariants}>
-              Value
+              Value ({color})
             </Tag>
           ))}
         </Box>
@@ -66,7 +66,7 @@ export const All = () => {
               style={styles.tag}
               color={color as ColorVariants}
             >
-              Value
+              Value ({color})
             </Tag>
           ))}
         </Box>
