@@ -1,3 +1,13 @@
+## 2.7.5
+
+Features:
+
+- Add neutral alert (5d24eeb4)
+
+Fixes:
+
+- Fix popover alignment & focus issues (1e13ba5f, 137e7d00)
+
 ## 2.7.4
 
 Features:
