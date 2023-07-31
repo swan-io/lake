@@ -42,6 +42,12 @@ export const Variants = () => {
           This is a children
         </LakeAlert>
       </StoryPart>
+
+      <StoryPart title="neutral" style={styles.part}>
+        <LakeAlert variant="neutral" title="Title" subtitle="This is a subtitle">
+          This is a children
+        </LakeAlert>
+      </StoryPart>
     </StoryBlock>
   );
 };

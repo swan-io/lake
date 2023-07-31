@@ -34,6 +34,16 @@ export const Default = () => {
         />
       </StoryPart>
 
+      <StoryPart title="With neutral anchored alert" style={styles.part}>
+        <Tile
+          footer={
+            <LakeAlert anchored={true} variant="neutral" title="It is an anchored alert">
+              <LakeText>Helloworld</LakeText>
+            </LakeAlert>
+          }
+        />
+      </StoryPart>
+
       <StoryPart title="With icon and title" style={styles.part}>
         <Tile icon={<Icon name="document-regular" size={20} />} title="Tile title" />
       </StoryPart>
