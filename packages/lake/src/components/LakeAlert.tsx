@@ -35,13 +35,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type AlertVariant = "info" | "warning" | "error" | "success";
+type AlertVariant = "info" | "warning" | "error" | "success" | "neutral";
 
-const alertIcon: Record<AlertVariant, IconName> = {
+const alertIcon: Record<AlertVariant, IconName | undefined> = {
   info: "info-regular",
   warning: "warning-regular",
   error: "dismiss-circle-regular",
   success: "checkmark-circle-regular",
+  neutral: undefined,
 };
 
 const alertColor: Record<AlertVariant, string> = {
@@ -49,6 +50,7 @@ const alertColor: Record<AlertVariant, string> = {
   warning: colors.warning[700],
   error: colors.negative[700],
   success: colors.positive[700],
+  neutral: colors.gray[700],
 };
 
 const alertBackground: Record<AlertVariant, string> = {
@@ -56,6 +58,7 @@ const alertBackground: Record<AlertVariant, string> = {
   warning: colors.warning[0],
   error: colors.negative[0],
   success: colors.positive[0],
+  neutral: colors.gray[0],
 };
 
 const alertBorder: Record<AlertVariant, string> = {
@@ -63,6 +66,7 @@ const alertBorder: Record<AlertVariant, string> = {
   warning: colors.warning[200],
   error: colors.negative[200],
   success: colors.positive[200],
+  neutral: colors.gray[200],
 };
 
 const alertLeftBorder: Record<AlertVariant, string> = {
@@ -70,6 +74,7 @@ const alertLeftBorder: Record<AlertVariant, string> = {
   warning: colors.warning[500],
   error: colors.negative[500],
   success: colors.positive[500],
+  neutral: colors.gray[500],
 };
 
 type Props = {
@@ -95,6 +100,7 @@ export const LakeAlert = ({
   callToAction,
 }: Props) => {
   const color = alertColor[variant];
+  const icon = alertIcon[variant];
 
   return (
     <View
@@ -106,11 +112,17 @@ export const LakeAlert = ({
       ]}
     >
       <Box direction="row" alignItems="center">
-        <Icon name={alertIcon[variant]} color={color} size={20} />
-        <Space width={20} />
+        {icon != null ? (
+          <>
+            <Icon name={icon} color={color} size={20} />
+            <Space width={20} />
+          </>
+        ) : null}
 
         <View style={commonStyles.fill}>
-          <LakeText color={color}>{title}</LakeText>
+          <LakeText color={color} variant={icon != null ? "regular" : "medium"}>
+            {title}
+          </LakeText>
 
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
@@ -119,7 +131,7 @@ export const LakeAlert = ({
       </Box>
 
       {isNotNullish(children) && (
-        <View style={styles.content}>
+        <View style={icon != null ? styles.content : null}>
           <Space height={12} />
 
           {isText(children) ? <LakeText>{children}</LakeText> : children}
