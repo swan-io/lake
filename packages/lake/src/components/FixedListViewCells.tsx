@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useState, ComponentProps } from "react";
 import { Clipboard, GestureResponderEvent, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
@@ -188,9 +188,11 @@ export const ColorPatchCell = ({
 export const SimpleTitleCell = ({
   isHighlighted = false,
   text,
+  tooltip,
 }: {
   isHighlighted?: boolean;
   text: string;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
 }) => (
   <View style={styles.cell}>
     <LakeText
@@ -198,6 +200,7 @@ export const SimpleTitleCell = ({
       color={isHighlighted ? colors.current.primary : colors.gray[900]}
       style={styles.regularText}
       variant="medium"
+      tooltip={tooltip}
     >
       {text}
     </LakeText>
@@ -229,11 +232,13 @@ export const CopyableRegularTextCell = ({
   text,
   copyWording,
   copiedWording,
+  tooltip,
 }: {
   variant?: TextVariant;
   text: string;
   copyWording: string;
   copiedWording: string;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
 }) => {
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
 
@@ -269,7 +274,7 @@ export const CopyableRegularTextCell = ({
 
       <Space width={4} />
 
-      <LakeText color={colors.gray[900]} style={styles.regularText} variant={variant}>
+      <LakeText tooltip={tooltip} color={colors.gray[900]} style={styles.regularText} variant={variant}>
         {text}
       </LakeText>
     </View>
@@ -339,11 +344,13 @@ export const LinkCell = ({
   external = false,
   onPress,
   variant = "medium",
+  tooltip,
 }: {
   children: ReactNode;
   onPress: () => void;
   external?: boolean;
   variant?: TextVariant
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
 }) => {
   return (
     <View style={styles.cell}>
@@ -359,7 +366,7 @@ export const LinkCell = ({
 
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} variant={variant} style={styles.mediumText}>
+      <LakeText color={colors.gray[900]} variant={variant} style={styles.mediumText} tooltip={tooltip}>
         {children}
       </LakeText>
     </View>
