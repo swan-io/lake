@@ -227,11 +227,13 @@ export const SimpleRegularTextCell = ({
 export const CopyableRegularTextCell = ({
   variant = "regular",
   text,
+  textToCopy,
   copyWording,
   copiedWording,
 }: {
   variant?: TextVariant;
   text: string;
+  textToCopy?: string;
   copyWording: string;
   copiedWording: string;
 }) => {
@@ -240,7 +242,7 @@ export const CopyableRegularTextCell = ({
   const onPress = useCallback(
     (event: GestureResponderEvent) => {
       event.preventDefault();
-      Clipboard.setString(text);
+      Clipboard.setString(textToCopy ?? text);
       setVisibleState("copied");
     },
     [text],
