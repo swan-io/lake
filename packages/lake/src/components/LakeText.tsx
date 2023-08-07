@@ -1,7 +1,8 @@
-import { forwardRef, ReactNode } from "react";
+import { ComponentProps, forwardRef, ReactNode } from "react";
 import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
 import { texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
+import { LakeTooltip } from "./LakeTooltip";
 
 const alignments = StyleSheet.create({
   center: { textAlign: "center" },
@@ -28,11 +29,21 @@ type Props = TextProps & {
   color?: string;
   userSelect?: TextStyle["userSelect"];
   variant?: TextVariant;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
 };
 
 export const LakeText = forwardRef<Text, Props>(
   (
-    { align = "left", children, color, style, userSelect, variant = "regular", ...props }: Props,
+    {
+      align = "left",
+      children,
+      color,
+      style,
+      userSelect,
+      variant = "regular",
+      tooltip,
+      ...props
+    }: Props,
     forwardedRef,
   ) => (
     <Text
@@ -46,7 +57,13 @@ export const LakeText = forwardRef<Text, Props>(
       ]}
       {...props}
     >
-      {children}
+      {tooltip ? (
+        <LakeTooltip {...tooltip}>
+          <Text>{children}</Text>
+        </LakeTooltip>
+      ) : (
+        children
+      )}
     </Text>
   ),
 );
