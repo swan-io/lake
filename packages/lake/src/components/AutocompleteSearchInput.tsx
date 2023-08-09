@@ -66,6 +66,7 @@ export const AutocompleteSearchInput = <T,>({
         lastRequest.current = undefined; // avoid to cancel twice the same request
 
         onValueChange(value);
+
         if (value.length <= 3 || !shouldDisplaySuggestions) {
           return setState(AsyncData.NotAsked());
         }

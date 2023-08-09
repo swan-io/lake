@@ -27,6 +27,7 @@ import { backgroundColor, colors, spacings } from "../constants/design";
 import { typography } from "../constants/typography";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
+import { isNotEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
 import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
@@ -169,11 +170,15 @@ const LakeComboboxWithRef = <I,>(
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
-  const [isFocused, setIsFocused] = useState(false);
   const [isFetchingAdditionalInfo, setIsFetchingAdditionalInfo] = useState(false);
 
-  const open = useCallback(() => ref.current?.focus(), []);
-  const close = useCallback(() => ref.current?.blur(), []);
+  // The Combobox has two distinct closed states: "closed" and "dismissed"
+  // When it's "closed", it will open on input focus or text change
+  // When it's "dismissed", it will NOT open on input focus, but will on text change
+  const [state, setState] = useState<"opened" | "closed" | "dismissed">("closed");
+  const open = useCallback(() => setState("opened"), []);
+  const close = useCallback(() => setState("closed"), []);
+  const dismiss = useCallback(() => setState("dismissed"), []);
 
   useImperativeHandle(externalRef, () => {
     return {
@@ -187,6 +192,7 @@ const LakeComboboxWithRef = <I,>(
   const handleKeyPress = useCallback((event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
     if (event.nativeEvent.key === "ArrowDown") {
       const listElement = listContainerRef.current;
+
       if (listElement != null) {
         const element = listElement as unknown as Element;
         const focusableElements = getFocusableElements(element, false);
@@ -200,15 +206,18 @@ const LakeComboboxWithRef = <I,>(
     (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
       if (event.nativeEvent.key === "ArrowDown" || event.nativeEvent.key === "ArrowUp") {
         const listElement = listContainerRef.current;
+
         if (listElement != null) {
           const element = listElement as unknown as Element;
           const target = event.currentTarget as unknown as HTMLElement;
           const focusableElements = getFocusableElements(element, false);
           const index = focusableElements.indexOf(target);
           const direction = event.nativeEvent.key === "ArrowDown" ? 1 : -1;
+
           if (index === -1) {
             return;
           }
+
           const nextIndex = index + direction;
           event.preventDefault();
 
@@ -223,19 +232,34 @@ const LakeComboboxWithRef = <I,>(
     [],
   );
 
-  const handleFocus = useCallback(() => {
-    window.clearTimeout(blurTimeoutId.current);
+  const handleChangeText = useCallback(
+    (value: string) => {
+      onValueChange(value);
 
-    blurTimeoutId.current = window.setTimeout(() => {
-      setIsFocused(true);
-    }, 100);
-  }, []);
+      if (isNotEmpty(value)) {
+        setState("opened");
+      } else {
+        setState("closed");
+      }
+    },
+    [onValueChange],
+  );
+
+  const handleFocus = useCallback(() => {
+    if (isNotEmpty(value)) {
+      window.clearTimeout(blurTimeoutId.current);
+
+      blurTimeoutId.current = window.setTimeout(() => {
+        setState(prevState => (prevState === "closed" ? "opened" : prevState));
+      }, 100);
+    }
+  }, [value]);
 
   const handleBlur = useCallback(() => {
     window.clearTimeout(blurTimeoutId.current);
 
     blurTimeoutId.current = window.setTimeout(() => {
-      setIsFocused(false);
+      setState(prevState => (prevState === "opened" ? "closed" : prevState));
     }, 100);
   }, []);
 
@@ -244,8 +268,8 @@ const LakeComboboxWithRef = <I,>(
       <LakeTextInput
         containerRef={inputTextRef as Ref<View>}
         style={styles.input}
-        ariaExpanded={isFocused}
-        ariaControls={isFocused ? suggestionsId : ""}
+        ariaExpanded={state === "opened"}
+        ariaControls={state === "opened" ? suggestionsId : ""}
         enterKeyHint="search"
         icon={icon}
         role="combobox"
@@ -254,7 +278,7 @@ const LakeComboboxWithRef = <I,>(
         disabled={disabled}
         error={error}
         hideErrors={hideErrors}
-        onChangeText={onValueChange}
+        onChangeText={handleChangeText}
         onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -267,11 +291,11 @@ const LakeComboboxWithRef = <I,>(
         id={suggestionsId}
         role="listbox"
         matchReferenceWidth={true}
-        onDismiss={close}
+        onDismiss={dismiss}
         referenceRef={ref}
         autoFocus={false}
-        returnFocus={false}
-        visible={isFocused && !items.isNotAsked()}
+        returnFocus={true}
+        visible={state === "opened" && !items.isNotAsked()}
         underlay={false}
         forcedMode="Dropdown"
       >
@@ -327,7 +351,7 @@ const LakeComboboxWithRef = <I,>(
 
                                 void Promise.resolve(onSelectItem(item)).finally(() => {
                                   setIsFetchingAdditionalInfo(false);
-                                  close();
+                                  dismiss();
                                 });
                               }}
                             >
