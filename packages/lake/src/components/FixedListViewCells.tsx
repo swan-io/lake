@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState, ComponentProps } from "react";
+import { ComponentProps, ReactNode, useCallback, useState } from "react";
 import { Clipboard, GestureResponderEvent, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";

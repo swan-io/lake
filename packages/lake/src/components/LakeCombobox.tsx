@@ -324,6 +324,7 @@ const LakeComboboxWithRef = <I,>(
                               onPress={() => {
                                 window.clearTimeout(blurTimeoutId.current);
                                 setIsFetchingAdditionalInfo(true);
+
                                 void Promise.resolve(onSelectItem(item)).finally(() => {
                                   setIsFetchingAdditionalInfo(false);
                                   close();
