@@ -40,7 +40,9 @@
     "**/*.{js,ts,tsx}": "eslint --fix"
   },
   "resolutions": {
-    "strip-ansi": "^6.0.1"
+    "string-width": "^4.2.3",
+    "strip-ansi": "^6.0.1",
+    "wrap-ansi": "^7.0.0"
   },
   "devDependencies": {
     "@fluentui/svg-icons": "^1.1.198",
