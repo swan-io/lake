@@ -1,9 +1,15 @@
+## 2.7.7
+
+Changes:
+
+- Update dependencies (23035ea)
+
 ## 2.7.6
 
 Features:
 
-- feat: add the posibility to copy a different text in CopyableRegularTextCell (c171661)
-- feat: add tooltips on text and on list cells (06074b7)
+- Add the possibility to copy a different text in CopyableRegularTextCell (c171661)
+- Add tooltips on text and on list cells (06074b7)
 
 ## 2.7.5
 
