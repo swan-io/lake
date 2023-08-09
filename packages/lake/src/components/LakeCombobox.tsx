@@ -25,7 +25,6 @@ import {
 
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { typography } from "../constants/typography";
-import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { Box } from "./Box";
@@ -170,9 +169,11 @@ const LakeComboboxWithRef = <I,>(
   const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
-  const [isFocused, { open, close }] = useDisclosure(false, () => setHasChanged(false));
+  const [isFocused, setIsFocused] = useState(false);
   const [isFetchingAdditionalInfo, setIsFetchingAdditionalInfo] = useState(false);
-  const [hasChanged, setHasChanged] = useState(false);
+
+  const open = useCallback(() => ref.current?.focus(), []);
+  const close = useCallback(() => ref.current?.blur(), []);
 
   useImperativeHandle(externalRef, () => {
     return {
@@ -224,17 +225,19 @@ const LakeComboboxWithRef = <I,>(
 
   const handleFocus = useCallback(() => {
     window.clearTimeout(blurTimeoutId.current);
+
     blurTimeoutId.current = window.setTimeout(() => {
-      open();
+      setIsFocused(true);
     }, 100);
-  }, [open]);
+  }, []);
 
   const handleBlur = useCallback(() => {
     window.clearTimeout(blurTimeoutId.current);
+
     blurTimeoutId.current = window.setTimeout(() => {
-      close();
+      setIsFocused(false);
     }, 100);
-  }, [close]);
+  }, []);
 
   return (
     <View>
@@ -252,10 +255,7 @@ const LakeComboboxWithRef = <I,>(
         error={error}
         hideErrors={hideErrors}
         onChangeText={onValueChange}
-        onChange={event => {
-          setHasChanged(true);
-          onChange?.(event);
-        }}
+        onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
@@ -270,8 +270,8 @@ const LakeComboboxWithRef = <I,>(
         onDismiss={close}
         referenceRef={ref}
         autoFocus={false}
-        returnFocus={true}
-        visible={isFocused && !items.isNotAsked() && hasChanged}
+        returnFocus={false}
+        visible={isFocused && !items.isNotAsked()}
         underlay={false}
         forcedMode="Dropdown"
       >
@@ -324,6 +324,7 @@ const LakeComboboxWithRef = <I,>(
                               onPress={() => {
                                 window.clearTimeout(blurTimeoutId.current);
                                 setIsFetchingAdditionalInfo(true);
+
                                 void Promise.resolve(onSelectItem(item)).finally(() => {
                                   setIsFetchingAdditionalInfo(false);
                                   close();

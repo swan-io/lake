@@ -29,7 +29,7 @@ type Props = TextProps & {
   color?: string;
   userSelect?: TextStyle["userSelect"];
   variant?: TextVariant;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
 };
 
 export const LakeText = forwardRef<Text, Props>(

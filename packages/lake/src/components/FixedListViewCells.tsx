@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState, ComponentProps } from "react";
+import { ComponentProps, ReactNode, useCallback, useState } from "react";
 import { Clipboard, GestureResponderEvent, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
@@ -192,7 +192,7 @@ export const SimpleTitleCell = ({
 }: {
   isHighlighted?: boolean;
   text: string;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
 }) => (
   <View style={styles.cell}>
     <LakeText
@@ -240,17 +240,18 @@ export const CopyableRegularTextCell = ({
   textToCopy?: string;
   copyWording: string;
   copiedWording: string;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
 }) => {
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
+  const clipboardText = textToCopy ?? text;
 
   const onPress = useCallback(
     (event: GestureResponderEvent) => {
       event.preventDefault();
-      Clipboard.setString(textToCopy ?? text);
+      Clipboard.setString(clipboardText);
       setVisibleState("copied");
     },
-    [text],
+    [clipboardText],
   );
 
   return (
@@ -276,7 +277,12 @@ export const CopyableRegularTextCell = ({
 
       <Space width={4} />
 
-      <LakeText tooltip={tooltip} color={colors.gray[900]} style={styles.regularText} variant={variant}>
+      <LakeText
+        tooltip={tooltip}
+        color={colors.gray[900]}
+        style={styles.regularText}
+        variant={variant}
+      >
         {text}
       </LakeText>
     </View>
@@ -351,8 +357,8 @@ export const LinkCell = ({
   children: ReactNode;
   onPress: () => void;
   external?: boolean;
-  variant?: TextVariant
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, 'children'>;
+  variant?: TextVariant;
+  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
 }) => {
   return (
     <View style={styles.cell}>
@@ -368,7 +374,12 @@ export const LinkCell = ({
 
       <Space width={8} />
 
-      <LakeText color={colors.gray[900]} variant={variant} style={styles.mediumText} tooltip={tooltip}>
+      <LakeText
+        color={colors.gray[900]}
+        variant={variant}
+        style={styles.mediumText}
+        tooltip={tooltip}
+      >
         {children}
       </LakeText>
     </View>
