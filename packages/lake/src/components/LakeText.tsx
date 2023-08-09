@@ -32,6 +32,16 @@ type Props = TextProps & {
   tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
 };
 
+const styles = StyleSheet.create({
+  tooltip: {
+    width: "100%",
+  },
+  ellipsis: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+});
+
 export const LakeText = forwardRef<Text, Props>(
   (
     {
@@ -58,8 +68,8 @@ export const LakeText = forwardRef<Text, Props>(
       {...props}
     >
       {tooltip ? (
-        <LakeTooltip {...tooltip}>
-          <Text>{children}</Text>
+        <LakeTooltip containerStyle={styles.tooltip} {...tooltip}>
+          <Text style={styles.ellipsis}>{children}</Text>
         </LakeTooltip>
       ) : (
         children
