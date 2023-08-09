@@ -252,7 +252,7 @@ const LakeComboboxWithRef = <I,>(
     window.clearTimeout(blurTimeoutId.current);
 
     blurTimeoutId.current = window.setTimeout(() => {
-      setState(prevState => (prevState === "opened" ? "closed" : prevState));
+      setState("dismissed");
     }, 100);
   }, []);
 
@@ -284,7 +284,7 @@ const LakeComboboxWithRef = <I,>(
         id={suggestionsId}
         role="listbox"
         matchReferenceWidth={true}
-        onDismiss={dismiss}
+        onEscapeKey={dismiss}
         referenceRef={ref}
         autoFocus={false}
         returnFocus={true}

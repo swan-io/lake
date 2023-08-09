@@ -10,6 +10,7 @@ import {
 import { match, P } from "ts-pattern";
 import { Animation, animations, backgroundColor, radii, shadows } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
+import { noop } from "../utils/function";
 import { BottomPanel } from "./BottomPanel";
 import { FocusTrap } from "./FocusTrap";
 import { Portal } from "./Portal";
@@ -23,7 +24,8 @@ type Props = {
   describedBy?: string;
   matchReferenceWidth?: boolean;
   matchReferenceMinWidth?: boolean;
-  onDismiss: () => void;
+  onDismiss?: () => void;
+  onEscapeKey?: () => void;
   referenceRef: RefObject<unknown>;
   returnFocus?: boolean;
   autoFocus?: boolean;
@@ -117,7 +119,8 @@ export const Popover = memo<Props>(
     describedBy,
     matchReferenceWidth = false,
     matchReferenceMinWidth = false,
-    onDismiss,
+    onDismiss = noop,
+    onEscapeKey = onDismiss,
     referenceRef,
     returnFocus = true,
     autoFocus = true,
@@ -275,7 +278,7 @@ export const Popover = memo<Props>(
                     focusLock={true}
                     returnFocus={returnFocus}
                     autoFocus={autoFocus}
-                    onEscapeKey={onDismiss}
+                    onEscapeKey={onEscapeKey}
                     onClickOutside={underlay ? undefined : onClickOutside}
                   >
                     <Pressable tabIndex={-1} onPress={onPress} style={styles.defaultCursor}>
