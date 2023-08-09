@@ -39,6 +39,9 @@
     "*": "prettier --ignore-unknown --write",
     "**/*.{js,ts,tsx}": "eslint --fix"
   },
+  "resolutions": {
+    "strip-ansi": "^6.0.1"
+  },
   "devDependencies": {
     "@fluentui/svg-icons": "^1.1.198",
     "@localazy/cli": "^1.7.3",
