@@ -33,6 +33,7 @@ import { Icon, IconName } from "./Icon";
 import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
 import { LoadingView } from "./LoadingView";
 import { Popover } from "./Popover";
+import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const DEFAULT_ELEMENT_HEIGHT = 64;
@@ -52,9 +53,6 @@ const styles = StyleSheet.create({
     transitionProperty: "background-color",
     transitionDuration: "200ms",
     outlineStyle: "none",
-    borderColor: colors.gray[100],
-    borderStyle: "solid",
-    borderBottomWidth: 1,
     justifyContents: "center",
   },
   hoveredItem: {
@@ -324,6 +322,7 @@ const LakeComboboxWithRef = <I,>(
                         role="list"
                         data={items}
                         style={styles.flatList}
+                        ItemSeparatorComponent={Separator}
                         renderItem={({ item }) => {
                           const rendered = renderItem(item);
 
