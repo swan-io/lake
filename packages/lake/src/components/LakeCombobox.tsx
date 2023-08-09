@@ -235,12 +235,7 @@ const LakeComboboxWithRef = <I,>(
   const handleChangeText = useCallback(
     (value: string) => {
       onValueChange(value);
-
-      if (isNotEmpty(value)) {
-        setState("opened");
-      } else {
-        setState("closed");
-      }
+      setState(isNotEmpty(value) ? "opened" : "closed");
     },
     [onValueChange],
   );
