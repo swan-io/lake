@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     touchAction: "manipulation",
   },
   disabled: {
-    pointerEvents: "none",
+    cursor: "not-allowed",
   },
 });
 
