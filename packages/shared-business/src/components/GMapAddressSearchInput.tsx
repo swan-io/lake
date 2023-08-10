@@ -2,7 +2,6 @@ import { Future, Result } from "@swan-io/boxed";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { Box } from "@swan-io/lake/src/components/Box";
-import { colors } from "@swan-io/lake/src/constants/design";
 import {
   CountryCCA3,
   countriesWithMultipleCCA3,
@@ -13,12 +12,9 @@ import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.pn
 import { PlaceDetail, getPlaceDetails, useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 
 const styles = StyleSheet.create({
-  poweredByGoogle: {
-    borderColor: colors.gray[100],
-    borderStyle: "solid",
-    borderTopWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  footer: {
+    padding: 12,
+    paddingBottom: 4,
   },
 });
 
@@ -126,7 +122,7 @@ export const GMapAddressSearchInput = ({
       error={error}
       emptyResultText={emptyResultText}
       ListFooterComponent={
-        <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
+        <Box direction="row" justifyContent="end" style={styles.footer}>
           <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
         </Box>
       }
