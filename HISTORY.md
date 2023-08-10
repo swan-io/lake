@@ -1,3 +1,7 @@
+## 2.7.10
+
+fix: disabled link does not work properly (c7295c1)
+
 ## 2.7.9
 
 Changes:
