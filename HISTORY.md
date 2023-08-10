@@ -1,3 +1,9 @@
+## 2.7.8
+
+Changes:
+
+- Fix Combobox regression (22de146)
+
 ## 2.7.7
 
 Changes:
