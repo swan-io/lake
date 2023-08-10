@@ -12,9 +12,9 @@ import poweredByGoogle from "../assets/images/powered_by_google_on_white_hdpi.pn
 import { PlaceDetail, getPlaceDetails, useGoogleMapSDK } from "../hooks/useGoogleMapSDK";
 
 const styles = StyleSheet.create({
-  poweredByGoogle: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+  footer: {
+    padding: 12,
+    paddingBottom: 4,
   },
 });
 
@@ -122,7 +122,7 @@ export const GMapAddressSearchInput = ({
       error={error}
       emptyResultText={emptyResultText}
       ListFooterComponent={
-        <Box direction="row" justifyContent="end" style={styles.poweredByGoogle}>
+        <Box direction="row" justifyContent="end" style={styles.footer}>
           <AutoWidthImage height={14} sourceUri={poweredByGoogle} />
         </Box>
       }

@@ -1,8 +1,10 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { MutableRefObject, ReactNode, useRef, useState } from "react";
+import { P, match } from "ts-pattern";
 import { colors } from "../constants/design";
 import { LakeCombobox } from "./LakeCombobox";
 import { LakeText } from "./LakeText";
+import { Separator } from "./Separator";
 
 type Suggestion<T> = {
   id: string;
@@ -57,7 +59,19 @@ export const AutocompleteSearchInput = <T,>({
       icon="search-filled"
       disabled={disabled}
       error={error}
-      ListFooterComponent={ListFooterComponent}
+      ListFooterComponent={
+        ListFooterComponent != null && (
+          <>
+            {match(state)
+              .with(AsyncData.P.Done(Result.P.Ok(P.select())), suggestions =>
+                suggestions.length > 0 ? <Separator /> : null,
+              )
+              .otherwise(() => null)}
+
+            {ListFooterComponent}
+          </>
+        )
+      }
       onSelectItem={item => {
         onSuggestion(item);
       }}
