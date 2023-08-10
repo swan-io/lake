@@ -1,6 +1,12 @@
-## 2.7.8
+## 2.7.9
 
 Changes:
+
+- Improve Gmaps Combobox style (47760f9)
+
+## 2.7.8
+
+Fixes:
 
 - Fix Combobox regression (22de146)
 
