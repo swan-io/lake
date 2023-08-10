@@ -2,6 +2,7 @@ import { Future, Result } from "@swan-io/boxed";
 import { AutoWidthImage } from "@swan-io/lake/src/components/AutoWidthImage";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { Box } from "@swan-io/lake/src/components/Box";
+import { colors } from "@swan-io/lake/src/constants/design";
 import {
   CountryCCA3,
   countriesWithMultipleCCA3,
@@ -13,8 +14,11 @@ import { PlaceDetail, getPlaceDetails, useGoogleMapSDK } from "../hooks/useGoogl
 
 const styles = StyleSheet.create({
   poweredByGoogle: {
-    paddingVertical: 8,
+    borderColor: colors.gray[100],
+    borderStyle: "solid",
+    borderTopWidth: 1,
     paddingHorizontal: 16,
+    paddingVertical: 8,
   },
 });
 
