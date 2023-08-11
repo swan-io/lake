@@ -32,7 +32,8 @@
     "ai-translate": "tsx -r dotenv/config scripts/locales/ai-translate.ts",
     "sort-locales": "tsx scripts/locales/sort.ts",
     "remove-unused-locales": "tsx scripts/locales/remove-unused.ts",
-    "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts"
+    "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts",
+    "configure-hooks": "git config --local core.hooksPath .hooks"
   },
   "lint-staged": {
     "packages/**/src/locales/*.json": "yarn sort-locales",
