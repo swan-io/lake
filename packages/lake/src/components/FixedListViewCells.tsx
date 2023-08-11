@@ -120,6 +120,7 @@ export const SimpleHeaderCell = ({
       }}
       disabled={isNullish(onPress)}
       style={styles.cellContainer}
+      role="columnheader"
     >
       {({ hovered }) => (
         <View style={[styles.cell, { justifyContent }]}>
