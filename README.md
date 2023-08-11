@@ -38,6 +38,12 @@ For better performance (and confort!), it's recommended to set:
 $ yarn lint
 ```
 
+You can also configure `lint-staged` as a pre-commit hook by running the following command :
+
+```console
+$ yarn configure-hooks
+```
+
 ## Generate Fluent icons
 
 Add the name of the desired icon in `scripts/fluent-icons/icons.json` using the format `icon-name-{filled|regular}`, and run the following command:
