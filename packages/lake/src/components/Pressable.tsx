@@ -23,6 +23,7 @@ import {
   View,
   ViewProps,
 } from "react-native";
+import { match } from "ts-pattern";
 import { Except, Merge } from "type-fest";
 import { useForceableState } from "../hooks/useForceableState";
 import { useHover } from "../hooks/useHover";
@@ -204,7 +205,10 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
         onKeyDown={keyDownHandler}
         ref={setRef}
         style={[
-          !disabled && applyPressStyle ? styles.active : styles.disabled,
+          match({ disabled, applyPressStyle })
+            .with({ disabled: false, applyPressStyle: true }, () => styles.active)
+            .with({ disabled: true }, () => styles.disabled)
+            .otherwise(() => null),
           typeof style === "function" ? style(interactionState) : style,
         ]}
         tabIndex={_tabIndex}

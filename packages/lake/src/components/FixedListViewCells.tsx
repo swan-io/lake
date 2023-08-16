@@ -28,6 +28,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  disabledCellHeader: {
+    cursor: "text",
+  },
   icon: {
     alignSelf: "stretch",
     alignItems: "center",
@@ -106,6 +109,7 @@ export const SimpleHeaderCell = ({
   onPress?: (direction: SortDirection) => void;
 }) => {
   const sortActive = isNotNullish(sort) && isNotNullish(onPress);
+  const disabled = isNullish(onPress);
 
   return (
     <Pressable
@@ -118,8 +122,9 @@ export const SimpleHeaderCell = ({
             .otherwise(() => "Desc"),
         );
       }}
-      disabled={isNullish(onPress)}
-      style={styles.cellContainer}
+      disabled={disabled}
+      style={[styles.cellContainer, disabled && styles.disabledCellHeader]}
+      role="columnheader"
     >
       {({ hovered }) => (
         <View style={[styles.cell, { justifyContent }]}>
