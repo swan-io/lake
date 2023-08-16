@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
+    width: 1,
   },
   disabledCellHeader: {
     cursor: "text",
