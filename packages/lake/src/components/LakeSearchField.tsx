@@ -10,6 +10,10 @@ import { Line, Svg } from "./Svg";
 import { TransitionView } from "./TransitionView";
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    flexShrink: 1,
+  },
   input: {
     transition: "300ms ease-in-out border-color",
     // ResponsiveContainer uses a 200 breaking,
@@ -234,7 +238,10 @@ export const LakeSearchField = ({
   };
 
   return (
-    <ResponsiveContainer breakpoint={200} style={maxWidth != null && { maxWidth }}>
+    <ResponsiveContainer
+      breakpoint={200}
+      style={[styles.container, maxWidth != null && { maxWidth }]}
+    >
       {({ large }) => {
         const Component = large ? ExpandedSearchField : CollapsibleSeachField;
         return <Component {...props} />;
