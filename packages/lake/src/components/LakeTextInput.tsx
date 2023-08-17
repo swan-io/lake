@@ -45,9 +45,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
+    flexShrink: 1,
     flexDirection: "row",
     alignItems: "stretch",
-    width: "100%",
   },
   contents: {
     flexGrow: 1,
