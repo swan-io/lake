@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "stretch",
+    width: "100%",
   },
   contents: {
     flexGrow: 1,
     flexShrink: 1,
     flexDirection: "row",
-    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
