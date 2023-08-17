@@ -1,11 +1,13 @@
 import { Meta } from "@storybook/react";
-import { LakeRadio } from "../src/components/LakeRadio";
+import { LakeRadio, RadioProps } from "../src/components/LakeRadio";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
   title: "Forms/Radio",
   component: LakeRadio,
 } as Meta<typeof LakeRadio>;
+
+type StoryArgs = Pick<RadioProps, "value" | "disabled" | "color">;
 
 export const Variations = () => {
   return (
@@ -32,11 +34,11 @@ export const Variations = () => {
   );
 };
 
-export const Colors = () => {
+export const Colors = ({ value, color, disabled }: StoryArgs) => {
   return (
     <StoryBlock title="Colors" description="Radio color impacts only selected state">
       <StoryPart title="Default">
-        <LakeRadio value={true} />
+        <LakeRadio value={value} color={color} disabled={disabled} />
       </StoryPart>
 
       <StoryPart title="gray">

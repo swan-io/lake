@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
-import { Accordion } from "../src/components/Accordion";
+import { Accordion, AccordionProps } from "../src/components/Accordion";
 import { BorderedIcon } from "../src/components/BorderedIcon";
 import { Box } from "../src/components/Box";
 import { Fill } from "../src/components/Fill";
@@ -11,6 +11,7 @@ import { Space } from "../src/components/Space";
 import { commonStyles } from "../src/constants/commonStyles";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { textInputs } from "polished";
 
 const styles = StyleSheet.create({
   accordionContainer: {
@@ -23,12 +24,14 @@ export default {
   component: Accordion,
 } as Meta<typeof Accordion>;
 
+type StoryArgs = Pick<AccordionProps, "trigger">;
+
 type PaymentMethodContentProps = {
   name: string;
   icon: IconName;
 };
 
-const PaymentMethodContent = ({ name, icon }: PaymentMethodContentProps) => {
+export const PaymentMethodContent = ({ name, icon }: PaymentMethodContentProps) => {
   return (
     <Box direction="row" alignItems="center" style={commonStyles.fill}>
       <BorderedIcon name={icon} size={32} padding={4} />
@@ -53,7 +56,7 @@ const PaymentMethodContent = ({ name, icon }: PaymentMethodContentProps) => {
   );
 };
 
-export const Default = () => {
+export const Default = ({ trigger }: StoryArgs) => {
   return (
     <StoryBlock title="Accordion">
       <StoryPart title="Default">

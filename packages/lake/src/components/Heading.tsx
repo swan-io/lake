@@ -31,14 +31,14 @@ const sizes = StyleSheet.create({
 type HeadingAlign = keyof typeof alignments;
 type HeadingSize = keyof typeof sizes;
 
-type Props = Except<TextProps, "role"> & {
+export type HeadingProps = Except<TextProps, "role"> & {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   align?: HeadingAlign;
   size: HeadingSize;
   children: ReactNode;
 };
 
-export const Heading = forwardRef<Text, Props>(
+export const Heading = forwardRef<Text, HeadingProps>(
   ({ children, align = "left", size, level, style, ...props }, forwardedRef) => (
     <Text
       ref={forwardedRef}

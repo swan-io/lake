@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
-import { WithCurrentColor } from "../src/components/WithCurrentColor";
+import { WithCurrentColor, WithCurrentColorProps } from "../src/components/WithCurrentColor";
 import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
 
@@ -27,13 +27,20 @@ export default {
   component: WithCurrentColor,
 } as Meta<typeof WithCurrentColor>;
 
-export const Colors = () => {
+type StoryArgs = Pick<WithCurrentColorProps, "variant" | "style" | "children">;
+
+
+export const Colors = ({ variant, style, children }: StoryArgs) => {
   return (
     <StoryBlock
       title="WithCurrentColor"
       description="This component change the color of all its children using 'colors.current[shade]'"
     >
       <Box direction="row" style={styles.container}>
+        <WithCurrentColor style={styles.blockContainer} variant={variant}>
+          <View style={styles.currentColorBlock} />
+        </WithCurrentColor>
+
         <WithCurrentColor style={styles.blockContainer} variant="gray">
           <View style={styles.currentColorBlock} />
         </WithCurrentColor>

@@ -4,7 +4,7 @@ import { Icon } from "./Icon";
 import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
 
-type Props = {
+export type CopyButtonProps = {
   valueToCopy: string;
   copyText: string;
   copiedText: string;
@@ -18,7 +18,7 @@ export const LakeCopyButton = ({
   size = copyButtondefaultSize,
   copyText,
   copiedText,
-}: Props) => {
+}: CopyButtonProps) => {
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
 
   return (

@@ -17,6 +17,8 @@ export default {
   component: MultiSelect,
 } as Meta<typeof MultiSelect>;
 
+type StoryArgs = Pick<MultiSelectProps<string>, "color" | "disabled">;
+
 const items: MultiSelectItem[] = [
   { label: "Camille", value: "camille", group: "C" },
   { label: "Charlotte", value: "charlotte", group: "C" },
@@ -53,11 +55,11 @@ const EditableMultiSelect = ({
   );
 };
 
-export const Variations = () => {
+export const Variations = ({ color, disabled }: StoryArgs) => {
   return (
     <StoryBlock title="MultiSelect variations">
       <StoryPart title="Default">
-        <EditableMultiSelect />
+        <EditableMultiSelect color={color} disabled={disabled} />
       </StoryPart>
 
       <StoryPart title="Without groups">
@@ -79,7 +81,7 @@ export const Variations = () => {
   );
 };
 
-export const Colors = () => {
+export const Colors = ({ color }: StoryArgs) => {
   return (
     <StoryBlock title="MultiSelect colors">
       {Object.keys(colors).map(color => (

@@ -4,7 +4,7 @@ import { Icon } from "../src/components/Icon";
 import { LakeAlert } from "../src/components/LakeAlert";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
-import { Tile, TileGrid } from "../src/components/Tile";
+import { Tile, TileGrid, TileProps } from "../src/components/Tile";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -21,11 +21,11 @@ export default {
   component: Tile,
 } as Meta<typeof Tile>;
 
-export const Default = () => {
+export const Default = ({ icon, paddingVertical, paddingHorizontal, numberOfLines, hovered, disabled, selected }: TileProps) => {
   return (
     <StoryBlock title="Tile" description={["This component creates a tile. "]}>
       <StoryPart title="Default" style={styles.part}>
-        <Tile />
+        <Tile icon={icon} paddingVertical={paddingVertical} paddingHorizontal={paddingHorizontal} numberOfLines={numberOfLines} hovered={hovered} disabled={disabled} selected={selected} />
       </StoryPart>
 
       <StoryPart title="With anchored alert" style={styles.part}>

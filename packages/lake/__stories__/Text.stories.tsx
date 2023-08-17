@@ -1,18 +1,26 @@
 import { Meta } from "@storybook/react";
-import { LakeText } from "../src/components/LakeText";
+import { LakeText, TextBProps } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { string } from "ts-pattern/dist/patterns";
 
 export default {
   title: "Typography/Text",
   component: LakeText,
 } as Meta<typeof LakeText>;
 
-export const Variations = () => {
+type StoryArgs = Pick<TextBProps, "align" | "color" | "variant">;
+
+export const Variations = ({ align, color, variant }: StoryArgs) => {
   return (
     <StoryBlock title="Text">
       <StoryPart title="Variations">
+        <LakeText align={align} color={color} variant={variant} >
+          Default: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
+        </LakeText>
+        <Space height={24} />
+
         <LakeText>
           Default: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
         </LakeText>

@@ -15,6 +15,7 @@ import { Fill } from "./Fill";
 import { Heading } from "./Heading";
 import { Icon } from "./Icon";
 import { Separator } from "./Separator";
+import { Color } from "three";
 
 const styles = StyleSheet.create({
   // eslint-disable-next-line react-native/no-color-literals

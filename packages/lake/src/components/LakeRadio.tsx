@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type RadioProps = {
   value: boolean;
   disabled?: boolean;
   color?: ColorVariants;
 };
 
-export const LakeRadio = ({ value, disabled = false, color = "current" }: Props) => (
+export const LakeRadio = ({ value, disabled = false, color = "current" }: RadioProps) => (
   <View
     style={[
       styles.outerCircle,

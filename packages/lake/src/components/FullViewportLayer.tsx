@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type FullViewportLayerProps = {
   visible: boolean;
   children: ReactNode;
 };
 
 const rootNode = document.querySelector("#full-page-layer-root") as Element;
 
-export const FullViewportLayer = ({ visible, children }: Props) => {
+export const FullViewportLayer = ({ visible, children }: FullViewportLayerProps) => {
   const [delayedVisible, setDelayedVisible] = useState(visible);
 
   useEffect(() => {

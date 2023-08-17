@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ModalProps, ScrollView, StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import { Grid } from "../src/components/Grid";
 import { LakeButton } from "../src/components/LakeButton";
@@ -8,6 +8,7 @@ import { LakeModal, LakeModalProps } from "../src/components/LakeModal";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { string } from "valienv";
 
 const styles = StyleSheet.create({
   block: {
@@ -28,16 +29,18 @@ export default {
   component: LakeModal,
 } as Meta<typeof LakeModal>;
 
+type StoryArgs = Pick<LakeModalProps, "color" | "title" | "icon" | "maxWidth">;
+
 type ButtonModalProps = Except<LakeModalProps, "children" | "visible"> & {
   withCloseCross?: boolean;
 };
 
-const ButtonModal = ({ withCloseCross = false, ...props }: ButtonModalProps) => {
+export const ButtonModal = ({ withCloseCross = false, color, ...props }: ButtonModalProps & StoryArgs) => {
   const [visible, setVisible] = useState(false);
 
   return (
     <>
-      <LakeButton color="live" size="small" onPress={() => setVisible(true)} style={styles.button}>
+      <LakeButton color={color} size="small" onPress={() => setVisible(true)} style={styles.button}>
         Open
       </LakeButton>
 
@@ -57,7 +60,7 @@ const ButtonModal = ({ withCloseCross = false, ...props }: ButtonModalProps) => 
           </Grid>
         </ScrollView>
 
-        <LakeButton color="live" size="small" onPress={() => setVisible(false)}>
+        <LakeButton color={color} size="small" onPress={() => setVisible(false)}>
           Close
         </LakeButton>
       </LakeModal>
@@ -65,21 +68,22 @@ const ButtonModal = ({ withCloseCross = false, ...props }: ButtonModalProps) => 
   );
 };
 
-export const All = () => {
+export const All = ({ color, title, icon, maxWidth }: StoryArgs) => {
   return (
+
     <StoryBlock
-      title="Modal"
+      title="Default"
       description={[
         "This component creates a modal with enter and leave animation. ",
         'You can try it by clicking on "Open" button.',
       ]}
     >
-      <StoryPart title="Default">
-        <ButtonModal />
+      <StoryPart title="Default" >
+        <ButtonModal title={title} color={color} icon={icon} maxWidth={maxWidth} />
       </StoryPart>
 
       <StoryPart title="With title">
-        <ButtonModal title="A title" />
+        <ButtonModal title={title} />
       </StoryPart>
 
       <StoryPart title="With title and icon">

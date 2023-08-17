@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { BorderedIcon } from "../src/components/BorderedIcon";
 import { Box } from "../src/components/Box";
-import { Icon } from "../src/components/Icon";
+import { Icon, IconProps } from "../src/components/Icon";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
 import { LakeTextInput } from "../src/components/LakeTextInput";
@@ -26,11 +26,16 @@ const styles = StyleSheet.create({
 export default {
   title: "Informations/Icon",
   component: BorderedIcon,
+  args: {
+    size: 24
+  }
 } as Meta<typeof BorderedIcon>;
+
+type StoryArgs = Pick<IconProps, "color" | "size" | "name">;
 
 const getKeys = <T extends string>(obj: Record<T, unknown>): T[] => Object.keys(obj) as T[];
 
-export const Default = () => {
+export const Default = ({ color, size, name }: StoryArgs) => {
   const [search, setSearch] = useState("");
 
   return (
@@ -53,7 +58,7 @@ export const Default = () => {
                 justifyContent="start"
                 style={styles.iconContainer}
               >
-                <Icon name={name} size={30} color={colors.gray[800]} />
+                <Icon name={name} size={size} color={color} />
                 <Space height={8} />
                 <LakeText align="center">{name}</LakeText>
               </Box>
@@ -72,7 +77,7 @@ export const Default = () => {
                 justifyContent="start"
                 style={styles.iconContainer}
               >
-                <Icon name={name} size={30} color={colors.gray[800]} />
+                <Icon name={name} size={size} color={colors.gray[800]} />
                 <Space height={8} />
                 <LakeText align="center">{name}</LakeText>
               </Box>

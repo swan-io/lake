@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type LakeScrollViewProps = {
   children: ReactNode;
   style?: ViewProps["style"];
   contentContainerStyle?: ViewProps["style"];
@@ -49,7 +49,7 @@ export const LakeScrollView = ({
   horizontalSafeArea = HORIZONTAL_SAFE_AREA,
   style,
   contentContainerStyle,
-}: Props) => {
+}: LakeScrollViewProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {

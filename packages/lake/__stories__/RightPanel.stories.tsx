@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { LakeButton } from "../src/components/LakeButton";
-import { RightPanel } from "../src/components/RightPanel";
+import { RightPanel, RightPanelProps } from "../src/components/RightPanel";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
@@ -40,7 +40,9 @@ export default {
   component: RightPanel,
 } as Meta<typeof RightPanel>;
 
-export const Default = () => {
+type StoryArgs = Pick<RightPanelProps, "visible" | "onPressClose">;
+
+export const Default = ({ visible, onPressClose }: StoryArgs) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const open = () => {
@@ -60,7 +62,7 @@ export const Default = () => {
         Open right panel
       </LakeButton>
 
-      <RightPanel visible={isOpen} onPressClose={() => setIsOpen(false)}>
+      <RightPanel visible={visible} onPressClose={() => setIsOpen(false)}>
         <Box style={styles.panelContent}>
           <View style={styles.block1} />
           <Space height={16} />

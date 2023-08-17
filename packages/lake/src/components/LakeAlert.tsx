@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   content: {
     marginLeft: 40,
   },
-  callToAction: {
+  callToActionAlert: {
     marginTop: -12,
     marginBottom: -12,
     marginRight: -12,
@@ -77,7 +77,10 @@ const alertLeftBorder: Record<AlertVariant, string> = {
   neutral: colors.gray[500],
 };
 
-type Props = {
+type anchStyle = keyof typeof styles.anchored;
+type callToActionStyle = keyof typeof styles.callToActionAlert;
+
+export type AlertProps = {
   anchored?: boolean;
   variant: AlertVariant;
   children?: ReactNode;
@@ -98,7 +101,7 @@ export const LakeAlert = ({
   children,
   style,
   callToAction,
-}: Props) => {
+}: AlertProps) => {
   const color = alertColor[variant];
   const icon = alertIcon[variant];
 
@@ -127,7 +130,7 @@ export const LakeAlert = ({
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
 
-        {isNotNullish(callToAction) && <View style={styles.callToAction}>{callToAction}</View>}
+        {isNotNullish(callToAction) && <View style={styles.callToActionAlert}>{callToAction}</View>}
       </Box>
 
       {isNotNullish(children) && (

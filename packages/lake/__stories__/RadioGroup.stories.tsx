@@ -9,6 +9,8 @@ export default {
   component: RadioGroup,
 } as Meta<typeof RadioGroup>;
 
+type StoryArgs = Pick<RadioGroupProps<ItemValue>, "direction" | "color" | "disabled">;
+
 function EditableRadioGroup<T>(props: Except<RadioGroupProps<T>, "value" | "onValueChange">) {
   const [value, setValue] = useState<T>();
 
@@ -38,11 +40,11 @@ const itemsWithDisabled: RadioGroupItem<ItemValue>[] = [
   { name: "More than €4,500", value: "MoreThan4500" },
 ];
 
-export const Default = () => {
+export const Default = ({ direction, color, disabled }: StoryArgs) => {
   return (
     <StoryBlock title="RadioGroup">
       <StoryPart title="Default">
-        <EditableRadioGroup items={items} />
+        <EditableRadioGroup items={items} direction={direction} color={color} disabled={disabled} />
       </StoryPart>
 
       <StoryPart title="Row direction">

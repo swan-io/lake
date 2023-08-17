@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
-import { SortBottomPanel, SortField, SortValue } from "../src/components/SortBottomPanel";
+import { SortBottomPanel, SortBottomPanelProps, SortField, SortValue } from "../src/components/SortBottomPanel";
 import { Space } from "../src/components/Space";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -17,6 +17,8 @@ export default {
   title: "Forms/SortBottomPanel",
   component: SortBottomPanel,
 } as Meta<typeof SortBottomPanel>;
+
+type StoryArgs = Pick<SortBottomPanelProps<string>, "visible" | "title">;
 
 type FieldName = "status" | "type" | "amount" | "executionDate";
 
@@ -43,7 +45,7 @@ const fields: SortField<FieldName>[] = [
   },
 ];
 
-export const Default = () => {
+export const Default = ({ visible, title }: StoryArgs) => {
   const [opened, setOpened] = useState(false);
   const [value, setValue] = useState<SortValue<FieldName> | undefined>();
 
@@ -64,8 +66,8 @@ export const Default = () => {
         )}
 
         <SortBottomPanel
-          visible={opened}
-          title="Sort by"
+          visible={visible}
+          title={title}
           fields={fields}
           value={value}
           onChange={setValue}

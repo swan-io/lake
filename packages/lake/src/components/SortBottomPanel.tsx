@@ -44,7 +44,7 @@ export type SortValue<T extends string> = {
   direction: SortDirection;
 };
 
-type Props<T extends string> = {
+export type SortBottomPanelProps<T extends string> = {
   visible: boolean;
   title: string;
   fields: SortField<T>[];
@@ -60,7 +60,7 @@ export const SortBottomPanel = <T extends string>({
   fields,
   onChange,
   onClose,
-}: Props<T>) => {
+}: SortBottomPanelProps<T>) => {
   return (
     <BottomPanel visible={visible} onPressClose={onClose}>
       <View style={styles.head}>

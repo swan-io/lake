@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type TagProps = {
   children?: ReactElement | ReactText | ReactFragment;
   label?: string;
   icon?: IconName;
@@ -67,7 +67,7 @@ export const Tag = ({
   ariaLabel,
   onPressRemove,
   style,
-}: Props) => {
+}: TagProps) => {
   const hasRemoveButton = isNotNullish(onPressRemove);
   const hasLabel = isNotNullishOrEmpty(label);
   const hasOnlyIcon = isNullish(children) && isNotNullish(icon);

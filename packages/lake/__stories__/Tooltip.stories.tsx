@@ -6,6 +6,7 @@ import { LakeTooltip } from "../src/components/LakeTooltip";
 import { Pressable } from "../src/components/Pressable";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { TooltipProps } from "../src/components/Tooltip";
 
 const styles = StyleSheet.create({
   target: {
@@ -20,6 +21,8 @@ export default {
   title: "Interactivity/Tooltip",
   component: LakeTooltip,
 } as Meta<typeof LakeTooltip>;
+
+type StoryArgs = Pick<TooltipProps, "describedBy" | "matchReferenceWidth" | "placement" | "width">;
 
 export const Placements = () => {
   return (
@@ -67,9 +70,19 @@ export const Placements = () => {
   );
 };
 
-export const Behaviors = () => {
+export const Behaviors = ({ describedBy, matchReferenceWidth, placement, width }: StoryArgs) => {
   return (
     <StoryBlock title="Tooltip behaviors">
+      <StoryPart title="Default">
+        <Box direction="row" justifyContent="center">
+          <LakeTooltip content="Tooltip content" placement={placement} describedBy={describedBy} matchReferenceWidth={matchReferenceWidth} width={width} >
+            <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
+              <LakeText>Hover to display tooltip at top</LakeText>
+            </Box>
+          </LakeTooltip>
+        </Box>
+      </StoryPart>
+
       <StoryPart title="Match Reference Width">
         <Box direction="row" justifyContent="center">
           <LakeTooltip

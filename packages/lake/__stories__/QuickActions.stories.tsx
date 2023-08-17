@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { QuickAction, QuickActions } from "../src/components/QuickActions";
+import { QuickAction, Props, QuickActions } from "../src/components/QuickActions";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -50,7 +50,9 @@ const actions: QuickAction[] = [
   },
 ];
 
-export const Default = () => {
+type StoryArgs = Pick<QuickAction, "icon" | "label" | "color">;
+
+export const Default = ({ icon, label, color }: StoryArgs) => {
   return (
     <StoryBlock title="QuickActions">
       <StoryPart title="With several actions">

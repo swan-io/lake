@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type SeparatorProps = {
   horizontal?: boolean;
   space?: SpacingValue;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Separator = ({ horizontal = false, space, style }: Props) => (
+export const Separator = ({ horizontal = false, space, style }: SeparatorProps) => (
   <View
     role="none"
     style={

@@ -3,17 +3,20 @@ import { LakeHeading } from "../src/components/LakeHeading";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { HeadingProps } from "../src/components/Heading";
 
 export default {
   title: "Typography/Heading",
   component: LakeHeading,
 } as Meta<typeof LakeHeading>;
 
-export const Variations = () => {
+type StoryArgs = Pick<HeadingProps, "level" | "align" | "size">;
+
+export const Variations = ({ level, align, size }: StoryArgs) => {
   return (
     <StoryBlock title="Text">
-      <StoryPart title="Variations">
-        <LakeHeading level={1} variant="h1">
+      <StoryPart title="Variations" >
+        <LakeHeading aria-setsize={size} level={level} variant="h1" align={align}>
           Lorem ipsum dolor sit amet
         </LakeHeading>
 

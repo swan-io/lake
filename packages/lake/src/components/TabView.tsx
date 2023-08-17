@@ -478,7 +478,7 @@ const DropdownItems = forwardRef<
   );
 });
 
-type Props = {
+export type TabViewProps = {
   activeTabId?: string;
   onChange?: (id: string) => void;
   tabs: Tab[];
@@ -513,7 +513,7 @@ export const TabView = ({
   padding,
   activeTabId,
   onChange,
-}: Props) => {
+}: TabViewProps) => {
   const containerRef = useRef<View | null>(null);
   const placeholderRef = useRef<View | null>(null);
   const otherPlaceholderRef = useRef<View | null>(null);
@@ -630,9 +630,9 @@ export const TabView = ({
         while (
           restInKept.length !== 0 &&
           restInKept.reduce((acc, item) => acc + item.width, 0) +
-            activeInKeptWidth +
-            (collapsed.length >= 1 ? otherLabelWidth : 0) >=
-            width
+          activeInKeptWidth +
+          (collapsed.length >= 1 ? otherLabelWidth : 0) >=
+          width
         ) {
           const last = restInKept.pop();
           if (isNotNullish(last)) {

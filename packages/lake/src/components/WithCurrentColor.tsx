@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewProps } from "react-native";
 import { colors, ColorVariants } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 
-type Props = {
+export type WithCurrentColorProps = {
   variant?: ColorVariants;
   style?: ViewProps["style"];
   children: ReactElement;
@@ -72,7 +72,7 @@ export const useCurrentColor = (
   }, [containerRef, variant]);
 };
 
-export const WithCurrentColor = ({ variant, style, children }: Props) => {
+export const WithCurrentColor = ({ variant, style, children }: WithCurrentColorProps) => {
   const containerRef = useRef(null);
 
   useCurrentColor(containerRef, variant);

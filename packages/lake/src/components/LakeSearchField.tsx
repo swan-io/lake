@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type SearchFieldProps = {
   initialValue: string;
   placeholder: string;
   onChangeText: (text: string) => void;
@@ -213,7 +213,7 @@ export const LakeSearchField = ({
   debounceDuration = 500,
   maxWidth,
   renderEnd,
-}: Props) => {
+}: SearchFieldProps) => {
   const [hasFocus, setFocused] = useBoolean(false);
   const inputRef = useRef<TextInput>(null);
 

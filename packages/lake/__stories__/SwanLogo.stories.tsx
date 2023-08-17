@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import { Space } from "../src/components/Space";
-import { SwanLogo } from "../src/components/SwanLogo";
+import { SwanLogo, SwanLogoProps } from "../src/components/SwanLogo";
 import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
 
@@ -9,11 +9,13 @@ export default {
   component: SwanLogo,
 } as Meta<typeof SwanLogo>;
 
-export const Colors = () => {
+type StoryArgs = Pick<SwanLogoProps, "color" | "style">;
+
+export const Colors = ({ color, style }: StoryArgs) => {
   return (
     <StoryBlock title="SwanLogo">
-      <SwanLogo />
-      <Space height={16} />
+      <SwanLogo color={color} />
+      <Space height={32} />
       <SwanLogo color={colors.gray.primary} />
       <Space height={16} />
       <SwanLogo color={colors.live.primary} />

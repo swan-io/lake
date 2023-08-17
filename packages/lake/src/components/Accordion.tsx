@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type AccordionProps = {
   trigger: ReactNode;
   children: ReactNode;
 };
 
-export const Accordion = ({ trigger, children }: Props) => {
+export const Accordion = ({ trigger, children }: AccordionProps) => {
   const id = useId();
   const [isOpen, { toggle }] = useDisclosure(false);
 

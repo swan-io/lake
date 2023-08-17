@@ -125,7 +125,7 @@ export type UploadFileStatus = (
   name?: string;
 };
 
-type Props = {
+export type UploadAreaProps = {
   icon: IconName;
   documents?: UploadFileStatus[];
   onRemoveFile?: (fileId: string) => void;
@@ -179,7 +179,7 @@ export const UploadArea = ({
   description,
   error,
   maxSize,
-}: Props) => {
+}: UploadAreaProps) => {
   const [isHovered, setIsHovered] = useBoolean(false);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
@@ -284,8 +284,8 @@ export const UploadArea = ({
                   {disabled
                     ? t("uploadArea.noValue")
                     : formatNestedMessage("uploadArea.dropFile", {
-                        browse: <Text style={styles.browse}>{t("uploadArea.browse")}</Text>,
-                      })}
+                      browse: <Text style={styles.browse}>{t("uploadArea.browse")}</Text>,
+                    })}
                 </LakeHeading>
 
                 {isNotNullish(error) ? (
