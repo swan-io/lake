@@ -1,14 +1,20 @@
+## 2.7.12
+
+Fixes:
+
+- Don't force width on input containers (815817d1)
+
 ## 2.7.11
 
 Fixes:
 
-Fix input with unit width management (478bf0aa)
+- Fix input with unit width management (478bf0aa)
 
 ## 2.7.10
 
 Fixes:
 
-Disabled link does not work properly (c7295c1)
+- Disabled link does not work properly (c7295c1)
 
 ## 2.7.9
 
