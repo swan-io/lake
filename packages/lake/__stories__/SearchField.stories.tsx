@@ -1,6 +1,9 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { Box } from "../src/components/Box";
+import { Fill } from "../src/components/Fill";
+import { Icon } from "../src/components/Icon";
 import { LakeSearchField } from "../src/components/LakeSearchField";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
@@ -29,12 +32,17 @@ export const Variations = () => {
         <LakeText>Debounced value: {text1}</LakeText>
       </StoryPart>
 
-      <StoryPart title="With initialValue" style={styles.container}>
-        <LakeSearchField
-          initialValue="Initial value"
-          placeholder="Placeholder"
-          onChangeText={setText2}
-        />
+      <StoryPart title="With initialValue">
+        <Box direction="row">
+          <Icon name="add-circle-filled" size={32} />
+          <Fill minWidth={96} />
+
+          <LakeSearchField
+            initialValue="Initial value"
+            placeholder="Placeholder"
+            onChangeText={setText2}
+          />
+        </Box>
 
         <Space height={12} />
         <LakeText>Debounced value: {text2}</LakeText>

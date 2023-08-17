@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     // to trigger the change
     maxWidth: 202,
     minWidth: 38,
+    justifyContent: "flex-end",
   },
   focus: {
     outlineStyle: "none",
@@ -34,6 +35,11 @@ const styles = StyleSheet.create({
     height: 8,
   },
   smallButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    flexGrow: 1,
+  },
+  largeInputContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
     flexGrow: 1,
@@ -194,6 +200,7 @@ const ExpandedSearchField = ({
           setFocused.off();
         }, 300);
       }}
+      containerStyle={styles.largeInputContainer}
       style={[styles.input, hasFocus ? styles.focus : null]}
     />
   );

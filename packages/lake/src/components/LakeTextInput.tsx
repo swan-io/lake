@@ -15,6 +15,7 @@ import {
   TextInputFocusEventData,
   TextInputProps,
   View,
+  ViewProps,
 } from "react-native";
 import { Except } from "type-fest";
 import { commonStyles } from "../constants/commonStyles";
@@ -169,6 +170,7 @@ export type LakeTextInputProps = Except<
   children?: ReactNode;
   hideErrors?: boolean;
   style?: TextInputProps["style"];
+  containerStyle?: ViewProps["style"];
   onChange?: ChangeEventHandler<HTMLInputElement>;
   maxCharCount?: number;
   help?: string;
@@ -195,6 +197,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       onChange,
       pattern,
       style: stylesFromProps,
+      containerStyle: containerStylesFromProps,
       onFocus: originalOnFocus,
       onBlur: originalOnBlur,
       value,
@@ -246,7 +249,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
     return (
       <View style={commonStyles.fill}>
         <View style={styles.root} aria-errormessage={error}>
-          <View style={styles.container}>
+          <View style={[styles.container, containerStylesFromProps]}>
             <View
               style={[
                 styles.contents,
