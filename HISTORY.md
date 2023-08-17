@@ -1,3 +1,9 @@
+## 2.7.14
+
+Fixes:
+
+- Add missing search field style (1b451c51)
+
 ## 2.7.13
 
 Fixes:
