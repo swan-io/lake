@@ -1,6 +1,14 @@
+## 2.7.11
+
+Fixes:
+
+Fix input with unit width management (478bf0aa)
+
 ## 2.7.10
 
-fix: disabled link does not work properly (c7295c1)
+Fixes:
+
+Disabled link does not work properly (c7295c1)
 
 ## 2.7.9
 
