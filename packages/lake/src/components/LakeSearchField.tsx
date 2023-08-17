@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   smallButtonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    flexGrow: 1,
   },
   openSearchFieldContainer: {
     position: "absolute",
