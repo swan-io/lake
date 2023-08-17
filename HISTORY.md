@@ -1,3 +1,9 @@
+## 2.7.15
+
+Fixes:
+
+- Fix search field responsiveness (28a51ade)
+
 ## 2.7.14
 
 Fixes:
