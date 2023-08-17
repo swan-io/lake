@@ -1,3 +1,9 @@
+## 2.7.13
+
+Fixes:
+
+- Fix container style for search field (0b7e6bde)
+
 ## 2.7.12
 
 Fixes:
