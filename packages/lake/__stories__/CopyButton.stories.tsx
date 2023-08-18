@@ -1,8 +1,8 @@
 import { Meta } from "@storybook/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
-import { CopyButtonProps, LakeCopyButton, copyButtondefaultSize } from "../src/components/LakeCopyButton";
+import { CopyButtonProps, LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
@@ -17,37 +17,22 @@ const styles = StyleSheet.create({
 export default {
   title: "Interactivity/CopyButton",
   component: LakeCopyButton,
+  args: {
+    valueToCopy: "Helloworld",
+    copyText: "Copy Helloworld",
+    copiedText: "Copied Helloworld!",
+  },
 } as Meta<typeof LakeCopyButton>;
-
-const getTime = () => {
-  const date = new Date();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-
-  return `${hours}:${minutes}:${seconds}`;
-};
 
 type StoryArgs = Pick<CopyButtonProps, "size" | "valueToCopy" | "copyText" | "copiedText">;
 
 export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArgs) => {
-
   const [pastedValue, setPastedValue] = useState("");
-  //onst [valueToCopy, setValueToCopy] = useState(() => getTime());
-
-  //useEffect(() => {
-  //const interval = setInterval(() => {
-  //setValueToCopy(getTime());
-  //}, 1000);
-
-  //return () => clearInterval(interval);
-  //}, []);
   return (
     <StoryBlock title="CopyButton">
       <StoryPart title="Sizes">
         <Box direction="row" alignItems="start">
           <LakeLabel
-            //label={`Default size (${copyButtondefaultSize})`}
             label={`Choosen size (${size})`}
             render={() => (
               <LakeCopyButton
@@ -55,8 +40,6 @@ export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArg
                 copyText={copyText}
                 copiedText={copiedText}
                 valueToCopy={valueToCopy}
-              //copyText="Copy"
-              //copiedText={`Copied ${valueToCopy}`}
               />
             )}
           />
@@ -71,9 +54,6 @@ export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArg
                 copyText={copyText}
                 copiedText={copiedText}
                 valueToCopy={valueToCopy}
-              //copyText="Copy"
-              //copiedText={`Copied ${valueToCopy}`}
-              //valueToCopy={valueToCopy}
               />
             )}
           />
@@ -88,9 +68,6 @@ export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArg
                 copyText={copyText}
                 copiedText={copiedText}
                 valueToCopy={valueToCopy}
-              //copyText="Copy"
-              //copiedText={`Copied ${valueToCopy}`}
-              //valueToCopy={valueToCopy}
               />
             )}
           />
@@ -105,9 +82,6 @@ export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArg
                 copyText={copyText}
                 copiedText={copiedText}
                 valueToCopy={valueToCopy}
-              //copyText="Copy"
-              //copiedText={`Copied ${valueToCopy}`}
-              //valueToCopy={valueToCopy}
               />
             )}
           />
@@ -123,7 +97,6 @@ export const Variations = ({ size, valueToCopy, copyText, copiedText }: StoryArg
           render={() => (
             <LakeTextInput
               value={pastedValue}
-              //value={valueToCopy}
               onChange={event => setPastedValue(event.currentTarget.value)}
             />
           )}

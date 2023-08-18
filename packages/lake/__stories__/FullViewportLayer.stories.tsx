@@ -1,5 +1,4 @@
 import { Meta } from "@storybook/react";
-import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { FullViewportLayer, FullViewportLayerProps } from "../src/components/FullViewportLayer";
@@ -35,7 +34,6 @@ export default {
 type StoryArgs = Pick<FullViewportLayerProps, "visible">;
 
 export const Default = ({ visible }: StoryArgs) => {
-  //const [visible, setVisible] = useState(false);
   return (
     <StoryBlock
       title="FullViewportLayer"
@@ -44,12 +42,7 @@ export const Default = ({ visible }: StoryArgs) => {
         'You can try it by clicking on "Open" button.',
       ]}
     >
-      <LakeButton
-        color="shakespear"
-        size="small"
-        //onPress={() => setVisible(true)}
-        style={styles.button}
-      >
+      <LakeButton color="shakespear" size="small" style={styles.button}>
         Open
       </LakeButton>
 
@@ -88,4 +81,3 @@ export const Default = ({ visible }: StoryArgs) => {
     </StoryBlock>
   );
 };
-//onPress={() => setVisible(false)} l60
