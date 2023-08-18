@@ -1,3 +1,9 @@
+## 2.7.16
+
+Features:
+
+- Add dialog role to LakeModal (e76063d)
+
 ## 2.7.15
 
 Fixes:
