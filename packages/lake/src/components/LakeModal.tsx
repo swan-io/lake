@@ -193,7 +193,10 @@ export const LakeModal = ({
                         <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
                       ) : null}
 
-                      <View style={[large ? styles.modal : styles.modalSmall, { maxWidth }]}>
+                      <View
+                        role="dialog"
+                        style={[large ? styles.modal : styles.modalSmall, { maxWidth }]}
+                      >
                         <View style={styles.modalHeader}>
                           <View style={styles.modalIconTitle}>
                             {icon != null ? (
