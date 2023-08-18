@@ -58,14 +58,14 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type SwitchProps = {
   value: boolean;
   onValueChange?: (value: boolean) => void;
   disabled?: boolean;
 };
 
 export const Switch = memo(
-  forwardRef<View, Props>(({ value, disabled = false, onValueChange }, ref) => {
+  forwardRef<View, SwitchProps>(({ value, disabled = false, onValueChange }, ref) => {
     const animatedValue = value ? 1 : 0;
     const animation = useAnimatedValue(animatedValue);
     const buttonRef = useRef<View>(null);

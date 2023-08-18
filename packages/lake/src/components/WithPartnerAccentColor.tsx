@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { ColorScale } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 
-type Props = {
+export type WithPartnerAccentColorProps = {
   color: string;
   children: ReactNode;
   scoped?: boolean;
@@ -29,7 +29,7 @@ const getContrastColor = (color: string) => {
   return text;
 };
 
-export const WithPartnerAccentColor = ({ color, scoped = false, children }: Props) => {
+export const WithPartnerAccentColor = ({ color, scoped = false, children }: WithPartnerAccentColorProps) => {
   const containerRef = useRef(null);
 
   useLayoutEffect(() => {

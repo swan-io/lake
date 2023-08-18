@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
-import { ResponsiveContainer } from "../src/components/ResponsiveContainer";
+import { ResponsiveContainer, ResponsiveContainerProps } from "../src/components/ResponsiveContainer";
 import { Space } from "../src/components/Space";
 import { Switch } from "../src/components/Switch";
 import { breakpoints, colors } from "../src/constants/design";
@@ -33,7 +33,9 @@ export default {
   component: ResponsiveContainer,
 } as Meta<typeof ResponsiveContainer>;
 
-export const Default = () => {
+type StoryArgs = Pick<ResponsiveContainerProps, "breakpoint" | "style">;
+
+export const Default = ({ breakpoint, style }: StoryArgs) => {
   const [forceMobileWidth, setForceMobileWidth] = useState(false);
 
   return (
@@ -56,7 +58,7 @@ export const Default = () => {
       <Space height={16} />
 
       <View style={forceMobileWidth ? styles.containerMobile : styles.container}>
-        <ResponsiveContainer breakpoint={breakpoints.tiny}>
+        <ResponsiveContainer breakpoint={breakpoint}>
           {({ small }) => (
             <Box direction={small ? "column" : "row"}>
               <Box justifyContent="center" alignItems="center" style={styles.block}>

@@ -79,13 +79,13 @@ const styles = StyleSheet.create({
 const isReactText = (node: ReactNode): node is ReactText =>
   ["string", "number"].includes(typeof node);
 
-type Props = {
+export type TooltipProps = {
   children: ReactNode;
   describedBy?: string;
   matchReferenceWidth?: boolean;
   onHide?: () => void;
   onShow?: () => void;
-  placement: "top" | "bottom"; // At the moment, we handle only those 2 placements
+  placement: "top" | "bottom" | "right" | "left"; // At the moment, we handle only those 2 placements
   referenceRef: RefObject<unknown>;
   width?: number;
   togglableOnFocus?: boolean;
@@ -97,7 +97,7 @@ export type TooltipRef = {
 };
 
 export const Tooltip = memo(
-  forwardRef<TooltipRef, Props>(
+  forwardRef<TooltipRef, TooltipProps>(
     (
       {
         children,
@@ -248,9 +248,8 @@ export const Tooltip = memo(
                   state?.placement === "top" && styles.arrowContainerTop,
                   state?.placement === "bottom" && styles.arrowContainerBottom,
                   {
-                    transform: `translateX(${-overflowOffset}px) rotate(${
-                      state?.placement === "bottom" ? "180deg" : "0deg"
-                    })`,
+                    transform: `translateX(${-overflowOffset}px) rotate(${state?.placement === "bottom" ? "180deg" : "0deg"
+                      })`,
                   },
                 ]}
               >

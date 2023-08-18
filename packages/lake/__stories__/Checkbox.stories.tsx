@@ -10,6 +10,7 @@ import {
 } from "../src/components/LakeCheckbox";
 import { Pressable } from "../src/components/Pressable";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { colors } from "../src/constants/design";
 
 const styles = StyleSheet.create({
   container: {
@@ -58,11 +59,13 @@ const InteractiveLabelledCheckbox = ({
   );
 };
 
-export const Variations = () => {
+type StoryArgs = Pick<CheckboxProps, "color" | "disabled" | "isError">;
+
+export const Variations = ({ color, disabled, isError }: StoryArgs) => {
   return (
     <StoryBlock title="Variations">
       <StoryPart title="Default">
-        <InteractiveCheckbox />
+        <InteractiveCheckbox color={color} disabled={disabled} isError={isError} />
       </StoryPart>
 
       <StoryPart title="Indeterminate">
@@ -92,11 +95,11 @@ export const Variations = () => {
   );
 };
 
-export const Colors = () => {
+export const Colors = ({ color }: StoryArgs) => {
   return (
     <StoryBlock title="Colors" description="Checkbox color impacts only checked state">
       <StoryPart title="Default">
-        <InteractiveCheckbox defaultValue={true} />
+        <InteractiveCheckbox defaultValue={true} color={color} />
       </StoryPart>
 
       <StoryPart title="gray">

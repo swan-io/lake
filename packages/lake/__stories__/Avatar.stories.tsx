@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import dedent from "ts-dedent";
-import { Avatar } from "../src/components/Avatar";
+import { Avatar, AvatarProps } from "../src/components/Avatar";
 import { Box } from "../src/components/Box";
 import { Space } from "../src/components/Space";
 import { StoryBlock, StoryCodePart, StoryPart } from "./_StoriesComponents";
@@ -10,12 +10,14 @@ export default {
   component: Avatar,
 } as Meta<typeof Avatar>;
 
-export const Variants = () => {
+type StoryArgs = AvatarProps;
+
+export const Variants = ({ initials, size }: StoryArgs) => {
   return (
     <StoryBlock title="Avatar">
       <StoryPart title="Sizes">
         <Box direction="row">
-          <Avatar initials="AA" size={32} />
+          <Avatar initials={initials} size={size} />
           <Space width={16} />
           <Avatar initials="AA" size={48} />
           <Space width={16} />

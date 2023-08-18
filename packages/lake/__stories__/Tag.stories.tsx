@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { ProjectEnvTag } from "../src/components/ProjectEnvTag";
 import { Space } from "../src/components/Space";
-import { Tag } from "../src/components/Tag";
+import { Tag, TagProps } from "../src/components/Tag";
 import { colors, ColorVariants, spacings } from "../src/constants/design";
 import { noop } from "../src/utils/function";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -23,13 +23,15 @@ export default {
   component: Tag,
 } as Meta<typeof Tag>;
 
-export const All = () => {
+type StoryArgs = Pick<TagProps, "iconSize" | "size" | "color" | "icon">;
+
+export const All = ({ iconSize, size, color, icon }: StoryArgs) => {
   return (
     <StoryBlock title="Tag">
       <StoryPart title="Default">
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
-            <Tag key={color} style={styles.tag} color={color as ColorVariants}>
+            <Tag key={color} style={styles.tag} color={color as ColorVariants} size={size} icon={icon} iconSize={iconSize} >
               Value ({color})
             </Tag>
           ))}

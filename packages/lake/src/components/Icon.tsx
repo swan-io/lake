@@ -18,14 +18,14 @@ const styles = StyleSheet.create({
 
 export type IconName = keyof typeof paths;
 
-type Props = WebAccessibilityProps & {
+export type IconProps = WebAccessibilityProps & {
   color?: string;
   name: IconName;
   size: number;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Icon = memo<Props>(({ name, color = "currentColor", size, style, ...props }) => (
+export const Icon = memo<IconProps>(({ name, color = "currentColor", size, style, ...props }) => (
   <Svg viewBox="0 0 24 24" style={[styles.inert, { height: size, width: size }, style]} {...props}>
     <Path d={paths[name]} fill={color} />
   </Svg>

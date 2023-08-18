@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
-import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
+import { WithPartnerAccentColor, WithPartnerAccentColorProps } from "../src/components/WithPartnerAccentColor";
 import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
 
@@ -22,11 +22,9 @@ export default {
   component: WithPartnerAccentColor,
 } as Meta<typeof WithPartnerAccentColor>;
 
-type StoryArgs = {
-  color: string;
-};
+type StoryArgs = Pick<WithPartnerAccentColorProps, "color" | "scoped">;
 
-export const Default = ({ color = "black" }: StoryArgs) => {
+export const Default = ({ color = "black", scoped }: StoryArgs) => {
   return (
     <StoryBlock
       title="WithPartnerAccentColor"
@@ -35,7 +33,7 @@ export const Default = ({ color = "black" }: StoryArgs) => {
         "You can edit the color in 'Controls' panel. (Press A to open it)",
       ]}
     >
-      <WithPartnerAccentColor color={color}>
+      <WithPartnerAccentColor color={color} scoped={scoped} >
         <Box direction="row" style={styles.container}>
           {Object.keys(colors.partner).map(colorShade => (
             <View

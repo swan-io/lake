@@ -51,7 +51,7 @@ export type QuickAction = {
   color?: string;
 };
 
-type Props = {
+export type Props = {
   actions: QuickAction[];
 };
 

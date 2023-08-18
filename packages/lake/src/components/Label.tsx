@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = Except<TextProps, "role"> & {
+export type LabelProps = Except<TextProps, "role"> & {
   children?: ReactNode;
   htmlFor?: string;
   id?: string;
 };
 
-export const Label = ({ htmlFor, id, style, ...props }: Props) => {
+export const Label = ({ htmlFor, id, style, ...props }: LabelProps) => {
   const ref = useRef<Text>(null);
   useNativeProp(ref, "for", htmlFor);
 

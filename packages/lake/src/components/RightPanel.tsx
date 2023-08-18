@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type RightPanelProps = {
   visible: boolean;
   children: ReactNode | ((context: Context) => ReactNode);
   onPressClose?: () => void;
@@ -105,8 +105,8 @@ type Props = {
 
 const rootNode = document.querySelector("#full-page-layer-root") as Element;
 
-export const RightPanel = forwardRef<FocusTrapRef, Props>(
-  ({ visible, children, onPressClose }: Props, ref) => {
+export const RightPanel = forwardRef<FocusTrapRef, RightPanelProps>(
+  ({ visible, children, onPressClose }: RightPanelProps, ref) => {
     const [delayedVisible, setDelayedVisible] = useState(visible);
 
     useEffect(() => {

@@ -7,6 +7,7 @@ import { Box } from "../src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "../src/components/LakeCombobox";
 import { LakeText } from "../src/components/LakeText";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { string } from "valienv";
 
 const styles = StyleSheet.create({
   footer: {
@@ -18,6 +19,8 @@ export default {
   title: "Forms/Combobox",
   component: LakeCombobox,
 } as Meta<typeof LakeCombobox>;
+
+type StoryArgs = Pick<LakeComboboxProps<string>, "icon" | "error" | "disabled">;
 
 type ApiResponse = {
   products: ApiProduct[];
@@ -102,11 +105,11 @@ const EditableCombobox = (props: EditableComboboxProps) => {
   );
 };
 
-export const Variations = () => {
+export const Variations = ({ icon, disabled, error }: StoryArgs) => {
   return (
     <StoryBlock title="Combobox">
       <StoryPart title="By default">
-        <EditableCombobox />
+        <EditableCombobox icon={icon} disabled={disabled} error={error} />
       </StoryPart>
 
       <StoryPart title="Is disabled">

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type TileProps = {
   icon?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
@@ -129,7 +129,7 @@ export const Tile = ({
   disabled = false,
   selected,
   style,
-}: Props) => {
+}: TileProps) => {
   return (
     <View
       role="region"

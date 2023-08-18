@@ -33,11 +33,11 @@ const EditableInputText = (props: Except<LakeTextInputProps, "value" | "onChange
   );
 };
 
-export const Variations = () => {
+export const Variations = ({ multiline, ariaExpanded, error, readOnly, validating, valid, disabled, color, icon, hideErrors }: LakeTextInputProps) => {
   return (
     <StoryBlock title="Input variations">
       <StoryPart title="Default">
-        <EditableInputText />
+        <EditableInputText multiline={multiline} error={error} ariaExpanded={ariaExpanded} readOnly={readOnly} validating={validating} valid={valid} disabled={disabled} color={color} icon={icon} hideErrors={hideErrors} />
       </StoryPart>
 
       <StoryPart title="Validating">

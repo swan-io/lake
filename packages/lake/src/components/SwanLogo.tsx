@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type SwanLogoProps = {
   color?: string;
   style?: StyleProp<ViewStyle>;
 };
 
-export const SwanLogo = ({ color = colors.gray[100], style }: Props) => (
+export const SwanLogo = ({ color = colors.gray[100], style }: SwanLogoProps) => (
   <Svg viewBox="0 0 45 10" style={[styles.base, style]}>
     <title>Swan</title>
 

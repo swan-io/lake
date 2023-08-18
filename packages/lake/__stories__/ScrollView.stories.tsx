@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet, View } from "react-native";
-import { LakeScrollView } from "../src/components/LakeScrollView";
+import { LakeScrollView, LakeScrollViewProps } from "../src/components/LakeScrollView";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { colors, texts } from "../src/constants/design";
@@ -34,7 +34,9 @@ export default {
   component: LakeScrollView,
 } as Meta<typeof LakeScrollView>;
 
-export const Default = () => {
+type StoryArgs = Pick<LakeScrollViewProps, "horizontalSafeArea">;
+
+export const Default = ({ horizontalSafeArea }: StoryArgs) => {
   return (
     <>
       <View>
@@ -45,7 +47,7 @@ export const Default = () => {
 
       <Space height={16} />
 
-      <LakeScrollView>
+      <LakeScrollView horizontalSafeArea={horizontalSafeArea}>
         <View style={styles.blockSmall} />
         <Space height={16} />
         <View style={styles.blockLarge} />

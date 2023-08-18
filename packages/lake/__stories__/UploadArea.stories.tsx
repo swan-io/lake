@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
+import { UploadArea, UploadAreaProps, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -17,18 +17,16 @@ export default {
   component: UploadArea,
 } as Meta<typeof UploadArea>;
 
-type StoryArgs = {
-  layout: "vertical" | "horizontal";
-};
+type StoryArgs = Pick<UploadAreaProps, "icon" | "disabled" | "layout" | "error" | "maxSize">;
 
-export const Variations = ({ layout }: StoryArgs) => {
+export const Variations = ({ icon, disabled, layout, error, maxSize }: StoryArgs) => {
   return (
     <StoryBlock
       title="UploadArea"
       description="You check design with vertical and horizontal layout, you can edit it in 'Controls' panel. (Press A to open it)"
     >
       <StoryPart title="Default" style={styles.storyPart}>
-        <UploadArea icon="document-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+        <UploadArea icon={icon} disabled={disabled} error={error} maxSize={maxSize} layout={layout} accept={ACCEPTED_FORMATS} />
       </StoryPart>
 
       <StoryPart title="With custom icon" style={styles.storyPart}>
@@ -67,12 +65,16 @@ export const Variations = ({ layout }: StoryArgs) => {
   );
 };
 
-export const WithOneFile = ({ layout }: StoryArgs) => {
+export const WithOneFile = ({ icon, disabled, layout, error, maxSize }: StoryArgs) => {
   return (
     <StoryBlock
       title="UploadArea with one file"
       description="Here is different file icons depending on file extension"
     >
+      <StoryPart title="Default" style={styles.storyPart}>
+        <UploadArea icon={icon} disabled={disabled} error={error} maxSize={maxSize} layout={layout} accept={ACCEPTED_FORMATS} />
+      </StoryPart>
+
       <StoryPart title="PDF" style={styles.storyPart}>
         <UploadArea
           icon="document-regular"
@@ -146,7 +148,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
   );
 };
 
-export const WithSeveralDocuments = ({ layout }: StoryArgs) => {
+export const WithSeveralDocuments = ({ icon, disabled, layout, error, maxSize }: StoryArgs) => {
   const documents: UploadFileStatus[] = [
     {
       id: "1",
@@ -177,6 +179,10 @@ export const WithSeveralDocuments = ({ layout }: StoryArgs) => {
   ];
   return (
     <StoryBlock title="UploadArea with several documents">
+      <StoryPart title="Default" style={styles.storyPart}>
+        <UploadArea icon={icon} disabled={disabled} error={error} maxSize={maxSize} layout={layout} accept={ACCEPTED_FORMATS} />
+      </StoryPart>
+
       <StoryPart title="" style={styles.storyPart}>
         <UploadArea
           icon="document-regular"
@@ -189,7 +195,7 @@ export const WithSeveralDocuments = ({ layout }: StoryArgs) => {
   );
 };
 
-export const Interactive = ({ layout }: StoryArgs) => {
+export const Interactive = ({ icon, disabled, layout, error, maxSize }: StoryArgs) => {
   const [documents, setDocuments] = useState<UploadFileStatus[]>([]);
   const [file, setFile] = useState<File>();
 
@@ -219,6 +225,10 @@ export const Interactive = ({ layout }: StoryArgs) => {
       title="Interactive UploadArea"
       description="You can try to select files, drag and drop and remove selected files."
     >
+      <StoryPart title="Default" style={styles.storyPart}>
+        <UploadArea icon={icon} disabled={disabled} error={error} maxSize={maxSize} layout={layout} accept={ACCEPTED_FORMATS} />
+      </StoryPart>
+
       <StoryPart title="With several documents" style={styles.storyPart}>
         <UploadArea
           icon="document-regular"

@@ -23,7 +23,7 @@ const variants = StyleSheet.create({
 type TextAlign = keyof typeof alignments;
 export type TextVariant = keyof typeof variants;
 
-type Props = TextProps & {
+export type TextBProps = TextProps & {
   align?: TextAlign;
   children: ReactNode;
   color?: string;
@@ -42,18 +42,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export const LakeText = forwardRef<Text, Props>(
+
+export const LakeText = forwardRef<Text, TextBProps>(
   (
-    {
-      align = "left",
-      children,
-      color,
-      style,
-      userSelect,
-      variant = "regular",
-      tooltip,
-      ...props
-    }: Props,
+    { align = "left", children, color, style, userSelect, variant = "regular", tooltip,
+      ...props }: TextBProps,
     forwardedRef,
   ) => (
     <Text

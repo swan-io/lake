@@ -51,6 +51,7 @@
     "@storybook/addon-actions": "^7.2.1",
     "@storybook/addon-essentials": "^7.2.1",
     "@storybook/addon-links": "^7.2.1",
+    "@storybook/addon-storysource": "^7.2.1",
     "@storybook/react": "^7.2.1",
     "@storybook/react-vite": "^7.2.1",
     "@types/prompts": "^2.4.4",

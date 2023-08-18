@@ -29,6 +29,8 @@ export default {
   component: TimePicker,
 } as Meta<typeof TimePicker>;
 
+type StoryArgs = Pick<TimePickerProps, "disabled" | "error">;
+
 const InteractiveTimePicker = (props: Except<TimePickerProps, "value" | "onChangeText">) => {
   const [value, setValue] = useState<string>();
 
@@ -43,24 +45,26 @@ const InteractiveTimeRangePicker = (props: Except<TimeRangePickerProps, "value" 
   return <TimeRangePicker {...props} value={value} onChange={setValue} error={error} />;
 };
 
-export const Default = () => {
+export const Default = ({ disabled, error }: StoryArgs) => {
   return (
     <StoryBlock title="TimePicker">
       <StoryPart title="Default">
-        <View style={styles.container}>
-          <InteractiveTimePicker noSuggestionLabel="No time available" />
+        <View style={styles.container} >
+          <InteractiveTimePicker noSuggestionLabel="No time available" disabled={disabled} error={error} />
         </View>
       </StoryPart>
     </StoryBlock>
   );
 };
 
-export const RangePicker = () => {
+export const RangePicker = ({ disabled, error }: TimeRangePickerProps) => {
   return (
     <StoryBlock title="TimeRangePicker">
       <StoryPart title="Default">
         <View style={styles.container}>
           <InteractiveTimeRangePicker
+            disabled={disabled}
+            error={error}
             startLabel="Start"
             endLabel="End"
             minutesLabel="Mins"

@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { Fill } from "../src/components/Fill";
 import { Icon } from "../src/components/Icon";
-import { LakeSearchField } from "../src/components/LakeSearchField";
+import { LakeSearchField, SearchFieldProps } from "../src/components/LakeSearchField";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
@@ -21,13 +21,16 @@ export default {
   component: LakeSearchField,
 } as Meta<typeof LakeSearchField>;
 
-export const Variations = () => {
+type StoryArgs = Pick<SearchFieldProps, "initialValue" | "placeholder" | "maxWidth">;
+
+export const Variations = ({ initialValue, placeholder, maxWidth }: StoryArgs) => {
   const [text1, setText1] = useState<string>();
   const [text2, setText2] = useState<string>();
+  console.log(initialValue)
   return (
     <StoryBlock title="SearchField">
       <StoryPart title="Default" style={styles.container}>
-        <LakeSearchField initialValue="" placeholder="Placeholder" onChangeText={setText1} />
+        <LakeSearchField initialValue={initialValue} placeholder={placeholder} maxWidth={maxWidth} onChangeText={setText1} />
         <Space height={12} />
         <LakeText>Debounced value: {text1}</LakeText>
       </StoryPart>
@@ -38,8 +41,9 @@ export const Variations = () => {
           <Fill minWidth={96} />
 
           <LakeSearchField
-            initialValue="Initial value"
-            placeholder="Placeholder"
+            initialValue={initialValue}
+            placeholder={placeholder}
+            maxWidth={maxWidth}
             onChangeText={setText2}
           />
         </Box>

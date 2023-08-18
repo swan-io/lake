@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet } from "react-native";
-import { LakeAlert } from "../src/components/LakeAlert";
+import { AlertProps, LakeAlert } from "../src/components/LakeAlert";
 import { LakeButton } from "../src/components/LakeButton";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -16,29 +16,31 @@ export default {
   component: LakeAlert,
 } as Meta<typeof LakeAlert>;
 
-export const Variants = () => {
+type StoryArgs = Pick<AlertProps, "anchored" | "callToAction">;
+
+export const Variants = ({ anchored, callToAction }: StoryArgs) => {
   return (
     <StoryBlock title="Alert variations">
       <StoryPart title="info" style={styles.part}>
-        <LakeAlert variant="info" title="Title" subtitle="This is a subtitle">
+        <LakeAlert variant="info" title="Title" subtitle="Subtitle" anchored={anchored} callToAction={callToAction}>
           This is a children
         </LakeAlert>
       </StoryPart>
 
       <StoryPart title="warning" style={styles.part}>
-        <LakeAlert variant="warning" title="Title" subtitle="This is a subtitle">
+        <LakeAlert variant="warning" title="Title" subtitle="This is a subtitle" anchored={anchored} callToAction={callToAction}>
           This is a children
         </LakeAlert>
       </StoryPart>
 
       <StoryPart title="error" style={styles.part}>
-        <LakeAlert variant="error" title="Title" subtitle="This is a subtitle">
+        <LakeAlert variant="error" title="Title" subtitle="This is a subtitle" anchored={anchored} callToAction={callToAction}>
           This is a children
         </LakeAlert>
       </StoryPart>
 
       <StoryPart title="success" style={styles.part}>
-        <LakeAlert variant="success" title="Title" subtitle="This is a subtitle">
+        <LakeAlert variant="success" title="Title" subtitle="This is a subtitle" anchored={anchored} callToAction={callToAction}>
           This is a children
         </LakeAlert>
       </StoryPart>

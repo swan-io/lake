@@ -7,6 +7,7 @@ import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { LabelProps } from "../src/components/Label";
 
 const styles = StyleSheet.create({
   block: {
@@ -21,13 +22,15 @@ export default {
   component: LakeLabel,
 } as Meta<typeof LakeLabel>;
 
+type StoryArgs = Pick<LabelProps, "id" | "children">;
+
 const label = "Creditor IBAN";
-export const ReadOnly = () => {
+export const ReadOnly = ({ id, children }: StoryArgs) => {
   return (
     <StoryBlock title="Readonly label">
       <StoryPart title="Color variations">
         <Grid numColumns={5} horizontalSpace={8} verticalSpace={8}>
-          <LakeLabel label="Default" render={id => <View id={id} style={styles.block} />} />
+          <LakeLabel label={label} render={id => <View id={id} style={styles.block} children={children} />} />
 
           <LakeLabel
             label="Gray"

@@ -8,13 +8,13 @@ const styles = StyleSheet.create({
 });
 
 export type Context = { small: boolean; large: boolean };
-type Props = {
+export type ResponsiveContainerProps = {
   children: (context: Context) => ReactNode;
   style?: ViewProps["style"];
   breakpoint?: number;
 };
 
-export const ResponsiveContainer = ({ children, style, breakpoint = 1000 }: Props) => {
+export const ResponsiveContainer = ({ children, style, breakpoint = 1000 }: ResponsiveContainerProps) => {
   const [isSmall, setIsSmall] = useState<boolean | null>(null);
   const containerRef = useRef<View | null>(null);
 

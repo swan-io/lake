@@ -23,6 +23,8 @@ export default {
   component: LakeSelect,
 } as Meta<typeof LakeSelect>;
 
+type StoryArgs = Pick<SelectProps<string>, "placeholder" | "mode" | "title" | "size" | "icon" | "color" | "disabled" | "error">;
+
 const items = [
   { name: "Camille", value: 1 },
   { name: "Charlotte", value: 2 },
@@ -103,12 +105,12 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
   );
 };
 
-export const Colors = () => {
+export const Colors = ({ placeholder, mode, title, size, icon, color, disabled, error }: StoryArgs) => {
   return (
     <StoryBlock title="Select colors" description="Color prop change only icon color">
       {Object.keys(colors).map(color => (
         <StoryPart key={color} title={color}>
-          <EditableSelect icon="building-bank-filled" color={color as ColorVariants} />
+          <EditableSelect placeholder={placeholder} mode={mode} title={title} size={size} disabled={disabled} error={error} icon={icon} color={color as ColorVariants} />
         </StoryPart>
       ))}
     </StoryBlock>

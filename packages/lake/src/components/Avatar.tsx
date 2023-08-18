@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+export type AvatarProps = {
   initials?: string;
   size: number;
 };
@@ -34,7 +34,7 @@ const initialsToVariant = (initials: string): ColorVariants => {
   }
 };
 
-export const Avatar = memo<Props>(({ initials = "", size }) => {
+export const Avatar = memo<AvatarProps>(({ initials = "", size }) => {
   const variant = initialsToVariant(initials);
   return (
     <View
