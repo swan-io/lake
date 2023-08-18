@@ -77,9 +77,6 @@ const alertLeftBorder: Record<AlertVariant, string> = {
   neutral: colors.gray[500],
 };
 
-type anchStyle = keyof typeof styles.anchored;
-type callToActionStyle = keyof typeof styles.callToActionAlert;
-
 export type AlertProps = {
   anchored?: boolean;
   variant: AlertVariant;
