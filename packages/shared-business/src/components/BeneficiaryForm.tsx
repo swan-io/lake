@@ -99,10 +99,15 @@ export const validateUbo = (
   editorState: EditorState,
   accountCountry: AccountCountry,
 ): Partial<Record<keyof EditorState, string | undefined>> => {
-  const isAddressRequired = accountCountry === "DEU" || accountCountry === "ESP";
-  const isBirthInfoRequired = accountCountry !== "DEU";
+  const isAddressRequired = match(accountCountry)
+    .with("DEU", "ESP", "NLD", () => true)
+    .otherwise(() => false);
+  const isBirthInfoRequired = match(accountCountry)
+    .with("ESP", "FRA", "NLD", () => true)
+    .otherwise(() => false);
   const isTaxIdentificationNumberRequired =
-    accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU";
+    (accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU") ||
+    accountCountry === "NLD";
 
   const validateTaxNumber = isTaxIdentificationNumberRequired
     ? combineValidators(validateNullableRequired, validateIndividualTaxNumber(accountCountry))
@@ -282,8 +287,12 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     ref,
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
-    const isAddressRequired = accountCountry === "DEU" || accountCountry === "ESP";
-    const isBirthInfoRequired = accountCountry !== "DEU";
+    const isAddressRequired = match(accountCountry)
+      .with("DEU", "ESP", "NLD", () => true)
+      .otherwise(() => false);
+    const isBirthInfoRequired = match(accountCountry)
+      .with("ESP", "FRA", "NLD", () => true)
+      .otherwise(() => false);
     const initialAddress = useRef({
       residencyAddressLine1: initialState?.residencyAddressLine1,
       residencyAddressCity: initialState?.residencyAddressCity,
@@ -370,7 +379,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           initialValue: initialState?.taxIdentificationNumber,
           validate: (value, { getFieldState }) => {
             const uboCountry = getFieldState("country").value;
-            if (accountCountry === "DEU" && uboCountry === "DEU") {
+            if ((accountCountry === "DEU" && uboCountry === "DEU") || accountCountry === "NLD") {
               return combineValidators(
                 validateNullableRequired,
                 validateIndividualTaxNumber(accountCountry),
