@@ -1,3 +1,9 @@
+## 2.7.17
+
+Features:
+
+- Add Dutch TIN validation (90f54bc2)
+
 ## 2.7.16
 
 Features:
