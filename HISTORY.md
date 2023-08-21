@@ -1,3 +1,9 @@
+## 2.7.18
+
+Fixes:
+
+- Fix Dutch TIN validation (de38dc7a)
+
 ## 2.7.17
 
 Features:
