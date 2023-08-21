@@ -1,0 +1,2 @@
+import{d as o}from"./dayjs.min-f79c4412.js";import{u as t,c as e,r as a,l as r}from"./utc-0dcac8e9.js";import"./_commonjsHelpers-de833af9.js";o.extend(t);o.extend(e);o.extend(a);o.extend(r);const m={actions:{argTypesRegex:"^on[A-Z].*"},controls:{matchers:{color:/(background|color)$/i,date:/Date$/}},options:{storySort:{method:"alphabetical"}}};export{m as parameters};
+//# sourceMappingURL=preview-249fcf0d.js.map
