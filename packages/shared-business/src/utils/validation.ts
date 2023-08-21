@@ -78,9 +78,10 @@ export const validateIndividualTaxNumber =
         }
       })
       .with("NLD", () => {
-        if (/^[0-9]{9}$/.test(value.padStart(9, "0"))) {
+        const paddedValue = value.padStart(9, "0");
+        if (/^[0-9]{9}$/.test(paddedValue)) {
           // https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Netherlands-TIN.pdf
-          const [n1, n2, n3, n4, n5, n6, n7, n8, n9] = value.split("").map(x => Number(x));
+          const [n1, n2, n3, n4, n5, n6, n7, n8, n9] = paddedValue.split("").map(x => Number(x));
           const remainder =
             ((n1 ?? 0) * 9 +
               (n2 ?? 0) * 8 +
