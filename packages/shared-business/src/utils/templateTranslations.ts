@@ -30,7 +30,7 @@ export const getTaxNumberTooltip = (accountCountry: AccountCountry) =>
   match(accountCountry)
     .with("DEU", () => t("common.form.taxIdentificationNumber.tooltip.deu"))
     .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
-    .otherwise(() => "");
+    .otherwise(() => undefined);
 
 export const getCompanyTaxNumberHelp = (accountCountry: AccountCountry) =>
   match(accountCountry)

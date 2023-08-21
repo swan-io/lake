@@ -23,6 +23,7 @@ type Props = {
   accountCountry: AccountCountry;
   isCompany: boolean;
   required?: boolean;
+  label?: string;
 };
 
 export const TaxIdentificationNumberInput = ({
@@ -35,19 +36,23 @@ export const TaxIdentificationNumberInput = ({
   accountCountry,
   isCompany,
   required,
+  label = t("beneficiaryForm.beneficiary.taxIdentificationNumber"),
 }: Props) => {
+  const tooltipContents = getTaxNumberTooltip(accountCountry);
   return (
     <LakeLabel
-      label={t("beneficiaryForm.beneficiary.taxIdentificationNumber")}
+      label={label}
       optionalLabel={required === true ? undefined : t("common.optional")}
       help={
-        <LakeTooltip
-          content={getTaxNumberTooltip(accountCountry)}
-          placement="top"
-          width={accountCountry === "DEU" ? 800 : undefined}
-        >
-          <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
-        </LakeTooltip>
+        tooltipContents != null ? (
+          <LakeTooltip
+            content={tooltipContents}
+            placement="top"
+            width={accountCountry === "DEU" ? 800 : undefined}
+          >
+            <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
+          </LakeTooltip>
+        ) : null
       }
       render={id => (
         <LakeTextInput
