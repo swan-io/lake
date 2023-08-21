@@ -1,3 +1,9 @@
+## 2.7.20
+
+Changes:
+
+- Update UBO requirements for NLD (c885926a)
+
 ## 2.7.19
 
 Changes:
