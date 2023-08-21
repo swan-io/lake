@@ -1,3 +1,9 @@
+## 2.7.19
+
+Changes:
+
+- Make TIN input label customizable (e4778880)
+
 ## 2.7.18
 
 Fixes:
