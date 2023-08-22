@@ -1,3 +1,9 @@
+## 2.7.21
+
+Changes:
+
+- Require taxIdenficiationNumber for UBOs on NLD accounts (0de82761)
+
 ## 2.7.20
 
 Changes:
