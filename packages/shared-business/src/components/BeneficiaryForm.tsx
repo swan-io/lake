@@ -738,7 +738,8 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                         />
 
                         {((accountCountry === "DEU" && country?.value === "DEU") ||
-                          accountCountry === "ESP") && (
+                          accountCountry === "ESP" ||
+                          accountCountry === "NLD") && (
                           <>
                             <Space height={12} />
 
@@ -751,8 +752,11 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   onChange={onChange}
                                   accountCountry={accountCountry}
                                   isCompany={false}
-                                  // is mandatory for German accounts and UBO living in Germany
-                                  required={accountCountry === "DEU" && country?.value === "DEU"}
+                                  // is mandatory for German accounts with UBO living in Germany
+                                  required={
+                                    (accountCountry === "DEU" && country?.value === "DEU") ||
+                                    accountCountry === "NLD"
+                                  }
                                 />
                               )}
                             </Field>
