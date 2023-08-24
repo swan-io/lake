@@ -77,29 +77,6 @@ export const validateIndividualTaxNumber =
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
-      .with("NLD", () => {
-        const paddedValue = value.padStart(9, "0");
-        if (/^[0-9]{9}$/.test(paddedValue)) {
-          // https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Netherlands-TIN.pdf
-          const [n1, n2, n3, n4, n5, n6, n7, n8, n9] = paddedValue.split("").map(x => Number(x));
-          const remainder =
-            ((n1 ?? 0) * 9 +
-              (n2 ?? 0) * 8 +
-              (n3 ?? 0) * 7 +
-              (n4 ?? 0) * 6 +
-              (n5 ?? 0) * 5 +
-              (n6 ?? 0) * 4 +
-              (n7 ?? 0) * 3 +
-              (n8 ?? 0) * 2) %
-            11;
-
-          if ((n9 ?? 0) !== remainder) {
-            return t("common.form.invalidTaxIdentificationNumber");
-          }
-        } else {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
       .otherwise(noop);
   };
 

@@ -100,14 +100,13 @@ export const validateUbo = (
   accountCountry: AccountCountry,
 ): Partial<Record<keyof EditorState, string | undefined>> => {
   const isAddressRequired = match(accountCountry)
-    .with("DEU", "ESP", "NLD", () => true)
+    .with("DEU", "ESP", () => true)
     .otherwise(() => false);
   const isBirthInfoRequired = match(accountCountry)
     .with("ESP", "FRA", "NLD", () => true)
     .otherwise(() => false);
   const isTaxIdentificationNumberRequired =
-    (accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU") ||
-    accountCountry === "NLD";
+    accountCountry === "DEU" && editorState.residencyAddressCountry === "DEU";
 
   const validateTaxNumber = isTaxIdentificationNumberRequired
     ? combineValidators(validateNullableRequired, validateIndividualTaxNumber(accountCountry))
@@ -288,7 +287,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
   ) => {
     const [reference] = useState(() => initialState?.reference ?? uuid());
     const isAddressRequired = match(accountCountry)
-      .with("DEU", "ESP", "NLD", () => true)
+      .with("DEU", "ESP", () => true)
       .otherwise(() => false);
     const isBirthInfoRequired = match(accountCountry)
       .with("ESP", "FRA", "NLD", () => true)
@@ -379,7 +378,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           initialValue: initialState?.taxIdentificationNumber,
           validate: (value, { getFieldState }) => {
             const uboCountry = getFieldState("country").value;
-            if ((accountCountry === "DEU" && uboCountry === "DEU") || accountCountry === "NLD") {
+            if (accountCountry === "DEU" && uboCountry === "DEU") {
               return combineValidators(
                 validateNullableRequired,
                 validateIndividualTaxNumber(accountCountry),
@@ -738,8 +737,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                         />
 
                         {((accountCountry === "DEU" && country?.value === "DEU") ||
-                          accountCountry === "ESP" ||
-                          accountCountry === "NLD") && (
+                          accountCountry === "ESP") && (
                           <>
                             <Space height={12} />
 
@@ -753,10 +751,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                   accountCountry={accountCountry}
                                   isCompany={false}
                                   // is mandatory for German accounts with UBO living in Germany
-                                  required={
-                                    (accountCountry === "DEU" && country?.value === "DEU") ||
-                                    accountCountry === "NLD"
-                                  }
+                                  required={accountCountry === "DEU" && country?.value === "DEU"}
                                 />
                               )}
                             </Field>
