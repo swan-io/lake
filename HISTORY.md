@@ -1,3 +1,9 @@
+## 2.7.22
+
+Changes:
+
+- Remove unnecessary checks for Dutch UBOs (4f33a8a2)
+
 ## 2.7.21
 
 Changes:
