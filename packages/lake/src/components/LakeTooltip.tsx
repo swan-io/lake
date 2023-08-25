@@ -15,7 +15,7 @@ import { usePopper } from "react-popper";
 import { match } from "ts-pattern";
 import { colors, shadows } from "../constants/design";
 import { useHover } from "../hooks/useHover";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { getRootElement, matchReferenceWidthModifier } from "../utils/popper";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -119,7 +119,19 @@ type TooltipRef = {
 
 const MAX_WIDTH = "calc(100vw - 20px)";
 
-export const LakeTooltip = memo(
+export const LakeTooltip = ({ content, children, ...rest }: Props) => {
+  if (isNullishOrEmpty(content)) {
+    return children;
+  }
+
+  return (
+    <Tooltip content={content} {...rest}>
+      {children}
+    </Tooltip>
+  );
+};
+
+const Tooltip = memo(
   forwardRef<TooltipRef, Props>(
     (
       {
