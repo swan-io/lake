@@ -1,3 +1,7 @@
+## 2.7.23
+
+- feat(LakeTooltip): return children if no content (cc72560)
+
 ## 2.7.22
 
 Changes:
