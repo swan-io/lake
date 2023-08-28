@@ -29,7 +29,7 @@ To reproduce the shiny effect on the back of the card, we inject a custom shader
 This custom shader chunk change the diffuse color depending on camera position.
 */
 
-// This uses alpha channel of alphaMap texture to make transparent pixels of logo
+// Uses alpha channel instead of green to make pixel transparent on logo plane
 const logoAlphaMapFragmentShader = `
 diffuseColor.a *= texture2D(alphaMap, vAlphaMapUv).a;
 `;
