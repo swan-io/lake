@@ -1,4 +1,4 @@
-import { KeyboardEvent, ReactElement, ReactNode, useCallback, useRef } from "react";
+import { KeyboardEvent, ReactElement, ReactNode, forwardRef, useCallback, useRef } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -30,6 +30,7 @@ import { Popover } from "./Popover";
 import { Pressable } from "./Pressable";
 import { Separator } from "./Separator";
 import { Space } from "./Space";
+import { useMergeRefs } from "../hooks/useMergeRefs";
 
 const styles = StyleSheet.create({
   normal: {
@@ -148,258 +149,265 @@ export type SelectProps<V> = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function LakeSelect<V>({
-  title,
-  items,
-  valueStyle,
-  size,
-  color = "current",
-  disabled = false,
-  mode = "normal",
-  placeholder,
-  readOnly = false,
-  id,
-  matchReferenceWidth = true,
-  value,
-  error,
-  hideErrors = false,
-  icon,
-  onValueChange,
-  PopoverFooter,
-  style,
-}: SelectProps<V>) {
-  const inputRef = useRef<View>(null);
-  const listRef = useRef<FlatList>(null);
-  const typingTimeoutRef = useRef<number | undefined>(undefined);
-  const currentlyTypedRef = useRef<string | undefined>(undefined);
-  const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
+export const LakeSelect = forwardRef<View | null, SelectProps<unknown>>(
+  <V,>(
+    {
+      title,
+      items,
+      valueStyle,
+      size,
+      color = "current",
+      disabled = false,
+      mode = "normal",
+      placeholder,
+      readOnly = false,
+      id,
+      matchReferenceWidth = true,
+      value,
+      error,
+      hideErrors = false,
+      icon,
+      onValueChange,
+      PopoverFooter,
+      style,
+    }: SelectProps<V>,
+    ref,
+  ) => {
+    const inputRef = useRef<View>(null);
+    const listRef = useRef<FlatList>(null);
+    const typingTimeoutRef = useRef<number | undefined>(undefined);
+    const currentlyTypedRef = useRef<string | undefined>(undefined);
+    const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
 
-  const [visible, { close, open }] = useDisclosure(false);
+    const mergedRef = useMergeRefs(inputRef, ref);
 
-  const hasValue = isNotNullish(value);
-  const isSmall = size === "small";
-  const itemValue = items.find(i => i.value === value);
+    const [visible, { close, open }] = useDisclosure(false);
 
-  const onKeyDown = useCallback(
-    (event: NativeSyntheticEvent<React.KeyboardEvent>) => {
-      // this made a search not visible for user as the native select component
-      if (event.nativeEvent.key.length === 1) {
-        event.nativeEvent.stopPropagation();
+    const hasValue = isNotNullish(value);
+    const isSmall = size === "small";
+    const itemValue = items.find(i => i.value === value);
 
-        const currentlyTyped = `${
-          currentlyTypedRef.current ?? ""
-        }${event.nativeEvent.key.toLowerCase()}`;
+    const onKeyDown = useCallback(
+      (event: NativeSyntheticEvent<React.KeyboardEvent>) => {
+        // this made a search not visible for user as the native select component
+        if (event.nativeEvent.key.length === 1) {
+          event.nativeEvent.stopPropagation();
 
-        currentlyTypedRef.current = currentlyTyped;
+          const currentlyTyped = `${
+            currentlyTypedRef.current ?? ""
+          }${event.nativeEvent.key.toLowerCase()}`;
 
-        const selectedIndex = items.findIndex(item =>
-          item.name.toLowerCase().startsWith(currentlyTyped),
-        );
+          currentlyTypedRef.current = currentlyTyped;
 
-        const selected = items[selectedIndex];
+          const selectedIndex = items.findIndex(item =>
+            item.name.toLowerCase().startsWith(currentlyTyped),
+          );
 
-        if (selected != null) {
-          if (visible) {
-            const listElement = listRef.current;
+          const selected = items[selectedIndex];
 
-            if (listElement != null) {
-              listItemRefs.current[selectedIndex]?.focus();
+          if (selected != null) {
+            if (visible) {
+              const listElement = listRef.current;
+
+              if (listElement != null) {
+                listItemRefs.current[selectedIndex]?.focus();
+              }
+            } else {
+              onValueChange(selected.value);
             }
-          } else {
-            onValueChange(selected.value);
           }
         }
-      }
 
-      if (typingTimeoutRef.current != null) {
-        window.clearTimeout(typingTimeoutRef.current);
-      }
+        if (typingTimeoutRef.current != null) {
+          window.clearTimeout(typingTimeoutRef.current);
+        }
 
-      typingTimeoutRef.current = window.setTimeout(() => {
-        currentlyTypedRef.current = undefined;
-      }, 300);
-    },
-    [items, onValueChange, visible],
-  );
+        typingTimeoutRef.current = window.setTimeout(() => {
+          currentlyTypedRef.current = undefined;
+        }, 300);
+      },
+      [items, onValueChange, visible],
+    );
 
-  const name = itemValue?.name ?? (value as unknown as string);
+    const name = itemValue?.name ?? (value as unknown as string);
 
-  return (
-    <View style={commonStyles.fill}>
-      <Pressable
-        id={id}
-        ref={inputRef}
-        aria-haspopup="listbox"
-        role="button"
-        aria-expanded={visible}
-        disabled={readOnly || disabled}
-        style={({ focused }) => [
-          mode === "normal" ? styles.normal : styles.borderless,
-          size === "small" && styles.small,
-          (disabled || readOnly) && styles.inputDisabled,
-          (visible || focused) && styles.focusedInput,
-          mode === "borderless" && styles.focusedWithoutShadow,
-          mode !== "borderless" && error != null && styles.errorContainer,
-          (disabled || readOnly) && mode === "borderless" && styles.inputBorderlessDisabled,
-          style,
-        ]}
-        onPress={open}
-        onKeyDown={onKeyDown}
-        aria-errormessage={error}
-      >
-        {({ hovered }) => (
-          <>
-            {mode === "normal" && <View style={[styles.shadowed, hovered && styles.hovered]} />}
+    return (
+      <View style={commonStyles.fill}>
+        <Pressable
+          id={id}
+          ref={mergedRef}
+          aria-haspopup="listbox"
+          role="button"
+          aria-expanded={visible}
+          disabled={readOnly || disabled}
+          style={({ focused }) => [
+            mode === "normal" ? styles.normal : styles.borderless,
+            size === "small" && styles.small,
+            (disabled || readOnly) && styles.inputDisabled,
+            (visible || focused) && styles.focusedInput,
+            mode === "borderless" && styles.focusedWithoutShadow,
+            mode !== "borderless" && error != null && styles.errorContainer,
+            (disabled || readOnly) && mode === "borderless" && styles.inputBorderlessDisabled,
+            style,
+          ]}
+          onPress={open}
+          onKeyDown={onKeyDown}
+          aria-errormessage={error}
+        >
+          {({ hovered }) => (
+            <>
+              {mode === "normal" && <View style={[styles.shadowed, hovered && styles.hovered]} />}
 
-            <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-              <Box direction="row" alignItems="center" style={commonStyles.fill}>
-                {icon && (
-                  <>
-                    <Icon color={colors[color].primary} name={icon} size={isSmall ? 16 : 18} />
-                    <Space width={8} />
-                  </>
-                )}
+              <Box direction="row" justifyContent="spaceBetween" alignItems="center">
+                <Box direction="row" alignItems="center" style={commonStyles.fill}>
+                  {icon && (
+                    <>
+                      <Icon color={colors[color].primary} name={icon} size={isSmall ? 16 : 18} />
+                      <Space width={8} />
+                    </>
+                  )}
 
-                {hasValue ? (
-                  <Box direction="row" alignItems="center" style={commonStyles.fill}>
-                    {isNotNullish(itemValue?.icon) && (
-                      <>
-                        {itemValue?.icon}
+                  {hasValue ? (
+                    <Box direction="row" alignItems="center" style={commonStyles.fill}>
+                      {isNotNullish(itemValue?.icon) && (
+                        <>
+                          {itemValue?.icon}
 
-                        <Space width={12} />
-                      </>
-                    )}
+                          <Space width={12} />
+                        </>
+                      )}
 
+                      <LakeText
+                        color={colors.gray[900]}
+                        variant={isSmall ? "smallRegular" : "regular"}
+                        style={[styles.itemText, valueStyle]}
+                      >
+                        {name}
+                      </LakeText>
+                    </Box>
+                  ) : (
                     <LakeText
-                      color={colors.gray[900]}
-                      variant={isSmall ? "smallRegular" : "regular"}
-                      style={[styles.itemText, valueStyle]}
+                      style={[
+                        styles.itemText,
+                        styles.selectPlaceholder,
+                        isSmall && styles.selectSmallPlaceholder,
+                      ]}
                     >
-                      {name}
+                      {placeholder ?? " "}
                     </LakeText>
-                  </Box>
-                ) : (
-                  <LakeText
-                    style={[
-                      styles.itemText,
-                      styles.selectPlaceholder,
-                      isSmall && styles.selectSmallPlaceholder,
-                    ]}
-                  >
-                    {placeholder ?? " "}
-                  </LakeText>
+                  )}
+                </Box>
+
+                <Fill minWidth={8} />
+
+                {!disabled && (
+                  <Icon
+                    color={colors.gray[900]}
+                    name={visible ? "chevron-up-filled" : "chevron-down-filled"}
+                    size={16}
+                  />
                 )}
               </Box>
+            </>
+          )}
+        </Pressable>
 
-              <Fill minWidth={8} />
-
-              {!disabled && (
-                <Icon
-                  color={colors.gray[900]}
-                  name={visible ? "chevron-up-filled" : "chevron-down-filled"}
-                  size={16}
-                />
-              )}
-            </Box>
-          </>
-        )}
-      </Pressable>
-
-      {!hideErrors && (
-        <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.errorText}>
-          {error ?? " "}
-        </LakeText>
-      )}
-
-      <Popover
-        role="listbox"
-        matchReferenceMinWidth={matchReferenceWidth}
-        onDismiss={close}
-        referenceRef={inputRef}
-        returnFocus={true}
-        visible={visible}
-      >
-        {isNotNullish(title) && (
-          <>
-            <LakeText variant="semibold" color={colors.gray[900]} style={styles.selectListTitle}>
-              {title}
-            </LakeText>
-
-            <Separator />
-          </>
+        {!hideErrors && (
+          <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.errorText}>
+            {error ?? " "}
+          </LakeText>
         )}
 
-        <FlatList
-          role="list"
-          data={items}
-          ref={listRef}
-          contentContainerStyle={styles.listContent}
-          onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
-            const { key } = event.nativeEvent;
+        <Popover
+          role="listbox"
+          matchReferenceMinWidth={matchReferenceWidth}
+          onDismiss={close}
+          referenceRef={inputRef}
+          returnFocus={true}
+          visible={visible}
+        >
+          {isNotNullish(title) && (
+            <>
+              <LakeText variant="semibold" color={colors.gray[900]} style={styles.selectListTitle}>
+                {title}
+              </LakeText>
 
-            if (key === "ArrowDown" || key === "ArrowUp") {
-              event.preventDefault();
+              <Separator />
+            </>
+          )}
 
-              if (isNotNullish(event.currentTarget)) {
-                const focusableElements = getFocusableElements(
-                  event.currentTarget as unknown as HTMLDivElement,
-                );
+          <FlatList
+            role="list"
+            data={items}
+            ref={listRef}
+            contentContainerStyle={styles.listContent}
+            onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
+              const { key } = event.nativeEvent;
 
-                const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
-                const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
+              if (key === "ArrowDown" || key === "ArrowUp") {
+                event.preventDefault();
 
-                focusableElements[nextIndex]?.focus();
+                if (isNotNullish(event.currentTarget)) {
+                  const focusableElements = getFocusableElements(
+                    event.currentTarget as unknown as HTMLDivElement,
+                  );
+
+                  const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
+                  const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
+
+                  focusableElements[nextIndex]?.focus();
+                }
               }
-            }
-          }}
-          keyExtractor={(_, index) => `select-item-${index}`}
-          renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
-            const isSelected = value === item.value;
+            }}
+            keyExtractor={(_, index) => `select-item-${index}`}
+            renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
+              const isSelected = value === item.value;
 
-            return (
-              <Pressable
-                ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
-                onKeyDown={onKeyDown}
-                style={({ hovered, focused }) => [
-                  styles.item,
-                  (hovered || isSelected) && styles.itemHighlighted,
-                  focused && styles.itemFocused,
-                ]}
-                role="option"
-                aria-selected={true}
-                onPress={() => {
-                  onValueChange(item.value);
-                  close();
-                }}
-              >
-                {isNotNullish(item.icon) && (
-                  <>
-                    {item.icon}
-
-                    <Space width={12} />
-                  </>
-                )}
-
-                <LakeText
-                  color={colors.gray[900]}
-                  numberOfLines={1}
-                  style={[styles.itemText, isSelected && styles.selected]}
+              return (
+                <Pressable
+                  ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
+                  onKeyDown={onKeyDown}
+                  style={({ hovered, focused }) => [
+                    styles.item,
+                    (hovered || isSelected) && styles.itemHighlighted,
+                    focused && styles.itemFocused,
+                  ]}
+                  role="option"
+                  aria-selected={true}
+                  onPress={() => {
+                    onValueChange(item.value);
+                    close();
+                  }}
                 >
-                  {item.name}
-                </LakeText>
+                  {isNotNullish(item.icon) && (
+                    <>
+                      {item.icon}
 
-                <Fill minWidth={12} />
+                      <Space width={12} />
+                    </>
+                  )}
 
-                {isSelected && (
-                  <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
-                )}
-              </Pressable>
-            );
-          }}
-        />
+                  <LakeText
+                    color={colors.gray[900]}
+                    numberOfLines={1}
+                    style={[styles.itemText, isSelected && styles.selected]}
+                  >
+                    {item.name}
+                  </LakeText>
 
-        {PopoverFooter}
-      </Popover>
-    </View>
-  );
-}
+                  <Fill minWidth={12} />
+
+                  {isSelected && (
+                    <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
+                  )}
+                </Pressable>
+              );
+            }}
+          />
+
+          {PopoverFooter}
+        </Popover>
+      </View>
+    );
+  },
+);
