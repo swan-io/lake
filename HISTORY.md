@@ -1,3 +1,7 @@
+## 2.7.24
+
+- feat(TaxIdentificationNumberInput): forwardRef (f1c5c10)
+
 ## 2.7.23
 
 - feat(LakeTooltip): return children if no content (cc72560)
