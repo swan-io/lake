@@ -1,4 +1,12 @@
-import { KeyboardEvent, ReactElement, ReactNode, useCallback, useRef } from "react";
+import {
+  ForwardedRef,
+  KeyboardEvent,
+  ReactElement,
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useRef,
+} from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -20,6 +28,7 @@ import {
   texts,
 } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
@@ -148,31 +157,36 @@ export type SelectProps<V> = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function LakeSelect<V>({
-  title,
-  items,
-  valueStyle,
-  size,
-  color = "current",
-  disabled = false,
-  mode = "normal",
-  placeholder,
-  readOnly = false,
-  id,
-  matchReferenceWidth = true,
-  value,
-  error,
-  hideErrors = false,
-  icon,
-  onValueChange,
-  PopoverFooter,
-  style,
-}: SelectProps<V>) {
+const LakeSelectWithRef = <V,>(
+  {
+    title,
+    items,
+    valueStyle,
+    size,
+    color = "current",
+    disabled = false,
+    mode = "normal",
+    placeholder,
+    readOnly = false,
+    id,
+    matchReferenceWidth = true,
+    value,
+    error,
+    hideErrors = false,
+    icon,
+    onValueChange,
+    PopoverFooter,
+    style,
+  }: SelectProps<V>,
+  forwardedRef: ForwardedRef<View>,
+) => {
   const inputRef = useRef<View>(null);
   const listRef = useRef<FlatList>(null);
   const typingTimeoutRef = useRef<number | undefined>(undefined);
   const currentlyTypedRef = useRef<string | undefined>(undefined);
   const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
+
+  const mergedRef = useMergeRefs(inputRef, forwardedRef);
 
   const [visible, { close, open }] = useDisclosure(false);
 
@@ -228,7 +242,7 @@ export function LakeSelect<V>({
     <View style={commonStyles.fill}>
       <Pressable
         id={id}
-        ref={inputRef}
+        ref={mergedRef}
         aria-haspopup="listbox"
         role="button"
         aria-expanded={visible}
@@ -402,4 +416,8 @@ export function LakeSelect<V>({
       </Popover>
     </View>
   );
-}
+};
+
+export const LakeSelect = forwardRef(LakeSelectWithRef) as <I>(
+  props: SelectProps<I> & { ref?: ForwardedRef<View> },
+) => ReturnType<typeof LakeSelectWithRef>;
