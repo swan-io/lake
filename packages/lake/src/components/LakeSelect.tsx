@@ -419,5 +419,5 @@ const LakeSelectWithRef = <V,>(
 };
 
 export const LakeSelect = forwardRef(LakeSelectWithRef) as <I>(
-  props: SelectProps<I> & { forwardedRef?: ForwardedRef<View> },
+  props: SelectProps<I> & { ref?: ForwardedRef<View> },
 ) => ReturnType<typeof LakeSelectWithRef>;

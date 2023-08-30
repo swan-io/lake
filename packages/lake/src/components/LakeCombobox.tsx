@@ -381,5 +381,5 @@ const LakeComboboxWithRef = <I,>(
 };
 
 export const LakeCombobox = forwardRef(LakeComboboxWithRef) as <I>(
-  props: LakeComboboxProps<I> & { forwardedRef?: RefObject<LakeComboboxRef> },
+  props: LakeComboboxProps<I> & { ref?: RefObject<LakeComboboxRef> },
 ) => ReturnType<typeof LakeComboboxWithRef>;
