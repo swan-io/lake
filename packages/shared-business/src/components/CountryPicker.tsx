@@ -1,6 +1,7 @@
 import { Flag } from "@swan-io/lake/src/components/Flag";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
-import { useMemo } from "react";
+import { ForwardedRef, forwardRef, useMemo } from "react";
+import { View } from "react-native";
 import { CountryCCA3, getCountryName } from "../constants/countries";
 
 type Props<T extends CountryCCA3> = {
@@ -15,17 +16,20 @@ type Props<T extends CountryCCA3> = {
   hideErrors?: boolean;
 };
 
-export function CountryPicker<T extends CountryCCA3>({
-  onValueChange,
-  value,
-  countries,
-  readOnly,
-  id,
-  error,
-  placeholder,
-  disabled,
-  hideErrors,
-}: Props<T>) {
+const CountryPickerWithRef = <T extends CountryCCA3>(
+  {
+    onValueChange,
+    value,
+    countries,
+    readOnly,
+    id,
+    error,
+    placeholder,
+    disabled,
+    hideErrors,
+  }: Props<T>,
+  forwardedRef: ForwardedRef<View>,
+) => {
   const items = useMemo(() => {
     return countries
       .filter((item, index, array) => array.indexOf(item) === index) // deduplicate
@@ -41,6 +45,7 @@ export function CountryPicker<T extends CountryCCA3>({
     <LakeSelect
       readOnly={readOnly}
       id={id}
+      ref={forwardedRef}
       error={error}
       items={items}
       placeholder={placeholder}
@@ -50,4 +55,8 @@ export function CountryPicker<T extends CountryCCA3>({
       hideErrors={hideErrors}
     />
   );
-}
+};
+
+export const CountryPicker = forwardRef(CountryPickerWithRef) as <T extends CountryCCA3>(
+  props: Props<T> & { ref?: ForwardedRef<View> },
+) => ReturnType<typeof CountryPickerWithRef>;
