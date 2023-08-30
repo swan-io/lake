@@ -159,7 +159,7 @@ const LakeComboboxWithRef = <I,>(
     error,
     hideErrors,
   }: LakeComboboxProps<I>,
-  externalRef: ForwardedRef<LakeComboboxRef>,
+  forwardedRef: ForwardedRef<LakeComboboxRef>,
 ) => {
   const ref = useRef<TextInput>(null);
 
@@ -178,7 +178,7 @@ const LakeComboboxWithRef = <I,>(
   const close = useCallback(() => setState("closed"), []);
   const dismiss = useCallback(() => setState("dismissed"), []);
 
-  useImperativeHandle(externalRef, () => {
+  useImperativeHandle(forwardedRef, () => {
     return {
       open,
       close,
@@ -381,5 +381,5 @@ const LakeComboboxWithRef = <I,>(
 };
 
 export const LakeCombobox = forwardRef(LakeComboboxWithRef) as <I>(
-  props: LakeComboboxProps<I> & { ref?: RefObject<LakeComboboxRef> },
+  props: LakeComboboxProps<I> & { forwardedRef?: RefObject<LakeComboboxRef> },
 ) => ReturnType<typeof LakeComboboxWithRef>;

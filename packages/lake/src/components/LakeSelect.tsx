@@ -178,7 +178,7 @@ const LakeSelectWithRef = <V,>(
     PopoverFooter,
     style,
   }: SelectProps<V>,
-  ref: ForwardedRef<View>,
+  forwardedRef: ForwardedRef<View>,
 ) => {
   const inputRef = useRef<View>(null);
   const listRef = useRef<FlatList>(null);
@@ -186,7 +186,7 @@ const LakeSelectWithRef = <V,>(
   const currentlyTypedRef = useRef<string | undefined>(undefined);
   const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
 
-  const mergedRef = useMergeRefs(inputRef, ref);
+  const mergedRef = useMergeRefs(inputRef, forwardedRef);
 
   const [visible, { close, open }] = useDisclosure(false);
 
@@ -419,5 +419,5 @@ const LakeSelectWithRef = <V,>(
 };
 
 export const LakeSelect = forwardRef(LakeSelectWithRef) as <I>(
-  props: SelectProps<I> & { ref?: ForwardedRef<View> },
+  props: SelectProps<I> & { forwardedRef?: ForwardedRef<View> },
 ) => ReturnType<typeof LakeSelectWithRef>;
