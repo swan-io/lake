@@ -3,7 +3,6 @@ import {
   KeyboardEvent,
   ReactElement,
   ReactNode,
-  RefObject,
   forwardRef,
   useCallback,
   useRef,
@@ -420,5 +419,5 @@ const LakeSelectWithRef = <V,>(
 };
 
 export const LakeSelect = forwardRef(LakeSelectWithRef) as <I>(
-  props: SelectProps<I> & { ref?: RefObject<View> },
+  props: SelectProps<I> & { ref?: ForwardedRef<View> },
 ) => ReturnType<typeof LakeSelectWithRef>;
