@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ColorVariants, colors } from "../constants/design";
+import { isNotNullishOrEmpty } from "../utils/nullish";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
@@ -32,14 +33,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export type CheckboxProps = {
+type CheckboxProps = {
   value: boolean | "mixed";
   color?: ColorVariants;
   disabled?: boolean;
   isError?: boolean;
 };
 
-export const LakeCheckbox = ({
+const Checkbox = ({
   value,
   color = "current",
   disabled = false,
@@ -100,35 +101,42 @@ export const LakeCheckbox = ({
   );
 };
 
-export type LabelledCheckboxProps = CheckboxProps & {
-  onValueChange: (value: boolean) => void;
-  label: string;
+export type LakeCheckboxProps = CheckboxProps & {
+  onValueChange?: (value: boolean) => void;
+  label?: string;
   disabled?: boolean;
   isError?: boolean;
 };
 
-export const LakeLabelledCheckbox = ({
+export const LakeCheckbox = ({
   value,
   color,
   label,
   onValueChange,
   disabled = false,
   isError = false,
-}: LabelledCheckboxProps) => {
+}: LakeCheckboxProps) => {
   return (
     <Pressable
       role="checkbox"
       aria-checked={value}
       style={styles.labelled}
-      onPress={() => onValueChange(value === true ? false : true)}
+      onPress={
+        onValueChange && !disabled ? () => onValueChange(value === true ? false : true) : null
+      }
       disabled={disabled}
     >
-      <LakeCheckbox value={value} color={color} disabled={disabled} isError={isError} />
-      <Space width={8} />
+      <Checkbox value={value} color={color} disabled={disabled} isError={isError} />
 
-      <LakeText color={colors.gray[900]} userSelect="none">
-        {label}
-      </LakeText>
+      {isNotNullishOrEmpty(label) && (
+        <>
+          <Space width={8} />
+
+          <LakeText color={colors.gray[900]} userSelect="none">
+            {label}
+          </LakeText>
+        </>
+      )}
     </Pressable>
   );
 };

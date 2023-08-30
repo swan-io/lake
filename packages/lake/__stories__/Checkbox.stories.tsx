@@ -2,13 +2,7 @@ import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import {
-  CheckboxProps,
-  LabelledCheckboxProps,
-  LakeCheckbox,
-  LakeLabelledCheckbox,
-} from "../src/components/LakeCheckbox";
-import { Pressable } from "../src/components/Pressable";
+import { LakeCheckbox, LakeCheckboxProps } from "../src/components/LakeCheckbox";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -25,25 +19,8 @@ export default {
 const InteractiveCheckbox = ({
   defaultValue = false,
   ...props
-}: Except<CheckboxProps, "value"> & { defaultValue?: CheckboxProps["value"] }) => {
-  const [value, setValue] = useState(defaultValue);
-
-  const toggle = () => {
-    setValue(v => (v === true ? false : true));
-  };
-
-  return (
-    <Pressable style={styles.container} onPress={toggle} disabled={props.disabled}>
-      <LakeCheckbox value={value} {...props} />
-    </Pressable>
-  );
-};
-
-const InteractiveLabelledCheckbox = ({
-  defaultValue = false,
-  ...props
-}: Except<LabelledCheckboxProps, "value" | "onValueChange"> & {
-  defaultValue?: CheckboxProps["value"];
+}: Except<LakeCheckboxProps, "value" | "onValueChange"> & {
+  defaultValue?: LakeCheckboxProps["value"];
 }) => {
   const [value, setValue] = useState(defaultValue);
 
@@ -53,7 +30,7 @@ const InteractiveLabelledCheckbox = ({
 
   return (
     <View style={styles.container}>
-      <LakeLabelledCheckbox value={value} onValueChange={toggle} {...props} />
+      <LakeCheckbox value={value} onValueChange={toggle} {...props} />
     </View>
   );
 };
@@ -70,7 +47,7 @@ export const Variations = () => {
       </StoryPart>
 
       <StoryPart title="Lablelled">
-        <InteractiveLabelledCheckbox label="Enabled" />
+        <InteractiveCheckbox label="Enabled" />
       </StoryPart>
 
       <StoryPart title="Disabled">

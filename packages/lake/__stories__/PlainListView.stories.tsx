@@ -5,7 +5,7 @@ import { Box } from "../src/components/Box";
 import { ColumnCellConfig, ColumnTitleConfig } from "../src/components/FixedListView";
 import { SimpleHeaderCell, SimpleTitleCell } from "../src/components/FixedListViewCells";
 import { LakeButton } from "../src/components/LakeButton";
-import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
+import { LakeCheckbox } from "../src/components/LakeCheckbox";
 import { PlainListView } from "../src/components/PlainListView";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
@@ -134,7 +134,7 @@ export const Primary: StoryFn<typeof PlainListView> = () => {
         <Tag label="End reached">{endReachedTimes} times</Tag>
         <Space width={16} />
 
-        <LakeLabelledCheckbox
+        <LakeCheckbox
           label="With infinite scroll"
           value={withInfiniteScroll}
           onValueChange={setWithInfiniteScroll}

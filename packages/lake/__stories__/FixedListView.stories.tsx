@@ -16,7 +16,7 @@ import {
   SimpleTitleCell,
 } from "../src/components/FixedListViewCells";
 import { LakeButton } from "../src/components/LakeButton";
-import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
+import { LakeCheckbox } from "../src/components/LakeCheckbox";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
 
@@ -188,7 +188,7 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
         <Tag label="End reached">{endReachedTimes} times</Tag>
         <Space width={16} />
 
-        <LakeLabelledCheckbox
+        <LakeCheckbox
           label="With infinite scroll"
           value={withInfiniteScroll}
           onValueChange={setWithInfiniteScroll}

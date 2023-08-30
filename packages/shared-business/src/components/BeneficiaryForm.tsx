@@ -1,5 +1,5 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { LakeLabelledCheckbox } from "@swan-io/lake/src/components/LakeCheckbox";
+import { LakeCheckbox } from "@swan-io/lake/src/components/LakeCheckbox";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
@@ -203,7 +203,7 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
   return (
     <View>
       <Box direction="row" alignItems="center">
-        <LakeLabelledCheckbox
+        <LakeCheckbox
           value={value === "direct" || value === "both"}
           onValueChange={direct => {
             match({ direct, value })
@@ -220,7 +220,7 @@ const CapitalTypeCheckboxes = ({ value, error, onChange }: CapitalTypeCheckboxes
 
         <Space width={24} />
 
-        <LakeLabelledCheckbox
+        <LakeCheckbox
           value={value === "indirect" || value === "both"}
           onValueChange={indirect => {
             match({ indirect, value })
