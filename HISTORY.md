@@ -1,3 +1,7 @@
+## 2.7.25
+
+- feat(CountryPicker): forwardRef (9cd01f9)
+
 ## 2.7.24
 
 - feat(TaxIdentificationNumberInput): forwardRef (f1c5c10)
