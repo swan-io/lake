@@ -6,7 +6,6 @@ import { SpacingValue } from "./Space";
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: radii[8],
     borderWidth: 1,
     borderColor: colors.current[100],
     backgroundColor: colors.current[50],
@@ -18,9 +17,16 @@ type Props = {
   size?: number;
   padding?: SpacingValue | 0;
   color?: ColorVariants;
+  borderRadius?: number;
 };
 
-export const BorderedIcon = ({ name, size = 96, padding = 0, color = "current" }: Props) => {
+export const BorderedIcon = ({
+  name,
+  size = 96,
+  padding = 0,
+  color = "current",
+  borderRadius = radii[8],
+}: Props) => {
   const iconSize = size - padding * 2;
 
   return (
@@ -34,6 +40,7 @@ export const BorderedIcon = ({ name, size = 96, padding = 0, color = "current" }
           height: size,
           borderColor: colors[color][100],
           backgroundColor: colors[color][50],
+          borderRadius,
         },
       ]}
     >
