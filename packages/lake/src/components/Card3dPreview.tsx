@@ -1,9 +1,10 @@
 import { Environment, OrbitControls, Text, useGLTF, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { Result } from "@swan-io/boxed";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
-import { match } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
@@ -27,6 +28,11 @@ And this texture is used as an alpha map on a plane.
 To reproduce the shiny effect on the back of the card, we inject a custom shader in rainbow_mastercard material.
 This custom shader chunk change the diffuse color depending on camera position.
 */
+
+// Uses alpha channel instead of green to make pixel transparent on logo plane
+const logoAlphaMapFragmentShader = `
+diffuseColor.a *= texture2D(alphaMap, vAlphaMapUv).a;
+`;
 
 const shinyColorFragmentShader = `
 float red = cameraPosition.x * cameraPosition.z;
@@ -74,7 +80,7 @@ type CardParams = {
   expirationDate: string;
   cvv: string;
   color: "Silver" | "Black";
-  logo: SVGElement | null;
+  logo: SVGElement | HTMLImageElement | null;
   logoScale: number;
   assetsUrls: Card3dAssetsUrls;
   onSvgError?: (code: string) => void;
@@ -266,10 +272,14 @@ export const Card = forwardRef<THREE.Group, CardProps>(
         return;
       }
 
-      // We transform the logo to white to be able to use it as alpha map
-      const whiteLogo = getMonochromeSvg(logo, "white");
-      // Convert to Image element to be able to use it as texture
-      const image = createSvgImage(whiteLogo);
+      const image = match(logo)
+        .with(P.instanceOf(HTMLImageElement), image => Result.Ok(image))
+        .otherwise(logo => {
+          // We transform the logo to white to be able to use it as alpha map
+          const whiteLogo = getMonochromeSvg(logo, "white");
+          // Convert to Image element to be able to use it as texture
+          return createSvgImage(whiteLogo);
+        });
 
       if (image.isError()) {
         handleSvgError.current?.(image.getError());
@@ -472,6 +482,17 @@ export const Card = forwardRef<THREE.Group, CardProps>(
                 <planeGeometry args={logoData.size} />
 
                 <meshStandardMaterial
+                  ref={material => {
+                    if (!material) {
+                      return;
+                    }
+                    material.onBeforeCompile = shader => {
+                      shader.fragmentShader = shader.fragmentShader.replace(
+                        "#include <alphamap_fragment>",
+                        logoAlphaMapFragmentShader,
+                      );
+                    };
+                  }}
                   color={match(color)
                     .with("Silver", () => 0x000000)
                     .with("Black", () => 0xffffff)
