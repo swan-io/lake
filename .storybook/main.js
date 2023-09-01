@@ -24,7 +24,7 @@ module.exports = {
       PLACEKIT_API_KEY:
         process.env.PLACEKIT_API_KEY != null
           ? JSON.stringify(process.env.PLACEKIT_API_KEY)
-          : undefined,
+          : "undefined",
     };
 
     config.build = {
