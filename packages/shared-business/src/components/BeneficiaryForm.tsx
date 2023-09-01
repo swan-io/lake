@@ -27,7 +27,7 @@ import {
 } from "../utils/validation";
 import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
-import { GMapCityInput } from "./GMapCityInput";
+import { PlacekitCityInput } from "./PlacekitCityInput";
 import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
 const styles = StyleSheet.create({
@@ -583,7 +583,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 }
                                 style={styles.inputContainer}
                                 render={id => (
-                                  <GMapCityInput
+                                  <PlacekitCityInput
                                     id={id}
                                     apiKey={googleMapApiKey}
                                     error={error}
@@ -597,7 +597,9 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                     }
                                     onSuggestion={place => {
                                       onChange(place.city);
-                                      setFieldValue("birthCityPostalCode", place.postalCode);
+                                      if (place.postalCode != null) {
+                                        setFieldValue("birthCityPostalCode", place.postalCode);
+                                      }
                                     }}
                                     onLoadError={onCityLoadError}
                                   />

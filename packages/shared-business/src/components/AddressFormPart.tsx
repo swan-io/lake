@@ -6,9 +6,8 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useCallback, useEffect } from "react";
 import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
-import { PlaceDetail } from "../hooks/useGoogleMapSDK";
 import { locale, t } from "../utils/i18n";
-import { GMapAddressSearchInput } from "./GMapAddressSearchInput";
+import { AddressDetail, PlacekitAddressSearchInput } from "./PlacekitAddressSearchInput";
 
 type AddressField = {
   address: string;
@@ -57,10 +56,12 @@ export const AddressFormPart = ({
   }, [manualModeEnabled, listenFields, setManualMode]);
 
   const onSuggestion = useCallback(
-    (place: PlaceDetail) => {
+    (place: AddressDetail) => {
       setFieldValue("address", place.completeAddress);
       setFieldValue("city", place.city);
-      setFieldValue("postalCode", place.postalCode);
+      if (place.postalCode != null) {
+        setFieldValue("postalCode", place.postalCode);
+      }
       setManualMode.on();
     },
     [setManualMode, setFieldValue],
@@ -74,7 +75,7 @@ export const AddressFormPart = ({
             label={label ?? t("addressFormPart.addressLabel")}
             optionalLabel={optionalLabel}
             render={id => (
-              <GMapAddressSearchInput
+              <PlacekitAddressSearchInput
                 inputRef={ref}
                 apiKey={apiKey}
                 emptyResultText={t("common.noResult")}

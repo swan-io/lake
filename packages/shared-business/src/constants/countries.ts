@@ -2227,10 +2227,10 @@ export type Country = (typeof countries)[number];
 export type CountryCCA2 = (typeof countries)[number]["cca2"];
 export type CountryCCA3 = (typeof countries)[number]["cca3"];
 
-export const getCCA2forCCA3 = (cca3: CountryCCA3) =>
+export const getCCA2forCCA3 = (cca3: CountryCCA3): CountryCCA2 | undefined =>
   countries.find(country => country.cca3 === cca3)?.cca2;
 
-export const getCCA3forCCA2 = (cca2: CountryCCA2) =>
+export const getCCA3forCCA2 = (cca2: CountryCCA2): CountryCCA3 | undefined =>
   countries.find(country => country.cca2 === cca2)?.cca3;
 
 const isTranslatedCountry = (value: unknown): value is CountryWithTranslation =>
@@ -2353,8 +2353,8 @@ export const companyCountries = [
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
 
 // Google API accepts only 5 country codes
-export const countriesWithMultipleCCA3: Partial<Record<CountryCCA3, string[]>> = {
-  FRA: ["FRA", "GUF", "REU", "MTQ", "GLP"], // France, French Guiana, Réunion, Martinique, Guadeloupe
+export const countriesWithMultipleCCA3: Partial<Record<CountryCCA3, CountryCCA3[]>> = {
+  FRA: ["FRA" as const, "GUF" as const, "REU" as const, "MTQ" as const, "GLP" as const], // France, French Guiana, Réunion, Martinique, Guadeloupe
 };
 
 export const isCountryCCA3 = (value: unknown): value is CountryCCA3 =>

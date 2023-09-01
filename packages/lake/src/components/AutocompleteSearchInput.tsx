@@ -7,7 +7,6 @@ import { LakeText } from "./LakeText";
 import { Separator } from "./Separator";
 
 type Suggestion<T> = {
-  id: string;
   title: string;
   subtitle: string;
   value: T;
@@ -24,7 +23,7 @@ type Props<T> = {
   emptyResultText: string;
   ListFooterComponent?: ReactNode;
   shouldDisplaySuggestions?: boolean;
-  loadSuggestions: (value: string) => Future<Result<Suggestion<T>[], unknown>>;
+  loadSuggestions?: (value: string) => Future<Result<Suggestion<T>[], unknown>>;
   onSuggestion: (suggestion: Suggestion<T>) => void;
   onLoadError?: (error: unknown) => void;
 };
@@ -56,7 +55,7 @@ export const AutocompleteSearchInput = <T,>({
       placeholder={placeholder}
       value={value ?? ""}
       items={state}
-      icon="search-filled"
+      icon={loadSuggestions != null ? "search-filled" : undefined}
       disabled={disabled}
       error={error}
       ListFooterComponent={
@@ -85,17 +84,19 @@ export const AutocompleteSearchInput = <T,>({
           return setState(AsyncData.NotAsked());
         }
 
-        setState(AsyncData.Loading());
+        if (loadSuggestions != null) {
+          setState(AsyncData.Loading());
 
-        const request = loadSuggestions(value);
-        lastRequest.current = request;
+          const request = loadSuggestions(value);
+          lastRequest.current = request;
 
-        if (onLoadError != null) {
-          request.tapError(onLoadError);
+          if (onLoadError != null) {
+            request.tapError(onLoadError);
+          }
+          request.onResolve(value => setState(AsyncData.Done(value)));
         }
-        request.onResolve(value => setState(AsyncData.Done(value)));
       }}
-      keyExtractor={item => item.id}
+      keyExtractor={item => `${item.title} ${item.subtitle}`}
       emptyResultText={emptyResultText}
       renderItem={item => (
         <>

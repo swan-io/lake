@@ -20,6 +20,13 @@ module.exports = {
       },
     };
 
+    config.define = {
+      PLACEKIT_API_KEY:
+        process.env.PLACEKIT_API_KEY != null
+          ? JSON.stringify(process.env.PLACEKIT_API_KEY)
+          : undefined,
+    };
+
     config.build = {
       ...config.build,
       // The polyfill generates a bug on Safari, where it makes the module
