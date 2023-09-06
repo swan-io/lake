@@ -1,12 +1,28 @@
+## 2.7.26
+
+Features:
+
+- Support PNG logos on 3D Card Preview (26a003c6)
+
+Changes:
+
+- Add `borderRadius` prop for BorderedIcon (50c52a10)
+
 ## 2.7.25
+
+Changes:
 
 - feat(CountryPicker): forwardRef (9cd01f9)
 
 ## 2.7.24
 
+Changes:
+
 - feat(TaxIdentificationNumberInput): forwardRef (f1c5c10)
 
 ## 2.7.23
+
+Changes:
 
 - feat(LakeTooltip): return children if no content (cc72560)
 
