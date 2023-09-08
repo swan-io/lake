@@ -1,3 +1,10 @@
+## 2.7.27
+
+Changes:
+
+- Only deploy main branch (c132050)
+- Add add-card icon (a0eb4f7)
+
 ## 2.7.26
 
 Features:
