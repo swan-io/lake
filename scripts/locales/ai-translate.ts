@@ -2,7 +2,7 @@ import { Option, Result } from "@swan-io/boxed";
 import chalk from "chalk";
 import cliSpinners from "cli-spinners";
 import fs from "fs/promises";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import ora from "ora";
 import os from "os";
 import path from "path";
@@ -25,6 +25,7 @@ import type { Except } from "type-fest";
  */
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 if (OPENAI_API_KEY == null) {
   throw new Error("OPENAI_API_KEY is not defined");
 }
@@ -32,11 +33,10 @@ if (OPENAI_API_KEY == null) {
 const MODEL = "gpt-3.5-turbo";
 const MODEL_TOKEN_PRICE = 0.002; // $/1000 tokens https://openai.com/pricing
 const tokenEncoder = tiktoken.encodingForModel(MODEL);
-const openai = new OpenAIApi(
-  new Configuration({
-    apiKey: OPENAI_API_KEY,
-  }),
-);
+
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+});
 
 class OpenAIError extends Error {
   cost: number;
@@ -68,13 +68,9 @@ const appTranslationsPaths = {
 type AppName = keyof typeof appTranslationsPaths;
 
 const printAppName = (appName: AppName): string => chalk.magenta(appName);
-
 const printLocale = (locale: Locale): string => chalk.green(locales[locale]);
-
 const printNbKeys = (nbKeys: number): string => chalk.bold(nbKeys);
-
 const printCost = (cost: number): string => chalk.yellow(`${cost.toFixed(4)}$`);
-
 const printDuration = (duration: number): string => chalk.cyan(`${(duration / 1000).toFixed(2)}s`);
 
 /**
@@ -225,7 +221,7 @@ const computePrice = (nbTokens: number): number => {
  * Giving us the possibility to get a price approximation before calling OpenAI
  * The result isn't 100% accurate but it's good enough for approximating the price
  */
-const countTokens = (text: string) => {
+const countTokens = (text: string): number => {
   const tokenized = tokenEncoder.encode(text);
   return tokenized.length;
 };
@@ -233,7 +229,7 @@ const countTokens = (text: string) => {
 /**
  * This counts the number of tokens into a list of messages
  */
-const countInputTokens = (input: ChatCompletionRequestMessage[]): number => {
+const countInputTokens = (input: OpenAI.Chat.ChatCompletionMessageParam[]): number => {
   return input.reduce((acc, { content }) => acc + countTokens(content ?? ""), 0);
 };
 
@@ -276,7 +272,7 @@ const getChatPrompt = (
   targetLocaleJson: Record<string, string>,
   targetLocale: Locale,
 ): Option<{
-  messages: ChatCompletionRequestMessage[];
+  messages: OpenAI.Chat.ChatCompletionMessageParam[];
   approximatedPrice: number;
   nbKeys: number;
 }> => {
@@ -291,7 +287,7 @@ const getChatPrompt = (
     return Option.None();
   }
 
-  const messages: ChatCompletionRequestMessage[] = [
+  const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
     {
       role: "system",
       content:
@@ -329,7 +325,7 @@ const getChatPrompt = (
  * And parse the result which should be a JSON
  */
 const createChatCompletion = async (
-  messages: ChatCompletionRequestMessage[],
+  messages: OpenAI.Chat.ChatCompletionMessageParam[],
 ): Promise<
   Result<
     { translatedMessages: Record<string, string>; cost: number; duration: number },
@@ -339,7 +335,7 @@ const createChatCompletion = async (
   try {
     const start = Date.now();
 
-    const { data } = await openai.createChatCompletion({
+    const data = await openai.chat.completions.create({
       model: MODEL,
       messages,
       temperature: 0.5,
@@ -509,5 +505,4 @@ const main = async () => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-main();
+void main();
