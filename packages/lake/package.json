@@ -27,9 +27,9 @@
   "license": "MIT",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@react-three/drei": "^9.80.1",
-    "@react-three/fiber": "^8.13.6",
-    "@swan-io/boxed": "^1.1.0",
+    "@react-three/drei": "^9.83.9",
+    "@react-three/fiber": "^8.14.1",
+    "@swan-io/boxed": "^1.2.0",
     "@swan-io/chicane": "^1.4.1",
     "dayjs": "^1.11.9",
     "polished": "^4.2.2",
@@ -37,23 +37,23 @@
     "react": "^18.2.0",
     "react-atomic-state": "^1.2.7",
     "react-dom": "^18.2.0",
-    "react-native-web": "^0.19.7",
+    "react-native-web": "^0.19.8",
     "react-popper": "^2.3.0",
     "react-ux-form": "^1.5.0",
     "rifm": "^0.12.1",
-    "three": "^0.155.0",
+    "three": "^0.156.1",
     "ts-dedent": "^2.2.0",
     "ts-pattern": "^5.0.5",
     "urql": "^4.0.5",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.19",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/react-native": "^0.72.2",
-    "@types/three": "^0.155.0",
-    "@types/uuid": "^9.0.2",
+    "@types/three": "^0.156.0",
+    "@types/uuid": "^9.0.3",
     "jsdom": "^22.1.0",
-    "type-fest": "^4.2.0"
+    "type-fest": "^4.3.1"
   }
 }
