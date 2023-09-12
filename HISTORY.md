@@ -1,3 +1,9 @@
+## 2.7.28
+
+Changes:
+
+- Update dependencies (7521ac4)
+
 ## 2.7.27
 
 Changes:
