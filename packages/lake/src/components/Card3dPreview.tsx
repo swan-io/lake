@@ -257,6 +257,10 @@ export const Card = forwardRef<THREE.Group, CardProps>(
           materials.card.map = blackTexture;
         })
         .exhaustive();
+
+      // force threejs to update material
+      // because sometimes it doesn't apply texture on load randomly
+      materials.card.needsUpdate = true;
     }, [color, materials.card, silverTexture, blackTexture]);
 
     // this avoid to have onSvgError as dependency of the effect below which should run only on logo change
