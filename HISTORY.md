@@ -1,3 +1,9 @@
+## 2.7.29
+
+Changes:
+
+- Add missing icons (89f8e86b)
+
 ## 2.7.28
 
 Changes:
