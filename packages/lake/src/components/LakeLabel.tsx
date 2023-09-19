@@ -148,18 +148,21 @@ export const LakeLabel = ({
             .exhaustive()}
         />
 
-        <View aria-labelledby={type === "view" || type === "viewSmall" ? id : undefined}>
+        <Box
+          aria-labelledby={type === "view" || type === "viewSmall" ? id : undefined}
+          direction="row"
+        >
           {render(id)}
-        </View>
+
+          {isNotNullish(actions) && (
+            <>
+              <Space width={16} />
+
+              {actions}
+            </>
+          )}
+        </Box>
       </View>
-
-      {isNotNullish(actions) && (
-        <>
-          <Space width={16} />
-
-          {actions}
-        </>
-      )}
     </Box>
   );
 };
