@@ -1,3 +1,11 @@
+## 2.7.30
+
+Changes:
+
+- feat(icons): arrow-clockwise-filled (b7637d5)
+- feat(icons): qr-code-regular (72cf02b)
+- [Fix] Label story, error in LakeLabel (d681ebb)
+
 ## 2.7.29
 
 Changes:
