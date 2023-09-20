@@ -1,3 +1,9 @@
+## 2.7.31
+
+Changes:
+
+- Attempt to alter CSS selector blocked by easylist (b6a713cb)
+
 ## 2.7.30
 
 Changes:
