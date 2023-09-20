@@ -30,10 +30,26 @@ export const Directions = () => {
         </Box>
       </StoryPart>
 
+      <StoryPart title="Horizontal with text">
+        <Box direction="row" alignItems="center">
+          <View style={styles.block} />
+          <Separator horizontal={true} space={16} text="or" />
+          <View style={styles.block} />
+        </Box>
+      </StoryPart>
+
       <StoryPart title="Vertical">
         <Box direction="column" alignItems="start">
           <View style={styles.block} />
           <Separator horizontal={false} space={16} />
+          <View style={styles.block} />
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="Vertical with text">
+        <Box direction="column" alignItems="start">
+          <View style={styles.block} />
+          <Separator horizontal={false} space={16} text="or" />
           <View style={styles.block} />
         </Box>
       </StoryPart>

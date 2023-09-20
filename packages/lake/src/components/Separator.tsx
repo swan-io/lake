@@ -1,6 +1,8 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { commonStyles } from "../constants/commonStyles";
 import { colors } from "../constants/design";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
+import { LakeText } from "./LakeText";
 import { SpacingValue } from "./Space";
 
 const styles = StyleSheet.create({
@@ -14,15 +16,31 @@ const styles = StyleSheet.create({
     height: 1,
     alignSelf: "stretch",
   },
+  horizontalContainer: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+  },
+  verticalContainer: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+  },
+  text: {
+    padding: "5px",
+  },
 });
 
-type Props = {
+type LineProps = {
   horizontal?: boolean;
   space?: SpacingValue;
   style?: StyleProp<ViewStyle>;
 };
+type Props = LineProps & {
+  text?: string;
+};
 
-export const Separator = ({ horizontal = false, space, style }: Props) => (
+const Line = ({ horizontal = false, style, space }: LineProps) => (
   <View
     role="none"
     style={
@@ -32,3 +50,21 @@ export const Separator = ({ horizontal = false, space, style }: Props) => (
     }
   />
 );
+
+export const Separator = ({ horizontal = false, space, style, text }: Props) => {
+  if (isNullishOrEmpty(text)) {
+    return <Line horizontal={horizontal} space={space} style={style} />;
+  }
+
+  return (
+    <View style={horizontal ? styles.horizontalContainer : styles.verticalContainer}>
+      <Line horizontal={horizontal} space={space} style={[style, commonStyles.fill]} />
+
+      <LakeText align="center" style={styles.text}>
+        {text}
+      </LakeText>
+
+      <Line horizontal={horizontal} space={space} style={[style, commonStyles.fill]} />
+    </View>
+  );
+};
