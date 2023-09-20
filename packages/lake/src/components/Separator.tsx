@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { colors } from "../constants/design";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { LakeText } from "./LakeText";
-import { SpacingValue } from "./Space";
+import { Space, SpacingValue } from "./Space";
 
 const styles = StyleSheet.create({
   horizontal: {
@@ -26,9 +27,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
   },
-  text: {
-    padding: "5px",
-  },
 });
 
 type LineProps = {
@@ -37,7 +35,7 @@ type LineProps = {
   style?: StyleProp<ViewStyle>;
 };
 type Props = LineProps & {
-  text?: string;
+  children?: ReactNode;
 };
 
 const Line = ({ horizontal = false, style, space }: LineProps) => (
@@ -51,19 +49,21 @@ const Line = ({ horizontal = false, style, space }: LineProps) => (
   />
 );
 
-export const Separator = ({ horizontal = false, space, style, text }: Props) => {
-  if (isNullishOrEmpty(text)) {
+export const Separator = ({ horizontal = false, space, style, children }: Props) => {
+  if (isNullishOrEmpty(children)) {
     return <Line horizontal={horizontal} space={space} style={style} />;
   }
 
   return (
     <View style={horizontal ? styles.horizontalContainer : styles.verticalContainer}>
       <Line horizontal={horizontal} space={space} style={[style, commonStyles.fill]} />
+      <Space width={12} />
 
-      <LakeText align="center" style={styles.text}>
-        {text}
+      <LakeText align="center" style={!horizontal && { lineHeight: 2 * (space ?? 0) }}>
+        {children}
       </LakeText>
 
+      <Space width={12} />
       <Line horizontal={horizontal} space={space} style={[style, commonStyles.fill]} />
     </View>
   );
