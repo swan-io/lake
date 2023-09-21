@@ -10,6 +10,7 @@ const BUTTON_SIZE = 20;
 const styles = StyleSheet.create({
   container: {
     height: BUTTON_SIZE,
+    width: "100%",
   },
   disabled: {
     cursor: "not-allowed",
