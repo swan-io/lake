@@ -1,3 +1,9 @@
+## 2.7.32
+
+Changes:
+
+- feat(Separator): separator with text (dbaeda8)
+
 ## 2.7.31
 
 Changes:
