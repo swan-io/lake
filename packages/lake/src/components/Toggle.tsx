@@ -72,6 +72,7 @@ export const Toggle = ({ onToggle, value, disabled = false, mode = "desktop", la
     <View style={styles.container}>
       <Pressable
         role="switch"
+        aria-checked={value}
         style={styles.switch}
         onPress={() => onToggle(!value)}
         disabled={disabled}
