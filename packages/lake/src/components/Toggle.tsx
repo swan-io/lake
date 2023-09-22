@@ -70,7 +70,12 @@ type Props = {
 export const Toggle = ({ onToggle, value, disabled = false, mode = "desktop", labels }: Props) => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.switch} onPress={() => onToggle(!value)} disabled={disabled}>
+      <Pressable
+        role="switch"
+        style={styles.switch}
+        onPress={() => onToggle(!value)}
+        disabled={disabled}
+      >
         {mode === "mobile" && (
           <View
             style={[
