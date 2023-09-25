@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { colors } from "../constants/design";
+import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
@@ -11,6 +12,7 @@ const BORDER_WIDTH = 1;
 const styles = StyleSheet.create({
   container: {
     display: "inline-block",
+    userSelect: "none",
   },
   disabled: {
     cursor: "not-allowed",
@@ -35,27 +37,11 @@ const styles = StyleSheet.create({
     borderWidth: BORDER_WIDTH,
   },
   switchItem: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     height: HEIGHT - BORDER_WIDTH * 2,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  switchItemOff: {
-    color: colors.negative[500],
-  },
-  switchItemOn: {
-    color: colors.positive[500],
-  },
-  desktopSwitchItem: {
-    paddingHorizontal: 8,
-    userSelect: "none",
-  },
-  desktopSwitchItemOff: {
-    color: colors.negative[500],
-  },
-  desktopSwitchItemOn: {
-    color: colors.positive[500],
   },
 });
 
@@ -119,31 +105,36 @@ export const Toggle = ({
           ]}
         />
 
-        <LakeText style={[styles.switchItem, value && styles.switchItemOn]} ref={onItemRef}>
+        <Box style={styles.switchItem} ref={onItemRef}>
           {isMobile ? (
-            <Icon name="checkmark-circle-regular" size={16} />
+            <Icon
+              size={16}
+              name="checkmark-circle-regular"
+              color={value ? colors.positive[500] : colors.gray[500]}
+            />
           ) : (
-            <LakeText
-              variant="smallMedium"
-              style={[styles.desktopSwitchItem, value && styles.desktopSwitchItemOn]}
-            >
+            <LakeText variant="smallMedium" color={value ? colors.positive[500] : colors.gray[500]}>
               {onLabel}
             </LakeText>
           )}
-        </LakeText>
+        </Box>
 
-        <LakeText style={[styles.switchItem, !value && styles.switchItemOff]} ref={offItemRef}>
+        <Box style={styles.switchItem} ref={offItemRef}>
           {isMobile ? (
-            <Icon name="subtract-circle-regular" size={16} />
+            <Icon
+              size={16}
+              name="subtract-circle-regular"
+              color={!value ? colors.negative[500] : colors.gray[500]}
+            />
           ) : (
             <LakeText
               variant="smallMedium"
-              style={[styles.desktopSwitchItem, !value && styles.desktopSwitchItemOff]}
+              color={!value ? colors.negative[500] : colors.gray[500]}
             >
               {offLabel}
             </LakeText>
           )}
-        </LakeText>
+        </Box>
       </Pressable>
     </View>
   );
