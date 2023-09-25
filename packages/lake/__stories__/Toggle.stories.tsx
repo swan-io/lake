@@ -25,9 +25,35 @@ export const Variations = () => {
         />
       </StoryPart>
 
+      <StoryPart title="Desktop Disabled">
+        <Toggle
+          value={value}
+          onToggle={setValue}
+          mode="desktop"
+          disabled={true}
+          labels={{
+            false: "Canceled",
+            true: "Active",
+          }}
+        />
+      </StoryPart>
+
       <StoryPart title="Mobile">
         <Toggle
           value={value}
+          onToggle={setValue}
+          mode="mobile"
+          labels={{
+            false: "Canceled",
+            true: "Active",
+          }}
+        />
+      </StoryPart>
+
+      <StoryPart title="Mobile Disabled">
+        <Toggle
+          value={value}
+          disabled={true}
           onToggle={setValue}
           mode="mobile"
           labels={{
