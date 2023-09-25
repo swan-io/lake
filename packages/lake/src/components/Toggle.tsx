@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     top: -BORDER_WIDTH,
     borderRadius: HEIGHT / 2,
-    transitionProperty: "transform, width",
     transitionDuration: "300ms",
     transitionTimingFunction: "ease-in-out",
     borderWidth: BORDER_WIDTH,
