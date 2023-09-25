@@ -1,3 +1,9 @@
+## 2.7.33
+
+Fixes:
+
+- Revert to previous layout lake label (6e62a17)
+
 ## 2.7.32
 
 Changes:
