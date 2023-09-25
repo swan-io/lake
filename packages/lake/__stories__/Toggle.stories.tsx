@@ -18,10 +18,8 @@ export const Variations = () => {
           value={value}
           onToggle={setValue}
           mode="desktop"
-          labels={{
-            false: "Canceled",
-            true: "Active",
-          }}
+          offLabel="Canceled"
+          onLabel="Active"
         />
       </StoryPart>
 
@@ -31,10 +29,8 @@ export const Variations = () => {
           onToggle={setValue}
           mode="desktop"
           disabled={true}
-          labels={{
-            false: "Canceled",
-            true: "Active",
-          }}
+          offLabel="Canceled"
+          onLabel="Active"
         />
       </StoryPart>
 
@@ -43,10 +39,8 @@ export const Variations = () => {
           value={value}
           onToggle={setValue}
           mode="mobile"
-          labels={{
-            false: "Canceled",
-            true: "Active",
-          }}
+          offLabel="Canceled"
+          onLabel="Active"
         />
       </StoryPart>
 
@@ -56,10 +50,8 @@ export const Variations = () => {
           disabled={true}
           onToggle={setValue}
           mode="mobile"
-          labels={{
-            false: "Canceled",
-            true: "Active",
-          }}
+          offLabel="Canceled"
+          onLabel="Active"
         />
       </StoryPart>
     </StoryBlock>

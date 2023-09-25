@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { colors } from "../constants/design";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: HEIGHT / 2,
     transform: "translateZ(0px)",
-    display: "inline-flex",
+    width: "min-content",
     borderColor: colors.gray[100],
     borderWidth: BORDER_WIDTH,
   },
@@ -36,26 +36,26 @@ const styles = StyleSheet.create({
     borderWidth: BORDER_WIDTH,
   },
   switchItem: {
+    paddingHorizontal: 4,
     height: HEIGHT - BORDER_WIDTH * 2,
-    borderRadius: (HEIGHT - BORDER_WIDTH * 2) / 2,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  switchItemUnchecked: {
+  switchItemOff: {
     color: colors.negative[500],
   },
-  switchItemChecked: {
+  switchItemOn: {
     color: colors.positive[500],
   },
   desktopSwitchItem: {
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingHorizontal: 8,
+    userSelect: "none",
   },
-  desktopSwitchItemUnchecked: {
+  desktopSwitchItemOff: {
     color: colors.negative[500],
   },
-  desktopSwitchItemChecked: {
+  desktopSwitchItemOn: {
     color: colors.positive[500],
   },
 });
@@ -65,27 +65,39 @@ type Props = {
   disabled?: boolean;
   onToggle: (next: boolean) => void;
   mode?: "desktop" | "mobile";
-  labels: {
-    true: string;
-    false: string;
-  };
+  onLabel: string;
+  offLabel: string;
 };
 
-export const Toggle = ({ onToggle, value, disabled = false, mode = "desktop", labels }: Props) => {
+export const Toggle = ({
+  onToggle,
+  value,
+  disabled = false,
+  mode = "desktop",
+  onLabel,
+  offLabel,
+}: Props) => {
   const containerRef = useRef<View | null>(null);
-  const checkedRef = useRef<Text | null>(null);
-  const uncheckedRef = useRef<Text | null>(null);
-  const [handlePosition, setHandlePosition] = useState({ width: 0, left: 0 });
+  const onItemRef = useRef<Text | null>(null);
+  const offItemRef = useRef<Text | null>(null);
+  const [handleStyle, setHandleStyle] = useState<ViewStyle>();
+  const isMobile = mode === "mobile";
 
   useEffect(() => {
-    (value ? checkedRef : uncheckedRef).current?.measureLayout(
+    (value ? onItemRef : offItemRef).current?.measureLayout(
       containerRef.current as unknown as number,
       (left, _, width) => {
-        setHandlePosition({ left, width });
+        setHandleStyle(prev => ({
+          transitionProperty: prev ? "all" : "none",
+          width: width + 2 * BORDER_WIDTH,
+          transform: `translateX(${
+            value ? -BORDER_WIDTH : left - (isMobile ? 2 * BORDER_WIDTH : 0)
+          }px)`,
+        }));
       },
       () => {},
     );
-  }, [value, mode, labels]);
+  }, [value, isMobile, onLabel, offLabel]);
 
   return (
     <View style={[styles.container, disabled && styles.disabled]} ref={containerRef}>
@@ -100,45 +112,36 @@ export const Toggle = ({ onToggle, value, disabled = false, mode = "desktop", la
         <View
           style={[
             styles.handle,
-
+            handleStyle,
             {
-              transform: `translateX(${handlePosition.left - 2 * BORDER_WIDTH}px)`,
-              width: handlePosition.width + 2 * BORDER_WIDTH,
               borderColor: value ? colors.positive[500] : colors.negative[500],
               backgroundColor: value ? colors.positive[50] : colors.negative[50],
             },
           ]}
         />
 
-        <LakeText style={[styles.switchItem, value && styles.switchItemChecked]} ref={checkedRef}>
-          {mode === "mobile" ? (
-            <Icon
-              style={{ width: HEIGHT - BORDER_WIDTH * 2 }}
-              name="checkmark-circle-regular"
-              size={16}
-            />
+        <LakeText style={[styles.switchItem, value && styles.switchItemOn]} ref={onItemRef}>
+          {isMobile ? (
+            <Icon name="checkmark-circle-regular" size={16} />
           ) : (
-            <LakeText style={[styles.desktopSwitchItem, value && styles.desktopSwitchItemChecked]}>
-              {labels.true}
+            <LakeText
+              variant="smallMedium"
+              style={[styles.desktopSwitchItem, value && styles.desktopSwitchItemOn]}
+            >
+              {onLabel}
             </LakeText>
           )}
         </LakeText>
 
-        <LakeText
-          style={[styles.switchItem, !value && styles.switchItemUnchecked]}
-          ref={uncheckedRef}
-        >
-          {mode === "mobile" ? (
-            <Icon
-              style={{ width: HEIGHT - BORDER_WIDTH * 2 }}
-              name="subtract-circle-regular"
-              size={16}
-            />
+        <LakeText style={[styles.switchItem, !value && styles.switchItemOff]} ref={offItemRef}>
+          {isMobile ? (
+            <Icon name="subtract-circle-regular" size={16} />
           ) : (
             <LakeText
-              style={[styles.desktopSwitchItem, !value && styles.desktopSwitchItemUnchecked]}
+              variant="smallMedium"
+              style={[styles.desktopSwitchItem, !value && styles.desktopSwitchItemOff]}
             >
-              {labels.false}
+              {offLabel}
             </LakeText>
           )}
         </LakeText>
