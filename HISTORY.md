@@ -1,3 +1,10 @@
+## 2.7.34
+
+Changes
+
+- Improve glob package workaround for yarn 1.x (d07129a)
+- feat(Toggle): add component (3952c3b)
+
 ## 2.7.33
 
 Fixes:
