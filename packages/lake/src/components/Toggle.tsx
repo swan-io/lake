@@ -71,7 +71,7 @@ export const Toggle = ({
       containerRef.current as unknown as number,
       (left, _, width) => {
         setHandleStyle(prev => ({
-          transitionProperty: prev ? "all" : "none",
+          transitionProperty: prev ? "width, transform" : "none",
           width: width + 2 * BORDER_WIDTH,
           transform: `translateX(${
             value ? -BORDER_WIDTH : left - (isMobile ? 2 * BORDER_WIDTH : 0)
