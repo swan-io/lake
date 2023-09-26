@@ -10,15 +10,11 @@ const HEIGHT = 26;
 const BORDER_WIDTH = 1;
 
 const styles = StyleSheet.create({
-  container: {
-    display: "inline-block",
-    userSelect: "none",
-  },
   disabled: {
-    cursor: "not-allowed",
     opacity: 0.3,
   },
   switch: {
+    userSelect: "none",
     flexDirection: "row",
     borderRadius: HEIGHT / 2,
     transform: "translateZ(0px)",
@@ -67,6 +63,8 @@ export const Toggle = ({
   const offItemRef = useRef<Text | null>(null);
   const [handleStyle, setHandleStyle] = useState<ViewStyle>();
   const isMobile = mode === "mobile";
+  const onColor = value ? colors.positive[500] : colors.gray[500];
+  const offColor = !value ? colors.negative[500] : colors.gray[500];
 
   useEffect(() => {
     (value ? onItemRef : offItemRef).current?.measureLayout(
@@ -85,57 +83,45 @@ export const Toggle = ({
   }, [value, isMobile, onLabel, offLabel]);
 
   return (
-    <View style={[styles.container, disabled && styles.disabled]} ref={containerRef}>
-      <Pressable
-        role="switch"
-        style={styles.switch}
-        onPress={() => onToggle(!value)}
-        disabled={disabled}
-        aria-checked={value}
-        aria-disabled={disabled}
-      >
-        <View
-          style={[
-            styles.handle,
-            handleStyle,
-            {
-              borderColor: value ? colors.positive[500] : colors.negative[500],
-              backgroundColor: value ? colors.positive[50] : colors.negative[50],
-            },
-          ]}
-        />
+    <Pressable
+      style={[styles.switch, disabled && styles.disabled]}
+      onPress={() => onToggle(!value)}
+      aria-disabled={disabled}
+      aria-checked={value}
+      disabled={disabled}
+      ref={containerRef}
+      role="switch"
+    >
+      <View
+        style={[
+          styles.handle,
+          handleStyle,
+          {
+            borderColor: value ? colors.positive[500] : colors.negative[500],
+            backgroundColor: value ? colors.positive[50] : colors.negative[50],
+          },
+        ]}
+      />
 
-        <Box style={styles.switchItem} ref={onItemRef}>
-          {isMobile ? (
-            <Icon
-              size={16}
-              name="checkmark-circle-regular"
-              color={value ? colors.positive[500] : colors.gray[500]}
-            />
-          ) : (
-            <LakeText variant="smallMedium" color={value ? colors.positive[500] : colors.gray[500]}>
-              {onLabel}
-            </LakeText>
-          )}
-        </Box>
+      <Box style={styles.switchItem} ref={onItemRef}>
+        {isMobile ? (
+          <Icon size={16} name="checkmark-circle-regular" color={onColor} />
+        ) : (
+          <LakeText variant="smallMedium" color={onColor}>
+            {onLabel}
+          </LakeText>
+        )}
+      </Box>
 
-        <Box style={styles.switchItem} ref={offItemRef}>
-          {isMobile ? (
-            <Icon
-              size={16}
-              name="subtract-circle-regular"
-              color={!value ? colors.negative[500] : colors.gray[500]}
-            />
-          ) : (
-            <LakeText
-              variant="smallMedium"
-              color={!value ? colors.negative[500] : colors.gray[500]}
-            >
-              {offLabel}
-            </LakeText>
-          )}
-        </Box>
-      </Pressable>
-    </View>
+      <Box style={styles.switchItem} ref={offItemRef}>
+        {isMobile ? (
+          <Icon size={16} name="subtract-circle-regular" color={offColor} />
+        ) : (
+          <LakeText variant="smallMedium" color={offColor}>
+            {offLabel}
+          </LakeText>
+        )}
+      </Box>
+    </Pressable>
   );
 };
