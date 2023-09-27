@@ -16,7 +16,7 @@ import {
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { Fragment, useLayoutEffect, useRef } from "react";
+import { Fragment, useMemo } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";
@@ -112,6 +112,9 @@ const styles = StyleSheet.create({
   preview: {
     aspectRatio: 16 / 4,
     width: "50%",
+    backgroundPosition: "center",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
   },
 });
 
@@ -130,7 +133,7 @@ type Props = {
   documents?: UploadFileStatus[];
   onRemoveFile?: (fileId: string) => void;
   accept: string[];
-  value?: File | Element;
+  value?: File;
   disabled?: boolean;
   onDropAccepted?: DropzoneOptions["onDropAccepted"];
   onDropRejected?: DropzoneOptions["onDropRejected"];
@@ -140,30 +143,10 @@ type Props = {
   maxSize?: number;
 };
 
-const UploadAreaPreview = ({ value }: { value: Element }) => {
-  const containerRef = useRef<View | null>(null);
+const UploadAreaPreview = ({ file }: { file: File }) => {
+  const url = useMemo(() => URL.createObjectURL(file), [file]);
 
-  useLayoutEffect(() => {
-    const element = containerRef.current as unknown as HTMLElement | null;
-    if (element != null) {
-      while (element.firstChild) {
-        element.firstChild.remove();
-      }
-
-      const previewElement = value.cloneNode(true) as HTMLElement;
-      element.append(previewElement);
-
-      previewElement.style.position = "absolute";
-      previewElement.style.top = "0";
-      previewElement.style.left = "0";
-      previewElement.style.width = "100%";
-      previewElement.style.height = "100%";
-      previewElement.style.objectFit = "contain";
-      previewElement.style.objectPosition = "50% 50%";
-    }
-  }, [value]);
-
-  return <View ref={containerRef} style={styles.preview} />;
+  return <View style={[styles.preview, { backgroundImage: `url("${url}")` }]} />;
 };
 
 export const UploadArea = ({
@@ -207,8 +190,8 @@ export const UploadArea = ({
           <input {...getInputProps()} />
 
           {isNotNullish(value) ? (
-            value instanceof Element ? (
-              <UploadAreaPreview value={value} />
+            value.type.startsWith("image/") ? (
+              <UploadAreaPreview file={value} />
             ) : (
               <>
                 <Icon
