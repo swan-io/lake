@@ -18,9 +18,9 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { FileTile } from "@swan-io/shared-business/src/components/FileTile";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";
 import { formatNestedMessage, t } from "../utils/i18n";
 
@@ -112,11 +112,19 @@ const styles = StyleSheet.create({
     borderColor: colors.negative[500],
   },
   preview: {
-    aspectRatio: 16 / 2,
+    aspectRatio: 16 / 5,
     width: "50%",
     backgroundPosition: "center",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
+  },
+  deleteButton: {
+    position: "absolute",
+    right: spacings[20],
+    top: spacings[20],
+  },
+  deleteButtonHovered: {
+    opacity: 0.8,
   },
 });
 
@@ -133,7 +141,8 @@ export type UploadFileStatus = (
 type Props = {
   icon: IconName;
   documents?: UploadFileStatus[];
-  onRemoveFile?: (fileId: string) => void;
+  onRemoveDocument?: (fileId: string) => void;
+  onRemoveFile?: () => void;
   accept: string[];
   value?: AsyncData<File>;
   disabled?: boolean;
@@ -158,6 +167,7 @@ export const UploadArea = ({
   documents = [],
   disabled = false,
   onRemoveFile,
+  onRemoveDocument,
   onDropAccepted,
   onDropRejected,
   layout = "vertical",
@@ -197,7 +207,22 @@ export const UploadArea = ({
               Loading: () => <LoadingView />,
               Done: value =>
                 value.type.startsWith("image/") ? (
-                  <UploadAreaPreview file={value} />
+                  <>
+                    <UploadAreaPreview file={value} />
+
+                    {onRemoveFile != null ? (
+                      <Pressable
+                        role="button"
+                        onPress={() => onRemoveFile()}
+                        style={({ hovered }) => [
+                          styles.deleteButton,
+                          hovered && styles.deleteButtonHovered,
+                        ]}
+                      >
+                        <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
+                      </Pressable>
+                    ) : null}
+                  </>
                 ) : (
                   <>
                     <Icon
@@ -226,6 +251,19 @@ export const UploadArea = ({
                         {value.name}
                       </LakeText>
                     </View>
+
+                    {onRemoveFile != null ? (
+                      <Pressable
+                        role="button"
+                        onPress={() => onRemoveFile()}
+                        style={({ hovered }) => [
+                          styles.deleteButton,
+                          hovered && styles.deleteButtonHovered,
+                        ]}
+                      >
+                        <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
+                      </Pressable>
+                    ) : null}
                   </>
                 ),
             })
@@ -317,14 +355,14 @@ export const UploadArea = ({
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={onRemoveFile ? () => onRemoveFile(document.id) : undefined}
+                  onRemove={onRemoveDocument ? () => onRemoveDocument(document.id) : undefined}
                 />
               ))
               .with({ status: "failed" }, ({ error }) => (
                 <FileTile
                   name={document.name ?? t("uploadArea.unknownFileName")}
                   url={document.fileUrl}
-                  onRemove={() => (onRemoveFile ? onRemoveFile(document.id) : undefined)}
+                  onRemove={() => (onRemoveDocument ? onRemoveDocument(document.id) : undefined)}
                   variant="refused"
                   title={error}
                 />

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
+const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg", "image/svg+xml"];
 
 export default {
   title: "Forms/UploadArea",
@@ -83,11 +83,23 @@ const SWAN_LOGO_SVG = new File(
 
 export const WithOneFile = ({ layout }: StoryArgs) => {
   const [file, setFile] = useState<File | undefined>(undefined);
+
   return (
     <StoryBlock
       title="UploadArea with one file"
       description="Here is different file icons depending on file extension"
     >
+      <StoryPart title="Interactive" style={styles.storyPart}>
+        <UploadArea
+          icon="document-regular"
+          layout={layout}
+          accept={ACCEPTED_FORMATS}
+          value={file ? AsyncData.Done(file) : undefined}
+          onDropAccepted={file => void setFile(file[0])}
+          onRemoveFile={() => setValue(undefined)}
+        />
+      </StoryPart>
+
       <StoryPart title="PDF" style={styles.storyPart}>
         <UploadArea
           icon="document-regular"
@@ -217,7 +229,7 @@ export const Interactive = ({ layout }: StoryArgs) => {
           accept={ACCEPTED_FORMATS}
           documents={documents}
           onDropAccepted={addDocuments}
-          onRemoveFile={removeDocument}
+          onRemoveDocument={removeDocument}
         />
       </StoryPart>
 
@@ -226,9 +238,10 @@ export const Interactive = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
+          value={file != null ? AsyncData.Done(file) : undefined}
           onDropAccepted={selectFile}
           onDropRejected={removeFile}
+          onRemoveFile={() => setFile(undefined)}
         />
       </StoryPart>
     </StoryBlock>
