@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { colors } from "../constants/design";
 import { Box } from "./Box";
@@ -66,21 +66,21 @@ export const Toggle = ({
   const onColor = value ? colors.positive[500] : colors.gray[500];
   const offColor = !value ? colors.negative[500] : colors.gray[500];
 
-  useEffect(() => {
+  const reajustLayout = useCallback(() => {
     (value ? onItemRef : offItemRef).current?.measureLayout(
       containerRef.current as unknown as number,
       (left, _, width) => {
         setHandleStyle(prev => ({
           transitionProperty: prev ? "width, transform" : "none",
           width: width + 2 * BORDER_WIDTH,
-          transform: `translateX(${
-            value ? -BORDER_WIDTH : left - (isMobile ? 2 * BORDER_WIDTH : 0)
-          }px)`,
+          transform: `translateX(${value ? -BORDER_WIDTH : left - 2 * BORDER_WIDTH}px)`,
         }));
       },
       () => {},
     );
-  }, [value, isMobile, onLabel, offLabel]);
+  }, [value]);
+
+  useEffect(reajustLayout, [reajustLayout, value, isMobile, onLabel, offLabel]);
 
   return (
     <Pressable
@@ -91,6 +91,7 @@ export const Toggle = ({
       disabled={disabled}
       ref={containerRef}
       role="switch"
+      onLayout={reajustLayout}
     >
       <View
         style={[
