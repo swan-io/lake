@@ -1,3 +1,9 @@
+## 2.7.35
+
+Changes
+
+- fix(Toggle): handle is 1px wront at first render (12258ef)
+
 ## 2.7.34
 
 Changes
