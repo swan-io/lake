@@ -387,7 +387,10 @@ export const PlainListView = <T, ExtraInfo>({
                               style={[
                                 styles.stickyHeader,
                                 large && styles.stickyHeaderLarge,
-                                { height: groupHeaderHeight, top: stickyOffset },
+                                {
+                                  height: groupHeaderHeight,
+                                  top: stickyOffset + groupHeaderHeight,
+                                },
                               ]}
                             >
                               <LakeHeading level={3} variant="h3">
