@@ -142,7 +142,10 @@ export type ButtonProps = {
   hrefAttrs?: { download?: boolean; rel?: string; target?: string };
   pill?: boolean;
 } & (
-  | { ariaLabel: string; children?: never }
+  | {
+      ariaLabel: string;
+      children?: never;
+    }
   | {
       ariaLabel?: string;
       children: ReactNode;
