@@ -107,6 +107,7 @@ type Props<T> = {
   value?: T;
   getId?: (item: T) => unknown;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
 const identity = <T,>(x: T) => x;
@@ -117,6 +118,7 @@ export const ChoicePicker = <T,>({
   large = false,
   renderItem,
   value,
+  disabled = false,
   onChange,
 }: Props<T>) => {
   const containerRef = useRef<ScrollView | null>(null);
@@ -222,6 +224,7 @@ export const ChoicePicker = <T,>({
           {items.map((item, index) => (
             <Pressable
               key={String(index)}
+              disabled={disabled}
               style={[
                 styles.item,
                 desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
@@ -261,7 +264,7 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressPrevious}
-          disabled={mobilePosition === "start"}
+          disabled={mobilePosition === "start" || disabled}
           style={styles.leftButton}
         />
       )}
@@ -272,7 +275,7 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressNext}
-          disabled={mobilePosition === "end"}
+          disabled={mobilePosition === "end" || disabled}
           style={styles.rightButton}
         />
       )}
