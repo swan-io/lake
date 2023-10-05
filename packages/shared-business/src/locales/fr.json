@@ -1,5 +1,6 @@
 {
   "addressFormPart.addressLabel": "Saisissez votre adresse",
+  "error.generic": "Une erreur est survenue",
   "addressFormPart.cityLabel": "Ville",
   "addressFormPart.placeholder": "Commencer à écrire...",
   "addressFormPart.postCodeLabel": "Code postal",
