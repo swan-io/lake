@@ -1,4 +1,5 @@
 {
+  "error.generic": "Ocorreu um erro",
   "addressFormPart.addressLabel": "Introduza o seu endereço",
   "addressFormPart.cityLabel": "Cidade",
   "addressFormPart.placeholder": "Comece a escrever...",

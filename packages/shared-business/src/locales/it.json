@@ -1,4 +1,5 @@
 {
+  "error.generic": "Si è verificato un errore",
   "addressFormPart.addressLabel": "Digita il tuo indirizzo",
   "addressFormPart.cityLabel": "Città",
   "addressFormPart.placeholder": "Inizia a digitare...",

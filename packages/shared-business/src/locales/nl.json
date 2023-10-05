@@ -1,4 +1,5 @@
 {
+  "error.generic": "Er is een fout opgetreden",
   "addressFormPart.addressLabel": "Typ uw adres",
   "addressFormPart.cityLabel": "Stad",
   "addressFormPart.placeholder": "Begin met typen...",
