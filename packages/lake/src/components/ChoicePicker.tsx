@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
     animationFillMode: "backwards",
     animationTimingFunction: "ease-in-out",
   },
+  disabled: {
+    opacity: 0.3,
+  },
   itemLarge: {
     flexBasis: "50%",
     maxWidth: "none",
@@ -227,6 +230,7 @@ export const ChoicePicker = <T,>({
               disabled={disabled}
               style={[
                 styles.item,
+                disabled && styles.disabled,
                 desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
                 desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
