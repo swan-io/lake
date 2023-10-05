@@ -1,6 +1,5 @@
 {
   "addressFormPart.addressLabel": "Saisissez votre adresse",
-  "error.generic": "Une erreur est survenue",
   "addressFormPart.cityLabel": "Ville",
   "addressFormPart.placeholder": "Commencer à écrire...",
   "addressFormPart.postCodeLabel": "Code postal",
@@ -104,6 +103,7 @@
   "datePicker.month.november": "Novembre",
   "datePicker.month.october": "Octobre",
   "datePicker.month.september": "Septembre",
+  "error.generic": "Une erreur est survenue",
   "error.network.500": "Erreur de serveur interne",
   "error.network.503": "Service indisponible",
   "error.requiredField": "Ce champ est requis",
