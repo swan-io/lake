@@ -15,6 +15,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 import { P, match } from "ts-pattern";
+import { CombinedError } from "urql";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
@@ -159,7 +160,11 @@ export const translateError = (error: unknown) => {
     .returnType<string>()
     .with({ __typename: P.select(P.string) }, __typename => `rejection.${__typename}`)
     .with(P.string, __typename => `rejection.${__typename}`)
-    .with({ response: { status: P.select(P.number) } }, status => `error.network.${status}`)
+    .with(P.instanceOf(CombinedError), ({ response }) =>
+      match(response)
+        .with({ response: { status: P.select(P.number) } }, status => `error.network.${status}`)
+        .otherwise(() => "error.generic"),
+    )
     .with(P.instanceOf(Error), ({ message }) => `rejection.${message}`)
     .otherwise(() => "error.generic");
 
