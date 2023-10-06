@@ -1,3 +1,10 @@
+## 2.7.37
+
+Changes
+
+- feat(LakeSlider): add disabled mode (01bbd97)
+- feat(ChoicePicker): disabled mode (3588ca5)
+
 ## 2.7.36
 
 Changes
