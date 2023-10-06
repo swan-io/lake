@@ -9,6 +9,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { match } from "ts-pattern";
+import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
   colors,
@@ -89,10 +90,6 @@ const styles = StyleSheet.create({
   },
   text: texts.semibold,
   textSmall: texts.smallSemibold,
-  disabled: {
-    cursor: "not-allowed",
-    opacity: 0.3,
-  },
   resetOpacity: {
     opacity: 1,
   },
@@ -192,12 +189,11 @@ export const LakeButton = memo(
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
             styles.base,
-
             isSmall && styles.small,
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
-            disabled && styles.disabled,
+            disabled && commonStyles.disabled,
             disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
 
