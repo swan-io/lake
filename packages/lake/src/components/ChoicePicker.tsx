@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
+import { commonStyles } from "../constants/commonStyles";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
 import { clampValue } from "../utils/math";
@@ -57,9 +58,6 @@ const styles = StyleSheet.create({
     animationDuration: "200ms",
     animationFillMode: "backwards",
     animationTimingFunction: "ease-in-out",
-  },
-  disabled: {
-    opacity: 0.3,
   },
   itemLarge: {
     flexBasis: "50%",
@@ -230,7 +228,7 @@ export const ChoicePicker = <T,>({
               disabled={disabled}
               style={[
                 styles.item,
-                disabled && styles.disabled,
+                disabled && commonStyles.disabled,
                 desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
                 desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
