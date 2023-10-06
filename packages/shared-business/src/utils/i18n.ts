@@ -14,6 +14,8 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
+import { P, match } from "ts-pattern";
+import { CombinedError } from "urql";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
@@ -149,3 +151,22 @@ export const rifmDateProps: RifmProps = getRifmProps({
   charMap: { 2: "/", 4: "/" },
   maxLength: 8,
 });
+
+const translationKeys = Object.keys(translationEN);
+const isTranslationKey = (key: string): key is TranslationKey => translationKeys.includes(key);
+
+export const translateError = (error: unknown) => {
+  const key = match(error)
+    .returnType<string>()
+    .with({ __typename: P.select(P.string) }, __typename => `rejection.${__typename}`)
+    .with(P.string, __typename => `rejection.${__typename}`)
+    .with(P.instanceOf(CombinedError), ({ response }) =>
+      match(response)
+        .with({ response: { status: P.select(P.number) } }, status => `error.network.${status}`)
+        .otherwise(() => "error.generic"),
+    )
+    .with(P.instanceOf(Error), ({ message }) => `rejection.${message}`)
+    .otherwise(() => "error.generic");
+
+  return t(isTranslationKey(key) ? key : "error.generic");
+};

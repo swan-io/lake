@@ -1,3 +1,9 @@
+## 2.7.36
+
+Changes
+
+- Add urql and rejections helpers (1c658cd)
+
 ## 2.7.35
 
 Changes

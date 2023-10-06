@@ -103,6 +103,7 @@
   "datePicker.month.november": "November",
   "datePicker.month.october": "October",
   "datePicker.month.september": "September",
+  "error.generic": "An error occurred",
   "error.network.500": "Internal server error",
   "error.network.503": "Service unavailable",
   "error.requiredField": "This field is required",

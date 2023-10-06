@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/shared-business",
-  "version": "2.7.35",
+  "version": "2.7.36",
   "engines": {
     "node": ">=18.0.0",
     "yarn": "^1.22.0"
@@ -41,6 +41,7 @@
     "react-ux-form": "^1.5.0",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.0.5",
+    "urql": "^4.0.5",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

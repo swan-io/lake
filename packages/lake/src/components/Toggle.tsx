@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { commonStyles } from "../constants/commonStyles";
 import { colors } from "../constants/design";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
@@ -10,9 +11,6 @@ const HEIGHT = 26;
 const BORDER_WIDTH = 1;
 
 const styles = StyleSheet.create({
-  disabled: {
-    opacity: 0.3,
-  },
   switch: {
     userSelect: "none",
     flexDirection: "row",
@@ -84,7 +82,7 @@ export const Toggle = ({
 
   return (
     <Pressable
-      style={[styles.switch, disabled && styles.disabled]}
+      style={[styles.switch, disabled && commonStyles.disabled]}
       onPress={() => onToggle(!value)}
       aria-disabled={disabled}
       aria-checked={value}
