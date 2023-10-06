@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { commonStyles } from "../constants/commonStyles";
 import { breakpoints } from "../constants/design";
 import { Box } from "./Box";
 import { LakeLabel } from "./LakeLabel";
@@ -13,6 +14,7 @@ export type SliderProps = {
   max: number;
   step: number;
   unit: string;
+  disabled?: boolean;
   onChange: (value: number) => void;
 };
 
@@ -29,7 +31,16 @@ const styles = StyleSheet.create({
 
 export const sliderBreakpoint = breakpoints.tiny;
 
-export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: SliderProps) => {
+export const LakeSlider = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  unit,
+  disabled = false,
+  onChange,
+}: SliderProps) => {
   const [dirtyValue, setDirtyValue] = useState(String(value));
 
   useEffect(() => {
@@ -57,6 +68,7 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
                     onChangeText={setDirtyValue}
                     onBlur={sanitizeInput}
                     inputMode="decimal"
+                    disabled={disabled}
                   />
                 </View>
               </Box>
@@ -67,8 +79,12 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
                 max={max}
                 step={step}
                 value={value}
+                disabled={disabled}
                 onChange={event => onChange(Number(event.target.value))}
-                style={{ backgroundSize: `${((value - min) / (max - min)) * 100}% 100%` }}
+                style={{
+                  backgroundSize: `${((value - min) / (max - min)) * 100}% 100%`,
+                  ...(disabled ? commonStyles.disabled : {}),
+                }}
               />
             </>
           ) : (
@@ -82,6 +98,7 @@ export const LakeSlider = ({ label, value, min, max, step, unit, onChange }: Sli
                   onChangeText={setDirtyValue}
                   onBlur={sanitizeInput}
                   inputMode="decimal"
+                  disabled={disabled}
                 />
               )}
             />
