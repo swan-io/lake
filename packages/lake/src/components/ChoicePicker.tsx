@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
+import { commonStyles } from "../constants/commonStyles";
 import { breakpoints, negativeSpacings, spacings } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
 import { clampValue } from "../utils/math";
@@ -107,6 +108,7 @@ type Props<T> = {
   value?: T;
   getId?: (item: T) => unknown;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
 const identity = <T,>(x: T) => x;
@@ -117,6 +119,7 @@ export const ChoicePicker = <T,>({
   large = false,
   renderItem,
   value,
+  disabled = false,
   onChange,
 }: Props<T>) => {
   const containerRef = useRef<ScrollView | null>(null);
@@ -222,8 +225,10 @@ export const ChoicePicker = <T,>({
           {items.map((item, index) => (
             <Pressable
               key={String(index)}
+              disabled={disabled}
               style={[
                 styles.item,
+                disabled && commonStyles.disabled,
                 desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
                 desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
@@ -261,7 +266,7 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressPrevious}
-          disabled={mobilePosition === "start"}
+          disabled={mobilePosition === "start" || disabled}
           style={styles.leftButton}
         />
       )}
@@ -272,7 +277,7 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressNext}
-          disabled={mobilePosition === "end"}
+          disabled={mobilePosition === "end" || disabled}
           style={styles.rightButton}
         />
       )}
