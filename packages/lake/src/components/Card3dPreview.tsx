@@ -414,7 +414,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
               rotation={[0, Math.PI, 0]}
               position={[4, -0.15, 0]}
             >
-              by Mastercard international.
+              from Mastercard International.
               {secondaryTextMaterial}
             </Text>
 
