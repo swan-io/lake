@@ -1,3 +1,4 @@
+import { intersection } from "@swan-io/lake/src/utils/array";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 
 export const LANGUAGE_FALLBACK = "en";
@@ -11,9 +12,9 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
   type SupportedLanguage = SupportedLanguages[number];
 
   // Restrict shared-business supported languages to the current project ones
-  if (isNullish(supportedLanguages)) {
-    supportedLanguages = languages;
-  }
+  supportedLanguages = isNullish(supportedLanguages)
+    ? languages
+    : intersection(supportedLanguages, languages);
 
   const isSupportedLanguage = (language: string): language is SupportedLanguage =>
     (supportedLanguages ?? []).includes(language as SupportedLanguage);
