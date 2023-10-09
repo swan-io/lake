@@ -1,4 +1,28 @@
 import { Option } from "@swan-io/boxed";
+import { BottomPanel } from "@swan-io/lake/src/components/BottomPanel";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { Fill } from "@swan-io/lake/src/components/Fill";
+import { Icon } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
+import { Item, LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
+import { Popover } from "@swan-io/lake/src/components/Popover";
+import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { Separator } from "@swan-io/lake/src/components/Separator";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { colors, spacings } from "@swan-io/lake/src/constants/design";
+import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
+import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
+import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
+import { noop } from "@swan-io/lake/src/utils/function";
+import {
+  isNotNullish,
+  isNotNullishOrEmpty,
+  isNullishOrEmpty,
+} from "@swan-io/lake/src/utils/nullish";
+import { getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
@@ -6,27 +30,8 @@ import { ValidatorResult, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
-import { colors, spacings } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
-import { useFirstMountState } from "../hooks/useFirstMountState";
-import { useResponsive } from "../hooks/useResponsive";
-import { noop } from "../utils/function";
-import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
-import { getRifmProps } from "../utils/rifm";
-import { BottomPanel } from "./BottomPanel";
-import { Box } from "./Box";
-import { Fill } from "./Fill";
-import { Icon } from "./Icon";
-import { LakeButton } from "./LakeButton";
-import { LakeLabel } from "./LakeLabel";
+import { t } from "../utils/i18n";
 import { LakeModal } from "./LakeModal";
-import { Item, LakeSelect } from "./LakeSelect";
-import { LakeText } from "./LakeText";
-import { LakeTextInput } from "./LakeTextInput";
-import { Popover } from "./Popover";
-import { Pressable } from "./Pressable";
-import { Separator } from "./Separator";
-import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   label: {
@@ -558,6 +563,7 @@ const YearMonthSelect = ({
             icon="arrow-left-filled"
             disabled={isPreviousDisabled}
             onPress={setPreviousMonth}
+            ariaLabel={t("datePicker.month.previous")}
           />
 
           <Fill minWidth={12} />
@@ -596,6 +602,7 @@ const YearMonthSelect = ({
                 icon="arrow-left-filled"
                 disabled={isPreviousDisabled}
                 onPress={setPreviousMonth}
+                ariaLabel={t("datePicker.month.previous")}
               />
 
               <Space width={12} />
@@ -608,6 +615,7 @@ const YearMonthSelect = ({
             icon="arrow-right-filled"
             disabled={isNextDisabled}
             onPress={setNextMonth}
+            ariaLabel={t("datePicker.month.next")}
           />
         </>
       )}
@@ -817,7 +825,13 @@ export const DatePicker = ({
           label={label}
           style={styles.label}
           actions={
-            <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+            <LakeButton
+              mode="secondary"
+              icon="calendar-ltr-regular"
+              size="small"
+              onPress={open}
+              ariaLabel={t("common.open")}
+            />
           }
           render={id => (
             <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
@@ -1294,7 +1308,14 @@ export const DateRangePicker = ({
         />
 
         <Space width={12} />
-        <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+
+        <LakeButton
+          mode="secondary"
+          icon="calendar-ltr-regular"
+          size="small"
+          onPress={open}
+          ariaLabel={t("common.open")}
+        />
       </Box>
 
       <Space height={4} />

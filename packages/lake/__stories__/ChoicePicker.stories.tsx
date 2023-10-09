@@ -1,8 +1,8 @@
 import { Meta } from "@storybook/react";
+import { ChoicePicker } from "@swan-io/shared-business/src/components/ChoicePicker";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
-import { ChoicePicker } from "../src/components/ChoicePicker";
 import { Tag } from "../src/components/Tag";
 import { spacings } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
