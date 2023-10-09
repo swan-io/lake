@@ -45,6 +45,7 @@
   "businessActivity.realEstate": "Immobilien",
   "businessActivity.scientificActivities": "Wissenschaftliche Tätigkeiten",
   "businessActivity.transportation": "Transportwesen",
+  "common.cancel": "Abbrechen",
   "common.form.help.nbCharacters": "{nbCharacters} Zeichen",
   "common.form.help.nbDigits": "{nbDigits} Ziffern",
   "common.form.invalidTaxIdentificationNumber": "Diese Steueridentifikationsnummer ist ungültig",

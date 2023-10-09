@@ -45,6 +45,7 @@
   "businessActivity.realEstate": "Servizi immobiliari",
   "businessActivity.scientificActivities": "Attività scientifiche",
   "businessActivity.transportation": "Trasporto",
+  "common.cancel": "Annulla",
   "common.form.help.nbCharacters": "{nbCharacters} caratteri",
   "common.form.help.nbDigits": "{nbDigits} cifre",
   "common.form.invalidTaxIdentificationNumber": "Codice fiscale non valido",

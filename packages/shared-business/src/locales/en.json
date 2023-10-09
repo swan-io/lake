@@ -50,6 +50,7 @@
   "common.form.invalidTaxIdentificationNumber": "This tax identification number is invalid",
   "common.form.taxIdentificationNumber.placeholder": "Tax ID",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (also Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr or Steuer-ID, according to § 139b AO)",
+  "common.cancel": "Cancel",
   "common.noResult": "Empty result",
   "common.optional": "Optional",
   "common.skipToContent": "Skip to content",
