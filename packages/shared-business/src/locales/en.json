@@ -52,6 +52,7 @@
   "common.form.taxIdentificationNumber.placeholder": "Tax ID",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (also Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr or Steuer-ID, according to § 139b AO)",
   "common.next": "Next",
+  "common.cancel": "Cancel",
   "common.noResult": "Empty result",
   "common.open": "Open",
   "common.optional": "Optional",

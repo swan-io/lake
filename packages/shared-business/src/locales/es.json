@@ -46,6 +46,7 @@
   "businessActivity.scientificActivities": "Actividades científicas",
   "businessActivity.transportation": "Transporte",
   "common.close": "Cerrar",
+  "common.cancel": "Cancelar",
   "common.form.help.nbCharacters": "{nbCharacters} caracteres",
   "common.form.help.nbDigits": "{nbDigits} dígitos",
   "common.form.invalidTaxIdentificationNumber": "Este número de identificación fiscal no es válido",

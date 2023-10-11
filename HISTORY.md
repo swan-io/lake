@@ -1,3 +1,9 @@
+## 2.7.38
+
+Fixes:
+
+- Fix `getBestLocale` (82241d2)
+
 ## 2.7.37
 
 Changes
