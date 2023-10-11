@@ -67,7 +67,9 @@ export const Formats = () => {
         <LakeAlert
           variant="info"
           title="Title"
-          callToAction={<LakeButton size="small" color="shakespear" icon="add-filled" />}
+          callToAction={
+            <LakeButton size="small" color="shakespear" icon="add-filled" ariaLabel="Action !" />
+          }
         />
       </StoryPart>
 

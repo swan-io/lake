@@ -1,10 +1,10 @@
 import { Box } from "@swan-io/lake/src/components/Box";
 import { IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
-import { LakeModal } from "@swan-io/lake/src/components/LakeModal";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { ColorVariants } from "@swan-io/lake/src/constants/design";
+import { LakeModal } from "@swan-io/shared-business/src/components/LakeModal";
 import { StyleSheet } from "react-native";
 import { t } from "../utils/i18n";
 

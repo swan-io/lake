@@ -1,5 +1,4 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
-import type { DateFormat } from "@swan-io/lake/src/components/DatePicker";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
@@ -16,6 +15,7 @@ import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 import { P, match } from "ts-pattern";
 import { CombinedError } from "urql";
+import type { DateFormat } from "../components/DatePicker";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
