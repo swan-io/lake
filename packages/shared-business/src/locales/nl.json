@@ -45,6 +45,7 @@
   "businessActivity.realEstate": "Onroerend goed",
   "businessActivity.scientificActivities": "Wetenschap",
   "businessActivity.transportation": "Transport",
+  "common.cancel": "Annuleren",
   "common.form.help.nbCharacters": "{nbCharacters} tekens",
   "common.form.help.nbDigits": "{nbDigits} cijfers",
   "common.form.invalidTaxIdentificationNumber": "Dit fiscale identificatienummer is ongeldig",
