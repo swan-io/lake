@@ -1,3 +1,15 @@
+## 3.0.0
+
+Changes
+
+3D card: Add custom texture (0e8ace4)
+feat(ConfirmModal): move component to shared business (fc5729a)
+
+Fixes
+
+fix(a11y): add missing aria-labels (ef316ca)
+fix(LakeButton): arial-label should be mandatory when no children (dfa8df3)
+
 ## 2.7.38
 
 Fixes:
