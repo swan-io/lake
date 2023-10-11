@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { AsyncData } from "@swan-io/boxed";
 import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
@@ -92,7 +93,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={PDF_FILE}
+          value={AsyncData.Done(PDF_FILE)}
         />
       </StoryPart>
 
@@ -101,7 +102,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={SWAN_LOGO_SVG}
+          value={AsyncData.Done(SWAN_LOGO_SVG)}
         />
       </StoryPart>
 
@@ -110,7 +111,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           icon="image-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={file}
+          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
           onDropAccepted={files => setFile(files[0])}
         />
       </StoryPart>
@@ -120,7 +121,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={XLS_FILE}
+          value={AsyncData.Done(XLS_FILE)}
         />
       </StoryPart>
 
@@ -129,7 +130,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={UNKNOWN_FILE}
+          value={AsyncData.Done(UNKNOWN_FILE)}
         />
       </StoryPart>
     </StoryBlock>
@@ -225,7 +226,7 @@ export const Interactive = ({ layout }: StoryArgs) => {
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={file}
+          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
           onDropAccepted={selectFile}
           onDropRejected={removeFile}
         />

@@ -1,8 +1,10 @@
+import { AsyncData } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { FileTile } from "@swan-io/lake/src/components/FileTile";
 import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LoadingView } from "@swan-io/lake/src/components/LoadingView";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     borderColor: colors.negative[500],
   },
   preview: {
-    aspectRatio: 16 / 4,
+    aspectRatio: 16 / 2,
     width: "50%",
     backgroundPosition: "center",
     backgroundSize: "contain",
@@ -133,7 +135,7 @@ type Props = {
   documents?: UploadFileStatus[];
   onRemoveFile?: (fileId: string) => void;
   accept: string[];
-  value?: File;
+  value?: AsyncData<File>;
   disabled?: boolean;
   onDropAccepted?: DropzoneOptions["onDropAccepted"];
   onDropRejected?: DropzoneOptions["onDropRejected"];
@@ -190,38 +192,43 @@ export const UploadArea = ({
           <input {...getInputProps()} />
 
           {isNotNullish(value) ? (
-            value.type.startsWith("image/") ? (
-              <UploadAreaPreview file={value} />
-            ) : (
-              <>
-                <Icon
-                  name={getIconNameFromFilename(value.name)}
-                  size={48}
-                  color={disabled ? colors.gray[200] : colors.current[500]}
-                />
+            value.match({
+              NotAsked: () => null,
+              Loading: () => <LoadingView />,
+              Done: value =>
+                value.type.startsWith("image/") ? (
+                  <UploadAreaPreview file={value} />
+                ) : (
+                  <>
+                    <Icon
+                      name={getIconNameFromFilename(value.name)}
+                      size={48}
+                      color={disabled ? colors.gray[200] : colors.current[500]}
+                    />
 
-                <Space
-                  width={layout === "horizontal" ? 48 : 16}
-                  height={layout === "horizontal" ? 48 : 16}
-                />
+                    <Space
+                      width={layout === "horizontal" ? 48 : 16}
+                      height={layout === "horizontal" ? 48 : 16}
+                    />
 
-                <View style={styles.browseBlock}>
-                  <LakeHeading
-                    level={5}
-                    variant="h5"
-                    align={layout === "horizontal" ? "left" : "center"}
-                  >
-                    {t("uploadArea.droppedFile")}
-                  </LakeHeading>
+                    <View style={styles.browseBlock}>
+                      <LakeHeading
+                        level={5}
+                        variant="h5"
+                        align={layout === "horizontal" ? "left" : "center"}
+                      >
+                        {t("uploadArea.droppedFile")}
+                      </LakeHeading>
 
-                  <Space height={4} />
+                      <Space height={4} />
 
-                  <LakeText variant="smallRegular" color={colors.gray[200]}>
-                    {value.name}
-                  </LakeText>
-                </View>
-              </>
-            )
+                      <LakeText variant="smallRegular" color={colors.gray[200]}>
+                        {value.name}
+                      </LakeText>
+                    </View>
+                  </>
+                ),
+            })
           ) : (
             <>
               <View style={styles.icon}>
