@@ -135,6 +135,31 @@ export type MonthNames = readonly [
 ];
 export type WeekDayNames = readonly [string, string, string, string, string, string, string];
 
+const weekDayNames: WeekDayNames = [
+  t("datePicker.day.sunday"),
+  t("datePicker.day.monday"),
+  t("datePicker.day.tuesday"),
+  t("datePicker.day.wednesday"),
+  t("datePicker.day.thursday"),
+  t("datePicker.day.friday"),
+  t("datePicker.day.saturday"),
+];
+
+const monthNames: MonthNames = [
+  t("datePicker.month.january"),
+  t("datePicker.month.february"),
+  t("datePicker.month.march"),
+  t("datePicker.month.april"),
+  t("datePicker.month.may"),
+  t("datePicker.month.june"),
+  t("datePicker.month.july"),
+  t("datePicker.month.august"),
+  t("datePicker.month.september"),
+  t("datePicker.month.october"),
+  t("datePicker.month.november"),
+  t("datePicker.month.december"),
+];
+
 type YearMonth = {
   year: number;
   month: number;
@@ -628,7 +653,6 @@ type MonthCalendarProps = {
   year: number;
   value: Option<DatePickerDate> | DatePickerRange;
   firstWeekDay: keyof typeof weekDayIndex;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: DatePickerDate) => void;
 };
@@ -638,14 +662,10 @@ const MonthCalendar = ({
   year,
   value,
   firstWeekDay,
-  weekDayNames,
   isSelectable,
   onChange,
 }: MonthCalendarProps) => {
-  const dayNames = useMemo(
-    () => getWeekDayNames(weekDayNames, firstWeekDay),
-    [weekDayNames, firstWeekDay],
-  );
+  const dayNames = useMemo(() => getWeekDayNames(weekDayNames, firstWeekDay), [firstWeekDay]);
   const weeks = useMemo(
     () => getMonthWeeks(month, year, firstWeekDay),
     [month, year, firstWeekDay],
@@ -738,8 +758,6 @@ export type DatePickerProps = {
   error?: string;
   format: DateFormat;
   firstWeekDay: keyof typeof weekDayIndex;
-  monthNames: MonthNames;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: string) => void;
 };
@@ -752,8 +770,6 @@ const DatePickerPopoverContent = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   desktop,
   isSelectable,
   onChange,
@@ -794,7 +810,6 @@ const DatePickerPopoverContent = ({
         year={monthYear.year}
         value={isNotNullishOrEmpty(value) ? parseDate(value, format) : Option.None()}
         firstWeekDay={firstWeekDay}
-        weekDayNames={weekDayNames}
         isSelectable={isSelectable}
         onChange={handleChange}
       />
@@ -808,8 +823,6 @@ export const DatePicker = ({
   error,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
 }: DatePickerProps) => {
@@ -857,8 +870,6 @@ export const DatePicker = ({
             value={value}
             format={format}
             firstWeekDay={firstWeekDay}
-            monthNames={monthNames}
-            weekDayNames={weekDayNames}
             desktop={desktop}
             isSelectable={isSelectable}
             onChange={onChange}
@@ -881,8 +892,6 @@ export const DatePickerModal = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
   visible,
@@ -948,8 +957,6 @@ export const DatePickerModal = ({
               value={value}
               format={format}
               firstWeekDay={firstWeekDay}
-              monthNames={monthNames}
-              weekDayNames={weekDayNames}
               desktop={desktop}
               isSelectable={isSelectable}
               onChange={onChange}
@@ -1018,8 +1025,6 @@ export type DateRangePickerProps = {
   startLabel: string;
   endLabel: string;
   firstWeekDay: keyof typeof weekDayIndex;
-  monthNames: MonthNames;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: { start: string; end: string }) => void;
 };
@@ -1036,8 +1041,6 @@ const DateRangePickerModalContent = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   desktop,
   displayTwoCalendar,
   isSelectable,
@@ -1163,7 +1166,6 @@ const DateRangePickerModalContent = ({
           year={periods.start.year}
           value={dateRange}
           firstWeekDay={firstWeekDay}
-          weekDayNames={weekDayNames}
           isSelectable={isSelectable}
           onChange={handleSelectDate}
         />
@@ -1190,7 +1192,6 @@ const DateRangePickerModalContent = ({
             year={periods.start.year}
             value={dateRange}
             firstWeekDay={firstWeekDay}
-            weekDayNames={weekDayNames}
             isSelectable={isSelectable}
             onChange={handleSelectDate}
           />
@@ -1214,7 +1215,6 @@ const DateRangePickerModalContent = ({
             year={periods.end.year}
             value={dateRange}
             firstWeekDay={firstWeekDay}
-            weekDayNames={weekDayNames}
             isSelectable={isSelectable}
             onChange={handleSelectDate}
           />
@@ -1231,8 +1231,6 @@ export const DateRangePicker = ({
   startLabel,
   endLabel,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
 }: DateRangePickerProps) => {
@@ -1329,8 +1327,6 @@ export const DateRangePicker = ({
           value={value}
           format={format}
           firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
           desktop={desktop}
           displayTwoCalendar={displayTwoCalendar}
           isSelectable={isSelectable}
@@ -1353,8 +1349,6 @@ export const DateRangePickerModal = ({
   error,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
   visible,
@@ -1452,8 +1446,6 @@ export const DateRangePickerModal = ({
         value={localeValue}
         format={format}
         firstWeekDay={firstWeekDay}
-        monthNames={monthNames}
-        weekDayNames={weekDayNames}
         desktop={desktop}
         displayTwoCalendar={displayTwoCalendar}
         isSelectable={isSelectable}
