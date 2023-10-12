@@ -1,6 +1,7 @@
 import { AsyncData } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LoadingView } from "@swan-io/lake/src/components/LoadingView";
@@ -20,7 +21,7 @@ import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { FileTile } from "@swan-io/shared-business/src/components/FileTile";
 import { Fragment, useMemo } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";
 import { formatNestedMessage, t } from "../utils/i18n";
 
@@ -243,7 +244,6 @@ export const UploadArea = ({
           isNotNullish(description) && (
             <>
               <Space height={4} />
-
               <LakeText align={layout === "horizontal" ? "left" : "center"}>{description}</LakeText>
             </>
           )
@@ -278,16 +278,15 @@ export const UploadArea = ({
                       <UploadAreaPreview file={value} />
 
                       {onRemoveFile != null ? (
-                        <Pressable
-                          role="button"
-                          onPress={() => onRemoveFile()}
-                          style={({ hovered }) => [
-                            styles.deleteButton,
-                            hovered && styles.deleteButtonHovered,
-                          ]}
-                        >
-                          <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
-                        </Pressable>
+                        <LakeButton
+                          mode="tertiary"
+                          size="small"
+                          icon="delete-regular"
+                          color="negative"
+                          onPress={onRemoveFile}
+                          style={styles.deleteButton}
+                          ariaLabel={t("common.remove")}
+                        />
                       ) : null}
                     </>
                   ) : (
@@ -320,16 +319,15 @@ export const UploadArea = ({
                       </View>
 
                       {onRemoveFile != null ? (
-                        <Pressable
-                          role="button"
-                          onPress={() => onRemoveFile()}
-                          style={({ hovered }) => [
-                            styles.deleteButton,
-                            hovered && styles.deleteButtonHovered,
-                          ]}
-                        >
-                          <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
-                        </Pressable>
+                        <LakeButton
+                          mode="tertiary"
+                          size="small"
+                          icon="delete-regular"
+                          color="negative"
+                          style={styles.deleteButton}
+                          onPress={onRemoveFile}
+                          ariaLabel={t("common.remove")}
+                        />
                       ) : null}
                     </>
                   ),
