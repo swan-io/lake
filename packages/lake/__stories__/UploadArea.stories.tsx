@@ -244,6 +244,18 @@ export const Interactive = ({ layout }: StoryArgs) => {
           onRemoveFile={() => setFile(undefined)}
         />
       </StoryPart>
+
+      <StoryPart title="With one file" style={styles.storyPart}>
+        <UploadArea
+          icon="document-regular"
+          layout={layout}
+          accept={ACCEPTED_FORMATS}
+          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
+          onDropAccepted={selectFile}
+          onDropRejected={removeFile}
+          onRemoveFile={() => setFile(undefined)}
+        />
+      </StoryPart>
     </StoryBlock>
   );
 };

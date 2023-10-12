@@ -185,6 +185,73 @@ export const UploadArea = ({
     maxSize,
   });
 
+  const browseElement = (
+    <>
+      <View style={styles.icon}>
+        <Icon
+          name={icon}
+          size={48}
+          color={disabled ? colors.gray[200] : colors.current[500]}
+          style={[
+            styles.decorativeIconLeft,
+            (isDragActive || isHovered) && styles.decorativeIconLeftHovered,
+          ]}
+        />
+
+        <Icon
+          name={icon}
+          size={48}
+          color={disabled ? colors.gray[200] : colors.current[500]}
+          style={[
+            styles.decorativeIconRight,
+            (isDragActive || isHovered) && styles.decorativeIconRightHovered,
+          ]}
+        />
+
+        <Icon name={icon} size={48} color={disabled ? colors.gray[200] : colors.current[500]} />
+      </View>
+
+      <Space width={layout === "horizontal" ? 48 : 16} height={layout === "horizontal" ? 48 : 16} />
+
+      <View style={styles.browseBlock}>
+        <LakeHeading
+          level={5}
+          variant="h5"
+          align={layout === "horizontal" ? "left" : "center"}
+          color={disabled ? colors.gray[200] : undefined}
+        >
+          {disabled
+            ? t("uploadArea.noValue")
+            : formatNestedMessage("uploadArea.dropFile", {
+                browse: <Text style={styles.browse}>{t("uploadArea.browse")}</Text>,
+              })}
+        </LakeHeading>
+
+        {isNotNullish(error) ? (
+          <>
+            <Space height={4} />
+
+            <LakeText
+              color={colors.negative[400]}
+              align={layout === "horizontal" ? "left" : "center"}
+            >
+              {error}
+            </LakeText>
+          </>
+        ) : (
+          !disabled &&
+          isNotNullish(description) && (
+            <>
+              <Space height={4} />
+
+              <LakeText align={layout === "horizontal" ? "left" : "center"}>{description}</LakeText>
+            </>
+          )
+        )}
+      </View>
+    </>
+  );
+
   return (
     <View style={commonStyles.fill}>
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
@@ -201,147 +268,73 @@ export const UploadArea = ({
         >
           <input {...getInputProps()} />
 
-          {isNotNullish(value) ? (
-            value.match({
-              NotAsked: () => null,
-              Loading: () => <LoadingView />,
-              Done: value =>
-                value.type.startsWith("image/") ? (
-                  <>
-                    <UploadAreaPreview file={value} />
-
-                    {onRemoveFile != null ? (
-                      <Pressable
-                        role="button"
-                        onPress={() => onRemoveFile()}
-                        style={({ hovered }) => [
-                          styles.deleteButton,
-                          hovered && styles.deleteButtonHovered,
-                        ]}
-                      >
-                        <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
-                      </Pressable>
-                    ) : null}
-                  </>
-                ) : (
-                  <>
-                    <Icon
-                      name={getIconNameFromFilename(value.name)}
-                      size={48}
-                      color={disabled ? colors.gray[200] : colors.current[500]}
-                    />
-
-                    <Space
-                      width={layout === "horizontal" ? 48 : 16}
-                      height={layout === "horizontal" ? 48 : 16}
-                    />
-
-                    <View style={styles.browseBlock}>
-                      <LakeHeading
-                        level={5}
-                        variant="h5"
-                        align={layout === "horizontal" ? "left" : "center"}
-                      >
-                        {t("uploadArea.droppedFile")}
-                      </LakeHeading>
-
-                      <Space height={4} />
-
-                      <LakeText variant="smallRegular" color={colors.gray[200]}>
-                        {value.name}
-                      </LakeText>
-                    </View>
-
-                    {onRemoveFile != null ? (
-                      <Pressable
-                        role="button"
-                        onPress={() => onRemoveFile()}
-                        style={({ hovered }) => [
-                          styles.deleteButton,
-                          hovered && styles.deleteButtonHovered,
-                        ]}
-                      >
-                        <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
-                      </Pressable>
-                    ) : null}
-                  </>
-                ),
-            })
-          ) : (
-            <>
-              <View style={styles.icon}>
-                <Icon
-                  name={icon}
-                  size={48}
-                  color={disabled ? colors.gray[200] : colors.current[500]}
-                  style={[
-                    styles.decorativeIconLeft,
-                    (isDragActive || isHovered) && styles.decorativeIconLeftHovered,
-                  ]}
-                />
-
-                <Icon
-                  name={icon}
-                  size={48}
-                  color={disabled ? colors.gray[200] : colors.current[500]}
-                  style={[
-                    styles.decorativeIconRight,
-                    (isDragActive || isHovered) && styles.decorativeIconRightHovered,
-                  ]}
-                />
-
-                <Icon
-                  name={icon}
-                  size={48}
-                  color={disabled ? colors.gray[200] : colors.current[500]}
-                />
-              </View>
-
-              <Space
-                width={layout === "horizontal" ? 48 : 16}
-                height={layout === "horizontal" ? 48 : 16}
-              />
-
-              <View style={styles.browseBlock}>
-                <LakeHeading
-                  level={5}
-                  variant="h5"
-                  align={layout === "horizontal" ? "left" : "center"}
-                  color={disabled ? colors.gray[200] : undefined}
-                >
-                  {disabled
-                    ? t("uploadArea.noValue")
-                    : formatNestedMessage("uploadArea.dropFile", {
-                        browse: <Text style={styles.browse}>{t("uploadArea.browse")}</Text>,
-                      })}
-                </LakeHeading>
-
-                {isNotNullish(error) ? (
-                  <>
-                    <Space height={4} />
-
-                    <LakeText
-                      color={colors.negative[400]}
-                      align={layout === "horizontal" ? "left" : "center"}
-                    >
-                      {error}
-                    </LakeText>
-                  </>
-                ) : (
-                  !disabled &&
-                  isNotNullish(description) && (
+          {isNotNullish(value)
+            ? value.match({
+                NotAsked: () => browseElement,
+                Loading: () => <LoadingView />,
+                Done: value =>
+                  value.type.startsWith("image/") ? (
                     <>
-                      <Space height={4} />
+                      <UploadAreaPreview file={value} />
 
-                      <LakeText align={layout === "horizontal" ? "left" : "center"}>
-                        {description}
-                      </LakeText>
+                      {onRemoveFile != null ? (
+                        <Pressable
+                          role="button"
+                          onPress={() => onRemoveFile()}
+                          style={({ hovered }) => [
+                            styles.deleteButton,
+                            hovered && styles.deleteButtonHovered,
+                          ]}
+                        >
+                          <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
+                        </Pressable>
+                      ) : null}
                     </>
-                  )
-                )}
-              </View>
-            </>
-          )}
+                  ) : (
+                    <>
+                      <Icon
+                        name={getIconNameFromFilename(value.name)}
+                        size={48}
+                        color={disabled ? colors.gray[200] : colors.current[500]}
+                      />
+
+                      <Space
+                        width={layout === "horizontal" ? 48 : 16}
+                        height={layout === "horizontal" ? 48 : 16}
+                      />
+
+                      <View style={styles.browseBlock}>
+                        <LakeHeading
+                          level={5}
+                          variant="h5"
+                          align={layout === "horizontal" ? "left" : "center"}
+                        >
+                          {t("uploadArea.droppedFile")}
+                        </LakeHeading>
+
+                        <Space height={4} />
+
+                        <LakeText variant="smallRegular" color={colors.gray[200]}>
+                          {value.name}
+                        </LakeText>
+                      </View>
+
+                      {onRemoveFile != null ? (
+                        <Pressable
+                          role="button"
+                          onPress={() => onRemoveFile()}
+                          style={({ hovered }) => [
+                            styles.deleteButton,
+                            hovered && styles.deleteButtonHovered,
+                          ]}
+                        >
+                          <Icon name={"delete-regular"} size={20} color={colors.negative[500]} />
+                        </Pressable>
+                      ) : null}
+                    </>
+                  ),
+              })
+            : browseElement}
         </View>
       </div>
 
