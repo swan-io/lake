@@ -18,7 +18,7 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { FileTile } from "@swan-io/shared-business/src/components/FileTile";
-import { Fragment, useLayoutEffect, useRef } from "react";
+import { Fragment } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";
