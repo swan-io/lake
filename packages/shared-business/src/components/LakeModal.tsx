@@ -1,6 +1,14 @@
-import { ReactNode, Suspense, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { commonStyles } from "../constants/commonStyles";
+import { FocusTrap } from "@swan-io/lake/src/components/FocusTrap";
+import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
+import { LoadingView } from "@swan-io/lake/src/components/LoadingView";
+import { Portal } from "@swan-io/lake/src/components/Portal";
+import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { Context, ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
   ColorVariants,
   backgroundColor,
@@ -9,18 +17,11 @@ import {
   negativeSpacings,
   shadows,
   spacings,
-} from "../constants/design";
-import { useBodyClassName } from "../hooks/useBodyClassName";
-import { FocusTrap } from "./FocusTrap";
-import { Icon, IconName } from "./Icon";
-import { LakeButton } from "./LakeButton";
-import { LakeHeading } from "./LakeHeading";
-import { LoadingView } from "./LoadingView";
-import { Portal } from "./Portal";
-import { Pressable } from "./Pressable";
-import { Context, ResponsiveContainer } from "./ResponsiveContainer";
-import { Space } from "./Space";
-import { TransitionView } from "./TransitionView";
+} from "@swan-io/lake/src/constants/design";
+import { useBodyClassName } from "@swan-io/lake/src/hooks/useBodyClassName";
+import { ReactNode, Suspense, useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { t } from "../utils/i18n";
 
 export type LakeModalProps = {
   visible: boolean;
@@ -222,6 +223,7 @@ export const LakeModal = ({
                               mode="tertiary"
                               onPress={onPressClose}
                               icon="lake-close"
+                              ariaLabel={t("common.close")}
                             />
                           ) : null}
                         </View>

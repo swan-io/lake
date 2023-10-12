@@ -1,4 +1,4 @@
-import { MonthNames, WeekDayNames } from "@swan-io/lake/src/components/DatePicker";
+import { MonthNames, WeekDayNames } from "@swan-io/shared-business/src/components/DatePicker";
 import dayjs from "dayjs";
 import { t } from "./i18n";
 

@@ -124,8 +124,6 @@ const isReactText = (node: ReactNode): node is ReactText =>
 export type ButtonProps = {
   ariaControls?: string;
   ariaExpanded?: boolean;
-  ariaLabel?: string;
-  children?: ReactNode;
   color?: ColorVariants;
   disabled?: boolean;
   loading?: boolean;
@@ -140,7 +138,16 @@ export type ButtonProps = {
   href?: string;
   hrefAttrs?: { download?: boolean; rel?: string; target?: string };
   pill?: boolean;
-};
+} & (
+  | {
+      ariaLabel: string;
+      children?: never;
+    }
+  | {
+      ariaLabel?: string;
+      children: ReactNode;
+    }
+);
 
 export const LakeButton = memo(
   forwardRef<View, ButtonProps>(

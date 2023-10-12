@@ -1,6 +1,5 @@
 import { AsyncData } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
-import { FileTile } from "@swan-io/lake/src/components/FileTile";
 import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeHeading } from "@swan-io/lake/src/components/LakeHeading";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
@@ -18,7 +17,8 @@ import {
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { Fragment, useMemo } from "react";
+import { FileTile } from "@swan-io/shared-business/src/components/FileTile";
+import { Fragment, useLayoutEffect, useRef } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";

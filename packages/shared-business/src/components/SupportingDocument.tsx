@@ -1,7 +1,6 @@
 import { Form } from "@swan-io/lake/src/components/Form";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
-import { LakeModal } from "@swan-io/lake/src/components/LakeModal";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -15,6 +14,7 @@ import {
   MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
 } from "../constants/uploads";
 import { TranslationKey, locale, t } from "../utils/i18n";
+import { LakeModal } from "./LakeModal";
 import { UploadArea, UploadFileStatus } from "./UploadArea";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];

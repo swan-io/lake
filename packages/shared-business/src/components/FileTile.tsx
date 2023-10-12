@@ -1,15 +1,16 @@
+import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeAlert } from "@swan-io/lake/src/components/LakeAlert";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { Tag } from "@swan-io/lake/src/components/Tag";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
+import { backgroundColor, colors, shadows, spacings } from "@swan-io/lake/src/constants/design";
+import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
+import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
-import { commonStyles } from "../constants/commonStyles";
-import { backgroundColor, colors, shadows, spacings } from "../constants/design";
-import { getIconNameFromFilename } from "../utils/file";
-import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
-import { Box } from "./Box";
-import { LakeAlert } from "./LakeAlert";
-import { LakeButton } from "./LakeButton";
-import { LakeText } from "./LakeText";
-import { Space } from "./Space";
-import { Tag } from "./Tag";
+import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   base: {
@@ -63,6 +64,7 @@ export const FileTile = ({ variant = "none", name, url, onRemove, title, descrip
           onPress={() => {
             window.open(url, "_blank");
           }}
+          ariaLabel={t("common.open")}
         />
       )}
 
@@ -73,6 +75,7 @@ export const FileTile = ({ variant = "none", name, url, onRemove, title, descrip
           icon="delete-regular"
           color="negative"
           onPress={onRemove}
+          ariaLabel={t("common.remove")}
         />
       )}
     </Box>
