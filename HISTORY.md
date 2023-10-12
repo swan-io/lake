@@ -1,3 +1,11 @@
+## 3.1.0
+
+Changes
+
+Use File instead of Element for UploadArea preview (ae75ca7)
+feat(DatePicker/Filters): remove dayNames and monthNames props (5a801a2)
+feat: Remove single file in uploadArea (be9418d)
+
 ## 3.0.0
 
 Changes
