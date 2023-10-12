@@ -96,7 +96,7 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
           accept={ACCEPTED_FORMATS}
           value={file ? AsyncData.Done(file) : undefined}
           onDropAccepted={file => void setFile(file[0])}
-          onRemoveFile={() => setValue(undefined)}
+          onRemoveFile={() => setFile(undefined)}
         />
       </StoryPart>
 
