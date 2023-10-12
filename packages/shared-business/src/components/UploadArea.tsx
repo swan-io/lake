@@ -124,9 +124,6 @@ const styles = StyleSheet.create({
     right: spacings[20],
     top: spacings[20],
   },
-  deleteButtonHovered: {
-    opacity: 0.8,
-  },
 });
 
 export type UploadFileStatus = (
