@@ -2,8 +2,6 @@ import {
   DateFormat,
   DatePickerDate,
   DatePickerModal,
-  MonthNames,
-  WeekDayNames,
 } from "@swan-io/shared-business/src/components/DatePicker";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -353,8 +351,6 @@ function FilterCheckbox<T>({
 
 type FilterDateProps = {
   label: string;
-  monthNames: MonthNames;
-  dayNames: WeekDayNames;
   noValueText: string;
   cancelText: string;
   submitText: string;
@@ -369,8 +365,6 @@ type FilterDateProps = {
 
 function FilterDate({
   label,
-  monthNames,
-  dayNames,
   initialValue,
   noValueText,
   cancelText,
@@ -403,8 +397,6 @@ function FilterDate({
 
       <DatePickerModal
         visible={visible}
-        monthNames={monthNames}
-        weekDayNames={dayNames}
         format={dateFormat}
         firstWeekDay="monday"
         label={label}
@@ -549,8 +541,6 @@ export type FilterRadioDef<T> = {
 export type FilterDateDef<Values = unknown> = {
   type: "date";
   label: string;
-  monthNames: MonthNames;
-  dayNames: WeekDayNames;
   cancelText: string;
   submitText: string;
   noValueText: string;
@@ -678,8 +668,6 @@ export const FiltersStack = <T extends FiltersDefinition>({
                 ({
                   type,
                   label,
-                  monthNames,
-                  dayNames,
                   noValueText,
                   cancelText,
                   submitText,
@@ -689,8 +677,6 @@ export const FiltersStack = <T extends FiltersDefinition>({
                 }) => (
                   <FilterDate
                     label={label}
-                    monthNames={monthNames}
-                    dayNames={dayNames}
                     noValueText={noValueText}
                     cancelText={cancelText}
                     submitText={submitText}
