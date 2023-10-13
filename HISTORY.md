@@ -1,3 +1,9 @@
+## 3.2.0
+
+Changes
+
+feat(LakeTextInput): add unit chooser (6a63c1c)
+
 ## 3.1.0
 
 Changes
