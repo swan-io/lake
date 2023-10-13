@@ -33,6 +33,25 @@ const EditableInputText = (props: Except<LakeTextInputProps, "value" | "onChange
   );
 };
 
+const EditableInputTextWithUnitChooser = (
+  props: Except<LakeTextInputProps, "value" | "onChange">,
+) => {
+  const [value, setValue] = useState(props.defaultValue ?? "");
+  const [unit, setUnit] = useState(props.unit);
+
+  return (
+    <View style={styles.input}>
+      <LakeTextInput
+        {...props}
+        unit={unit}
+        value={value}
+        onUnitChange={setUnit}
+        onChange={event => setValue(event.currentTarget.value)}
+      />
+    </View>
+  );
+};
+
 export const Variations = () => {
   return (
     <StoryBlock title="Input variations">
@@ -101,6 +120,14 @@ export const Variations = () => {
 
       <StoryPart title="With unit">
         <EditableInputText unit="$" />
+      </StoryPart>
+
+      <StoryPart title="With unit chooser">
+        <EditableInputTextWithUnitChooser
+          units={["EUR", "PLN", "USD"]}
+          unit="USD"
+          inputMode="numeric"
+        />
       </StoryPart>
 
       <StoryPart title="With end icon and custom injected component">
