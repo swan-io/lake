@@ -35,6 +35,7 @@ import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon, IconName } from "./Icon";
+import { LakeSelect } from "./LakeSelect";
 import { LakeText } from "./LakeText";
 
 const TRANSPARENT = "transparent";
@@ -133,6 +134,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderLeftWidth: 0,
     flexShrink: 0,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
   unitDisabled: {
     borderColor: colors.gray[50],
@@ -165,6 +168,7 @@ export type LakeTextInputProps = Except<
   multiline?: boolean;
   icon?: IconName;
   unit?: string;
+  units?: string[];
   inputMode?: TextInputProps["inputMode"];
   pattern?: string;
   children?: ReactNode;
@@ -172,6 +176,7 @@ export type LakeTextInputProps = Except<
   style?: TextInputProps["style"];
   containerStyle?: ViewProps["style"];
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onUnitChange?: (value: string) => void;
   maxCharCount?: number;
   help?: string;
   renderEnd?: () => ReactNode;
@@ -191,10 +196,12 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
       icon,
       children,
       unit,
+      units,
       color = "gray",
       inputMode = "text",
       hideErrors = false,
       onChange,
+      onUnitChange,
       pattern,
       style: stylesFromProps,
       containerStyle: containerStylesFromProps,
@@ -259,7 +266,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 disabled && styles.disabled,
                 readOnly && styles.readOnly,
                 isFocused && styles.focused,
-                isNotNullish(unit) && styles.inputWithUnit,
+                isNotNullish(unit ?? units) && styles.inputWithUnit,
                 hasError && styles.error,
                 valid && styles.valid,
                 stylesFromProps,
@@ -321,14 +328,26 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
               )}
             </View>
 
-            {isNotNullish(unit) && (
+            {isNotNullish(units) && isNotNullish(onUnitChange) ? (
+              <Box>
+                <LakeSelect
+                  value={unit}
+                  onValueChange={onUnitChange}
+                  items={units.map(value => ({ name: value, value }))}
+                  disabled={disabled}
+                  style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
+                  mode="borderless"
+                  hideErrors={true}
+                />
+              </Box>
+            ) : isNotNullish(unit) ? (
               <LakeText
                 color={colors.gray[900]}
                 style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
               >
                 {unit}
               </LakeText>
-            )}
+            ) : null}
           </View>
 
           {children}
