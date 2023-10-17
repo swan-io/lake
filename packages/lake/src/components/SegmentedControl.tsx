@@ -1,10 +1,12 @@
 import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { backgroundColor, colors, radii, spacings } from "../constants/design";
+import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
+import { Space } from "./Space";
 
 const HEIGHT = 64;
 
@@ -84,12 +86,21 @@ export const SegmentedControl = <T extends string>({
               flexShrink: 1,
               justifyContent: "center",
               alignItems: "center",
+              flexDirection: "row",
               padding: spacings[12],
             }}
             onPress={() => {
               onValueChange(item.id);
             }}
           >
+            {isNotNullish(item.icon) && (
+              <>
+                {item.icon}
+
+                <Space width={12} />
+              </>
+            )}
+
             <LakeText
               color={colors.gray[900]}
               numberOfLines={1}
@@ -111,7 +122,7 @@ export const SegmentedControl = <T extends string>({
           width: HEIGHT,
         }}
       >
-        <Icon size={20} name="more-horizontal-filled" color={colors.gray[500]} />
+        <Icon size={24} name="more-horizontal-filled" color={colors.gray[500]} />
       </Pressable>
     </Box>
   );
