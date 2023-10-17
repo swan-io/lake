@@ -1,5 +1,6 @@
 import { ReactNode, useRef } from "react";
 import { StyleSheet, View } from "react-native";
+import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, colors, radii, spacings } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
@@ -102,93 +103,96 @@ export const SegmentedControl = <T extends string>({
         })}
       </Box>
 
-      <Box
-        direction="row"
+      <View
+        onLayout={({ nativeEvent: { layout } }) => {
+          console.log("available width", layout.width);
+        }}
         style={{
           flexGrow: 1,
           flexShrink: 1,
           padding: spacings[4],
         }}
       >
-        <View
-          role="none"
-          style={{
-            flexGrow: 1,
-            flexShrink: 1,
-            position: "absolute",
-            width: `${(1 / items.length) * 100}%`,
-            top: spacings[4],
-            left: spacings[4],
-            right: spacings[4],
-            bottom: spacings[4],
-            transitionProperty: "transform",
-            transitionDuration: "250ms",
-            transitionTimingFunction: "ease",
-            transform: `translateX(${selectedItemIndex * 100}%)`,
-          }}
-          onLayout={({ nativeEvent: { layout } }) => {
-            indicatorWidth.current = layout.width;
-            maybeHideItems();
-          }}
-        >
+        <Box direction="row" style={commonStyles.fill}>
           <View
+            role="none"
             style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
               flexGrow: 1,
               flexShrink: 1,
-              borderRadius: radii[4],
-              backgroundColor: backgroundColor.accented,
+              width: `${(1 / items.length) * 100}%`,
+              transitionProperty: "transform",
+              transitionDuration: "250ms",
+              transitionTimingFunction: "ease",
+              transform: `translateX(${selectedItemIndex * 100}%)`,
             }}
-          />
-        </View>
-
-        {items.map(item => (
-          <Pressable
-            key={item.id}
-            style={{
-              flexBasis: "0%",
-              flexGrow: 1,
-              flexShrink: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-            onPress={() => {
-              onValueChange(item.id);
+            onLayout={({ nativeEvent: { layout } }) => {
+              indicatorWidth.current = layout.width;
+              maybeHideItems();
             }}
           >
-            <Box
-              direction="row"
-              alignItems="center"
-              onLayout={({ nativeEvent: { layout } }) => {
-                // itemsWidths.current[index] = layout.width;
-                // maybeUpdateItems();
-              }}
+            <View
               style={{
-                padding: spacings[12],
-                // backgroundColor: "hotpink",
+                flexGrow: 1,
+                flexShrink: 1,
+                borderRadius: radii[4],
+                backgroundColor: backgroundColor.accented,
+              }}
+            />
+          </View>
+
+          {items.map((item, i) => (
+            <Pressable
+              key={item.id}
+              style={{
+                flexBasis: "0%",
+                flexGrow: 1,
+                flexShrink: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+              onPress={() => {
+                onValueChange(item.id);
               }}
             >
-              {isNotNullish(item.icon) && (
-                <>
-                  {item.icon}
-
-                  <Space width={12} />
-                </>
-              )}
-
-              <LakeText
-                color={colors.gray[900]}
-                numberOfLines={1}
+              <Box
+                direction="row"
+                alignItems="center"
+                onLayout={({ nativeEvent: { layout } }) => {
+                  // itemsWidths.current[index] = layout.width;
+                  // maybeUpdateItems();
+                }}
                 style={{
-                  userSelect: "none",
+                  padding: spacings[12],
+                  // backgroundColor: "hotpink",
                 }}
               >
-                {item.name}
-              </LakeText>
-            </Box>
-          </Pressable>
-        ))}
-      </Box>
+                {isNotNullish(item.icon) && (
+                  <>
+                    {item.icon}
+
+                    <Space width={12} />
+                  </>
+                )}
+
+                <LakeText
+                  color={colors.gray[900]}
+                  numberOfLines={1}
+                  style={{
+                    userSelect: "none",
+                  }}
+                >
+                  {item.name}
+                </LakeText>
+              </Box>
+            </Pressable>
+          ))}
+        </Box>
+      </View>
 
       <Pressable
         role="button"
