@@ -9,20 +9,28 @@ export default {
   component: TabView,
 } as Meta<typeof TabView>;
 
+const items = [
+  { id: "sct", name: "SEPA Credit Transfer" },
+  { id: "sdd", name: "SEPA Direct Debit" },
+  { id: "card", name: "Card" },
+] as const;
+
+type ItemId = (typeof items)[number]["id"];
+
 export const Default = () => {
-  const items = [
-    { name: "SEPA Credit Transfer", value: "SEPA Credit Transfer" },
-    { name: "SEPA Direct Debit", value: "SEPA Direct Debit" },
-    { name: "Card", value: "Card" },
-  ];
-  const [value, setValue] = useState({ name: "Card", value: "Card" });
+  const [selected, setSelected] = useState<ItemId>(items[0].id);
 
   return (
     <StoryBlock
       title="Segmented control"
       description="You can reduce window's width to see behavior when there isn't enough space to display all controls"
     >
-      <SegmentedControl items={items} onValueChange={setValue} mode="desktop" value={value} />
+      <SegmentedControl
+        mode="desktop"
+        selected={selected}
+        items={items}
+        onValueChange={setSelected}
+      />
     </StoryBlock>
   );
 };
