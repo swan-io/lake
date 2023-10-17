@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { backgroundColor, colors, radii, spacings } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -18,6 +18,8 @@ export type Item<T extends string> = {
   icon?: ReactNode;
 };
 
+const Item = () => {};
+
 type Props<T extends string> = {
   mode?: "desktop" | "mobile";
   selected: T;
@@ -31,7 +33,20 @@ export const SegmentedControl = <T extends string>({
   items,
   onValueChange,
 }: Props<T>) => {
+  const indicatorWidth = useRef(0);
+  const itemWidths = useRef<number[]>([]);
   const selectedItemIndex = items.findIndex(item => item.id === selected);
+  // const visibleItems = useState(items.length);
+
+  // TODO: Update logic (this is not a god path)
+  const maybeHideItems = () => {
+    const maxWidth = items.length * indicatorWidth.current;
+    const allItemsWidth = itemWidths.current.reduce((acc, width) => acc + width, 0);
+
+    if (allItemsWidth > maxWidth) {
+      console.log("SHOULD HIDE");
+    }
+  };
 
   return (
     <Box
@@ -42,6 +57,51 @@ export const SegmentedControl = <T extends string>({
         borderRadius: radii[8],
       }}
     >
+      <Box
+        role="none"
+        aria-hidden={true}
+        direction="row"
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+        }}
+      >
+        {items.map((item, index) => {
+          return (
+            <Box
+              key={`${item.id}-hidden`}
+              direction="row"
+              alignItems="center"
+              onLayout={({ nativeEvent: { layout } }) => {
+                itemWidths.current[index] = layout.width;
+              }}
+              style={{
+                padding: spacings[12],
+                backgroundColor: "green",
+              }}
+            >
+              {isNotNullish(item.icon) && (
+                <>
+                  {item.icon}
+
+                  <Space width={12} />
+                </>
+              )}
+
+              <LakeText
+                color={colors.gray[900]}
+                numberOfLines={1}
+                style={{
+                  userSelect: "none",
+                }}
+              >
+                {item.name}
+              </LakeText>
+            </Box>
+          );
+        })}
+      </Box>
+
       <Box
         direction="row"
         style={{
@@ -57,18 +117,22 @@ export const SegmentedControl = <T extends string>({
             flexShrink: 1,
             position: "absolute",
             width: `${(1 / items.length) * 100}%`,
-            top: 0,
-            left: 0,
-            bottom: 0,
+            top: spacings[4],
+            left: spacings[4],
+            right: spacings[4],
+            bottom: spacings[4],
             transitionProperty: "transform",
             transitionDuration: "250ms",
             transitionTimingFunction: "ease",
             transform: `translateX(${selectedItemIndex * 100}%)`,
           }}
+          onLayout={({ nativeEvent: { layout } }) => {
+            indicatorWidth.current = layout.width;
+            maybeHideItems();
+          }}
         >
           <View
             style={{
-              margin: spacings[4],
               flexGrow: 1,
               flexShrink: 1,
               borderRadius: radii[4],
@@ -87,29 +151,41 @@ export const SegmentedControl = <T extends string>({
               justifyContent: "center",
               alignItems: "center",
               flexDirection: "row",
-              padding: spacings[12],
             }}
             onPress={() => {
               onValueChange(item.id);
             }}
           >
-            {isNotNullish(item.icon) && (
-              <>
-                {item.icon}
-
-                <Space width={12} />
-              </>
-            )}
-
-            <LakeText
-              color={colors.gray[900]}
-              numberOfLines={1}
+            <Box
+              direction="row"
+              alignItems="center"
+              onLayout={({ nativeEvent: { layout } }) => {
+                // itemsWidths.current[index] = layout.width;
+                // maybeUpdateItems();
+              }}
               style={{
-                userSelect: "none",
+                padding: spacings[12],
+                // backgroundColor: "hotpink",
               }}
             >
-              {item.name}
-            </LakeText>
+              {isNotNullish(item.icon) && (
+                <>
+                  {item.icon}
+
+                  <Space width={12} />
+                </>
+              )}
+
+              <LakeText
+                color={colors.gray[900]}
+                numberOfLines={1}
+                style={{
+                  userSelect: "none",
+                }}
+              >
+                {item.name}
+              </LakeText>
+            </Box>
           </Pressable>
         ))}
       </Box>
