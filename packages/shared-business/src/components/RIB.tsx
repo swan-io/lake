@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
   half: {
     padding: spacings[24],
   },
+  shrink: {
+    flexShrink: 1,
+  },
   label: {
     ...getTextStyle("serif", 10),
   },
@@ -85,7 +88,7 @@ const kindStyles = {
 };
 
 const Item = ({ color = "gray", kind, label, value }: ItemProps) => (
-  <View>
+  <View style={styles.shrink}>
     <Text style={[styles.label, color === "partner" && styles.partnerLabel]}>{label}</Text>
     <Space height={4} />
 
