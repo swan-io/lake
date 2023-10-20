@@ -232,10 +232,11 @@ export const deburr = (value: string): string => {
     .replace(/[\u0300-\u036f]/g, "");
 };
 
-export const words = (string: string): string[] => {
-  return string.split(/\b/).filter(x => /^[a-zA-Z0-9]+$/.test(x));
-};
+export const words = (value: string): string[] =>
+  value.split(/\b/).filter(x => /^[a-zA-Z0-9]+$/.test(x));
 
-export const capitalize = (string: string) => {
-  return `${string.charAt(0).toUpperCase()}${string.slice(1).toLowerCase()}`;
-};
+export const capitalize = <T extends string>(value: T) =>
+  `${value.charAt(0).toUpperCase()}${value.slice(1).toLowerCase()}` as Capitalize<T>;
+
+export const lowerCase = <T extends string>(value: T) => value.toLowerCase() as Lowercase<T>;
+export const upperCase = <T extends string>(value: T) => value.toUpperCase() as Uppercase<T>;
