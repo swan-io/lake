@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, colors, radii, spacings } from "../constants/design";
@@ -36,16 +36,14 @@ export const SegmentedControl = <T extends string>({
 }: Props<T>) => {
   const indicatorWidth = useRef(0);
   const itemWidths = useRef<number[]>([]);
+  const [itemsToDisplay, setItemsToDisplay] = useState(items);
   const selectedItemIndex = items.findIndex(item => item.id === selected);
-  // const visibleItems = useState(items.length);
 
-  // TODO: Update logic (this is not a god path)
   const maybeHideItems = () => {
-    const maxWidth = items.length * indicatorWidth.current;
-    const allItemsWidth = itemWidths.current.reduce((acc, width) => acc + width, 0);
-
-    if (allItemsWidth > maxWidth) {
-      console.log("SHOULD HIDE");
+    const maxWidth = itemsToDisplay.length * indicatorWidth.current;
+    const slots = Math.floor(maxWidth / Math.max(...itemWidths.current));
+    if (slots !== itemsToDisplay.length) {
+      setItemsToDisplay(items.slice(0, Math.max(1, slots)));
     }
   };
 
@@ -67,7 +65,7 @@ export const SegmentedControl = <T extends string>({
           visibility: "hidden",
         }}
       >
-        {items.map((item, index) => {
+        {itemsToDisplay.map((item, index) => {
           return (
             <Box
               key={`${item.id}-hidden`}
@@ -104,9 +102,6 @@ export const SegmentedControl = <T extends string>({
       </Box>
 
       <View
-        onLayout={({ nativeEvent: { layout } }) => {
-          console.log("available width", layout.width);
-        }}
         style={{
           flexGrow: 1,
           flexShrink: 1,
@@ -123,7 +118,7 @@ export const SegmentedControl = <T extends string>({
               bottom: 0,
               flexGrow: 1,
               flexShrink: 1,
-              width: `${(1 / items.length) * 100}%`,
+              width: `${(1 / itemsToDisplay.length) * 100}%`,
               transitionProperty: "transform",
               transitionDuration: "250ms",
               transitionTimingFunction: "ease",
@@ -144,7 +139,7 @@ export const SegmentedControl = <T extends string>({
             />
           </View>
 
-          {items.map((item, i) => (
+          {itemsToDisplay.map((item, i) => (
             <Pressable
               key={item.id}
               style={{
