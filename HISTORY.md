@@ -1,28 +1,38 @@
+## 3.2.1
+
+Changes:
+
+- RIB - Move to new line when name is too long (0a7657f)
+- Add NLD RIB (1f33a78)
+- Improve capitalize + add lowerCase, upperCase and uncapitalize (dda6feb)
+- Update dependencies (a85dafc)
+- Add heartbeat animation (ea2395e)
+
 ## 3.2.0
 
 Changes
 
-feat(LakeTextInput): add unit chooser (6a63c1c)
+- feat(LakeTextInput): add unit chooser (6a63c1c)
 
 ## 3.1.0
 
 Changes
 
-Use File instead of Element for UploadArea preview (ae75ca7)
-feat(DatePicker/Filters): remove dayNames and monthNames props (5a801a2)
-feat: Remove single file in uploadArea (be9418d)
+- Use File instead of Element for UploadArea preview (ae75ca7)
+- feat(DatePicker/Filters): remove dayNames and monthNames props (5a801a2)
+- feat: Remove single file in uploadArea (be9418d)
 
 ## 3.0.0
 
 Changes
 
-3D card: Add custom texture (0e8ace4)
-feat(ConfirmModal): move component to shared business (fc5729a)
+- 3D card: Add custom texture (0e8ace4)
+- feat(ConfirmModal): move component to shared business (fc5729a)
 
 Fixes
 
-fix(a11y): add missing aria-labels (ef316ca)
-fix(LakeButton): arial-label should be mandatory when no children (dfa8df3)
+- fix(a11y): add missing aria-labels (ef316ca)
+- fix(LakeButton): arial-label should be mandatory when no children (dfa8df3)
 
 ## 2.7.38
 
