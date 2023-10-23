@@ -2,6 +2,7 @@
 // https://github.com/getsentry/sentry-javascript/blob/7.56.0/packages/react/src/errorboundary.tsx
 
 import { Component, ErrorInfo, ReactElement, ReactNode, isValidElement } from "react";
+import { isNotNullish } from "../utils/nullish";
 
 const isError = (value: unknown): value is Error => {
   const string = Object.prototype.toString.call(value);
@@ -67,7 +68,10 @@ export class ErrorBoundary extends Component<Props, State> {
     if (isError(error)) {
       const cause = new Error(error.message);
       cause.name = `ErrorBoundary ${cause.name}`;
-      cause.stack = errorInfo.componentStack;
+
+      if (isNotNullish(errorInfo.componentStack)) {
+        cause.stack = errorInfo.componentStack;
+      }
 
       setCause(error, cause);
     }
