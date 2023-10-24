@@ -78,20 +78,16 @@ export const SegmentedControl = <T extends string>({
           role="none"
           style={[
             styles.selectedItemIndicator,
-            mode === "mobile" && [
-              styles.selectedItemMobile,
-              {
-                height: `${(1 / items.length) * 100}%`,
-                transform: `translateY(${selectedItemIndex * 100}%)`,
-              },
-            ],
-            mode === "desktop" && [
-              styles.selectedItemDesktop,
-              {
-                width: `${(1 / items.length) * 100}%`,
-                transform: `translateX(${selectedItemIndex * 100}%)`,
-              },
-            ],
+            mode === "mobile" ? styles.selectedItemMobile : styles.selectedItemDesktop,
+            mode === "mobile"
+              ? {
+                  height: `${(1 / items.length) * 100}%`,
+                  transform: `translateY(${selectedItemIndex * 100}%)`,
+                }
+              : {
+                  width: `${(1 / items.length) * 100}%`,
+                  transform: `translateX(${selectedItemIndex * 100}%)`,
+                },
           ]}
         />
 
