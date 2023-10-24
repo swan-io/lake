@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     borderRadius: radii[8],
     padding: spacings[4],
   },
-  selectedItem: {
+  selectedItemIndicator: {
     position: "absolute",
     left: 0,
     top: 0,
@@ -34,13 +34,19 @@ const styles = StyleSheet.create({
     padding: spacings[12],
     flexDirection: "row",
   },
-  itemMobile: {
+  itemDesktop: {
     flexDirection: "column",
     justifyContent: "center",
   },
-  textItem: {
+  itemText: {
     userSelect: "none",
     lineHeight: texts.regular.fontSize,
+  },
+  selectedItemMobile: {
+    right: 0,
+  },
+  selectedItemDesktop: {
+    bottom: 0,
   },
 });
 
@@ -71,26 +77,28 @@ export const SegmentedControl = <T extends string>({
         <View
           role="none"
           style={[
-            styles.selectedItem,
-            // eslint-disable-next-line react-native/no-inline-styles
-            mode === "mobile" && {
-              right: 0,
-              height: `${(1 / items.length) * 100}%`,
-              transform: `translateY(${selectedItemIndex * 100}%)`,
-            },
-            // eslint-disable-next-line react-native/no-inline-styles
-            mode === "desktop" && {
-              bottom: 0,
-              width: `${(1 / items.length) * 100}%`,
-              transform: `translateX(${selectedItemIndex * 100}%)`,
-            },
+            styles.selectedItemIndicator,
+            mode === "mobile" && [
+              styles.selectedItemMobile,
+              {
+                height: `${(1 / items.length) * 100}%`,
+                transform: `translateY(${selectedItemIndex * 100}%)`,
+              },
+            ],
+            mode === "desktop" && [
+              styles.selectedItemDesktop,
+              {
+                width: `${(1 / items.length) * 100}%`,
+                transform: `translateX(${selectedItemIndex * 100}%)`,
+              },
+            ],
           ]}
         />
 
         {items.map(item => (
           <Pressable
             key={item.id}
-            style={[styles.item, mode === "desktop" && styles.itemMobile]}
+            style={[styles.item, mode === "desktop" && styles.itemDesktop]}
             onPress={() => {
               onValueChange(item.id);
             }}
@@ -107,7 +115,7 @@ export const SegmentedControl = <T extends string>({
               color={colors.gray[900]}
               numberOfLines={1}
               variant="regular"
-              style={styles.textItem}
+              style={styles.itemText}
             >
               {item.name}
             </LakeText>
