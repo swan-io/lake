@@ -1,3 +1,11 @@
+## 3.3.0
+
+Changes:
+
+- Update license report (e6cec13)
+- Create segmented control component (c31c1fe)
+- Add finnish language (5dbd053)
+
 ## 3.2.1
 
 Changes:
