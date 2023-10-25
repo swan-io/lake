@@ -35,7 +35,7 @@ type Props = {
   onValueChange: (value: string) => void;
   style?: StyleProp<ViewStyle>;
   value?: string;
-  language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt";
+  language: "en" | "es" | "de" | "fi" | "fr" | "it" | "nl" | "pt";
   placeholder: string;
   shouldDisplaySuggestions?: boolean;
   emptyResultText: string;
