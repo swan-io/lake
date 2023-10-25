@@ -1,3 +1,9 @@
+## 3.3.1
+
+Changes:
+
+- Add shared-business Finnish translations (857007a)
+
 ## 3.3.0
 
 Changes:
