@@ -1,8 +1,9 @@
 import { ComponentProps, forwardRef, ReactNode } from "react";
 import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
-import { texts } from "../constants/design";
+import { animations, gray75, texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 import { LakeTooltip } from "./LakeTooltip";
+import { TransitionView } from "./TransitionView";
 
 const alignments = StyleSheet.create({
   center: { textAlign: "center" },
@@ -30,6 +31,7 @@ type Props = TextProps & {
   userSelect?: TextStyle["userSelect"];
   variant?: TextVariant;
   tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
+  refreshing?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -39,6 +41,13 @@ const styles = StyleSheet.create({
   ellipsis: {
     overflow: "hidden",
     textOverflow: "ellipsis",
+  },
+  refreshing: {
+    backgroundColor: gray75,
+    borderRadius: 24,
+  },
+  hidden: {
+    visibility: "hidden",
   },
 });
 
@@ -52,28 +61,36 @@ export const LakeText = forwardRef<Text, Props>(
       userSelect,
       variant = "regular",
       tooltip,
+      refreshing = false,
       ...props
     }: Props,
     forwardedRef,
   ) => (
-    <Text
-      ref={forwardedRef}
-      style={[
-        variants[variant],
-        alignments[align],
-        isNotNullish(color) && { color },
-        isNotNullish(userSelect) && { userSelect },
-        style,
-      ]}
-      {...props}
+    <TransitionView
+      style={refreshing && styles.refreshing}
+      {...(refreshing && animations.heartbeat)}
     >
-      {tooltip ? (
-        <LakeTooltip containerStyle={styles.tooltip} {...tooltip}>
-          <Text style={styles.ellipsis}>{children}</Text>
-        </LakeTooltip>
-      ) : (
-        children
-      )}
-    </Text>
+      <Text
+        ref={forwardedRef}
+        style={[
+          variants[variant],
+          alignments[align],
+          isNotNullish(color) && { color },
+          isNotNullish(userSelect) && { userSelect },
+          refreshing && styles.hidden,
+          style,
+        ]}
+        aria-busy={refreshing}
+        {...props}
+      >
+        {tooltip ? (
+          <LakeTooltip containerStyle={styles.tooltip} {...tooltip}>
+            <Text style={styles.ellipsis}>{children}</Text>
+          </LakeTooltip>
+        ) : (
+          children
+        )}
+      </Text>
+    </TransitionView>
   ),
 );

@@ -53,6 +53,23 @@ export const Variations = () => {
         </LakeText>
       </StoryPart>
 
+      <StoryPart title="With loading parts">
+        <LakeText variant="light">
+          Light: Lorem ipsum dolor sit amet, <LakeText refreshing={true}>consectetur</LakeText>{" "}
+          adipiscing elit. Sed euismod, nisl nec
+        </LakeText>
+
+        <Space height={16} />
+
+        <LakeText variant="smallSemibold">
+          SmallSemibold:{" "}
+          <LakeText refreshing={true}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </LakeText>{" "}
+          Sed euismod, nisl nec
+        </LakeText>
+      </StoryPart>
+
       <StoryPart title="Colors">
         <LakeText color={colors.gray.primary}>
           gray: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl nec
