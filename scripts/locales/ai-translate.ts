@@ -55,6 +55,7 @@ const locales = {
   it: "Italian",
   pt: "Portuguese",
   nl: "Dutch",
+  fi: "Finnish",
 };
 
 type Locale = keyof typeof locales;
