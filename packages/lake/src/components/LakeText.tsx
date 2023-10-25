@@ -35,6 +35,9 @@ type Props = TextProps & {
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    display: "inline-block",
+  },
   tooltip: {
     width: "100%",
   },
@@ -67,7 +70,7 @@ export const LakeText = forwardRef<Text, Props>(
     forwardedRef,
   ) => (
     <TransitionView
-      style={refreshing && styles.refreshing}
+      style={[refreshing && styles.refreshing, styles.wrapper]}
       {...(refreshing && animations.heartbeat)}
     >
       <Text
