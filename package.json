@@ -33,7 +33,9 @@
     "sort-locales": "tsx scripts/locales/sort.ts",
     "remove-unused-locales": "tsx scripts/locales/remove-unused.ts",
     "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts",
-    "configure-hooks": "git config --local core.hooksPath .hooks"
+    "configure-hooks": "git config --local core.hooksPath .hooks",
+    "release": "release-it --config ./.release-it.local.json --preReleaseId=rc",
+    "release:ci": "release-it --config ./.release-it.ci.json --ci"
   },
   "lint-staged": {
     "packages/**/src/locales/*.json": "yarn sort-locales",
