@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Typecheck
         run: |
-          echo ${{ github.ref_name }}
-          echo ${{ contains(github.ref_name, 'release-') }}
-          echo ${{ startsWith(github.ref_name, 'release-') }}
+          echo ${{ github.event.pull_request.head.ref }}
+          echo ${{ contains(github.event.pull_request.head.ref, 'release-') }}
+          echo ${{ startsWith(github.event.pull_request.head.ref, 'release-') }}
 
       # - uses: actions/checkout@v3
 
