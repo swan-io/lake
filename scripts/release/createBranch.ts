@@ -19,7 +19,15 @@ const getChangelog = (from: string, to: string) =>
 
 const getBranchName = () => exec("git rev-parse --abbrev-ref HEAD").catch(() => null);
 const getLatestCommitHash = (branch: string) => exec(`git log -n 1 ${branch} --pretty=format:"%H"`);
-const resetBranch = (branch: string) => exec(`git switch -C ${branch} origin/${branch}`);
+
+const resetBranch = (remote: string, branch: string) =>
+  exec(`git switch -C ${branch} ${remote}/${branch}`);
+
+const localBranchExists = (branch: string) =>
+  exec(`git show-ref --heads --quiet --verify -- "refs/heads/${branch}"`);
+
+const remoteBranchExists = (remote: string, branch: string) =>
+  exec(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`);
 
 const isWorkingDirClean = () =>
   exec("git diff --quiet HEAD").then(
@@ -70,7 +78,7 @@ const createBranch = async () => {
     process.exit(1);
   }
 
-  await resetBranch("main");
+  await resetBranch("origin", "main");
 
   console.log(`🚀 Let's release @swan-io/lake (currently at ${version.raw})`);
 
@@ -115,8 +123,12 @@ const createBranch = async () => {
   const releaseBranch = `release-v${nextVersion}`;
   const releaseTitle = `[release] v${nextVersion}`;
 
-  await exec(`git branch -D ${releaseBranch}`); // Delete existing local branch
-  await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
+  if (await localBranchExists(releaseBranch)) {
+    await exec(`git branch -D ${releaseBranch}`); // Delete existing local branch
+  }
+  if (await remoteBranchExists(releaseBranch, "origin")) {
+    await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
+  }
 
   pkg["version"] = nextVersion;
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
