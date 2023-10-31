@@ -8,7 +8,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release
-    if: ${{ github.event.pull_request.merged == true && startsWith(github.ref_name, 'release-') }}
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-') }}
     steps:
       - uses: actions/checkout@v3
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo version=${{ github.ref_name }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
+        run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
         run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --verify-tag --generate-notes # --prerelease
