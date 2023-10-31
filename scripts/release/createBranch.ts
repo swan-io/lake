@@ -17,37 +17,23 @@ const logError = (...error: string[]) =>
 const getChangelog = (from: string, to: string) =>
   exec(`git log --pretty=format:"- %s (%h)" ${from}...${to}`);
 
-const getBranchName = () => exec("git rev-parse --abbrev-ref HEAD").catch(() => null);
-const getLatestCommitHash = (branch: string) => exec(`git log -n 1 ${branch} --pretty=format:"%H"`);
-
-const resetBranch = (remote: string, branch: string) =>
-  exec(`git switch -C ${branch} ${remote}/${branch}`);
-
 const promiseToBoolean = (promise: Promise<unknown>) =>
   promise.then(
     () => true,
     () => false,
   );
 
+const deleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
+const getBranchName = () => exec("git rev-parse --abbrev-ref HEAD").catch(() => null);
+const getLatestCommitHash = (branch: string) => exec(`git log -n 1 ${branch} --pretty=format:"%H"`);
 const isWorkingDirClean = () => promiseToBoolean(exec("git diff --quiet HEAD"));
+const resetBranch = (branch: string) => exec(`git switch -C ${branch} origin/${branch}`);
 
 const localBranchExists = (branch: string) =>
   promiseToBoolean(exec(`git show-ref --heads --quiet --verify -- "refs/heads/${branch}"`));
 
-const remoteBranchExists = (remote: string, branch: string) =>
-  promiseToBoolean(exec(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`));
-
-const deleteLocalBranch = async (branch: string) => {
-  if (await localBranchExists(branch)) {
-    return exec(`git branch -D ${branch}`);
-  }
-};
-
-const deleteRemoteBranch = async (remote: string, branch: string) => {
-  if (await remoteBranchExists(remote, branch)) {
-    return exec(`git push ${remote} -d ${branch}`);
-  }
-};
+const remoteBranchExists = (branch: string) =>
+  promiseToBoolean(exec(`git show-ref --quiet --verify -- "refs/remotes/origin/${branch}"`));
 
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");
@@ -92,7 +78,7 @@ const createBranch = async () => {
     process.exit(1);
   }
 
-  await resetBranch("origin", "main");
+  await resetBranch("main");
 
   console.log(`🚀 Let's release @swan-io/lake (currently at ${version.raw})`);
 
@@ -138,8 +124,14 @@ const createBranch = async () => {
   const releaseBranch = `${releaseType}-v${nextVersion.raw}`;
   const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
 
-  await deleteLocalBranch(releaseBranch);
-  await deleteRemoteBranch("origin", releaseBranch);
+  if (await localBranchExists(releaseBranch)) {
+    logError(`${releaseBranch} branch already exists.`);
+    process.exit(1);
+  }
+  if (await remoteBranchExists(releaseBranch)) {
+    logError(`origin/${releaseBranch} branch already exists.`);
+    process.exit(1);
+  }
 
   pkg["version"] = nextVersion.raw;
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
