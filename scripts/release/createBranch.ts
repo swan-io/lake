@@ -55,8 +55,7 @@ const createBranch = async () => {
     process.exit(1);
   }
 
-  // TODO: Invert this
-  if (await isWorkingDirClean()) {
+  if (!(await isWorkingDirClean())) {
     logError("Working dir must be clean.", "Please stage and commit your changes.");
     process.exit(1);
   }
