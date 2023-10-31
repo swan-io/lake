@@ -54,7 +54,9 @@ jobs:
 
       - name: Get changelog
         id: changelog
-        run: echo changelog=gh release view ${{ steps.version.outputs.version }} --json body -t "{{.body}}" >> $GITHUB_OUTPUT
+        run: |
+          gh config set pager "less -F -X"
+          echo changelog=$(gh release view ${{ steps.version.outputs.version }} --json body -t "{{.body}}") >> $GITHUB_OUTPUT
 
       - name: Final check
         run: |
