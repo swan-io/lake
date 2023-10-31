@@ -129,6 +129,9 @@ const createBranch = async () => {
   const releaseBranch = `release-v${nextVersion}`;
   const releaseTitle = `[release] v${nextVersion}`;
 
+  await exec(`git branch -d ${releaseBranch}`); // Delete existing local branch
+  await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
+
   await exec(`git checkout -b ${releaseBranch}`);
   await exec(`git add . -u`);
   await exec(`git commit -m "${releaseTitle}"`);
