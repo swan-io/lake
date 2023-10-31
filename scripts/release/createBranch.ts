@@ -37,6 +37,18 @@ const localBranchExists = (branch: string) =>
 const remoteBranchExists = (remote: string, branch: string) =>
   promiseToBoolean(exec(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`));
 
+const deleteLocalBranch = async (branch: string) => {
+  if (await localBranchExists(branch)) {
+    return exec(`git branch -D ${branch}`);
+  }
+};
+
+const deleteRemoteBranch = async (remote: string, branch: string) => {
+  if (await remoteBranchExists(remote, branch)) {
+    return exec(`git push ${remote} -d ${branch}`);
+  }
+};
+
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
@@ -116,23 +128,26 @@ const createBranch = async () => {
     ],
   });
 
-  const nextVersion = response.value as string;
+  const nextVersion = semver.parse(response.value as string | null);
 
   if (nextVersion == null) {
     process.exit(0);
   }
 
-  const releaseBranch = `release-v${nextVersion}`;
-  const releaseTitle = `[release] v${nextVersion}`;
+  const nextVersionIsPrerelease = nextVersion.prerelease.length > 0;
 
-  if (await localBranchExists(releaseBranch)) {
-    await exec(`git branch -D ${releaseBranch}`); // Delete existing local branch
-  }
-  if (await remoteBranchExists(releaseBranch, "origin")) {
-    await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
+  if (nextVersionIsPrerelease) {
+    throw new Error("STOP");
   }
 
-  pkg["version"] = nextVersion;
+  const releaseType = nextVersionIsPrerelease ? "release" : "prerelease";
+  const releaseBranch = `${releaseType}-v${nextVersion.raw}`;
+  const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
+
+  await deleteLocalBranch(releaseBranch);
+  await deleteRemoteBranch("origin", releaseBranch);
+
+  pkg["version"] = nextVersion.raw;
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
 
   const info = JSON.parse(await exec("yarn --json workspaces info")) as { data: string };
@@ -142,7 +157,7 @@ const createBranch = async () => {
     const pkgPath = path.join(rootDir, location, "package.json");
     const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
 
-    pkg["version"] = nextVersion;
+    pkg["version"] = nextVersion.raw;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
   });
 
@@ -157,6 +172,7 @@ const createBranch = async () => {
   console.log(url + os.EOL);
 
   await exec("git checkout main");
+  await deleteLocalBranch(releaseBranch);
 };
 
 void createBranch();
