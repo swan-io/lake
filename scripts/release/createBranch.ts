@@ -68,7 +68,7 @@ const createBranch = async () => {
     process.exit(1);
   }
 
-  await exec("git fetch origin");
+  await exec("git fetch origin --prune");
 
   const latestLocalCommitHash = await getLatestCommitHash("main");
   const latestRemoteCommitHash = await getLatestCommitHash("origin/main");
