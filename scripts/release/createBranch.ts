@@ -128,19 +128,13 @@ const createBranch = async () => {
     ],
   });
 
-  const nextVersion = semver.parse(response.value as string | null);
+  const nextVersion = semver.parse(response.value as string);
 
   if (nextVersion == null) {
     process.exit(0);
   }
 
-  const nextVersionIsPrerelease = nextVersion.prerelease.length > 0;
-
-  if (nextVersionIsPrerelease) {
-    throw new Error("STOP");
-  }
-
-  const releaseType = nextVersionIsPrerelease ? "release" : "prerelease";
+  const releaseType = nextVersion.prerelease.length > 0 ? "release" : "prerelease";
   const releaseBranch = `${releaseType}-v${nextVersion.raw}`;
   const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
 
