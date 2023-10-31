@@ -1,3 +1,9 @@
+## 3.3.2
+
+Changes:
+
+- Update finnish translations (3629b623)
+
 ## 3.3.1
 
 Changes:
