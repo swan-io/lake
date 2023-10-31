@@ -50,7 +50,7 @@ jobs:
         run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --verify-tag --generate-notes # --prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --generate-notes # --prerelease
 
       - name: Get changelog
         id: changelog
