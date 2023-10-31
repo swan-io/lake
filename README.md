@@ -2,6 +2,8 @@
 
 > Swan's component kit
 
+TRY SOMETHING
+
 ## Getting started
 
 First, install [yarn](https://yarnpkg.com/en/docs/install).
