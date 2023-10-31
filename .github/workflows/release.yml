@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Release
     if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-') }}
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v3
 
