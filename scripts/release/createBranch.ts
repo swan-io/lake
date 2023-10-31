@@ -112,6 +112,12 @@ const createBranch = async () => {
     process.exit(0);
   }
 
+  const releaseBranch = `release-v${nextVersion}`;
+  const releaseTitle = `[release] v${nextVersion}`;
+
+  await exec(`git branch -D ${releaseBranch}`); // Delete existing local branch
+  await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
+
   pkg["version"] = nextVersion;
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
 
@@ -125,12 +131,6 @@ const createBranch = async () => {
     pkg["version"] = nextVersion;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
   });
-
-  const releaseBranch = `release-v${nextVersion}`;
-  const releaseTitle = `[release] v${nextVersion}`;
-
-  await exec(`git branch -d ${releaseBranch}`); // Delete existing local branch
-  await exec(`git push origin -d ${releaseBranch}`); // Delete existing remote branch
 
   await exec(`git checkout -b ${releaseBranch}`);
   await exec(`git add . -u`);
