@@ -1,17 +1,21 @@
 name: Release
 
 on:
-  push:
-    branches: ["main"]
+  pull_request:
+    types: [closed]
 
 jobs:
   release:
     runs-on: ubuntu-latest
     name: Release
     # if: ${{ startsWith(github.ref_name, 'release-') }}
+    if: ${{ github.event.pull_request.merged == true }}
     steps:
       - name: Typecheck
         run: |
+          echo ${{ github.ref_name }}
+          echo ${{ contains(github.ref_name, 'release-') }}
+          echo ${{ startsWith(github.ref_name, 'release-') }}
           echo ${{ github.event.pull_request.head.ref }}
           echo ${{ contains(github.event.pull_request.head.ref, 'release-') }}
           echo ${{ startsWith(github.event.pull_request.head.ref, 'release-') }}
