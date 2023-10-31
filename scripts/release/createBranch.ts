@@ -137,8 +137,12 @@ const createBranch = async () => {
   await exec(`git commit -m "${releaseTitle}"`);
   await exec(`git push -u origin ${releaseBranch}`);
 
-  const output = await exec(`gh pr create -t "${releaseTitle}" -b "${changelog}"`);
-  console.log(output);
+  const url = await exec(`gh pr create -t "${releaseTitle}" -b "${changelog}"`);
+
+  console.log(os.EOL + chalk.bold("✨ Pull request created:"));
+  console.log(url + os.EOL);
+
+  await exec("git checkout main");
 };
 
 void createBranch();
