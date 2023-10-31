@@ -23,17 +23,19 @@ const getLatestCommitHash = (branch: string) => exec(`git log -n 1 ${branch} --p
 const resetBranch = (remote: string, branch: string) =>
   exec(`git switch -C ${branch} ${remote}/${branch}`);
 
-const localBranchExists = (branch: string) =>
-  exec(`git show-ref --heads --quiet --verify -- "refs/heads/${branch}"`);
-
-const remoteBranchExists = (remote: string, branch: string) =>
-  exec(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`);
-
-const isWorkingDirClean = () =>
-  exec("git diff --quiet HEAD").then(
+const promiseToBoolean = (promise: Promise<unknown>) =>
+  promise.then(
     () => true,
     () => false,
   );
+
+const isWorkingDirClean = () => promiseToBoolean(exec("git diff --quiet HEAD"));
+
+const localBranchExists = (branch: string) =>
+  promiseToBoolean(exec(`git show-ref --heads --quiet --verify -- "refs/heads/${branch}"`));
+
+const remoteBranchExists = (remote: string, branch: string) =>
+  promiseToBoolean(exec(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`));
 
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");
