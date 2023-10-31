@@ -2,19 +2,20 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: ["main"]
 
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
+    name: Release
+    if: ${{ github.repository == 'swan-io/lake' && contains('refs/heads/main', github.ref) || startsWith(github.ref_name, 'release-') }}
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
           node-version: lts/*
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --pure-lockfile
@@ -25,36 +26,42 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Run tests
+      - name: Test
         run: yarn test
 
-      - name: Pack
+      - name: Check licenses
+        run: yarn license-check
+
+      - name: Build
         run: yarn build
 
-      - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          yarn workspace @swan-io/lake publish
-          yarn workspace @swan-io/shared-business publish
-
-      - name: Get changelog
-        id: changelog
-        shell: bash
-        # trick for multiline variables
-        run: |
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$(head -100 HISTORY.md)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+      # - name: Publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      #     yarn workspace @swan-io/lake publish --tag latest
+      #     yarn workspace @swan-io/shared-business publish --tag latest
 
       - name: Get version
         id: version
-        run: echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        run: echo version=${{ github.ref_name }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
-      - name: Notify on Slack
-        uses: bloodyowl/slack-message-release-action@v1.1.5
-        with:
-          version: ${{ steps.version.outputs.version }}
-          changelog: ${{ steps.changelog.outputs.changelog }}
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Create GitHub release
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --verify-tag --generate-notes # --prerelease
+
+      - name: Get changelog
+        id: changelog
+        run: echo version=gh release view ${{ steps.version.outputs.version }} --json body -t "{{.body}}" >> $GITHUB_OUTPUT
+
+      - name: Final check
+        run: |
+          echo ${{ steps.version.outputs.version }}
+          echo ${{ steps.changelog.outputs.changelog }}
+
+      # - name: Notify on Slack
+      #   uses: bloodyowl/slack-message-release-action@v1.1.5
+      #   with:
+      #     version: ${{ steps.version.outputs.version }}
+      #     changelog: ${{ steps.changelog.outputs.changelog }}
+      #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
