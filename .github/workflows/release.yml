@@ -8,39 +8,32 @@ jobs:
   release:
     runs-on: ubuntu-latest
     name: Release
-    # if: ${{ startsWith(github.ref_name, 'release-') }}
-    if: ${{ github.event.pull_request.merged == true }}
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.ref_name, 'release-') }}
     steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --pure-lockfile
+
       - name: Typecheck
-        run: |
-          echo ${{ github.event.pull_request.head.ref }}
-          echo ${{ contains(github.event.pull_request.head.ref, 'release-') }}
-          echo ${{ startsWith(github.event.pull_request.head.ref, 'release-') }}
+        run: yarn typecheck
 
-      # - uses: actions/checkout@v3
+      - name: Lint
+        run: yarn lint
 
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: lts/*
-      #     cache: yarn
+      - name: Run tests
+        run: yarn test
 
-      # - name: Install dependencies
-      #   run: yarn install --pure-lockfile
+      - name: Check licenses
+        run: yarn license-check
 
-      # - name: Typecheck
-      #   run: yarn typecheck
-
-      # - name: Lint
-      #   run: yarn lint
-
-      # - name: Test
-      #   run: yarn test
-
-      # - name: Check licenses
-      #   run: yarn license-check
-
-      # - name: Build
-      #   run: yarn build
+      - name: Build
+        run: yarn build
 
       # - name: Publish
       #   env:
@@ -50,21 +43,21 @@ jobs:
       #     yarn workspace @swan-io/lake publish --tag latest
       #     yarn workspace @swan-io/shared-business publish --tag latest
 
-      # - name: Get version
-      #   id: version
-      #   run: echo version=${{ github.ref_name }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
+      - name: Get version
+        id: version
+        run: echo version=${{ github.ref_name }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
-      # - name: Create GitHub release
-      #   run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --verify-tag --generate-notes # --prerelease
+      - name: Create GitHub release
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --verify-tag --generate-notes # --prerelease
 
-      # - name: Get changelog
-      #   id: changelog
-      #   run: echo version=gh release view ${{ steps.version.outputs.version }} --json body -t "{{.body}}" >> $GITHUB_OUTPUT
+      - name: Get changelog
+        id: changelog
+        run: echo version=gh release view ${{ steps.version.outputs.version }} --json body -t "{{.body}}" >> $GITHUB_OUTPUT
 
-      # - name: Final check
-      #   run: |
-      #     echo ${{ steps.version.outputs.version }}
-      #     echo ${{ steps.changelog.outputs.changelog }}
+      - name: Final check
+        run: |
+          echo ${{ steps.version.outputs.version }}
+          echo ${{ steps.changelog.outputs.changelog }}
 
       # - name: Notify on Slack
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
