@@ -47,7 +47,7 @@ jobs:
         # trick for multiline variables
         run: |
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo ${{ github.event.pull_request.body }} >> $GITHUB_OUTPUT
+          echo "${{ github.event.pull_request.body }}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub prerelease
