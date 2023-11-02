@@ -1,12 +1,13 @@
 import chalk from "chalk";
 import childProcess from "node:child_process";
 import fs from "node:fs";
-import os from "node:os";
 import util from "node:util";
 import path from "pathe";
 import prompts from "prompts";
 import semver from "semver";
 import { PackageJson } from "type-fest";
+
+const REPO_URL = "https://github.com/swan-io/lake";
 
 type ChildProcess = {
   stdout: string;
@@ -25,7 +26,7 @@ const exec = (cmd: string): Promise<{ cmd: string; ok: boolean; out: string }> =
   );
 
 const logError = (...error: string[]) =>
-  console.error(`${chalk.red("ERROR")} ${error.join(os.EOL)}` + os.EOL);
+  console.error(`${chalk.red("ERROR")} ${error.join("\n")}` + "\n");
 
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");
@@ -82,7 +83,7 @@ const createPullRequest = async () => {
     return !isIndexClean || !isWorktreeClean || !isSkipped;
   });
 
-  if (!isRepoDirty) {
+  if (isRepoDirty) {
     logError("Working dir must be clean.", "Please stage and commit your changes.");
     process.exit(1);
   }
@@ -102,29 +103,38 @@ const createPullRequest = async () => {
     process.exit(1);
   }
 
-  await exec(`git switch -C main origin/main`);
-
   console.log(`🚀 Let's release @swan-io/lake (currently at ${version.raw})`);
 
-  const changelog = await exec(`git log --pretty=format:"%s (%h)" v${version.raw}...main`);
+  await exec('gh config set pager "less -F -X"');
+  await exec(`git switch -C main origin/main`);
 
-  console.log(
-    changelog.out
-      .split(os.EOL)
-      .filter(line => line.startsWith("[prerelease] v") || line.startsWith("[release] v"))
-      .join(os.EOL),
-  );
+  const changelog = await exec(`gh pr list --state merged --base main --json title,author,url`);
 
   if (!changelog.ok) {
-    logError(`Can't generate changelog using v${version.raw} tag.`);
+    logError(`Can't generate changelog using "gh pr list" command.`);
     process.exit(1);
   }
 
-  if (changelog.out !== "") {
-    console.log(os.EOL + chalk.bold("Changelog:"));
-    console.log(changelog.out + os.EOL);
-  } else {
-    console.log(os.EOL + chalk.bold("Empty changelog") + os.EOL);
+  const changelogItems = (
+    JSON.parse(changelog.out) as {
+      title: string;
+      url: string;
+      author: { is_bot: boolean; login: string };
+    }[]
+  )
+    .filter(
+      pr =>
+        !pr.author.is_bot &&
+        !pr.title.startsWith("[release]") &&
+        !pr.title.startsWith("[prerelease]"),
+    )
+    .map(pr => {
+      return `- ${pr.title} by @${pr.author.login} in ${pr.url}`;
+    });
+
+  if (changelogItems.length > 0) {
+    console.log("\n" + chalk.bold("What's Changed"));
+    console.log(changelogItems.join("\n") + "\n");
   }
 
   const patch = semver.inc(version, "patch");
@@ -157,7 +167,7 @@ const createPullRequest = async () => {
   const nextVersion = semver.parse(response.value as string);
 
   if (nextVersion == null) {
-    process.exit(0); // user cancelled
+    process.exit(1); // user cancelled
   }
 
   const releaseType = nextVersion.prerelease.length > 0 ? "prerelease" : "release";
@@ -174,7 +184,7 @@ const createPullRequest = async () => {
   }
 
   pkg["version"] = nextVersion.raw;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
 
   const info = JSON.parse((await exec("yarn --json workspaces info")).out) as { data: string };
   const packages = JSON.parse(info.data) as Record<string, { location: string }>;
@@ -184,31 +194,28 @@ const createPullRequest = async () => {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
 
     pkg["version"] = nextVersion.raw;
-    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
   });
-
-  const ghPagerConfig = await exec("gh config get pager");
-  await exec('gh config set pager "less -F -X"');
 
   await exec(`git checkout -b ${releaseBranch}`);
   await exec(`git add . -u`);
   await exec(`git commit -m "${releaseTitle}"`);
   await exec(`git push -u origin ${releaseBranch}`);
 
-  const url = await exec(`gh pr create -t "${releaseTitle}" -b "${changelog.out}"`);
+  const releaseNotes =
+    (changelogItems.length > 0
+      ? "## What's Changed" + "\n\n" + changelogItems.join("\n") + "\n\n"
+      : "") + `**Full Changelog**: ${REPO_URL}/compare/v${version.raw}...v${nextVersion.raw}`;
 
-  // restore gh pager config
-  if (ghPagerConfig.ok) {
-    await exec(`gh config set pager "${ghPagerConfig.out}"`);
-  }
+  const url = await exec(`gh pr create -t "${releaseTitle}" -b "${releaseNotes}"`);
 
   if (!url.ok) {
     logError("Unable to create pull request");
     process.exit(1);
   }
 
-  console.log(os.EOL + chalk.bold("✨ Pull request created:"));
-  console.log(url.out + os.EOL);
+  console.log("\n" + chalk.bold("✨ Pull request created:"));
+  console.log(url.out + "\n");
 
   await exec("git checkout main");
   await exec(`git branch -D ${releaseBranch}`);
