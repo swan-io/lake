@@ -56,6 +56,6 @@ jobs:
       # - name: Notify on Slack
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
       #   with:
-      #     version: ${{ steps.version.outputs.version }}
+      #     version: ${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g'
       #     changelog: ${{ github.event.pull_request.body }}
       #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
