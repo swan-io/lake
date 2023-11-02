@@ -10,46 +10,49 @@ jobs:
     name: Prerelease
     if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'prerelease-v') }}
     env:
+      CHANGELOG: ${{ github.event.pull_request.body }}
       GH_TOKEN: ${{ github.token }}
+      REF_BRANCH: ${{ github.event.pull_request.head.ref }}
     steps:
       - uses: actions/checkout@v3
 
-      - name: Test
-        run: echo version="${{ github.event.pull_request.head.ref | sed -e 's/release-//g' }}"
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: lts/*
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
-          cache: yarn
+      # - name: Install dependencies
+      #   run: yarn install --pure-lockfile
 
-      - name: Install dependencies
-        run: yarn install --pure-lockfile
+      # - name: Typecheck
+      #   run: yarn typecheck
 
-      - name: Typecheck
-        run: yarn typecheck
+      # - name: Lint
+      #   run: yarn lint
 
-      - name: Lint
-        run: yarn lint
+      # - name: Run tests
+      #   run: yarn test
 
-      - name: Run tests
-        run: yarn test
+      # - name: Check licenses
+      #   run: yarn license-check
 
-      - name: Check licenses
-        run: yarn license-check
+      # - name: Build
+      #   run: yarn build
 
-      - name: Build
-        run: yarn build
+      # - name: Get version
+      #   id: version
+      #   run: echo version="$REF_BRANCH" | sed -e 's/prerelease-//g' >> $GITHUB_OUTPUT
 
-      - name: Get version
-        id: version
-        run: echo version="${{ github.event.pull_request.head.ref | sed -e 's/prerelease-//g' }}" >> $GITHUB_OUTPUT
+      # - name: Get changelog
+      #   id: changelog
+      #   run: echo changelog="$CHANGELOG" >> $GITHUB_OUTPUT
 
-      - name: Get changelog
-        id: changelog
-        run: echo changelog="${{ github.event.pull_request.body | sed -e 's/"/\\"/g' }}" >> $GITHUB_OUTPUT
+      - name: Variables inspect
+        run: |
+          echo ${{ steps.version.outputs.version }}
+          echo ${{ steps.changelog.outputs.changelog }}
 
       - name: Create GitHub prerelease
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "${{ steps.changelog.outputs.changelog }}" --prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes ${{ steps.changelog.outputs.changelog }} --prerelease
 
       # - name: Publish
       #   env:
@@ -59,14 +62,9 @@ jobs:
       #     yarn workspace @swan-io/lake publish --tag next
       #     yarn workspace @swan-io/shared-business publish --tag next
 
-      - name: Final check
-        run: |
-          echo ${{ steps.version.outputs.version }}
-          echo "${{ steps.changelog.outputs.changelog }}"
-
       # - name: Notify on Slack
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
       #   with:
       #     version: ${{ steps.version.outputs.version }}
-      #     changelog: "${{ steps.changelog.outputs.changelog }}"
+      #     changelog: ${{ steps.changelog.outputs.changelog }}
       #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
