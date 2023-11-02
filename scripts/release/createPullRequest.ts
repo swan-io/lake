@@ -7,8 +7,6 @@ import prompts from "prompts";
 import semver from "semver";
 import { PackageJson } from "type-fest";
 
-const REPO_URL = "https://github.com/swan-io/lake";
-
 type ChildProcess = {
   stdout: string;
   stderr: string;
@@ -34,7 +32,7 @@ const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
 const version = semver.parse(pkg.version);
 
 if (version == null) {
-  logError("Invalid current package version.");
+  logError("Invalid current package version");
   process.exit(1);
 }
 
@@ -43,31 +41,31 @@ const versionIsPrerelease = prerelease.length > 0;
 
 if (versionIsPrerelease) {
   if (prerelease.length !== 2 || prerelease[0] !== "rc" || typeof prerelease[1] !== "number") {
-    logError(`Invalid current package version: ${version.raw}.`);
+    logError(`Invalid current package version: ${version.raw}`);
     process.exit(1);
   }
 }
 
 const createPullRequest = async () => {
   if (!(await exec("which git")).ok) {
-    logError("git install not detected.", "https://git-scm.com");
+    logError("git install not detected", "https://git-scm.com");
     process.exit(1);
   }
   if (!(await exec("which gh")).ok) {
-    logError("gh install not detected.", "https://cli.github.com");
+    logError("gh install not detected", "https://cli.github.com");
     process.exit(1);
   }
   if (!(await exec("which yarn")).ok) {
-    logError("yarn install not detected.", "https://classic.yarnpkg.com");
+    logError("yarn install not detected", "https://classic.yarnpkg.com");
     process.exit(1);
   }
 
   if (!(await exec("git rev-parse --git-dir")).ok) {
-    logError("Must be in a git repo.");
+    logError("Must be in a git repo");
     process.exit(1);
   }
   if ((await exec("git rev-parse --abbrev-ref HEAD")).out !== "main") {
-    logError(`Must be on branch main.`);
+    logError(`Must be on branch main`);
     process.exit(1);
   }
 
@@ -84,7 +82,7 @@ const createPullRequest = async () => {
   });
 
   if (isRepoDirty) {
-    logError("Working dir must be clean.", "Please stage and commit your changes.");
+    logError("Working dir must be clean", "Please stage and commit your changes");
     process.exit(1);
   }
 
@@ -99,7 +97,7 @@ const createPullRequest = async () => {
   );
 
   if (!areLatestCommitIdentical) {
-    logError("main is not in sync with origin/main.");
+    logError("main is not in sync with origin/main");
     process.exit(1);
   }
 
@@ -111,7 +109,7 @@ const createPullRequest = async () => {
   const changelog = await exec(`gh pr list --state merged --base main --json title,author,url`);
 
   if (!changelog.ok) {
-    logError(`Can't generate changelog using "gh pr list" command.`);
+    logError(`Can't generate changelog using "gh pr list" command`);
     process.exit(1);
   }
 
@@ -175,11 +173,11 @@ const createPullRequest = async () => {
   const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
 
   if ((await exec(`git show-ref --heads --quiet --verify -- "refs/heads/${releaseBranch}"`)).ok) {
-    logError(`${releaseBranch} branch already exists.`);
+    logError(`${releaseBranch} branch already exists`);
     process.exit(1);
   }
   if ((await exec(`git show-ref --quiet --verify -- "refs/remotes/origin/${releaseBranch}"`)).ok) {
-    logError(`origin/${releaseBranch} branch already exists.`);
+    logError(`origin/${releaseBranch} branch already exists`);
     process.exit(1);
   }
 
@@ -202,10 +200,17 @@ const createPullRequest = async () => {
   await exec(`git commit -m "${releaseTitle}"`);
   await exec(`git push -u origin ${releaseBranch}`);
 
+  const repoUrl = await exec("gh repo view --json url -t {{.url}}");
+
+  if (!repoUrl.ok) {
+    logError("Unable to get repo url");
+    process.exit(1);
+  }
+
   const releaseNotes =
     (changelogItems.length > 0
       ? "## What's Changed" + "\n\n" + changelogItems.join("\n").replaceAll('"', '\\"') + "\n\n"
-      : "") + `**Full Changelog**: ${REPO_URL}/compare/v${version.raw}...v${nextVersion.raw}`;
+      : "") + `**Full Changelog**: ${repoUrl.out}/compare/v${version.raw}...v${nextVersion.raw}`;
 
   const url = await exec(`gh pr create -t "${releaseTitle}" -b "${releaseNotes}"`);
 
