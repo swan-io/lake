@@ -1,4 +1,4 @@
-name: Release
+name: Prerelease
 
 on:
   pull_request:
@@ -7,8 +7,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    name: Release
-    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
+    name: Prerelease
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'prerelease-v') }}
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -39,10 +39,10 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g' >> $GITHUB_OUTPUT
+        run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/prerelease-//g' >> $GITHUB_OUTPUT
 
-      - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --generate-notes # --prerelease
+      - name: Create GitHub prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --generate-notes --prerelease
 
       - name: Get changelog
         id: changelog
@@ -55,8 +55,8 @@ jobs:
       #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       #   run: |
       #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      #     yarn workspace @swan-io/lake publish --tag latest
-      #     yarn workspace @swan-io/shared-business publish --tag latest
+      #     yarn workspace @swan-io/lake publish --tag next
+      #     yarn workspace @swan-io/shared-business publish --tag next
 
       - name: Final check
         run: |
