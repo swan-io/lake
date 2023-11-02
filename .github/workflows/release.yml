@@ -16,43 +16,39 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: lts/*
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
 
-      # - name: Install dependencies
-      #   run: yarn install --pure-lockfile
+      - name: Install dependencies
+        run: yarn install --pure-lockfile
 
-      # - name: Typecheck
-      #   run: yarn typecheck
+      - name: Typecheck
+        run: yarn typecheck
 
-      # - name: Lint
-      #   run: yarn lint
+      - name: Lint
+        run: yarn lint
 
-      # - name: Run tests
-      #   run: yarn test
+      - name: Run tests
+        run: yarn test
 
-      # - name: Check licenses
-      #   run: yarn license-check
+      - name: Check licenses
+        run: yarn license-check
 
-      # - name: Build
-      #   run: yarn build
+      - name: Build
+        run: yarn build
 
-      # - name: Get version
-      #   id: version
-      #   run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
+      - name: Get version
+        id: version
+        run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
-      # - name: Get changelog
-      #   id: changelog
-      #   run: echo changelog="$CHANGELOG" >> $GITHUB_OUTPUT
+      - name: Create GitHub release
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "$CHANGELOG"
 
       - name: Variables inspect
         run: |
           echo ${{ steps.version.outputs.version }}
-          echo ${{ steps.changelog.outputs.changelog }}
-
-      - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes ${{ steps.changelog.outputs.changelog }}
+          echo "$CHANGELOG"
 
       # - name: Publish
       #   env:
