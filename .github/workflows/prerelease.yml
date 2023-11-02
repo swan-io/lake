@@ -51,7 +51,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub prerelease
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes ${{ steps.changelog.outputs.changelog }} --prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "${{ steps.changelog.outputs.changelog }}" --prerelease
 
       # - name: Publish
       #   env:
@@ -64,11 +64,11 @@ jobs:
       - name: Final check
         run: |
           echo ${{ steps.version.outputs.version }}
-          echo ${{ steps.changelog.outputs.changelog }}
+          echo "${{ steps.changelog.outputs.changelog }}"
 
       # - name: Notify on Slack
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
       #   with:
       #     version: ${{ steps.version.outputs.version }}
-      #     changelog: ${{ steps.changelog.outputs.changelog }}
+      #     changelog: "${{ steps.changelog.outputs.changelog }}"
       #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

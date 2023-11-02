@@ -7,6 +7,8 @@ import prompts from "prompts";
 import semver from "semver";
 import { PackageJson } from "type-fest";
 
+const REPO_URL = "https://github.com/swan-io/lake";
+
 type ChildProcess = {
   stdout: string;
   stderr: string;
@@ -200,17 +202,10 @@ const createPullRequest = async () => {
   await exec(`git commit -m "${releaseTitle}"`);
   await exec(`git push -u origin ${releaseBranch}`);
 
-  const repoUrl = await exec("gh repo view --json url -t {{.url}}");
-
-  if (!repoUrl.ok) {
-    logError("Unable to get repo url");
-    process.exit(1);
-  }
-
   const releaseNotes =
     (changelogItems.length > 0
       ? "## What's Changed" + "\n\n" + changelogItems.join("\n").replaceAll('"', '\\"') + "\n\n"
-      : "") + `**Full Changelog**: ${repoUrl.out}/compare/v${version.raw}...v${nextVersion.raw}`;
+      : "") + `**Full Changelog**: ${REPO_URL}/compare/v${version.raw}...v${nextVersion.raw}`;
 
   const url = await exec(`gh pr create -t "${releaseTitle}" -b "${releaseNotes}"`);
 
