@@ -14,7 +14,6 @@ type ChildProcess = {
   stderr: string;
 };
 
-const escape = (value: string) => `<<EOF\n${value}\nEOF`;
 const promisifiedExec = util.promisify(childProcess.exec);
 
 const toOut = ({ stdout, stderr }: ChildProcess) =>
@@ -205,10 +204,10 @@ const createPullRequest = async () => {
 
   const releaseNotes =
     (changelogItems.length > 0
-      ? "## What's Changed" + "\n\n" + changelogItems.join("\n") + "\n\n"
+      ? "## What's Changed" + "\n\n" + changelogItems.join("\n").replaceAll('"', '\\"') + "\n\n"
       : "") + `**Full Changelog**: ${REPO_URL}/compare/v${version.raw}...v${nextVersion.raw}`;
 
-  const url = await exec(`gh pr create -t "${escape(releaseTitle)}" -b "${escape(releaseNotes)}"`);
+  const url = await exec(`gh pr create -t "${releaseTitle}" -b "${releaseNotes}"`);
 
   if (!url.ok) {
     logError("Unable to create pull request");
