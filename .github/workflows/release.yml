@@ -39,11 +39,11 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo version="$(echo ${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g')" >> $GITHUB_OUTPUT
+        run: echo version="${{ github.event.pull_request.head.ref | sed -e 's/release-//g' }}" >> $GITHUB_OUTPUT
 
       - name: Get changelog
         id: changelog
-        run: echo changelog="$(echo "${{ github.event.pull_request.body }}" | sed -e 's/"/\\"/g')" >> $GITHUB_OUTPUT
+        run: echo changelog="${{ github.event.pull_request.body | sed -e 's/"/\\"/g' }}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
         run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "${{ steps.changelog.outputs.changelog }}"
