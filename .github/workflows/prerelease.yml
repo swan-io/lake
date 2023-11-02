@@ -37,8 +37,21 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Get version
+        id: version
+        run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/prerelease-//g' >> $GITHUB_OUTPUT
+
+      - name: Get changelog
+        id: changelog
+        shell: bash
+        # trick for multiline variables
+        run: |
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo ${{ github.event.pull_request.body }} >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Create GitHub prerelease
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes ${{ github.event.pull_request.body }} --prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes ${{ steps.changelog.outputs.changelog }} --prerelease
 
       # - name: Publish
       #   env:
@@ -50,12 +63,12 @@ jobs:
 
       - name: Final check
         run: |
-          echo ${{ github.event.pull_request.head.ref }} | sed -e 's/prerelease-//g'
-          echo ${{ github.event.pull_request.body }}
+          echo ${{ steps.version.outputs.version }}
+          echo ${{ steps.changelog.outputs.changelog }}
 
       # - name: Notify on Slack
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
       #   with:
-      #     version: ${{ github.event.pull_request.head.ref }} | sed -e 's/release-//g'
-      #     changelog: ${{ github.event.pull_request.body }}
+      #     version: ${{ steps.version.outputs.version }}
+      #     changelog: ${{ steps.changelog.outputs.changelog }}
       #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
