@@ -129,7 +129,7 @@ const createPullRequest = async () => {
         !pr.title.startsWith("[prerelease]"),
     )
     .map(pr => {
-      return `- ${pr.title} by @${pr.author.login} in ${pr.url}`;
+      return `- ${pr.title.replace(/["'`]/g, "")} by @${pr.author.login} in ${pr.url}`;
     });
 
   if (changelogItems.length > 0) {
@@ -204,7 +204,7 @@ const createPullRequest = async () => {
 
   const releaseNotes =
     (changelogItems.length > 0
-      ? "## What's Changed" + "\n\n" + changelogItems.join("\n").replaceAll('"', '\\"') + "\n\n"
+      ? "## What's Changed" + "\n\n" + changelogItems.join("\n") + "\n\n"
       : "") + `**Full Changelog**: ${REPO_URL}/compare/v${version.raw}...v${nextVersion.raw}`;
 
   const url = await exec(`gh pr create -t "${releaseTitle}" -b "${releaseNotes}"`);

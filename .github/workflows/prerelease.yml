@@ -62,5 +62,5 @@ jobs:
       #   uses: bloodyowl/slack-message-release-action@v1.1.5
       #   with:
       #     version: ${{ steps.version.outputs.version }}
-      #     changelog: ${{ steps.changelog.outputs.changelog }}
+      #     changelog: "$CHANGELOG"
       #     slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
