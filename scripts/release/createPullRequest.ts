@@ -129,7 +129,8 @@ const createPullRequest = async () => {
         !pr.title.startsWith("[prerelease]"),
     )
     .map(pr => {
-      return `- ${pr.title.replace(/["'`]/g, "")} by @${pr.author.login} in ${pr.url}`;
+      // Sanitize the PR titles to replace quoted content with italic content
+      return `- ${pr.title.replace(/["'`]/g, "*")} by @${pr.author.login} in ${pr.url}`;
     });
 
   if (changelogItems.length > 0) {
