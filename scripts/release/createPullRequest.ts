@@ -187,12 +187,20 @@ const createPullRequest = async () => {
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + os.EOL, "utf-8");
   });
 
+  const ghPagerConfig = await exec("gh config get pager");
+  await exec('gh config set pager "less -F -X"');
+
   await exec(`git checkout -b ${releaseBranch}`);
   await exec(`git add . -u`);
   await exec(`git commit -m "${releaseTitle}"`);
   await exec(`git push -u origin ${releaseBranch}`);
 
   const url = await exec(`gh pr create -t "${releaseTitle}" -b "${changelog.out}"`);
+
+  // restore gh pager config
+  if (ghPagerConfig.ok) {
+    await exec(`gh config set pager "${ghPagerConfig.out}"`);
+  }
 
   if (!url.ok) {
     logError("Unable to create pull request");
