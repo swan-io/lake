@@ -39,16 +39,11 @@ jobs:
 
       - name: Get version
         id: version
-        run: echo version=${{ github.event.pull_request.head.ref }} | sed -e 's/prerelease-//g' >> $GITHUB_OUTPUT
+        run: echo version="$(echo ${{ github.event.pull_request.head.ref }} | sed -e 's/prerelease-//g')" >> $GITHUB_OUTPUT
 
       - name: Get changelog
         id: changelog
-        shell: bash
-        # trick for multiline variables
-        run: |
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "${{ github.event.pull_request.body }}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+        run: echo changelog="$(echo "${{ github.event.pull_request.body }}" | sed -e 's/"/\\"/g')" >> $GITHUB_OUTPUT
 
       - name: Create GitHub prerelease
         run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "${{ steps.changelog.outputs.changelog }}" --prerelease
