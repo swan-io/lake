@@ -108,7 +108,7 @@ const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`)
 const createGhPullRequest = (title: string, notes: string) =>
   exec(`gh pr create -t "${title}" -b "${notes}"`);
 
-const main = async () => {
+void (async () => {
   if (await isProgramMissing("git")) {
     logError("git needs to be installed", "https://git-scm.com");
     process.exit(1);
@@ -267,6 +267,4 @@ const main = async () => {
 
   await gitCheckout("main");
   await gitDeleteLocalBranch(releaseBranch);
-};
-
-void main();
+})();
