@@ -147,7 +147,7 @@ void (async () => {
     process.exit(1);
   }
 
-  console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
+  console.log(`🚀 Let's release ${pkg.name} (currently at ${currentVersion.raw})`);
 
   await updateGhPagerConfig();
   await resetGitBranch("main", "branch");
