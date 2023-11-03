@@ -163,10 +163,7 @@ void (async () => {
     JSON.parse(changelog.out) as {
       title: string;
       url: string;
-      author: {
-        is_bot: boolean;
-        login: string;
-      };
+      author: { is_bot: boolean; login: string };
     }[]
   )
     .filter(
