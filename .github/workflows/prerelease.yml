@@ -1,14 +1,14 @@
-name: Release
+name: Prerelease
 
 on:
   pull_request:
     types: [closed]
 
 jobs:
-  release:
-    name: Release
+  prerelease:
+    name: Prerelease
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'prerelease-v') }}
     env:
       CHANGELOG: ${{ github.event.pull_request.body }}
       GH_TOKEN: ${{ github.token }}
@@ -43,15 +43,15 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          yarn workspace @swan-io/lake publish
-          yarn workspace @swan-io/shared-business publish
+          yarn workspace @swan-io/lake publish --tag next
+          yarn workspace @swan-io/shared-business publish --tag next
 
       - name: Get version
         id: version
-        run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
+        run: echo version="$REF_BRANCH" | sed -e 's/prerelease-//g' >> $GITHUB_OUTPUT
 
-      - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "$CHANGELOG"
+      - name: Create GitHub prerelease
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "$CHANGELOG" --prerelease
 
       - name: Notify on Slack
         uses: bloodyowl/slack-message-release-action@v1.1.5
