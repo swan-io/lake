@@ -27,7 +27,7 @@
     "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
-    "bump": "node scripts/version/version.mjs",
+    "release": "tsx scripts/release/createPullRequest.ts",
     "icons": "tsx scripts/fluent-icons/generateIcons.ts",
     "ai-translate": "tsx -r dotenv/config scripts/locales/aiTranslate.ts",
     "sort-locales": "tsx scripts/locales/sort.ts",
