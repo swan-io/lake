@@ -73,7 +73,8 @@ const isGitRepoDirty = () =>
     return !isIndexClean || !isWorktreeClean || !isSkipped;
   });
 
-const fetchGitRemote = (remote: string) => exec(`git fetch ${remote} --prune`);
+const fetchGitRemote = (remote: string) =>
+  exec(`git fetch ${remote} --tags --prune --prune-tags --force`);
 
 const getLastGitCommitHash = (branch: string) =>
   exec(`git log -n 1 ${branch} --pretty=format:"%H"`).then(_ => _.out);
