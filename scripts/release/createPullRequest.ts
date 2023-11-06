@@ -153,8 +153,8 @@ program
     }
 
     console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
-    await updateGhPagerConfig();
 
+    await updateGhPagerConfig();
     const changelog = await getGhChangelog("main");
 
     if (!changelog.ok) {
