@@ -144,12 +144,7 @@ program
     await fetchGitRemote("origin");
 
     if (opts.sync) {
-      const [latestLocalCommitHash, latestRemoteCommitHash] = await Promise.all([
-        getLastGitCommitHash("main"),
-        getLastGitCommitHash("origin/main"),
-      ]);
-
-      if (latestLocalCommitHash !== latestRemoteCommitHash) {
+      if ((await getLastGitCommitHash("main")) !== (await getLastGitCommitHash("origin/main"))) {
         logError("main is not in sync with origin/main");
         process.exit(1);
       }
