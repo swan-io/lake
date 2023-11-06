@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { Command } from "commander";
 import childProcess from "node:child_process";
 import fs from "node:fs";
 import util from "node:util";
@@ -108,163 +109,172 @@ const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`)
 const createGhPullRequest = (title: string, notes: string) =>
   exec(`gh pr create -t "${title}" -b "${notes}"`);
 
-void (async () => {
-  if (await isProgramMissing("git")) {
-    logError("git needs to be installed", "https://git-scm.com");
-    process.exit(1);
-  }
-  if (await isProgramMissing("gh")) {
-    logError("gh needs to be installed", "https://cli.github.com");
-    process.exit(1);
-  }
-  if (await isProgramMissing("yarn")) {
-    logError("yarn needs to be installed", "https://classic.yarnpkg.com");
-    process.exit(1);
-  }
+const program = new Command();
 
-  if (await isNotGitRepo()) {
-    logError("Must be in a git repo");
-    process.exit(1);
-  }
-  if ((await getGitBranch()) !== "main") {
-    logError("Must be on branch main");
-    process.exit(1);
-  }
-  if (await isGitRepoDirty()) {
-    logError("Working dir must be clean", "Please stage and commit your changes");
-    process.exit(1);
-  }
+program
+  .name("release")
+  .option("--no-sync-check", "Don't check that local branch is up to date with the remote")
+  .action(async (opts: { syncCheck: boolean }) => {
+    if (await isProgramMissing("git")) {
+      logError("git needs to be installed", "https://git-scm.com");
+      process.exit(1);
+    }
+    if (await isProgramMissing("gh")) {
+      logError("gh needs to be installed", "https://cli.github.com");
+      process.exit(1);
+    }
+    if (await isProgramMissing("yarn")) {
+      logError("yarn needs to be installed", "https://classic.yarnpkg.com");
+      process.exit(1);
+    }
 
-  await fetchGitRemote("origin");
+    if (await isNotGitRepo()) {
+      logError("Must be in a git repo");
+      process.exit(1);
+    }
+    if ((await getGitBranch()) !== "main") {
+      logError("Must be on branch main");
+      process.exit(1);
+    }
+    if (await isGitRepoDirty()) {
+      logError("Working dir must be clean", "Please stage and commit your changes");
+      process.exit(1);
+    }
 
-  const [latestLocalCommitHash, latestRemoteCommitHash] = await Promise.all([
-    getLastGitCommitHash("main"),
-    getLastGitCommitHash("origin/main"),
-  ]);
+    await fetchGitRemote("origin");
 
-  if (latestLocalCommitHash !== latestRemoteCommitHash) {
-    logError("main is not in sync with origin/main");
-    process.exit(1);
-  }
+    if (opts.syncCheck) {
+      const [latestLocalCommitHash, latestRemoteCommitHash] = await Promise.all([
+        getLastGitCommitHash("main"),
+        getLastGitCommitHash("origin/main"),
+      ]);
 
-  console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
+      if (latestLocalCommitHash !== latestRemoteCommitHash) {
+        logError("main is not in sync with origin/main");
+        process.exit(1);
+      }
 
-  await updateGhPagerConfig();
-  await resetGitBranch("main", "branch");
+      await resetGitBranch("main", "branch");
+    }
 
-  const changelog = await getGhChangelog("main");
+    console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
+    await updateGhPagerConfig();
 
-  if (!changelog.ok) {
-    logError("Can't generate GitHub changelog");
-    process.exit(1);
-  }
+    const changelog = await getGhChangelog("main");
 
-  const changelogEntries = (
-    JSON.parse(changelog.out) as {
-      title: string;
-      url: string;
-      author: {
-        is_bot: boolean;
-        login: string;
-      };
-    }[]
-  )
-    .filter(
-      pr =>
-        !pr.author.is_bot &&
-        !pr.title.startsWith("[release]") &&
-        !pr.title.startsWith("[prerelease]"),
+    if (!changelog.ok) {
+      logError("Can't generate GitHub changelog");
+      process.exit(1);
+    }
+
+    const changelogEntries = (
+      JSON.parse(changelog.out) as {
+        title: string;
+        url: string;
+        author: {
+          is_bot: boolean;
+          login: string;
+        };
+      }[]
     )
-    .map(
-      // Sanitize the PR titles to replace quoted content with italic content
-      pr => `- ${pr.title.replace(/["'`]/g, "*")} by @${pr.author.login} in ${pr.url}`,
-    );
+      .filter(
+        pr =>
+          !pr.author.is_bot &&
+          !pr.title.startsWith("[release]") &&
+          !pr.title.startsWith("[prerelease]"),
+      )
+      .map(
+        // Sanitize the PR titles to replace quoted content with italic content
+        pr => `- ${pr.title.replace(/["'`]/g, "*")} by @${pr.author.login} in ${pr.url}`,
+      );
 
-  if (changelogEntries.length > 0) {
-    console.log("\n" + chalk.bold("What's Changed"));
-    console.log(changelogEntries.join("\n") + "\n");
-  }
+    if (changelogEntries.length > 0) {
+      console.log("\n" + chalk.bold("What's Changed"));
+      console.log(changelogEntries.join("\n") + "\n");
+    }
 
-  const patch = semver.inc(currentVersion, "patch");
-  const minor = semver.inc(currentVersion, "minor");
-  const major = semver.inc(currentVersion, "major");
-  const prepatch = semver.inc(currentVersion, "prepatch", "rc");
-  const preminor = semver.inc(currentVersion, "preminor", "rc");
-  const premajor = semver.inc(currentVersion, "premajor", "rc");
-  const prerelease = semver.inc(currentVersion, "prerelease", "rc");
+    const patch = semver.inc(currentVersion, "patch");
+    const minor = semver.inc(currentVersion, "minor");
+    const major = semver.inc(currentVersion, "major");
+    const prepatch = semver.inc(currentVersion, "prepatch", "rc");
+    const preminor = semver.inc(currentVersion, "preminor", "rc");
+    const premajor = semver.inc(currentVersion, "premajor", "rc");
+    const prerelease = semver.inc(currentVersion, "prerelease", "rc");
 
-  const response = await prompts({
-    type: "select",
-    name: "value",
-    message: "Select increment (next version)",
-    initial: 0, // default is patch
-    choices: [
-      { title: `patch (${patch})`, value: patch },
-      { title: `minor (${minor})`, value: minor },
-      { title: `major (${major})`, value: major },
-      ...(isCurrentVersionPrerelease
-        ? [{ title: `prerelease (${prerelease})`, value: prerelease }]
-        : [
-            { title: `prepatch (${prepatch})`, value: prepatch },
-            { title: `preminor (${preminor})`, value: preminor },
-            { title: `premajor (${premajor})`, value: premajor },
-          ]),
-    ],
-  });
+    const response = await prompts({
+      type: "select",
+      name: "value",
+      message: "Select increment (next version)",
+      initial: 0, // default is patch
+      choices: [
+        { title: `patch (${patch})`, value: patch },
+        { title: `minor (${minor})`, value: minor },
+        { title: `major (${major})`, value: major },
+        ...(isCurrentVersionPrerelease
+          ? [{ title: `prerelease (${prerelease})`, value: prerelease }]
+          : [
+              { title: `prepatch (${prepatch})`, value: prepatch },
+              { title: `preminor (${preminor})`, value: preminor },
+              { title: `premajor (${premajor})`, value: premajor },
+            ]),
+      ],
+    });
 
-  const nextVersion = semver.parse(response.value as string);
+    const nextVersion = semver.parse(response.value as string);
 
-  if (nextVersion == null) {
-    process.exit(1); // user cancelled
-  }
+    if (nextVersion == null) {
+      process.exit(1); // user cancelled
+    }
 
-  const releaseType = nextVersion.prerelease.length > 0 ? "prerelease" : "release";
-  const releaseBranch = `${releaseType}-v${nextVersion.raw}`;
-  const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
+    const releaseType = nextVersion.prerelease.length > 0 ? "prerelease" : "release";
+    const releaseBranch = `${releaseType}-v${nextVersion.raw}`;
+    const releaseTitle = `[${releaseType}] v${nextVersion.raw}`;
 
-  if (await hasGitLocalBranch(releaseBranch)) {
-    logError(`${releaseBranch} branch already exists`);
-    process.exit(1);
-  }
-  if (await hasGitRemoteBranch(releaseBranch, "origin")) {
-    logError(`origin/${releaseBranch} branch already exists`);
-    process.exit(1);
-  }
-
-  pkg["version"] = nextVersion.raw;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
-
-  const packages = await getWorkspacePackages();
-
-  Object.entries(packages).forEach(([, { location }]) => {
-    const pkgPath = path.join(rootDir, location, "package.json");
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
+    if (await hasGitLocalBranch(releaseBranch)) {
+      logError(`${releaseBranch} branch already exists`);
+      process.exit(1);
+    }
+    if (await hasGitRemoteBranch(releaseBranch, "origin")) {
+      logError(`origin/${releaseBranch} branch already exists`);
+      process.exit(1);
+    }
 
     pkg["version"] = nextVersion.raw;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
+
+    const packages = await getWorkspacePackages();
+
+    Object.entries(packages).forEach(([, { location }]) => {
+      const pkgPath = path.join(rootDir, location, "package.json");
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as PackageJson;
+
+      pkg["version"] = nextVersion.raw;
+      fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf-8");
+    });
+
+    await gitCheckoutNewBranch(releaseBranch);
+    await gitAddAll();
+    await gitCommit(releaseTitle);
+    await gitPush(releaseBranch, "origin");
+
+    const releaseNotes =
+      (changelogEntries.length > 0
+        ? "## What's Changed" + "\n\n" + changelogEntries.join("\n") + "\n\n"
+        : "") +
+      `**Full Changelog**: ${REPOSITORY_URL}/compare/v${currentVersion.raw}...v${nextVersion.raw}`;
+
+    const url = await createGhPullRequest(releaseTitle, releaseNotes);
+
+    if (!url.ok) {
+      logError("Unable to create pull request");
+      process.exit(1);
+    }
+
+    console.log("\n" + chalk.bold("✨ Pull request created:"));
+    console.log(url.out + "\n");
+
+    await gitCheckout("main");
+    await gitDeleteLocalBranch(releaseBranch);
   });
 
-  await gitCheckoutNewBranch(releaseBranch);
-  await gitAddAll();
-  await gitCommit(releaseTitle);
-  await gitPush(releaseBranch, "origin");
-
-  const releaseNotes =
-    (changelogEntries.length > 0
-      ? "## What's Changed" + "\n\n" + changelogEntries.join("\n") + "\n\n"
-      : "") +
-    `**Full Changelog**: ${REPOSITORY_URL}/compare/v${currentVersion.raw}...v${nextVersion.raw}`;
-
-  const url = await createGhPullRequest(releaseTitle, releaseNotes);
-
-  if (!url.ok) {
-    logError("Unable to create pull request");
-    process.exit(1);
-  }
-
-  console.log("\n" + chalk.bold("✨ Pull request created:"));
-  console.log(url.out + "\n");
-
-  await gitCheckout("main");
-  await gitDeleteLocalBranch(releaseBranch);
-})();
+program.parse(process.argv);
