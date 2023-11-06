@@ -113,8 +113,8 @@ const program = new Command();
 
 program
   .name("release")
-  .option("--no-sync-check", "Don't check that local branch is up to date with the remote")
-  .action(async (opts: { syncCheck: boolean }) => {
+  .option("--no-sync", "Don't check that local branch is up to date with the remote")
+  .action(async (opts: { sync: boolean }) => {
     if (await isProgramMissing("git")) {
       logError("git needs to be installed", "https://git-scm.com");
       process.exit(1);
@@ -143,7 +143,7 @@ program
 
     await fetchGitRemote("origin");
 
-    if (opts.syncCheck) {
+    if (opts.sync) {
       const [latestLocalCommitHash, latestRemoteCommitHash] = await Promise.all([
         getLastGitCommitHash("main"),
         getLastGitCommitHash("origin/main"),
