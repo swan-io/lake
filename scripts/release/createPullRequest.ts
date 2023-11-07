@@ -136,7 +136,7 @@ void (async () => {
 
   await resetGitBranch("main", "origin");
 
-  console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
+  console.log(`🚀 Let's release ${pkg.name} (currently at ${currentVersion.raw})`);
 
   const currentVersionTag = `v${currentVersion.raw}`;
   const changelogEntries = await getGitChangelogEntries(currentVersionTag, "main");
