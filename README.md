@@ -73,6 +73,6 @@ We use [Vitest](https://vitest.dev/api/) and [React Testing Library](https://tes
 
 ## Releasing
 
-1. Write the changes in `HISTORY.md` and commit the release notes as `X.X.X release notes`.
-2. Run `yarn bump`, set the version according to what you set in `HISTORY.md`
-3. Run `git push && git push --tags`
+1. Run `yarn release`, select next version increment.
+2. Copy the PR url, make it approved and merge it.
+3. A Github release will automatically be created by the CI.
