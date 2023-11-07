@@ -67,8 +67,8 @@ const updateGhPagerConfig = () => exec('gh config set pager "less -F -X"');
 const resetGitBranch = (branch: string, remote: string) =>
   exec(`git switch -C ${branch} ${remote}/${branch}`);
 
-const getGitChangelogEntries = (branch: string, since?: string) =>
-  exec(`git log ${since != null ? `${since}..${branch}` : ""} --pretty="format:%s (%h)"`)
+const getGitChangelogEntries = (from: string | undefined, to: string) =>
+  exec(`git log ${from != null ? `${from}..${to}` : ""} --pretty="format:%s (%h)"`)
     .then(_ => _.split("\n"))
     .then(entries =>
       entries
@@ -136,9 +136,10 @@ void (async () => {
 
   await resetGitBranch("main", "origin");
 
-  const currentTag = `v${currentVersion.raw}`;
-  console.log(`🚀 Let's release @swan-io/lake (currently at ${currentTag})`);
-  const changelogEntries = await getGitChangelogEntries("main", currentTag);
+  console.log(`🚀 Let's release @swan-io/lake (currently at ${currentVersion.raw})`);
+
+  const currentVersionTag = `v${currentVersion.raw}`;
+  const changelogEntries = await getGitChangelogEntries(currentVersionTag, "main");
 
   if (changelogEntries.length > 0) {
     console.log("\n" + chalk.bold("What's Changed"));
@@ -199,7 +200,7 @@ void (async () => {
 
   const releaseNotes = [
     ...(changelogEntries.length > 0 ? ["## What's Changed", changelogEntries.join("\n")] : []),
-    `**Full Changelog**: ${REPOSITORY_URL}/compare/${currentTag}...${releaseTag}`,
+    `**Full Changelog**: ${REPOSITORY_URL}/compare/${currentVersionTag}...${releaseTag}`,
   ].join("\n\n");
 
   await updateGhPagerConfig();
