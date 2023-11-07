@@ -2,6 +2,7 @@ import { Children, forwardRef, Fragment, memo, ReactNode, ReactText } from "reac
 import {
   ActivityIndicator,
   GestureResponderEvent,
+  HrefAttrs,
   PressableStateCallbackType,
   StyleProp,
   StyleSheet,
@@ -136,7 +137,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle> | ((props: PressableStateCallbackType) => StyleProp<ViewStyle>);
   forceBackground?: boolean;
   href?: string;
-  hrefAttrs?: { download?: boolean; rel?: string; target?: string };
+  hrefAttrs?: HrefAttrs;
   pill?: boolean;
 } & (
   | {

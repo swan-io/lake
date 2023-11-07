@@ -13,7 +13,6 @@ export const Default = () => {
       <LakeDownloadButton
         filename="account_statement.pdf"
         url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-        onError={() => alert("Failed to download file")}
       />
     </StoryBlock>
   );
