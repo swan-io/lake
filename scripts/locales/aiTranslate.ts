@@ -239,7 +239,7 @@ const countInputTokens = (input: OpenAI.Chat.ChatCompletionMessageParam[]): numb
         match(content)
           .with(P.string, text => text)
           .with(P.array(P._), array =>
-            array.reduce((acc, item) => acc + (item.type === "text" ? "\n" + item.text : ""), ""),
+            array.reduce((acc, item) => acc + (item.type === "text" ? " " + item.text : ""), ""),
           )
           .otherwise(() => ""),
       ),
