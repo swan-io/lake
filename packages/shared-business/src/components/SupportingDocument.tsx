@@ -31,6 +31,7 @@ type SupportingDocumentPurposeEnum =
   | "AssociationRegistration"
   | "Banking"
   | "CompanyRegistration"
+  | "GeneralAssemblyMinutes"
   | "Other"
   | "PowerOfAttorney"
   | "ProofOfCompanyAddress"
