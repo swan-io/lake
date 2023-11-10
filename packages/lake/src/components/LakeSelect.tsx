@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     paddingHorizontal: spacings[16],
+    borderRadius: radii[6],
+    transitionProperty: "background-color",
+    transitionDuration: "150ms",
   },
   small: {
     paddingVertical: 5,
@@ -259,7 +262,6 @@ const LakeSelectWithRef = <V,>(
                 : hovered
                 ? colors.gray[100]
                 : invariantColors.transparent,
-              borderRadius: radii[6],
             },
             styles.focusedWithoutShadow,
           ],
