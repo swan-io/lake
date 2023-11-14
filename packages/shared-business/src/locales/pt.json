@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Documentos suportados: .pdf, .png, .jpg",
   "supportingDoc.downloadTemplate": "Descarregar um modelo",
   "supportingDoc.errorUpload": "Falha ao carregar ficheiro",
+  "supportingDoc.generalAssemblyMinutes": "Atas da assembleia geral",
+  "supportingDoc.generalAssemblyMinutes.description": "Atas da última assembleia geral da associação",
   "supportingDoc.noRequiredDocuments": "Não precisamos de nenhum documento da sua parte. Pode continuar.",
   "supportingDoc.powerAttorney": "Procuração",
   "supportingDoc.powerAttornySigned": "Procuração assinada pelo representante legal",

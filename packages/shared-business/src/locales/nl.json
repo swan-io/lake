@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Ondersteunde documenten: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Een sjabloon downloaden",
   "supportingDoc.errorUpload": "Bestand uploaden mislukt",
+  "supportingDoc.generalAssemblyMinutes": "Notulen algemene vergadering",
+  "supportingDoc.generalAssemblyMinutes.description": "Notulen van de laatste algemene vergadering van de vereniging",
   "supportingDoc.noRequiredDocuments": "We hebben geen documenten van u nodig. U kunt verder gaan.",
   "supportingDoc.powerAttorney": "Volmacht",
   "supportingDoc.powerAttornySigned": "Volmacht getekend door de wettelijk vertegenwoordiger",

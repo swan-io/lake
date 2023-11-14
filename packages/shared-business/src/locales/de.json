@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Vorlage herunterladen",
   "supportingDoc.errorUpload": "Datei konnte nicht hochgeladen werden",
+  "supportingDoc.generalAssemblyMinutes": "Protokoll der Generalversammlung",
+  "supportingDoc.generalAssemblyMinutes.description": "Protokoll der letzten Generalversammlung des Vereins",
   "supportingDoc.noRequiredDocuments": "Wir brauchen keine Dokumente von Ihnen. Sie können fortfahren.",
   "supportingDoc.powerAttorney": "Vollmacht",
   "supportingDoc.powerAttornySigned": "Vom gesetzlichen Vertreter unterzeichnete Vollmacht",

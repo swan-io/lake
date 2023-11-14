@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Supported documents: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Download template",
   "supportingDoc.errorUpload": "Failed to upload file",
+  "supportingDoc.generalAssemblyMinutes": "General assembly minutes",
+  "supportingDoc.generalAssemblyMinutes.description": "Minutes of the last general assembly of the association",
   "supportingDoc.noRequiredDocuments": "We don't need any documents from you. You can continue.",
   "supportingDoc.powerAttorney": "Power of attorney",
   "supportingDoc.powerAttornySigned": "Power of attorney signed by the legal representative",

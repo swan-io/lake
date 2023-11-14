@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Documenti supportati: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Scarica un modello",
   "supportingDoc.errorUpload": "Impossibile caricare file",
+  "supportingDoc.generalAssemblyMinutes": "Verbali dell'assemblea generale",
+  "supportingDoc.generalAssemblyMinutes.description": "Verbali dell'ultima assemblea generale dell'associazione",
   "supportingDoc.noRequiredDocuments": "Non abbiamo bisogno di alcun documento da parte sua. Può proseguire.",
   "supportingDoc.powerAttorney": "Procura",
   "supportingDoc.powerAttornySigned": "Procura firmata dal rappresentante legale",
