@@ -257,7 +257,7 @@
   "supportingDoc.documentTypes": "Documentos admitidos: .pdf, .png, .jpg. Máx: \n{maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Descargar una plantilla",
   "supportingDoc.errorUpload": "No se ha podido cargar el archivo",
-  "supportingDoc.generalAssemblyMinutes": "Actas de la Asamblea General",
+  "supportingDoc.generalAssemblyMinutes": "Actas de la asamblea general",
   "supportingDoc.generalAssemblyMinutes.description": "Actas de la última asamblea general de la asociación",
   "supportingDoc.noRequiredDocuments": "No necesitamos que subas ningún documento. Puedes seguir.",
   "supportingDoc.powerAttorney": "Apoderamiento",
