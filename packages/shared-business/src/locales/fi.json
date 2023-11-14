@@ -257,6 +257,8 @@
   "supportingDoc.documentTypes": "Tuetut asiakirjamuodot: .pdf, .png, .jpg, enint.: {maxSizeMB} MB",
   "supportingDoc.downloadTemplate": "Lataa malli",
   "supportingDoc.errorUpload": "Tiedoston lataaminen epäonnistui",
+  "supportingDoc.generalAssemblyMinutes": "Yleiskokouksen pöytäkirja",
+  "supportingDoc.generalAssemblyMinutes.description": "Yhdistyksen viimeisen yleiskokouksen pöytäkirja",
   "supportingDoc.noRequiredDocuments": "Emme tarvitse enempää asiakirjoja sinulta. Voit jatkaa eteenpäin.",
   "supportingDoc.powerAttorney": "Valtakirja",
   "supportingDoc.powerAttornySigned": "Laillisen edustajan allekirjoittama valtakirja",

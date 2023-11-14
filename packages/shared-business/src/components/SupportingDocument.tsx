@@ -52,6 +52,7 @@ export const uploadableDocumentTypes = [
   "PowerOfAttorney",
   "SwornStatement",
   "UBODeclaration",
+  "GeneralAssemblyMinutes",
 ] satisfies SupportingDocumentPurposeEnum[];
 
 export type SupportingDocumentPurpose = (typeof uploadableDocumentTypes)[number];
@@ -66,6 +67,7 @@ type FormValues = {
   PowerOfAttorney: FormValue;
   SwornStatement: FormValue;
   UBODeclaration: FormValue;
+  GeneralAssemblyMinutes: FormValue;
 };
 
 type Props = {
@@ -196,6 +198,10 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
       },
       SwornStatement: {
         initialValue: initialValues["SwornStatement"] ?? [],
+        validate: validateNotEmpty,
+      },
+      GeneralAssemblyMinutes: {
+        initialValue: initialValues["GeneralAssemblyMinutes"] ?? [],
         validate: validateNotEmpty,
       },
     });
@@ -530,6 +536,38 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       onDropAccepted={files => {
                         onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "PowerOfAttorney");
+                      }}
+                      error={error}
+                      documents={value}
+                      accept={ACCEPTED_FORMATS}
+                      icon="document-regular"
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
+                      maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Space height={24} />
+          </>
+        )}
+
+        {requiredDocumentTypes.includes("GeneralAssemblyMinutes") && (
+          <>
+            <LakeLabel
+              label={t("supportingDoc.generalAssemblyMinutes")}
+              help={<Help type="tooltip" text="supportingDoc.generalAssemblyMinutes.description" />}
+              render={() => (
+                <Field name="GeneralAssemblyMinutes">
+                  {({ value, onChange, error }) => (
+                    <UploadArea
+                      layout="horizontal"
+                      onDropAccepted={files => {
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
+                        handleUpload(files, "GeneralAssemblyMinutes");
                       }}
                       error={error}
                       documents={value}
