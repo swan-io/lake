@@ -52,10 +52,3 @@ jobs:
 
       - name: Create GitHub release
         run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "$CHANGELOG"
-
-      - name: Notify on Slack
-        uses: bloodyowl/slack-message-release-action@v1.1.5
-        with:
-          version: ${{ steps.version.outputs.version }}
-          changelog: "$CHANGELOG"
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
