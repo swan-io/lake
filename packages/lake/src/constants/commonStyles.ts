@@ -43,6 +43,7 @@ export const commonStyles = {
   fill: { flexGrow: 1, flexShrink: 1 },
   fillNoShrink: { flexGrow: 1, flexShrink: 0 },
   hidden: { visibility: "hidden" },
+  disabled: { cursor: "not-allowed", opacity: 0.5 },
   view: viewStyle,
   visuallyHidden: visuallyHiddenStyle,
 } as const;

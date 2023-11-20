@@ -1,7 +1,4 @@
 import { Meta } from "@storybook/react";
-import { useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Except } from "type-fest";
 import {
   DatePicker,
   DatePickerModal,
@@ -12,7 +9,10 @@ import {
   isDateInRange,
   isTodayOrFutureDate,
   validateDateRangeOrder,
-} from "../src/components/DatePicker";
+} from "@swan-io/shared-business/src/components/DatePicker";
+import { useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
@@ -61,31 +61,6 @@ const InteractiveDateRangePicker = ({
   );
 };
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
-
-const dayNames = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-] as const;
-
 export const Default = () => {
   return (
     <WithPartnerAccentColor color="#0F6FDE">
@@ -95,8 +70,6 @@ export const Default = () => {
             <InteractiveDatePicker
               label="Select a date"
               firstWeekDay="monday"
-              monthNames={monthNames}
-              weekDayNames={dayNames}
               format="DD/MM/YYYY"
             />
           </View>
@@ -107,8 +80,6 @@ export const Default = () => {
             <InteractiveDatePicker
               label="Select a date"
               firstWeekDay="sunday"
-              monthNames={monthNames}
-              weekDayNames={dayNames}
               format="DD/MM/YYYY"
             />
           </View>
@@ -119,8 +90,6 @@ export const Default = () => {
             <InteractiveDatePicker
               label="Select a date"
               firstWeekDay="sunday"
-              monthNames={monthNames}
-              weekDayNames={dayNames}
               format="DD/MM/YYYY"
               isSelectable={isTodayOrFutureDate}
             />
@@ -132,8 +101,6 @@ export const Default = () => {
             <InteractiveDatePicker
               label="Select a date"
               firstWeekDay="sunday"
-              monthNames={monthNames}
-              weekDayNames={dayNames}
               format="DD/MM/YYYY"
               isSelectable={isDateInRange(FIFTEEN_DAYS_AGO, FIFTEEN_DAYS_LATER)}
             />
@@ -162,8 +129,6 @@ export const ButtonWithModal = () => {
 
           <DatePickerModal
             visible={isOpened}
-            monthNames={monthNames}
-            weekDayNames={dayNames}
             value={value}
             firstWeekDay="monday"
             format="DD/MM/YYYY"
@@ -189,8 +154,6 @@ export const Range = () => {
               startLabel="Start date"
               endLabel="End date"
               firstWeekDay="monday"
-              monthNames={monthNames}
-              weekDayNames={dayNames}
               format="DD/MM/YYYY"
             />
           </View>
@@ -220,8 +183,6 @@ export const ButtonWithRangePopover = () => {
 
           <DateRangePickerModal
             visible={isOpened}
-            monthNames={monthNames}
-            weekDayNames={dayNames}
             value={value}
             firstWeekDay="monday"
             format="DD/MM/YYYY"

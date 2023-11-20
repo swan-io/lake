@@ -1,4 +1,28 @@
 import { Option } from "@swan-io/boxed";
+import { BottomPanel } from "@swan-io/lake/src/components/BottomPanel";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { Fill } from "@swan-io/lake/src/components/Fill";
+import { Icon } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
+import { Item, LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
+import { Popover } from "@swan-io/lake/src/components/Popover";
+import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { Separator } from "@swan-io/lake/src/components/Separator";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { colors, spacings } from "@swan-io/lake/src/constants/design";
+import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
+import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
+import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
+import { noop } from "@swan-io/lake/src/utils/function";
+import {
+  isNotNullish,
+  isNotNullishOrEmpty,
+  isNullishOrEmpty,
+} from "@swan-io/lake/src/utils/nullish";
+import { getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
@@ -6,27 +30,8 @@ import { ValidatorResult, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
-import { colors, spacings } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
-import { useFirstMountState } from "../hooks/useFirstMountState";
-import { useResponsive } from "../hooks/useResponsive";
-import { noop } from "../utils/function";
-import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
-import { getRifmProps } from "../utils/rifm";
-import { BottomPanel } from "./BottomPanel";
-import { Box } from "./Box";
-import { Fill } from "./Fill";
-import { Icon } from "./Icon";
-import { LakeButton } from "./LakeButton";
-import { LakeLabel } from "./LakeLabel";
+import { t } from "../utils/i18n";
 import { LakeModal } from "./LakeModal";
-import { Item, LakeSelect } from "./LakeSelect";
-import { LakeText } from "./LakeText";
-import { LakeTextInput } from "./LakeTextInput";
-import { Popover } from "./Popover";
-import { Pressable } from "./Pressable";
-import { Separator } from "./Separator";
-import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   label: {
@@ -129,6 +134,31 @@ export type MonthNames = readonly [
   string,
 ];
 export type WeekDayNames = readonly [string, string, string, string, string, string, string];
+
+const weekDayNames: WeekDayNames = [
+  t("datePicker.day.sunday"),
+  t("datePicker.day.monday"),
+  t("datePicker.day.tuesday"),
+  t("datePicker.day.wednesday"),
+  t("datePicker.day.thursday"),
+  t("datePicker.day.friday"),
+  t("datePicker.day.saturday"),
+];
+
+const monthNames: MonthNames = [
+  t("datePicker.month.january"),
+  t("datePicker.month.february"),
+  t("datePicker.month.march"),
+  t("datePicker.month.april"),
+  t("datePicker.month.may"),
+  t("datePicker.month.june"),
+  t("datePicker.month.july"),
+  t("datePicker.month.august"),
+  t("datePicker.month.september"),
+  t("datePicker.month.october"),
+  t("datePicker.month.november"),
+  t("datePicker.month.december"),
+];
 
 type YearMonth = {
   year: number;
@@ -558,6 +588,7 @@ const YearMonthSelect = ({
             icon="arrow-left-filled"
             disabled={isPreviousDisabled}
             onPress={setPreviousMonth}
+            ariaLabel={t("datePicker.month.previous")}
           />
 
           <Fill minWidth={12} />
@@ -596,6 +627,7 @@ const YearMonthSelect = ({
                 icon="arrow-left-filled"
                 disabled={isPreviousDisabled}
                 onPress={setPreviousMonth}
+                ariaLabel={t("datePicker.month.previous")}
               />
 
               <Space width={12} />
@@ -608,6 +640,7 @@ const YearMonthSelect = ({
             icon="arrow-right-filled"
             disabled={isNextDisabled}
             onPress={setNextMonth}
+            ariaLabel={t("datePicker.month.next")}
           />
         </>
       )}
@@ -620,7 +653,6 @@ type MonthCalendarProps = {
   year: number;
   value: Option<DatePickerDate> | DatePickerRange;
   firstWeekDay: keyof typeof weekDayIndex;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: DatePickerDate) => void;
 };
@@ -630,14 +662,10 @@ const MonthCalendar = ({
   year,
   value,
   firstWeekDay,
-  weekDayNames,
   isSelectable,
   onChange,
 }: MonthCalendarProps) => {
-  const dayNames = useMemo(
-    () => getWeekDayNames(weekDayNames, firstWeekDay),
-    [weekDayNames, firstWeekDay],
-  );
+  const dayNames = useMemo(() => getWeekDayNames(weekDayNames, firstWeekDay), [firstWeekDay]);
   const weeks = useMemo(
     () => getMonthWeeks(month, year, firstWeekDay),
     [month, year, firstWeekDay],
@@ -730,8 +758,6 @@ export type DatePickerProps = {
   error?: string;
   format: DateFormat;
   firstWeekDay: keyof typeof weekDayIndex;
-  monthNames: MonthNames;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: string) => void;
 };
@@ -744,8 +770,6 @@ const DatePickerPopoverContent = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   desktop,
   isSelectable,
   onChange,
@@ -786,7 +810,6 @@ const DatePickerPopoverContent = ({
         year={monthYear.year}
         value={isNotNullishOrEmpty(value) ? parseDate(value, format) : Option.None()}
         firstWeekDay={firstWeekDay}
-        weekDayNames={weekDayNames}
         isSelectable={isSelectable}
         onChange={handleChange}
       />
@@ -800,8 +823,6 @@ export const DatePicker = ({
   error,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
 }: DatePickerProps) => {
@@ -817,7 +838,13 @@ export const DatePicker = ({
           label={label}
           style={styles.label}
           actions={
-            <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+            <LakeButton
+              mode="secondary"
+              icon="calendar-ltr-regular"
+              size="small"
+              onPress={open}
+              ariaLabel={t("common.open")}
+            />
           }
           render={id => (
             <Rifm value={value ?? ""} onChange={onChange} {...rifmDateProps}>
@@ -843,8 +870,6 @@ export const DatePicker = ({
             value={value}
             format={format}
             firstWeekDay={firstWeekDay}
-            monthNames={monthNames}
-            weekDayNames={weekDayNames}
             desktop={desktop}
             isSelectable={isSelectable}
             onChange={onChange}
@@ -867,8 +892,6 @@ export const DatePickerModal = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
   visible,
@@ -934,8 +957,6 @@ export const DatePickerModal = ({
               value={value}
               format={format}
               firstWeekDay={firstWeekDay}
-              monthNames={monthNames}
-              weekDayNames={weekDayNames}
               desktop={desktop}
               isSelectable={isSelectable}
               onChange={onChange}
@@ -1004,8 +1025,6 @@ export type DateRangePickerProps = {
   startLabel: string;
   endLabel: string;
   firstWeekDay: keyof typeof weekDayIndex;
-  monthNames: MonthNames;
-  weekDayNames: WeekDayNames;
   isSelectable?: (date: DatePickerDate) => boolean;
   onChange: (date: { start: string; end: string }) => void;
 };
@@ -1022,8 +1041,6 @@ const DateRangePickerModalContent = ({
   value,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   desktop,
   displayTwoCalendar,
   isSelectable,
@@ -1149,7 +1166,6 @@ const DateRangePickerModalContent = ({
           year={periods.start.year}
           value={dateRange}
           firstWeekDay={firstWeekDay}
-          weekDayNames={weekDayNames}
           isSelectable={isSelectable}
           onChange={handleSelectDate}
         />
@@ -1176,7 +1192,6 @@ const DateRangePickerModalContent = ({
             year={periods.start.year}
             value={dateRange}
             firstWeekDay={firstWeekDay}
-            weekDayNames={weekDayNames}
             isSelectable={isSelectable}
             onChange={handleSelectDate}
           />
@@ -1200,7 +1215,6 @@ const DateRangePickerModalContent = ({
             year={periods.end.year}
             value={dateRange}
             firstWeekDay={firstWeekDay}
-            weekDayNames={weekDayNames}
             isSelectable={isSelectable}
             onChange={handleSelectDate}
           />
@@ -1217,8 +1231,6 @@ export const DateRangePicker = ({
   startLabel,
   endLabel,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
 }: DateRangePickerProps) => {
@@ -1294,7 +1306,14 @@ export const DateRangePicker = ({
         />
 
         <Space width={12} />
-        <LakeButton mode="secondary" icon="calendar-ltr-regular" size="small" onPress={open} />
+
+        <LakeButton
+          mode="secondary"
+          icon="calendar-ltr-regular"
+          size="small"
+          onPress={open}
+          ariaLabel={t("common.open")}
+        />
       </Box>
 
       <Space height={4} />
@@ -1308,8 +1327,6 @@ export const DateRangePicker = ({
           value={value}
           format={format}
           firstWeekDay={firstWeekDay}
-          monthNames={monthNames}
-          weekDayNames={weekDayNames}
           desktop={desktop}
           displayTwoCalendar={displayTwoCalendar}
           isSelectable={isSelectable}
@@ -1332,8 +1349,6 @@ export const DateRangePickerModal = ({
   error,
   format,
   firstWeekDay,
-  monthNames,
-  weekDayNames,
   isSelectable,
   onChange,
   visible,
@@ -1431,8 +1446,6 @@ export const DateRangePickerModal = ({
         value={localeValue}
         format={format}
         firstWeekDay={firstWeekDay}
-        monthNames={monthNames}
-        weekDayNames={weekDayNames}
         desktop={desktop}
         displayTwoCalendar={displayTwoCalendar}
         isSelectable={isSelectable}

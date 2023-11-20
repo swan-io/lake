@@ -1,7 +1,6 @@
 import { Form } from "@swan-io/lake/src/components/Form";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
-import { LakeModal } from "@swan-io/lake/src/components/LakeModal";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -15,6 +14,7 @@ import {
   MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
 } from "../constants/uploads";
 import { TranslationKey, locale, t } from "../utils/i18n";
+import { LakeModal } from "./LakeModal";
 import { UploadArea, UploadFileStatus } from "./UploadArea";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
@@ -31,6 +31,7 @@ type SupportingDocumentPurposeEnum =
   | "AssociationRegistration"
   | "Banking"
   | "CompanyRegistration"
+  | "GeneralAssemblyMinutes"
   | "Other"
   | "PowerOfAttorney"
   | "ProofOfCompanyAddress"
@@ -51,6 +52,7 @@ export const uploadableDocumentTypes = [
   "PowerOfAttorney",
   "SwornStatement",
   "UBODeclaration",
+  "GeneralAssemblyMinutes",
 ] satisfies SupportingDocumentPurposeEnum[];
 
 export type SupportingDocumentPurpose = (typeof uploadableDocumentTypes)[number];
@@ -65,6 +67,7 @@ type FormValues = {
   PowerOfAttorney: FormValue;
   SwornStatement: FormValue;
   UBODeclaration: FormValue;
+  GeneralAssemblyMinutes: FormValue;
 };
 
 type Props = {
@@ -195,6 +198,10 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
       },
       SwornStatement: {
         initialValue: initialValues["SwornStatement"] ?? [],
+        validate: validateNotEmpty,
+      },
+      GeneralAssemblyMinutes: {
+        initialValue: initialValues["GeneralAssemblyMinutes"] ?? [],
         validate: validateNotEmpty,
       },
     });
@@ -529,6 +536,38 @@ export const SupportingDocument = forwardRef<SupportingDocumentRef, Props>(
                       onDropAccepted={files => {
                         onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
                         handleUpload(files, "PowerOfAttorney");
+                      }}
+                      error={error}
+                      documents={value}
+                      accept={ACCEPTED_FORMATS}
+                      icon="document-regular"
+                      description={t("supportingDoc.documentTypes", {
+                        maxSizeMB: MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE_MB,
+                      })}
+                      maxSize={MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Space height={24} />
+          </>
+        )}
+
+        {requiredDocumentTypes.includes("GeneralAssemblyMinutes") && (
+          <>
+            <LakeLabel
+              label={t("supportingDoc.generalAssemblyMinutes")}
+              help={<Help type="tooltip" text="supportingDoc.generalAssemblyMinutes.description" />}
+              render={() => (
+                <Field name="GeneralAssemblyMinutes">
+                  {({ value, onChange, error }) => (
+                    <UploadArea
+                      layout="horizontal"
+                      onDropAccepted={files => {
+                        onChange([...value, { id: NO_ID_YET, status: "uploading", progress: 0 }]);
+                        handleUpload(files, "GeneralAssemblyMinutes");
                       }}
                       error={error}
                       documents={value}

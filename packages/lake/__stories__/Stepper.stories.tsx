@@ -107,6 +107,7 @@ export const Interactive = () => {
             icon="chevron-left-filled"
             color="current"
             onPress={setPreviousStep}
+            ariaLabel="Previous"
           />
 
           <Space width={16} />
@@ -116,6 +117,7 @@ export const Interactive = () => {
             icon="chevron-right-filled"
             color="current"
             onPress={setNextStep}
+            ariaLabel="Next"
           />
         </Box>
       </StoryBlock>

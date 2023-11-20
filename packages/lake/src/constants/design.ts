@@ -648,11 +648,30 @@ const shake = StyleSheet.create({
   },
 });
 
+const heartbeat = StyleSheet.create({
+  enter: {
+    animationKeyframes: [
+      {
+        "0%, 100%": {
+          opacity: 1,
+        },
+        "50%": {
+          opacity: 0.5,
+        },
+      },
+    ],
+    animationDuration: "1000ms",
+    animationTimingFunction: easeInOutQuad,
+    animationIterationCount: "infinite",
+  },
+});
+
 export const animations = {
   fadeAndSlideInFromTop,
   fadeAndSlideInFromLeft,
   fadeAndSlideInFromBottom,
   fadeAndSlideInFromRight,
+  heartbeat,
   shake,
 };
 

@@ -84,3 +84,8 @@ export const groupBy = <T, K extends string>(
   });
   return grouped;
 };
+
+export const intersection = <T>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<T>) => {
+  const toKeep = new Set(arrayB);
+  return arrayA.filter(item => toKeep.has(item));
+};

@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/lake",
-  "version": "2.7.25",
+  "version": "3.4.0",
   "engines": {
     "node": ">=18.0.0",
     "yarn": "^1.22.0"
@@ -27,33 +27,33 @@
   "license": "MIT",
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@react-three/drei": "^9.80.1",
-    "@react-three/fiber": "^8.13.6",
-    "@swan-io/boxed": "^1.1.0",
+    "@react-three/drei": "^9.88.11",
+    "@react-three/fiber": "^8.15.10",
+    "@swan-io/boxed": "^1.2.0",
     "@swan-io/chicane": "^1.4.1",
-    "dayjs": "^1.11.9",
+    "dayjs": "^1.11.10",
     "polished": "^4.2.2",
-    "prism-react-renderer": "^2.0.6",
+    "prism-react-renderer": "^2.1.0",
     "react": "^18.2.0",
     "react-atomic-state": "^1.2.7",
     "react-dom": "^18.2.0",
-    "react-native-web": "^0.19.7",
+    "react-native-web": "^0.19.9",
     "react-popper": "^2.3.0",
     "react-ux-form": "^1.5.0",
     "rifm": "^0.12.1",
-    "three": "^0.155.0",
+    "three": "^0.158.0",
     "ts-dedent": "^2.2.0",
     "ts-pattern": "^5.0.5",
     "urql": "^4.0.5",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.19",
-    "@types/react-dom": "^18.2.7",
-    "@types/react-native": "^0.72.2",
-    "@types/three": "^0.155.0",
-    "@types/uuid": "^9.0.2",
+    "@types/react": "^18.2.36",
+    "@types/react-dom": "^18.2.14",
+    "@types/react-native": "^0.72.5",
+    "@types/three": "^0.158.1",
+    "@types/uuid": "^9.0.6",
     "jsdom": "^22.1.0",
-    "type-fest": "^4.2.0"
+    "type-fest": "^4.6.0"
   }
 }

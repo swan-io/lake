@@ -1,14 +1,18 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  pull_request:
+    types: [closed]
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
+    env:
+      CHANGELOG: ${{ github.event.pull_request.body }}
+      GH_TOKEN: ${{ github.token }}
+      REF_BRANCH: ${{ github.event.pull_request.head.ref }}
     steps:
       - uses: actions/checkout@v3
 
@@ -28,6 +32,9 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      - name: Check licenses
+        run: yarn license-check
+
       - name: Pack
         run: yarn build
 
@@ -39,22 +46,9 @@ jobs:
           yarn workspace @swan-io/lake publish
           yarn workspace @swan-io/shared-business publish
 
-      - name: Get changelog
-        id: changelog
-        shell: bash
-        # trick for multiline variables
-        run: |
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$(head -100 HISTORY.md)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Get version
         id: version
-        run: echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
-      - name: Notify on Slack
-        uses: bloodyowl/slack-message-release-action@v1.1.5
-        with:
-          version: ${{ steps.version.outputs.version }}
-          changelog: ${{ steps.changelog.outputs.changelog }}
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Create GitHub release
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }} --notes "$CHANGELOG"

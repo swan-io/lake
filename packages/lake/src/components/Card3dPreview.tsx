@@ -79,7 +79,7 @@ type CardParams = {
   cardNumber: string;
   expirationDate: string;
   cvv: string;
-  color: "Silver" | "Black";
+  color: "Silver" | "Black" | THREE.Texture;
   logo: SVGElement | HTMLImageElement | null;
   logoScale: number;
   assetsUrls: Card3dAssetsUrls;
@@ -256,7 +256,13 @@ export const Card = forwardRef<THREE.Group, CardProps>(
         .with("Black", () => {
           materials.card.map = blackTexture;
         })
-        .exhaustive();
+        .otherwise(texture => {
+          materials.card.map = texture;
+        });
+
+      // force threejs to update material
+      // because sometimes it doesn't apply texture on load randomly
+      materials.card.needsUpdate = true;
     }, [color, materials.card, silverTexture, blackTexture]);
 
     // this avoid to have onSvgError as dependency of the effect below which should run only on logo change
@@ -302,7 +308,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
         color={match(color)
           .with("Silver", () => 0x000000)
           .with("Black", () => 0xeeeeee)
-          .exhaustive()}
+          .otherwise(() => 0xeeeeee)}
         metalness={0.1}
         roughness={0.55}
         envMapIntensity={ENV_MAP_INTENSITY}
@@ -410,7 +416,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
               rotation={[0, Math.PI, 0]}
               position={[4, -0.15, 0]}
             >
-              by Mastercard international.
+              from Mastercard International.
               {secondaryTextMaterial}
             </Text>
 
@@ -496,7 +502,7 @@ export const Card = forwardRef<THREE.Group, CardProps>(
                   color={match(color)
                     .with("Silver", () => 0x000000)
                     .with("Black", () => 0xffffff)
-                    .exhaustive()}
+                    .otherwise(() => 0xffffff)}
                   metalness={0.1}
                   roughness={0.35}
                   envMapIntensity={ENV_MAP_INTENSITY}

@@ -1,12 +1,161 @@
+## 3.3.2
+
+Changes:
+
+- Update finnish translations (3629b623)
+
+## 3.3.1
+
+Changes:
+
+- Add shared-business Finnish translations (857007a)
+
+## 3.3.0
+
+Changes:
+
+- Update license report (e6cec13)
+- Create segmented control component (c31c1fe)
+- Add finnish language (5dbd053)
+
+## 3.2.1
+
+Changes:
+
+- RIB - Move to new line when name is too long (0a7657f)
+- Add NLD RIB (1f33a78)
+- Improve capitalize + add lowerCase, upperCase and uncapitalize (dda6feb)
+- Update dependencies (a85dafc)
+- Add heartbeat animation (ea2395e)
+
+## 3.2.0
+
+Changes
+
+- feat(LakeTextInput): add unit chooser (6a63c1c)
+
+## 3.1.0
+
+Changes
+
+- Use File instead of Element for UploadArea preview (ae75ca7)
+- feat(DatePicker/Filters): remove dayNames and monthNames props (5a801a2)
+- feat: Remove single file in uploadArea (be9418d)
+
+## 3.0.0
+
+Changes
+
+- 3D card: Add custom texture (0e8ace4)
+- feat(ConfirmModal): move component to shared business (fc5729a)
+
+Fixes
+
+- fix(a11y): add missing aria-labels (ef316ca)
+- fix(LakeButton): arial-label should be mandatory when no children (dfa8df3)
+
+## 2.7.38
+
+Fixes:
+
+- Fix `getBestLocale` (82241d2)
+
+## 2.7.37
+
+Changes
+
+- feat(LakeSlider): add disabled mode (01bbd97)
+- feat(ChoicePicker): disabled mode (3588ca5)
+
+## 2.7.36
+
+Changes
+
+- Add urql and rejections helpers (1c658cd)
+
+## 2.7.35
+
+Changes
+
+- fix(Toggle): handle is 1px wront at first render (12258ef)
+
+## 2.7.34
+
+Changes
+
+- Improve glob package workaround for yarn 1.x (d07129a)
+- feat(Toggle): add component (3952c3b)
+
+## 2.7.33
+
+Fixes:
+
+- Revert to previous layout lake label (6e62a17)
+
+## 2.7.32
+
+Changes:
+
+- feat(Separator): separator with text (dbaeda8)
+
+## 2.7.31
+
+Changes:
+
+- Attempt to alter CSS selector blocked by easylist (b6a713cb)
+
+## 2.7.30
+
+Changes:
+
+- feat(icons): arrow-clockwise-filled (b7637d5)
+- feat(icons): qr-code-regular (72cf02b)
+- [Fix] Label story, error in LakeLabel (d681ebb)
+
+## 2.7.29
+
+Changes:
+
+- Add missing icons (89f8e86b)
+
+## 2.7.28
+
+Changes:
+
+- Update dependencies (7521ac4)
+
+## 2.7.27
+
+Changes:
+
+- Only deploy main branch (c132050)
+- Add add-card icon (a0eb4f7)
+
+## 2.7.26
+
+Features:
+
+- Support PNG logos on 3D Card Preview (26a003c6)
+
+Changes:
+
+- Add `borderRadius` prop for BorderedIcon (50c52a10)
+
 ## 2.7.25
+
+Changes:
 
 - feat(CountryPicker): forwardRef (9cd01f9)
 
 ## 2.7.24
 
+Changes:
+
 - feat(TaxIdentificationNumberInput): forwardRef (f1c5c10)
 
 ## 2.7.23
+
+Changes:
 
 - feat(LakeTooltip): return children if no content (cc72560)
 

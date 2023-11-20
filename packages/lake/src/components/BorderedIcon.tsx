@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
-import { colors, ColorVariants, radii } from "../constants/design";
+import { colors, ColorVariants, Radii, radii } from "../constants/design";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
 import { SpacingValue } from "./Space";
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: radii[8],
     borderWidth: 1,
     borderColor: colors.current[100],
     backgroundColor: colors.current[50],
@@ -18,9 +17,16 @@ type Props = {
   size?: number;
   padding?: SpacingValue | 0;
   color?: ColorVariants;
+  borderRadius?: Radii;
 };
 
-export const BorderedIcon = ({ name, size = 96, padding = 0, color = "current" }: Props) => {
+export const BorderedIcon = ({
+  name,
+  size = 96,
+  padding = 0,
+  color = "current",
+  borderRadius = 8,
+}: Props) => {
   const iconSize = size - padding * 2;
 
   return (
@@ -34,6 +40,7 @@ export const BorderedIcon = ({ name, size = 96, padding = 0, color = "current" }
           height: size,
           borderColor: colors[color][100],
           backgroundColor: colors[color][50],
+          borderRadius: radii[borderRadius],
         },
       ]}
     >

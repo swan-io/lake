@@ -12,6 +12,7 @@ import {
   useRef,
 } from "react";
 import {
+  HrefAttrs,
   NativeSyntheticEvent,
   PressableProps,
   PressableStateCallbackType,
@@ -221,11 +222,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
 
 type ExtraProps = {
   href?: string;
-  hrefAttrs?: {
-    download?: boolean;
-    rel?: string;
-    target?: string;
-  };
+  hrefAttrs?: HrefAttrs;
 };
 
 export type PressableViewProps = Except<Props<ViewProps>, "children">;

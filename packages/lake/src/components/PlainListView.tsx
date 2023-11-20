@@ -63,6 +63,7 @@ type Props<T, ExtraInfo> = {
   breakpoint?: number;
   withoutScroll?: boolean;
   stickyOffset?: number;
+  headerBackgroundColor?: string;
 };
 
 const styles = StyleSheet.create({
@@ -99,6 +100,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  header: {
+    position: "sticky",
+    top: 0,
+    flexDirection: "row",
+    alignItems: "stretch",
+    zIndex: 2,
   },
   stickyHeader: {
     position: "sticky",
@@ -230,6 +238,7 @@ export const PlainListView = <T, ExtraInfo>({
   breakpoint = breakpoints.large,
   withoutScroll = false,
   stickyOffset = 0,
+  headerBackgroundColor = backgroundColor.default,
 }: Props<T, ExtraInfo>) => {
   const viewId = useId();
   const scrollTrackerRef = useRef<View>(null);
@@ -333,87 +342,100 @@ export const PlainListView = <T, ExtraInfo>({
         const displayColumns = large ? columns : smallColumns;
         return (
           <>
-            {!isEmpty && large ? (
-              <View style={[styles.segment, styles.segmentLarge, headerStyle]}>
-                {displayColumns.map(({ id, width, title, renderTitle }) => {
-                  const columnId = `${viewId}_${id}`;
-
-                  return (
-                    <View
-                      style={[
-                        styles.segmentHeaderCell,
-                        {
-                          width: typeof width === "number" ? width : ONE,
-                          flexGrow: width === "grow" ? ONE : ZERO,
-                          height: headerHeight,
-                        },
-                      ]}
-                      id={columnId}
-                      key={columnId}
-                    >
-                      {renderTitle({ title, extraInfo, id })}
-                    </View>
-                  );
-                })}
-              </View>
-            ) : null}
-
             {cloneElement(listWrapper, {
               children: (
                 <>
-                  {Array.from(groups.entries()).map(([groupName, items]) => {
-                    return (
-                      <Fragment key={groupName}>
-                        {groupName != null ? (
+                  {!isEmpty && large ? (
+                    <View
+                      style={[
+                        styles.segment,
+                        styles.segmentLarge,
+                        styles.header,
+                        headerStyle,
+                        { backgroundColor: headerBackgroundColor },
+                      ]}
+                    >
+                      {displayColumns.map(({ id, width, title, renderTitle }) => {
+                        const columnId = `${viewId}_${id}`;
+
+                        return (
                           <View
                             style={[
-                              styles.stickyHeader,
-                              large && styles.stickyHeaderLarge,
-                              { height: groupHeaderHeight, top: stickyOffset },
+                              styles.segmentHeaderCell,
+                              {
+                                width: typeof width === "number" ? width : ONE,
+                                flexGrow: width === "grow" ? ONE : ZERO,
+                                height: headerHeight,
+                              },
                             ]}
+                            id={columnId}
+                            key={columnId}
                           >
-                            <LakeHeading level={3} variant="h3">
-                              {groupName}
-                            </LakeHeading>
+                            {renderTitle({ title, extraInfo, id })}
                           </View>
-                        ) : null}
+                        );
+                      })}
+                    </View>
+                  ) : null}
 
-                        {items.map((item, index) => {
-                          const key = keyExtractor(item, index);
-                          const isActive = activeRowId === key;
-                          const isHovered = isNotNullish(getRowLink) && hoveredRow === key;
+                  <View>
+                    {Array.from(groups.entries()).map(([groupName, items]) => {
+                      return (
+                        <Fragment key={groupName}>
+                          {groupName != null ? (
+                            <View
+                              style={[
+                                styles.stickyHeader,
+                                large && styles.stickyHeaderLarge,
+                                {
+                                  height: groupHeaderHeight,
+                                  top: stickyOffset + groupHeaderHeight,
+                                },
+                              ]}
+                            >
+                              <LakeHeading level={3} variant="h3">
+                                {groupName}
+                              </LakeHeading>
+                            </View>
+                          ) : null}
 
-                          const wrapper = createRowWrapper({
-                            item,
-                            absoluteIndex: index,
-                            extraInfo,
-                          });
+                          {items.map((item, index) => {
+                            const key = keyExtractor(item, index);
+                            const isActive = activeRowId === key;
+                            const isHovered = isNotNullish(getRowLink) && hoveredRow === key;
 
-                          return cloneElement(wrapper, {
-                            style: { ...styles.rowLink, ...wrapper.props.style },
-                            key: index,
-                            ref: isActive ? activeItemRef : null,
-                            children: (
-                              <Row
-                                id={key}
-                                rowHeight={rowHeight}
-                                columns={displayColumns}
-                                item={item}
-                                index={index}
-                                extraInfo={extraInfo}
-                                isActive={isActive}
-                                isHovered={isHovered}
-                                large={large}
-                                style={rowStyle}
-                                onMouseEnter={setHoveredRow}
-                                onMouseLeave={removeHoveredRow}
-                              />
-                            ),
-                          });
-                        })}
-                      </Fragment>
-                    );
-                  })}
+                            const wrapper = createRowWrapper({
+                              item,
+                              absoluteIndex: index,
+                              extraInfo,
+                            });
+
+                            return cloneElement(wrapper, {
+                              style: { ...styles.rowLink, ...wrapper.props.style },
+                              key: index,
+                              ref: isActive ? activeItemRef : null,
+                              children: (
+                                <Row
+                                  id={key}
+                                  rowHeight={rowHeight}
+                                  columns={displayColumns}
+                                  item={item}
+                                  index={index}
+                                  extraInfo={extraInfo}
+                                  isActive={isActive}
+                                  isHovered={isHovered}
+                                  large={large}
+                                  style={rowStyle}
+                                  onMouseEnter={setHoveredRow}
+                                  onMouseLeave={removeHoveredRow}
+                                />
+                              ),
+                            });
+                          })}
+                        </Fragment>
+                      );
+                    })}
+                  </View>
 
                   <View>
                     <View aria-busy={isLoading} style={styles.loadingPlaceholder}>

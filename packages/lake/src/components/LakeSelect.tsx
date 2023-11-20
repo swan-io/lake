@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     paddingHorizontal: spacings[16],
+    borderRadius: radii[6],
+    transitionProperty: "background-color",
+    transitionDuration: "150ms",
   },
   small: {
     paddingVertical: 5,
@@ -247,12 +250,21 @@ const LakeSelectWithRef = <V,>(
         role="button"
         aria-expanded={visible}
         disabled={readOnly || disabled}
-        style={({ focused }) => [
+        style={({ focused, hovered, pressed }) => [
           mode === "normal" ? styles.normal : styles.borderless,
           size === "small" && styles.small,
           (disabled || readOnly) && styles.inputDisabled,
           (visible || focused) && styles.focusedInput,
-          mode === "borderless" && styles.focusedWithoutShadow,
+          mode === "borderless" && [
+            {
+              backgroundColor: pressed
+                ? colors.gray[200]
+                : hovered
+                ? colors.gray[100]
+                : invariantColors.transparent,
+            },
+            styles.focusedWithoutShadow,
+          ],
           mode !== "borderless" && error != null && styles.errorContainer,
           (disabled || readOnly) && mode === "borderless" && styles.inputBorderlessDisabled,
           style,

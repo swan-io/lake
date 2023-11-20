@@ -14,31 +14,6 @@ import { Space } from "../src/components/Space";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
 import { StoryBlock } from "./_StoriesComponents";
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
-
-const dayNames = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-] as const;
-
 const mode: FilterRadioDef<"QES" | "Expert"> = {
   type: "radio",
   label: "Mode",
@@ -70,8 +45,6 @@ const startDate: FilterDateDef = {
   submitText: "Save",
   noValueText: "None",
   dateFormat: "DD/MM/YYYY",
-  dayNames,
-  monthNames,
 };
 
 const resourceId: FilterInputDef = {

@@ -2,6 +2,7 @@ import { Children, forwardRef, Fragment, memo, ReactNode, ReactText } from "reac
 import {
   ActivityIndicator,
   GestureResponderEvent,
+  HrefAttrs,
   PressableStateCallbackType,
   StyleProp,
   StyleSheet,
@@ -9,6 +10,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { match } from "ts-pattern";
+import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
   colors,
@@ -89,10 +91,6 @@ const styles = StyleSheet.create({
   },
   text: texts.semibold,
   textSmall: texts.smallSemibold,
-  disabled: {
-    cursor: "not-allowed",
-    opacity: 0.3,
-  },
   resetOpacity: {
     opacity: 1,
   },
@@ -127,8 +125,6 @@ const isReactText = (node: ReactNode): node is ReactText =>
 export type ButtonProps = {
   ariaControls?: string;
   ariaExpanded?: boolean;
-  ariaLabel?: string;
-  children?: ReactNode;
   color?: ColorVariants;
   disabled?: boolean;
   loading?: boolean;
@@ -141,9 +137,18 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle> | ((props: PressableStateCallbackType) => StyleProp<ViewStyle>);
   forceBackground?: boolean;
   href?: string;
-  hrefAttrs?: { download?: boolean; rel?: string; target?: string };
+  hrefAttrs?: HrefAttrs;
   pill?: boolean;
-};
+} & (
+  | {
+      ariaLabel: string;
+      children?: never;
+    }
+  | {
+      ariaLabel?: string;
+      children: ReactNode;
+    }
+);
 
 export const LakeButton = memo(
   forwardRef<View, ButtonProps>(
@@ -192,12 +197,11 @@ export const LakeButton = memo(
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
             styles.base,
-
             isSmall && styles.small,
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
-            disabled && styles.disabled,
+            disabled && commonStyles.disabled,
             disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
 

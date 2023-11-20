@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { Future, Result } from "@swan-io/boxed";
+import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { UploadArea } from "@swan-io/shared-business/src/components/UploadArea";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -181,7 +181,7 @@ const ConfigForm = ({ value, onChange }: ConfigFormProps) => {
           render={() => (
             <UploadArea
               accept={["image/svg+xml"]}
-              value={logoFile}
+              value={logoFile != undefined ? AsyncData.Done(logoFile) : undefined}
               onDropAccepted={handleLogo}
               layout="horizontal"
               icon="arrow-download-filled"

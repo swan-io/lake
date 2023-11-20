@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     position: "fixed",
     animationFillMode: "forwards",
+    visibility: "visible",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

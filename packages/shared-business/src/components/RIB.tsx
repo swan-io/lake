@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
   half: {
     padding: spacings[24],
   },
+  shrink: {
+    flexShrink: 1,
+  },
   label: {
     ...getTextStyle("serif", 10),
   },
@@ -85,7 +88,7 @@ const kindStyles = {
 };
 
 const Item = ({ color = "gray", kind, label, value }: ItemProps) => (
-  <View>
+  <View style={styles.shrink}>
     <Text style={[styles.label, color === "partner" && styles.partnerLabel]}>{label}</Text>
     <Space height={4} />
 
@@ -134,6 +137,11 @@ type RIBv1Props = {
       agency: string;
       bankNumber: string;
       nationalCode: string;
+    }
+  | {
+      accountCountry: "NLD";
+      bankKey: string;
+      bankNumber: string;
     }
 );
 
@@ -217,6 +225,15 @@ const RIBv1 = ({
                 <Item kind="small" label={t("rib.nationalCode")} value={nationalCode} />
                 <Space width={24} />
                 <Item kind="small" label={t("rib.number")} value={bankNumber} />
+              </>
+            ))
+            .with({ accountCountry: "NLD" }, ({ bankKey, bankNumber }) => (
+              <>
+                <Item kind="small" label={t("rib.bank")} value={bank} />
+                <Space width={24} />
+                <Item kind="small" label={t("rib.number")} value={bankNumber} />
+                <Space width={24} />
+                <Item kind="small" label={t("rib.key")} value={bankKey} />
               </>
             ))
             .exhaustive()}

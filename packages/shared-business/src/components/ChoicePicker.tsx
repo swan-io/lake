@@ -1,15 +1,17 @@
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeRadio } from "@swan-io/lake/src/components/LakeRadio";
+import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { Tile } from "@swan-io/lake/src/components/Tile";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
+import { breakpoints, negativeSpacings, spacings } from "@swan-io/lake/src/constants/design";
+import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
+import { clampValue } from "@swan-io/lake/src/utils/math";
+import { detectScrollAnimationEnd } from "@swan-io/lake/src/utils/viewport";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
-import { breakpoints, negativeSpacings, spacings } from "../constants/design";
-import { useResponsive } from "../hooks/useResponsive";
-import { clampValue } from "../utils/math";
-import { detectScrollAnimationEnd } from "../utils/viewport";
-import { LakeButton } from "./LakeButton";
-import { LakeRadio } from "./LakeRadio";
-import { Pressable } from "./Pressable";
-import { Space } from "./Space";
-import { Tile } from "./Tile";
+import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   root: {
@@ -107,6 +109,7 @@ type Props<T> = {
   value?: T;
   getId?: (item: T) => unknown;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
 const identity = <T,>(x: T) => x;
@@ -117,6 +120,7 @@ export const ChoicePicker = <T,>({
   large = false,
   renderItem,
   value,
+  disabled = false,
   onChange,
 }: Props<T>) => {
   const containerRef = useRef<ScrollView | null>(null);
@@ -222,8 +226,10 @@ export const ChoicePicker = <T,>({
           {items.map((item, index) => (
             <Pressable
               key={String(index)}
+              disabled={disabled}
               style={[
                 styles.item,
+                disabled && commonStyles.disabled,
                 desktop && styles.itemAnimation, // set enter animation only on desktop because it can break scroll snap
                 desktop && { animationDelay: `${200 + 100 * index}ms` },
                 large && styles.itemLarge,
@@ -261,8 +267,9 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressPrevious}
-          disabled={mobilePosition === "start"}
+          disabled={mobilePosition === "start" || disabled}
           style={styles.leftButton}
+          ariaLabel={t("common.previous")}
         />
       )}
 
@@ -272,8 +279,9 @@ export const ChoicePicker = <T,>({
           mode="secondary"
           forceBackground={true}
           onPress={onPressNext}
-          disabled={mobilePosition === "end"}
+          disabled={mobilePosition === "end" || disabled}
           style={styles.rightButton}
+          ariaLabel={t("common.next")}
         />
       )}
     </View>

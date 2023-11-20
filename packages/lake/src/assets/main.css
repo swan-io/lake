@@ -417,7 +417,8 @@ input[type="range"] {
   border-radius: 1px;
   border-style: none;
   height: 20px;
-  box-shadow: 0 0 0 2px var(--color-background-light-accented),
+  box-shadow:
+    0 0 0 2px var(--color-background-light-accented),
     inset 0 0 0 9px var(--color-background-light-accented);
   background-image: linear-gradient(var(--color-current-500), var(--color-current-500));
   background-size: 0 100%;
@@ -442,7 +443,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 #app-root {
-  transition: 300ms ease-in-out transform, 300ms ease-in-out filter, 300ms ease-in-out opacity;
+  transition:
+    300ms ease-in-out transform,
+    300ms ease-in-out filter,
+    300ms ease-in-out opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {

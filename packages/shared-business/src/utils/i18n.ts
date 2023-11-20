@@ -1,10 +1,10 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
-import type { DateFormat } from "@swan-io/lake/src/components/DatePicker";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
 import dayjsLocaleEN from "dayjs/locale/en";
 import dayjsLocaleES from "dayjs/locale/es";
+import dayjsLocaleFI from "dayjs/locale/fi";
 import dayjsLocaleFR from "dayjs/locale/fr";
 import dayjsLocaleIT from "dayjs/locale/it";
 import dayjsLocaleNL from "dayjs/locale/nl";
@@ -14,9 +14,13 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
+import { P, match } from "ts-pattern";
+import { CombinedError } from "urql";
+import type { DateFormat } from "../components/DatePicker";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
+import translationFI from "../locales/fi.json";
 import translationFR from "../locales/fr.json";
 import translationIT from "../locales/it.json";
 import translationNL from "../locales/nl.json";
@@ -29,7 +33,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
-const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt"] as const;
+const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt", "fi"] as const;
 type SupportedLanguage = (typeof supportedLanguages)[number];
 
 type TranslationParams = Record<string, string | number>;
@@ -109,6 +113,15 @@ const locales: Record<SupportedLanguage, () => Locale> = {
     timeFormat: "HH:mm:ss",
     timePlaceholder: "HH:mm:ss",
   }),
+  fi: () => ({
+    language: "fi",
+    translations: translationFI,
+    dayjsLocale: dayjsLocaleFI,
+    dateFormat: "DD/MM/YYYY",
+    datePlaceholder: "DD/MM/YYYY",
+    timeFormat: "HH:mm:ss",
+    timePlaceholder: "HH:mm:ss",
+  }),
 };
 
 const { getBestLocale } = getLanguagesHelpers(supportedLanguages);
@@ -149,3 +162,22 @@ export const rifmDateProps: RifmProps = getRifmProps({
   charMap: { 2: "/", 4: "/" },
   maxLength: 8,
 });
+
+const translationKeys = Object.keys(translationEN);
+const isTranslationKey = (key: string): key is TranslationKey => translationKeys.includes(key);
+
+export const translateError = (error: unknown) => {
+  const key = match(error)
+    .returnType<string>()
+    .with({ __typename: P.select(P.string) }, __typename => `rejection.${__typename}`)
+    .with(P.string, __typename => `rejection.${__typename}`)
+    .with(P.instanceOf(CombinedError), ({ response }) =>
+      match(response)
+        .with({ response: { status: P.select(P.number) } }, status => `error.network.${status}`)
+        .otherwise(() => "error.generic"),
+    )
+    .with(P.instanceOf(Error), ({ message }) => `rejection.${message}`)
+    .otherwise(() => "error.generic");
+
+  return t(isTranslationKey(key) ? key : "error.generic");
+};
