@@ -64,7 +64,7 @@ type Props = {
   initialState?: EditorState;
   accountCountry: AccountCountry;
   step: BeneficiaryFormStep;
-  googleMapApiKey: string;
+  placekitApiKey: string;
   onStepChange: (step: BeneficiaryFormStep) => void;
   onSave: (editorState: EditorState) => void | Promise<void>;
   onClose: () => void;
@@ -277,7 +277,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
       initialState,
       accountCountry,
       step,
-      googleMapApiKey,
+      placekitApiKey,
       onStepChange,
       onClose,
       onSave,
@@ -585,7 +585,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                                 render={id => (
                                   <PlacekitCityInput
                                     id={id}
-                                    apiKey={googleMapApiKey}
+                                    apiKey={placekitApiKey}
                                     error={error}
                                     country={birthCountryCode.value}
                                     value={value ?? ""}
@@ -724,7 +724,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                     {({ country }) => (
                       <>
                         <AddressFormPart
-                          apiKey={googleMapApiKey}
+                          apiKey={placekitApiKey}
                           initialAddress={initialAddress.current.residencyAddressLine1 ?? ""}
                           initialCity={initialAddress.current.residencyAddressCity ?? ""}
                           initialPostalCode={
