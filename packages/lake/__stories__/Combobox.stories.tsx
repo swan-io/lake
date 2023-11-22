@@ -1,5 +1,7 @@
 import { Meta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@swan-io/boxed";
+import { PlacekitAddressSearchInput } from "@swan-io/shared-business/src/components/PlacekitAddressSearchInput";
+import { PlacekitCityInput } from "@swan-io/shared-business/src/components/PlacekitCityInput";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
@@ -103,6 +105,9 @@ const EditableCombobox = (props: EditableComboboxProps) => {
 };
 
 export const Variations = () => {
+  const [search, setSearch] = useState("");
+  const [city, setCity] = useState("");
+
   return (
     <StoryBlock title="Combobox">
       <StoryPart title="By default">
@@ -136,6 +141,37 @@ export const Variations = () => {
               <LakeText>With footer component</LakeText>
             </Box>
           }
+        />
+      </StoryPart>
+
+      <StoryPart title="CityInput">
+        <PlacekitCityInput
+          apiKey={PLACEKIT_API_KEY}
+          country="FRA"
+          value={city}
+          onValueChange={setCity}
+          onSuggestion={place => {
+            console.log(place.city);
+            console.log(place.postalCode);
+          }}
+          onLoadError={() => {}}
+        />
+      </StoryPart>
+
+      <StoryPart title="AddressInput">
+        <PlacekitAddressSearchInput
+          apiKey={PLACEKIT_API_KEY}
+          country="FRA"
+          value={search}
+          onValueChange={setSearch}
+          onSuggestion={place => {
+            console.log(place.completeAddress);
+            console.log(place.city);
+            console.log(place.postalCode);
+          }}
+          language="fr"
+          placeholder=""
+          emptyResultText="Nothing"
         />
       </StoryPart>
     </StoryBlock>

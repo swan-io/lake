@@ -31,6 +31,7 @@
   "dependencies": {
     "@formatjs/intl": "^2.9.6",
     "@googlemaps/js-api-loader": "1.16.2",
+    "@placekit/client-js": "^2.0.0",
     "@swan-io/boxed": "^1.2.0",
     "dayjs": "^1.11.10",
     "react": "^18.2.0",
