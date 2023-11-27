@@ -1,5 +1,5 @@
 import { ReactNode, useId } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View, ViewProps } from "react-native";
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { Icon } from "./Icon";
@@ -40,17 +40,24 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  trigger: ReactNode;
   children: ReactNode;
+  trigger: ReactNode;
+  style?: ViewProps["style"];
+  contentContainerStyle?: ViewProps["style"];
 };
 
-export const Accordion = ({ trigger, children }: Props) => {
+export const Accordion = ({ children, trigger, style, contentContainerStyle }: Props) => {
   const id = useId();
   const [isOpen, { toggle }] = useDisclosure(false);
 
   return (
     <View>
-      <Pressable aria-expanded={isOpen} aria-controls={id} style={styles.trigger} onPress={toggle}>
+      <Pressable
+        aria-controls={id}
+        aria-expanded={isOpen}
+        onPress={toggle}
+        style={[styles.trigger, style]}
+      >
         <Icon
           name="chevron-right-filled"
           size={12}
@@ -76,7 +83,7 @@ export const Accordion = ({ trigger, children }: Props) => {
         style={[styles.contentContainer, isOpen && styles.contentContainerDisplayed]}
       >
         <View style={styles.contentInner}>
-          <View style={styles.content}>{children}</View>
+          <View style={[styles.content, contentContainerStyle]}>{children}</View>
         </View>
       </View>
     </View>
