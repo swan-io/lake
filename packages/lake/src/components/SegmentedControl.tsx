@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     alignItems: "center",
     padding: spacings[12],
-    flexDirection: "row",
+    flexDirection: "column",
   },
   itemDesktop: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "center",
   },
   itemText: {
