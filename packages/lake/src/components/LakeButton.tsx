@@ -213,31 +213,31 @@ export const LakeButton = memo(
                       ? colors[color][600]
                       : colors[color][500]
                     : hovered
-                    ? colors[color].secondary
-                    : colors[color].primary,
+                      ? colors[color].secondary
+                      : colors[color].primary,
               }))
               .with("secondary", () => ({
                 backgroundColor: pressed
                   ? colors[color][100]
                   : hovered
-                  ? colors[color][50]
-                  : forceBackground
-                  ? backgroundColor.accented
-                  : invariantColors.transparent,
+                    ? colors[color][50]
+                    : forceBackground
+                      ? backgroundColor.accented
+                      : invariantColors.transparent,
                 borderWidth: 1,
                 borderColor:
                   disabled && forceBackground
                     ? colors[color][100]
                     : hovered
-                    ? colors[color][600]
-                    : colors[color][300],
+                      ? colors[color][600]
+                      : colors[color][300],
               }))
               .with("tertiary", () => ({
                 backgroundColor: pressed
                   ? colors[color][200]
                   : hovered
-                  ? colors[color][100]
-                  : invariantColors.transparent,
+                    ? colors[color][100]
+                    : invariantColors.transparent,
               }))
               .exhaustive(),
 
@@ -250,8 +250,8 @@ export const LakeButton = memo(
                 ? disabled && forceBackground
                   ? colors[color][300]
                   : hovered || pressed
-                  ? colors[color][700]
-                  : colors[color][600]
+                    ? colors[color][700]
+                    : colors[color][600]
                 : colors[color].contrast;
 
             return (

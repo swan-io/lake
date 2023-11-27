@@ -157,8 +157,8 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
                 hasErrors && (isDone || isActive)
                   ? colors.negative[500]
                   : isActive || isDone
-                  ? colors.current[500]
-                  : colors.gray[300]
+                    ? colors.current[500]
+                    : colors.gray[300]
               }
             >
               {stepNumber}. {step.label}

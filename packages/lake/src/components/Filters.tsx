@@ -573,10 +573,10 @@ type Filter<T> =
 type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox" }
   ? T["items"][number]["value"][] | undefined
   : T extends { type: "radio" }
-  ? T["items"][number]["value"] | undefined
-  : T extends { type: "boolean" }
-  ? boolean | undefined
-  : string | undefined;
+    ? T["items"][number]["value"] | undefined
+    : T extends { type: "boolean" }
+      ? boolean | undefined
+      : string | undefined;
 
 const getFilterValue = <T extends Filter<unknown>["type"]>(
   _type: T,

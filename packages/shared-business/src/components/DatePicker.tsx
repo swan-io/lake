@@ -732,10 +732,10 @@ const MonthCalendar = ({
                       isSelected
                         ? colors.current.contrast
                         : isDisabled
-                        ? colors.gray[300]
-                        : isToday
-                        ? colors.current[500]
-                        : colors.gray[900]
+                          ? colors.gray[300]
+                          : isToday
+                            ? colors.current[500]
+                            : colors.gray[900]
                     }
                   >
                     {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
