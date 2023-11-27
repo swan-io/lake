@@ -136,10 +136,10 @@ export const BorderedButton = memo(
             disabled
               ? styles.disabled
               : pressed
-              ? styles.pressed
-              : hovered
-              ? styles.hovered
-              : false,
+                ? styles.pressed
+                : hovered
+                  ? styles.hovered
+                  : false,
 
             style,
           ]}
