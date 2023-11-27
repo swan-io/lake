@@ -1,4 +1,4 @@
-import { forwardRef, memo, useEffect, useState } from "react";
+import { forwardRef, memo, useLayoutEffect, useState } from "react";
 import { Image, ImageProps } from "react-native";
 import { Except } from "type-fest";
 import { isNotNullish } from "../utils/nullish";
@@ -12,32 +12,49 @@ type Props = Except<ImageProps, "source"> & {
 
 export const AutoWidthImage = memo(
   forwardRef<Image, Props>(
-    ({ ariaLabel, maxWidth, height, sourceUri, style, ...props }, forwardedRef) => {
-      const [size, setSize] = useState<{ height: number; width: number }>({
-        height,
-        width: 0,
+    ({ ariaLabel, maxWidth, height, sourceUri, onLoadEnd, style, ...props }, forwardedRef) => {
+      const [{ fetching, size }, setState] = useState<{
+        fetching: boolean;
+        size: {
+          height: number;
+          width: number;
+        };
+      }>({
+        fetching: true,
+        size: { height, width: 0 },
       });
 
-      useEffect(() => {
-        Image.getSize(sourceUri, (fetchedWidth, fetchedHeight) => {
-          const ratio = fetchedWidth / fetchedHeight;
-          const width = ratio * height;
+      useLayoutEffect(() => {
+        Image.getSize(
+          sourceUri,
+          (fetchedWidth, fetchedHeight) => {
+            const ratio = fetchedWidth / fetchedHeight;
+            const width = ratio * height;
 
-          if (isNotNullish(maxWidth) && maxWidth < width) {
-            const height = maxWidth / ratio;
-            setSize({ height, width: maxWidth });
-          } else {
-            setSize({ height, width });
-          }
-        });
+            const size =
+              isNotNullish(maxWidth) && maxWidth < width
+                ? { height: maxWidth / ratio, width: maxWidth }
+                : { height, width };
+
+            setState({ fetching: false, size });
+          },
+          () => {
+            setState(({ size }) => ({ fetching: false, size }));
+          },
+        );
       }, [maxWidth, height, sourceUri]);
 
       return (
         <Image
           aria-label={ariaLabel}
           ref={forwardedRef}
-          source={{ uri: sourceUri }}
           style={[style, size]}
+          source={fetching ? null : sourceUri}
+          onLoadEnd={() => {
+            if (!fetching) {
+              onLoadEnd?.();
+            }
+          }}
           {...props}
         />
       );
