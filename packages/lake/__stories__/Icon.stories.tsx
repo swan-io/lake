@@ -17,9 +17,11 @@ const styles = StyleSheet.create({
   container: {
     flexWrap: "wrap",
   },
-  iconContainer: {
-    width: 200,
-    height: 100,
+  icon: {
+    flexBasis: "0%",
+    flexGrow: 1,
+    minWidth: 250,
+    paddingVertical: 16,
   },
 });
 
@@ -47,15 +49,13 @@ export const Default = () => {
           {getKeys(fluentIcons)
             .filter(name => name.includes(search))
             .map(name => (
-              <Box
-                key={name}
-                alignItems="center"
-                justifyContent="start"
-                style={styles.iconContainer}
-              >
+              <Box key={name} alignItems="center" style={styles.icon}>
                 <Icon name={name} size={30} color={colors.gray[800]} />
                 <Space height={8} />
-                <LakeText align="center">{name}</LakeText>
+
+                <LakeText align="center" numberOfLines={1}>
+                  {name}
+                </LakeText>
               </Box>
             ))}
         </Box>
@@ -66,15 +66,13 @@ export const Default = () => {
           {getKeys(customIcons)
             .filter(name => name.includes(search))
             .map(name => (
-              <Box
-                key={name}
-                alignItems="center"
-                justifyContent="start"
-                style={styles.iconContainer}
-              >
+              <Box key={name} alignItems="center" style={styles.icon}>
                 <Icon name={name} size={30} color={colors.gray[800]} />
                 <Space height={8} />
-                <LakeText align="center">{name}</LakeText>
+
+                <LakeText align="center" numberOfLines={1}>
+                  {name}
+                </LakeText>
               </Box>
             ))}
         </Box>
@@ -107,15 +105,13 @@ export const Bordered = ({ color }: BorderedArgs) => {
           {getKeys(fluentIcons)
             .filter(name => name.includes(search))
             .map(name => (
-              <Box
-                key={name}
-                alignItems="center"
-                justifyContent="start"
-                style={styles.iconContainer}
-              >
+              <Box key={name} alignItems="center" style={styles.icon}>
                 <BorderedIcon name={name} color={color} size={40} padding={8} />
                 <Space height={8} />
-                <LakeText align="center">{name}</LakeText>
+
+                <LakeText align="center" numberOfLines={1}>
+                  {name}
+                </LakeText>
               </Box>
             ))}
         </Box>
@@ -126,15 +122,13 @@ export const Bordered = ({ color }: BorderedArgs) => {
           {getKeys(customIcons)
             .filter(name => name.includes(search))
             .map(name => (
-              <Box
-                key={name}
-                alignItems="center"
-                justifyContent="start"
-                style={styles.iconContainer}
-              >
-                <BorderedIcon name={name} color={color} size={40} padding={8} />
+              <Box key={name} alignItems="center" style={styles.icon}>
+                <BorderedIcon name={name} color={color} size={100} padding={8} />
                 <Space height={8} />
-                <LakeText align="center">{name}</LakeText>
+
+                <LakeText align="center" numberOfLines={1}>
+                  {name}
+                </LakeText>
               </Box>
             ))}
         </Box>
