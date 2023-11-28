@@ -5,7 +5,7 @@ import fs from "fs/promises";
 import OpenAI from "openai";
 import ora from "ora";
 import os from "os";
-import path from "path";
+import path from "pathe";
 import prompts from "prompts";
 import tiktoken from "tiktoken-node";
 import { P, match } from "ts-pattern";
