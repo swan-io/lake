@@ -40,19 +40,19 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  chevronGap?: Spacings;
   children: ReactNode;
-  contentContainerStyle?: ViewProps["style"];
-  style?: ViewProps["style"];
   trigger: ReactNode;
+  style?: ViewProps["style"];
+  contentContainerStyle?: ViewProps["style"];
+  spaceBetweenChevronAndTrigger?: Spacings;
 };
 
 export const Accordion = ({
-  chevronGap = 20,
   children,
-  contentContainerStyle,
-  style,
   trigger,
+  style,
+  contentContainerStyle,
+  spaceBetweenChevronAndTrigger = 20,
 }: Props) => {
   const id = useId();
   const [isOpen, { toggle }] = useDisclosure(false);
@@ -72,7 +72,7 @@ export const Accordion = ({
           style={[styles.arrow, isOpen && styles.arrowOpen]}
         />
 
-        <Space width={chevronGap} />
+        <Space width={spaceBetweenChevronAndTrigger} />
 
         {typeof trigger === "string" ? (
           <LakeText variant="smallMedium" color={colors.gray[900]}>
