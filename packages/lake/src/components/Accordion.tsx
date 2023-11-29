@@ -1,6 +1,6 @@
 import { ReactNode, useId } from "react";
 import { Pressable, StyleSheet, View, ViewProps } from "react-native";
-import { backgroundColor, colors, spacings } from "../constants/design";
+import { Spacings, backgroundColor, colors, spacings } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -40,13 +40,20 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  chevronGap?: Spacings;
   children: ReactNode;
-  trigger: ReactNode;
-  style?: ViewProps["style"];
   contentContainerStyle?: ViewProps["style"];
+  style?: ViewProps["style"];
+  trigger: ReactNode;
 };
 
-export const Accordion = ({ children, trigger, style, contentContainerStyle }: Props) => {
+export const Accordion = ({
+  chevronGap = 20,
+  children,
+  contentContainerStyle,
+  style,
+  trigger,
+}: Props) => {
   const id = useId();
   const [isOpen, { toggle }] = useDisclosure(false);
 
@@ -65,7 +72,7 @@ export const Accordion = ({ children, trigger, style, contentContainerStyle }: P
           style={[styles.arrow, isOpen && styles.arrowOpen]}
         />
 
-        <Space width={20} />
+        <Space width={chevronGap} />
 
         {typeof trigger === "string" ? (
           <LakeText variant="smallMedium" color={colors.gray[900]}>
