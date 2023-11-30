@@ -1,0 +1,26 @@
+import{S as g,a as c,j as t,V as f}from"./Space-10d9fdae.js";import{r as R}from"./index-f1286426.js";import{L as S,s as k}from"./LakeSlider-c538c730.js";import{S as u,a as e}from"./_StoriesComponents-489400c8.js";import"./extends-98964cd2.js";import"./_commonjsHelpers-de833af9.js";import"./commonStyles-36c574d7.js";import"./LakeLabel-76810c5b.js";import"./v4-4a60fe23.js";import"./LakeTextInput-1deaccb9.js";import"./Pressable-26615920.js";import"./Fill-1651274c.js";import"./LakeSelect-2a808d95.js";import"./useDisclosure-a0ce2208.js";import"./a11y-e7c88e69.js";import"./Popover-d60fb73f.js";import"./useResponsive-6a0e73a7.js";import"./function-a81f264e.js";import"./Boxed-86465006.js";import"./BottomPanel-00442132.js";import"./useBodyClassName-4b4df53c.js";import"./math-fdcae859.js";import"./FocusTrap-b35362e4.js";import"./array-4dd4a51c.js";import"./LoadingView-72fe2eb5.js";import"./colors-298625c7.js";import"./index-d20fe330.js";import"./TransitionView-f34fd509.js";import"./index-d5b64afb.js";import"./index-257d3b92.js";import"./index-89fbb86c.js";import"./ResponsiveContainer-8ec8eb11.js";const n=g.create({desktop:{padding:10,maxWidth:800},mobile:{maxWidth:400}}),et={title:"Forms/Slider",component:S},r=({mobileSize:b=!1,...h})=>{const[y,x]=R.useState(0);return t(f,{style:b?n.mobile:n.desktop,children:t(S,{...h,value:y,onChange:x})})},i=()=>c(u,{title:"Ranges",children:[t(e,{title:"from 0 to 100",children:t(r,{label:"Range",min:0,max:100,step:1,unit:"$"})}),t(e,{title:"from -20 to 50",children:t(r,{label:"Range",min:-20,max:50,step:1,unit:"$"})}),t(e,{title:"with steps 10 by 10",children:t(r,{label:"Range",min:0,max:100,step:10,unit:"$"})})]}),o=()=>c(u,{title:"Slider sizes",description:`UI of slider depends on container width. If width is lower than ${k}, there is only a text input without slider`,children:[t(e,{title:"Mobile",children:t(r,{label:"Range",min:0,max:100,step:1,unit:"$",mobileSize:!0})}),t(e,{title:"Desktop",children:t(r,{label:"Range",min:0,max:100,step:1,unit:"$"})})]});var a,s,l;i.parameters={...i.parameters,docs:{...(a=i.parameters)==null?void 0:a.docs,source:{originalSource:`() => {
+  return <StoryBlock title="Ranges">
+      <StoryPart title="from 0 to 100">
+        <EditableSlider label="Range" min={0} max={100} step={1} unit="$" />
+      </StoryPart>
+
+      <StoryPart title="from -20 to 50">
+        <EditableSlider label="Range" min={-20} max={50} step={1} unit="$" />
+      </StoryPart>
+
+      <StoryPart title="with steps 10 by 10">
+        <EditableSlider label="Range" min={0} max={100} step={10} unit="$" />
+      </StoryPart>
+    </StoryBlock>;
+}`,...(l=(s=i.parameters)==null?void 0:s.docs)==null?void 0:l.source}}};var m,p,d;o.parameters={...o.parameters,docs:{...(m=o.parameters)==null?void 0:m.docs,source:{originalSource:`() => {
+  return <StoryBlock title="Slider sizes" description={\`UI of slider depends on container width. If width is lower than \${sliderBreakpoint}, there is only a text input without slider\`}>
+      <StoryPart title="Mobile">
+        <EditableSlider label="Range" min={0} max={100} step={1} unit="$" mobileSize={true} />
+      </StoryPart>
+
+      <StoryPart title="Desktop">
+        <EditableSlider label="Range" min={0} max={100} step={1} unit="$" />
+      </StoryPart>
+    </StoryBlock>;
+}`,...(d=(p=o.parameters)==null?void 0:p.docs)==null?void 0:d.source}}};const rt=["Ranges","Sizes"];export{i as Ranges,o as Sizes,rt as __namedExportsOrder,et as default};
+//# sourceMappingURL=Slider.stories-6f407886.js.map
