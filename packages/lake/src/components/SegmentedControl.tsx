@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     alignItems: "center",
-    padding: spacings[12],
+    padding: spacings[16],
     flexDirection: "column",
   },
   itemDesktop: {
