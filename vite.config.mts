@@ -8,6 +8,5 @@ export default defineConfig({
     setupFiles: ["scripts/tests/testSetup.ts"],
     environment: "jsdom",
     watch: false,
-    threads: false,
   },
 });
