@@ -1,5 +1,5 @@
 {
-  "include": ["vite.config.mts"],
+  "include": ["vite.config.ts"],
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Node",
