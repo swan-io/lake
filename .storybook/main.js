@@ -1,7 +1,7 @@
-import { StorybookConfig } from "@storybook/react-vite";
-import { version } from "../package.json";
+const { version } = require("../package.json");
 
-const config: StorybookConfig = {
+/** @type {import('@storybook/react-vite').StorybookConfig} */
+module.exports = {
   stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
   framework: {
@@ -42,5 +42,3 @@ const config: StorybookConfig = {
     };
   },
 };
-
-export default config;
