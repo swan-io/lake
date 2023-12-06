@@ -31,7 +31,7 @@ export const BorderedIcon = ({
 }: Props) => {
   const iconSize = size - padding * 2;
 
-  const boxStyle = {
+  const dynamicStyle = {
     backgroundColor: colors[color][50],
     borderColor: colors[color][100],
     borderRadius: radii[borderRadius],
@@ -40,7 +40,7 @@ export const BorderedIcon = ({
   };
 
   return (
-    <Box alignItems="center" justifyContent="center" style={[styles.base, boxStyle, style]}>
+    <Box alignItems="center" justifyContent="center" style={[styles.base, dynamicStyle, style]}>
       <Icon name={name} size={iconSize} color={colors[color][500]} />
     </Box>
   );
