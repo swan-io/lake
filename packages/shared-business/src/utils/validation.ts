@@ -4,6 +4,7 @@ import { match } from "ts-pattern";
 import { t } from "./i18n";
 import { AccountCountry } from "./templateTranslations";
 
+// https://github.com/colinhacks/zod/blob/v3.22.4/src/types.ts#L568
 const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([A-Z0-9_+-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i;
 const VAT_NUMBER_REGEX =
