@@ -33,6 +33,7 @@ type Props = {
   underlay?: boolean;
   safetyMargin?: number;
   forcedMode?: "Dropdown" | "BottomPanel";
+  field?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -128,6 +129,7 @@ export const Popover = memo<Props>(
     underlay = true,
     safetyMargin = 8,
     forcedMode,
+    field = false,
   }) => {
     const [rootElement, setRootElement] = useState<Element | null>(null);
     const underlayRef = useRef<View | null>(null);
@@ -155,23 +157,24 @@ export const Popover = memo<Props>(
         const rect = element.getBoundingClientRect();
         const availableSpaceAbove = rect.top;
         const availableSpaceBelow = window.innerHeight - rect.bottom;
+        const visualViewportOffsetTop = window.visualViewport?.offsetTop ?? 0;
         setViewportInformation({
           availableSpaceAbove,
           availableSpaceBelow,
           availableSpaceBefore: rect.left,
           availableSpaceAfter: window.innerWidth - rect.right,
-          top: Math.max(rect.bottom, safetyMargin),
+          top: visualViewportOffsetTop + Math.max(rect.bottom, safetyMargin),
           bottom: Math.max(window.innerHeight - rect.top, safetyMargin),
           left: Math.max(rect.left, safetyMargin),
           right: Math.max(window.innerWidth - rect.right, safetyMargin),
           availableHeight:
-            availableSpaceAbove <= availableSpaceBelow
+            field || availableSpaceAbove <= availableSpaceBelow
               ? window.innerHeight - rect.top - (rect.bottom - rect.top) - 20
               : availableSpaceAbove - 20,
           width: rect.right - rect.left,
         });
       }
-    }, [safetyMargin, referenceRef, visible]);
+    }, [safetyMargin, referenceRef, visible, field]);
 
     useEffect(() => {
       const element = underlayRef.current as unknown as HTMLElement | null;
@@ -252,20 +255,20 @@ export const Popover = memo<Props>(
                 <ScrollView
                   style={[
                     styles.popover,
-                    availableSpaceAbove <= availableSpaceBelow && { top },
-                    availableSpaceAbove > availableSpaceBelow && { bottom },
+                    (field || availableSpaceAbove <= availableSpaceBelow) && { top },
+                    !field && availableSpaceAbove > availableSpaceBelow && { bottom },
                     availableSpaceBefore <= availableSpaceAfter && { left },
                     availableSpaceBefore > availableSpaceAfter && { right },
 
                     matchReferenceMinWidth && { minWidth: width },
                     matchReferenceWidth && { width },
-                    { maxHeight: availableHeight },
+                    { maxHeight: field ? undefined : availableHeight },
                   ]}
                   contentContainerStyle={[
                     styles.popoverContents,
                     {
                       justifyContent:
-                        availableSpaceAbove > availableSpaceBelow ? FLEX_END : FLEX_START,
+                        !field && availableSpaceAbove > availableSpaceBelow ? FLEX_END : FLEX_START,
                     },
                   ]}
                   id={id}

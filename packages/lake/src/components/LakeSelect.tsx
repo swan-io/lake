@@ -260,8 +260,8 @@ const LakeSelectWithRef = <V,>(
               backgroundColor: pressed
                 ? colors.gray[200]
                 : hovered
-                  ? colors.gray[100]
-                  : invariantColors.transparent,
+                ? colors.gray[100]
+                : invariantColors.transparent,
             },
             styles.focusedWithoutShadow,
           ],
@@ -344,6 +344,7 @@ const LakeSelectWithRef = <V,>(
         referenceRef={inputRef}
         returnFocus={true}
         visible={visible}
+        field={true}
       >
         {isNotNullish(title) && (
           <>
