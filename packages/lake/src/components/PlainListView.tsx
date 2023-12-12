@@ -389,7 +389,7 @@ export const PlainListView = <T, ExtraInfo>({
                                 large && styles.stickyHeaderLarge,
                                 {
                                   height: groupHeaderHeight,
-                                  top: stickyOffset + groupHeaderHeight,
+                                  top: stickyOffset + (large ? headerHeight : 0),
                                 },
                               ]}
                             >
