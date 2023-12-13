@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   root: {
     height: 1,
     flexGrow: 1,
-    overflow: "hidden",
   },
   container: {
     height: 1,
