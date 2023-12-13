@@ -732,10 +732,10 @@ const MonthCalendar = ({
                       isSelected
                         ? colors.current.contrast
                         : isDisabled
-                          ? colors.gray[300]
-                          : isToday
-                            ? colors.current[500]
-                            : colors.gray[900]
+                        ? colors.gray[300]
+                        : isToday
+                        ? colors.current[500]
+                        : colors.gray[900]
                     }
                   >
                     {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
@@ -864,7 +864,14 @@ export const DatePicker = ({
         />
       </Box>
 
-      <Popover id={popoverId} role="dialog" onDismiss={close} referenceRef={ref} visible={isOpened}>
+      <Popover
+        id={popoverId}
+        role="dialog"
+        onDismiss={close}
+        referenceRef={ref}
+        visible={isOpened}
+        field={true}
+      >
         <View style={desktop ? styles.popoverDesktop : styles.popover}>
           <DatePickerPopoverContent
             value={value}
