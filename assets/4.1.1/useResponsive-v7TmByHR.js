@@ -1,2 +1,0 @@
-import{r as t}from"./index-4g5l5LRQ.js";import{D as n,l as a}from"./Space-bKyZCUEf.js";const m=992,p=({width:e},s)=>e>=s,u=(e=m)=>{const s=t.useSyncExternalStore(o=>{const i=n.addEventListener("change",({window:c})=>{a(c)&&o()});return()=>{i.remove()}},()=>p(n.get("window"),e)),r=t.useCallback(o=>s?o.desktop??o.mobile:o.mobile,[s]);return{desktop:s,media:r}};export{u};
-//# sourceMappingURL=useResponsive-v7TmByHR.js.map
