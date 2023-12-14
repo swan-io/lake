@@ -124,7 +124,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onHoverEnd: () => setIsHovered(false),
     });
 
-    const onTextInpuKeyDown = useCallback(
+    const onTextInputKeyDown = useCallback(
       (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         if (event.code === "Backspace") {
           setValues(state => state.slice(0, -1));
@@ -208,7 +208,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             onBlur={onBlur}
             disabled={disabled}
             onChange={onTextInputChange}
-            onKeyPress={onTextInpuKeyDown}
+            onKeyPress={onTextInputKeyDown}
           />
         </View>
 
