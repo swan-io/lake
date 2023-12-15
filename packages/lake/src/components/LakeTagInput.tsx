@@ -1,20 +1,20 @@
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useRef, useState } from "react";
 import {
   NativeSyntheticEvent,
   StyleSheet,
   TextInput,
-  TextInputChangeEventData,
   TextInputFocusEventData,
-  TextInputKeyPressEventData,
   TextInputProps,
   View,
 } from "react-native";
+import { Merge } from "type-fest";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";
+import { Pressable } from "./Pressable";
 import { Tag } from "./Tag";
 
 const TRANSPARENT = "transparent";
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacings[4],
     paddingTop: spacings[4],
     outlineStyle: "none",
+    cursor: "text",
   },
   focused: {
     borderColor: colors.gray[500],
@@ -83,40 +84,45 @@ const styles = StyleSheet.create({
   },
 });
 
-export type LakeTagInputProps = TextInputProps & {
-  onChange: () => string[];
-  readOnly?: boolean;
-  error?: string;
-  disabled?: boolean;
-  valid?: boolean;
-  hideErrors?: boolean;
-  help?: string;
-  validator?: (value: string) => boolean;
-};
+export type LakeTagInputProps = Merge<
+  TextInputProps,
+  {
+    readOnly?: boolean;
+    error?: string;
+    disabled?: boolean;
+    valid?: boolean;
+    hideErrors?: boolean;
+    help?: string;
+    validator?: (value: string) => boolean;
+    values: string[];
+    onAddValues: (added: string[]) => void;
+    onRemoveValue: (value: string) => void;
+  }
+>;
 
 const SEPARATORS_REGEX = /,| /;
 
 export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
   (
     {
+      validator = () => true,
       onFocus: originalOnFocus,
       onBlur: originalOnBlur,
-      onChange,
+      values,
+      onAddValues,
+      onRemoveValue,
       readOnly = false,
-      error,
       disabled = false,
       valid = false,
       hideErrors = false,
       help,
-      validator = () => true,
+      error,
     }: LakeTagInputProps,
     forwardRef,
   ) => {
     const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
-
     const [isFocused, setIsFocused] = useState(false);
-    const [values, setValues] = useState<string[]>([]);
     const [isHovered, setIsHovered] = useState(false);
 
     useHover(containerRef, {
@@ -124,29 +130,13 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onHoverEnd: () => setIsHovered(false),
     });
 
-    const onTextInputKeyDown = useCallback(
-      (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        if (event.code === "Backspace") {
-          setValues(state => state.slice(0, -1));
-        }
-      },
-      [],
-    );
-
-    const onTextInputChange = useCallback(
-      (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
-        const value = event.target.value as string;
-
-        const sp = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
-        if (sp.length > 1 || sp[0] !== value) {
-          setValues(state => [...state, ...sp.filter(v => !state.includes(v))]);
-          inputRef.current?.clear();
-        }
-      },
-      [],
-    );
-
-    useEffect(() => onChange(values), [values]);
+    const onTextInputChange = useCallback((value: string) => {
+      const values = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
+      if (values.length > 1 || values[0] !== value) {
+        onAddValues(values);
+        inputRef.current?.clear();
+      }
+    }, []);
 
     const autoFocus = useCallback(() => {
       inputRef.current?.focus();
@@ -168,14 +158,12 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       [originalOnBlur],
     );
 
-    const onRemove = (value: string) => setValues(s => s.filter(v => v !== value));
-
-    const mergedRef = useMergeRefs(inputRef, containerRef, forwardRef);
+    const mergedRef = useMergeRefs(inputRef, forwardRef);
     const hasError = isNotNullishOrEmpty(error);
 
     return (
       <View>
-        <View
+        <Pressable
           style={[
             styles.root,
             readOnly && hasError && styles.readOnlyError,
@@ -186,14 +174,14 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             valid && styles.valid,
             isHovered && styles.hovered,
           ]}
-          ref={containerRef}
-          onClick={autoFocus}
           aria-errormessage={error}
+          onPress={autoFocus}
+          ref={containerRef}
         >
           {values.map((v, i) => (
             <Tag
               key={i}
-              onPressRemove={() => onRemove(v)}
+              onPressRemove={!readOnly && !disabled ? () => onRemoveValue(v) : undefined}
               style={styles.tag}
               color={validator(v) ? "gray" : "negative"}
             >
@@ -206,11 +194,11 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             style={[styles.input, disabled && styles.disabled]}
             onFocus={onFocus}
             onBlur={onBlur}
-            disabled={disabled}
-            onChange={onTextInputChange}
-            onKeyPress={onTextInputKeyDown}
+            aria-disabled={disabled}
+            onChangeText={onTextInputChange}
+            readOnly={readOnly}
           />
-        </View>
+        </Pressable>
 
         {!hideErrors && (
           <Box direction="row" style={styles.errorContainer}>
