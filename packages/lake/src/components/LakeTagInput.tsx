@@ -4,9 +4,11 @@ import {
   StyleSheet,
   TextInput,
   TextInputFocusEventData,
+  TextInputKeyPressEventData,
   TextInputProps,
   View,
 } from "react-native";
+import { match } from "ts-pattern";
 import { Merge } from "type-fest";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
@@ -95,8 +97,7 @@ export type LakeTagInputProps = Merge<
     help?: string;
     validator?: (value: string) => boolean;
     values: string[];
-    onAddValues: (added: string[]) => void;
-    onRemoveValue: (value: string) => void;
+    onValuesChanged: (values: string[]) => void;
   }
 >;
 
@@ -109,8 +110,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onFocus: originalOnFocus,
       onBlur: originalOnBlur,
       values,
-      onAddValues,
-      onRemoveValue,
+      onValuesChanged,
       readOnly = false,
       disabled = false,
       valid = false,
@@ -130,13 +130,26 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onHoverEnd: () => setIsHovered(false),
     });
 
-    const onTextInputChange = useCallback((value: string) => {
-      const values = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
-      if (values.length > 1 || values[0] !== value) {
-        onAddValues(values);
-        inputRef.current?.clear();
-      }
-    }, []);
+    const onTextInputChange = useCallback(
+      (value: string) => {
+        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
+        if (input.length > 1 || input[0] !== value) {
+          onValuesChanged([...values, ...input.filter(v => !values.includes(v))]);
+          inputRef.current?.clear();
+        }
+      },
+      [values, onValuesChanged],
+    );
+
+    const onTextInputKeyPress = useCallback(
+      ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        match(nativeEvent.key).with("Backspace", () => {
+          const last = values[values.length - 1];
+          onValuesChanged(values.filter(current => current !== last));
+        });
+      },
+      [onValuesChanged, values],
+    );
 
     const autoFocus = useCallback(() => {
       inputRef.current?.focus();
@@ -178,14 +191,18 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
           onPress={autoFocus}
           ref={containerRef}
         >
-          {values.map((v, i) => (
+          {values.map((value, i) => (
             <Tag
               key={i}
-              onPressRemove={!readOnly && !disabled ? () => onRemoveValue(v) : undefined}
+              onPressRemove={
+                !readOnly && !disabled
+                  ? () => onValuesChanged(values.filter(current => current !== value))
+                  : undefined
+              }
               style={styles.tag}
-              color={validator(v) ? "gray" : "negative"}
+              color={validator(value) ? "gray" : "negative"}
             >
-              {v}
+              {value}
             </Tag>
           ))}
 
@@ -196,6 +213,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             onBlur={onBlur}
             aria-disabled={disabled}
             onChangeText={onTextInputChange}
+            onKeyPress={onTextInputKeyPress}
             readOnly={readOnly}
           />
         </Pressable>

@@ -18,19 +18,14 @@ export default {
   component: LakeTextInput,
 } as Meta<typeof LakeTextInput>;
 
-const EditableTagInput = (
-  props: Except<LakeTagInputProps, "onAddValues" | "onRemoveValue" | "values">,
-) => {
+const EditableTagInput = (props: Except<LakeTagInputProps, "onValuesChanged" | "values">) => {
   const [values, setValues] = useState<string[]>(["toto", "dfghj@iouy.fr"]);
 
   return (
     <View style={styles.input}>
       <LakeTagInput
         validator={isValidEmail}
-        onAddValues={values =>
-          setValues(state => [...state, ...values.filter(v => !state.includes(v))])
-        }
-        onRemoveValue={value => setValues(s => s.filter(v => v !== value))}
+        onValuesChanged={setValues}
         values={values}
         {...props}
       />
