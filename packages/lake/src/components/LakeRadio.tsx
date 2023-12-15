@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.gray[500],
   },
+  error: {
+    borderColor: colors.negative[500],
+  },
   innerCircle: {
     justifyContent: "center",
     alignItems: "center",
@@ -34,9 +37,15 @@ type Props = {
   value: boolean;
   disabled?: boolean;
   color?: ColorVariants;
+  isError?: boolean;
 };
 
-export const LakeRadio = ({ value, disabled = false, color = "current" }: Props) => (
+export const LakeRadio = ({
+  value,
+  disabled = false,
+  color = "current",
+  isError = false,
+}: Props) => (
   <View
     style={[
       styles.outerCircle,
@@ -44,8 +53,10 @@ export const LakeRadio = ({ value, disabled = false, color = "current" }: Props)
       disabled && {
         borderColor: colors.gray[300],
       },
+      isError && styles.error,
     ]}
     role="none"
+    aria-invalid={isError}
   >
     <View
       aria-hidden={!value}
