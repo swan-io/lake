@@ -379,8 +379,8 @@ const isDateRange = (value: Option<DatePickerDate> | DatePickerRange): value is 
 
 const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | DatePickerRange) => {
   return match(value)
-    .with(Option.pattern.Some(P.select()), value => isDateEquals(value, date))
-    .with(Option.pattern.None, () => false)
+    .with(Option.P.Some(P.select()), value => isDateEquals(value, date))
+    .with(Option.P.None, () => false)
     .with(P.when(isDateRange), ({ start, end }) => {
       // if range is invalid, we don't display any selection
       if (start.isSome() && end.isSome() && isDateAfter(start.value, end.value)) {
@@ -732,10 +732,10 @@ const MonthCalendar = ({
                       isSelected
                         ? colors.current.contrast
                         : isDisabled
-                        ? colors.gray[300]
-                        : isToday
-                        ? colors.current[500]
-                        : colors.gray[900]
+                          ? colors.gray[300]
+                          : isToday
+                            ? colors.current[500]
+                            : colors.gray[900]
                     }
                   >
                     {date.match({ Some: ({ day }) => day.toString(), None: () => " " })}
