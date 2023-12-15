@@ -1,0 +1,21 @@
+import{S as q,c as t,j as w,a as o,V as B,I as L,L as k}from"./Space-dxGnbzd3.js";import{r as l}from"./index-4g5l5LRQ.js";import{c as j,B as V}from"./commonStyles-9JDigoGy.js";import{P as E}from"./Pressable-teMr6gfa.js";import{S as H,a as s}from"./_StoriesComponents-vYenuBXn.js";import"./extends-dGVwEr9R.js";import"./_commonjsHelpers-4gQjN7DL.js";import"./index-jmm5gWkb.js";const i=26,r=1,d=q.create({switch:{userSelect:"none",flexDirection:"row",borderRadius:i/2,transform:"translateZ(0px)",width:"min-content",borderColor:t.gray[100],borderWidth:r},handle:{position:"absolute",width:i,height:i,top:-r,borderRadius:i/2,transitionDuration:"300ms",transitionTimingFunction:"ease-in-out",borderWidth:r},switchItem:{paddingHorizontal:8,height:i-r*2,display:"flex",alignItems:"center",justifyContent:"center"}}),n=({onToggle:a,value:e,disabled:u=!1,mode:x="desktop",onLabel:p,offLabel:f})=>{const b=l.useRef(null),y=l.useRef(null),h=l.useRef(null),[D,I]=l.useState(),m=x==="mobile",v=e?t.positive[500]:t.gray[500],T=e?t.gray[500]:t.negative[500],g=l.useCallback(()=>{var S;(S=(e?y:h).current)==null||S.measureLayout(b.current,(R,z,A)=>{I(M=>({transitionProperty:M?"width, transform":"none",width:A+2*r,transform:`translateX(${e?-r:R-2*r}px)`}))},()=>{})},[e]);return l.useEffect(g,[g,e,m,p,f]),w(E,{style:[d.switch,u&&j.disabled],onPress:()=>a(!e),"aria-disabled":u,"aria-checked":e,disabled:u,ref:b,role:"switch",onLayout:g,children:[o(B,{style:[d.handle,D,{borderColor:e?t.positive[500]:t.negative[500],backgroundColor:e?t.positive[50]:t.negative[50]}]}),o(V,{style:d.switchItem,ref:y,children:m?o(L,{size:16,name:"checkmark-circle-regular",color:v}):o(k,{variant:"smallMedium",color:v,children:p})}),o(V,{style:d.switchItem,ref:h,children:m?o(L,{size:16,name:"subtract-circle-regular",color:T}):o(k,{variant:"smallMedium",color:T,children:f})})]})};try{n.displayName="Toggle",n.__docgenInfo={description:"",displayName:"Toggle",props:{value:{defaultValue:null,description:"",name:"value",required:!0,type:{name:"boolean"}},disabled:{defaultValue:{value:"false"},description:"",name:"disabled",required:!1,type:{name:"boolean"}},onToggle:{defaultValue:null,description:"",name:"onToggle",required:!0,type:{name:"(next: boolean) => void"}},mode:{defaultValue:{value:"desktop"},description:"",name:"mode",required:!1,type:{name:"enum",value:[{value:'"desktop"'},{value:'"mobile"'}]}},onLabel:{defaultValue:null,description:"",name:"onLabel",required:!0,type:{name:"string"}},offLabel:{defaultValue:null,description:"",name:"offLabel",required:!0,type:{name:"string"}}}}}catch{}const J={title:"Forms/Toggle",component:n},c=()=>{const[a,e]=l.useState(!1);return w(H,{title:"Variations",description:"Toggle component",children:[o(s,{title:"Desktop",children:o(n,{value:a,onToggle:e,mode:"desktop",offLabel:"Canceled",onLabel:"Active"})}),o(s,{title:"Desktop Disabled",children:o(n,{value:a,onToggle:e,mode:"desktop",disabled:!0,offLabel:"Canceled",onLabel:"Active"})}),o(s,{title:"Mobile",children:o(n,{value:a,onToggle:e,mode:"mobile",offLabel:"Canceled",onLabel:"Active"})}),o(s,{title:"Mobile Disabled",children:o(n,{value:a,disabled:!0,onToggle:e,mode:"mobile",offLabel:"Canceled",onLabel:"Active"})})]})};var C,P,_;c.parameters={...c.parameters,docs:{...(C=c.parameters)==null?void 0:C.docs,source:{originalSource:`() => {
+  const [value, setValue] = useState(false);
+  return <StoryBlock title="Variations" description="Toggle component">
+      <StoryPart title="Desktop">
+        <Toggle value={value} onToggle={setValue} mode="desktop" offLabel="Canceled" onLabel="Active" />
+      </StoryPart>
+
+      <StoryPart title="Desktop Disabled">
+        <Toggle value={value} onToggle={setValue} mode="desktop" disabled={true} offLabel="Canceled" onLabel="Active" />
+      </StoryPart>
+
+      <StoryPart title="Mobile">
+        <Toggle value={value} onToggle={setValue} mode="mobile" offLabel="Canceled" onLabel="Active" />
+      </StoryPart>
+
+      <StoryPart title="Mobile Disabled">
+        <Toggle value={value} disabled={true} onToggle={setValue} mode="mobile" offLabel="Canceled" onLabel="Active" />
+      </StoryPart>
+    </StoryBlock>;
+}`,...(_=(P=c.parameters)==null?void 0:P.docs)==null?void 0:_.source}}};const K=["Variations"];export{c as Variations,K as __namedExportsOrder,J as default};
+//# sourceMappingURL=Toggle.stories-IjWLgdJT.js.map
