@@ -160,7 +160,9 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             }
           })
           .with({ key: "Enter", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
-            pushNewValues([input.value]);
+            if (isNotNullishOrEmpty(input.value)) {
+              pushNewValues([input.value]);
+            }
           });
       },
       [onValuesChanged, pushNewValues, values],
