@@ -8,7 +8,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { match } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { Merge } from "type-fest";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
@@ -120,8 +120,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
     }: LakeTagInputProps,
     forwardRef,
   ) => {
-    const inputRef = useRef<unknown>(null);
-    // const inputRef = useRef<TextInput | null>(null);
+    const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -131,34 +130,36 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onHoverEnd: () => setIsHovered(false),
     });
 
-    const pushNewValues = (value: string) => {
-      const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
-      if (input.length > 1 || input[0] !== value) {
-        onValuesChanged([...values, ...input.filter(v => !values.includes(v))]);
+    const pushNewValues = useCallback(
+      (vals: string[]) => {
+        onValuesChanged([...values, ...vals.filter(v => !values.includes(v))]);
         inputRef.current?.clear();
-      }
-    };
-
-    const onTextInputChange = useCallback(
-      (value: string) => {
-        pushNewValues(value);
       },
       [values, onValuesChanged],
     );
 
+    const onTextInputChange = useCallback(
+      (value: string) => {
+        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
+        if (input.length > 1 || input[0] !== value) {
+          pushNewValues(input);
+        }
+      },
+      [pushNewValues],
+    );
+
     const onTextInputKeyPress = useCallback(
       ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        match(nativeEvent.key)
-          .with("Backspace", () => {
+        match({ key: nativeEvent.key, input: inputRef.current })
+          .with({ key: "Backspace" }, () => {
             const last = values[values.length - 1];
             onValuesChanged(values.filter(current => current !== last));
           })
-          .with("Enter", () => {
-
-            console.log("[NC] c", (inputRef.current as unknown as HTMLInputElement)?.value);
+          .with({ key: "Enter", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
+            pushNewValues([input.value]);
           });
       },
-      [onValuesChanged, values],
+      [onValuesChanged, pushNewValues, values],
     );
 
     const autoFocus = useCallback(() => {
