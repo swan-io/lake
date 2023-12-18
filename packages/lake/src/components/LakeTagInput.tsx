@@ -120,7 +120,8 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
     }: LakeTagInputProps,
     forwardRef,
   ) => {
-    const inputRef = useRef<TextInput | null>(null);
+    const inputRef = useRef<unknown>(null);
+    // const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -130,23 +131,32 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       onHoverEnd: () => setIsHovered(false),
     });
 
+    const pushNewValues = (value: string) => {
+      const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
+      if (input.length > 1 || input[0] !== value) {
+        onValuesChanged([...values, ...input.filter(v => !values.includes(v))]);
+        inputRef.current?.clear();
+      }
+    };
+
     const onTextInputChange = useCallback(
       (value: string) => {
-        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
-        if (input.length > 1 || input[0] !== value) {
-          onValuesChanged([...values, ...input.filter(v => !values.includes(v))]);
-          inputRef.current?.clear();
-        }
+        pushNewValues(value);
       },
       [values, onValuesChanged],
     );
 
     const onTextInputKeyPress = useCallback(
       ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        match(nativeEvent.key).with("Backspace", () => {
-          const last = values[values.length - 1];
-          onValuesChanged(values.filter(current => current !== last));
-        });
+        match(nativeEvent.key)
+          .with("Backspace", () => {
+            const last = values[values.length - 1];
+            onValuesChanged(values.filter(current => current !== last));
+          })
+          .with("Enter", () => {
+
+            console.log("[NC] c", (inputRef.current as unknown as HTMLInputElement)?.value);
+          });
       },
       [onValuesChanged, values],
     );
