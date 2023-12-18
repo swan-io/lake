@@ -13,7 +13,7 @@ import { Merge } from "type-fest";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { useMergeRefs } from "../hooks/useMergeRefs";
-import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
+import { isNotNullish, isNotNullishOrEmpty, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   tag: {
     marginRight: spacings[4],
     marginBottom: spacings[4],
+    maxWidth: 350,
   },
   errorContainer: {
     paddingTop: spacings[4],
@@ -98,6 +99,7 @@ export type LakeTagInputProps = Merge<
     validator?: (value: string) => boolean;
     values: string[];
     onValuesChanged: (values: string[]) => void;
+    placeholder?: string;
   }
 >;
 
@@ -115,6 +117,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       disabled = false,
       valid = false,
       hideErrors = false,
+      placeholder,
       help,
       error,
     }: LakeTagInputProps,
@@ -151,9 +154,10 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
     const onTextInputKeyPress = useCallback(
       ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         match({ key: nativeEvent.key, input: inputRef.current })
-          .with({ key: "Backspace" }, () => {
-            const last = values[values.length - 1];
-            onValuesChanged(values.filter(current => current !== last));
+          .with({ key: "Backspace", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
+            if (isNullishOrEmpty(input.value)) {
+              onValuesChanged(values.filter(current => current !== values[values.length - 1]));
+            }
           })
           .with({ key: "Enter", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
             pushNewValues([input.value]);
@@ -226,6 +230,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             onChangeText={onTextInputChange}
             onKeyPress={onTextInputKeyPress}
             readOnly={readOnly}
+            placeholder={placeholder}
           />
         </Pressable>
 
