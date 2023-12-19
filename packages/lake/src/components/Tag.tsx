@@ -29,10 +29,13 @@ const styles = StyleSheet.create({
   },
   text: {
     ...texts.smallMedium,
-    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 8,
+    display: "block",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   unselectable: {
     userSelect: "none",
