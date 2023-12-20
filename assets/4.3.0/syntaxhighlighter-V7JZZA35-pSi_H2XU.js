@@ -1,0 +1,2 @@
+import{S as f,c as g,s as h}from"./DocsRenderer-NNNQARDV-wFFhmpsA.js";import"./iframe-zhuvBTBM.js";import"../../sb-preview/runtime.js";import"./index-4g5l5LRQ.js";import"./_commonjsHelpers-4gQjN7DL.js";import"./react-18-ba7OOUbL.js";import"./index-jmm5gWkb.js";import"./index-ogXoivrg.js";import"./polished.esm-SyeXkIL0.js";import"./extends-dGVwEr9R.js";import"./_getPrototype-bjD8Yebc.js";import"./index-PPLHz8o0.js";export{f as SyntaxHighlighter,g as createCopyToClipboardFunction,h as default};
+//# sourceMappingURL=syntaxhighlighter-V7JZZA35-pSi_H2XU.js.map
