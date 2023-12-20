@@ -36,6 +36,16 @@ export const All = () => {
         </Box>
       </StoryPart>
 
+      <StoryPart title="Large">
+        <Box direction="row" style={styles.container}>
+          {Object.keys(colors).map(color => (
+            <Tag key={color} size="large" style={styles.tag} color={color as ColorVariants}>
+              Value ({color})
+            </Tag>
+          ))}
+        </Box>
+      </StoryPart>
+
       <StoryPart title="With label">
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
@@ -56,6 +66,21 @@ export const All = () => {
         </Box>
       </StoryPart>
 
+      <StoryPart title="With icon">
+        <Box direction="row" style={styles.container}>
+          {Object.keys(colors).map(color => (
+            <Tag
+              key={color}
+              style={styles.tag}
+              icon="arrow-down-filled"
+              color={color as ColorVariants}
+            >
+              Value ({color})
+            </Tag>
+          ))}
+        </Box>
+      </StoryPart>
+
       <StoryPart title="With label and dismiss">
         <Box direction="row" style={styles.container}>
           {Object.keys(colors).map(color => (
@@ -67,6 +92,22 @@ export const All = () => {
               color={color as ColorVariants}
             >
               Value ({color})
+            </Tag>
+          ))}
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="With max width">
+        <Box direction="row" style={styles.container}>
+          {Object.keys(colors).map(color => (
+            <Tag
+              key={color}
+              label="Label"
+              onPressRemove={noop}
+              style={[styles.tag, { maxWidth: 100 }]}
+              color={color as ColorVariants}
+            >
+              Value with long long text and ellipsis ({color})
             </Tag>
           ))}
         </Box>

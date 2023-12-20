@@ -19,23 +19,26 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   larger: {
-    paddingHorizontal: 4,
     height: 40,
   },
   label: {
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
     borderRightWidth: 0,
+    paddingHorizontal: 8,
+  },
+  withLabel: {
+    borderLeftWidth: 0,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  center: {
+    paddingHorizontal: 8,
+    flexGrow: 1,
+    flexShrink: 1,
   },
   text: {
     ...texts.smallMedium,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 8,
-    display: "block",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
   },
   unselectable: {
     userSelect: "none",
@@ -108,24 +111,13 @@ export const Tag = ({
           styles.base,
           size === "large" && styles.larger,
           hasOnlyIcon && styles.onlyIcon,
-          {
-            backgroundColor: tint50,
-            borderColor: tint200,
-
-            ...(hasLabel && {
-              borderLeftWidth: 0,
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-            }),
-          },
+          { backgroundColor: tint50, borderColor: tint200 },
+          hasLabel && styles.withLabel,
           style,
         ]}
       >
-        <Text
-          numberOfLines={1}
-          style={[styles.text, hasOnlyIcon && styles.onlyIcon, { color: primary }]}
-        >
-          {icon && (
+        <Box direction="row" alignItems="center" style={styles.center}>
+          {isNotNullish(icon) && (
             <>
               <Icon name={icon} color={primary} size={iconSize} />
 
@@ -133,8 +125,13 @@ export const Tag = ({
             </>
           )}
 
-          {children}
-        </Text>
+          <Text
+            numberOfLines={1}
+            style={[styles.text, hasOnlyIcon && styles.onlyIcon, { color: primary }]}
+          >
+            {children}
+          </Text>
+        </Box>
 
         {hasRemoveButton && (
           <Pressable
