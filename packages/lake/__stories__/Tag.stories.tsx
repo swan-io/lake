@@ -1,10 +1,12 @@
 import { Meta } from "@storybook/react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
+import { Icon } from "../src/components/Icon";
+import { LakeText } from "../src/components/LakeText";
 import { ProjectEnvTag } from "../src/components/ProjectEnvTag";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
-import { colors, ColorVariants, spacings } from "../src/constants/design";
+import { ColorVariants, colors, spacings } from "../src/constants/design";
 import { noop } from "../src/utils/function";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -15,6 +17,19 @@ const styles = StyleSheet.create({
   tag: {
     marginRight: spacings[12],
     marginBottom: spacings[12],
+  },
+  rightsIcon: {
+    marginHorizontal: spacings[4],
+  },
+  separator: {
+    width: 1,
+    alignSelf: "stretch",
+    backgroundColor: colors.gray[200],
+    height: 28,
+    marginHorizontal: spacings[4],
+  },
+  permissionsContainer: {
+    padding: 4,
   },
 });
 
@@ -111,6 +126,63 @@ export const All = () => {
             </Tag>
           ))}
         </Box>
+      </StoryPart>
+
+      <StoryPart title="With icon only">
+        <Box direction="row" style={styles.container}>
+          {Object.keys(colors).map(color => (
+            <Tag
+              key={color}
+              icon="arrow-down-filled"
+              style={styles.tag}
+              color={color as ColorVariants}
+            ></Tag>
+          ))}
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="With elements inside">
+        <Tag color="gray">
+          <>
+            <Icon name="eye-regular" size={16} color={colors.swan[500]} style={styles.rightsIcon} />
+
+            <Icon
+              name="arrow-swap-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <Icon
+              name="person-add-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <Icon
+              name="settings-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <View style={styles.separator} />
+
+            <>
+              <Icon
+                name="payment-regular"
+                size={16}
+                color={colors.swan[500]}
+                style={styles.rightsIcon}
+              />
+
+              <LakeText color={colors.swan[500]} variant="smallRegular">
+                12
+              </LakeText>
+            </>
+          </>
+        </Tag>
       </StoryPart>
 
       <StoryPart title="Env tags">
