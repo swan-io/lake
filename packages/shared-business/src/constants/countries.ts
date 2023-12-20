@@ -1250,7 +1250,7 @@ const readonlyCountries = [
     name: "Republika e Kosovës",
     deburr: "republika e kosoves",
     cca2: "XK",
-    cca3: "UNK",
+    cca3: "XKX",
     idd: "383",
     uid: "XK-383",
     flag: "🇽🇰",
