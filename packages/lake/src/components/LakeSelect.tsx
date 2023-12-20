@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingVertical: 12,
+    maxHeight: 300,
   },
   item: {
     display: "flex",
@@ -260,8 +261,8 @@ const LakeSelectWithRef = <V,>(
               backgroundColor: pressed
                 ? colors.gray[200]
                 : hovered
-                ? colors.gray[100]
-                : invariantColors.transparent,
+                  ? colors.gray[100]
+                  : invariantColors.transparent,
             },
             styles.focusedWithoutShadow,
           ],
