@@ -28,7 +28,7 @@ export default {
   component: LakeModal,
 } as Meta<typeof LakeModal>;
 
-type ButtonModalProps = Except<LakeModalProps, "children" | "visible"> & {
+type ButtonModalProps = Except<LakeModalProps, "children"> & {
   withCloseCross?: boolean;
 };
 
@@ -41,26 +41,24 @@ const ButtonModal = ({ withCloseCross = false, ...props }: ButtonModalProps) => 
         Open
       </LakeButton>
 
-      <LakeModal
-        {...props}
-        visible={visible}
-        onPressClose={withCloseCross ? () => setVisible(false) : undefined}
-      >
-        <Space height={8} />
+      {visible && (
+        <LakeModal {...props} onClose={withCloseCross ? () => setVisible(false) : undefined}>
+          <Space height={8} />
 
-        <ScrollView>
-          <Grid horizontalSpace={4} verticalSpace={4} numColumns={4} style={styles.grid}>
-            <View style={styles.block} />
-            <View style={styles.block} />
-            <View style={styles.block} />
-            <View style={styles.block} />
-          </Grid>
-        </ScrollView>
+          <ScrollView>
+            <Grid horizontalSpace={4} verticalSpace={4} numColumns={4} style={styles.grid}>
+              <View style={styles.block} />
+              <View style={styles.block} />
+              <View style={styles.block} />
+              <View style={styles.block} />
+            </Grid>
+          </ScrollView>
 
-        <LakeButton color="live" size="small" onPress={() => setVisible(false)}>
-          Close
-        </LakeButton>
-      </LakeModal>
+          <LakeButton color="live" size="small" onPress={() => setVisible(false)}>
+            Close
+          </LakeButton>
+        </LakeModal>
+      )}
     </>
   );
 };

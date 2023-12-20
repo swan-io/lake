@@ -19,21 +19,21 @@ import {
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { useBodyClassName } from "@swan-io/lake/src/hooks/useBodyClassName";
-import { ReactNode, Suspense, useEffect, useState } from "react";
+import { ReactNode, Suspense, useEffect, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { t } from "../utils/i18n";
 
 export type LakeModalProps = {
-  visible: boolean;
   title?: string;
   icon?: IconName;
   color?: ColorVariants;
   children: ReactNode | ((context: Context) => ReactNode);
   maxWidth?: number;
-  onPressClose?: () => void;
+  onClose?: () => void;
 };
 
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
+const LEAVE_DURATION = 300;
 
 const styles = StyleSheet.create({
   root: {
@@ -41,9 +41,6 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleSheet.absoluteFillObject,
-  },
-  inert: {
-    pointerEvents: "none",
   },
   fill: {
     ...StyleSheet.absoluteFillObject,
@@ -84,7 +81,7 @@ const styles = StyleSheet.create({
         transform: "translateY(-20px)",
       },
     },
-    animationDuration: "300ms",
+    animationDuration: `${LEAVE_DURATION}ms`,
     animationTimingFunction: "ease-in-out",
   },
   modalContainer: {
@@ -138,28 +135,38 @@ const styles = StyleSheet.create({
 });
 
 export const LakeModal = ({
-  visible,
   icon,
   title,
   color = "current",
   children,
   maxWidth = 570,
-
-  onPressClose,
+  onClose,
 }: LakeModalProps) => {
   const [rootElement, setRootElement] = useState<Element | undefined>(() => undefined);
 
   useEffect(() => {
     const rootElement = document.createElement("div");
+
     document.body.append(rootElement);
     setRootElement(rootElement);
+
     return () => {
       rootElement.remove();
       setRootElement(undefined);
     };
   }, []);
 
-  useBodyClassName("ModalOpen", { enabled: visible });
+  useBodyClassName("ModalOpen");
+
+  const handleOnClose = useMemo(() => {
+    if (onClose == null) {
+      return;
+    }
+
+    return () => {
+      setTimeout(() => onClose?.(), LEAVE_DURATION);
+    };
+  }, [onClose]);
 
   if (rootElement == null) {
     return null;
@@ -167,74 +174,72 @@ export const LakeModal = ({
 
   return (
     <Portal container={rootElement}>
-      <View aria-modal={true} style={[styles.container, !visible && styles.inert]}>
+      <View aria-modal={true} style={styles.container}>
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
-          {visible ? <View style={styles.overlay} /> : null}
+          <View style={styles.overlay} />
         </TransitionView>
 
         <Suspense fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
           <TransitionView style={styles.fill} enter={styles.modalEnter} leave={styles.modalLeave}>
-            {visible ? (
-              <ResponsiveContainer style={styles.root} breakpoint={breakpoints.tiny}>
-                {({ large, small }) => (
-                  <FocusTrap
-                    autoFocus={true}
-                    focusLock={true}
-                    returnFocus={true}
-                    onEscapeKey={onPressClose}
-                    style={styles.trap}
+            <ResponsiveContainer style={styles.root} breakpoint={breakpoints.tiny}>
+              {({ large, small }) => (
+                <FocusTrap
+                  autoFocus={true}
+                  focusLock={true}
+                  returnFocus={true}
+                  onEscapeKey={handleOnClose}
+                  style={styles.trap}
+                >
+                  <ScrollView
+                    style={styles.modalContainer}
+                    contentContainerStyle={
+                      large ? styles.modalContentContainer : styles.modalContentContainerSmall
+                    }
                   >
-                    <ScrollView
-                      style={styles.modalContainer}
-                      contentContainerStyle={
-                        large ? styles.modalContentContainer : styles.modalContentContainerSmall
-                      }
+                    {handleOnClose != null ? (
+                      <Pressable onPress={handleOnClose} style={styles.pressableOverlay} />
+                    ) : null}
+
+                    <View
+                      role="dialog"
+                      style={[large ? styles.modal : styles.modalSmall, { maxWidth }]}
                     >
-                      {onPressClose != null ? (
-                        <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
-                      ) : null}
+                      <View style={styles.modalHeader}>
+                        <View style={styles.modalIconTitle}>
+                          {icon != null ? (
+                            <Icon name={icon} size={large ? 40 : 32} color={colors[color][500]} />
+                          ) : null}
 
-                      <View
-                        role="dialog"
-                        style={[large ? styles.modal : styles.modalSmall, { maxWidth }]}
-                      >
-                        <View style={styles.modalHeader}>
-                          <View style={styles.modalIconTitle}>
-                            {icon != null ? (
-                              <Icon name={icon} size={large ? 40 : 32} color={colors[color][500]} />
-                            ) : null}
+                          {icon != null && title != null ? <Space height={12} /> : null}
 
-                            {icon != null && title != null ? <Space height={12} /> : null}
+                          {title != null ? (
+                            <>
+                              <LakeHeading level={2} variant="h3">
+                                {title}
+                              </LakeHeading>
 
-                            {title != null ? (
-                              <>
-                                <LakeHeading level={2} variant="h3">
-                                  {title}
-                                </LakeHeading>
-
-                                <Space height={12} />
-                              </>
-                            ) : null}
-                          </View>
-
-                          {onPressClose != null ? (
-                            <LakeButton
-                              style={styles.closeButton}
-                              mode="tertiary"
-                              onPress={onPressClose}
-                              icon="lake-close"
-                              ariaLabel={t("common.close")}
-                            />
+                              <Space height={12} />
+                            </>
                           ) : null}
                         </View>
 
-                        {typeof children == "function" ? children({ large, small }) : children}
+                        {handleOnClose != null ? (
+                          <LakeButton
+                            style={styles.closeButton}
+                            mode="tertiary"
+                            onPress={handleOnClose}
+                            icon="lake-close"
+                            ariaLabel={t("common.close")}
+                          />
+                        ) : null}
                       </View>
-                    </ScrollView>
-                  </FocusTrap>
-                )}
-              </ResponsiveContainer>
-            ) : null}
+
+                      {typeof children == "function" ? children({ large, small }) : children}
+                    </View>
+                  </ScrollView>
+                </FocusTrap>
+              )}
+            </ResponsiveContainer>
           </TransitionView>
         </Suspense>
       </View>
