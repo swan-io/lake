@@ -1,4 +1,4 @@
-import { ReactElement, ReactFragment, ReactText } from "react";
+import { ReactElement, ReactFragment, ReactText, isValidElement } from "react";
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
 import { ColorVariants, colors, texts } from "../constants/design";
 import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   },
   onlyIcon: {
     height: 28,
-    width: 28,
     padding: 0,
   },
   larger: {
@@ -94,6 +93,7 @@ export const Tag = ({
             styles.base,
             styles.label,
             size === "large" && styles.larger,
+            hasOnlyIcon && styles.onlyIcon,
             { backgroundColor: tint100, borderColor: tint200 },
           ]}
         >
@@ -116,21 +116,34 @@ export const Tag = ({
           style,
         ]}
       >
-        <Box direction="row" alignItems="center" style={styles.center}>
-          {isNotNullish(icon) && (
+        <Box
+          direction="row"
+          alignItems="center"
+          style={[styles.center, hasOnlyIcon && styles.onlyIcon]}
+        >
+          {isNotNullish(icon) ? (
             <>
               <Icon name={icon} color={primary} size={iconSize} />
 
               {isNotNullish(children) && <Space width={8} />}
             </>
-          )}
+          ) : null}
 
-          <Text
-            numberOfLines={1}
-            style={[styles.text, hasOnlyIcon && styles.onlyIcon, { color: primary }]}
-          >
-            {children}
-          </Text>
+          {isValidElement(children) ? (
+            children
+          ) : (
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.text,
+                {
+                  color: primary,
+                },
+              ]}
+            >
+              {children}
+            </Text>
+          )}
         </Box>
 
         {hasRemoveButton && (
