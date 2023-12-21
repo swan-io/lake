@@ -130,9 +130,7 @@ export const Tag = ({
           ) : null}
 
           {isValidElement(children) ? (
-            <Box direction="row" alignItems="center">
-              {children}
-            </Box>
+            children
           ) : (
             <Text
               numberOfLines={1}
