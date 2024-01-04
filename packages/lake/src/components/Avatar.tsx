@@ -1,14 +1,12 @@
 import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { ColorVariants, colors } from "../constants/design";
-import { typography } from "../constants/typography";
+import { ColorVariants, colors, texts } from "../constants/design";
 import { Icon } from "./Icon";
 
 const styles = StyleSheet.create({
   text: {
-    ...typography.bodyLarge,
-    fontWeight: typography.fontWeights.demi,
+    ...texts.semibold,
     textAlign: "center",
     userSelect: "none",
   },
