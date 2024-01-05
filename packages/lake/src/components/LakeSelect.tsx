@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingVertical: 12,
-    maxHeight: 300,
   },
   item: {
     display: "flex",
@@ -345,7 +344,6 @@ const LakeSelectWithRef = <V,>(
         referenceRef={inputRef}
         returnFocus={true}
         visible={visible}
-        field={true}
       >
         {isNotNullish(title) && (
           <>
