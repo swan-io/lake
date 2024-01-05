@@ -1264,6 +1264,7 @@ export const FixedListView = <T, ExtraInfo>({
                 .with("tile", () => (
                   <FixedListViewPlaceholder
                     count={loading.count}
+                    headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     rowVerticalSpacing={rowVerticalSpacing}
                     paddingHorizontal={0}
@@ -1272,6 +1273,7 @@ export const FixedListView = <T, ExtraInfo>({
                 .with("plain", () => (
                   <PlainListViewPlaceholder
                     count={loading.count}
+                    headerHeight={headerHeight}
                     rowHeight={rowHeight}
                     rowVerticalSpacing={rowVerticalSpacing}
                     paddingHorizontal={0}
