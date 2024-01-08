@@ -370,6 +370,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
           referenceRef={inputRef}
           returnFocus={true}
           visible={visible}
+          field={true}
         >
           <View style={styles.list}>
             {enableGroups ? (

@@ -336,21 +336,21 @@ body {
   --heading-3-font-weight: 600;
   --heading-4-font-size: 20px;
   --heading-4-font-weight: 400;
-  --heading-5-font-size: 15px;
+  --heading-5-font-size: 16px;
   --heading-5-font-weight: 500;
-  --heading-6-font-size: 15px;
+  --heading-6-font-size: 16px;
   --heading-6-font-weight: 400;
 
   --text-color: var(--color-gray-500);
   --text-line-height: 1.5;
 
-  --text-semibold-font-size: 15px;
+  --text-semibold-font-size: 16px;
   --text-semibold-font-weight: 600;
-  --text-medium-font-size: 15px;
+  --text-medium-font-size: 16px;
   --text-medium-font-weight: 500;
-  --text-regular-font-size: 15px;
+  --text-regular-font-size: 16px;
   --text-regular-font-weight: 400;
-  --text-light-font-size: 15px;
+  --text-light-font-size: 16px;
   --text-light-font-weight: 300;
 
   --text-small-semibold-font-size: 14px;
@@ -363,7 +363,7 @@ body {
   --placeholder-color: var(--color-gray-400);
   --placeholder-line-height: 1.5;
 
-  --placeholder-font-size: 15px;
+  --placeholder-font-size: 16px;
   --placeholder-font-weight: 400;
 
   --placeholder-small-font-size: 14px;

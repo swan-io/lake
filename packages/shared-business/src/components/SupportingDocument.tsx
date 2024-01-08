@@ -28,12 +28,17 @@ export type Document = {
 };
 
 type SupportingDocumentPurposeEnum =
+  | "AdministratorDecisionOfAppointment"
   | "AssociationRegistration"
   | "Banking"
   | "CompanyRegistration"
+  | "FinancialStatements"
   | "GeneralAssemblyMinutes"
+  | "LegalRepresentativeProofOfIdentity"
+  | "NIFAccreditationCard"
   | "Other"
   | "PowerOfAttorney"
+  | "PresidentDecisionOfAppointment"
   | "ProofOfCompanyAddress"
   | "ProofOfCompanyIncome"
   | "ProofOfIdentity"
@@ -42,7 +47,9 @@ type SupportingDocumentPurposeEnum =
   | "ProofOfOriginOfFunds"
   | "SignedStatus"
   | "SwornStatement"
-  | "UBODeclaration";
+  | "UBODeclaration"
+  | "UltimateBeneficialOwnerProofOfAddress"
+  | "UltimateBeneficialOwnerProofOfIdentity";
 
 export const uploadableDocumentTypes = [
   "AssociationRegistration",

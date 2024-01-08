@@ -379,8 +379,8 @@ const isDateRange = (value: Option<DatePickerDate> | DatePickerRange): value is 
 
 const isSelectedDate = (date: DatePickerDate, value: Option<DatePickerDate> | DatePickerRange) => {
   return match(value)
-    .with(Option.pattern.Some(P.select()), value => isDateEquals(value, date))
-    .with(Option.pattern.None, () => false)
+    .with(Option.P.Some(P.select()), value => isDateEquals(value, date))
+    .with(Option.P.None, () => false)
     .with(P.when(isDateRange), ({ start, end }) => {
       // if range is invalid, we don't display any selection
       if (start.isSome() && end.isSome() && isDateAfter(start.value, end.value)) {
@@ -864,7 +864,14 @@ export const DatePicker = ({
         />
       </Box>
 
-      <Popover id={popoverId} role="dialog" onDismiss={close} referenceRef={ref} visible={isOpened}>
+      <Popover
+        id={popoverId}
+        role="dialog"
+        onDismiss={close}
+        referenceRef={ref}
+        visible={isOpened}
+        field={true}
+      >
         <View style={desktop ? styles.popoverDesktop : styles.popover}>
           <DatePickerPopoverContent
             value={value}
