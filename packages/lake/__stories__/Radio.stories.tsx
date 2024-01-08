@@ -28,6 +28,10 @@ export const Variations = () => {
       <StoryPart title="Selected">
         <LakeRadio value={true} />
       </StoryPart>
+
+      <StoryPart title="With error">
+        <LakeRadio isError={true} value={false} />
+      </StoryPart>
     </StoryBlock>
   );
 };
