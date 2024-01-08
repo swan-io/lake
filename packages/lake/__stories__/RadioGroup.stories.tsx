@@ -60,6 +60,18 @@ export const Default = () => {
       <StoryPart title="With color">
         <EditableRadioGroup items={items} color="live" />
       </StoryPart>
+
+      <StoryPart title="With help">
+        <EditableRadioGroup items={items} help="Select a value" />
+      </StoryPart>
+
+      <StoryPart title="With error">
+        <EditableRadioGroup items={items} error="This is an error" />
+      </StoryPart>
+
+      <StoryPart title="With hidden error">
+        <EditableRadioGroup items={items} error="I'm hidden :(" hideErrors={true} />
+      </StoryPart>
     </StoryBlock>
   );
 };
