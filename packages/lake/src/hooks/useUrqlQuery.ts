@@ -25,7 +25,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
 
   const reload = useCallback(() => {
     setIsForceReloading(true);
-    reexecute();
+    reexecute({ requestPolicy: "network-only" });
   }, [reexecute]);
 
   useEffect(() => {
