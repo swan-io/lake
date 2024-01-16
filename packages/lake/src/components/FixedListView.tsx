@@ -358,11 +358,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: radii[4],
   },
   emptyListContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    flexGrow: 1,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -1232,67 +1228,106 @@ export const FixedListView = <T, ExtraInfo>({
     <View style={styles.root}>
       <View ref={startFocusAnchorRef} tabIndex={0} />
 
-      <ScrollView
-        onKeyDown={onKeyDown}
-        onLayout={onLayout}
-        onScroll={onScroll}
-        scrollEventThrottle={32}
-        style={[styles.container, mode === "tile" && styles.containerTile]}
-        contentContainerStyle={[
-          styles.contentContainer,
-          {
-            height:
-              totalHeight +
-              SCROLLBAR_RESERVED_SPACE +
-              (isLoading ? loading.count * (rowHeight + rowVerticalSpacing) : 0),
-          },
-        ]}
-      >
-        <View
-          aria-busy={isLoading}
-          style={[
-            styles.loadingPlaceholder,
+      {data.length === 0 && isNotNullish(renderEmptyList) && !isLoading ? (
+        <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
+      ) : (
+        <ScrollView
+          onKeyDown={onKeyDown}
+          onLayout={onLayout}
+          onScroll={onScroll}
+          scrollEventThrottle={32}
+          style={[styles.container, mode === "tile" && styles.containerTile]}
+          contentContainerStyle={[
+            styles.contentContainer,
             {
-              top: rowsHeight,
-              marginLeft: horizontalPadding * 2,
-              marginRight: horizontalPadding * 2,
+              height:
+                totalHeight +
+                SCROLLBAR_RESERVED_SPACE +
+                (isLoading ? loading.count * (rowHeight + rowVerticalSpacing) : 0),
             },
           ]}
         >
-          {isLoading
-            ? match(mode)
-                .with("tile", () => (
-                  <FixedListViewPlaceholder
-                    count={loading.count}
-                    headerHeight={headerHeight}
-                    rowHeight={rowHeight}
-                    rowVerticalSpacing={rowVerticalSpacing}
-                    paddingHorizontal={0}
-                  />
-                ))
-                .with("plain", () => (
-                  <PlainListViewPlaceholder
-                    count={loading.count}
-                    headerHeight={headerHeight}
-                    rowHeight={rowHeight}
-                    rowVerticalSpacing={rowVerticalSpacing}
-                    paddingHorizontal={0}
-                  />
-                ))
-                .exhaustive()
-            : null}
-        </View>
+          <View
+            aria-busy={isLoading}
+            style={[
+              styles.loadingPlaceholder,
+              {
+                top: rowsHeight,
+                marginLeft: horizontalPadding * 2,
+                marginRight: horizontalPadding * 2,
+              },
+            ]}
+          >
+            {isLoading
+              ? match(mode)
+                  .with("tile", () => (
+                    <FixedListViewPlaceholder
+                      count={loading.count}
+                      headerHeight={headerHeight}
+                      rowHeight={rowHeight}
+                      rowVerticalSpacing={rowVerticalSpacing}
+                      paddingHorizontal={0}
+                    />
+                  ))
+                  .with("plain", () => (
+                    <PlainListViewPlaceholder
+                      count={loading.count}
+                      headerHeight={headerHeight}
+                      rowHeight={rowHeight}
+                      rowVerticalSpacing={rowVerticalSpacing}
+                      paddingHorizontal={0}
+                    />
+                  ))
+                  .exhaustive()
+              : null}
+          </View>
 
-        <View style={[styles.backgroundRows, { top: headerHeight }]}>{backgroundRows}</View>
+          <View style={[styles.backgroundRows, { top: headerHeight }]}>{backgroundRows}</View>
 
-        <View style={styles.scrollContentContainer} ref={scrollContentsRef}>
-          {stickedToStartColumns.length > 0 ? (
+          <View style={styles.scrollContentContainer} ref={scrollContentsRef}>
+            {stickedToStartColumns.length > 0 ? (
+              <View
+                style={[
+                  styles.stickyColumn,
+                  {
+                    width: stickedToStartColumnsWidth + horizontalPadding,
+                    paddingLeft: horizontalPadding,
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.headingSegment,
+                    { height: headerHeight, backgroundColor: headerBackgroundColor },
+                  ]}
+                >
+                  <HeaderSegment
+                    columns={stickedToStartColumns}
+                    extraInfo={extraInfo}
+                    viewId={viewId}
+                    width={stickedToStartColumnsWidth}
+                  />
+
+                  <View
+                    style={[
+                      styles.stickyColumnStartOverflow,
+                      { width: horizontalPadding, backgroundColor: headerBackgroundColor },
+                    ]}
+                  />
+
+                  <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
+                </View>
+
+                <View style={{ height: rowsHeight }}>{startRows}</View>
+              </View>
+            ) : null}
+
             <View
               style={[
-                styles.stickyColumn,
+                styles.centerColumnsContainer,
                 {
-                  width: stickedToStartColumnsWidth + horizontalPadding,
-                  paddingLeft: horizontalPadding,
+                  paddingLeft: stickedToStartColumns.length === 0 ? horizontalPadding : ZERO,
+                  paddingRight: stickedToEndColumns.length === 0 ? horizontalPadding : ZERO,
                 },
               ]}
             >
@@ -1302,165 +1337,126 @@ export const FixedListView = <T, ExtraInfo>({
                   { height: headerHeight, backgroundColor: headerBackgroundColor },
                 ]}
               >
-                <HeaderSegment
-                  columns={stickedToStartColumns}
-                  extraInfo={extraInfo}
-                  viewId={viewId}
-                  width={stickedToStartColumnsWidth}
-                />
-
-                <View
-                  style={[
-                    styles.stickyColumnStartOverflow,
-                    { width: horizontalPadding, backgroundColor: headerBackgroundColor },
-                  ]}
-                />
+                <ScrollView
+                  ref={centerHeadersRef}
+                  horizontal={true}
+                  onLayout={onCenterTrackLayout}
+                  style={styles.centerColumns}
+                  contentContainerStyle={{
+                    minWidth:
+                      centerColumnsWidth +
+                      (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
+                      (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
+                  }}
+                >
+                  <HeaderSegment
+                    columns={columns}
+                    extraInfo={extraInfo}
+                    viewId={viewId}
+                    width={centerColumnsWidth}
+                  />
+                </ScrollView>
 
                 <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
               </View>
 
-              <View style={{ height: rowsHeight }}>{startRows}</View>
-            </View>
-          ) : null}
-
-          <View
-            style={[
-              styles.centerColumnsContainer,
-              {
-                paddingLeft: stickedToStartColumns.length === 0 ? horizontalPadding : ZERO,
-                paddingRight: stickedToEndColumns.length === 0 ? horizontalPadding : ZERO,
-              },
-            ]}
-          >
-            <View
-              style={[
-                styles.headingSegment,
-                { height: headerHeight, backgroundColor: headerBackgroundColor },
-              ]}
-            >
               <ScrollView
-                ref={centerHeadersRef}
                 horizontal={true}
-                onLayout={onCenterTrackLayout}
+                ref={centerColumnsRef}
                 style={styles.centerColumns}
+                contentContainerStyle={[
+                  styles.centerColumnsContentContainer,
+                  {
+                    minWidth:
+                      centerColumnsWidth +
+                      (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
+                      (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
+                  },
+                ]}
+              >
+                {centerRows}
+              </ScrollView>
+
+              <ScrollView
+                ref={horizontalScrollbarRef}
+                horizontal={true}
+                style={styles.horizontalScrollbar}
                 contentContainerStyle={{
                   minWidth:
                     centerColumnsWidth +
                     (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
                     (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
                 }}
-              >
-                <HeaderSegment
-                  columns={columns}
-                  extraInfo={extraInfo}
-                  viewId={viewId}
-                  width={centerColumnsWidth}
-                />
-              </ScrollView>
+              />
 
-              <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
+              {stickedToStartColumns.length > 0 && hasHorizontalScroll ? (
+                <View
+                  style={[
+                    styles.leftToRightGradient,
+                    {
+                      maxHeight: data.length * totalRowHeight,
+                      top: headerHeight,
+                      bottom: SCROLLBAR_RESERVED_SPACE + rowVerticalSpacing / 2,
+                    },
+                    shouldShowStartGradient && styles.visibleGradient,
+                  ]}
+                ></View>
+              ) : null}
+
+              {stickedToEndColumns.length > 0 && hasHorizontalScroll ? (
+                <View
+                  style={[
+                    styles.rightToLeftGradient,
+                    {
+                      maxHeight: data.length * totalRowHeight,
+                      top: headerHeight,
+                      bottom: SCROLLBAR_RESERVED_SPACE + rowVerticalSpacing / 2,
+                    },
+                    shouldShowEndGradient && styles.visibleGradient,
+                  ]}
+                ></View>
+              ) : null}
             </View>
 
-            <ScrollView
-              horizontal={true}
-              ref={centerColumnsRef}
-              style={styles.centerColumns}
-              contentContainerStyle={[
-                styles.centerColumnsContentContainer,
-                {
-                  minWidth:
-                    centerColumnsWidth +
-                    (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
-                    (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
-                },
-              ]}
-            >
-              {centerRows}
-            </ScrollView>
-
-            <ScrollView
-              ref={horizontalScrollbarRef}
-              horizontal={true}
-              style={styles.horizontalScrollbar}
-              contentContainerStyle={{
-                minWidth:
-                  centerColumnsWidth +
-                  (stickedToStartColumns.length === 0 ? horizontalPadding : 0) +
-                  (stickedToEndColumns.length === 0 ? horizontalPadding : 0),
-              }}
-            />
-
-            {stickedToStartColumns.length > 0 && hasHorizontalScroll ? (
+            {stickedToEndColumns.length > 0 ? (
               <View
                 style={[
-                  styles.leftToRightGradient,
+                  styles.stickyColumn,
                   {
-                    maxHeight: data.length * totalRowHeight,
-                    top: headerHeight,
-                    bottom: SCROLLBAR_RESERVED_SPACE + rowVerticalSpacing / 2,
+                    width: stickedToEndColumnsWidth + horizontalPadding,
+                    paddingRight: horizontalPadding,
                   },
-                  shouldShowStartGradient && styles.visibleGradient,
-                ]}
-              ></View>
-            ) : null}
-
-            {stickedToEndColumns.length > 0 && hasHorizontalScroll ? (
-              <View
-                style={[
-                  styles.rightToLeftGradient,
-                  {
-                    maxHeight: data.length * totalRowHeight,
-                    top: headerHeight,
-                    bottom: SCROLLBAR_RESERVED_SPACE + rowVerticalSpacing / 2,
-                  },
-                  shouldShowEndGradient && styles.visibleGradient,
-                ]}
-              ></View>
-            ) : null}
-          </View>
-
-          {stickedToEndColumns.length > 0 ? (
-            <View
-              style={[
-                styles.stickyColumn,
-                {
-                  width: stickedToEndColumnsWidth + horizontalPadding,
-                  paddingRight: horizontalPadding,
-                },
-              ]}
-            >
-              <View
-                style={[
-                  styles.headingSegment,
-                  { height: headerHeight, backgroundColor: headerBackgroundColor },
                 ]}
               >
                 <View
                   style={[
-                    styles.stickyColumnEndOverflow,
-                    { width: horizontalPadding, backgroundColor: headerBackgroundColor },
+                    styles.headingSegment,
+                    { height: headerHeight, backgroundColor: headerBackgroundColor },
                   ]}
-                />
+                >
+                  <View
+                    style={[
+                      styles.stickyColumnEndOverflow,
+                      { width: horizontalPadding, backgroundColor: headerBackgroundColor },
+                    ]}
+                  />
 
-                <HeaderSegment
-                  columns={stickedToEndColumns}
-                  extraInfo={extraInfo}
-                  viewId={viewId}
-                  width={stickedToEndColumnsWidth}
-                />
+                  <HeaderSegment
+                    columns={stickedToEndColumns}
+                    extraInfo={extraInfo}
+                    viewId={viewId}
+                    width={stickedToEndColumnsWidth}
+                  />
 
-                <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
+                  <View style={[styles.topGradient, isScrolled && styles.visibleTopGradient]} />
+                </View>
+
+                <View style={{ height: rowsHeight }}>{endRows}</View>
               </View>
-
-              <View style={{ height: rowsHeight }}>{endRows}</View>
-            </View>
-          ) : null}
-        </View>
-      </ScrollView>
-
-      {data.length === 0 && isNotNullish(renderEmptyList) && !isLoading ? (
-        <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
-      ) : null}
+            ) : null}
+          </View>
+        </ScrollView>
+      )}
 
       <View ref={endFocusAnchorRef} tabIndex={0} />
     </View>
