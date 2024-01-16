@@ -370,6 +370,7 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundColor.default,
   },
   emptyList: {
+    flexShrink: 1,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
