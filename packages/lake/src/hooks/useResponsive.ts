@@ -4,27 +4,19 @@ import { useCallback, useSyncExternalStore } from "react";
 import { Dimensions } from "react-native";
 import { isNotNullish } from "../utils/nullish";
 
-const BREAKPOINT = 992;
+export const useResponsive = (breakpoint = 992) => {
+  const desktop = useSyncExternalStore(
+    useCallback(onStoreChange => {
+      const subscription = Dimensions.addEventListener("change", ({ window }) => {
+        if (isNotNullish(window)) {
+          onStoreChange();
+        }
+      });
 
-export const useResponsive = (breakpoint: number | undefined = BREAKPOINT) => {
-  const subscribe = useCallback((onStoreChange: () => void) => {
-    const subscription = Dimensions.addEventListener("change", ({ window }) => {
-      if (isNotNullish(window)) {
-        onStoreChange();
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  const getSnapshot = useCallback(() => {
-    const { width } = Dimensions.get("window");
-    return width >= breakpoint;
-  }, [breakpoint]);
-
-  const desktop = useSyncExternalStore(subscribe, getSnapshot);
+      return subscription.remove;
+    }, []),
+    useCallback(() => Dimensions.get("window").width >= breakpoint, [breakpoint]),
+  );
 
   const media = useCallback(
     <T>(values: { mobile: T; desktop?: T }): T =>
