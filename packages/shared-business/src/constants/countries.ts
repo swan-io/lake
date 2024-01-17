@@ -1763,6 +1763,9 @@ export type Country = Simplify<
   }
 >;
 
+export type CountryCCA2 = Country["cca2"];
+export type CountryCCA3 = Country["cca3"];
+
 export const countries: Country[] = readonlyCountries
   .map(country => {
     const name = countryNameResolver.match({
@@ -1780,9 +1783,6 @@ export const countries: Country[] = readonlyCountries
   .sort((countryA, countryB) => {
     return countryA.name.localeCompare(countryB.name);
   });
-
-export type CountryCCA2 = Country["cca2"];
-export type CountryCCA3 = Country["cca3"];
 
 export const getCCA2forCCA3 = (cca3: CountryCCA3): CountryCCA2 | undefined =>
   countries.find(country => country.cca3 === cca3)?.cca2;
