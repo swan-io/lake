@@ -1753,7 +1753,7 @@ const countryNameResolver = Result.fromExecution(() => {
   return new DisplayNames(locales, { type: "region" });
 });
 
-type Country = Simplify<
+export type Country = Simplify<
   Pick<(typeof readonlyCountries)[number], "cca2" | "cca3"> & {
     name: string;
     deburr: string;
