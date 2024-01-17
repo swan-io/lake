@@ -3,14 +3,6 @@ import { deburr } from "@swan-io/lake/src/utils/string";
 import { Simplify } from "type-fest";
 import { locale } from "../utils/i18n";
 
-export const france = {
-  name: "France",
-  cca2: "FR",
-  cca3: "FRA",
-  idd: "33",
-  flag: "🇫🇷",
-} as const;
-
 const readonlyCountries = [
   {
     name: "Åland",
@@ -383,7 +375,13 @@ const readonlyCountries = [
     idd: "298",
     flag: "🇫🇴",
   },
-  france,
+  {
+    name: "France",
+    cca2: "FR",
+    cca3: "FRA",
+    idd: "33",
+    flag: "🇫🇷",
+  },
   {
     name: "Gabon",
     cca2: "GA",
@@ -1794,6 +1792,7 @@ export const companyWithUboCountries = ["BEL", "DEU", "FRA", "ITA", "LTU", "LUX"
 export type CompanyWithUboCountryCCA3 = (typeof companyWithUboCountries)[number];
 
 export const allCountries = countries.map(country => country.cca3);
+export const france = countries.find(country => country.cca3 === "FRA") as Country;
 
 export const individualCountries = [
   "AUT",
