@@ -1,5 +1,6 @@
 import { ReactNode, useCallback, useLayoutEffect, useRef, useState } from "react";
 import { LayoutChangeEvent, StyleSheet, View, ViewProps } from "react-native";
+import { Merge } from "type-fest";
 
 const styles = StyleSheet.create({
   hidden: {
@@ -7,16 +8,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export type Context = { small: boolean; large: boolean };
-type Props = {
-  children: (context: Context) => ReactNode;
-  style?: ViewProps["style"];
-  breakpoint?: number;
+export type Context = {
+  small: boolean;
+  large: boolean;
 };
 
-export const ResponsiveContainer = ({ children, style, breakpoint = 1000 }: Props) => {
-  const [isSmall, setIsSmall] = useState<boolean | null>(null);
+type Props = Merge<
+  ViewProps,
+  {
+    breakpoint?: number;
+    children: (context: Context) => ReactNode;
+  }
+>;
+
+export const ResponsiveContainer = ({ breakpoint = 1000, children, style, ...props }: Props) => {
   const containerRef = useRef<View | null>(null);
+  const [small, setSmall] = useState<boolean | null>(null);
 
   const onLayout = useCallback(
     ({
@@ -24,25 +31,27 @@ export const ResponsiveContainer = ({ children, style, breakpoint = 1000 }: Prop
         layout: { width },
       },
     }: LayoutChangeEvent) => {
-      setIsSmall(() => width < breakpoint);
+      setSmall(width < breakpoint);
     },
     [breakpoint],
   );
 
   useLayoutEffect(() => {
-    if (containerRef.current != null) {
-      const element = containerRef.current as unknown as HTMLElement;
-      setIsSmall(() => element.offsetWidth < breakpoint);
+    const element = containerRef.current as HTMLElement | null;
+
+    if (element != null) {
+      setSmall(element.offsetWidth < breakpoint);
     }
   }, [breakpoint]);
 
-  const isSmallWithDefault = isSmall ?? false;
+  const isSmallWithDefault = small ?? false;
 
   return (
     <View
       ref={containerRef}
       onLayout={onLayout}
-      style={[style, isSmall == null ? styles.hidden : null]}
+      style={[style, small == null ? styles.hidden : null]}
+      {...props}
     >
       {children({ small: isSmallWithDefault, large: !isSmallWithDefault })}
     </View>
