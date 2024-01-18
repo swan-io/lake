@@ -22,14 +22,13 @@ import {
   TextInputKeyPressEventData,
   View,
 } from "react-native";
-
 import { backgroundColor, colors, spacings } from "../constants/design";
-import { typography } from "../constants/typography";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { isNotEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
+import { LakeText } from "./LakeText";
 import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
 import { LoadingView } from "./LoadingView";
 import { Popover } from "./Popover";
@@ -65,7 +64,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[100],
   },
   itemText: {
-    ...typography.bodyLarge,
     userSelect: "none",
   },
   loader: {
@@ -351,9 +349,9 @@ const LakeComboboxWithRef = <I,>(
                               }}
                             >
                               {isReactText(rendered) ? (
-                                <Text numberOfLines={1} style={styles.itemText}>
+                                <LakeText numberOfLines={1} style={styles.itemText}>
                                   {rendered}
-                                </Text>
+                                </LakeText>
                               ) : (
                                 rendered
                               )}
