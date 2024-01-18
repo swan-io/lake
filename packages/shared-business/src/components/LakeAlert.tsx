@@ -7,7 +7,7 @@ import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import { colors, shadows } from "@swan-io/lake/src/constants/design";
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
-import { ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { t } from "../utils/i18n";
 
@@ -87,16 +87,8 @@ type Props = {
   title: ReactNode;
   subtitle?: string;
   style?: StyleProp<ViewStyle>;
-} & (
-  | {
-      callToAction?: ReactNode;
-      foldable?: never;
-    }
-  | {
-      callToAction?: never;
-      foldable: boolean;
-    }
-);
+  action?: "fold" | ReactElement;
+};
 
 const isText = (node: ReactNode): node is string | number =>
   typeof node === "string" || typeof node === "number";
@@ -108,10 +100,9 @@ export const LakeAlert = ({
   subtitle,
   children,
   style,
-  callToAction,
-  foldable = false,
+  action,
 }: Props) => {
-  const [visible, { toggle }] = useBoolean(!foldable || isNotNullish(callToAction));
+  const [visible, { toggle }] = useBoolean(action !== "fold");
 
   const color = alertColor[variant];
   const icon = alertIcon[variant];
@@ -141,11 +132,11 @@ export const LakeAlert = ({
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
 
-        {isNotNullish(callToAction) ? (
-          <View style={styles.callToAction}>{callToAction}</View>
+        {isNotNullish(action) && action !== "fold" ? (
+          <View style={styles.callToAction}>{action}</View>
         ) : null}
 
-        {foldable && isNotNullish(children) ? (
+        {action === "fold" && isNotNullish(children) ? (
           <LakeButton onPress={toggle} mode="tertiary" size="small">
             {visible ? t("alert.showLess") : t("alert.showMore")}
           </LakeButton>

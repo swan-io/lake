@@ -32,7 +32,7 @@ export const Variants = () => {
       </StoryPart>
 
       <StoryPart title="warning" style={styles.part}>
-        <LakeAlert variant="warning" title="Title" subtitle="This is a subtitle" foldable={true}>
+        <LakeAlert variant="warning" title="Title" subtitle="This is a subtitle" action="fold">
           This is a foldable alert with children
         </LakeAlert>
       </StoryPart>
@@ -62,7 +62,7 @@ export const Formats = () => {
   return (
     <StoryBlock title="Alert formats">
       <StoryPart title="Anchored" style={styles.part}>
-        <LakeAlert anchored={true} variant="info" title="Title" foldable={true} />
+        <LakeAlert anchored={true} variant="info" title="Title" />
       </StoryPart>
 
       <StoryPart title="With subtitle" style={styles.part}>
@@ -73,7 +73,7 @@ export const Formats = () => {
         <LakeAlert
           variant="info"
           title="Title"
-          callToAction={
+          action={
             <LakeButton size="small" color="shakespear" icon="add-filled" ariaLabel="Action !" />
           }
         >
