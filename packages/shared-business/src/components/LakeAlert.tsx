@@ -83,12 +83,10 @@ const alertLeftBorder: Record<AlertVariant, string> = {
 type Props = {
   anchored?: boolean;
   variant: AlertVariant;
-  children?: ReactNode;
   title: ReactNode;
   subtitle?: string;
   style?: StyleProp<ViewStyle>;
-  action?: "fold" | ReactElement;
-};
+} & ({ action: "fold"; children: ReactNode } | { action?: ReactElement; children?: ReactNode });
 
 const isText = (node: ReactNode): node is string | number =>
   typeof node === "string" || typeof node === "number";
@@ -102,6 +100,7 @@ export const LakeAlert = ({
   style,
   action,
 }: Props) => {
+  const foldable = action === "fold";
   const [visible, { toggle }] = useBoolean(action !== "fold");
 
   const color = alertColor[variant];
@@ -132,11 +131,11 @@ export const LakeAlert = ({
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
 
-        {isNotNullish(action) && action !== "fold" ? (
+        {isNotNullish(action) && !foldable ? (
           <View style={styles.callToAction}>{action}</View>
         ) : null}
 
-        {action === "fold" && isNotNullish(children) ? (
+        {foldable && isNotNullish(children) ? (
           <LakeButton onPress={toggle} mode="tertiary" size="small">
             {visible ? t("alert.showLess") : t("alert.showMore")}
           </LakeButton>
