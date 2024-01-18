@@ -1,12 +1,15 @@
+import { Box } from "@swan-io/lake/src/components/Box";
+import { Icon, IconName } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
+import { colors, shadows } from "@swan-io/lake/src/constants/design";
+import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
+import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { commonStyles } from "../constants/commonStyles";
-import { colors, shadows } from "../constants/design";
-import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
-import { Box } from "./Box";
-import { Icon, IconName } from "./Icon";
-import { LakeText } from "./LakeText";
-import { Space } from "./Space";
+import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   base: {
@@ -81,11 +84,19 @@ type Props = {
   anchored?: boolean;
   variant: AlertVariant;
   children?: ReactNode;
-  callToAction?: ReactNode;
   title: ReactNode;
   subtitle?: string;
   style?: StyleProp<ViewStyle>;
-};
+} & (
+  | {
+      callToAction?: ReactNode;
+      foldable?: never;
+    }
+  | {
+      callToAction?: never;
+      foldable: boolean;
+    }
+);
 
 const isText = (node: ReactNode): node is string | number =>
   typeof node === "string" || typeof node === "number";
@@ -98,7 +109,10 @@ export const LakeAlert = ({
   children,
   style,
   callToAction,
+  foldable = false,
 }: Props) => {
+  const [visible, { toggle }] = useBoolean(!foldable || isNotNullish(callToAction));
+
   const color = alertColor[variant];
   const icon = alertIcon[variant];
 
@@ -127,10 +141,18 @@ export const LakeAlert = ({
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
 
-        {isNotNullish(callToAction) && <View style={styles.callToAction}>{callToAction}</View>}
+        {isNotNullish(callToAction) ? (
+          <View style={styles.callToAction}>{callToAction}</View>
+        ) : null}
+
+        {foldable && isNotNullish(children) ? (
+          <LakeButton onPress={toggle} mode="tertiary" size="small">
+            {visible ? t("alert.showLess") : t("alert.showMore")}
+          </LakeButton>
+        ) : null}
       </Box>
 
-      {isNotNullish(children) && (
+      {isNotNullish(children) && visible && (
         <View style={icon != null ? styles.content : null}>
           <Space height={12} />
 

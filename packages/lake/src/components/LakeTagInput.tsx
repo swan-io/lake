@@ -155,7 +155,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         match({ key: nativeEvent.key, input: inputRef.current })
           .with({ key: "Backspace", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
-            if (isNullishOrEmpty(input.value)) {
+            if (isNullishOrEmpty(input.value) && !disabled) {
               onValuesChanged(values.filter(current => current !== values[values.length - 1]));
             }
           })
@@ -165,7 +165,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             }
           });
       },
-      [onValuesChanged, pushNewValues, values],
+      [onValuesChanged, pushNewValues, values, disabled],
     );
 
     const autoFocus = useCallback(() => {

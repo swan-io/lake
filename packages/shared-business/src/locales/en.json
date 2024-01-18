@@ -4,6 +4,8 @@
   "addressFormPart.placeholder": "Start typing…",
   "addressFormPart.postCodeLabel": "Postcode",
   "addressFormPart.setManual": "Enter manually",
+  "alert.showLess": "Show less",
+  "alert.showMore": "Show more",
   "beneficiaryForm.beneficiary.address": "Find beneficiary address",
   "beneficiaryForm.beneficiary.birthCity": "Birth city",
   "beneficiaryForm.beneficiary.birthCityPlaceholder": "Search for the beneficiary's birth city",

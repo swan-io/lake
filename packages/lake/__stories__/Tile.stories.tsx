@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
+import { LakeAlert } from "@swan-io/shared-business/src/components/LakeAlert";
 import { StyleSheet } from "react-native";
 import { Icon } from "../src/components/Icon";
-import { LakeAlert } from "../src/components/LakeAlert";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { Tile, TileGrid } from "../src/components/Tile";

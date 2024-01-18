@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
+import { LakeAlert } from "@swan-io/shared-business/src/components/LakeAlert";
 import { StyleSheet } from "react-native";
-import { LakeAlert } from "../src/components/LakeAlert";
 import { LakeButton } from "../src/components/LakeButton";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -31,6 +31,12 @@ export const Variants = () => {
         </LakeAlert>
       </StoryPart>
 
+      <StoryPart title="warning" style={styles.part}>
+        <LakeAlert variant="warning" title="Title" subtitle="This is a subtitle" foldable={true}>
+          This is a foldable alert with children
+        </LakeAlert>
+      </StoryPart>
+
       <StoryPart title="error" style={styles.part}>
         <LakeAlert variant="error" title="Title" subtitle="This is a subtitle">
           This is a children
@@ -56,7 +62,7 @@ export const Formats = () => {
   return (
     <StoryBlock title="Alert formats">
       <StoryPart title="Anchored" style={styles.part}>
-        <LakeAlert anchored={true} variant="info" title="Title" />
+        <LakeAlert anchored={true} variant="info" title="Title" foldable={true} />
       </StoryPart>
 
       <StoryPart title="With subtitle" style={styles.part}>
@@ -70,7 +76,9 @@ export const Formats = () => {
           callToAction={
             <LakeButton size="small" color="shakespear" icon="add-filled" ariaLabel="Action !" />
           }
-        />
+        >
+          This is a children
+        </LakeAlert>
       </StoryPart>
 
       <StoryPart title="With children" style={styles.part}>

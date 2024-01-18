@@ -1,5 +1,4 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { LakeAlert } from "@swan-io/lake/src/components/LakeAlert";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -11,6 +10,7 @@ import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nulli
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
+import { LakeAlert } from "./LakeAlert";
 
 const styles = StyleSheet.create({
   base: {
