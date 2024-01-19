@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { ActivityIndicator, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { colors } from "../constants/design";
+import { colors } from "../constants/colors";
 
 const styles = StyleSheet.create({
   base: {
@@ -32,7 +32,7 @@ type Props = {
 const isDev = process.env.NODE_ENV === "development";
 
 export const LoadingView = forwardRef<View, Props>(
-  ({ color = colors.gray[400], delay = isDev ? 0 : 1000, style }, forwardedRef) => (
+  ({ color = colors.gray[100], delay = isDev ? 0 : 1000, style }, forwardedRef) => (
     <View ref={forwardedRef} style={[styles.base, style]}>
       <ActivityIndicator
         size="small"

@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, View } from "react-native";
+import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../constants/design";
+import { typography } from "../constants/typography";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
-import { LakeText } from "./LakeText";
 import { Popover } from "./Popover";
 import { Space } from "./Space";
 
@@ -31,7 +31,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[50],
   },
   availableFiltersTitle: {
+    ...typography.bodyLarge,
+    color: colors.current[500],
     paddingHorizontal: 24,
+  },
+  filterName: {
+    ...typography.bodySmall,
   },
 });
 
@@ -81,7 +86,7 @@ export function FilterChooser<FilterName extends string>({
         visible={visible}
       >
         <View style={styles.list}>
-          <LakeText style={styles.availableFiltersTitle}>{title}</LakeText>
+          <Text style={styles.availableFiltersTitle}>{title}</Text>
           <Space height={8} />
 
           <FlatList
@@ -100,9 +105,7 @@ export function FilterChooser<FilterName extends string>({
                     close();
                   }}
                 >
-                  <LakeText variant="smallRegular" style={isSet && styles.selected}>
-                    {item.label}
-                  </LakeText>
+                  <Text style={[styles.filterName, isSet && styles.selected]}>{item.label}</Text>
 
                   {isSet && <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />}
                 </Pressable>
