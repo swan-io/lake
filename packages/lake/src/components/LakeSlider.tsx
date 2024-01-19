@@ -4,6 +4,7 @@ import { commonStyles } from "../constants/commonStyles";
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 10, // the slider thumb has a 20px size
     zIndex: 1,
   },
 });

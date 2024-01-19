@@ -6,12 +6,12 @@ import { Box } from "../src/components/Box";
 import { LakeSlider } from "../src/components/LakeSlider";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
+import { commonStyles } from "../src/constants/commonStyles";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
   slider: {
-    padding: 10, // adds some padding to avoid crop slider handler caused by storybook canvas
-    flex: 1,
+    ...commonStyles.fill,
     maxWidth: 800,
   },
 });

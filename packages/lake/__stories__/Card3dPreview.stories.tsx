@@ -191,14 +191,17 @@ const ConfigForm = ({ value, onChange }: ConfigFormProps) => {
 
         <Space height={16} />
 
-        <LakeSlider
-          min={0}
-          max={1}
+        <LakeLabel
           label="Logo scale"
-          step={0.01}
-          value={value.logoScale}
-          onChange={setLogoScale}
-          unit=""
+          render={() => (
+            <LakeSlider
+              min={0}
+              max={1}
+              step={0.01}
+              value={value.logoScale}
+              onChange={setLogoScale}
+            />
+          )}
         />
       </View>
     </Box>
