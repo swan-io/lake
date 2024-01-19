@@ -263,6 +263,7 @@ export const invariantColors = {
   white: "#fff",
   transparent: "transparent",
   gray: "#16141a",
+  defaultAccentColor: "#6240b5",
 };
 
 export type ColorVariants = keyof typeof colors;
