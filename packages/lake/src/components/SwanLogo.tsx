@@ -1,5 +1,5 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { invariantColors } from "../constants/design";
+import { colors } from "../constants/colors";
 import { Path, Svg } from "./Svg";
 
 const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const SwanLogo = ({ color = invariantColors.gray, style }: Props) => (
+export const SwanLogo = ({ color = colors.gray[100], style }: Props) => (
   <Svg viewBox="0 0 45 10" style={[styles.base, style]}>
     <title>Swan</title>
 

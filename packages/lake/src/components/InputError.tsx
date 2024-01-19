@@ -1,12 +1,13 @@
-import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { colors, texts } from "../constants/design";
-import { LakeText } from "./LakeText";
+import { StyleProp, StyleSheet, Text, TextStyle } from "react-native";
+import { colors } from "../constants/colors";
+import { typography } from "../constants/typography";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   base: {
-    color: colors.negative[500],
-    lineHeight: texts.h1.lineHeight,
+    ...typography.bodySmall,
+    color: colors.red[100],
+    lineHeight: typography.lineHeights.input,
     minHeight: 32,
     paddingHorizontal: 3, // borderRadius / 2
     paddingVertical: 4,
@@ -19,10 +20,4 @@ type Props = {
 };
 
 export const InputError = ({ message = "", style }: Props) =>
-  message !== "" ? (
-    <LakeText variant="smallRegular" style={[styles.base, style]}>
-      {message}
-    </LakeText>
-  ) : (
-    <Space height={32} />
-  );
+  message !== "" ? <Text style={[styles.base, style]}>{message}</Text> : <Space height={32} />;
