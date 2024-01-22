@@ -363,11 +363,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: backgroundColor.default,
+  },
+  emptyListContentContainer: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: spacings[48],
-    backgroundColor: backgroundColor.default,
   },
   emptyList: {
     flexDirection: "column",
@@ -1459,7 +1461,12 @@ export const FixedListView = <T, ExtraInfo>({
       </ScrollView>
 
       {data.length === 0 && isNotNullish(renderEmptyList) && !isLoading ? (
-        <View style={styles.emptyListContainer}>{renderEmptyList()}</View>
+        <ScrollView
+          style={styles.emptyListContainer}
+          contentContainerStyle={styles.emptyListContentContainer}
+        >
+          {renderEmptyList()}
+        </ScrollView>
       ) : null}
 
       <View ref={endFocusAnchorRef} tabIndex={0} />
