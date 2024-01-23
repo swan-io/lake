@@ -1,5 +1,5 @@
 import { AsyncData, Result } from "@swan-io/boxed";
-import { DependencyList, useCallback, useEffect, useMemo, useState } from "react";
+import { DependencyList, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnyVariables, CombinedError, UseQueryArgs, useQuery } from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
@@ -16,7 +16,9 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   args: UseQueryArgs<Variables, Data>,
   dependencyList: DependencyList = EMPTY_DEPENDENCY_LIST,
 ): Query<Data> => {
-  const [isDepsListUpdate, setIsDepsListUpdate] = useState(true);
+  const isFirstRender = useRef(true);
+
+  const [isDepsListUpdate, setIsDepsListUpdate] = useState(false);
   const [isForceReloading, setIsForceReloading] = useState(false);
 
   const [{ data, fetching, error }, reexecute] = useQuery({
@@ -25,7 +27,11 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   });
 
   useEffect(() => {
-    setIsDepsListUpdate(true);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      setIsDepsListUpdate(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencyList);
 
