@@ -491,6 +491,7 @@ function FilterInput({
                     placeholder={placeholder}
                     value={value}
                     onChangeText={onChange}
+                    onSubmitEditing={onSubmit}
                   />
                 )}
               />
