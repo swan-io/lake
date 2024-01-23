@@ -6,6 +6,7 @@ import {
   ColumnCellConfig,
   ColumnTitleConfig,
   FixedListView,
+  FixedListViewEmpty,
   FixedListViewPlaceholder,
   FixedListViewProps,
 } from "../src/components/FixedListView";
@@ -75,6 +76,7 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
   const [endReachedTimes, setEndReachedTimes] = useState(0);
   const [withInfiniteScroll, setWithInfiniteScroll] = useState(false);
   const [showFakeLoader, setShowFakeLoader] = useState(false);
+  const [forceIsLoading, setForceIsLoading] = useState(false);
 
   const [data, setData] = useState(() => Array.from({ length: 100 }, _ => generateItem()));
 
@@ -193,6 +195,14 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
           value={withInfiniteScroll}
           onValueChange={setWithInfiniteScroll}
         />
+
+        <Space width={16} />
+
+        <LakeLabelledCheckbox
+          label="Force loading state"
+          value={forceIsLoading}
+          onValueChange={setForceIsLoading}
+        />
       </Box>
 
       <Space height={16} />
@@ -209,8 +219,11 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
         headerHeight={48}
         onEndReached={onEndReached}
         onEndReachedThresholdPx={300}
+        renderEmptyList={() => (
+          <FixedListViewEmpty icon="lake-inbox-empty" title="Nothing to see here" />
+        )}
         loading={{
-          isLoading: showFakeLoader,
+          isLoading: forceIsLoading || showFakeLoader,
           count: 5,
         }}
         {...props}
