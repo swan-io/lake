@@ -95,6 +95,7 @@ export type LakeTagInputProps = Merge<
     disabled?: boolean;
     valid?: boolean;
     hideErrors?: boolean;
+    validateOnBlur?: boolean;
     help?: string;
     validator?: (value: string) => boolean;
     values: string[];
@@ -111,6 +112,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       validator = () => true,
       onFocus: originalOnFocus,
       onBlur: originalOnBlur,
+      validateOnBlur = true,
       values,
       onValuesChanged,
       readOnly = false,
@@ -153,6 +155,10 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
 
     const onTextInputKeyPress = useCallback(
       ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        if (disabled || readOnly) {
+          return;
+        }
+
         match({ key: nativeEvent.key, input: inputRef.current })
           .with({ key: "Backspace", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
             if (isNullishOrEmpty(input.value)) {
@@ -165,7 +171,7 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
             }
           });
       },
-      [onValuesChanged, pushNewValues, values],
+      [onValuesChanged, pushNewValues, values, disabled, readOnly],
     );
 
     const autoFocus = useCallback(() => {
@@ -182,10 +188,19 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
 
     const onBlur = useCallback(
       (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+        const input = inputRef.current;
+        if (
+          input instanceof HTMLInputElement &&
+          isNotNullishOrEmpty(input.value) &&
+          validateOnBlur
+        ) {
+          pushNewValues([input.value]);
+        }
+
         setIsFocused(false);
         originalOnBlur?.(event);
       },
-      [originalOnBlur],
+      [pushNewValues, originalOnBlur, validateOnBlur],
     );
 
     const mergedRef = useMergeRefs(inputRef, forwardRef);
