@@ -29,7 +29,7 @@ const toResult = <Data>({
 export const useUrqlMutation = <Data, Variables extends AnyVariables>(
   query: TypedDocumentNode<Data, Variables>,
 ) => {
-  const [{ fetching, data, error }, execute] = useMutation<Data, Variables>(query);
+  const [{ fetching, data, error }, execute] = useMutation(query);
 
   return [
     useMemo((): AsyncData<Result<Data, Error>> => {
@@ -44,12 +44,9 @@ export const useUrqlMutation = <Data, Variables extends AnyVariables>(
     }, [fetching, data, error]),
 
     useCallback(
-      (
-        input: Variables,
-        context?: Partial<OperationContext>,
-      ): Future<Result<Data, Error | CombinedError>> =>
-        Future.fromPromise(execute(input, context))
-          .mapError(error => error as Error) // Only used to cast error
+      (variables: Variables, context?: Partial<OperationContext>) =>
+        Future.fromPromise(execute(variables, context))
+          .mapError(error => error as CombinedError)
           .mapOkToResult(toResult),
       [execute],
     ),
