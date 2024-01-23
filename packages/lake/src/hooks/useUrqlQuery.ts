@@ -10,9 +10,11 @@ type Query<Data> = {
   reload: () => void;
 };
 
+const EMPTY_DEPENDENCY_LIST: DependencyList = [];
+
 export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   args: UseQueryArgs<Variables, Data>,
-  dependencyList: DependencyList,
+  dependencyList: DependencyList = EMPTY_DEPENDENCY_LIST,
 ): Query<Data> => {
   const [isDepsListUpdate, setIsDepsListUpdate] = useState(true);
   const [isForceReloading, setIsForceReloading] = useState(false);
