@@ -485,7 +485,7 @@ function FilterInput({
                 label={label}
                 render={id => (
                   <LakeTextInput
-                    nativeID={id}
+                    id={id}
                     error={error}
                     style={styles.input}
                     placeholder={placeholder}
