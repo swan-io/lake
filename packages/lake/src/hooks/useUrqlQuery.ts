@@ -1,5 +1,5 @@
 import { AsyncData, Result } from "@swan-io/boxed";
-import { DependencyList, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { DependencyList, useCallback, useEffect, useMemo, useState } from "react";
 import { AnyVariables, CombinedError, UseQueryArgs, useQuery } from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
@@ -16,9 +16,8 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   args: UseQueryArgs<Variables, Data>,
   dependencyList: DependencyList = EMPTY_DEPENDENCY_LIST,
 ): Query<Data> => {
-  const isFirstRender = useRef(true);
-
-  const [isDepsListUpdate, setIsDepsListUpdate] = useState(false);
+  const hasDependencyList = dependencyList !== EMPTY_DEPENDENCY_LIST;
+  const [isDepsListUpdate, setIsDepsListUpdate] = useState(hasDependencyList);
   const [isForceReloading, setIsForceReloading] = useState(false);
 
   const [{ data, fetching, error }, reexecute] = useQuery({
@@ -27,9 +26,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   });
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
+    if (hasDependencyList) {
       setIsDepsListUpdate(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +101,7 @@ type PaginatedQuery<Data> = {
 
 export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
   args: UseQueryArgs<Variables, Data>,
-  dependencyList: DependencyList,
+  dependencyList: DependencyList = EMPTY_DEPENDENCY_LIST,
 ): PaginatedQuery<Data> => {
   const [after, setAfter] = useState<string>();
 
