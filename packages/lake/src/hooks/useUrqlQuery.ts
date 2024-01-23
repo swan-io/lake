@@ -104,8 +104,8 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
     isForceReloading,
     data,
     nextData,
-    reload: originalReload,
-  } = useUrqlQuery<Data, Variables>(
+    reload: baseReload,
+  } = useUrqlQuery(
     { ...args, variables: { ...args.variables, after } as Variables },
     dependencyList,
   );
@@ -117,8 +117,8 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
 
   const reload = useCallback(() => {
     setAfter(undefined);
-    originalReload();
-  }, [originalReload]);
+    baseReload();
+  }, [baseReload]);
 
   return {
     isForceReloading,
