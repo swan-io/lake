@@ -14,7 +14,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   args: UseQueryArgs<Variables, Data>,
   dependencyList: DependencyList,
 ): Query<Data> => {
-  const [haveParamsChanged, setHaveParamsChanged] = useState(false);
+  const [isDepsListUpdate, setIsDepsListUpdate] = useState(true);
   const [isForceReloading, setIsForceReloading] = useState(false);
 
   const [{ data, fetching, error }, reexecute] = useQuery({
@@ -22,22 +22,22 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
     context: useMemo(() => ({ ...args.context, suspense: false }), [args.context]),
   });
 
-  const reload = useCallback(() => {
-    setIsForceReloading(true);
-    reexecute({ requestPolicy: "network-only" });
-  }, [reexecute]);
-
   useEffect(() => {
-    setHaveParamsChanged(true);
+    setIsDepsListUpdate(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencyList);
 
   useEffect(() => {
     if (!fetching) {
-      setHaveParamsChanged(false);
+      setIsDepsListUpdate(false);
       setIsForceReloading(false);
     }
   }, [fetching]);
+
+  const reload = useCallback(() => {
+    setIsForceReloading(true);
+    reexecute({ requestPolicy: "network-only" });
+  }, [reexecute]);
 
   const okResult = useMemo(
     () => (isNullish(data) ? null : AsyncData.Done(Result.Ok<Data, CombinedError>(data))),
@@ -49,7 +49,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
   );
 
   const initialFetching = isNullish(okResult) && isNullish(errorResult);
-  const shouldResetState = haveParamsChanged || isForceReloading;
+  const shouldResetState = isDepsListUpdate || isForceReloading;
 
   if (fetching && (initialFetching || shouldResetState)) {
     return {
