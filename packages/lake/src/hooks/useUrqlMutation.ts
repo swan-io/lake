@@ -32,7 +32,7 @@ export const useUrqlMutation = <Data, Variables extends AnyVariables>(
   const [{ fetching, data, error }, execute] = useMutation(query);
 
   return [
-    useMemo((): AsyncData<Result<Data, Error>> => {
+    useMemo((): AsyncData<Result<Data, CombinedError>> => {
       if (fetching) {
         return AsyncData.Loading();
       }
