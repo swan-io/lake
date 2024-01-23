@@ -370,6 +370,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: spacings[48],
+    minHeight: "100%",
   },
   emptyList: {
     flexDirection: "column",
