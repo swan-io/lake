@@ -6,6 +6,11 @@ export const stubFalse = (): false => false;
 export const stubTrue = (): true => true;
 export const unionToArray = <T extends PropertyKey>(object: Record<T, true>) => Dict.keys(object);
 
+export const getUnionGuard = <T extends PropertyKey>(object: Record<T, true>) => {
+  const set = new Set<unknown>(unionToArray<T>(object));
+  return (value: unknown): value is T => set.has(value);
+};
+
 export const memoize = <Input extends Array<unknown>, Output>(
   func: (...input: Input) => Output,
   getCacheKey: (...input: Input) => string,

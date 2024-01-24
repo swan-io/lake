@@ -1,6 +1,12 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { useCallback, useMemo } from "react";
-import { AnyVariables, CombinedError, TypedDocumentNode, useMutation } from "urql";
+import {
+  AnyVariables,
+  CombinedError,
+  OperationContext,
+  TypedDocumentNode,
+  useMutation,
+} from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
 
 const toResult = <Data>({
@@ -23,10 +29,10 @@ const toResult = <Data>({
 export const useUrqlMutation = <Data, Variables extends AnyVariables>(
   query: TypedDocumentNode<Data, Variables>,
 ) => {
-  const [{ fetching, data, error }, execute] = useMutation<Data, Variables>(query);
+  const [{ fetching, data, error }, execute] = useMutation(query);
 
   return [
-    useMemo((): AsyncData<Result<Data, Error>> => {
+    useMemo((): AsyncData<Result<Data, CombinedError>> => {
       if (fetching) {
         return AsyncData.Loading();
       }
@@ -38,9 +44,9 @@ export const useUrqlMutation = <Data, Variables extends AnyVariables>(
     }, [fetching, data, error]),
 
     useCallback(
-      (input: Variables): Future<Result<Data, Error | CombinedError>> =>
-        Future.fromPromise(execute(input))
-          .mapError(error => error as Error) // Only used to cast error
+      (variables: Variables, context?: Partial<OperationContext>) =>
+        Future.fromPromise(execute(variables, context))
+          .mapError(error => error as CombinedError)
           .mapOkToResult(toResult),
       [execute],
     ),
