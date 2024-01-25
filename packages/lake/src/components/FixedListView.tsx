@@ -1059,7 +1059,7 @@ export const FixedListView = <T, ExtraInfo>({
     [viewId],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const renderedRangeStartIndex = Math.max(
       0,
       Math.floor((currentScrollY.current - renderThreshold) / totalRowHeight),
