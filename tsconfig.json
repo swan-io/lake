@@ -4,7 +4,7 @@
   "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "module": "ESNext",
-    "target": "ESNext",
+    "target": "ES2019",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "react-jsx",
     "moduleResolution": "Node",
