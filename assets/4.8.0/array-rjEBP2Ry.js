@@ -1,0 +1,2 @@
+const c=t=>t[0],i=t=>t[t.length-1],u=(t,e)=>{let n=0,s=t.length;for(;;){const r=n+Math.round((s-n)/2),o=t[r];if(r===s||r===n)return o===e?n:-1;if(o===e)return r;if(o!=null&&e!=null){if(o>e){s=r;continue}if(o<e){n=r;continue}}}},f=(t,e)=>{const n={};return t.forEach(s=>{const r=e(s);n[r]=[...n[r]??[],s]}),n},d=(t,e)=>{const n=new Set(e);return t.filter(s=>n.has(s))};export{c as f,f as g,d as i,i as l,u as s};
+//# sourceMappingURL=array-rjEBP2Ry.js.map
