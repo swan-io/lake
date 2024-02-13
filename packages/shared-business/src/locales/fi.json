@@ -81,6 +81,7 @@
   "datePicker.month.previous": "Edellinen kuukausi",
   "datePicker.month.september": "Syyskuu",
   "error.generic": "Virhe tapahtui",
+  "error.iban.invalid": "IBAN-tilinumero ei näytä olevan oikein. Yritä syöttää se uudelleen.",
   "error.network.500": "Sisäinen palvelinvirhe",
   "error.network.503": "Palvelua ei saatavilla",
   "error.requiredField": "Vaadittu kenttä",

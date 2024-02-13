@@ -81,6 +81,7 @@
   "datePicker.month.previous": "Mês anterior",
   "datePicker.month.september": "Setembro",
   "error.generic": "Ocorreu um erro",
+  "error.iban.invalid": "Este IBAN não parece correto. Tente inserir novamente.",
   "error.network.500": "Erro interno do servidor",
   "error.network.503": "Serviço indisponível",
   "error.requiredField": "Este campo é obrigatório",

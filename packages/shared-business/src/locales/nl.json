@@ -81,6 +81,7 @@
   "datePicker.month.previous": "Vorige maand",
   "datePicker.month.september": "September",
   "error.generic": "Er is een fout opgetreden",
+  "error.iban.invalid": "Deze IBAN lijkt niet juist. Probeer het nog eens.",
   "error.network.500": "Interne Server Fout",
   "error.network.503": "Dienst niet beschikbaar",
   "error.requiredField": "Dit veld is verplicht",
