@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@formatjs/intl": "^2.10.0",
-    "@googlemaps/js-api-loader": "1.16.2",
     "@placekit/client-js": "^2.2.0",
     "@swan-io/boxed": "^2.0.0",
     "dayjs": "^1.11.10",
