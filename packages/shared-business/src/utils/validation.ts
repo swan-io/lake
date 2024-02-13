@@ -1,4 +1,5 @@
 import { noop } from "@swan-io/lake/src/utils/function";
+import { isValid as isValidIban } from "iban";
 import { Validator } from "react-ux-form";
 import { match } from "ts-pattern";
 import { t } from "./i18n";
@@ -107,3 +108,11 @@ export const validateCompanyTaxNumber =
       })
       .otherwise(noop);
   };
+
+export { printFormat as printIbanFormat } from "iban";
+
+export const validateIban = (iban: string) => {
+  if (!isValidIban(iban)) {
+    return t("error.iban.invalid");
+  }
+};
