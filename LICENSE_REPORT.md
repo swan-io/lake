@@ -9,12 +9,14 @@ Name | Version | License | URL | VendorUrl | VendorName
 @react-three/fiber | 8.15.16 | MIT | https://github.com/pmndrs/react-three-fiber.git | https://github.com/pmndrs/react-three-fiber#readme | Paul Henschel
 @testing-library/react | 14.2.1 | MIT | https://github.com/testing-library/react-testing-library | https://github.com/testing-library/react-testing-library#readme | Kent C. Dodds
 @testing-library/user-event | 14.5.2 | MIT | https://github.com/testing-library/user-event | https://github.com/testing-library/user-event#readme | Giorgio Polvara
+@types/iban | 0.0.35 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/iban | Unknown
 @types/react | 18.2.55 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react | Unknown
 @types/react-dom | 18.2.19 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom | Unknown
 @types/react-native | 0.72.8 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-native | Unknown
 @types/three | 0.161.2 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three | Unknown
 @types/uuid | 9.0.8 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/uuid | Unknown
 dayjs | 1.11.10 | MIT | https://github.com/iamkun/dayjs.git | https://day.js.org/ | iamkun
+iban | 0.0.14 | MIT | https://github.com/arhs/iban.js | Unknown | Laurent VB
 jsdom | 23.2.0 | MIT | https://github.com/jsdom/jsdom.git | Unknown | Unknown
 polished | 4.3.1 | MIT | https://github.com/styled-components/polished.git | https://polished.js.org/ | Brian Hough
 prism-react-renderer | 2.3.1 | MIT | https://github.com/FormidableLabs/prism-react-renderer | Unknown | Unknown
@@ -32,7 +34,6 @@ ts-pattern | 5.0.6 | MIT | ssh://git@github.com/gvergnaud/ts-pattern.git | https
 urql | 4.0.6 | MIT | https://github.com/urql-graphql/urql.git | https://formidable.com/open-source/urql/docs/ | urql GraphQL Contributors
 uuid | 9.0.1 | MIT | https://github.com/uuidjs/uuid.git | Unknown | Unknown
 vitest | 1.2.2 | MIT | https://github.com/vitest-dev/vitest.git | https://github.com/vitest-dev/vitest#readme | Anthony Fu
-@googlemaps/js-api-loader | 1.16.2 | Apache-2.0 | https://github.com/googlemaps/js-api-loader.git | https://github.com/googlemaps/js-api-loader | Justin Poehnelt
 type-fest | 2.19.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 0.20.2 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 3.13.1 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
