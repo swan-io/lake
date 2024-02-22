@@ -1,5 +1,8 @@
 import { Meta } from "@storybook/react";
-import { SupportingDocument } from "@swan-io/shared-business/src/components/SupportingDocument";
+import {
+  Document,
+  SupportingDocument,
+} from "@swan-io/shared-business/src/components/SupportingDocument";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -16,7 +19,7 @@ export default {
 } as Meta<typeof SupportingDocument>;
 
 export const Variations = () => {
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
       <StoryPart title="Default" style={styles.storyPart}>
