@@ -2684,7 +2684,7 @@
     "@types/express" "^4.7.0"
     file-system-cache "2.3.0"
 
-"@swan-io/boxed@^2.0.1":
+"@swan-io/boxed@^2.0.0", "@swan-io/boxed@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.0.1.tgz#7b71f6beeae378ecba7d96766f2595f9e48dc76a"
   integrity sha512-Jc6PSzygUqMVlqpm4sYlFDz2CFs3gs98Qi1LBGuvb1oo6232ZVcknhcdxI3XORT0GnsMuKpsfMmvday8iU2lJw==
@@ -2697,6 +2697,13 @@
     "@emotion/hash" "^0.9.1"
     history "^5.3.0"
     use-sync-external-store "^1.2.0"
+
+"@swan-io/use-form@^2.0.0-rc.0":
+  version "2.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.0-rc.0.tgz#94bb1d3abef4534e1e4299abe2022d79d021874b"
+  integrity sha512-pSlMYuM97g+EHvE+x9H+hMN26bY7iJikKKbejwujPhc9pYQLZPpa3cV7IhyyJDB1fu9ENutJzBregUjlvleqHQ==
+  dependencies:
+    "@swan-io/boxed" "^2.0.0"
 
 "@swc/core-darwin-arm64@1.4.2":
   version "1.4.2"
@@ -7661,13 +7668,6 @@ react-use-measure@^2.1.1:
   integrity sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==
   dependencies:
     debounce "^1.2.1"
-
-react-ux-form@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/react-ux-form/-/react-ux-form-1.5.0.tgz#a00a2fb903fa532dd8a868228261dbe991cf0b53"
-  integrity sha512-hUOmgcFXWqHYFDuKCuyEgQSh63KujFHjAEAKpanYa5lWfhO2JKlLqORnGyRpvw5wc+xIAJ/67KKauv2pbswxww==
-  dependencies:
-    use-sync-external-store "^1.2.0"
 
 react@^18.2.0:
   version "18.2.0"

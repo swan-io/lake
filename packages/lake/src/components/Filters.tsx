@@ -3,10 +3,10 @@ import {
   DatePickerDate,
   DatePickerModal,
 } from "@swan-io/shared-business/src/components/DatePicker";
+import { ValidatorResult, useForm } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, Text, View } from "react-native";
-import { ValidatorResult, hasDefinedKeys, useForm } from "react-ux-form";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
 import { colors, shadows, spacings } from "../constants/design";
@@ -409,7 +409,7 @@ function FilterDate({
           const formattedValue = dayjs(value, dateFormat, true).toJSON();
           onSave(formattedValue);
         }}
-        onDissmiss={close}
+        onDismiss={close}
       />
     </View>
   );
@@ -450,12 +450,14 @@ function FilterInput({
   });
 
   const onSubmit = () => {
-    submitForm(values => {
-      if (hasDefinedKeys(values, ["input"])) {
-        setValue(values.input);
-        onSave(values.input);
-        close();
-      }
+    submitForm({
+      onSuccess: ({ input }) => {
+        if (input.isSome()) {
+          setValue(input.get());
+          onSave(input.get());
+          close();
+        }
+      },
     });
   };
 

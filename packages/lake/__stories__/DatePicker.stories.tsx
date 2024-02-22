@@ -136,7 +136,7 @@ export const ButtonWithModal = () => {
             confirmLabel="Select"
             cancelLabel="Cancel"
             onChange={setValue}
-            onDissmiss={() => setIsOpened(false)}
+            onDismiss={() => setIsOpened(false)}
           />
         </StoryPart>
       </StoryBlock>
@@ -191,7 +191,7 @@ export const ButtonWithRangePopover = () => {
             confirmLabel="Select"
             cancelLabel="Cancel"
             onChange={setValue}
-            onDissmiss={() => setIsOpened(false)}
+            onDismiss={() => setIsOpened(false)}
           />
         </StoryPart>
       </StoryBlock>

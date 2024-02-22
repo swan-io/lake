@@ -1,8 +1,8 @@
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Space } from "@swan-io/lake/src/components/Space";
+import { Form } from "@swan-io/use-form";
 import { useCallback } from "react";
-import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
 import { locale, t } from "../utils/i18n";
 import { AddressDetail, PlacekitAddressSearchInput } from "./PlacekitAddressSearchInput";
