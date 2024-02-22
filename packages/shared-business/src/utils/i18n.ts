@@ -164,7 +164,9 @@ export const rifmDateProps: RifmProps = getRifmProps({
 });
 
 const translationKeys = Object.keys(translationEN);
-const isTranslationKey = (key: string): key is TranslationKey => translationKeys.includes(key);
+
+export const isTranslationKey = (value: unknown): value is TranslationKey =>
+  typeof value === "string" && translationKeys.includes(value as TranslationKey);
 
 export const translateError = (error: unknown) => {
   const key = match(error)

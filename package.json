@@ -33,6 +33,7 @@
     "sort-locales": "tsx scripts/locales/sort.ts",
     "remove-unused-locales": "tsx scripts/locales/removeUnused.ts",
     "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts",
+    "extract-supporting-document-purposes": "tsx -r dotenv/config scripts/graphql/extractSupportingDocumentPurposes.ts",
     "configure-hooks": "git config --local core.hooksPath .hooks"
   },
   "lint-staged": {
