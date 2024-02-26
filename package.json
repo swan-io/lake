@@ -75,7 +75,7 @@
     "semver": "^7.6.0",
     "storybook": "^7.6.14",
     "tiktoken-node": "^0.0.7",
-    "ts-pattern": "^5.0.6",
+    "ts-pattern": "^5.0.8",
     "tsx": "^4.7.1",
     "type-fest": "^4.10.2",
     "typescript": "^5.3.3",

@@ -1,4 +1,5 @@
 import { Dict } from "@swan-io/boxed";
+import { P } from "ts-pattern";
 
 export const identity = <T>(value: T): T => value;
 export const noop = () => {};
@@ -9,6 +10,13 @@ export const unionToArray = <T extends PropertyKey>(object: Record<T, true>) => 
 export const getUnionGuard = <T extends PropertyKey>(object: Record<T, true>) => {
   const set = new Set<unknown>(unionToArray<T>(object));
   return (value: unknown): value is T => set.has(value);
+};
+
+export const getUnionUtils = <T extends PropertyKey>(object: Record<T, true>) => {
+  const array = Dict.keys(object);
+  const set = new Set(array);
+  const is = (value: unknown): value is T => set.has(value as T);
+  return { array, set, is, P: P.when(is) };
 };
 
 export const memoize = <Input extends Array<unknown>, Output>(
