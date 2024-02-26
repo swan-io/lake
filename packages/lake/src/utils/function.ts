@@ -12,7 +12,7 @@ export const getUnionGuard = <T extends PropertyKey>(object: Record<T, true>) =>
   return (value: unknown): value is T => set.has(value);
 };
 
-export const union = <T extends PropertyKey>(object: Record<T, true>) => {
+export const deriveUnion = <T extends PropertyKey>(object: Record<T, true>) => {
   const array = Dict.keys(object);
   const set = new Set(array);
   const is = (value: unknown): value is T => set.has(value as T);
