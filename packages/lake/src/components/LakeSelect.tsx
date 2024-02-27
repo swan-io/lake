@@ -30,7 +30,7 @@ import {
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
-import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
+import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon, IconName } from "./Icon";
@@ -157,8 +157,7 @@ export type SelectProps<V> = {
   disabled?: boolean;
   value?: V;
   onValueChange: (value: V) => void;
-  isItemDisabled?: (value: V) => boolean;
-  disabledItemTooltip?: string;
+  isItemDisabled?: (value: V) => boolean | string;
   hideErrors?: boolean;
   id?: string;
   error?: string;
@@ -185,7 +184,6 @@ const LakeSelectWithRef = <V,>(
     icon,
     onValueChange,
     isItemDisabled,
-    disabledItemTooltip,
     PopoverFooter,
     style,
   }: SelectProps<V>,
@@ -394,18 +392,18 @@ const LakeSelectWithRef = <V,>(
             return (
               <LakeTooltip
                 placement="right"
-                content={disabledItemTooltip}
-                disabled={!isDisabled && isNotNullishOrEmpty(disabledItemTooltip)}
+                content={isDisabled}
+                disabled={typeof isDisabled !== "string"}
               >
                 <Pressable
                   ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
                   onKeyDown={onKeyDown}
-                  disabled={isDisabled}
+                  disabled={isDisabled !== false}
                   style={({ hovered, focused }) => [
                     styles.item,
                     (hovered || isSelected) && styles.itemHighlighted,
                     focused && styles.itemFocused,
-                    isDisabled && styles.itemDisabled,
+                    isDisabled !== false && styles.itemDisabled,
                   ]}
                   role="option"
                   aria-selected={true}
