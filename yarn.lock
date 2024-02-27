@@ -8663,10 +8663,10 @@ ts-dedent@^2.0.0, ts-dedent@^2.2.0:
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
 
-ts-pattern@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.6.tgz#53af94065c761ec9f87b9113e52e6b884f81d60d"
-  integrity sha512-Y+jOjihlFriWzcBjncPCf2/am+Hgz7LtsWs77pWg5vQQKLQj07oNrJryo/wK2G0ndNaoVn2ownFMeoeAuReu3Q==
+ts-pattern@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.8.tgz#47fa76776350bfbffaa6252a69ce5990ae05db95"
+  integrity sha512-aafbuAQOTEeWmA7wtcL94w6I89EgLD7F+IlWkr596wYxeb0oveWDO5dQpv85YP0CGbxXT/qXBIeV6IYLcoZ2uA==
 
 tslib@^1.13.0:
   version "1.14.1"
