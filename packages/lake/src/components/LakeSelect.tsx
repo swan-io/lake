@@ -30,11 +30,12 @@ import {
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
+import { LakeTooltip } from "./LakeTooltip";
 import { Popover } from "./Popover";
 import { Pressable } from "./Pressable";
 import { Separator } from "./Separator";
@@ -105,6 +106,9 @@ const styles = StyleSheet.create({
     borderRadius: radii[4],
     outlineStyle: "none",
   },
+  itemDisabled: {
+    opacity: 0.5,
+  },
   selectListTitle: {
     paddingHorizontal: spacings[24],
     paddingVertical: spacings[12],
@@ -153,6 +157,8 @@ export type SelectProps<V> = {
   disabled?: boolean;
   value?: V;
   onValueChange: (value: V) => void;
+  isItemDisabled?: (value: V) => boolean;
+  disabledItemTooltip?: string;
   hideErrors?: boolean;
   id?: string;
   error?: string;
@@ -178,6 +184,8 @@ const LakeSelectWithRef = <V,>(
     hideErrors = false,
     icon,
     onValueChange,
+    isItemDisabled,
+    disabledItemTooltip,
     PopoverFooter,
     style,
   }: SelectProps<V>,
@@ -381,45 +389,54 @@ const LakeSelectWithRef = <V,>(
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
             const isSelected = value === item.value;
+            const isDisabled = isNotNullish(isItemDisabled) ? isItemDisabled(item.value) : false;
 
             return (
-              <Pressable
-                ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
-                onKeyDown={onKeyDown}
-                style={({ hovered, focused }) => [
-                  styles.item,
-                  (hovered || isSelected) && styles.itemHighlighted,
-                  focused && styles.itemFocused,
-                ]}
-                role="option"
-                aria-selected={true}
-                onPress={() => {
-                  onValueChange(item.value);
-                  close();
-                }}
+              <LakeTooltip
+                placement="right"
+                content={disabledItemTooltip}
+                disabled={!isDisabled && isNotNullishOrEmpty(disabledItemTooltip)}
               >
-                {isNotNullish(item.icon) && (
-                  <>
-                    {item.icon}
-
-                    <Space width={12} />
-                  </>
-                )}
-
-                <LakeText
-                  color={colors.gray[900]}
-                  numberOfLines={1}
-                  style={[styles.itemText, isSelected && styles.selected]}
+                <Pressable
+                  ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
+                  onKeyDown={onKeyDown}
+                  disabled={isDisabled}
+                  style={({ hovered, focused }) => [
+                    styles.item,
+                    (hovered || isSelected) && styles.itemHighlighted,
+                    focused && styles.itemFocused,
+                    isDisabled && styles.itemDisabled,
+                  ]}
+                  role="option"
+                  aria-selected={true}
+                  onPress={() => {
+                    onValueChange(item.value);
+                    close();
+                  }}
                 >
-                  {item.name}
-                </LakeText>
+                  {isNotNullish(item.icon) && (
+                    <>
+                      {item.icon}
 
-                <Fill minWidth={12} />
+                      <Space width={12} />
+                    </>
+                  )}
 
-                {isSelected && (
-                  <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
-                )}
-              </Pressable>
+                  <LakeText
+                    color={colors.gray[900]}
+                    numberOfLines={1}
+                    style={[styles.itemText, isSelected && styles.selected]}
+                  >
+                    {item.name}
+                  </LakeText>
+
+                  <Fill minWidth={12} />
+
+                  {isSelected && (
+                    <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
+                  )}
+                </Pressable>
+              </LakeTooltip>
             );
           }}
         />
