@@ -389,7 +389,7 @@ const LakeSelectWithRef = <V,>(
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
             const isSelected = value === item.value;
-            const isDisabled = isNotNullish(isItemDisabled) ? isItemDisabled(item.value) : false;
+            const isDisabled = isNotNullish(isItemDisabled) && isItemDisabled(item.value);
 
             return (
               <LakeTooltip
