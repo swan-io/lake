@@ -2698,10 +2698,10 @@
     history "^5.3.0"
     use-sync-external-store "^1.2.0"
 
-"@swan-io/use-form@^2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.0-rc.1.tgz#fe6dba8f3f36a0e4d31182a89ae5a107f8048184"
-  integrity sha512-ZuH+b/OeuuOXTqQ6PdNWtsHYB8hKNgURrqKoQY4uG4vI3xcSWJNQi6vkS8cYMAyowB1r3p7KH9sEtogN5H2bhQ==
+"@swan-io/use-form@^2.0.0-rc.2":
+  version "2.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.0-rc.2.tgz#8e7aad0257e16df2bbf5603f5e16b14820e399ee"
+  integrity sha512-F7uX/7dSbPgO4PhOk5IRKIIrKfSv7WcBRFd4UKaYrrFhvJbNg8pojNI2H8/1H8SyYwp8gCMJ3AcDUmuzovpJNg==
   dependencies:
     "@swan-io/boxed" "^2.0.0"
 
