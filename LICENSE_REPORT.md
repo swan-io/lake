@@ -28,7 +28,7 @@ react-native-web | 0.19.10 | MIT | git://github.com/necolas/react-native-web.git
 react-popper | 2.3.0 | MIT | https://github.com/popperjs/react-popper | https://popper.js.org/react-popper | Travis Arnold
 react-ux-form | 1.5.0 | MIT | https://github.com/swan-io/react-ux-form.git | https://github.com/swan-io/react-ux-form#readme | Mathieu Acthernoene
 rifm | 0.12.1 | MIT | https://github.com/istarkov/rifm.git | Unknown | istarkov
-three | 0.162.0 | MIT | https://github.com/mrdoob/three.js | https://threejs.org/ | mrdoob
+three | 0.161.0 | MIT | https://github.com/mrdoob/three.js | https://threejs.org/ | mrdoob
 ts-dedent | 2.2.0 | MIT | https://github.com/tamino-martinius/node-ts-dedent.git | Unknown | Tamino Martinius
 ts-pattern | 5.0.8 | MIT | ssh://git@github.com/gvergnaud/ts-pattern.git | https://github.com/gvergnaud/ts-pattern#readme | Gabriel Vergnaud
 urql | 4.0.6 | MIT | https://github.com/urql-graphql/urql.git | https://formidable.com/open-source/urql/docs/ | urql GraphQL Contributors
