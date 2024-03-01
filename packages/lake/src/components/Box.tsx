@@ -1,18 +1,17 @@
 import { forwardRef, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from "react-native";
 
-/* eslint-disable react-native/no-unused-styles */
-const directionStyles = StyleSheet.create({
-  columnReverse: { flexDirection: "column-reverse" },
-  row: { flexDirection: "row" },
-  rowReverse: { flexDirection: "row-reverse" },
-});
-
 const alignItemsStyles = StyleSheet.create({
   baseline: { alignItems: "baseline" },
   center: { alignItems: "center" },
   end: { alignItems: "flex-end" },
   start: { alignItems: "flex-start" },
+});
+
+const directionStyles = StyleSheet.create({
+  columnReverse: { flexDirection: "column-reverse" },
+  row: { flexDirection: "row" },
+  rowReverse: { flexDirection: "row-reverse" },
 });
 
 const justifyContentStyles = StyleSheet.create({
@@ -23,24 +22,46 @@ const justifyContentStyles = StyleSheet.create({
   spaceAround: { justifyContent: "space-around" },
   spaceEvenly: { justifyContent: "space-evenly" },
 });
-/* eslint-enable react-native/no-unused-styles */
 
-type BoxDirection = keyof typeof directionStyles | "column";
+const wrapStyles = StyleSheet.create({
+  wrap: { flexWrap: "wrap" },
+  wrapReverse: { flexWrap: "wrap-reverse" },
+});
+
+const otherStyles = StyleSheet.create({
+  grow1: { flexGrow: 1 },
+  shrink1: { flexShrink: 1 },
+});
+
 type BoxAlignItems = keyof typeof alignItemsStyles | "stretch";
+type BoxDirection = keyof typeof directionStyles | "column";
 type BoxJustifyContent = keyof typeof justifyContentStyles | "normal";
+type BoxWrap = keyof typeof wrapStyles | "nowrap";
 
 export type BoxProps = ViewProps & {
   alignItems?: BoxAlignItems;
   children?: ReactNode;
   direction?: BoxDirection;
   justifyContent?: BoxJustifyContent;
+  wrap?: BoxWrap;
+  grow?: number;
+  shrink?: number;
   style?: StyleProp<ViewStyle>;
 };
 
 export const Box = forwardRef<View, BoxProps>(
   (
-    // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/View/index.js#L146
-    { alignItems = "stretch", direction = "column", justifyContent = "normal", style, ...props },
+    // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.19.10/packages/react-native-web/src/exports/View/index.js#L146
+    {
+      alignItems = "stretch",
+      direction = "column",
+      justifyContent = "normal",
+      wrap = "nowrap",
+      grow = 0,
+      shrink = 0,
+      style,
+      ...props
+    },
     forwardedRef,
   ) => (
     <View
@@ -50,6 +71,9 @@ export const Box = forwardRef<View, BoxProps>(
         alignItems !== "stretch" && alignItemsStyles[alignItems],
         direction !== "column" && directionStyles[direction],
         justifyContent !== "normal" && justifyContentStyles[justifyContent],
+        wrap !== "nowrap" && wrapStyles[wrap],
+        grow !== 0 && (grow === 1 ? otherStyles.grow1 : { flexGrow: grow }),
+        shrink !== 0 && (shrink === 1 ? otherStyles.shrink1 : { flexShrink: shrink }),
         style,
       ]}
     />
