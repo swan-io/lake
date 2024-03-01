@@ -620,7 +620,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
   }
 
   return (
-    <Stack direction="row" wrap={true}>
+    <Stack direction="row" wrap="wrap">
       {openedFilters.map(filterName => {
         const filterDefinition = definition[filterName];
 
