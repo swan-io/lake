@@ -30,7 +30,7 @@ import {
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
 import { Icon, IconName } from "./Icon";
@@ -157,7 +157,7 @@ export type SelectProps<V> = {
   disabled?: boolean;
   value?: V;
   onValueChange: (value: V) => void;
-  isItemDisabled?: (value: V) => boolean | string;
+  disabledItems?: { value: V; message?: string }[];
   hideErrors?: boolean;
   id?: string;
   error?: string;
@@ -183,7 +183,7 @@ const LakeSelectWithRef = <V,>(
     hideErrors = false,
     icon,
     onValueChange,
-    isItemDisabled,
+    disabledItems = [],
     PopoverFooter,
     style,
   }: SelectProps<V>,
@@ -387,23 +387,23 @@ const LakeSelectWithRef = <V,>(
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
             const isSelected = value === item.value;
-            const isDisabled = isNotNullish(isItemDisabled) && isItemDisabled(item.value);
+            const isDisabled = disabledItems.find(({ value }) => value === item.value);
 
             return (
               <LakeTooltip
                 placement="right"
-                content={isDisabled}
-                disabled={typeof isDisabled !== "string"}
+                content={isDisabled?.message}
+                disabled={isNullishOrEmpty(isDisabled?.message)}
               >
                 <Pressable
                   ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
                   onKeyDown={onKeyDown}
-                  disabled={isDisabled !== false}
+                  disabled={isNotNullish(isDisabled)}
                   style={({ hovered, focused }) => [
                     styles.item,
                     (hovered || isSelected) && styles.itemHighlighted,
                     focused && styles.itemFocused,
-                    isDisabled !== false && styles.itemDisabled,
+                    isNotNullish(isDisabled) && styles.itemDisabled,
                   ]}
                   role="option"
                   aria-selected={true}
