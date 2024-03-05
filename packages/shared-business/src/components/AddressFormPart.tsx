@@ -1,9 +1,7 @@
-import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { Form } from "react-ux-form";
 import { CountryCCA3 } from "../constants/countries";
 import { locale, t } from "../utils/i18n";
@@ -15,46 +13,25 @@ type AddressField = {
   postalCode: string;
 };
 
-type FormProps = Pick<Form<AddressField>, "Field" | "setFieldValue" | "listenFields">;
+type FormProps = Pick<Form<AddressField>, "Field" | "setFieldValue">;
 
 type Props = {
-  initialAddress: string;
-  initialCity: string;
-  initialPostalCode: string;
   country: CountryCCA3;
   label: string;
   optionalLabel?: string;
   placeholder?: string;
-  isLarge: boolean;
   apiKey: string;
 } & FormProps;
 
 export const AddressFormPart = ({
-  initialAddress,
-  initialCity,
-  initialPostalCode,
   country,
   label,
   optionalLabel,
   placeholder,
   Field,
   setFieldValue,
-  listenFields,
-  isLarge,
   apiKey,
 }: Props) => {
-  const [manualModeEnabled, setManualMode] = useBoolean(
-    initialAddress !== "" || initialCity !== "" || initialPostalCode !== "",
-  );
-
-  useEffect(() => {
-    if (!manualModeEnabled) {
-      return listenFields(["city", "postalCode"], () => {
-        setManualMode.on();
-      });
-    }
-  }, [manualModeEnabled, listenFields, setManualMode]);
-
   const onSuggestion = useCallback(
     (place: AddressDetail) => {
       setFieldValue("address", place.completeAddress);
@@ -62,9 +39,8 @@ export const AddressFormPart = ({
       if (place.postalCode != null) {
         setFieldValue("postalCode", place.postalCode);
       }
-      setManualMode.on();
     },
-    [setManualMode, setFieldValue],
+    [setFieldValue],
   );
 
   return (
@@ -89,66 +65,49 @@ export const AddressFormPart = ({
                 onSuggestion={onSuggestion}
               />
             )}
-            actions={
-              !manualModeEnabled && isLarge ? (
-                <LakeButton mode="secondary" size="small" onPress={setManualMode.on}>
-                  {t("addressFormPart.setManual")}
-                </LakeButton>
-              ) : null
-            }
           />
         )}
       </Field>
 
-      {!manualModeEnabled && !isLarge ? (
-        <LakeButton mode="secondary" size="small" onPress={setManualMode.on}>
-          {t("addressFormPart.setManual")}
-        </LakeButton>
-      ) : null}
+      <Space height={12} />
 
-      {manualModeEnabled ? (
-        <>
-          <Space height={12} />
-
-          <Field name="city">
-            {({ ref, value, valid, error, onChange }) => (
-              <LakeLabel
-                label={t("addressFormPart.cityLabel")}
-                render={id => (
-                  <LakeTextInput
-                    ref={ref}
-                    id={id}
-                    value={value}
-                    valid={valid}
-                    error={error}
-                    onChangeText={onChange}
-                  />
-                )}
+      <Field name="city">
+        {({ ref, value, valid, error, onChange }) => (
+          <LakeLabel
+            label={t("addressFormPart.cityLabel")}
+            render={id => (
+              <LakeTextInput
+                ref={ref}
+                id={id}
+                value={value}
+                valid={valid}
+                error={error}
+                onChangeText={onChange}
               />
             )}
-          </Field>
+          />
+        )}
+      </Field>
 
-          <Space height={12} />
+      <Space height={12} />
 
-          <Field name="postalCode">
-            {({ ref, value, valid, error, onChange }) => (
-              <LakeLabel
-                label={t("addressFormPart.postCodeLabel")}
-                render={id => (
-                  <LakeTextInput
-                    ref={ref}
-                    id={id}
-                    value={value}
-                    valid={valid}
-                    error={error}
-                    onChangeText={onChange}
-                  />
-                )}
+      <Field name="postalCode">
+        {({ ref, value, valid, error, onChange }) => (
+          <LakeLabel
+            label={t("addressFormPart.postCodeLabel")}
+            render={id => (
+              <LakeTextInput
+                ref={ref}
+                id={id}
+                value={value}
+                valid={valid}
+                error={error}
+                onChangeText={onChange}
               />
             )}
-          </Field>
-        </>
-      ) : null}
+          />
+        )}
+      </Field>
     </>
   );
 };
