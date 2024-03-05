@@ -39,7 +39,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-native-web": "^0.19.10",
-    "react-ux-form": "^1.5.0",
+    "@swan-io/use-form": "^2.0.0-rc.2",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.0.8",
     "urql": "^4.0.6",

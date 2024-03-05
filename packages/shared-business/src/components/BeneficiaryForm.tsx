@@ -1,3 +1,4 @@
+import { Option } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeLabelledCheckbox } from "@swan-io/lake/src/components/LakeCheckbox";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
@@ -9,10 +10,11 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { StepDots } from "@swan-io/lake/src/components/StepDots";
 import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { noop } from "@swan-io/lake/src/utils/function";
-import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { pick } from "@swan-io/lake/src/utils/object";
+import { Validator, combineValidators, useForm } from "@swan-io/use-form";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Validator, combineValidators, hasDefinedKeys, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
 import { v4 as uuid } from "uuid";
@@ -160,32 +162,6 @@ export const validateUbo = (
 
 type CapitalType = "none" | "direct" | "indirect" | "both";
 
-const getCapitalType = (
-  direct: boolean | undefined,
-  indirect: boolean | undefined,
-): CapitalType => {
-  if (direct === true && indirect === true) {
-    return "both";
-  }
-  if (direct === true) {
-    return "direct";
-  }
-  if (indirect === true) {
-    return "indirect";
-  }
-  return "none";
-};
-
-const getDirectAndIndirect = (capitalType: CapitalType): [boolean, boolean] => {
-  return match(capitalType)
-    .returnType<[boolean, boolean]>()
-    .with("both", () => [true, true])
-    .with("direct", () => [true, false])
-    .with("indirect", () => [false, true])
-    .with("none", () => [false, false])
-    .exhaustive();
-};
-
 type CapitalTypeCheckboxesProps = {
   value: CapitalType;
   onChange: (value: CapitalType) => void;
@@ -252,13 +228,13 @@ type FormValues = {
   birthCity: string;
   birthCityPostalCode: string;
   type: BeneficiaryType;
-  capitalType?: CapitalType;
-  totalCapitalPercentage?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  country?: CountryCCA3;
-  taxIdentificationNumber?: string;
+  capitalType: CapitalType | undefined;
+  totalCapitalPercentage: string | undefined;
+  address: string | undefined;
+  city: string | undefined;
+  postalCode: string | undefined;
+  country: CountryCCA3 | undefined;
+  taxIdentificationNumber: string | undefined;
 };
 
 const requiredStepFields = [
@@ -299,8 +275,8 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     });
 
     const commonStepValues = useRef<FormValues>();
-
     const initialBirthDate = initialState?.birthDate;
+
     const { Field, FieldsListener, setFieldValue, submitForm, listenFields, validateField } =
       useForm<FormValues>({
         firstName: {
@@ -339,13 +315,20 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
           validate: validateRequired,
         },
         capitalType: {
-          initialValue: getCapitalType(initialState?.direct, initialState?.indirect),
-          validate: (value, { getFieldState }) => {
-            const type = getFieldState("type");
-            if (type.value === "HasCapital" && value === "none") {
+          initialValue: match({
+            direct: initialState?.direct,
+            indirect: initialState?.indirect,
+          })
+            .returnType<CapitalType>()
+            .with({ direct: true, indirect: true }, () => "both")
+            .with({ direct: true }, () => "direct")
+            .with({ indirect: true }, () => "indirect")
+            .otherwise(() => "none"),
+
+          validate: (value, { getFieldValue }) => {
+            if (getFieldValue("type") === "HasCapital" && value === "none") {
               return t("beneficiaryForm.beneficiary.directOrIndirect");
             }
-            return undefined;
           },
         },
         totalCapitalPercentage: {
@@ -376,8 +359,9 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         },
         taxIdentificationNumber: {
           initialValue: initialState?.taxIdentificationNumber,
-          validate: (value, { getFieldState }) => {
-            const uboCountry = getFieldState("country").value;
+          validate: (value, { getFieldValue }) => {
+            const uboCountry = getFieldValue("country");
+
             if (accountCountry === "DEU" && uboCountry === "DEU") {
               return combineValidators(
                 validateNullableRequired,
@@ -396,7 +380,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
     useEffect(() => {
       if (initialState != null) {
         // submit form to validate all fields
-        submitForm(noop);
+        submitForm();
       }
     }, [initialState, submitForm]);
 
@@ -435,43 +419,55 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
         submit: () => {
           hasBeenSubmittedOnce.current = true;
 
-          submitForm(values => {
-            if (
-              step === "common" &&
-              isAddressRequired &&
-              hasDefinedKeys(values, requiredStepFields)
-            ) {
-              commonStepValues.current = values;
-              onStepChange("address");
-              return;
-            }
+          submitForm({
+            onSuccess: values => {
+              const firstStepValues = Option.allFromDict(pick(values, requiredStepFields));
 
-            const allStepsValues = { ...commonStepValues.current, ...values };
+              if (step === "common" && isAddressRequired && firstStepValues.isSome()) {
+                commonStepValues.current = {
+                  ...firstStepValues.get(),
 
-            if (hasDefinedKeys(allStepsValues, requiredStepFields)) {
-              const [direct, indirect] = getDirectAndIndirect(allStepsValues.capitalType ?? "none");
-              return onSave({
-                reference,
-                firstName: allStepsValues.firstName,
-                lastName: allStepsValues.lastName,
-                birthDate: encodeBirthDate(allStepsValues.birthDate),
-                birthCountryCode: allStepsValues.birthCountryCode,
-                birthCity: allStepsValues.birthCity,
-                birthCityPostalCode: allStepsValues.birthCityPostalCode,
-                type: allStepsValues.type,
-                indirect,
-                direct,
-                totalCapitalPercentage: isNotNullish(allStepsValues.totalCapitalPercentage)
-                  ? parseInt(allStepsValues.totalCapitalPercentage, 10)
-                  : undefined,
+                  capitalType: values.capitalType.getWithDefault(undefined),
+                  totalCapitalPercentage: values.totalCapitalPercentage.getWithDefault(undefined),
+                  address: values.address.getWithDefault(undefined),
+                  city: values.city.getWithDefault(undefined),
+                  postalCode: values.postalCode.getWithDefault(undefined),
+                  country: values.country.getWithDefault(undefined),
+                  taxIdentificationNumber: values.taxIdentificationNumber.getWithDefault(undefined),
+                };
 
-                residencyAddressLine1: allStepsValues.address,
-                residencyAddressCity: allStepsValues.city,
-                residencyAddressCountry: allStepsValues.country,
-                residencyAddressPostalCode: allStepsValues.postalCode,
-                taxIdentificationNumber: allStepsValues.taxIdentificationNumber,
-              });
-            }
+                return onStepChange("address");
+              }
+
+              const secondStepValues = Option.allFromDict(
+                pick({ ...commonStepValues.current, ...values }, requiredStepFields),
+              );
+
+              if (secondStepValues.isSome()) {
+                const { birthDate, ...rest } = secondStepValues.get();
+                const capitalType = values.capitalType.getWithDefault("none");
+
+                return onSave({
+                  ...rest,
+
+                  reference,
+                  birthDate: encodeBirthDate(birthDate),
+                  direct: capitalType === "both" || capitalType === "direct",
+                  indirect: capitalType === "both" || capitalType === "indirect",
+
+                  totalCapitalPercentage: values.totalCapitalPercentage
+                    .flatMap(value => Option.fromNullable(value))
+                    .map<number | undefined>(value => parseInt(value, 10))
+                    .getWithDefault(undefined),
+
+                  residencyAddressLine1: values.address.getWithDefault(undefined),
+                  residencyAddressCity: values.city.getWithDefault(undefined),
+                  residencyAddressCountry: values.country.getWithDefault(undefined),
+                  residencyAddressPostalCode: values.postalCode.getWithDefault(undefined),
+                  taxIdentificationNumber: values.taxIdentificationNumber.getWithDefault(undefined),
+                });
+              }
+            },
           });
         },
       };

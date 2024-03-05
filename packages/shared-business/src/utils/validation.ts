@@ -1,6 +1,6 @@
 import { noop } from "@swan-io/lake/src/utils/function";
+import { Validator } from "@swan-io/use-form";
 import { isValid as isValidIban } from "iban";
-import { Validator } from "react-ux-form";
 import { match } from "ts-pattern";
 import { t } from "./i18n";
 import { AccountCountry } from "./templateTranslations";

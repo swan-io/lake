@@ -6,6 +6,7 @@ import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { isNotNullishOrEmpty, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { FormConfig, Validator, useForm } from "@swan-io/use-form";
 import {
   ForwardedRef,
   Fragment,
@@ -16,7 +17,6 @@ import {
   useState,
 } from "react";
 import { StyleSheet } from "react-native";
-import { FormConfig, Validator, useForm } from "react-ux-form";
 import { match } from "ts-pattern";
 import {
   MAX_SUPPORTING_DOCUMENT_UPLOAD_SIZE,
@@ -38,7 +38,7 @@ export type Document<Purpose extends string> = {
 
 type FormValue = UploadFileStatus[];
 
-type FormValues<Purpose extends string> = Record<Purpose, FormValue>;
+type FormValues<Purpose extends string> = Required<Record<Purpose, FormValue>>;
 
 type Props<Purpose extends string> = {
   getAwsUrl: (
@@ -164,7 +164,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
 
-  const { Field, setFieldValue, getFieldState, listenFields, submitForm } = useForm<
+  const { Field, setFieldValue, getFieldValue, listenFields, submitForm } = useForm<
     FormValues<Purpose>
   >(
     requiredDocumentPurposes.reduce<FormConfig<FormValues<Purpose>>>(
@@ -182,10 +182,10 @@ const SupportingDocumentWithRef = <Purpose extends string>(
   useImperativeHandle(externalRef, () => {
     return {
       submit: (callback: (value: boolean) => void) => {
-        submitForm(
-          () => callback(true),
-          () => callback(false),
-        );
+        submitForm({
+          onSuccess: () => callback(true),
+          onFailure: () => callback(false),
+        });
       },
     };
   });
@@ -224,7 +224,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
         const xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
 
-        const state = getFieldState(fieldName).value;
+        const state = getFieldValue(fieldName);
         setFieldValue(
           fieldName,
           state.map(doc =>
@@ -242,7 +242,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
         xhr.upload.onprogress = event => {
           const progress = (event.loaded / event.total) * 100;
 
-          const state = getFieldState(fieldName).value;
+          const state = getFieldValue(fieldName);
           setFieldValue(
             fieldName,
             state.map(uploadState =>
@@ -252,7 +252,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
         };
 
         xhr.onerror = () => {
-          const state = getFieldState(fieldName).value;
+          const state = getFieldValue(fieldName);
           setFieldValue(
             fieldName,
             state.map(uploadState =>
@@ -270,7 +270,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
         };
 
         xhr.onload = () => {
-          const state = getFieldState(fieldName).value;
+          const state = getFieldValue(fieldName);
 
           if (xhr.status !== 200 && xhr.status !== 204) {
             setFieldValue(
@@ -306,7 +306,7 @@ const SupportingDocumentWithRef = <Purpose extends string>(
         xhr.send(formData);
       })
       .catch(() => {
-        const state = getFieldState(fieldName).value;
+        const state = getFieldValue(fieldName);
         setFieldValue(
           fieldName,
           state.map(uploadState =>

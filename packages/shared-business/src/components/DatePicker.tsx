@@ -18,15 +18,16 @@ import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { noop } from "@swan-io/lake/src/utils/function";
 import {
+  isNotEmpty,
   isNotNullish,
   isNotNullishOrEmpty,
   isNullishOrEmpty,
 } from "@swan-io/lake/src/utils/nullish";
 import { getRifmProps } from "@swan-io/lake/src/utils/rifm";
+import { ValidatorResult, useForm } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { ValidatorResult, useForm } from "react-ux-form";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
@@ -892,7 +893,7 @@ type DatePickerModalProps = Except<DatePickerProps, "error"> & {
   cancelLabel: string;
   confirmLabel: string;
   validate?: (value: string) => ValidatorResult;
-  onDissmiss: () => void;
+  onDismiss: () => void;
 };
 
 export const DatePickerModal = ({
@@ -906,7 +907,7 @@ export const DatePickerModal = ({
   cancelLabel,
   confirmLabel,
   validate,
-  onDissmiss,
+  onDismiss,
 }: DatePickerModalProps) => {
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
   const { Field, submitForm, setFieldValue, resetField } = useForm({
@@ -918,15 +919,20 @@ export const DatePickerModal = ({
 
   const handleCancel = () => {
     setFieldValue("date", value ?? "");
-    onDissmiss();
+    onDismiss();
   };
 
   const handleConfirm = () => {
-    submitForm(({ date }) => {
-      if (isNotNullishOrEmpty(date)) {
-        onChange(date);
-      }
-      onDissmiss();
+    submitForm({
+      onSuccess: values => {
+        const date = values.date.getWithDefault("");
+
+        if (isNotEmpty(date)) {
+          onChange(date);
+        }
+
+        onDismiss();
+      },
     });
   };
 
@@ -1348,7 +1354,7 @@ type DateRangePickerModalProps = DateRangePickerProps & {
   visible: boolean;
   cancelLabel: string;
   confirmLabel: string;
-  onDissmiss: () => void;
+  onDismiss: () => void;
 };
 
 export const DateRangePickerModal = ({
@@ -1363,7 +1369,7 @@ export const DateRangePickerModal = ({
   endLabel,
   cancelLabel,
   confirmLabel,
-  onDissmiss,
+  onDismiss,
 }: DateRangePickerModalProps) => {
   const { desktop } = useResponsive(MODALE_MOBILE_THRESHOLD);
   const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
@@ -1383,12 +1389,12 @@ export const DateRangePickerModal = ({
 
   const handleCancel = () => {
     setLocaleValue(value);
-    onDissmiss();
+    onDismiss();
   };
 
   const handleConfirm = () => {
     onChange(localeValue);
-    onDissmiss();
+    onDismiss();
   };
 
   return (
