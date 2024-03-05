@@ -479,7 +479,7 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
 
     return (
       <ResponsiveContainer breakpoint={breakpoints.tiny}>
-        {({ small, large }) => (
+        {({ small }) => (
           <>
             {match(step)
               .with("common", () => (
@@ -725,17 +725,10 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                       <>
                         <AddressFormPart
                           apiKey={placekitApiKey}
-                          initialAddress={initialAddress.current.residencyAddressLine1 ?? ""}
-                          initialCity={initialAddress.current.residencyAddressCity ?? ""}
-                          initialPostalCode={
-                            initialAddress.current.residencyAddressPostalCode ?? ""
-                          }
                           country={country?.value ?? accountCountry}
                           label={t("beneficiaryForm.beneficiary.address")}
                           Field={Field}
                           setFieldValue={setFieldValue}
-                          listenFields={listenFields}
-                          isLarge={large}
                         />
 
                         {((accountCountry === "DEU" && country?.value === "DEU") ||
