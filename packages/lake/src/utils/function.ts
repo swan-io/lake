@@ -5,12 +5,6 @@ export const identity = <T>(value: T): T => value;
 export const noop = () => {};
 export const stubFalse = (): false => false;
 export const stubTrue = (): true => true;
-export const unionToArray = <T extends PropertyKey>(object: Record<T, true>) => Dict.keys(object);
-
-export const getUnionGuard = <T extends PropertyKey>(object: Record<T, true>) => {
-  const set = new Set<unknown>(unionToArray<T>(object));
-  return (value: unknown): value is T => set.has(value);
-};
 
 export const deriveUnion = <T extends PropertyKey>(object: Record<T, true>) => {
   const array = Dict.keys(object);
