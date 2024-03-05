@@ -13,7 +13,7 @@ import { noop } from "@swan-io/lake/src/utils/function";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { pick } from "@swan-io/lake/src/utils/object";
 import { Validator, combineValidators, useForm } from "@swan-io/use-form";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Rifm } from "rifm";
 import { match } from "ts-pattern";
@@ -27,8 +27,8 @@ import {
   validateNullableRequired,
   validateRequired,
 } from "../utils/validation";
-import { AddressFormPart } from "./AddressFormPart";
 import { CountryPicker } from "./CountryPicker";
+import { AddressDetail, PlacekitAddressSearchInput } from "./PlacekitAddressSearchInput";
 import { PlacekitCityInput } from "./PlacekitCityInput";
 import { TaxIdentificationNumberInput } from "./TaxIdentificationNumberInput";
 
@@ -473,6 +473,17 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
       };
     });
 
+    const onSuggestion = useCallback(
+      (place: AddressDetail) => {
+        setFieldValue("address", place.completeAddress);
+        setFieldValue("city", place.city);
+        if (place.postalCode != null) {
+          setFieldValue("postalCode", place.postalCode);
+        }
+      },
+      [setFieldValue],
+    );
+
     return (
       <ResponsiveContainer breakpoint={breakpoints.tiny}>
         {({ small }) => (
@@ -719,13 +730,68 @@ export const BeneficiaryForm = forwardRef<BeneficiaryFormRef | undefined, Props>
                   <FieldsListener names={["country"]}>
                     {({ country }) => (
                       <>
-                        <AddressFormPart
-                          apiKey={placekitApiKey}
-                          country={country?.value ?? accountCountry}
-                          label={t("beneficiaryForm.beneficiary.address")}
-                          Field={Field}
-                          setFieldValue={setFieldValue}
-                        />
+                        <Field name="address">
+                          {({ ref, value, onChange, error }) => (
+                            <LakeLabel
+                              label={t("beneficiaryForm.beneficiary.address")}
+                              render={id => (
+                                <PlacekitAddressSearchInput
+                                  inputRef={ref}
+                                  apiKey={placekitApiKey}
+                                  emptyResultText={t("common.noResult")}
+                                  placeholder={t("addressFormPart.placeholder")}
+                                  language={locale.language}
+                                  id={id}
+                                  country={country.value ?? accountCountry}
+                                  value={value}
+                                  error={error}
+                                  onValueChange={onChange}
+                                  onSuggestion={onSuggestion}
+                                />
+                              )}
+                            />
+                          )}
+                        </Field>
+
+                        <Space height={12} />
+
+                        <Field name="city">
+                          {({ ref, value, valid, error, onChange }) => (
+                            <LakeLabel
+                              label={t("addressFormPart.cityLabel")}
+                              render={id => (
+                                <LakeTextInput
+                                  ref={ref}
+                                  id={id}
+                                  value={value}
+                                  valid={valid}
+                                  error={error}
+                                  onChangeText={onChange}
+                                />
+                              )}
+                            />
+                          )}
+                        </Field>
+
+                        <Space height={12} />
+
+                        <Field name="postalCode">
+                          {({ ref, value, valid, error, onChange }) => (
+                            <LakeLabel
+                              label={t("addressFormPart.postCodeLabel")}
+                              render={id => (
+                                <LakeTextInput
+                                  ref={ref}
+                                  id={id}
+                                  value={value}
+                                  valid={valid}
+                                  error={error}
+                                  onChangeText={onChange}
+                                />
+                              )}
+                            />
+                          )}
+                        </Field>
 
                         {((accountCountry === "DEU" && country?.value === "DEU") ||
                           accountCountry === "ESP") && (
