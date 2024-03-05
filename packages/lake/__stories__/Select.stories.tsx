@@ -71,11 +71,30 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
       </StoryPart>
 
       <StoryPart title="With disabled items">
-        <EditableSelect isItemDisabled={value => value % 2 === 0} />
+        <EditableSelect
+          disabledItems={[
+            { value: 4 },
+            { value: 5 },
+            { value: 7 },
+            { value: 12 },
+            { value: 15 },
+            { value: 16 },
+            { value: 999 },
+          ]}
+        />
       </StoryPart>
 
       <StoryPart title="With disabled items tooltips">
-        <EditableSelect isItemDisabled={value => (value % 2 === 0 ? "I'm disabled" : false)} />
+        <EditableSelect
+          disabledItems={[
+            { message: "Item Émilie is disabled", value: 4 },
+            { message: "Item François is disabled", value: 5 },
+            { message: "Item Marie-Anne is disabled", value: 7 },
+            { message: "Item Valérie is disabled", value: 12 },
+            { message: "Item Jérôme is disabled", value: 15 },
+            { message: "Item Thomas is disabled", value: 16 },
+          ]}
+        />
       </StoryPart>
 
       <StoryPart title="Small">
