@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef } from "react";
 import { LayoutChangeEvent, PanResponder, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
-import { colors } from "../constants/colors";
+import { colors } from "../constants/design";
 import { useAnimatedValue } from "../hooks/useAnimatedValue";
 import { interpolate } from "../utils/math";
 
@@ -20,19 +20,19 @@ const styles = StyleSheet.create({
     height: 4,
     marginVertical: "auto",
     borderRadius: 2,
-    backgroundColor: colors.gray[10],
+    backgroundColor: colors.gray[100],
     overflow: "hidden",
   },
   barFill: {
     ...StyleSheet.absoluteFillObject,
     transformOrigin: "0 0",
-    backgroundColor: colors.gray[100],
+    backgroundColor: colors.gray[900],
   },
   button: {
     position: "absolute",
     height: BUTTON_SIZE,
     width: BUTTON_SIZE,
-    backgroundColor: colors.gray[100],
+    backgroundColor: colors.gray[900],
     borderRadius: BUTTON_SIZE / 2,
     marginLeft: -(BUTTON_SIZE / 2),
     willChange: "left", // because we animate left directly
