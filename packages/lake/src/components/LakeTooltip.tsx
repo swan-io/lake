@@ -2,7 +2,6 @@ import {
   forwardRef,
   memo,
   ReactNode,
-  ReactText,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -94,9 +93,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const isReactText = (node: ReactNode): node is ReactText =>
-  ["string", "number"].includes(typeof node);
-
 type Props = {
   children: ReactNode;
   content: ReactNode;
@@ -112,24 +108,26 @@ type Props = {
   disabled?: boolean;
 };
 
-type TooltipRef = {
+export type TooltipRef = {
   show: () => void;
   hide: () => void;
 };
 
 const MAX_WIDTH = "calc(100vw - 20px)";
 
-export const LakeTooltip = ({ content, children, ...rest }: Props) => {
-  if (isNullishOrEmpty(content)) {
-    return children;
-  }
+export const LakeTooltip = forwardRef<TooltipRef, Props>(
+  ({ content, children, ...rest }, forwardedRef) => {
+    if (isNullishOrEmpty(content)) {
+      return children;
+    }
 
-  return (
-    <Tooltip content={content} {...rest}>
-      {children}
-    </Tooltip>
-  );
-};
+    return (
+      <Tooltip ref={forwardedRef} content={content} {...rest}>
+        {children}
+      </Tooltip>
+    );
+  },
+);
 
 const Tooltip = memo(
   forwardRef<TooltipRef, Props>(
@@ -275,7 +273,7 @@ const Tooltip = memo(
                   ]}
                 >
                   <View style={[styles.content, { width, maxWidth: MAX_WIDTH }]}>
-                    {isReactText(content) ? (
+                    {typeof content === "string" || typeof content === "number" ? (
                       <LakeText align="center" color={colors.gray.contrast}>
                         {content}
                       </LakeText>
@@ -319,16 +317,19 @@ const Tooltip = memo(
   ),
 );
 
-export const InformationTooltip = ({ text }: { text: string }) => (
-  <LakeTooltip
-    describedBy="copy"
-    placement="bottom"
-    togglableOnFocus={true}
-    width={300}
-    content={text}
-  >
-    <View style={styles.info}>
-      <Icon name="info-regular" size={24} color={colors.gray[900]} />
-    </View>
-  </LakeTooltip>
+export const InformationTooltip = forwardRef<TooltipRef, { text: string }>(
+  ({ text }, forwardedRef) => (
+    <LakeTooltip
+      ref={forwardedRef}
+      describedBy="copy"
+      placement="bottom"
+      togglableOnFocus={true}
+      width={300}
+      content={text}
+    >
+      <View style={styles.info}>
+        <Icon name="info-regular" size={24} color={colors.gray[900]} />
+      </View>
+    </LakeTooltip>
+  ),
 );

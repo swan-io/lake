@@ -1,4 +1,4 @@
-import { Children, forwardRef, Fragment, memo, ReactNode, ReactText } from "react";
+import { Children, forwardRef, Fragment, memo, ReactNode } from "react";
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -118,9 +118,6 @@ const styles = StyleSheet.create({
     right: -3,
   },
 });
-
-const isReactText = (node: ReactNode): node is ReactText =>
-  ["string", "number"].includes(typeof node);
 
 export type ButtonProps = {
   ariaControls?: string;
@@ -264,7 +261,7 @@ export const LakeButton = memo(
                   </>
                 )}
 
-                {isReactText(children) ? (
+                {typeof children === "string" || typeof children === "number" ? (
                   <LakeText
                     numberOfLines={1}
                     userSelect="none"
