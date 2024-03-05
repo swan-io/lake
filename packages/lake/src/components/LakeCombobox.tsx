@@ -2,7 +2,6 @@ import { AsyncData, Result } from "@swan-io/boxed";
 import {
   ForwardedRef,
   ReactNode,
-  ReactText,
   Ref,
   RefObject,
   forwardRef,
@@ -94,9 +93,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
-
-const isReactText = (node: ReactNode): node is ReactText =>
-  ["string", "number"].includes(typeof node);
 
 const getItemLayout: <I>(
   data: ArrayLike<I> | null | undefined,
@@ -348,7 +344,7 @@ const LakeComboboxWithRef = <I,>(
                                 });
                               }}
                             >
-                              {isReactText(rendered) ? (
+                              {typeof rendered === "string" || typeof rendered === "number" ? (
                                 <LakeText numberOfLines={1} style={styles.itemText}>
                                   {rendered}
                                 </LakeText>
