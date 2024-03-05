@@ -387,23 +387,23 @@ const LakeSelectWithRef = <V,>(
           keyExtractor={(_, index) => `select-item-${index}`}
           renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
             const isSelected = value === item.value;
-            const isDisabled = disabledItems.find(({ value }) => value === item.value);
+            const disablement = disabledItems.find(({ value }) => value === item.value);
 
             return (
               <LakeTooltip
                 placement="right"
-                content={isDisabled?.message}
-                disabled={isNullishOrEmpty(isDisabled?.message)}
+                content={disablement?.message}
+                disabled={isNullishOrEmpty(disablement?.message)}
               >
                 <Pressable
                   ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
                   onKeyDown={onKeyDown}
-                  disabled={isNotNullish(isDisabled)}
+                  disabled={isNotNullish(disablement)}
                   style={({ hovered, focused }) => [
                     styles.item,
                     (hovered || isSelected) && styles.itemHighlighted,
                     focused && styles.itemFocused,
-                    isNotNullish(isDisabled) && styles.itemDisabled,
+                    isNotNullish(disablement) && styles.itemDisabled,
                   ]}
                   role="option"
                   aria-selected={true}
