@@ -157,16 +157,17 @@ export const Popover = memo<Props>(
         const rect = element.getBoundingClientRect();
         const availableSpaceAbove = rect.top;
         const availableSpaceBelow = window.innerHeight - rect.bottom;
-        const visualViewportOffsetTop = window.visualViewport?.offsetTop ?? 0;
+        const visualViewportOffsetTop = window.scrollY ?? 0;
+        const visualViewportOffsetLeft = window.scrollX ?? 0;
         setViewportInformation({
           availableSpaceAbove,
           availableSpaceBelow,
           availableSpaceBefore: rect.left,
           availableSpaceAfter: window.innerWidth - rect.right,
           top: visualViewportOffsetTop + Math.max(rect.bottom, safetyMargin),
-          bottom: Math.max(window.innerHeight - rect.top, safetyMargin),
-          left: Math.max(rect.left, safetyMargin),
-          right: Math.max(window.innerWidth - rect.right, safetyMargin),
+          bottom: Math.max(window.innerHeight - rect.top, safetyMargin) - visualViewportOffsetTop,
+          left: visualViewportOffsetLeft + Math.max(rect.left, safetyMargin),
+          right: Math.max(window.innerWidth - rect.right, safetyMargin) - visualViewportOffsetLeft,
           availableHeight:
             field || availableSpaceAbove <= availableSpaceBelow
               ? window.innerHeight - rect.top - (rect.bottom - rect.top) - 20
@@ -239,18 +240,18 @@ export const Popover = memo<Props>(
 
     return (
       <Portal container={rootElement}>
+        {visible && underlay ? (
+          <Pressable
+            ref={underlayRef}
+            style={styles.underlay}
+            onPress={onPressUnderlay}
+            aria-label="Close"
+          />
+        ) : null}
+
         <TransitionView style={styles.container} {...animation}>
           {visible ? (
             <View style={styles.contents}>
-              {underlay ? (
-                <Pressable
-                  ref={underlayRef}
-                  style={styles.underlay}
-                  onPress={onPressUnderlay}
-                  aria-label="Close"
-                />
-              ) : null}
-
               {availableHeight > 0 ? (
                 <ScrollView
                   style={[
