@@ -2698,6 +2698,11 @@
     history "^5.3.0"
     use-sync-external-store "^1.2.0"
 
+"@swan-io/request@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.1.tgz#54a0a0d87ba609e81d31f6280d66b650818687d6"
+  integrity sha512-CbfliPNRYfeg/aBCcCVnuhMX7sjztH7nK3odmGJO1ua2BuhnUWOy2XeIsFEK8+1KzYIf5k0Uew9JKPHwknlGwA==
+
 "@swan-io/use-form@^2.0.0-rc.2":
   version "2.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.0-rc.2.tgz#8e7aad0257e16df2bbf5603f5e16b14820e399ee"
