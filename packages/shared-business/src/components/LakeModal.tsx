@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleSheet.absoluteFillObject,
+    position: "fixed",
   },
   inert: {
     pointerEvents: "none",
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
+    position: "fixed",
     backgroundColor: BACKGROUND_COLOR,
   },
   overlayEnter: {
