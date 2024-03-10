@@ -191,7 +191,7 @@ const Tooltip = memo(
                   aria-describedby={describedBy}
                   style={[styles.base, position.get().style]}
                 >
-                  {!hideArrow && position.get().verticalPosition === "bottom" ? (
+                  {position.get().verticalPosition === "bottom" ? (
                     <Box
                       direction="row"
                       justifyContent={match(position.get().horizontalPosition)
@@ -202,7 +202,10 @@ const Tooltip = memo(
                       style={styles.arrowBar}
                     >
                       <Svg width={16} height={8} viewBox="0 0 16 8">
-                        <Polygon points="8 0 16 8 0 8" fill={colors.gray[900]} />
+                        <Polygon
+                          points="8 0 16 8 0 8"
+                          fill={hideArrow ? "transparent" : colors.gray[900]}
+                        />
                       </Svg>
                     </Box>
                   ) : null}
@@ -217,7 +220,7 @@ const Tooltip = memo(
                     )}
                   </View>
 
-                  {!hideArrow && position.get().verticalPosition === "top" ? (
+                  {position.get().verticalPosition === "top" ? (
                     <Box
                       direction="row"
                       justifyContent={match(position.get().horizontalPosition)
@@ -228,7 +231,10 @@ const Tooltip = memo(
                       style={styles.arrowBar}
                     >
                       <Svg width={16} height={8} viewBox="0 0 16 8">
-                        <Polygon points="8 8 16 0 0 0" fill={colors.gray[900]} />
+                        <Polygon
+                          points="8 8 16 0 0 0"
+                          fill={hideArrow ? "transparent" : colors.gray[900]}
+                        />
                       </Svg>
                     </Box>
                   ) : null}
