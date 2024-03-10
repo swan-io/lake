@@ -51,7 +51,7 @@ type Props<Purpose extends string> = {
   requiredDocumentPurposes: Purpose[];
   onChange?: (documents: Document<Purpose>[]) => void;
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
-  onboardingLanguage?: string;
+  templateLanguage?: string;
 };
 
 const styles = StyleSheet.create({
@@ -134,7 +134,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     documents,
     generateUpload,
     requiredDocumentPurposes,
-    onboardingLanguage = locale.language,
+    templateLanguage = locale.language,
     status,
     onRemoveFile,
   }: Props<Purpose>,
@@ -301,7 +301,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
             color="current"
             onPress={() =>
               window.open(
-                `/power-of-attorney-template/${match(onboardingLanguage)
+                `/power-of-attorney-template/${match(templateLanguage)
                   .with("fr", () => "fr")
                   .with("de", () => "de")
                   .with("es", () => "es")
