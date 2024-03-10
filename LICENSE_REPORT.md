@@ -4,7 +4,6 @@ Name | Version | License | URL | VendorUrl | VendorName
 --- | --- | --- | --- | --- | ---
 @formatjs/intl | 2.10.0 | MIT | git@github.com:formatjs/formatjs.git | https://formatjs.io/ | Long Ho
 @placekit/client-js | 2.3.0 | MIT | https://github.com/placekit/client-js.git | https://github.com/placekit/client-js#readme | PlaceKit
-@popperjs/core | 2.11.8 | MIT | https://github.com/popperjs/popper-core.git | Unknown | Federico Zivolo
 @react-three/drei | 9.99.4 | MIT | https://github.com/pmndrs/drei.git | https://github.com/pmndrs/drei | Unknown
 @react-three/fiber | 8.15.16 | MIT | https://github.com/pmndrs/react-three-fiber.git | https://github.com/pmndrs/react-three-fiber#readme | Paul Henschel
 @testing-library/react | 14.2.1 | MIT | https://github.com/testing-library/react-testing-library | https://github.com/testing-library/react-testing-library#readme | Kent C. Dodds
@@ -25,8 +24,6 @@ react-atomic-state | 2.0.0 | MIT | https://github.com/zoontek/react-atomic-state
 react-dom | 18.2.0 | MIT | https://github.com/facebook/react.git | https://reactjs.org/ | Unknown
 react-dropzone | 14.2.3 | MIT | https://github.com/react-dropzone/react-dropzone.git | https://github.com/react-dropzone/react-dropzone | Param Aggarwal
 react-native-web | 0.19.10 | MIT | git://github.com/necolas/react-native-web.git | Unknown | Nicolas Gallagher
-react-popper | 2.3.0 | MIT | https://github.com/popperjs/react-popper | https://popper.js.org/react-popper | Travis Arnold
-react-ux-form | 1.5.0 | MIT | https://github.com/swan-io/react-ux-form.git | https://github.com/swan-io/react-ux-form#readme | Mathieu Acthernoene
 rifm | 0.12.1 | MIT | https://github.com/istarkov/rifm.git | Unknown | istarkov
 three | 0.161.0 | MIT | https://github.com/mrdoob/three.js | https://threejs.org/ | mrdoob
 ts-dedent | 2.2.0 | MIT | https://github.com/tamino-martinius/node-ts-dedent.git | Unknown | Tamino Martinius

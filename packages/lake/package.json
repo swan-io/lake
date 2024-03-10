@@ -26,7 +26,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@popperjs/core": "^2.11.8",
     "@react-three/drei": "^9.99.4",
     "@react-three/fiber": "^8.15.16",
     "@swan-io/boxed": "^2.0.1",
@@ -38,7 +37,6 @@
     "react-atomic-state": "^2.0.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
-    "react-popper": "^2.3.0",
     "@swan-io/use-form": "^2.0.0-rc.2",
     "rifm": "^0.12.1",
     "three": "^0.161.0",
