@@ -40,7 +40,7 @@ export const TaxIdentificationNumberInput = forwardRef<TextInput | null, Props>(
       accountCountry,
       isCompany,
       required,
-      label = t("beneficiaryForm.beneficiary.taxIdentificationNumber"),
+      label = t("taxIdentificationNumber.label"),
     }: Props,
     ref,
   ) => {
