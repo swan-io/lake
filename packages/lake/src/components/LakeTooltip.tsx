@@ -4,39 +4,28 @@ import {
   ReactNode,
   useEffect,
   useImperativeHandle,
-  useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
-import { usePopper } from "react-popper";
 import { match } from "ts-pattern";
-import { colors, shadows } from "../constants/design";
+import { colors, shadows, spacings } from "../constants/design";
+import { useContextualLayer } from "../hooks/useContextualLayer";
 import { useHover } from "../hooks/useHover";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
-import { getRootElement, matchReferenceWidthModifier } from "../utils/popper";
+import { getRootElement } from "../utils/popper";
+import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Portal } from "./Portal";
+import { Polygon, Svg } from "./Svg";
 
 const { matches: canHover } = window.matchMedia("(hover: hover)");
 
 const styles = StyleSheet.create({
   base: {
-    alignItems: "center",
-  },
-  baseTop: {
-    marginBottom: 8,
-  },
-  baseBottom: {
-    marginTop: 8,
-  },
-  baseRight: {
-    marginLeft: 8,
-  },
-  baseLeft: {
-    marginRight: 8,
+    position: "absolute",
+    pointerEvents: "none",
   },
   content: {
     paddingVertical: 12,
@@ -48,45 +37,8 @@ const styles = StyleSheet.create({
     borderColor: colors.gray[900],
     boxShadow: shadows.modal,
   },
-  arrowContainer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    margin: "auto",
-    width: 14,
-    height: 10,
-    overflow: "hidden",
-  },
-  arrowContainerHorizontal: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    margin: "auto",
-    width: 14,
-    height: 10,
-    overflow: "hidden",
-  },
-  arrowContainerTop: {
-    bottom: -7,
-  },
-  arrowContainerBottom: {
-    top: -7,
-  },
-  arrowContainerRight: {
-    left: -7,
-  },
-  arrowContainerLeft: {
-    right: -7,
-  },
-  arrow: {
-    position: "relative",
-    top: -7,
-    height: 14,
-    width: 14,
-    backgroundColor: colors.gray[900],
-    borderWidth: 1,
-    borderColor: colors.gray[900],
-    transform: "rotate(45deg)",
+  arrowBar: {
+    paddingHorizontal: spacings[12],
   },
   info: {
     flexGrow: 0,
@@ -101,7 +53,7 @@ type Props = {
   hideArrow?: boolean;
   onHide?: () => void;
   onShow?: () => void;
-  placement: "left" | "top" | "bottom" | "right";
+  placement: "left" | "right" | "center";
   width?: number;
   togglableOnFocus?: boolean;
   containerStyle?: ViewProps["style"];
@@ -112,8 +64,6 @@ export type TooltipRef = {
   show: () => void;
   hide: () => void;
 };
-
-const MAX_WIDTH = "calc(100vw - 20px)";
 
 export const LakeTooltip = forwardRef<TooltipRef, Props>(
   ({ content, children, ...rest }, forwardedRef) => {
@@ -148,11 +98,15 @@ const Tooltip = memo(
       },
       forwardedRef,
     ) => {
-      const referenceRef = useRef<View | null>(null);
-      const rootElement = getRootElement(referenceRef.current as Element | null);
-      const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
       const timeoutRef = useRef(0);
       const [visible, setVisible] = useState(false);
+
+      const { referenceRef, position } = useContextualLayer({
+        placement,
+        visible,
+        matchReferenceWidth,
+      });
+      const rootElement = getRootElement(referenceRef.current as Element | null);
 
       useImperativeHandle(forwardedRef, () => ({
         show: () => setVisible(true),
@@ -166,26 +120,6 @@ const Tooltip = memo(
           setVisible(nextVisible);
         },
       });
-
-      const {
-        attributes,
-        update,
-        styles: popperStyles,
-        state,
-      } = usePopper(referenceRef.current as Element | null, popperElement, {
-        placement,
-        modifiers: useMemo(
-          () => [
-            { name: "preventOverflow", enabled: true, options: { padding: 10 } },
-            { name: "flip", enabled: false },
-            { name: "hide", enabled: true },
-            { ...matchReferenceWidthModifier, enabled: matchReferenceWidth },
-          ],
-          [matchReferenceWidth],
-        ),
-      });
-
-      const overflowOffset = state?.modifiersData.preventOverflow?.x ?? 0;
 
       useEffect(() => {
         const node = referenceRef.current;
@@ -243,36 +177,37 @@ const Tooltip = memo(
         return () => clearTimeout(timeoutRef.current);
       }, []);
 
-      useLayoutEffect(() => {
-        void update?.();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [content]);
-
       return (
         <>
           <View ref={referenceRef} style={containerStyle}>
             {children}
           </View>
 
-          {isNotNullish(rootElement) && visible && !disabled && (
+          {isNotNullish(rootElement) && position.isSome() && !disabled && (
             <Portal container={rootElement}>
-              <div
-                ref={setPopperElement}
-                style={{ ...popperStyles.popper, maxWidth: MAX_WIDTH }}
-                {...attributes.popper}
-                role="tooltip"
-                aria-describedby={describedBy}
-              >
+              <View style={position.get().rootStyle}>
                 <View
-                  style={[
-                    styles.base,
-                    state?.placement === "top" && styles.baseTop,
-                    state?.placement === "bottom" && styles.baseBottom,
-                    state?.placement === "right" && styles.baseRight,
-                    state?.placement === "left" && styles.baseLeft,
-                  ]}
+                  role="tooltip"
+                  aria-describedby={describedBy}
+                  style={[styles.base, position.get().style]}
                 >
-                  <View style={[styles.content, { width, maxWidth: MAX_WIDTH }]}>
+                  {!hideArrow && position.get().verticalPosition === "bottom" ? (
+                    <Box
+                      direction="row"
+                      justifyContent={match(position.get().horizontalPosition)
+                        .with("left", () => "start" as const)
+                        .with("center", () => "center" as const)
+                        .with("right", () => "end" as const)
+                        .exhaustive()}
+                      style={styles.arrowBar}
+                    >
+                      <Svg width={16} height={8} viewBox="0 0 16 8">
+                        <Polygon points="8 0 16 8 0 8" fill={colors.gray[900]} />
+                      </Svg>
+                    </Box>
+                  ) : null}
+
+                  <View style={[styles.content, { width }]}>
                     {typeof content === "string" || typeof content === "number" ? (
                       <LakeText align="center" color={colors.gray.contrast}>
                         {content}
@@ -282,33 +217,23 @@ const Tooltip = memo(
                     )}
                   </View>
 
-                  {!hideArrow && (
-                    <View
-                      role="none"
-                      style={[
-                        state?.placement === "right" || state?.placement === "left"
-                          ? styles.arrowContainerHorizontal
-                          : styles.arrowContainer,
-                        state?.placement === "top" && styles.arrowContainerTop,
-                        state?.placement === "bottom" && styles.arrowContainerBottom,
-                        state?.placement === "right" && styles.arrowContainerRight,
-                        state?.placement === "left" && styles.arrowContainerLeft,
-                        {
-                          transform: `translateX(${-overflowOffset}px) rotate(${match(
-                            state?.placement,
-                          )
-                            .with("bottom", () => "180deg")
-                            .with("left", () => "-90deg")
-                            .with("right", () => "90deg")
-                            .otherwise(() => "0deg")})`,
-                        },
-                      ]}
+                  {!hideArrow && position.get().verticalPosition === "top" ? (
+                    <Box
+                      direction="row"
+                      justifyContent={match(position.get().horizontalPosition)
+                        .with("left", () => "start" as const)
+                        .with("center", () => "center" as const)
+                        .with("right", () => "end" as const)
+                        .exhaustive()}
+                      style={styles.arrowBar}
                     >
-                      <View style={styles.arrow} />
-                    </View>
-                  )}
+                      <Svg width={16} height={8} viewBox="0 0 16 8">
+                        <Polygon points="8 8 16 0 0 0" fill={colors.gray[900]} />
+                      </Svg>
+                    </Box>
+                  ) : null}
                 </View>
-              </div>
+              </View>
             </Portal>
           )}
         </>
@@ -322,7 +247,7 @@ export const InformationTooltip = forwardRef<TooltipRef, { text: string }>(
     <LakeTooltip
       ref={forwardedRef}
       describedBy="copy"
-      placement="bottom"
+      placement="right"
       togglableOnFocus={true}
       width={300}
       content={text}

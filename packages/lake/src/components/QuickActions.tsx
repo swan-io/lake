@@ -61,7 +61,7 @@ export const QuickActions = ({ actions }: Props) => {
       {actions.map((action, index) => (
         <LakeTooltip
           content={action.tooltipText}
-          placement="top"
+          placement="right"
           key={index}
           containerStyle={styles.actionContainer}
           disabled={action.tooltipDisabled === true || isNullishOrEmpty(action.tooltipText)}

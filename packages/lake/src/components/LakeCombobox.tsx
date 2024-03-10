@@ -285,7 +285,6 @@ const LakeComboboxWithRef = <I,>(
         visible={state === "opened" && !items.isNotAsked()}
         underlay={false}
         forcedMode="Dropdown"
-        field={true}
       >
         <View style={[styles.list, { maxHeight: itemHeight * nbItemsDisplayed }]}>
           {items.match({
