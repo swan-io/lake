@@ -1,3 +1,4 @@
+import { Future } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeAlert } from "@swan-io/lake/src/components/LakeAlert";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
@@ -5,11 +6,19 @@ import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Tag } from "@swan-io/lake/src/components/Tag";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
-import { backgroundColor, colors, shadows, spacings } from "@swan-io/lake/src/constants/design";
+import {
+  backgroundColor,
+  colors,
+  gray75,
+  shadows,
+  spacings,
+} from "@swan-io/lake/src/constants/design";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
-import { StyleSheet } from "react-native";
-import { match } from "ts-pattern";
+import { useCallback, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { P, match } from "ts-pattern";
+import { SwanFile } from "../utils/SwanFile";
 import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
@@ -24,74 +33,112 @@ const styles = StyleSheet.create({
     paddingLeft: spacings[20],
     paddingRight: spacings[8],
   },
+  progressBar: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: gray75,
+  },
+  progress: {
+    height: 4,
+    transitionProperty: "width",
+    transitionDuration: "300ms",
+    transitionTimingFunction: "ease-in-out",
+    borderRadius: 2,
+    backgroundColor: colors.current[500],
+  },
 });
 
 type Props = {
-  variant?: "none" | "pending" | "verified" | "refused";
-  name: string;
-  url?: string;
-  onRemove?: () => void;
-  title?: string;
-  description?: string;
+  file: SwanFile;
+  onRemove?: () => Future<unknown>;
 };
 
-export const FileTile = ({ variant = "none", name, url, onRemove, title, description }: Props) => (
-  <Box style={styles.base}>
-    <Box alignItems="center" direction="row" style={styles.content}>
-      <Tag
-        icon={getIconNameFromFilename(name)}
-        iconSize={20}
-        color={match(variant)
-          .with("none", "pending", () => "shakespear" as const)
-          .with("verified", () => "positive" as const)
-          .with("refused", () => "negative" as const)
-          .exhaustive()}
-      />
+export const FileTile = ({ file: { statusInfo, name, url }, onRemove }: Props) => {
+  const [isDeleting, setIsDeleting] = useState(false);
 
-      <Space width={16} />
+  const onPressRemove = useCallback(() => {
+    if (onRemove != undefined) {
+      setIsDeleting(true);
+      onRemove().tap(() => setIsDeleting(false));
+    }
+  }, [onRemove]);
 
-      <LakeText numberOfLines={1} color={colors.gray[700]} style={commonStyles.fill}>
-        {name}
-      </LakeText>
+  return (
+    <Box style={styles.base}>
+      <Box alignItems="center" direction="row" style={styles.content}>
+        {statusInfo.status === "Uploading" ? (
+          <>
+            <LakeText numberOfLines={1} color={colors.gray[700]}>
+              {t("fileTile.uploading")}
+            </LakeText>
 
-      <Space width={12} />
+            <Space width={20} />
 
-      {isNotNullishOrEmpty(url) && (
-        <LakeButton
-          mode="tertiary"
-          size="small"
-          icon="open-filled"
-          onPress={() => {
-            window.open(url, "_blank");
-          }}
-          ariaLabel={t("common.open")}
-        />
-      )}
+            <View role="progressbar" style={styles.progressBar}>
+              <View style={[styles.progress, { width: `${statusInfo.progress * 100}%` }]} />
+            </View>
+          </>
+        ) : (
+          <>
+            <Tag
+              icon={getIconNameFromFilename(name)}
+              iconSize={20}
+              color={match(statusInfo)
+                .with({ status: P.union("Uploaded", "Pending") }, () => "shakespear" as const)
+                .with({ status: "Validated" }, () => "positive" as const)
+                .with({ status: "Refused" }, () => "negative" as const)
+                .exhaustive()}
+            />
 
-      {isNotNullish(onRemove) && (
-        <LakeButton
-          mode="tertiary"
-          size="small"
-          icon="delete-regular"
-          color="negative"
-          onPress={onRemove}
-          ariaLabel={t("common.remove")}
-        />
-      )}
+            <Space width={16} />
+
+            <LakeText numberOfLines={1} color={colors.gray[700]} style={commonStyles.fill}>
+              {name}
+            </LakeText>
+
+            <Space width={12} />
+
+            {isNotNullishOrEmpty(url) && (
+              <LakeButton
+                mode="tertiary"
+                size="small"
+                icon="open-filled"
+                onPress={() => {
+                  window.open(url, "_blank");
+                }}
+                ariaLabel={t("common.open")}
+              />
+            )}
+
+            {isNotNullish(onRemove) && (
+              <LakeButton
+                mode="tertiary"
+                size="small"
+                icon="delete-regular"
+                color="negative"
+                onPress={onPressRemove}
+                loading={isDeleting}
+                ariaLabel={t("common.remove")}
+              />
+            )}
+          </>
+        )}
+      </Box>
+
+      {match(statusInfo)
+        .with({ status: "Pending" }, () => (
+          <LakeAlert anchored={true} title={t("fileTile.status.Pending")} variant="info" />
+        ))
+        .with({ status: "Validated" }, () => (
+          <LakeAlert anchored={true} title={t("fileTile.status.Validated")} variant="success" />
+        ))
+        .with({ status: "Refused" }, ({ reason }) => (
+          <LakeAlert anchored={true} title={t("fileTile.status.Refused")} variant="error">
+            {reason}
+          </LakeAlert>
+        ))
+        .otherwise(() => null)}
     </Box>
-
-    {variant !== "none" && (
-      <LakeAlert
-        anchored={true}
-        title={title}
-        variant={match(variant)
-          .with("pending", () => "info" as const)
-          .with("verified", () => "success" as const)
-          .with("refused", () => "error" as const)
-          .exhaustive()}
-      >
-        {description}
-      </LakeAlert>
-    )}
-  </Box>
-);
+  );
+};
