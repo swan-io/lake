@@ -5,10 +5,19 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { match, P } from "ts-pattern";
-import { Animation, animations, backgroundColor, radii, shadows } from "../constants/design";
+import {
+  Animation,
+  animations,
+  backgroundColor,
+  radii,
+  shadows,
+  spacings,
+} from "../constants/design";
+import { useContextualLayer } from "../hooks/useContextualLayer";
 import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
 import { BottomPanel } from "./BottomPanel";
@@ -26,23 +35,19 @@ type Props = {
   matchReferenceMinWidth?: boolean;
   onDismiss?: () => void;
   onEscapeKey?: () => void;
-  referenceRef: RefObject<unknown>;
+  referenceRef: RefObject<View | Text>;
   returnFocus?: boolean;
   autoFocus?: boolean;
   visible: boolean;
   underlay?: boolean;
   safetyMargin?: number;
   forcedMode?: "Dropdown" | "BottomPanel";
-  field?: boolean;
 };
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     pointerEvents: "none",
-  },
-  contents: {
-    ...StyleSheet.absoluteFillObject,
   },
   defaultCursor: {
     cursor: "default",
@@ -56,50 +61,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  popoverContainer: {
+    position: "absolute",
+    display: "flex",
+  },
   popover: {
     pointerEvents: "auto",
-    position: "absolute",
     display: "flex",
     flexDirection: "column",
     backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
-    marginVertical: 4,
+    marginVertical: spacings[8],
     overflow: "hidden",
     boxShadow: shadows.modal,
+    flexGrow: 1,
+    alignSelf: "stretch",
   },
   popoverContents: {
     alignItems: "stretch",
   },
 });
-
-type ViewportInformation = {
-  availableSpaceAbove: number;
-  availableSpaceBelow: number;
-  availableSpaceBefore: number;
-  availableSpaceAfter: number;
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-  availableHeight: number;
-  width: number;
-};
-
-const DEFAULT_VIEWPORT_INFORMATION = {
-  availableSpaceAbove: 0,
-  availableSpaceBelow: 0,
-  availableSpaceBefore: 0,
-  availableSpaceAfter: 0,
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
-  availableHeight: 0,
-  width: 0,
-};
-
-const FLEX_END = "flex-end";
-const FLEX_START = "flex-start";
 
 const animation: Animation = {
   ...animations.fadeAndSlideInFromBottom,
@@ -127,55 +108,18 @@ export const Popover = memo<Props>(
     autoFocus = true,
     visible,
     underlay = true,
-    safetyMargin = 8,
     forcedMode,
-    field = false,
   }) => {
     const [rootElement, setRootElement] = useState<Element | null>(null);
     const underlayRef = useRef<View | null>(null);
     const { desktop } = useResponsive(VIEWPORT_WIDTH_THRESHOLD);
 
-    const [
-      {
-        availableSpaceAbove,
-        availableSpaceBelow,
-        availableSpaceBefore,
-        availableSpaceAfter,
-        top,
-        bottom,
-        left,
-        right,
-        availableHeight,
-        width,
-      },
-      setViewportInformation,
-    ] = useState<ViewportInformation>(DEFAULT_VIEWPORT_INFORMATION);
-
-    useEffect(() => {
-      const element = referenceRef.current as HTMLElement | null;
-      if (element != null && visible) {
-        const rect = element.getBoundingClientRect();
-        const availableSpaceAbove = rect.top;
-        const availableSpaceBelow = window.innerHeight - rect.bottom;
-        const visualViewportOffsetTop = window.scrollY ?? 0;
-        const visualViewportOffsetLeft = window.scrollX ?? 0;
-        setViewportInformation({
-          availableSpaceAbove,
-          availableSpaceBelow,
-          availableSpaceBefore: rect.left,
-          availableSpaceAfter: window.innerWidth - rect.right,
-          top: visualViewportOffsetTop + Math.max(rect.bottom, safetyMargin),
-          bottom: Math.max(window.innerHeight - rect.top, safetyMargin) - visualViewportOffsetTop,
-          left: visualViewportOffsetLeft + Math.max(rect.left, safetyMargin),
-          right: Math.max(window.innerWidth - rect.right, safetyMargin) - visualViewportOffsetLeft,
-          availableHeight:
-            field || availableSpaceAbove <= availableSpaceBelow
-              ? window.innerHeight - rect.top - (rect.bottom - rect.top) - 20
-              : availableSpaceAbove - 20,
-          width: rect.right - rect.left,
-        });
-      }
-    }, [safetyMargin, referenceRef, visible, field]);
+    const { position } = useContextualLayer({
+      referenceRef,
+      visible,
+      matchReferenceWidth,
+      matchReferenceMinWidth,
+    });
 
     useEffect(() => {
       const element = underlayRef.current as unknown as HTMLElement | null;
@@ -250,28 +194,24 @@ export const Popover = memo<Props>(
         ) : null}
 
         <TransitionView style={styles.container} {...animation}>
-          {visible ? (
-            <View style={styles.contents}>
-              {availableHeight > 0 ? (
+          {position.isSome() ? (
+            <View style={position.get().rootStyle}>
+              <View
+                style={[
+                  styles.popoverContainer,
+                  position.get().style,
+                  {
+                    alignItems: match(position.get().horizontalPosition)
+                      .with("left", () => "flex-start" as const)
+                      .with("center", () => "center" as const)
+                      .with("right", () => "flex-end" as const)
+                      .exhaustive(),
+                  },
+                ]}
+              >
                 <ScrollView
-                  style={[
-                    styles.popover,
-                    (field || availableSpaceAbove <= availableSpaceBelow) && { top },
-                    !field && availableSpaceAbove > availableSpaceBelow && { bottom },
-                    availableSpaceBefore <= availableSpaceAfter && { left },
-                    availableSpaceBefore > availableSpaceAfter && { right },
-
-                    matchReferenceMinWidth && { minWidth: width },
-                    matchReferenceWidth && { width },
-                    { maxHeight: field ? undefined : availableHeight },
-                  ]}
-                  contentContainerStyle={[
-                    styles.popoverContents,
-                    {
-                      justifyContent:
-                        !field && availableSpaceAbove > availableSpaceBelow ? FLEX_END : FLEX_START,
-                    },
-                  ]}
+                  style={styles.popover}
+                  contentContainerStyle={styles.popoverContents}
                   id={id}
                   role={role}
                   aria-describedby={describedBy}
@@ -289,7 +229,7 @@ export const Popover = memo<Props>(
                     </Pressable>
                   </FocusTrap>
                 </ScrollView>
-              ) : null}
+              </View>
             </View>
           ) : null}
         </TransitionView>

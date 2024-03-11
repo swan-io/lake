@@ -262,7 +262,7 @@ export const CopyableRegularTextCell = ({
   return (
     <View style={styles.cell}>
       <LakeTooltip
-        placement="top"
+        placement="right"
         onHide={() => setVisibleState("copy")}
         togglableOnFocus={true}
         content={visibleState === "copy" ? copyWording : copiedWording}

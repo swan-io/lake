@@ -53,7 +53,7 @@ export const TaxIdentificationNumberInput = forwardRef<TextInput | null, Props>(
           tooltipContents != null ? (
             <LakeTooltip
               content={tooltipContents}
-              placement="top"
+              placement="right"
               width={accountCountry === "DEU" ? 800 : undefined}
             >
               <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />

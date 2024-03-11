@@ -865,14 +865,7 @@ export const DatePicker = ({
         />
       </Box>
 
-      <Popover
-        id={popoverId}
-        role="dialog"
-        onDismiss={close}
-        referenceRef={ref}
-        visible={isOpened}
-        field={true}
-      >
+      <Popover id={popoverId} role="dialog" onDismiss={close} referenceRef={ref} visible={isOpened}>
         <View style={desktop ? styles.popoverDesktop : styles.popover}>
           <DatePickerPopoverContent
             value={value}

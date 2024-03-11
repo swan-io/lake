@@ -132,6 +132,11 @@ type TspanProps = CommonProps & {
   y?: number;
 };
 
+type PolygonProps = CommonProps & {
+  points: string;
+  fill?: string;
+};
+
 export const Svg = ({ style, ...props }: SvgProps) =>
   createElement("svg", { ...props, style: [styles.svg, style] });
 
@@ -142,6 +147,7 @@ export const Use = (props: UseProps) => createElement("use", props);
 export const Mask = (props: CommonProps) => createElement("mask", props);
 export const Text = (props: TextProps) => createElement("text", props);
 export const Tspan = (props: TspanProps) => createElement("tspan", props);
+export const Polygon = (props: PolygonProps) => createElement("polygon", props);
 
 export const Image = (props: ImageProps) => createElement("image", props);
 

@@ -24,9 +24,9 @@ export default {
 export const Placements = () => {
   return (
     <StoryBlock title="Tooltip placements">
-      <StoryPart title="Top">
+      <StoryPart title="Left">
         <Box direction="row" justifyContent="center">
-          <LakeTooltip content="Tooltip content" placement="top">
+          <LakeTooltip content="Tooltip content" placement="left">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
               <LakeText>Hover to display tooltip at top</LakeText>
             </Box>
@@ -34,21 +34,11 @@ export const Placements = () => {
         </Box>
       </StoryPart>
 
-      <StoryPart title="Bottom">
+      <StoryPart title="Center">
         <Box direction="row" justifyContent="center">
-          <LakeTooltip content="Tooltip content" placement="bottom">
+          <LakeTooltip content="Tooltip content" placement="center">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
               <LakeText>Hover to display tooltip at bottom</LakeText>
-            </Box>
-          </LakeTooltip>
-        </Box>
-      </StoryPart>
-
-      <StoryPart title="Left">
-        <Box direction="row" justifyContent="center">
-          <LakeTooltip content="Tooltip content" placement="left">
-            <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
-              <LakeText>Hover to display tooltip at left</LakeText>
             </Box>
           </LakeTooltip>
         </Box>
@@ -58,7 +48,7 @@ export const Placements = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip content="Tooltip content" placement="right">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
-              <LakeText>Hover to display tooltip at right</LakeText>
+              <LakeText>Hover to display tooltip at left</LakeText>
             </Box>
           </LakeTooltip>
         </Box>
@@ -74,7 +64,7 @@ export const Behaviors = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip
             content="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-            placement="bottom"
+            placement="center"
             matchReferenceWidth={true}
           >
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
@@ -88,7 +78,7 @@ export const Behaviors = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip
             content="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-            placement="bottom"
+            placement="center"
             hideArrow={true}
           >
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
@@ -102,7 +92,7 @@ export const Behaviors = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip
             content="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-            placement="bottom"
+            placement="center"
             togglableOnFocus={true}
           >
             <Pressable>
@@ -123,7 +113,7 @@ export const Behaviors = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip
             content="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-            placement="bottom"
+            placement="center"
             disabled={true}
           >
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
