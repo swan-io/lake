@@ -29,7 +29,7 @@
     "@react-three/drei": "^9.99.4",
     "@react-three/fiber": "^8.15.16",
     "@swan-io/boxed": "^2.1.0-beta",
-    "@swan-io/chicane": "^1.4.1",
+    "@swan-io/chicane": "^2.0.0-rc.0",
     "dayjs": "^1.11.10",
     "polished": "^4.3.1",
     "prism-react-renderer": "^2.3.1",
