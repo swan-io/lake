@@ -14,6 +14,7 @@ const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
+    position: "fixed",
   },
   inert: {
     pointerEvents: "none",
