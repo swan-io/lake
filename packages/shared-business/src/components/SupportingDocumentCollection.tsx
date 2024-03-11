@@ -255,6 +255,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                     body.append("file", file);
                     return Request.make({
                       url: upload.url,
+                      method: "POST",
                       onLoadStart,
                       onProgress,
                       body,
