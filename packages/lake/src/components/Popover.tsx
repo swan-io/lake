@@ -118,6 +118,7 @@ export const Popover = memo<Props>(
       referenceRef,
       visible,
       matchReferenceWidth,
+      matchReferenceMinWidth,
     });
 
     useEffect(() => {

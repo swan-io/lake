@@ -24,6 +24,7 @@ type Config = {
   placement?: Placement;
   visible: boolean;
   matchReferenceWidth?: boolean;
+  matchReferenceMinWidth?: boolean;
   referenceRef?: MutableRefObject<View | Text | null>;
 };
 
@@ -43,6 +44,7 @@ export const useContextualLayer = ({
   placement,
   visible,
   matchReferenceWidth = false,
+  matchReferenceMinWidth = false,
   referenceRef: externalReferenceRef,
 }: Config): ContextualLayerConfig => {
   const referenceRef = useRef<View | Text | null>(null);
@@ -109,6 +111,7 @@ export const useContextualLayer = ({
       ...horizontalPosition,
       maxHeight,
       ...(matchReferenceWidth === true ? { width } : undefined),
+      ...(matchReferenceMinWidth === true ? { minWidth: width } : undefined),
       pointerEvents: "auto",
     };
 
@@ -119,7 +122,7 @@ export const useContextualLayer = ({
         availableSpaceAbove > availableSpaceBelow ? ("top" as const) : ("bottom" as const),
       style,
     });
-  }, [placement, matchReferenceWidth, usedRef]);
+  }, [placement, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
 
   useEffect(() => {
     if (visible) {
