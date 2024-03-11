@@ -2679,10 +2679,15 @@
     "@types/express" "^4.7.0"
     file-system-cache "2.3.0"
 
-"@swan-io/boxed@^2.0.0", "@swan-io/boxed@^2.0.1":
+"@swan-io/boxed@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.0.1.tgz#7b71f6beeae378ecba7d96766f2595f9e48dc76a"
   integrity sha512-Jc6PSzygUqMVlqpm4sYlFDz2CFs3gs98Qi1LBGuvb1oo6232ZVcknhcdxI3XORT0GnsMuKpsfMmvday8iU2lJw==
+
+"@swan-io/boxed@^2.1.0-beta":
+  version "2.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.1.0-beta.tgz#7895f83f9682646a250591c95beb1f837c797fc9"
+  integrity sha512-e9I4BNztyN56g6gUAkurLA9cQA/S8FyglRwNaWOxlthtPc0mDRld6oLxrTGYIAXbhxIydURw9X/J0rHJxBoVnQ==
 
 "@swan-io/chicane@^1.4.1":
   version "1.4.1"
