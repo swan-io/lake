@@ -79,7 +79,7 @@ type HelpProps =
 const Help = (props: HelpProps) => {
   return match(props)
     .with({ type: "tooltip" }, ({ text, width }) => (
-      <LakeTooltip content={text} width={width} togglableOnFocus={true} placement="top">
+      <LakeTooltip content={text} width={width} togglableOnFocus={true} placement="right">
         <LakeButton
           mode="tertiary"
           size="small"
