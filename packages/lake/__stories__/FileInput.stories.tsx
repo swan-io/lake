@@ -1,6 +1,5 @@
 import { Meta } from "@storybook/react";
-import { AsyncData } from "@swan-io/boxed";
-import { UploadArea, UploadFileStatus } from "@swan-io/shared-business/src/components/UploadArea";
+import { FileInput } from "@swan-io/shared-business/src/components/FileInput";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -14,9 +13,9 @@ const styles = StyleSheet.create({
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg", "image/svg+xml"];
 
 export default {
-  title: "Forms/UploadArea",
-  component: UploadArea,
-} as Meta<typeof UploadArea>;
+  title: "Forms/FileInput",
+  component: FileInput,
+} as Meta<typeof FileInput>;
 
 type StoryArgs = {
   layout: "vertical" | "horizontal";
@@ -29,15 +28,15 @@ export const Variations = ({ layout }: StoryArgs) => {
       description="You check design with vertical and horizontal layout, you can edit it in 'Controls' panel. (Press A to open it)"
     >
       <StoryPart title="Default" style={styles.storyPart}>
-        <UploadArea icon="document-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+        <FileInput icon="document-regular" layout={layout} accept={ACCEPTED_FORMATS} />
       </StoryPart>
 
       <StoryPart title="With custom icon" style={styles.storyPart}>
-        <UploadArea icon="image-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+        <FileInput icon="image-regular" layout={layout} accept={ACCEPTED_FORMATS} />
       </StoryPart>
 
       <StoryPart title="With description" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
@@ -46,7 +45,7 @@ export const Variations = ({ layout }: StoryArgs) => {
       </StoryPart>
 
       <StoryPart title="With error" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
@@ -56,7 +55,7 @@ export const Variations = ({ layout }: StoryArgs) => {
       </StoryPart>
 
       <StoryPart title="Disabled" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
@@ -90,170 +89,95 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
       description="Here is different file icons depending on file extension"
     >
       <StoryPart title="Interactive" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={file ? AsyncData.Done(file) : undefined}
-          onDropAccepted={file => void setFile(file[0])}
-          onRemoveFile={() => setFile(undefined)}
+          value={file}
+          onFiles={files => void setFile(files[0])}
+          onPressRemove={() => setFile(undefined)}
+          maxSize={20_000_000}
+          description={"20MB max"}
+        />
+      </StoryPart>
+
+      <StoryPart title="Interactive (image only)" style={styles.storyPart}>
+        <FileInput
+          icon="document-regular"
+          layout={layout}
+          accept={ACCEPTED_FORMATS.filter(item => item.startsWith("image/"))}
+          value={file}
+          onFiles={files => void setFile(files[0])}
+          onPressRemove={() => setFile(undefined)}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
       <StoryPart title="PDF" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={AsyncData.Done(PDF_FILE)}
+          value={PDF_FILE}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
       <StoryPart title="SVG" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={AsyncData.Done(SWAN_LOGO_SVG)}
+          accept={["image/svg+xml"]}
+          value={SWAN_LOGO_SVG}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
       <StoryPart title="Controlled" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="image-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
-          onDropAccepted={files => setFile(files[0])}
+          value={file}
+          onFiles={files => setFile(files[0])}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
       <StoryPart title="XLS" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={AsyncData.Done(XLS_FILE)}
+          value={XLS_FILE}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
       <StoryPart title="Unknown" style={styles.storyPart}>
-        <UploadArea
+        <FileInput
           icon="document-regular"
           layout={layout}
           accept={ACCEPTED_FORMATS}
-          value={AsyncData.Done(UNKNOWN_FILE)}
-        />
-      </StoryPart>
-    </StoryBlock>
-  );
-};
-
-export const WithSeveralDocuments = ({ layout }: StoryArgs) => {
-  const documents: UploadFileStatus[] = [
-    {
-      id: "1",
-      name: "first-document.pdf",
-      status: "finished",
-    },
-    {
-      id: "2",
-      name: "second-document.png",
-      status: "finished",
-    },
-    {
-      id: "3",
-      name: "third-document.jpg",
-      status: "finished",
-    },
-    {
-      id: "4",
-      name: "fourth-document.xls",
-      status: "finished",
-    },
-    {
-      id: "5",
-      name: "last-document.png",
-      progress: 60,
-      status: "uploading",
-    },
-  ];
-  return (
-    <StoryBlock title="UploadArea with several documents">
-      <StoryPart title="" style={styles.storyPart}>
-        <UploadArea
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          documents={documents}
-        />
-      </StoryPart>
-    </StoryBlock>
-  );
-};
-
-export const Interactive = ({ layout }: StoryArgs) => {
-  const [documents, setDocuments] = useState<UploadFileStatus[]>([]);
-  const [file, setFile] = useState<File>();
-
-  const addDocuments = (files: File[]) => {
-    const newDocuments: UploadFileStatus[] = files.map((file, index) => ({
-      id: (new Date().getTime() + index).toString(),
-      name: file.name,
-      status: "finished",
-    }));
-    setDocuments(currentDocuments => [...currentDocuments, ...newDocuments]);
-  };
-
-  const removeDocument = (fileId: string) => {
-    setDocuments(currentDocuments => currentDocuments.filter(d => d.id !== fileId));
-  };
-
-  const selectFile = (files: File[]) => {
-    setFile(files[0]);
-  };
-
-  const removeFile = () => {
-    setFile(undefined);
-  };
-
-  return (
-    <StoryBlock
-      title="Interactive UploadArea"
-      description="You can try to select files, drag and drop and remove selected files."
-    >
-      <StoryPart title="With several documents" style={styles.storyPart}>
-        <UploadArea
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          documents={documents}
-          onDropAccepted={addDocuments}
-          onRemoveDocument={removeDocument}
+          value={UNKNOWN_FILE}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
 
-      <StoryPart title="With one file" style={styles.storyPart}>
-        <UploadArea
+      <StoryPart title="Dist file" style={styles.storyPart}>
+        <FileInput
           icon="document-regular"
           layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={file != null ? AsyncData.Done(file) : undefined}
-          onDropAccepted={selectFile}
-          onDropRejected={removeFile}
-          onRemoveFile={() => setFile(undefined)}
-        />
-      </StoryPart>
-
-      <StoryPart title="With one file" style={styles.storyPart}>
-        <UploadArea
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={file != null ? AsyncData.Done(file) : AsyncData.NotAsked()}
-          onDropAccepted={selectFile}
-          onDropRejected={removeFile}
-          onRemoveFile={() => setFile(undefined)}
+          accept={["image/png"]}
+          value={{ url: "https://fakeimg.pl/500x300/?retina=true" }}
+          maxSize={20_000_000}
+          description={"20MB max"}
         />
       </StoryPart>
     </StoryBlock>

@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { UploadArea } from "@swan-io/shared-business/src/components/UploadArea";
+import { Future, Result } from "@swan-io/boxed";
+import { FileInput } from "@swan-io/shared-business/src/components/FileInput";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import envNxUrl from "../src/assets/3d-card/environment/nx.png?url";
@@ -179,10 +179,10 @@ const ConfigForm = ({ value, onChange }: ConfigFormProps) => {
         <LakeLabel
           label="Logo"
           render={() => (
-            <UploadArea
+            <FileInput
               accept={["image/svg+xml"]}
-              value={logoFile != undefined ? AsyncData.Done(logoFile) : undefined}
-              onDropAccepted={handleLogo}
+              value={logoFile}
+              onFiles={handleLogo}
               layout="horizontal"
               icon="arrow-download-filled"
             />
