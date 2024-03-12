@@ -28,8 +28,9 @@
   "dependencies": {
     "@react-three/drei": "^9.99.4",
     "@react-three/fiber": "^8.15.16",
-    "@swan-io/boxed": "^2.1.0-beta",
+    "@swan-io/boxed": "^2.1.0",
     "@swan-io/chicane": "^2.0.0-rc.0",
+    "@swan-io/use-form": "^2.0.0-rc.2",
     "dayjs": "^1.11.10",
     "polished": "^4.3.1",
     "prism-react-renderer": "^2.3.1",
@@ -37,7 +38,6 @@
     "react-atomic-state": "^2.0.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
-    "@swan-io/use-form": "^2.0.0-rc.2",
     "rifm": "^0.12.1",
     "three": "^0.161.0",
     "ts-dedent": "^2.2.0",
