@@ -12,6 +12,7 @@ import {
   Fragment,
   Ref,
   forwardRef,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -22,7 +23,7 @@ import { match } from "ts-pattern";
 import { UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { isTranslationKey, locale, t } from "../utils/i18n";
-import { FilesUploader } from "./FilesUploader";
+import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
@@ -126,8 +127,9 @@ export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) =>
   }
 };
 
-export type SupportingDocumentCollectionRef = {
+export type SupportingDocumentCollectionRef<Purpose extends string> = {
   areAllRequiredDocumentsFilled: () => boolean;
+  addDocument: (document: Document<Purpose>) => void;
 };
 
 export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
@@ -140,19 +142,22 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     onRemoveFile,
     showIds = false,
   }: Props<Purpose>,
-  ref: Ref<SupportingDocumentCollectionRef>,
+  ref: Ref<SupportingDocumentCollectionRef<Purpose>>,
 ) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
 
+  const [addedDocuments, setAddedDocuments] = useState<Document<Purpose>[]>([]);
+
   const orderedDocumentPurposes = useMemo(() => {
     // Get all purposes to display: the required ones and the ones that have at least a document
     const allPurposes = new Set(requiredDocumentPurposes);
-    documents.forEach(document => allPurposes.add(document.purpose));
+    const allDocuments = [...addedDocuments, ...documents];
+    allDocuments.forEach(document => allPurposes.add(document.purpose));
 
     const documentsByPurpose = new Map(
       [...allPurposes].map(purpose => {
-        const purposeDocuments = documents.filter(document => document.purpose === purpose);
+        const purposeDocuments = allDocuments.filter(document => document.purpose === purpose);
         return [purpose, purposeDocuments];
       }),
     );
@@ -197,7 +202,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
           areAllDocumentsValidated: priorityByPurpose.get(purpose) === 0,
         };
       });
-  }, [requiredDocumentPurposes, documents]);
+  }, [requiredDocumentPurposes, documents, addedDocuments]);
 
   const filesByRequiredPurpose = useRef(
     new Map(
@@ -207,12 +212,27 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     ),
   );
 
+  const filesUploaderRefByPurpose = useRef<Partial<Record<Purpose, FilesUploaderRef | null>>>({});
+
   useImperativeHandle(ref, () => ({
     areAllRequiredDocumentsFilled: () => {
       const filesByPurposes = [...filesByRequiredPurpose.current.values()];
       return filesByPurposes.every(files => files.length > 0);
     },
+    addDocument: document => {
+      setAddedDocuments(documents => [...documents, document]);
+    },
   }));
+
+  useEffect(() => {
+    const lastAddedDocument = addedDocuments[addedDocuments.length - 1];
+    if (lastAddedDocument != null) {
+      const ref = filesUploaderRefByPurpose.current[lastAddedDocument?.purpose];
+      if (ref != null) {
+        ref.add(lastAddedDocument.file);
+      }
+    }
+  }, [addedDocuments]);
 
   return (
     <Form>
@@ -242,6 +262,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                 })}
               render={() => (
                 <FilesUploader
+                  ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
                   // Only allow uploading is the Supporting Document Collection awaits for docs
                   // and that the specific purpose isn't already fully validated
                   canUpload={status === "WaitingForDocument" && !areAllDocumentsValidated}
@@ -344,5 +365,5 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
 export const SupportingDocumentCollection = forwardRef(SupportingDocumentCollectionWithRef) as <
   I extends string,
 >(
-  props: Props<I> & { ref?: ForwardedRef<SupportingDocumentCollectionRef> },
+  props: Props<I> & { ref?: ForwardedRef<SupportingDocumentCollectionRef<I>> },
 ) => ReturnType<typeof SupportingDocumentCollectionWithRef>;

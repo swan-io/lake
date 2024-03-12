@@ -3,11 +3,13 @@ import { Future, Result } from "@swan-io/boxed";
 import {
   Document,
   SupportingDocumentCollection,
+  SupportingDocumentCollectionRef,
   UploadOutput,
 } from "@swan-io/shared-business/src/components/SupportingDocumentCollection";
 import { UploadOutputWithId } from "@swan-io/shared-business/src/hooks/useFilesUploader";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
+import { LakeButton } from "../src/components/LakeButton";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -38,10 +40,13 @@ const generateUpload = () =>
 
 export const WaitingForDocument = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
+  const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
+
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
       <StoryPart title="Default" style={styles.storyPart}>
         <SupportingDocumentCollection
+          ref={ref}
           status="WaitingForDocument"
           generateUpload={generateUpload}
           documents={documents}
@@ -53,6 +58,23 @@ export const WaitingForDocument = () => {
             "UnknownDocumentType",
           ]}
         />
+
+        <LakeButton
+          onPress={() => {
+            if (ref.current != null) {
+              ref.current.addDocument({
+                purpose: "UltimateBeneficialOwnerProofOfAddress",
+                file: {
+                  id: crypto.randomUUID(),
+                  name: "toto.jpg",
+                  statusInfo: { status: "Uploaded" },
+                },
+              });
+            }
+          }}
+        >
+          Add other document from outside
+        </LakeButton>
       </StoryPart>
     </StoryBlock>
   );

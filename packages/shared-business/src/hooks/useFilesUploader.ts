@@ -29,6 +29,16 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
 ) => {
   const [files, setFiles] = useState(config.initialFiles);
 
+  const add = useCallback((fileToAdd: SwanFile) => {
+    setFiles(files => {
+      if (files.some(item => item.id === fileToAdd.id)) {
+        return files.map(item => (item.id === fileToAdd.id ? fileToAdd : item));
+      } else {
+        return [...files, fileToAdd];
+      }
+    });
+  }, []);
+
   const upload = useCallback(
     (uploadInput: UploadInput, file: File) => {
       return config
@@ -102,5 +112,6 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
     files,
     upload,
     remove,
+    add,
   };
 };
