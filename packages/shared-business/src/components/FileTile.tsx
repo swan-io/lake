@@ -103,7 +103,7 @@ export const FileTile = ({
 
             <Space width={16} />
 
-            <Box>
+            <Box grow={1}>
               <LakeText numberOfLines={1} color={colors.gray[700]} style={commonStyles.fill}>
                 {name}
               </LakeText>
@@ -128,7 +128,10 @@ export const FileTile = ({
                     }}
                   >
                     <Box direction="row" alignItems="center">
-                      <LakeText variant="smallRegular">{t("fileTile.id", { id })}</LakeText>
+                      <LakeText numberOfLines={1} variant="smallRegular">
+                        {t("fileTile.id", { id })}
+                      </LakeText>
+
                       <Space width={4} />
                       <Icon size={14} name="copy-regular" />
                     </Box>
