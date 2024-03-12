@@ -2,8 +2,8 @@ const { version } = require("../package.json");
 
 /** @type {import('@storybook/react-vite').StorybookConfig} */
 module.exports = {
-  stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
+  stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
   docs: {
     autodocs: false,
   },
