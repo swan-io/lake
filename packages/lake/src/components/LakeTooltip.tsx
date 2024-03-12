@@ -53,7 +53,7 @@ type Props = {
   hideArrow?: boolean;
   onHide?: () => void;
   onShow?: () => void;
-  placement: "left" | "right" | "center";
+  placement?: "left" | "right" | "center";
   width?: number;
   togglableOnFocus?: boolean;
   containerStyle?: ViewProps["style"];

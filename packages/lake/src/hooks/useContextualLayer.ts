@@ -40,6 +40,8 @@ type ContextualLayerConfig = {
   position: Option<ContextualLayerPosition>;
 };
 
+const MAX_OFFSET_FOR_CENTER_PLACEMENT = 100;
+
 export const useContextualLayer = ({
   placement,
   visible,
@@ -71,9 +73,15 @@ export const useContextualLayer = ({
     const height = rect.bottom - rect.top;
     const width = rect.right - rect.left;
 
+    const isCenteredEnough =
+      Math.abs(availableSpaceBefore - availableSpaceAfter) < MAX_OFFSET_FOR_CENTER_PLACEMENT;
     const inferedPlacement =
       placement ??
-      (availableSpaceBefore > availableSpaceAfter ? ("right" as const) : ("left" as const));
+      (isCenteredEnough
+        ? ("center" as const)
+        : availableSpaceBefore > availableSpaceAfter
+          ? ("right" as const)
+          : ("left" as const));
 
     const verticalPosition =
       availableSpaceAbove > availableSpaceBelow
