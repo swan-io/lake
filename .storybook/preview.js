@@ -15,9 +15,6 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 export const parameters = {
-  actions: {
-    argTypesRegex: "^on[A-Z].*",
-  },
   controls: {
     matchers: {
       color: /(background|color)$/i,

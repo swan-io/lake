@@ -31,10 +31,10 @@ ts-pattern | 5.0.8 | MIT | ssh://git@github.com/gvergnaud/ts-pattern.git | https
 urql | 4.0.6 | MIT | https://github.com/urql-graphql/urql.git | https://formidable.com/open-source/urql/docs/ | urql GraphQL Contributors
 uuid | 9.0.1 | MIT | https://github.com/uuidjs/uuid.git | Unknown | Unknown
 vitest | 1.3.1 | MIT | https://github.com/vitest-dev/vitest.git | https://github.com/vitest-dev/vitest#readme | Anthony Fu
+type-fest | 0.16.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 2.19.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 0.20.2 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 3.13.1 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 0.8.1 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | sindresorhus.com | Sindre Sorhus
-type-fest | 0.16.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
 type-fest | 0.6.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | sindresorhus.com | Sindre Sorhus
 type-fest | 4.12.0 | (MIT OR CC0-1.0) | https://github.com/sindresorhus/type-fest.git | https://sindresorhus.com | Sindre Sorhus
