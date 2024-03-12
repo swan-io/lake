@@ -40,6 +40,12 @@ const styles = StyleSheet.create({
   arrowBar: {
     paddingHorizontal: spacings[12],
   },
+  arrowBarTop: {
+    top: 1,
+  },
+  arrowBarBottom: {
+    bottom: 1,
+  },
   info: {
     flexGrow: 0,
   },
@@ -199,7 +205,7 @@ const Tooltip = memo(
                         .with("center", () => "center" as const)
                         .with("right", () => "end" as const)
                         .exhaustive()}
-                      style={styles.arrowBar}
+                      style={[styles.arrowBar, styles.arrowBarTop]}
                     >
                       <Svg width={16} height={8} viewBox="0 0 16 8">
                         <Polygon
@@ -228,7 +234,7 @@ const Tooltip = memo(
                         .with("center", () => "center" as const)
                         .with("right", () => "end" as const)
                         .exhaustive()}
-                      style={styles.arrowBar}
+                      style={[styles.arrowBar, styles.arrowBarBottom]}
                     >
                       <Svg width={16} height={8} viewBox="0 0 16 8">
                         <Polygon
