@@ -52,6 +52,7 @@ type Props<Purpose extends string> = {
   onChange?: (documents: Document<Purpose>[]) => void;
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   templateLanguage?: string;
+  showIds?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -137,6 +138,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     templateLanguage = locale.language,
     status,
     onRemoveFile,
+    showIds = false,
   }: Props<Purpose>,
   ref: Ref<SupportingDocumentCollectionRef>,
 ) => {
@@ -270,6 +272,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                       filesByRequiredPurpose.current.set(purpose, files);
                     }
                   }}
+                  showIds={showIds}
                 />
               )}
             />

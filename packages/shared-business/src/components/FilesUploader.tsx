@@ -22,6 +22,7 @@ type Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError> = Co
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   onChange?: (files: SwanFile[]) => void;
   canUpload?: boolean;
+  showIds?: boolean;
 };
 
 export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, UploadFileError>({
@@ -33,6 +34,7 @@ export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, Up
   onChange,
   formatAndSizeDescription,
   canUpload = true,
+  showIds = false,
   ...config
 }: Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError>) => {
   const { files, upload, remove } = useFilesUploader(config);
@@ -82,6 +84,7 @@ export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, Up
 
           <FileTile
             file={file}
+            showId={showIds}
             onRemove={
               onRemoveFile != undefined && file.statusInfo.status === "Uploaded"
                 ? () =>

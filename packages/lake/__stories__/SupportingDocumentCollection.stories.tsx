@@ -58,6 +58,29 @@ export const WaitingForDocument = () => {
   );
 };
 
+export const WaitingForDocumentShowIds = () => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  return (
+    <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default" style={styles.storyPart}>
+        <SupportingDocumentCollection
+          status="WaitingForDocument"
+          generateUpload={generateUpload}
+          documents={documents}
+          onChange={setDocuments}
+          requiredDocumentPurposes={[
+            "ProofOfIdentity",
+            "SwornStatement",
+            "PowerOfAttorney",
+            "UnknownDocumentType",
+          ]}
+          showIds={true}
+        />
+      </StoryPart>
+    </StoryBlock>
+  );
+};
+
 export const WaitingForDocumentWithApprovedAndRejected = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([
     {
