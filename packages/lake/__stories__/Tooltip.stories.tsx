@@ -1,9 +1,11 @@
 import { Meta } from "@storybook/react";
 import { StyleSheet } from "react-native";
+import { Fragment } from "react/jsx-runtime";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
 import { LakeTooltip } from "../src/components/LakeTooltip";
 import { Pressable } from "../src/components/Pressable";
+import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -51,6 +53,27 @@ export const Placements = () => {
               <LakeText>Hover to display tooltip at left</LakeText>
             </Box>
           </LakeTooltip>
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="Auto">
+        <Box direction="row" justifyContent="center">
+          {Array.from({ length: 10 }, (_, index) => (
+            <Fragment key={String(index)}>
+              {index > 0 ? <Space width={12} /> : null}
+
+              <LakeTooltip content="Tooltip content">
+                <Box
+                  style={styles.target}
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <LakeText>Hover</LakeText>
+                </Box>
+              </LakeTooltip>
+            </Fragment>
+          ))}
         </Box>
       </StoryPart>
     </StoryBlock>
