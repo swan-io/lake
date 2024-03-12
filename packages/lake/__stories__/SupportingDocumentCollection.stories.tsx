@@ -21,14 +21,12 @@ export default {
   component: SupportingDocumentCollection,
 } as Meta<typeof SupportingDocumentCollection>;
 
-let idCount = -1;
-
 const generateUpload = () =>
   Future.make<Result<UploadOutputWithId<UploadOutput>, unknown>>(resolve => {
     setTimeout(() => {
       resolve(
         Result.Ok({
-          id: String(++idCount),
+          id: crypto.randomUUID(),
           upload: {
             url: window.location.href,
             fields: [],
