@@ -31,7 +31,7 @@
   "dependencies": {
     "@formatjs/intl": "^2.10.0",
     "@placekit/client-js": "^2.3.0",
-    "@swan-io/boxed": "^2.1.0-beta",
+    "@swan-io/boxed": "^2.1.0",
     "@swan-io/request": "^1.0.1",
     "@swan-io/use-form": "^2.0.0-rc.2",
     "dayjs": "^1.11.10",
