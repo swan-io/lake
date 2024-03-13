@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useRef, useState } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -106,7 +106,9 @@ export type LakeTagInputProps = Merge<
 
 const SEPARATORS_REGEX = /,| /;
 
-export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
+export type TagInputRef = TextInput & { pushPendingValue: () => void };
+
+export const LakeTagInput = forwardRef<TagInputRef, LakeTagInputProps>(
   (
     {
       validator = () => true,
@@ -123,12 +125,14 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       help,
       error,
     }: LakeTagInputProps,
-    forwardRef,
+    forwardedRef,
   ) => {
     const inputRef = useRef<TextInput | null>(null);
     const containerRef = useRef<View | null>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    const mergedRef = useMergeRefs(inputRef, forwardedRef);
 
     useHover(containerRef, {
       onHoverStart: () => setIsHovered(true),
@@ -203,7 +207,26 @@ export const LakeTagInput = forwardRef<TextInput | null, LakeTagInputProps>(
       [pushNewValues, originalOnBlur, validateOnBlur],
     );
 
-    const mergedRef = useMergeRefs(inputRef, forwardRef);
+    useImperativeHandle<
+      Pick<TagInputRef, "pushPendingValue">,
+      Pick<TagInputRef, "pushPendingValue">
+    >(
+      forwardedRef,
+      () => ({
+        pushPendingValue: () => {
+          const input = inputRef.current;
+          if (
+            input instanceof HTMLInputElement &&
+            isNotNullishOrEmpty(input.value) &&
+            validateOnBlur
+          ) {
+            pushNewValues([input.value]);
+          }
+        },
+      }),
+      [pushNewValues, validateOnBlur],
+    );
+
     const hasError = isNotNullishOrEmpty(error);
 
     return (
