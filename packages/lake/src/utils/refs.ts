@@ -1,7 +1,6 @@
-// From https://github.com/gregberge/react-merge-refs
-
 import { LegacyRef, MutableRefObject, RefCallback } from "react";
 
+// From https://github.com/gregberge/react-merge-refs
 export const mergeRefs =
   <T>(refs: (MutableRefObject<T> | LegacyRef<T> | null | undefined)[]): RefCallback<T> =>
   value => {
