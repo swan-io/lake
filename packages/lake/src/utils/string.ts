@@ -232,6 +232,8 @@ export const deburr = (value: string): string => {
     .replace(/[\u0300-\u036f]/g, "");
 };
 
+export const trim = (value: string): string => value.trim();
+
 export const words = (value: string): string[] =>
   value.split(/\b/).filter(x => /^[a-zA-Z0-9]+$/.test(x));
 
