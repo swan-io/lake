@@ -2,7 +2,15 @@ import { Future, Result } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { IconName } from "@swan-io/lake/src/components/Icon";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { Fragment, useEffect, useRef } from "react";
+import {
+  ForwardedRef,
+  Fragment,
+  Ref,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { Config, useFilesUploader } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { FileInput } from "./FileInput";
@@ -22,26 +30,39 @@ type Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError> = Co
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   onChange?: (files: SwanFile[]) => void;
   canUpload?: boolean;
+  showIds?: boolean;
 };
 
-export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, UploadFileError>({
-  maxSize,
-  accept,
-  icon,
-  getUploadConfig,
-  onRemoveFile,
-  onChange,
-  formatAndSizeDescription,
-  canUpload = true,
-  ...config
-}: Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError>) => {
-  const { files, upload, remove } = useFilesUploader(config);
+export type FilesUploaderRef = {
+  add: (file: SwanFile) => void;
+};
+
+const FilesUploaderWithRef = <UploadInput, UploadOutput, GenerateUploadError, UploadFileError>(
+  {
+    maxSize,
+    accept,
+    icon,
+    getUploadConfig,
+    onRemoveFile,
+    onChange,
+    formatAndSizeDescription,
+    canUpload = true,
+    showIds = false,
+    ...config
+  }: Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError>,
+  ref: Ref<FilesUploaderRef>,
+) => {
+  const { files, upload, remove, add } = useFilesUploader(config);
 
   // Keep the `onChange` callback as a ref to avoid running the effect
   // every time the function updates
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const isFirstRender = useRef(true);
+
+  useImperativeHandle(ref, () => ({
+    add,
+  }));
 
   useEffect(() => {
     // Avoid calling `onChange` on first render
@@ -82,6 +103,7 @@ export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, Up
 
           <FileTile
             file={file}
+            showId={showIds}
             onRemove={
               onRemoveFile != undefined && file.statusInfo.status === "Uploaded"
                 ? () =>
@@ -96,3 +118,14 @@ export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, Up
     </Box>
   );
 };
+
+export const FilesUploader = forwardRef(FilesUploaderWithRef) as <
+  UploadInput,
+  UploadOutput,
+  GenerateUploadError,
+  UploadFileError,
+>(
+  props: Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError> & {
+    ref?: ForwardedRef<FilesUploaderRef>;
+  },
+) => ReturnType<typeof FilesUploaderWithRef>;

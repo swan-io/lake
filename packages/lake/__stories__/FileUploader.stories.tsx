@@ -18,37 +18,36 @@ export default {
   component: FilesUploader,
 } as Meta<typeof FilesUploader>;
 
-let idCounter = 0;
+const documents: SwanFile[] = [
+  {
+    id: crypto.randomUUID(),
+    name: "first-document.pdf",
+    url: "https://swan.io",
+    statusInfo: { status: "Validated" },
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "second-document.png",
+    statusInfo: { status: "Pending" },
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "third-document.jpg",
+    statusInfo: { status: "Refused", reason: "Quality of the document was too low" },
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "fourth-document.xls",
+    statusInfo: { status: "Uploaded" },
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "last-document.png",
+    statusInfo: { status: "Uploaded" },
+  },
+];
 
 export const WithSeveralDocuments = () => {
-  const documents: SwanFile[] = [
-    {
-      id: String(++idCounter),
-      name: "first-document.pdf",
-      url: "https://swan.io",
-      statusInfo: { status: "Validated" },
-    },
-    {
-      id: String(++idCounter),
-      name: "second-document.png",
-      statusInfo: { status: "Pending" },
-    },
-    {
-      id: String(++idCounter),
-      name: "third-document.jpg",
-      statusInfo: { status: "Refused", reason: "Quality of the document was too low" },
-    },
-    {
-      id: String(++idCounter),
-      name: "fourth-document.xls",
-      statusInfo: { status: "Uploaded" },
-    },
-    {
-      id: String(++idCounter),
-      name: "last-document.png",
-      statusInfo: { status: "Uploaded" },
-    },
-  ];
   return (
     <StoryBlock title="UploadArea with several documents">
       <StoryPart title="" style={styles.storyPart}>
@@ -58,7 +57,7 @@ export const WithSeveralDocuments = () => {
           accept={ACCEPTED_FORMATS}
           initialFiles={documents}
           getUploadConfig={() => {}}
-          generateUpload={() => Future.value(Result.Ok({ id: String(++idCounter), upload: {} }))}
+          generateUpload={() => Future.value(Result.Ok({ id: crypto.randomUUID(), upload: {} }))}
           onRemoveFile={() =>
             Future.make<Result<unknown, unknown>>(resolve => {
               setTimeout(() => resolve(Result.Ok(undefined)), 1_000);
