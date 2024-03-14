@@ -8,11 +8,8 @@ import {
 } from "@swan-io/shared-business/src/components/SupportingDocumentCollection";
 import { UploadOutputWithId } from "@swan-io/shared-business/src/hooks/useFilesUploader";
 import { useRef, useState } from "react";
-import { StyleSheet } from "react-native";
 import { LakeButton } from "../src/components/LakeButton";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
-
-const styles = StyleSheet.create({});
 
 export default {
   title: "Onboarding/SupportingDocumentCollection",
@@ -40,7 +37,7 @@ export const WaitingForDocument = () => {
 
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           ref={ref}
           status="WaitingForDocument"
@@ -80,7 +77,7 @@ export const WaitingForDocumentShowIds = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
   return (
     <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
@@ -129,7 +126,7 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
   ]);
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
@@ -157,7 +154,7 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
 export const Pending = () => {
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="PendingReview"
           generateUpload={generateUpload}
@@ -182,7 +179,7 @@ export const Pending = () => {
 export const Approved = () => {
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="Approved"
           generateUpload={generateUpload}
@@ -207,7 +204,7 @@ export const Approved = () => {
 export const ApprovedWithoutDownload = () => {
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="Approved"
           generateUpload={generateUpload}
@@ -231,7 +228,7 @@ export const ApprovedWithoutDownload = () => {
 export const Rejected = () => {
   return (
     <StoryBlock title="SupportingDocument" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="Rejected"
           generateUpload={generateUpload}
@@ -257,7 +254,7 @@ export const ReadOnlyEmpty = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
   return (
     <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
@@ -275,7 +272,7 @@ export const ReadOnlyEmpty = () => {
 export const ReadOnlyWithDocs = () => {
   return (
     <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
-      <StoryPart title="Default" style={styles.storyPart}>
+      <StoryPart title="Default">
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
