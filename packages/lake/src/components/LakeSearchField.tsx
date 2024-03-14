@@ -1,4 +1,4 @@
-import { ReactNode, RefObject, useCallback, useRef, useState } from "react";
+import { ReactNode, Ref, useCallback, useRef, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { animations, backgroundColor, colors, radii, spacings } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
@@ -71,7 +71,7 @@ type Props = {
 };
 
 type InternalProps = {
-  inputRef: RefObject<TextInput>;
+  inputRef: Ref<TextInput>;
   placeholder: string;
   initialValue: string;
   onChange: (value: string) => void;
@@ -139,8 +139,10 @@ const ExpandedSearchField = ({
   hasFocus,
   clear,
   renderEnd,
+  currentValue,
 }: InternalProps) => {
   const timeoutRef = useRef<number | null>(null);
+
   return (
     <LakeTextInput
       ref={inputRef}
@@ -153,7 +155,7 @@ const ExpandedSearchField = ({
       hideErrors={true}
       renderEnd={() => (
         <>
-          {isNotNullishOrEmpty((inputRef?.current as unknown as HTMLInputElement)?.value) && (
+          {isNotNullishOrEmpty(currentValue) && (
             <Pressable
               onPress={() => {
                 if (timeoutRef.current != null) {
