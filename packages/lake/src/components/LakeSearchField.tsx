@@ -1,8 +1,9 @@
-import { ReactNode, Ref, useCallback, useRef, useState } from "react";
+import { ReactNode, RefObject, useCallback, useRef, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { animations, backgroundColor, colors, radii, spacings } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
 import { useDebounce } from "../hooks/useDebounce";
+import { isNotNullishOrEmpty } from "../utils/nullish";
 import { LakeButton } from "./LakeButton";
 import { LakeTextInput } from "./LakeTextInput";
 import { ResponsiveContainer } from "./ResponsiveContainer";
@@ -70,7 +71,7 @@ type Props = {
 };
 
 type InternalProps = {
-  inputRef: Ref<TextInput>;
+  inputRef: RefObject<TextInput>;
   placeholder: string;
   initialValue: string;
   onChange: (value: string) => void;
@@ -152,39 +153,41 @@ const ExpandedSearchField = ({
       hideErrors={true}
       renderEnd={() => (
         <>
-          <Pressable
-            onPress={() => {
-              if (timeoutRef.current != null) {
-                clearTimeout(timeoutRef.current);
-              }
-              clear();
-            }}
-            style={styles.clearButton}
-          >
-            <Svg viewBox="0 0 16 16" style={styles.clear}>
-              <>
-                <Line
-                  x1="0"
-                  x2="16"
-                  y1="0"
-                  y2="16"
-                  strokeLinecap="round"
-                  stroke={colors.gray[500]}
-                  strokeWidth={2}
-                />
+          {isNotNullishOrEmpty((inputRef?.current as unknown as HTMLInputElement)?.value) && (
+            <Pressable
+              onPress={() => {
+                if (timeoutRef.current != null) {
+                  clearTimeout(timeoutRef.current);
+                }
+                clear();
+              }}
+              style={styles.clearButton}
+            >
+              <Svg viewBox="0 0 16 16" style={styles.clear}>
+                <>
+                  <Line
+                    x1="0"
+                    x2="16"
+                    y1="0"
+                    y2="16"
+                    strokeLinecap="round"
+                    stroke={colors.gray[500]}
+                    strokeWidth={2}
+                  />
 
-                <Line
-                  x1="0"
-                  x2="16"
-                  y1="16"
-                  y2="0"
-                  strokeLinecap="round"
-                  stroke={colors.gray[500]}
-                  strokeWidth={2}
-                />
-              </>
-            </Svg>
-          </Pressable>
+                  <Line
+                    x1="0"
+                    x2="16"
+                    y1="16"
+                    y2="0"
+                    strokeLinecap="round"
+                    stroke={colors.gray[500]}
+                    strokeWidth={2}
+                  />
+                </>
+              </Svg>
+            </Pressable>
+          )}
 
           {renderEnd?.()}
         </>
