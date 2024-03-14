@@ -238,74 +238,82 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
 
   return (
     <Form>
-      {orderedDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
-        return (
-          <Fragment key={purpose}>
-            <LakeLabel
-              label={getSupportingDocumentPurposeLabel(purpose)}
-              help={match(purpose as string)
-                .with("PowerOfAttorney", () => (
-                  <Help
-                    type="button"
-                    label={t("supportingDocuments.help.whatIsThis")}
-                    onPress={() => setShowPowerOfAttorneyModal(true)}
-                  />
-                ))
-                .with("SwornStatement", () => (
-                  <Help
-                    type="button"
-                    label={t("supportingDocuments.help.whatIsThis")}
-                    onPress={() => setShowSwornStatementModal(true)}
-                  />
-                ))
-                .otherwise(() => {
-                  const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
-                  return isNotNullishOrEmpty(label) ? <Help type="tooltip" text={label} /> : null;
-                })}
-              render={() => (
-                <FilesUploader
-                  ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
-                  // Only allow uploading is the Supporting Document Collection awaits for docs
-                  // and that the specific purpose isn't already fully validated
-                  canUpload={
-                    !readOnly && status === "WaitingForDocument" && !areAllDocumentsValidated
-                  }
-                  accept={ACCEPTED_FORMATS}
-                  maxSize={20_000_000}
-                  icon="document-regular"
-                  initialFiles={files}
-                  generateUpload={generateUpload}
-                  getUploadConfig={file => ({ fileName: file.name, purpose })}
-                  uploadFile={({ upload, file, onLoadStart, onProgress }) => {
-                    const body = new FormData();
-                    upload.fields.forEach(({ key, value }) => body.append(key, value));
-                    body.append("file", file);
-                    return Request.make({
-                      url: upload.url,
-                      method: "POST",
-                      onLoadStart,
-                      onProgress,
-                      body,
-                    }).mapOkToResult(badStatusToError);
-                  }}
-                  formatAndSizeDescription={t("supportingDocuments.documentTypes", {
-                    maxSizeMB: 20_000_000 / 1_000_000,
+      {orderedDocumentPurposes
+        .filter(({ files }) => {
+          // Completely hide the purpose section if empty and no action is available
+          if (readOnly && files.length === 0) {
+            return false;
+          }
+          return true;
+        })
+        .map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
+          return (
+            <Fragment key={purpose}>
+              <LakeLabel
+                label={getSupportingDocumentPurposeLabel(purpose)}
+                help={match(purpose as string)
+                  .with("PowerOfAttorney", () => (
+                    <Help
+                      type="button"
+                      label={t("supportingDocuments.help.whatIsThis")}
+                      onPress={() => setShowPowerOfAttorneyModal(true)}
+                    />
+                  ))
+                  .with("SwornStatement", () => (
+                    <Help
+                      type="button"
+                      label={t("supportingDocuments.help.whatIsThis")}
+                      onPress={() => setShowSwornStatementModal(true)}
+                    />
+                  ))
+                  .otherwise(() => {
+                    const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
+                    return isNotNullishOrEmpty(label) ? <Help type="tooltip" text={label} /> : null;
                   })}
-                  onRemoveFile={readOnly ? undefined : onRemoveFile}
-                  onChange={files => {
-                    if (isRequired) {
-                      filesByRequiredPurpose.current.set(purpose, files);
+                render={() => (
+                  <FilesUploader
+                    ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
+                    // Only allow uploading is the Supporting Document Collection awaits for docs
+                    // and that the specific purpose isn't already fully validated
+                    canUpload={
+                      !readOnly && status === "WaitingForDocument" && !areAllDocumentsValidated
                     }
-                  }}
-                  showIds={showIds}
-                />
-              )}
-            />
+                    accept={ACCEPTED_FORMATS}
+                    maxSize={20_000_000}
+                    icon="document-regular"
+                    initialFiles={files}
+                    generateUpload={generateUpload}
+                    getUploadConfig={file => ({ fileName: file.name, purpose })}
+                    uploadFile={({ upload, file, onLoadStart, onProgress }) => {
+                      const body = new FormData();
+                      upload.fields.forEach(({ key, value }) => body.append(key, value));
+                      body.append("file", file);
+                      return Request.make({
+                        url: upload.url,
+                        method: "POST",
+                        onLoadStart,
+                        onProgress,
+                        body,
+                      }).mapOkToResult(badStatusToError);
+                    }}
+                    formatAndSizeDescription={t("supportingDocuments.documentTypes", {
+                      maxSizeMB: 20_000_000 / 1_000_000,
+                    })}
+                    onRemoveFile={readOnly ? undefined : onRemoveFile}
+                    onChange={files => {
+                      if (isRequired) {
+                        filesByRequiredPurpose.current.set(purpose, files);
+                      }
+                    }}
+                    showIds={showIds}
+                  />
+                )}
+              />
 
-            <Space height={24} />
-          </Fragment>
-        );
-      })}
+              <Space height={24} />
+            </Fragment>
+          );
+        })}
 
       {requiredDocumentPurposes.length === 0 ? (
         <>
