@@ -54,6 +54,7 @@ type Props<Purpose extends string> = {
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   templateLanguage?: string;
   showIds?: boolean;
+  readOnly?: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -141,6 +142,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     status,
     onRemoveFile,
     showIds = false,
+    readOnly = false,
   }: Props<Purpose>,
   ref: Ref<SupportingDocumentCollectionRef<Purpose>>,
 ) => {
@@ -265,7 +267,9 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                   ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
                   // Only allow uploading is the Supporting Document Collection awaits for docs
                   // and that the specific purpose isn't already fully validated
-                  canUpload={status === "WaitingForDocument" && !areAllDocumentsValidated}
+                  canUpload={
+                    !readOnly && status === "WaitingForDocument" && !areAllDocumentsValidated
+                  }
                   accept={ACCEPTED_FORMATS}
                   maxSize={20_000_000}
                   icon="document-regular"
@@ -287,7 +291,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                   formatAndSizeDescription={t("supportingDocuments.documentTypes", {
                     maxSizeMB: 20_000_000 / 1_000_000,
                   })}
-                  onRemoveFile={onRemoveFile}
+                  onRemoveFile={readOnly ? undefined : onRemoveFile}
                   onChange={files => {
                     if (isRequired) {
                       filesByRequiredPurpose.current.set(purpose, files);
