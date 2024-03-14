@@ -212,7 +212,7 @@
   "supportingDocuments.downloadTemplate": "Lataa pohja",
   "supportingDocuments.errorUpload": "Tiedoston lataus epäonnistui",
   "supportingDocuments.help.whatIsThis": "Mikä tämä on?",
-  "supportingDocuments.noRequiredDocuments": "Emme tarvitse sinulta mitään asiakirjoja. Voit jatkaa.",
+  "supportingDocuments.noDocuments": "Ei asiakirjoja.",
   "supportingDocuments.powerOfAttorneyModal.description": "Allekirjoitettu ja päivätty asiakirja, joka valtuuttaa yksilön edustamaan tai toimimaan yrityksen laillisen edustajan puolesta.",
   "supportingDocuments.powerOfAttorneyModal.title": "Valtakirja",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment": "Päättäjän nimityspäätös",

@@ -212,7 +212,7 @@
   "supportingDocuments.downloadTemplate": "Vorlage herunterladen",
   "supportingDocuments.errorUpload": "Datei konnte nicht hochgeladen werden",
   "supportingDocuments.help.whatIsThis": "Was ist das?",
-  "supportingDocuments.noRequiredDocuments": "Wir benötigen keine Dokumente von Ihnen. Sie können fortfahren.",
+  "supportingDocuments.noDocuments": "Keine Dokumente.",
   "supportingDocuments.powerOfAttorneyModal.description": "Ein unterzeichneter und datierter Dokument, das einer Person die Vertretung oder Handlung im Namen des gesetzlichen Vertreters eines Unternehmens autorisiert.",
   "supportingDocuments.powerOfAttorneyModal.title": "Vollmacht",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment": "Entscheidung über die Ernennung eines Administrators",

@@ -212,7 +212,7 @@
   "supportingDocuments.downloadTemplate": "Scarica modello",
   "supportingDocuments.errorUpload": "Caricamento del file non riuscito",
   "supportingDocuments.help.whatIsThis": "Cosa è questo?",
-  "supportingDocuments.noRequiredDocuments": "Non abbiamo bisogno di nessun documento da parte tua. Puoi continuare.",
+  "supportingDocuments.noDocuments": "Nessun documento.",
   "supportingDocuments.powerOfAttorneyModal.description": "Un documento firmato e datato che autorizza un individuo a rappresentare o agire per conto del legale rappresentante di un'azienda.",
   "supportingDocuments.powerOfAttorneyModal.title": "Procura",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment": "Decisione di nomina dell'Amministratore",

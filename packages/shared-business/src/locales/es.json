@@ -212,7 +212,7 @@
   "supportingDocuments.downloadTemplate": "Descargar plantilla",
   "supportingDocuments.errorUpload": "Error al subir el archivo",
   "supportingDocuments.help.whatIsThis": "¿Qué es esto?",
-  "supportingDocuments.noRequiredDocuments": "No necesitamos ningún documento tuyo. Puedes continuar.",
+  "supportingDocuments.noDocuments": "Sin documentos.",
   "supportingDocuments.powerOfAttorneyModal.description": "Documento firmado y fechado que autoriza a una persona a representar o actuar en nombre del representante legal de una empresa.",
   "supportingDocuments.powerOfAttorneyModal.title": "Poder notarial",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment": "Decisión de nombramiento del administrador",

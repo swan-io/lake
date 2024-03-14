@@ -212,7 +212,7 @@
   "supportingDocuments.downloadTemplate": "Download template",
   "supportingDocuments.errorUpload": "Failed to upload file",
   "supportingDocuments.help.whatIsThis": "What is this?",
-  "supportingDocuments.noRequiredDocuments": "We don't need any documents from you. You can continue.",
+  "supportingDocuments.noDocuments": "No documents.",
   "supportingDocuments.powerOfAttorneyModal.description": "A signed and dated document authorizing an individual to represent or act on behalf of a company's legal representative.",
   "supportingDocuments.powerOfAttorneyModal.title": "Power of attorney",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment.description": "",

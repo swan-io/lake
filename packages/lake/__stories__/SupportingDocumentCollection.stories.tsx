@@ -12,11 +12,7 @@ import { StyleSheet } from "react-native";
 import { LakeButton } from "../src/components/LakeButton";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
-const styles = StyleSheet.create({
-  storyPart: {
-    maxWidth: 600,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default {
   title: "Onboarding/SupportingDocumentCollection",
@@ -251,6 +247,53 @@ export const Rejected = () => {
             },
           ]}
           requiredDocumentPurposes={["ProofOfIdentity"]}
+        />
+      </StoryPart>
+    </StoryBlock>
+  );
+};
+
+export const ReadOnlyEmpty = () => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  return (
+    <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default" style={styles.storyPart}>
+        <SupportingDocumentCollection
+          status="WaitingForDocument"
+          generateUpload={generateUpload}
+          documents={documents}
+          onChange={setDocuments}
+          requiredDocumentPurposes={[]}
+          showIds={true}
+          readOnly={true}
+        />
+      </StoryPart>
+    </StoryBlock>
+  );
+};
+
+export const ReadOnlyWithDocs = () => {
+  return (
+    <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default" style={styles.storyPart}>
+        <SupportingDocumentCollection
+          status="WaitingForDocument"
+          generateUpload={generateUpload}
+          documents={[
+            {
+              purpose: "ProofOfIdentity",
+              file: {
+                id: "id",
+                name: "IdCard.pdf",
+                url: "https://swan.io",
+                statusInfo: { status: "Refused", reason: "Invalid document" },
+              },
+            },
+          ]}
+          onChange={() => {}}
+          requiredDocumentPurposes={[]}
+          showIds={true}
+          readOnly={true}
         />
       </StoryPart>
     </StoryBlock>
