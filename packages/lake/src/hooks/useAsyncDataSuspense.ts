@@ -19,7 +19,7 @@ export const useAsyncDataSuspense = <T extends AsyncData<unknown>>(asyncData: T)
       resolve(undefined);
       hasResolved.current = true;
     }
-  });
+  }, [asyncData, resolve]);
 
   if (!hasResolved.current) {
     throw promiseToThrow;
