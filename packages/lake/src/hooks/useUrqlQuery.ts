@@ -142,10 +142,11 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
   };
 };
 
-type DeferredQuery<Data, Variables extends AnyVariables> = [
-  data: AsyncData<Result<Data, CombinedError>>,
-  query: (args: Variables) => Future<Result<Data, CombinedError>>,
-];
+type DeferredQuery<Data, Variables extends AnyVariables> = {
+  data: AsyncData<Result<Data, CombinedError>>;
+  query: (args: Variables) => Future<Result<Data, CombinedError>>;
+  reset: () => void;
+};
 
 export const useDeferredUrqlQuery = <Data, Variables extends AnyVariables>(
   document: DocumentInput<Data, Variables>,
@@ -166,5 +167,9 @@ export const useDeferredUrqlQuery = <Data, Variables extends AnyVariables>(
     [client, document],
   );
 
-  return [data, query];
+  const reset = useCallback(() => {
+    setData(AsyncData.NotAsked());
+  }, []);
+
+  return { data, query, reset };
 };
