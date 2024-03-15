@@ -1,7 +1,15 @@
-import { AsyncData, Result } from "@swan-io/boxed";
+import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { DependencyList, useCallback, useEffect, useMemo, useState } from "react";
-import { AnyVariables, CombinedError, UseQueryArgs, useQuery } from "urql";
+import {
+  AnyVariables,
+  CombinedError,
+  DocumentInput,
+  UseQueryArgs,
+  useClient,
+  useQuery,
+} from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
+import { parseOperationResult } from "../utils/urql";
 
 type Query<Data> = {
   isForceReloading: boolean;
@@ -132,4 +140,31 @@ export const useUrqlPaginatedQuery = <Data, Variables extends AnyVariables>(
     reload,
     setAfter,
   };
+};
+
+type DeferredQuery<Data, Variables extends AnyVariables> = [
+  data: AsyncData<Result<Data, CombinedError>>,
+  query: (args: Variables) => Future<Result<Data, CombinedError>>,
+];
+
+export const useDeferredUrqlQuery = <Data, Variables extends AnyVariables>(
+  document: DocumentInput<Data, Variables>,
+): DeferredQuery<Data, Variables> => {
+  const [data, setData] = useState<AsyncData<Result<Data, CombinedError>>>(AsyncData.NotAsked());
+
+  const client = useClient();
+
+  const query = useCallback(
+    (args: Variables) => {
+      setData(AsyncData.Loading());
+      return Future.fromPromise<Data, CombinedError>(
+        client.query(document, args).toPromise().then(parseOperationResult),
+      ).tap(data => {
+        setData(AsyncData.Done(data));
+      });
+    },
+    [client, document],
+  );
+
+  return [data, query];
 };
