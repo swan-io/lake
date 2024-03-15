@@ -4,12 +4,12 @@ import {
   AnyVariables,
   CombinedError,
   DocumentInput,
-  OperationResult,
   UseQueryArgs,
   useClient,
   useQuery,
 } from "urql";
 import { isNotNullish, isNullish } from "../utils/nullish";
+import { parseOperationResult } from "../utils/urql";
 
 type Query<Data> = {
   isForceReloading: boolean;
@@ -157,15 +157,11 @@ export const useDeferredUrqlQuery = <Data, Variables extends AnyVariables>(
   const query = useCallback(
     (args: Variables) => {
       setData(AsyncData.Loading());
-      return Future.fromPromise<OperationResult<Data, Variables>, CombinedError>(
-        client.query(document, args).toPromise(),
-      )
-        .mapOkToResult(res =>
-          res.data != null ? Result.Ok(res.data) : Result.Error(res.error as CombinedError),
-        )
-        .tap(data => {
-          setData(AsyncData.Done(data));
-        });
+      return Future.fromPromise<Data, CombinedError>(
+        client.query(document, args).toPromise().then(parseOperationResult),
+      ).tap(data => {
+        setData(AsyncData.Done(data));
+      });
     },
     [client, document],
   );
