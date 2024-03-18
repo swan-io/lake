@@ -16,6 +16,7 @@ type Query<Data> = {
   data: AsyncData<Result<Data, CombinedError>>;
   nextData: AsyncData<Result<Data, CombinedError>>;
   reload: () => void;
+  refresh: () => void;
 };
 
 const EMPTY_DEPENDENCY_LIST: DependencyList = [];
@@ -52,6 +53,10 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
     reexecute({ requestPolicy: "network-only" });
   }, [reexecute]);
 
+  const refresh = useCallback(() => {
+    reexecute({ requestPolicy: "cache-and-network" });
+  }, [reexecute]);
+
   const okResult = useMemo(
     () => (isNullish(data) ? null : AsyncData.Done(Result.Ok<Data, CombinedError>(data))),
     [data],
@@ -70,6 +75,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
       data: AsyncData.Loading(),
       nextData: AsyncData.Loading(),
       reload,
+      refresh,
     };
   }
 
@@ -79,6 +85,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
       data: errorResult,
       nextData: errorResult,
       reload,
+      refresh,
     };
   }
 
@@ -88,6 +95,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
       data: okResult,
       nextData: fetching ? AsyncData.Loading() : okResult,
       reload,
+      refresh,
     };
   }
 
@@ -96,6 +104,7 @@ export const useUrqlQuery = <Data, Variables extends AnyVariables>(
     data: AsyncData.NotAsked(),
     nextData: AsyncData.NotAsked(),
     reload,
+    refresh,
   };
 };
 
