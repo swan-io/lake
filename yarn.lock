@@ -2312,10 +2312,10 @@
   resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.1.0.tgz#c6ba85f576a8042e6c9f5a7552fba9b8dd4170e5"
   integrity sha512-uoDYMIyP18290829n4xNk+I3ioNrmmxHPXArc0ZiBOsHBtnDLXLE4/F9x7piEA8ooO1V1L6A0v+LRnJsu/8eDA==
 
-"@swan-io/chicane@^2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@swan-io/chicane/-/chicane-2.0.0-rc.1.tgz#9fa4c003e296669d52a4e66288339ed73d17ffce"
-  integrity sha512-Euht28F3YaQDKlngjX1RxO6+hR6JQXEwb4ru3ZVga2aBKk00mD9clGQW21Gat2HxmIBfz4/YV5xcY0hxDEn49Q==
+"@swan-io/chicane@^2.0.0-rc.2":
+  version "2.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@swan-io/chicane/-/chicane-2.0.0-rc.2.tgz#fe98f4c10c385fcac003303bff75b5de286940fa"
+  integrity sha512-SWE0q8Yql8pjBN6o2SmKKkD3CP0R8cTD5vcmxC19CBDAkosSR6JlOlSgPkq9zHiuGtDtrBwT5vrdJQxLr4Ix+A==
   dependencies:
     "@emotion/hash" "^0.9.1"
     use-sync-external-store "^1.2.0"
