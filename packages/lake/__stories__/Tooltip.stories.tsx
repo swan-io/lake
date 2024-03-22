@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Fragment } from "react/jsx-runtime";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
-import { LakeTooltip } from "../src/components/LakeTooltip";
+import { InformationTooltip, LakeTooltip } from "../src/components/LakeTooltip";
 import { Pressable } from "../src/components/Pressable";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
@@ -74,6 +74,27 @@ export const Placements = () => {
               </LakeTooltip>
             </Fragment>
           ))}
+        </Box>
+      </StoryPart>
+    </StoryBlock>
+  );
+};
+
+export const InfoTooltip = () => {
+  return (
+    <StoryBlock title="Information Tooltip">
+      <StoryPart title="Default">
+        <Box direction="row" justifyContent="center">
+          <InformationTooltip text="Default information tooltip" />
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="With custom icon">
+        <Box direction="row" justifyContent="center">
+          <InformationTooltip
+            icon="building-shop-regular"
+            text="Information tooltip with custom icon"
+          />
         </Box>
       </StoryPart>
     </StoryBlock>

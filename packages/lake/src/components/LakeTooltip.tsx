@@ -15,7 +15,7 @@ import { useHover } from "../hooks/useHover";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { getRootElement } from "../utils/popper";
 import { Box } from "./Box";
-import { Icon } from "./Icon";
+import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Portal } from "./Portal";
 import { Polygon, Svg } from "./Svg";
@@ -254,8 +254,8 @@ const Tooltip = memo(
   ),
 );
 
-export const InformationTooltip = forwardRef<TooltipRef, { text: string }>(
-  ({ text }, forwardedRef) => (
+export const InformationTooltip = forwardRef<TooltipRef, { text: string; icon?: IconName }>(
+  ({ text, icon = "info-regular" }, forwardedRef) => (
     <LakeTooltip
       ref={forwardedRef}
       describedBy="copy"
@@ -265,7 +265,7 @@ export const InformationTooltip = forwardRef<TooltipRef, { text: string }>(
       content={text}
     >
       <View style={styles.info}>
-        <Icon name="info-regular" size={24} color={colors.gray[900]} />
+        <Icon name={icon} size={24} color={colors.gray[900]} />
       </View>
     </LakeTooltip>
   ),
