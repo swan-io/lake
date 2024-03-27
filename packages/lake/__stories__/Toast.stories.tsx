@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { CombinedError } from "urql";
 import { LakeButton } from "../src/components/LakeButton";
 import { Space } from "../src/components/Space";
 import { ToastStack } from "../src/components/ToastStack";
@@ -17,6 +18,9 @@ export default {
 } as Meta<typeof ToastStack>;
 
 export const Default = () => {
+  const error = new CombinedError({});
+  error.requestId = "req-thvfknqp";
+
   return (
     <>
       <ToastStack />
@@ -90,6 +94,7 @@ export const Default = () => {
               showToast({
                 variant: "error",
                 title: "Oops ! Something went wrong",
+                error,
                 description: "Please retry or contact us",
               })
             }

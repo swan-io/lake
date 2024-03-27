@@ -23,6 +23,9 @@ import { Polygon, Svg } from "./Svg";
 const { matches: canHover } = window.matchMedia("(hover: hover)");
 
 const styles = StyleSheet.create({
+  root: {
+    zIndex: 1000,
+  },
   base: {
     position: "absolute",
     pointerEvents: "none",
@@ -191,7 +194,7 @@ const Tooltip = memo(
 
           {isNotNullish(rootElement) && position.isSome() && !disabled && (
             <Portal container={rootElement}>
-              <View style={position.get().rootStyle}>
+              <View style={[position.get().rootStyle, styles.root]}>
                 <View
                   role="tooltip"
                   aria-describedby={describedBy}

@@ -11,6 +11,9 @@ import {
 } from "urql";
 import { isNotNullish, isNullish } from "./nullish";
 
+export const isCombinedError = (error: unknown): error is CombinedError =>
+  error instanceof CombinedError;
+
 export const parseOperationResult = <T>({ error, data }: OperationResult<T>): T => {
   if (isNotNullish(error)) {
     throw error;

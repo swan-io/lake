@@ -8,6 +8,7 @@ type ToastContent = {
   variant: ToastVariant;
   title: string;
   description?: string;
+  error?: Error;
   autoClose?: boolean;
 };
 
@@ -16,6 +17,7 @@ type Toast = {
   variant: ToastVariant;
   title: string;
   description?: string;
+  error?: Error;
   progress?: Animated.Value;
   timeout?: ControllableTimeout;
 };
@@ -37,7 +39,7 @@ export const hideToast = (uid: string) => {
   toasts.set(toasts => toasts.filter(toast => toast.uid !== uid));
 };
 
-export const showToast = ({ variant, title, description, autoClose }: ToastContent) => {
+export const showToast = ({ variant, title, description, error, autoClose }: ToastContent) => {
   const uid = `${variant} - ${title} - ${description ?? ""}`;
 
   const toast = toasts.get().find(toast => toast.uid === uid);
@@ -89,6 +91,6 @@ export const showToast = ({ variant, title, description, autoClose }: ToastConte
       })
     : undefined;
 
-  toasts.set(toasts => [{ uid, variant, title, description, progress, timeout }, ...toasts]);
+  toasts.set(toasts => [{ uid, variant, title, description, error, progress, timeout }, ...toasts]);
   return uid;
 };
