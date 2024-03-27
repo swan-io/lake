@@ -71,7 +71,7 @@ type ToastProps = {
   uid: string;
   title: string;
   description?: string;
-  error?: Error;
+  error?: unknown;
   progress?: Animated.Value;
   onClose: (uid: string) => void;
 };

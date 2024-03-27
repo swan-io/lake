@@ -8,7 +8,7 @@ type ToastContent = {
   variant: ToastVariant;
   title: string;
   description?: string;
-  error?: Error;
+  error?: unknown;
   autoClose?: boolean;
 };
 
@@ -17,7 +17,7 @@ type Toast = {
   variant: ToastVariant;
   title: string;
   description?: string;
-  error?: Error;
+  error?: unknown;
   progress?: Animated.Value;
   timeout?: ControllableTimeout;
 };
