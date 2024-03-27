@@ -5,19 +5,21 @@ import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
 
 type Props = {
-  valueToCopy: string;
-  copyText: string;
+  color?: string;
   copiedText: string;
+  copyText: string;
   size?: number;
+  valueToCopy: string;
 };
 
 export const copyButtondefaultSize = 21;
 
 export const LakeCopyButton = ({
-  valueToCopy,
-  size = copyButtondefaultSize,
-  copyText,
+  color,
   copiedText,
+  copyText,
+  size = copyButtondefaultSize,
+  valueToCopy,
 }: Props) => {
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
 
@@ -36,7 +38,7 @@ export const LakeCopyButton = ({
           setVisibleState("copied");
         }}
       >
-        <Icon size={size} name="copy-regular" />
+        <Icon color={color} size={size} name="copy-regular" />
       </Pressable>
     </LakeTooltip>
   );

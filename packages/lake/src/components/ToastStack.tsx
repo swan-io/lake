@@ -1,12 +1,15 @@
+import { t } from "@swan-io/shared-business/src/utils/i18n";
 import { memo, useEffect, useRef, useState } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, Clipboard, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { ColorVariants, animations, colors, shadows } from "../constants/design";
 import { ToastVariant, hideToast, useToasts } from "../state/toasts";
-import { isNullish } from "../utils/nullish";
+import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
+import { isCombinedError } from "../utils/urql";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
+import { LakeTooltip } from "./LakeTooltip";
 import { Portal } from "./Portal";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
@@ -52,6 +55,15 @@ const styles = StyleSheet.create({
     height: 2,
     transformOrigin: "left",
   },
+  copyTooltip: {
+    alignSelf: "flex-start",
+  },
+  copyButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
+  },
 });
 
 type ToastProps = {
@@ -59,12 +71,15 @@ type ToastProps = {
   uid: string;
   title: string;
   description?: string;
+  error?: Error;
   progress?: Animated.Value;
   onClose: (uid: string) => void;
 };
 
-const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, onClose }) => {
+const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progress, onClose }) => {
   const progressBarRef = useRef<View>(null);
+  const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
+  const hasDescription = isNotNullishOrEmpty(description);
 
   const colorVariation = match(variant)
     .returnType<ColorVariants>()
@@ -128,7 +143,7 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, on
             </LakeText>
           </Box>
 
-          {description != null && (
+          {hasDescription && (
             <>
               <Space height={8} />
 
@@ -137,6 +152,42 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, progress, on
               </LakeText>
             </>
           )}
+
+          {isCombinedError(error) && isNotNullish(error.requestId) ? (
+            <>
+              <Space height={hasDescription ? 4 : 8} />
+
+              <LakeTooltip
+                describedBy="copy"
+                onHide={() => setVisibleState("copy")}
+                togglableOnFocus={true}
+                placement="center"
+                containerStyle={styles.copyTooltip}
+                content={
+                  visibleState === "copy"
+                    ? t("copyButton.copyTooltip")
+                    : t("copyButton.copiedTooltip")
+                }
+              >
+                <Pressable
+                  style={styles.copyButton}
+                  onPress={event => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    Clipboard.setString(error.requestId ?? "");
+                    setVisibleState("copied");
+                  }}
+                >
+                  <Icon color={colors.gray[700]} size={14} name="copy-regular" />
+                  <Space width={4} />
+
+                  <LakeText numberOfLines={1} variant="smallRegular" color={colors.gray[700]}>
+                    ID: {error.requestId}
+                  </LakeText>
+                </Pressable>
+              </LakeTooltip>
+            </>
+          ) : null}
         </Box>
 
         <Pressable onPress={() => onClose(uid)} style={styles.closeButton}>
@@ -190,9 +241,10 @@ export const ToastStack = () => {
             key={toast.uid}
             uid={toast.uid}
             variant={toast.variant}
-            progress={toast.progress}
             title={toast.title}
             description={toast.description}
+            error={toast.error}
+            progress={toast.progress}
             onClose={hideToast}
           />
         ))}
