@@ -807,7 +807,7 @@ export const TabView = ({
           style={[
             styles.underline,
             styles.animatedUnderline,
-            { transform: `translateX(${left}px) scaleX(${width})` },
+            { transform: `translateX(${left}px)`, width },
           ]}
         />
       )}

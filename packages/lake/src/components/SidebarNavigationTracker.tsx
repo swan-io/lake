@@ -43,20 +43,10 @@ type Layout = { color: string; top: number; height: number };
 // using `offsetTop` and `offsetHeight` here to avoid calculations
 // being wrong when ancestor has as CSS transform applied
 const getCoordinates = (element: HTMLElement, guide: HTMLElement) => {
-  const offsetHeight = element.offsetHeight;
-  const guideParent = guide.parentElement;
+  const parentTop = guide.parentElement?.getBoundingClientRect().top ?? 0;
+  const elementRect = element.getBoundingClientRect();
 
-  if (guideParent == null || !guideParent.contains(element)) {
-    return { top: 0, height: offsetHeight };
-  }
-  let offsetTop = 0;
-  let currentElement: HTMLElement | null = element;
-  while (currentElement != null && currentElement != guideParent) {
-    offsetTop += currentElement.offsetTop;
-    currentElement = currentElement.offsetParent as HTMLElement | null;
-  }
-
-  return { top: offsetTop, height: offsetHeight };
+  return { top: elementRect.top - parentTop, height: elementRect.height };
 };
 
 export const SidebarNavigationTracker = ({ style, contentContainerStyle, children }: Props) => {
@@ -110,7 +100,8 @@ export const SidebarNavigationTracker = ({ style, contentContainerStyle, childre
               style={[
                 styles.trackIndicator,
                 {
-                  transform: `translateY(${track.top}px) scaleY(${track.height})`,
+                  transform: `translateY(${track.top}px)`,
+                  height: track.height,
                   backgroundColor: track.color,
                 },
               ]}
