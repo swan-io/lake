@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
     height: 32,
     width: "100%",
   },
+  item: {
+    boxShadow: "0 1px rgba(0, 0, 0, 0.1)",
+  },
 });
 
 export default {
@@ -47,8 +50,8 @@ export const Default = () => {
     >
       <SidebarNavigationTracker contentContainerStyle={styles.container}>
         {rows.map(row => (
-          <Pressable key={row.id} onPress={selectRow(row.id)}>
-            <Box style={styles.row} direction="row">
+          <Pressable key={row.id} onPress={selectRow(row.id)} style={styles.item}>
+            <Box style={styles.row} direction="row" alignItems="center">
               {activeRow === row.id && (
                 <SidebarNavigationTrackerActiveMarker color={colors.positive.primary} />
               )}
