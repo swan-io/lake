@@ -257,19 +257,20 @@ const Tooltip = memo(
   ),
 );
 
-export const InformationTooltip = forwardRef<TooltipRef, { text: string; icon?: IconName }>(
-  ({ text, icon = "info-regular" }, forwardedRef) => (
-    <LakeTooltip
-      ref={forwardedRef}
-      describedBy="copy"
-      placement="right"
-      togglableOnFocus={true}
-      width={300}
-      content={text}
-    >
-      <View style={styles.info}>
-        <Icon name={icon} size={24} color={colors.gray[900]} />
-      </View>
-    </LakeTooltip>
-  ),
-);
+export const InformationTooltip = forwardRef<
+  TooltipRef,
+  { text: string; icon?: IconName; size?: number }
+>(({ text, icon = "info-regular", size = 24 }, forwardedRef) => (
+  <LakeTooltip
+    ref={forwardedRef}
+    describedBy="copy"
+    placement="right"
+    togglableOnFocus={true}
+    width={300}
+    content={text}
+  >
+    <View style={styles.info}>
+      <Icon name={icon} size={size} color={colors.gray[900]} />
+    </View>
+  </LakeTooltip>
+));
