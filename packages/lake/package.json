@@ -26,9 +26,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@react-three/drei": "^9.102.3",
-    "@react-three/fiber": "^8.15.19",
-    "@swan-io/boxed": "^2.1.0",
+    "@react-three/drei": "^9.103.0",
+    "@react-three/fiber": "^8.16.1",
+    "@swan-io/boxed": "^2.1.1",
     "@swan-io/chicane": "^2.0.0-rc.2",
     "@swan-io/use-form": "^2.0.0-rc.2",
     "dayjs": "^1.11.10",
@@ -39,19 +39,19 @@
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
     "rifm": "^0.12.1",
-    "three": "^0.162.0",
+    "three": "^0.163.0",
     "ts-dedent": "^2.2.0",
-    "ts-pattern": "^5.0.8",
+    "ts-pattern": "^5.1.0",
     "urql": "^4.0.6",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.65",
-    "@types/react-dom": "^18.2.21",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
     "@types/react-native": "^0.72.8",
-    "@types/three": "^0.162.0",
+    "@types/three": "^0.163.0",
     "@types/uuid": "^9.0.8",
     "jsdom": "^24.0.0",
-    "type-fest": "^4.12.0"
+    "type-fest": "^4.14.0"
   }
 }
