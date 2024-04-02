@@ -42,6 +42,7 @@
     "**/*.{js,ts,tsx}": "eslint --fix"
   },
   "resolutions": {
+    "@types/mime": "3.0.4",
     "jackspeak": "2.1.1"
   },
   "devDependencies": {
