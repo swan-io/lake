@@ -103,7 +103,7 @@ export const InfoTooltip = () => {
           <InformationTooltip
             icon="lake-face-id"
             text="Information tooltip with custom icon"
-            size={72}
+            iconSize={72}
           />
         </Box>
       </StoryPart>

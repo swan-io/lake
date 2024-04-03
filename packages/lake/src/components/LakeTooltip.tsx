@@ -259,8 +259,8 @@ const Tooltip = memo(
 
 export const InformationTooltip = forwardRef<
   TooltipRef,
-  { text: string; icon?: IconName; size?: number }
->(({ text, icon = "info-regular", size = 24 }, forwardedRef) => (
+  { text: string; icon?: IconName; iconSize?: number }
+>(({ text, icon = "info-regular", iconSize = 24 }, forwardedRef) => (
   <LakeTooltip
     ref={forwardedRef}
     describedBy="copy"
@@ -270,7 +270,7 @@ export const InformationTooltip = forwardRef<
     content={text}
   >
     <View style={styles.info}>
-      <Icon name={icon} size={size} color={colors.gray[900]} />
+      <Icon name={icon} size={iconSize} color={colors.gray[900]} />
     </View>
   </LakeTooltip>
 ));
