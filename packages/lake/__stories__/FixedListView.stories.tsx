@@ -12,6 +12,7 @@ import {
 } from "../src/components/FixedListView";
 import {
   ColorPatchCell,
+  LinkCell,
   SimpleHeaderCell,
   SimpleRegularTextCell,
   SimpleTitleCell,
@@ -137,12 +138,34 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
         ),
       },
       {
+        width: 150,
+        id: "link_before",
+        title: "Link before",
+        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
+        renderCell: () => (
+          <LinkCell onPress={() => {}} buttonPosition="start">
+            <Tag color="shakespear">Demo link</Tag>
+          </LinkCell>
+        ),
+      },
+      {
         width: 500,
         id: "onboarding_id",
         title: "Onboarding ID",
         renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
         renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
           <SimpleRegularTextCell text={id} />
+        ),
+      },
+      {
+        width: 150,
+        id: "link_after",
+        title: "Link after",
+        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
+        renderCell: () => (
+          <LinkCell onPress={() => {}} buttonPosition="end">
+            <Tag color="shakespear">Demo link</Tag>
+          </LinkCell>
         ),
       },
       {

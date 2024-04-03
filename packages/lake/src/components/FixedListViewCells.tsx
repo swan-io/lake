@@ -358,26 +358,35 @@ export const LinkCell = ({
   onPress,
   variant = "medium",
   tooltip,
+  buttonPosition = "start",
 }: {
   children: ReactNode;
   onPress: () => void;
   external?: boolean;
   variant?: TextVariant;
   tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
+  buttonPosition?: "start" | "end";
 }) => {
+  const ArrowButton = () => (
+    <Pressable
+      style={({ hovered }) => [styles.icon, hovered && styles.underline]}
+      onPress={event => {
+        event.preventDefault();
+        onPress();
+      }}
+    >
+      <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
+    </Pressable>
+  );
+
   return (
     <View style={styles.cell}>
-      <Pressable
-        style={({ hovered }) => [styles.icon, hovered && styles.underline]}
-        onPress={event => {
-          event.preventDefault();
-          onPress();
-        }}
-      >
-        <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
-      </Pressable>
-
-      <Space width={8} />
+      {buttonPosition === "start" && (
+        <>
+          <ArrowButton />
+          <Space width={8} />
+        </>
+      )}
 
       <LakeText
         color={colors.gray[900]}
@@ -387,6 +396,13 @@ export const LinkCell = ({
       >
         {children}
       </LakeText>
+
+      {buttonPosition === "end" && (
+        <>
+          <Space width={8} />
+          <ArrowButton />
+        </>
+      )}
     </View>
   );
 };
