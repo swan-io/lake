@@ -97,6 +97,16 @@ export const InfoTooltip = () => {
           />
         </Box>
       </StoryPart>
+
+      <StoryPart title="With custom size">
+        <Box direction="row" justifyContent="center">
+          <InformationTooltip
+            icon="lake-face-id"
+            text="Information tooltip with custom icon"
+            iconSize={72}
+          />
+        </Box>
+      </StoryPart>
     </StoryBlock>
   );
 };
