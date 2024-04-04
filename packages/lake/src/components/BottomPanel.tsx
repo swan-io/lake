@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { PanResponder, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
@@ -7,6 +7,7 @@ import { limitElastic } from "../utils/math";
 import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
+import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
 const ELASTIC_LENGTH = 100; // the maximum value you can reach
@@ -182,7 +183,7 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
         {visible ? <View style={styles.overlay} /> : null}
       </TransitionView>
 
-      <Suspense fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
+      <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
         <TransitionView style={styles.fill} enter={styles.modalEnter} leave={styles.modalLeave}>
           {visible ? (
             <View ref={container} style={styles.container}>
@@ -215,7 +216,7 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
             </View>
           ) : null}
         </TransitionView>
-      </Suspense>
+      </Suspendable>
     </Portal>
   );
 };

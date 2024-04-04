@@ -7,6 +7,7 @@ import { Portal } from "@swan-io/lake/src/components/Portal";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Context, ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
 import { Space } from "@swan-io/lake/src/components/Space";
+import { Suspendable } from "@swan-io/lake/src/components/Suspendable";
 import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
@@ -19,7 +20,7 @@ import {
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { useBodyClassName } from "@swan-io/lake/src/hooks/useBodyClassName";
-import { ReactNode, Suspense, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { t } from "../utils/i18n";
 
@@ -174,7 +175,7 @@ export const LakeModal = ({
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>
 
-        <Suspense fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
+        <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
           <TransitionView style={styles.fill} enter={styles.modalEnter} leave={styles.modalLeave}>
             {visible ? (
               <ResponsiveContainer style={styles.root} breakpoint={breakpoints.tiny}>
@@ -238,7 +239,7 @@ export const LakeModal = ({
               </ResponsiveContainer>
             ) : null}
           </TransitionView>
-        </Suspense>
+        </Suspendable>
       </View>
     </Portal>
   );
