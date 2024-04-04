@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, forwardRef, useEffect, useState } from "react";
+import { ReactNode, forwardRef, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { backgroundColor, breakpoints } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
@@ -7,6 +7,7 @@ import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
 import { Pressable } from "./Pressable";
 import { Context, ResponsiveContainer } from "./ResponsiveContainer";
+import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
@@ -136,7 +137,7 @@ export const RightPanel = forwardRef<FocusTrapRef, Props>(
                   ) : null}
                 </TransitionView>
 
-                <Suspense fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
+                <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
                   <TransitionView
                     style={[styles.fillMax, large && styles.fillMaxLarge]}
                     enter={styles.containerEnter}
@@ -174,7 +175,7 @@ export const RightPanel = forwardRef<FocusTrapRef, Props>(
                       </FocusTrap>
                     ) : null}
                   </TransitionView>
-                </Suspense>
+                </Suspendable>
               </>
             )}
           </ResponsiveContainer>

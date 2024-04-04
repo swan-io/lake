@@ -1,9 +1,10 @@
-import { ReactNode, Suspense, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { backgroundColor } from "../constants/design";
 import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
+import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
@@ -11,7 +12,7 @@ const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
 const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
-    overflow: "hidden",
+    position: "fixed",
   },
   inert: {
     pointerEvents: "none",
@@ -37,14 +38,14 @@ const styles = StyleSheet.create({
   },
   containerEnter: {
     animationKeyframes: {
-      "0%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
+      "0%": { opacity: 0, transform: "translateX(200px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   containerLeave: {
     animationKeyframes: {
-      "100%": { opacity: 0, transform: "translateZ(0px) translateX(200px)" },
+      "100%": { opacity: 0, transform: "translateX(200px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -55,21 +56,20 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleSheet.absoluteFillObject,
-    transform: "translateZ(0px)",
     flexDirection: "row",
     alignItems: "stretch",
     backgroundColor: backgroundColor.default,
   },
   contentsEnter: {
     animationKeyframes: {
-      "0%": { transform: "translateZ(0px) translateX(50px)" },
+      "0%": { transform: "translateX(50px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
   },
   contentsLeave: {
     animationKeyframes: {
-      "100%": { transform: "translateZ(0px) translateX(50px)" },
+      "100%": { transform: "translateX(50px)" },
     },
     animationDuration: "500ms",
     animationTimingFunction: "ease-in-out",
@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
   contentsContainer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 2,
-    transform: "translateZ(0px)",
     maxWidth: "100%",
   },
   contents: {
@@ -107,7 +106,7 @@ export const FullViewportLayer = ({ visible, children }: Props) => {
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>
 
-        <Suspense fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
+        <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
           <TransitionView
             style={styles.fill}
             enter={styles.containerEnter}
@@ -132,7 +131,7 @@ export const FullViewportLayer = ({ visible, children }: Props) => {
               </FocusTrap>
             ) : null}
           </TransitionView>
-        </Suspense>
+        </Suspendable>
       </View>
     </Portal>
   );
