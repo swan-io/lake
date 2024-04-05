@@ -2,14 +2,16 @@ import { Array, Option } from "@swan-io/boxed";
 import { MutableRefObject, forwardRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
-import { animations, spacings } from "../constants/design";
+import { animations, colors, spacings } from "../constants/design";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { noop } from "../utils/function";
 import { Box } from "./Box";
 import { FocusTrapRef } from "./FocusTrap";
 import { LakeButton } from "./LakeButton";
+import { LoadingView } from "./LoadingView";
 import { RightPanel } from "./RightPanel";
 import { Space } from "./Space";
+import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
 const styles = StyleSheet.create({
@@ -169,7 +171,15 @@ const ListRightPanel_ = forwardRef<FocusTrapRef, Props<unknown>>(
                       key={activeId}
                       style={styles.detailsContents}
                     >
-                      {render(activeItem, large)}
+                      {previousItem != null ? (
+                        <Suspendable
+                          fallback={<LoadingView color={colors.current[500]} delay={0} />}
+                        >
+                          {render(activeItem, large)}
+                        </Suspendable>
+                      ) : (
+                        render(activeItem, large)
+                      )}
                     </TransitionView>,
 
                     ...(previousItem != null && previousId !== activeId
