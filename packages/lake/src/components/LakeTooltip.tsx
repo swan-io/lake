@@ -64,6 +64,7 @@ type Props = {
   onShow?: () => void;
   placement?: "left" | "right" | "center";
   width?: number;
+  maxWidth?: number;
   togglableOnFocus?: boolean;
   containerStyle?: ViewProps["style"];
   disabled?: boolean;
@@ -101,6 +102,7 @@ const Tooltip = memo(
         onShow,
         placement,
         width,
+        maxWidth,
         togglableOnFocus = false,
         containerStyle,
         disabled = false,
@@ -219,7 +221,7 @@ const Tooltip = memo(
                     </Box>
                   ) : null}
 
-                  <View style={[styles.content, { width }]}>
+                  <View style={[styles.content, { width, maxWidth }]}>
                     {typeof content === "string" || typeof content === "number" ? (
                       <LakeText align="center" color={colors.gray.contrast}>
                         {content}
