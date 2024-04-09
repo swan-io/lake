@@ -93,84 +93,86 @@ export const Tag = ({
   const tint200 = variant[200];
 
   return (
-    <View
-      style={[
-        styles.container,
-        size === "large" && styles.larger,
-        { backgroundColor: tint50 },
-        style,
-      ]}
-    >
-      {hasLabel && (
-        <Box
-          alignItems="center"
-          direction="row"
-          style={[styles.label, { backgroundColor: tint100, borderColor: tint200 }]}
-        >
-          <LakeText
-            numberOfLines={1}
-            variant="smallMedium"
-            style={styles.unselectable}
-            color={primary}
-          >
-            {label}
-          </LakeText>
-        </Box>
-      )}
-
-      <Box alignItems="center" direction="row" aria-label={ariaLabel} style={styles.contents}>
-        {isNotNullish(icon) ? (
+    <Box direction="row">
+      <View
+        style={[
+          styles.container,
+          size === "large" && styles.larger,
+          { backgroundColor: tint50 },
+          style,
+        ]}
+      >
+        {hasLabel && (
           <Box
-            style={[styles.icon, { width: size === "large" ? spacings[40] : spacings[24] }]}
             alignItems="center"
-            justifyContent="center"
-          >
-            <Icon name={icon} color={primary} size={16} />
-          </Box>
-        ) : null}
-
-        {children != null ? (
-          <Box
             direction="row"
-            alignItems="center"
-            style={[styles.text, isNotNullish(icon) ? styles.textWithIcon : null]}
+            style={[styles.label, { backgroundColor: tint100, borderColor: tint200 }]}
           >
-            {isValidElement(children) ? (
-              children
-            ) : (
-              <LakeText
-                numberOfLines={1}
-                variant="smallMedium"
-                color={primary}
-                style={styles.textContent}
-              >
-                {children}
-              </LakeText>
-            )}
+            <LakeText
+              numberOfLines={1}
+              variant="smallMedium"
+              style={styles.unselectable}
+              color={primary}
+            >
+              {label}
+            </LakeText>
           </Box>
+        )}
+
+        <Box alignItems="center" direction="row" aria-label={ariaLabel} style={styles.contents}>
+          {isNotNullish(icon) ? (
+            <Box
+              style={[styles.icon, { width: size === "large" ? spacings[40] : spacings[24] }]}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Icon name={icon} color={primary} size={16} />
+            </Box>
+          ) : null}
+
+          {children != null ? (
+            <Box
+              direction="row"
+              alignItems="center"
+              style={[styles.text, isNotNullish(icon) ? styles.textWithIcon : null]}
+            >
+              {isValidElement(children) ? (
+                children
+              ) : (
+                <LakeText
+                  numberOfLines={1}
+                  variant="smallMedium"
+                  color={primary}
+                  style={styles.textContent}
+                >
+                  {children}
+                </LakeText>
+              )}
+            </Box>
+          ) : null}
+        </Box>
+
+        {onPressRemove != null ? (
+          <Pressable
+            role="button"
+            onPress={onPressRemove}
+            style={({ hovered, pressed }) => [
+              styles.dismiss,
+              {
+                color: primary,
+                width: size === "large" ? spacings[40] : spacings[24],
+                boxShadow: `-1px 0 ${tint200}`,
+              },
+              hovered && { backgroundColor: tint100 },
+              pressed && { backgroundColor: tint200 },
+            ]}
+          >
+            <Icon name="dismiss-regular" color={primary} size={14} style={styles.dismissIcon} />
+          </Pressable>
         ) : null}
-      </Box>
 
-      {onPressRemove != null ? (
-        <Pressable
-          role="button"
-          onPress={onPressRemove}
-          style={({ hovered, pressed }) => [
-            styles.dismiss,
-            {
-              color: primary,
-              width: size === "large" ? spacings[40] : spacings[24],
-              boxShadow: `-1px 0 ${tint200}`,
-            },
-            hovered && { backgroundColor: tint100 },
-            pressed && { backgroundColor: tint200 },
-          ]}
-        >
-          <Icon name="dismiss-regular" color={primary} size={14} style={styles.dismissIcon} />
-        </Pressable>
-      ) : null}
-
-      <View style={[styles.border, { boxShadow: `inset 0 0 0 1px ${tint200}` }]} />
-    </View>
+        <View style={[styles.border, { boxShadow: `inset 0 0 0 1px ${tint200}` }]} />
+      </View>
+    </Box>
   );
 };
