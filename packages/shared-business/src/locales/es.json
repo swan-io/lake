@@ -73,7 +73,7 @@
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Verificación pendiente",
   "fileTile.status.Refused": "Rechazado",
-  "fileTile.status.Validated": "Verificado",
+  "fileTile.status.Validated": "Validado",
   "fileTile.uploading": "Subiendo…",
   "monthlyPaymentVolume.between10000And50000": "Entre 10 000 y 50 000 euros",
   "monthlyPaymentVolume.between50000And100000": "Entre 50 000 y 100 000 euros",

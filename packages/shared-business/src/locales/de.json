@@ -73,7 +73,7 @@
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Ausstehende Überprüfung",
   "fileTile.status.Refused": "Abgelehnt",
-  "fileTile.status.Validated": "Überprüft",
+  "fileTile.status.Validated": "Validiert",
   "fileTile.uploading": "Hochladen…",
   "monthlyPaymentVolume.between10000And50000": "Zwischen 10.000 und 50.000 €",
   "monthlyPaymentVolume.between50000And100000": "Zwischen 50.000 und 100.000 €",
