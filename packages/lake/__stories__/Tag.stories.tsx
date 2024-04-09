@@ -152,54 +152,47 @@ export const All = () => {
       </StoryPart>
 
       <StoryPart title="With elements inside">
-        <Box direction="row">
-          <Tag color="gray">
+        <Tag color="gray">
+          <>
+            <Icon name="eye-regular" size={16} color={colors.swan[500]} style={styles.rightsIcon} />
+
+            <Icon
+              name="arrow-swap-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <Icon
+              name="person-add-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <Icon
+              name="settings-regular"
+              size={16}
+              color={colors.swan[500]}
+              style={styles.rightsIcon}
+            />
+
+            <View style={styles.separator} />
+
             <>
               <Icon
-                name="eye-regular"
+                name="payment-regular"
                 size={16}
                 color={colors.swan[500]}
                 style={styles.rightsIcon}
               />
 
-              <Icon
-                name="arrow-swap-regular"
-                size={16}
-                color={colors.swan[500]}
-                style={styles.rightsIcon}
-              />
-
-              <Icon
-                name="person-add-regular"
-                size={16}
-                color={colors.swan[500]}
-                style={styles.rightsIcon}
-              />
-
-              <Icon
-                name="settings-regular"
-                size={16}
-                color={colors.swan[500]}
-                style={styles.rightsIcon}
-              />
-
-              <View style={styles.separator} />
-
-              <>
-                <Icon
-                  name="payment-regular"
-                  size={16}
-                  color={colors.swan[500]}
-                  style={styles.rightsIcon}
-                />
-
-                <LakeText color={colors.swan[500]} variant="smallRegular">
-                  12
-                </LakeText>
-              </>
+              <LakeText color={colors.swan[500]} variant="smallRegular">
+                12
+              </LakeText>
             </>
-          </Tag>
-        </Box>
+          </>
+        </Tag>
       </StoryPart>
 
       <StoryPart title="Env tags">

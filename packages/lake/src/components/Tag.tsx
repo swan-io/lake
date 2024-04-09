@@ -8,6 +8,7 @@ import { LakeText } from "./LakeText";
 
 const styles = StyleSheet.create({
   container: {
+    alignSelf: "flex-start",
     borderRadius: radii[4],
     height: spacings[24],
   },
