@@ -73,7 +73,7 @@
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Odottaa vahvistusta",
   "fileTile.status.Refused": "Hylätty",
-  "fileTile.status.Validated": "Vahvistettu",
+  "fileTile.status.Validated": "Validoitu",
   "fileTile.uploading": "Ladataan…",
   "monthlyPaymentVolume.between10000And50000": "10 000 euron ja 50 000 euron välillä",
   "monthlyPaymentVolume.between50000And100000": "50 000 euron ja 100 000 euron välillä",
