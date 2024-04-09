@@ -8,7 +8,9 @@ import { LakeText } from "./LakeText";
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: "flex-start",
+    display: "inline-flex",
+    flexDirection: "row",
+    alignItems: "center",
     borderRadius: radii[4],
     height: spacings[24],
   },
@@ -91,9 +93,7 @@ export const Tag = ({
   const tint200 = variant[200];
 
   return (
-    <Box
-      direction="row"
-      alignItems="center"
+    <View
       style={[
         styles.container,
         size === "large" && styles.larger,
@@ -171,6 +171,6 @@ export const Tag = ({
       ) : null}
 
       <View style={[styles.border, { boxShadow: `inset 0 0 0 1px ${tint200}` }]} />
-    </Box>
+    </View>
   );
 };
