@@ -25,11 +25,7 @@ const styles = StyleSheet.create({
     width: 1,
     alignSelf: "stretch",
     backgroundColor: colors.gray[200],
-    height: 28,
     marginHorizontal: spacings[4],
-  },
-  permissionsContainer: {
-    padding: 4,
   },
 });
 
