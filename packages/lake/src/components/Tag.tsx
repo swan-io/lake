@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
   label: {
     paddingHorizontal: spacings[8],
     alignSelf: "stretch",
+    borderTopLeftRadius: radii[4],
+    borderBottomLeftRadius: radii[4],
   },
   contents: {
     flexGrow: 1,
