@@ -221,7 +221,11 @@ export const FileInput = ({
 
                   <Space height={4} />
 
-                  <LakeText variant="smallRegular" color={colors.gray[200]}>
+                  <LakeText
+                    variant="smallRegular"
+                    color={colors.gray[200]}
+                    align={layout === "horizontal" ? "left" : "center"}
+                  >
                     {name}
                   </LakeText>
                 </View>
