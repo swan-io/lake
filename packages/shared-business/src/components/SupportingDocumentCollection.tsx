@@ -5,8 +5,8 @@ import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
-import { Request, badStatusToError } from "@swan-io/request";
+import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
 import {
   ForwardedRef,
   Fragment,
@@ -20,7 +20,7 @@ import {
 } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
-import { UploadOutputWithId } from "../hooks/useFilesUploader";
+import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { isTranslationKey, locale, t } from "../utils/i18n";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
@@ -50,6 +50,9 @@ type Props<Purpose extends string> = {
   ) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>;
   documents: Document<Purpose>[];
   requiredDocumentPurposes: Purpose[];
+  uploadFile?: (
+    config: UploadFileInput<UploadOutput>,
+  ) => Future<Result<Response<string>, NetworkError | TimeoutError>>;
   onChange?: (documents: Document<Purpose>[]) => void;
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   templateLanguage?: string;
@@ -143,6 +146,7 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
   {
     documents,
     generateUpload,
+    uploadFile,
     requiredDocumentPurposes,
     templateLanguage = locale.language,
     status,
@@ -290,18 +294,22 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                   initialFiles={files}
                   generateUpload={generateUpload}
                   getUploadConfig={file => ({ fileName: file.name, purpose })}
-                  uploadFile={({ upload, file, onLoadStart, onProgress }) => {
-                    const body = new FormData();
-                    upload.fields.forEach(({ key, value }) => body.append(key, value));
-                    body.append("file", file);
-                    return Request.make({
-                      url: upload.url,
-                      method: "POST",
-                      onLoadStart,
-                      onProgress,
-                      body,
-                    }).mapOkToResult(badStatusToError);
-                  }}
+                  uploadFile={
+                    isNotNullish(uploadFile)
+                      ? uploadFile
+                      : ({ upload, file, onLoadStart, onProgress }) => {
+                          const body = new FormData();
+                          upload.fields.forEach(({ key, value }) => body.append(key, value));
+                          body.append("file", file);
+                          return Request.make({
+                            url: upload.url,
+                            method: "POST",
+                            onLoadStart,
+                            onProgress,
+                            body,
+                          }).mapOkToResult(badStatusToError);
+                        }
+                  }
                   formatAndSizeDescription={t("supportingDocuments.documentTypes", {
                     maxSizeMB: 20_000_000 / 1_000_000,
                   })}
