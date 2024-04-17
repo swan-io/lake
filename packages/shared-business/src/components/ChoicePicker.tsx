@@ -110,11 +110,13 @@ type Props<T> = {
   getId?: (item: T) => unknown;
   onChange: (value: T) => void;
   disabled?: boolean;
+  tile?: boolean;
 };
 
 const identity = <T,>(x: T) => x;
 
 export const ChoicePicker = <T,>({
+  tile = true,
   items,
   getId = identity,
   large = false,
@@ -238,12 +240,8 @@ export const ChoicePicker = <T,>({
               ]}
               onPress={() => onChange(item)}
             >
-              {({ hovered }) => (
-                <Tile
-                  hovered={hovered}
-                  selected={value != null && getId(item) === getId(value)}
-                  flexGrow={1}
-                >
+              {({ hovered }) => {
+                const tileContent = (
                   <View style={styles.tileContents}>
                     <View style={styles.tileRenderedContents}>{renderItem(item)}</View>
 
@@ -254,8 +252,19 @@ export const ChoicePicker = <T,>({
                       </>
                     )}
                   </View>
-                </Tile>
-              )}
+                );
+                return tile ? (
+                  <Tile
+                    hovered={hovered}
+                    selected={value != null && getId(item) === getId(value)}
+                    flexGrow={1}
+                  >
+                    {tileContent}
+                  </Tile>
+                ) : (
+                  tileContent
+                );
+              }}
             </Pressable>
           ))}
         </ScrollView>
