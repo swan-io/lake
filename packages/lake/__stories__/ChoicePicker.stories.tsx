@@ -83,6 +83,34 @@ export const Default = () => {
           }
         />
       </StoryPart>
+
+      <StoryPart title="Without tile" style={styles.part}>
+        <ChoicePicker
+          tile={false}
+          items={items}
+          value={largeValue}
+          onChange={setLargeValue}
+          renderItem={item =>
+            match(item)
+              .with("Virtual", () => (
+                <Tag icon="phone-regular" color="mediumSladeBlue">
+                  Virtual
+                </Tag>
+              ))
+              .with("VirtualAndPhysical", () => (
+                <Tag icon="payment-regular" color="shakespear">
+                  Virtual & physical
+                </Tag>
+              ))
+              .with("SingleUseVirtual", () => (
+                <Tag icon="phone-regular" color="darkPink">
+                  Single use
+                </Tag>
+              ))
+              .exhaustive()
+          }
+        />
+      </StoryPart>
     </StoryBlock>
   );
 };
