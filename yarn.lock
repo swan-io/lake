@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@0no-co/graphql.web@^1.0.5":
+"@0no-co/graphql.web@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.6.tgz#3def68bbaf654a301bd910ce3744506cad97ab9a"
   integrity sha512-KZ7TnwMcQJcFgzjoY623AVxtlDQonkqp3rSz0wb15/jHPyU1v5gynUibEpuutDeoyGJ5Tp+FwxjGyDGDwq3vIw==
@@ -2329,10 +2329,25 @@
     "@emotion/hash" "^0.9.1"
     use-sync-external-store "^1.2.0"
 
+"@swan-io/graphql-client@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@swan-io/graphql-client/-/graphql-client-0.1.0.tgz#675d5fb378c08b37fa7988c9180f6cbfeb144d5c"
+  integrity sha512-3FY+kHq9/OvuNzcAETepUspAzFo8b9atOsXqelRHE1wPpJKzk3GgYhN7iAZACRrna7rt+g7VREKfR1ADmaBwvA==
+  dependencies:
+    "@0no-co/graphql.web" "^1.0.6"
+    "@swan-io/boxed" "^2.1.1"
+    "@swan-io/request" "^1.0.4"
+    ts-pattern "^5.1.0"
+
 "@swan-io/request@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.2.tgz#bfabcbd3c031782dfde4e1438f790c9a7f682926"
   integrity sha512-jLl5CWyAvqLUp70GIAN7O+fcWBa30ozp4I37sTFJOQvICrlAi5pbGDALZyYt4rkE33ahHwi4BLzWTa6PqOE5MA==
+
+"@swan-io/request@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.4.tgz#9578892306b92c335b064051e165a55268817d14"
+  integrity sha512-3KguAxPCJ0EBlETij2volJw68k4lOw4nxjw1SkjStyjA50awFxx5UwgUeGfocsDbI7EwPqs1oH3E23hoAcni5w==
 
 "@swan-io/use-form@^2.0.0":
   version "2.0.0"
@@ -2885,14 +2900,6 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
-
-"@urql/core@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-5.0.0.tgz#690e664cf66f733077c558bf685adbdac2b25823"
-  integrity sha512-kFkZxusq/VBQKEUcQFtf7AilMotLO+oGpE4WFhCiminZm8ZU2aulXSDWla50TaD0pj704FnWlXts6lRm0uHdDg==
-  dependencies:
-    "@0no-co/graphql.web" "^1.0.5"
-    wonka "^6.3.2"
 
 "@use-gesture/core@10.3.1":
   version "10.3.1"
@@ -8262,14 +8269,6 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-urql@^4.0.7:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-4.0.7.tgz#7c2c7eecce3bf0d2bd2d5be372515bf6dd2f13c2"
-  integrity sha512-wnOONtZoYEobmamM5ushUBGil6UCUPd7SH5uEAqsz5Y/qBV88/2QG6jq7v6xP+413x5Lqy0h0hCGRB0KIeG6Kg==
-  dependencies:
-    "@urql/core" "^5.0.0"
-    wonka "^6.3.2"
-
 use-sync-external-store@1.2.0, use-sync-external-store@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
@@ -8526,11 +8525,6 @@ why-is-node-running@^2.2.2:
   dependencies:
     siginfo "^2.0.0"
     stackback "0.0.2"
-
-wonka@^6.3.2:
-  version "6.3.4"
-  resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.3.4.tgz#76eb9316e3d67d7febf4945202b5bdb2db534594"
-  integrity sha512-CjpbqNtBGNAeyNS/9W6q3kSkKE52+FjIj7AkFlLr11s/VWGUu6a2CdYSdGxocIhIVjaW/zchesBQUKPVU69Cqg==
 
 wordwrap@^1.0.0:
   version "1.0.0"

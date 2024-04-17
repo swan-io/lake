@@ -1,5 +1,6 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
+import { BadStatusError } from "@swan-io/request";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
 import dayjsLocaleEN from "dayjs/locale/en";
@@ -15,7 +16,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 import { P, match } from "ts-pattern";
-import { CombinedError } from "urql";
 import type { DateFormat } from "../components/DatePicker";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
@@ -173,11 +173,7 @@ export const translateError = (error: unknown) => {
     .returnType<string>()
     .with({ __typename: P.select(P.string) }, __typename => `rejection.${__typename}`)
     .with(P.string, __typename => `rejection.${__typename}`)
-    .with(P.instanceOf(CombinedError), ({ response }) =>
-      match(response)
-        .with({ response: { status: P.select(P.number) } }, status => `error.network.${status}`)
-        .otherwise(() => "error.generic"),
-    )
+    .with(P.instanceOf(BadStatusError), ({ status }) => `error.network.${status}`)
     .with(P.instanceOf(Error), ({ message }) => `rejection.${message}`)
     .otherwise(() => "error.generic");
 

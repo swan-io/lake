@@ -1,9 +1,8 @@
 import { Meta } from "@storybook/react";
-import { CombinedError } from "urql";
 import { LakeButton } from "../src/components/LakeButton";
 import { Space } from "../src/components/Space";
 import { ToastStack } from "../src/components/ToastStack";
-import { showToast } from "../src/state/toasts";
+import { registerErrorToRequestId, showToast } from "../src/state/toasts";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = {
@@ -17,10 +16,13 @@ export default {
   component: ToastStack,
 } as Meta<typeof ToastStack>;
 
-export const Default = () => {
-  const error = new CombinedError({});
-  error.requestId = "req-thvfknqp";
+const map = new WeakMap<WeakKey, string>();
+registerErrorToRequestId(map);
 
+const error = new Error();
+map.set(error, "req-thvfknqp");
+
+export const Default = () => {
   return (
     <>
       <ToastStack />

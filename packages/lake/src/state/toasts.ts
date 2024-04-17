@@ -39,6 +39,16 @@ export const hideToast = (uid: string) => {
   toasts.set(toasts => toasts.filter(toast => toast.uid !== uid));
 };
 
+let errorToRequestId = new WeakMap<WeakKey, string>();
+
+export const registerErrorToRequestId = (value: WeakMap<WeakKey, string>) => {
+  errorToRequestId = value;
+};
+
+export const getErrorToRequestId = () => {
+  return errorToRequestId;
+};
+
 export const showToast = ({ variant, title, description, error, autoClose }: ToastContent) => {
   const uid = `${variant} - ${title} - ${description ?? ""}`;
 
