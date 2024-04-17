@@ -32,6 +32,7 @@
     "@formatjs/intl": "^2.10.1",
     "@placekit/client-js": "^2.3.0",
     "@swan-io/boxed": "^2.1.1",
+    "@swan-io/graphql-client": "^0.1.0",
     "@swan-io/request": "^1.0.2",
     "@swan-io/use-form": "^2.0.0",
     "dayjs": "^1.11.10",
@@ -43,7 +44,6 @@
     "react-native-web": "^0.19.10",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.1.0",
-    "urql": "^4.0.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

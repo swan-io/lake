@@ -1,11 +1,12 @@
+import { Array, Option } from "@swan-io/boxed";
+import { ClientError } from "@swan-io/graphql-client";
 import { t } from "@swan-io/shared-business/src/utils/i18n";
 import { memo, useEffect, useRef, useState } from "react";
 import { Animated, Clipboard, StyleSheet, View } from "react-native";
-import { match } from "ts-pattern";
+import { P, match } from "ts-pattern";
 import { ColorVariants, animations, colors, shadows } from "../constants/design";
-import { ToastVariant, hideToast, useToasts } from "../state/toasts";
-import { isNotNullish, isNotNullishOrEmpty, isNullish } from "../utils/nullish";
-import { isCombinedError } from "../utils/urql";
+import { ToastVariant, getErrorToRequestId, hideToast, useToasts } from "../state/toasts";
+import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
@@ -81,6 +82,19 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
   const hasDescription = isNotNullishOrEmpty(description);
 
+  const [requestId] = useState<Option<string>>(() => {
+    if (error == undefined) {
+      return Option.None();
+    }
+    return Array.findMap(ClientError.toArray(error as ClientError), error => {
+      if (error instanceof Error) {
+        return Option.fromNullable(getErrorToRequestId().get(error));
+      } else {
+        return Option.None();
+      }
+    });
+  });
+
   const colorVariation = match(variant)
     .returnType<ColorVariants>()
     .with("success", () => "positive")
@@ -153,41 +167,44 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
             </>
           )}
 
-          {isCombinedError(error) && isNotNullish(error.requestId) ? (
-            <>
-              <Space height={hasDescription ? 4 : 8} />
+          {match(requestId)
+            .with(Option.P.None, () => null)
+            .with(Option.P.Some(P.select()), requestId => (
+              <>
+                <Space height={hasDescription ? 4 : 8} />
 
-              <LakeTooltip
-                describedBy="copy"
-                onHide={() => setVisibleState("copy")}
-                togglableOnFocus={true}
-                placement="center"
-                containerStyle={styles.copyTooltip}
-                content={
-                  visibleState === "copy"
-                    ? t("copyButton.copyTooltip")
-                    : t("copyButton.copiedTooltip")
-                }
-              >
-                <Pressable
-                  style={styles.copyButton}
-                  onPress={event => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    Clipboard.setString(error.requestId ?? "");
-                    setVisibleState("copied");
-                  }}
+                <LakeTooltip
+                  describedBy="copy"
+                  onHide={() => setVisibleState("copy")}
+                  togglableOnFocus={true}
+                  placement="center"
+                  containerStyle={styles.copyTooltip}
+                  content={
+                    visibleState === "copy"
+                      ? t("copyButton.copyTooltip")
+                      : t("copyButton.copiedTooltip")
+                  }
                 >
-                  <Icon color={colors.gray[700]} size={14} name="copy-regular" />
-                  <Space width={4} />
+                  <Pressable
+                    style={styles.copyButton}
+                    onPress={event => {
+                      event.stopPropagation();
+                      event.preventDefault();
+                      Clipboard.setString(requestId ?? "");
+                      setVisibleState("copied");
+                    }}
+                  >
+                    <Icon color={colors.gray[700]} size={14} name="copy-regular" />
+                    <Space width={4} />
 
-                  <LakeText numberOfLines={1} variant="smallRegular" color={colors.gray[700]}>
-                    ID: {error.requestId}
-                  </LakeText>
-                </Pressable>
-              </LakeTooltip>
-            </>
-          ) : null}
+                    <LakeText numberOfLines={1} variant="smallRegular" color={colors.gray[700]}>
+                      ID: {requestId}
+                    </LakeText>
+                  </Pressable>
+                </LakeTooltip>
+              </>
+            ))
+            .exhaustive()}
         </Box>
 
         <Pressable onPress={() => onClose(uid)} style={styles.closeButton}>
