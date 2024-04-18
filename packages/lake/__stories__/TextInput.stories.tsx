@@ -70,6 +70,10 @@ export const Variations = () => {
         <EditableInputText warning={true} />
       </StoryPart>
 
+      <StoryPart title="Warning + error">
+        <EditableInputText warning={true} error="This input is invalid" />
+      </StoryPart>
+
       <StoryPart title="Invalid">
         <EditableInputText icon="chat-help-regular" error="This input is invalid" />
       </StoryPart>

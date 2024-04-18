@@ -269,10 +269,10 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 readOnly && styles.readOnly,
                 isFocused && styles.focused,
                 isNotNullish(unit ?? units) && styles.inputWithUnit,
+                warning && { borderColor: colors.warning[500] },
                 hasError && styles.error,
                 valid && styles.valid,
                 stylesFromProps,
-                warning && !hasError && { borderColor: colors.warning[500] },
               ]}
               ref={containerRef}
             >
