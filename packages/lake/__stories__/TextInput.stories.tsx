@@ -38,7 +38,6 @@ const EditableInputTextWithUnitChooser = (
 ) => {
   const [value, setValue] = useState(props.defaultValue ?? "");
   const [unit, setUnit] = useState(props.unit);
-
   return (
     <View style={styles.input}>
       <LakeTextInput
@@ -67,8 +66,12 @@ export const Variations = () => {
         <EditableInputText valid={true} />
       </StoryPart>
 
+      <StoryPart title="Warning">
+        <EditableInputText warning={true} />
+      </StoryPart>
+
       <StoryPart title="Invalid">
-        <EditableInputText error="This input is invalid" />
+        <EditableInputText icon="chat-help-regular" error="This input is invalid" />
       </StoryPart>
 
       <StoryPart title="Invalid without error message">
