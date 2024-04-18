@@ -272,7 +272,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 hasError && styles.error,
                 valid && styles.valid,
                 stylesFromProps,
-                warning && { borderColor: colors.warning[500] },
+                warning && !hasError && { borderColor: colors.warning[500] },
               ]}
               ref={containerRef}
             >
@@ -321,7 +321,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 />
               )}
 
-              {!validating && warning && (
+              {!validating && warning && !hasError && (
                 <Icon
                   name="warning-regular"
                   size={20}
