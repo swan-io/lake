@@ -142,8 +142,7 @@ export const FileInput = ({
       .with({ url: P.string }, ({ url, name }) =>
         Option.Some({
           url,
-          name:
-            name ?? Result.fromExecution(() => new URL(url).pathname).getWithDefault("untitled"),
+          name: name ?? Result.fromExecution(() => new URL(url).pathname).getOr("untitled"),
         }),
       )
       .with(P.instanceOf(File), file =>

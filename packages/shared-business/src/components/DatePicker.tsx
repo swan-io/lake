@@ -776,7 +776,7 @@ const DatePickerPopoverContent = ({
   onChange,
 }: DatePickerPopoverContentProps) => {
   const [monthYear, setMonthYear] = useState(() =>
-    getYearMonth(value, format).getWithDefault(getTodayYearMonth()),
+    getYearMonth(value, format).getOr(getTodayYearMonth()),
   );
 
   // Automatically change displayed year and month when user change the value with text input
@@ -918,7 +918,7 @@ export const DatePickerModal = ({
   const handleConfirm = () => {
     submitForm({
       onSuccess: values => {
-        const date = values.date.getWithDefault("");
+        const date = values.date.getOr("");
 
         if (isNotEmpty(date)) {
           onChange(date);
@@ -1054,10 +1054,8 @@ const DateRangePickerModalContent = ({
 }: DateRangePickerModalContentProps) => {
   const isFirstMount = useFirstMountState();
   const [periods, setPeriods] = useState(() => {
-    const startYearMonth = getYearMonth(value.start, format).getWithDefault(getTodayYearMonth());
-    const endYearMonth = getYearMonth(value.end, format).getWithDefault(
-      incrementYearMonth(startYearMonth),
-    );
+    const startYearMonth = getYearMonth(value.start, format).getOr(getTodayYearMonth());
+    const endYearMonth = getYearMonth(value.end, format).getOr(incrementYearMonth(startYearMonth));
     return {
       start: startYearMonth,
       end: isYearMonthEquals(startYearMonth, endYearMonth)

@@ -2316,10 +2316,10 @@
     "@types/express" "^4.7.0"
     file-system-cache "2.3.0"
 
-"@swan-io/boxed@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.1.1.tgz#bdf17d725270c8560d2371972427b6f7e80da5d8"
-  integrity sha512-NzmIVAnJuzuPwm8ZR4I9tUpuo9qjtVNA7aTSZYdSvcJ+y7NTyt9+tCi4y87T3m8hACN2ATMqvTmRtHOSDIIz7w==
+"@swan-io/boxed@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.2.1.tgz#adda3c08bad0215a90cfced371817484ef90ad50"
+  integrity sha512-jJiiVd9CzVPQUb8OuFeGddruTkbLBNCiL2RvN8Jt+Eul7EMkXB/gY4dUYffxyLMDnn2t3EaZahYQ+yHvtLxzDg==
 
 "@swan-io/chicane@^2.0.0":
   version "2.0.0"
@@ -2329,32 +2329,27 @@
     "@emotion/hash" "^0.9.1"
     use-sync-external-store "^1.2.0"
 
-"@swan-io/graphql-client@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@swan-io/graphql-client/-/graphql-client-0.1.0.tgz#675d5fb378c08b37fa7988c9180f6cbfeb144d5c"
-  integrity sha512-3FY+kHq9/OvuNzcAETepUspAzFo8b9atOsXqelRHE1wPpJKzk3GgYhN7iAZACRrna7rt+g7VREKfR1ADmaBwvA==
+"@swan-io/graphql-client@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@swan-io/graphql-client/-/graphql-client-0.1.1.tgz#1a96a7f990b3663cb7909af01fbaa8dbb3a563e5"
+  integrity sha512-sRwJ3V+I3aiGDzd+jPqiIAezw8qC+UZiGx0m6PPnRzdAYpYBhlQO+JjnhzkzaQV4CrVDT5CoFgaBBiGwz0maMg==
   dependencies:
     "@0no-co/graphql.web" "^1.0.6"
-    "@swan-io/boxed" "^2.1.1"
-    "@swan-io/request" "^1.0.4"
+    "@swan-io/boxed" "^2.2.1"
+    "@swan-io/request" "^1.0.5"
     ts-pattern "^5.1.0"
 
-"@swan-io/request@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.2.tgz#bfabcbd3c031782dfde4e1438f790c9a7f682926"
-  integrity sha512-jLl5CWyAvqLUp70GIAN7O+fcWBa30ozp4I37sTFJOQvICrlAi5pbGDALZyYt4rkE33ahHwi4BLzWTa6PqOE5MA==
+"@swan-io/request@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.5.tgz#3e4fd8e0d699bde18fa7338939c4f2de92ab7dae"
+  integrity sha512-inXD6hBUmbbDyzAAL30yEaIuSmTCjzyGpQwejdTTDE63qNnDpOVj4SZzsMgph8q1xCq5r3tLm5QgvN2HGuneIw==
 
-"@swan-io/request@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.4.tgz#9578892306b92c335b064051e165a55268817d14"
-  integrity sha512-3KguAxPCJ0EBlETij2volJw68k4lOw4nxjw1SkjStyjA50awFxx5UwgUeGfocsDbI7EwPqs1oH3E23hoAcni5w==
-
-"@swan-io/use-form@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.0.tgz#20363a05d4e7242d6b0b19f954f83556fd6496e4"
-  integrity sha512-PctTlWCu7itDB/T32PGBFyfzVQobgPxbULkTZnDJlcL2qsuoQXeTjtmAF6ddiZajUKDtZpvYYjQdmtxJzsY8Sg==
+"@swan-io/use-form@^2.0.2":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.3.tgz#96b51217854a87e24aaaad8277c09cf9daf9b576"
+  integrity sha512-jPjsrSaN7o8HPdB5XEgFkLPx6CP7W+pH69TLE2Oxa1NzBTWyh0ziDKPH9sWsbCsJ+erxGRzZvKXNDoK1Wk5nDQ==
   dependencies:
-    "@swan-io/boxed" "^2.1.1"
+    "@swan-io/boxed" "^2.2.1"
 
 "@swc/core-darwin-arm64@1.4.11":
   version "1.4.11"

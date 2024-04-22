@@ -7,7 +7,7 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
       .toOption()
       .flatMap(Option.fromNullable)
       .map(value => JSON.parse(value) as T)
-      .getWithDefault(defaultValue);
+      .getOr(defaultValue);
   });
 
   const setPersistedState = useCallback(
