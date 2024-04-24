@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { colors, shadows } from "../constants/design";
+import { breakpoints, colors, shadows } from "../constants/design";
+import { useResponsive } from "../hooks/useResponsive";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
@@ -24,8 +25,11 @@ const styles = StyleSheet.create({
     marginHorizontal: -1,
     marginBottom: -1,
   },
-  content: {
+  contentDesktop: {
     marginLeft: 40,
+  },
+  contentMobile: {
+    marginLeft: 0,
   },
   callToAction: {
     marginTop: -12,
@@ -101,6 +105,7 @@ export const LakeAlert = ({
 }: Props) => {
   const color = alertColor[variant];
   const icon = alertIcon[variant];
+  const { desktop } = useResponsive(breakpoints.medium);
 
   return (
     <View
@@ -131,7 +136,7 @@ export const LakeAlert = ({
       </Box>
 
       {isNotNullish(children) && (
-        <View style={icon != null ? styles.content : null}>
+        <View style={icon != null && desktop ? styles.contentDesktop : styles.contentMobile}>
           <Space height={12} />
 
           {isText(children) ? <LakeText>{children}</LakeText> : children}
