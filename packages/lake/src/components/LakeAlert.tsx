@@ -25,12 +25,10 @@ const styles = StyleSheet.create({
     marginHorizontal: -1,
     marginBottom: -1,
   },
-  contentDesktop: {
+  content: {
     marginLeft: 40,
   },
-  contentMobile: {
-    marginLeft: 0,
-  },
+
   callToAction: {
     marginTop: -12,
     marginBottom: -12,
@@ -136,7 +134,7 @@ export const LakeAlert = ({
       </Box>
 
       {isNotNullish(children) && (
-        <View style={icon != null && desktop ? styles.contentDesktop : styles.contentMobile}>
+        <View style={desktop && icon != null && styles.content}>
           <Space height={12} />
 
           {isText(children) ? <LakeText>{children}</LakeText> : children}
