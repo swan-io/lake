@@ -110,6 +110,21 @@ export const AccountCountries = () => {
           accountHolderAddress={accountHolderAddress}
         />
       </StoryPart>
+
+      <StoryPart title="Italy">
+        <RIB
+          version="v1"
+          accountCountry="ITA"
+          partnerColor="#0f6fde"
+          iban="IT 60 X 05428 11101 000000123456"
+          bic="SWNBITM2"
+          bank="05428"
+          agency="11101"
+          bankNumber="000000123456"
+          bankAddress={bankAddress}
+          accountHolderAddress={accountHolderAddress}
+        />
+      </StoryPart>
     </StoryBlock>
   );
 };
