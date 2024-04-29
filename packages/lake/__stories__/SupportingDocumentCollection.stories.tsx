@@ -60,6 +60,7 @@ export const WaitingForDocument = () => {
               {
                 title: "ID",
                 value: "666",
+                type: "copy",
               },
               {
                 title: "Lorem ipsum",

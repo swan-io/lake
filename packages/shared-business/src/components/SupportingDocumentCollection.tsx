@@ -5,6 +5,7 @@ import { LakeCopyButton } from "@swan-io/lake/src/components/LakeCopyButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
+import { ReadOnlyFieldList } from "@swan-io/lake/src/components/ReadOnlyFieldList";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
@@ -48,6 +49,7 @@ type SupportingDocumentCollectionStatus =
 type PurposeMetadata = {
   title: string;
   values: {
+    type?: "text" | "copy";
     title: string;
     value: string;
   }[];
@@ -93,25 +95,6 @@ type HelpProps =
       label: string;
       onPress: () => void;
     };
-
-const CopiableLine = ({ label, text }: { label: string; text: string }) => (
-  <LakeLabel
-    type="viewSmall"
-    label={label}
-    actions={
-      <LakeCopyButton
-        valueToCopy={text}
-        copiedText={t("copyButton.copiedTooltip")}
-        copyText={t("copyButton.copyTooltip")}
-      />
-    }
-    render={() => (
-      <LakeText variant="regular" color={colors.gray[900]}>
-        {text}
-      </LakeText>
-    )}
-  />
-);
 
 const Help = (props: HelpProps) => {
   return match(props)
@@ -442,7 +425,28 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
         icon="document-regular"
         onPressClose={() => setCurrentMetadata(undefined)}
       >
-        {currentMetadata?.values.map(data => <CopiableLine label={data.title} text={data.value} />)}
+        <ReadOnlyFieldList>
+          {currentMetadata?.values.map(({ title, value, type }) => (
+            <LakeLabel
+              type="viewSmall"
+              label={title}
+              actions={
+                type === "copy" && (
+                  <LakeCopyButton
+                    valueToCopy={value}
+                    copiedText={t("copyButton.copiedTooltip")}
+                    copyText={t("copyButton.copyTooltip")}
+                  />
+                )
+              }
+              render={() => (
+                <LakeText variant="regular" color={colors.gray[900]}>
+                  {value}
+                </LakeText>
+              )}
+            />
+          ))}
+        </ReadOnlyFieldList>
       </LakeModal>
     </Form>
   );
