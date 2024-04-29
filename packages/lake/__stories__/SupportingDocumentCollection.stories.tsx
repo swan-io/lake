@@ -107,7 +107,6 @@ export const WaitingForDocumentShowIds = () => {
             "UnknownDocumentType",
           ]}
           showIds={true}
-          hideHelp={true}
         />
       </StoryPart>
     </StoryBlock>
