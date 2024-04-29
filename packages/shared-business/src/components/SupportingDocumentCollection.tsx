@@ -1,10 +1,12 @@
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { Form } from "@swan-io/lake/src/components/Form";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
+import { LakeCopyButton } from "@swan-io/lake/src/components/LakeCopyButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Space } from "@swan-io/lake/src/components/Space";
+import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
 import {
@@ -43,6 +45,14 @@ type SupportingDocumentCollectionStatus =
   | "Canceled"
   | "Rejected";
 
+type PurposeMetadata = {
+  title: string;
+  values: {
+    title: string;
+    value: string;
+  }[];
+};
+
 type Props<Purpose extends string> = {
   status: SupportingDocumentCollectionStatus;
   generateUpload: (
@@ -58,6 +68,8 @@ type Props<Purpose extends string> = {
   templateLanguage?: string;
   showIds?: boolean;
   readOnly?: boolean;
+  getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
+  readonlyDocumentPurposes?: Purpose[];
 };
 
 const styles = StyleSheet.create({
@@ -81,6 +93,25 @@ type HelpProps =
       label: string;
       onPress: () => void;
     };
+
+const CopiableLine = ({ label, text }: { label: string; text: string }) => (
+  <LakeLabel
+    type="viewSmall"
+    label={label}
+    actions={
+      <LakeCopyButton
+        valueToCopy={text}
+        copiedText={t("copyButton.copiedTooltip")}
+        copyText={t("copyButton.copyTooltip")}
+      />
+    }
+    render={() => (
+      <LakeText variant="regular" color={colors.gray[900]}>
+        {text}
+      </LakeText>
+    )}
+  />
+);
 
 const Help = (props: HelpProps) => {
   return match(props)
@@ -153,11 +184,14 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     onRemoveFile,
     showIds = false,
     readOnly = false,
+    getPurposeMetadata,
+    readonlyDocumentPurposes = [],
   }: Props<Purpose>,
   ref: Ref<SupportingDocumentCollectionRef<Purpose>>,
 ) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
+  const [currentMetadata, setCurrentMetadata] = useState<PurposeMetadata | undefined>(undefined);
 
   const [addedDocuments, setAddedDocuments] = useState<Document<Purpose>[]>([]);
 
@@ -257,36 +291,53 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
   return (
     <Form>
       {showableDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
+        const metadata = getPurposeMetadata?.(purpose);
+
         return (
           <Fragment key={purpose}>
             <LakeLabel
               label={getSupportingDocumentPurposeLabel(purpose)}
-              help={match(purpose as string)
-                .with("PowerOfAttorney", () => (
+              help={
+                isNotNullish(metadata) ? (
                   <Help
                     type="button"
-                    label={t("supportingDocuments.help.whatIsThis")}
-                    onPress={() => setShowPowerOfAttorneyModal(true)}
+                    label={metadata.title}
+                    onPress={() => setCurrentMetadata(metadata)}
                   />
-                ))
-                .with("SwornStatement", () => (
-                  <Help
-                    type="button"
-                    label={t("supportingDocuments.help.whatIsThis")}
-                    onPress={() => setShowSwornStatementModal(true)}
-                  />
-                ))
-                .otherwise(() => {
-                  const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
-                  return isNotNullishOrEmpty(label) ? <Help type="tooltip" text={label} /> : null;
-                })}
+                ) : (
+                  match(purpose as string)
+                    .with("PowerOfAttorney", () => (
+                      <Help
+                        type="button"
+                        label={t("supportingDocuments.help.whatIsThis")}
+                        onPress={() => setShowPowerOfAttorneyModal(true)}
+                      />
+                    ))
+                    .with("SwornStatement", () => (
+                      <Help
+                        type="button"
+                        label={t("supportingDocuments.help.whatIsThis")}
+                        onPress={() => setShowSwornStatementModal(true)}
+                      />
+                    ))
+                    .otherwise(() => {
+                      const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
+                      return isNotNullishOrEmpty(label) ? (
+                        <Help type="tooltip" text={label} />
+                      ) : null;
+                    })
+                )
+              }
               render={() => (
                 <FilesUploader
                   ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
                   // Only allow uploading is the Supporting Document Collection awaits for docs
                   // and that the specific purpose isn't already fully validated
                   canUpload={
-                    !readOnly && status === "WaitingForDocument" && !areAllDocumentsValidated
+                    !readonlyDocumentPurposes.includes(purpose) &&
+                    !readOnly &&
+                    status === "WaitingForDocument" &&
+                    !areAllDocumentsValidated
                   }
                   accept={ACCEPTED_FORMATS}
                   maxSize={20_000_000}
@@ -383,6 +434,15 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
             {t("supportingDocuments.downloadTemplate")}
           </LakeButton>
         </LakeButtonGroup>
+      </LakeModal>
+
+      <LakeModal
+        visible={isNotNullish(currentMetadata)}
+        title={t("supportingDocuments.informations")}
+        icon="document-regular"
+        onPressClose={() => setCurrentMetadata(undefined)}
+      >
+        {currentMetadata?.values.map(data => <CopiableLine label={data.title} text={data.value} />)}
       </LakeModal>
     </Form>
   );

@@ -50,6 +50,23 @@ export const WaitingForDocument = () => {
             "PowerOfAttorney",
             "UnknownDocumentType",
           ]}
+          getPurposeMetadata={purpose => ({
+            title: "Show metadata",
+            values: [
+              {
+                title: "Purpose",
+                value: purpose,
+              },
+              {
+                title: "ID",
+                value: "666",
+              },
+              {
+                title: "Lorem ipsum",
+                value: "dolor sit amet",
+              },
+            ],
+          })}
         />
 
         <LakeButton
@@ -90,6 +107,7 @@ export const WaitingForDocumentShowIds = () => {
             "UnknownDocumentType",
           ]}
           showIds={true}
+          hideHelp={true}
         />
       </StoryPart>
     </StoryBlock>
