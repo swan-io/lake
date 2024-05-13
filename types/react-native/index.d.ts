@@ -390,6 +390,21 @@ declare module "react-native" {
   export interface TextStyle extends AnimationStyles, InteractionStyles, TransformsStyle {
     display?: DisplayValue;
     fontFeatureSettings?: string;
+    fontVariantNumeric?:
+      | "normal"
+      | "ordinal"
+      | "slashed-zero"
+      | "lining-nums"
+      | "oldstyle-nums"
+      | "proportional-nums"
+      | "tabular-nums"
+      | "diagonal-fractions"
+      | "stacked-fractions"
+      | "inherit"
+      | "initial"
+      | "revert"
+      | "revert-layer"
+      | "unset";
     textOverflow?: "clip" | "ellipsis";
     textTransform?: "none" | "capitalize" | "uppercase" | "lowercase";
     transform?: string;
