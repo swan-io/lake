@@ -351,7 +351,8 @@ declare module "react-native" {
     | "grid"
     | "inline"
     | "inline-block"
-    | "inline-flex";
+    | "inline-flex"
+    | "list-item";
 
   type PositionValue = FlexStyle["position"] | "fixed" | "static" | "sticky";
   type WebDimensionValue = ReactNative.DimensionValue | string;
