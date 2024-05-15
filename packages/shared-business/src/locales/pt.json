@@ -223,6 +223,7 @@
   "supportingDocuments.purpose.AssociationRegistration.description": "Documento oficial que comprove o registo da sua associação. (< 3 meses)",
   "supportingDocuments.purpose.Banking": "Bancário",
   "supportingDocuments.purpose.Banking.description": "",
+  "supportingDocuments.purpose.CapitalShareDepositCertificate": "Certificado de Depósito de Capital Social",
   "supportingDocuments.purpose.CompanyLeaseAgreement": "Contrato de Arrendamento da Empresa",
   "supportingDocuments.purpose.CompanyRegistration": "Prova de registo da empresa (< 3 meses)",
   "supportingDocuments.purpose.CompanyRegistration.description": "Documento oficial que comprove a existência legal de uma empresa e forneça informações sobre sua personalidade jurídica.\n(< 3 meses)",

@@ -223,6 +223,7 @@
   "supportingDocuments.purpose.AssociationRegistration.description": "Document officiel prouvant l'inscription de votre association. (< 3 mois)",
   "supportingDocuments.purpose.Banking": "Bancaire",
   "supportingDocuments.purpose.Banking.description": "",
+  "supportingDocuments.purpose.CapitalShareDepositCertificate": "Certificat de dépôt de capital social",
   "supportingDocuments.purpose.CompanyLeaseAgreement": "Contrat de location de l'entreprise",
   "supportingDocuments.purpose.CompanyRegistration": "Preuve d'inscription de l'entreprise (< 3 mois)",
   "supportingDocuments.purpose.CompanyRegistration.description": "Document officiel prouvant l'existence légale d'une entreprise et fournissant des informations sur sa personnalité juridique.\n(< 3 mois)",
