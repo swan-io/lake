@@ -223,6 +223,7 @@
   "supportingDocuments.purpose.AssociationRegistration.description": "Virallinen asiakirja, joka todistaa yhdistyksen rekisteröinnin. (< 3 kuukautta vanha)",
   "supportingDocuments.purpose.Banking": "Pankkitoiminta",
   "supportingDocuments.purpose.Banking.description": "",
+  "supportingDocuments.purpose.CapitalShareDepositCertificate": "Pääoman osuuden talletustodistus",
   "supportingDocuments.purpose.CompanyLeaseAgreement": "Yrityksen vuokrasopimus",
   "supportingDocuments.purpose.CompanyRegistration": "Yrityksen rekisteröintitodistus (< 3 kuukautta vanha)",
   "supportingDocuments.purpose.CompanyRegistration.description": "Virallinen asiakirja, joka todistaa yrityksen laillisen olemassaolon ja antaa tietoa sen oikeushenkilöstä.\n(< 3 kuukautta vanha)",

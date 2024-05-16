@@ -223,6 +223,7 @@
   "supportingDocuments.purpose.AssociationRegistration": "Proof of registration",
   "supportingDocuments.purpose.Banking.description": "",
   "supportingDocuments.purpose.Banking": "Banking",
+  "supportingDocuments.purpose.CapitalShareDepositCertificate": "Capital Share Deposit Certificate",
   "supportingDocuments.purpose.CompanyLeaseAgreement": "Company Lease Agreement",
   "supportingDocuments.purpose.CompanyRegistration.description": "Official document proving the legal existence of a company and providing info about its legal personality.\n(< 3 months old)",
   "supportingDocuments.purpose.CompanyRegistration": "Proof of company registration (< 3 months old)",
