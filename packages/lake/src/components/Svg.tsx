@@ -51,6 +51,7 @@ type RadialGradientProps = CommonProps & {
   fy?: string;
   r?: string;
   gradientTransform?: string;
+  gradientUnits?: "objectBoundingBox" | "userSpaceOnUse";
 };
 
 type ImageProps = CommonProps & {
@@ -93,6 +94,7 @@ type RectProps = CommonProps & {
 type StopProps = CommonProps & {
   offset?: string;
   stopColor?: string;
+  stopOpacity?: number;
 };
 
 type UseProps = CommonProps & {
