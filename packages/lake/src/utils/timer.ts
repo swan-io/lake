@@ -1,11 +1,17 @@
 // based on https://gist.github.com/ncou/3a0a1f89c8e22416d0d607f621a948a9
 
+/**
+ * @deprecated
+ */
 export type ControllableTimeout = {
   readonly duration: number;
   readonly clear: () => void;
   readonly reset: () => void;
 };
 
+/**
+ * @deprecated
+ */
 export const createControllableTimeout = (config: {
   duration: number;
   onStart: (duration: number) => void;
