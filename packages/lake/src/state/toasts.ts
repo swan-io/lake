@@ -1,7 +1,67 @@
 import { atom, useAtom } from "react-atomic-state";
-import { Animated, Easing } from "react-native";
-import { ControllableTimeout, createControllableTimeout } from "../utils/timer";
 
+// based on https://gist.github.com/ncou/3a0a1f89c8e22416d0d607f621a948a9
+const createProgress = ({ duration, onEnd }: { duration: number; onEnd: () => void }) => {
+  const callbacks = new Set<(value: number) => void>();
+
+  let endDate = 0;
+  let timerId = 0;
+
+  const step = () => {
+    const value = (endDate - Date.now()) / duration;
+    callbacks.forEach(callback => callback(value));
+    animationRequest = window.requestAnimationFrame(step);
+  };
+
+  let animationRequest = window.requestAnimationFrame(step);
+
+  const start = () => {
+    endDate = Date.now() + duration;
+
+    timerId = window.setTimeout(() => {
+      clear();
+      onEnd();
+    }, duration);
+  };
+
+  const reset = () => {
+    window.clearTimeout(timerId);
+    start();
+  };
+
+  const subscribe = (callback: (value: number) => void) => {
+    callbacks.add(callback);
+
+    return () => {
+      callbacks.delete(callback);
+    };
+  };
+
+  const clear = () => {
+    document.removeEventListener("visibilitychange", onDocumentVisible);
+    window.clearTimeout(timerId);
+    window.cancelAnimationFrame(animationRequest);
+  };
+
+  const onDocumentVisible = () => {
+    document.removeEventListener("visibilitychange", onDocumentVisible);
+    reset();
+  };
+
+  if (document.hidden) {
+    document.addEventListener("visibilitychange", onDocumentVisible);
+  } else {
+    reset();
+  }
+
+  return {
+    clear,
+    reset,
+    subscribe,
+  };
+};
+
+export type ToastProgress = ReturnType<typeof createProgress>;
 export type ToastVariant = "success" | "info" | "warning" | "error";
 
 type ToastContent = {
@@ -18,8 +78,7 @@ type Toast = {
   title: string;
   description?: string;
   error?: unknown;
-  progress?: Animated.Value;
-  timeout?: ControllableTimeout;
+  progress?: ToastProgress;
 };
 
 const toasts = atom<Toast[]>([]);
@@ -29,14 +88,10 @@ export const useToasts = () => useAtom(toasts);
 export const hideToast = (uid: string) => {
   const toast = toasts.get().find(toast => toast.uid === uid);
 
-  if (!toast) {
-    return;
+  if (toast != null) {
+    toast.progress?.clear();
+    toasts.set(toasts => toasts.filter(toast => toast.uid !== uid));
   }
-
-  toast.timeout?.clear();
-  toast.progress?.stopAnimation();
-
-  toasts.set(toasts => toasts.filter(toast => toast.uid !== uid));
 };
 
 let errorToRequestId = new WeakMap<WeakKey, string>();
@@ -51,56 +106,25 @@ export const getErrorToRequestId = () => {
 
 export const showToast = ({ variant, title, description, error, autoClose }: ToastContent) => {
   const uid = `${variant} - ${title} - ${description ?? ""}`;
-
   const toast = toasts.get().find(toast => toast.uid === uid);
 
   if (toast != null) {
-    if (toast.timeout && toast.progress) {
-      toast.timeout.clear();
-
-      Animated.timing(toast.progress, {
-        duration: 100,
-        easing: Easing.linear,
-        toValue: 1,
-        useNativeDriver: false,
-      }).start(() => {
-        toast.timeout?.reset();
-      });
-    }
-
+    toast.progress?.reset();
     return uid;
   }
 
   // by default, only info and success toasts are auto-closing
-  const isAutoClosingToast = autoClose ?? (variant === "info" || variant === "success");
+  const shouldAutoClose = autoClose ?? (variant === "info" || variant === "success");
 
-  const progress = isAutoClosingToast ? new Animated.Value(1) : undefined;
-
-  const timeout = progress
-    ? createControllableTimeout({
+  const progress = shouldAutoClose
+    ? createProgress({
         duration: 10000,
-        onStart: duration => {
-          Animated.timing(progress, {
-            duration,
-            easing: Easing.linear,
-            toValue: 0,
-            useNativeDriver: false,
-          }).start();
-        },
-        onReset: duration => {
-          Animated.timing(progress, {
-            duration,
-            easing: Easing.linear,
-            toValue: 0,
-            useNativeDriver: false,
-          }).start();
-        },
         onEnd: () => {
           hideToast(uid);
         },
       })
     : undefined;
 
-  toasts.set(toasts => [{ uid, variant, title, description, error, progress, timeout }, ...toasts]);
+  toasts.set(toasts => [{ uid, variant, title, description, error, progress }, ...toasts]);
   return uid;
 };

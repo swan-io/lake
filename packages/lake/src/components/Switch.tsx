@@ -1,8 +1,6 @@
-import { forwardRef, memo, useEffect, useRef } from "react";
-import { Animated, Pressable, StyleSheet, View } from "react-native";
+import { forwardRef, memo } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, shadows } from "../constants/design";
-import { useAnimatedValue } from "../hooks/useAnimatedValue";
-import { interpolate } from "../utils/math";
 import { Icon } from "./Icon";
 
 const WIDTH = 36;
@@ -17,7 +15,7 @@ const styles = StyleSheet.create({
     width: WIDTH,
     boxSizing: "content-box",
     transitionProperty: "background-color",
-    transitionDuration: "300ms",
+    transitionDuration: "250ms",
     boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.2)",
   },
   active: {
@@ -40,11 +38,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: PADDING,
     width: BUTTON_SIZE,
+    transform: `translateX(${PADDING}px)`,
+    transitionProperty: "transform",
+    transitionDuration: "250ms",
+    transitionTimingFunction: "ease",
+  },
+  buttonActive: {
+    transform: `translateX(${WIDTH - BUTTON_SIZE - PADDING}px)`,
   },
   icon: {
     opacity: 0,
     transitionProperty: "opacity",
-    transitionDuration: "300ms",
+    transitionDuration: "250ms",
   },
   shadow: {
     position: "absolute",
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
     boxShadow: shadows.tile,
     opacity: 0,
     transitionProperty: "opacity",
-    transitionDuration: "300ms",
+    transitionDuration: "250ms",
   },
 });
 
@@ -66,36 +71,6 @@ type Props = {
 
 export const Switch = memo(
   forwardRef<View, Props>(({ value, disabled = false, onValueChange }, ref) => {
-    const animatedValue = value ? 1 : 0;
-    const animation = useAnimatedValue(animatedValue);
-    const buttonRef = useRef<View>(null);
-
-    useEffect(() => {
-      const interpolateValue = interpolate({
-        inputRange: [0, 1],
-        outputRange: [PADDING, WIDTH - BUTTON_SIZE - PADDING],
-      });
-
-      const id = animation.addListener(({ value }) => {
-        if (buttonRef.current instanceof HTMLElement) {
-          buttonRef.current.style.transform = `translateX(${interpolateValue(value)}px)`;
-        }
-      });
-
-      return () => {
-        animation.removeListener(id);
-      };
-    }, [animation]);
-
-    useEffect(() => {
-      Animated.spring(animation, {
-        bounciness: 6,
-        speed: 25,
-        toValue: animatedValue,
-        useNativeDriver: false,
-      }).start();
-    }, [animation, animatedValue]);
-
     return (
       <Pressable
         ref={ref}
@@ -109,7 +84,7 @@ export const Switch = memo(
             <View style={[styles.shadow, hovered && styles.opaque]} />
 
             <View style={[styles.base, value && styles.active, disabled && styles.disabled]}>
-              <View ref={buttonRef} style={styles.button}>
+              <View style={[styles.button, value && styles.buttonActive]}>
                 <Icon
                   color={colors.positive[400]}
                   name="checkmark-filled"

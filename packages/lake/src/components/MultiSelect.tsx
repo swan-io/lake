@@ -10,11 +10,13 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TextInput,
   TextStyle,
   View,
   ViewStyle,
 } from "react-native";
 import { ColorVariants, backgroundColor, colors, radii, shadows, texts } from "../constants/design";
+import { useBoolean } from "../hooks/useBoolean";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
@@ -23,7 +25,7 @@ import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { InputError } from "./InputError";
 import { Popover } from "./Popover";
-import { PressableText, PressableTextInput } from "./Pressable";
+import { PressableText } from "./Pressable";
 import { Space } from "./Space";
 import { Tag } from "./Tag";
 
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     placeholderTextColor: colors.gray[300],
   },
-  filterfocused: {
+  filterFocused: {
     borderColor: colors.gray[200],
   },
   searchIcon: {
@@ -189,6 +191,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     id,
   }) => {
     const [filter, setFilter] = useState<string>("");
+    const [filterFocused, setFilterFocused] = useBoolean(false);
 
     const shouldScrollToBottomRef = useRef(false);
     const selectedTagListRef = useRef<View & Element>(null);
@@ -269,7 +272,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     const ListHeaderComponent = useMemo(
       () => (
         <Box direction="row" alignItems="center" style={styles.filterContainer}>
-          <PressableTextInput
+          <TextInput
             autoComplete="off"
             inputMode="search"
             multiline={false}
@@ -277,7 +280,9 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
             onChangeText={filterValue => setFilter(filterValue)}
             placeholder={filterPlaceholder}
             value={filter}
-            style={({ focused }) => [styles.filterInput, focused && styles.filterfocused]}
+            onFocus={setFilterFocused.on}
+            onBlur={setFilterFocused.off}
+            style={[styles.filterInput, filterFocused && styles.filterFocused]}
           />
 
           <Icon
@@ -288,7 +293,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
           />
         </Box>
       ),
-      [filter, filterPlaceholder, color],
+      [filter, filterFocused, setFilterFocused, filterPlaceholder, color],
     );
 
     const ListEmptyComponent = useMemo(

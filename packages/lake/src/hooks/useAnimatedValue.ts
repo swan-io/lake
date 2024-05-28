@@ -3,6 +3,9 @@ import { Animated } from "react-native";
 
 const UNSET = Symbol("unset");
 
+/**
+ * @deprecated
+ */
 export const useAnimatedValue = (value: number): Animated.Value => {
   const ref = useRef<Animated.Value | typeof UNSET>(UNSET);
 

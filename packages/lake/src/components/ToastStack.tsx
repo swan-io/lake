@@ -2,10 +2,16 @@ import { Array, Option } from "@swan-io/boxed";
 import { ClientError } from "@swan-io/graphql-client";
 import { t } from "@swan-io/shared-business/src/utils/i18n";
 import { memo, useEffect, useRef, useState } from "react";
-import { Animated, Clipboard, StyleSheet, View } from "react-native";
+import { Clipboard, StyleSheet, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { ColorVariants, animations, colors, shadows } from "../constants/design";
-import { ToastVariant, getErrorToRequestId, hideToast, useToasts } from "../state/toasts";
+import {
+  ToastProgress,
+  ToastVariant,
+  getErrorToRequestId,
+  hideToast,
+  useToasts,
+} from "../state/toasts";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
@@ -73,7 +79,7 @@ type ToastProps = {
   title: string;
   description?: string;
   error?: unknown;
-  progress?: Animated.Value;
+  progress?: ToastProgress;
   onClose: (uid: string) => void;
 };
 
@@ -108,13 +114,11 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
       return;
     }
 
-    const id = progress.addListener(({ value }) => {
+    return progress.subscribe(value => {
       if (progressBarRef.current instanceof HTMLElement) {
         progressBarRef.current.style.transform = `scaleX(${value})`;
       }
     });
-
-    return () => progress.removeListener(id);
   }, [progress]);
 
   return (
