@@ -50,4 +50,4 @@ jobs:
         run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }}"
+        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }}
