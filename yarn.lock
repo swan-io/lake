@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@0no-co/graphql.web@^1.0.6":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.0.7.tgz#c7a762c887b3482a79ffa68f63de5e96059a62e4"
-  integrity sha512-E3Qku4mTzdrlwVWGPxklDnME5ANrEGetvYw4i2GCRlppWXXE4QD66j7pwb8HelZwS6LnqEChhrSOGCXpbiu6MQ==
-
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.3.0.tgz#ed441b6fa600072520ce18b43d2c8cc8caecc7f4"
@@ -2223,16 +2218,6 @@
   dependencies:
     "@emotion/hash" "^0.9.1"
     use-sync-external-store "^1.2.0"
-
-"@swan-io/graphql-client@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@swan-io/graphql-client/-/graphql-client-0.1.3.tgz#420b55fc3b936fb370a4850edd7944ef0da35786"
-  integrity sha512-C9NqOHwavRrAGCr5vyrd8ViTndkLayh4y4+N1nkxwKgAleLV3cIaxFeu6+UCPUksx2U1ygg0l5d0ez/L0azuUg==
-  dependencies:
-    "@0no-co/graphql.web" "^1.0.6"
-    "@swan-io/boxed" "^2.3.0"
-    "@swan-io/request" "^1.0.6"
-    ts-pattern "^5.1.0"
 
 "@swan-io/request@^1.0.6":
   version "1.0.6"
@@ -7778,7 +7763,7 @@ ts-dedent@^2.0.0, ts-dedent@^2.2.0:
   resolved "https://registry.yarnpkg.com/ts-dedent/-/ts-dedent-2.2.0.tgz#39e4bd297cd036292ae2394eb3412be63f563bb5"
   integrity sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==
 
-ts-pattern@^5.1.0, ts-pattern@^5.1.1:
+ts-pattern@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.1.1.tgz#600e0a3d23ab1b0eb30b7c897d0898e940504544"
   integrity sha512-i+owkHr5RYdQxj8olUgRrqpiWH9x27PuWVfXwDmJ/n/CoF/SAa7WW1i2oUpPDMQpJ4U+bGRUcZkVq7i1m3zFCg==

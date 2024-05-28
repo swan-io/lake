@@ -1,5 +1,4 @@
 import { Array, Option } from "@swan-io/boxed";
-import { ClientError } from "@swan-io/graphql-client";
 import { t } from "@swan-io/shared-business/src/utils/i18n";
 import { memo, useEffect, useRef, useState } from "react";
 import { Animated, Clipboard, StyleSheet, View } from "react-native";
@@ -77,6 +76,13 @@ type ToastProps = {
   onClose: (uid: string) => void;
 };
 
+const errorsToArray = (errors: unknown): Error[] => {
+  const asArray = Array.isArray(errors) ? errors : [errors];
+  return Array.filterMap(asArray, error =>
+    error instanceof Error ? Option.Some(error) : Option.None(),
+  );
+};
+
 const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progress, onClose }) => {
   const progressBarRef = useRef<View>(null);
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
@@ -86,13 +92,9 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
     if (error == undefined) {
       return Option.None();
     }
-    return Array.findMap(ClientError.toArray(error as ClientError), error => {
-      if (error instanceof Error) {
-        return Option.fromNullable(getErrorToRequestId().get(error));
-      } else {
-        return Option.None();
-      }
-    });
+    return Array.findMap(errorsToArray(error), error =>
+      Option.fromNullable(getErrorToRequestId().get(error)),
+    );
   });
 
   const colorVariation = match(variant)
