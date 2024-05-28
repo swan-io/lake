@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, View } from "react-native";
 import { colors } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
+import { isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
@@ -47,7 +48,7 @@ export function FilterChooser<FilterName extends string>({
   filters: Partial<Record<FilterName, unknown>>;
   openFilters: FilterName[];
   label: string;
-  title: string;
+  title?: string;
   availableFilters: { label: string; name: FilterName }[];
   large?: boolean;
   onAddFilter: (filterName: FilterName) => void;
@@ -81,8 +82,12 @@ export function FilterChooser<FilterName extends string>({
         visible={visible}
       >
         <View style={styles.list}>
-          <LakeText style={styles.availableFiltersTitle}>{title}</LakeText>
-          <Space height={8} />
+          {isNotNullishOrEmpty(title) ? (
+            <>
+              <LakeText style={styles.availableFiltersTitle}>{title}</LakeText>
+              <Space height={8} />
+            </>
+          ) : null}
 
           <FlatList
             role="list"
