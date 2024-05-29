@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     outlineWidth: 0,
     // make focus indicator invisible on iOS (outline: none doesn't work)
     opacity: 0,
+    order: -1,
   },
   grabContainer: {
     paddingHorizontal: 128,
@@ -195,12 +196,13 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
                   autoFocus={true}
                   focusLock={true}
                   returnFocus={returnFocus}
+                  onEscapeKey={() => {
+                    if (onPressClose != null) {
+                      onPressClose();
+                    }
+                  }}
                   style={styles.trap}
                 >
-                  {onPressClose != null ? (
-                    <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
-                  ) : null}
-
                   <View style={styles.modal}>
                     <View style={styles.grabContainer} {...panResponder.panHandlers}>
                       <View style={styles.grabLine} />
@@ -208,6 +210,10 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
 
                     {children}
                   </View>
+
+                  {onPressClose != null ? (
+                    <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
+                  ) : null}
                 </FocusTrap>
               </ScrollView>
 
