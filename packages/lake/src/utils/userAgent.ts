@@ -27,7 +27,7 @@ export const isSafari =
   isNullish(navigator.userAgentData) && SAFARI_REGEXP.test(navigator.userAgent) && !isChrome;
 
 // from https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
-export const isSupportedMobileDevice = ((): boolean => {
+export const isDecentMobileDevice = ((): boolean => {
   // Windows Phone must come first because its UA also contains "Android"
   if (/windows phone/i.test(navigator.userAgent)) {
     return false;
