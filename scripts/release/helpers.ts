@@ -3,7 +3,6 @@ import childProcess from "node:child_process";
 import util from "node:util";
 
 const REPOSITORY = "lake";
-const VERSION_REGEXP = /^v\d+\.\d+.\d+$/;
 
 export const logError = (...error: string[]) =>
   console.error(`${chalk.red("ERROR")} ${error.join("\n")}` + "\n");
@@ -56,7 +55,12 @@ export const resetGitBranch = (branch: string, remote: string) =>
 export const getGitCommits = (from: string | undefined, to: string) =>
   exec(`git log ${from != null ? `${from}..${to}` : ""} --pretty="format:%s"`)
     .then(_ => _.split("\n"))
-    .then(entries => entries.map(entry => "- " + entry.trim().replace(/["]/g, "*")).toReversed());
+    .then(entries =>
+      entries
+        .filter(entry => !/^v\d+\.\d+.\d+/.test(entry))
+        .map(entry => "- " + entry.trim().replace(/["]/g, "*"))
+        .toReversed(),
+    );
 
 // https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-local-branch-exists
 export const hasGitLocalBranch = (branch: string) =>
@@ -92,7 +96,7 @@ export const getLatestGhRelease = () =>
 export const getGhReleasePullRequest = () =>
   exec("gh pr list --state merged --json title")
     .then(output => JSON.parse(output) as { title: string }[])
-    .then(output => output.map(({ title }) => title).find(title => VERSION_REGEXP.test(title)));
+    .then(output => output.map(({ title }) => title).find(title => /^v\d+\.\d+.\d+$/.test(title)));
 
 export const createGhRelease = async (version: string, notes: string) =>
   exec(`gh release create ${version} --title ${version}  --notes "${notes}"`);
