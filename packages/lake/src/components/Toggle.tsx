@@ -60,7 +60,7 @@ export const Toggle = ({
   const onItemRef = useRef<Text | null>(null);
   const offItemRef = useRef<Text | null>(null);
   const [handleStyle, setHandleStyle] = useState<ViewStyle>();
-  const isMobile = mode === "mobile";
+  const isMobileMode = mode === "mobile";
   const onColor = value ? colors.positive[500] : colors.gray[500];
   const offColor = !value ? colors.negative[500] : colors.gray[500];
 
@@ -78,7 +78,7 @@ export const Toggle = ({
     );
   }, [value]);
 
-  useEffect(reajustLayout, [reajustLayout, value, isMobile, onLabel, offLabel]);
+  useEffect(reajustLayout, [reajustLayout, value, isMobileMode, onLabel, offLabel]);
 
   return (
     <Pressable
@@ -103,7 +103,7 @@ export const Toggle = ({
       />
 
       <Box style={styles.switchItem} ref={onItemRef}>
-        {isMobile ? (
+        {isMobileMode ? (
           <Icon size={16} name="checkmark-circle-regular" color={onColor} />
         ) : (
           <LakeText variant="smallMedium" color={onColor}>
@@ -113,7 +113,7 @@ export const Toggle = ({
       </Box>
 
       <Box style={styles.switchItem} ref={offItemRef}>
-        {isMobile ? (
+        {isMobileMode ? (
           <Icon size={16} name="subtract-circle-regular" color={offColor} />
         ) : (
           <LakeText variant="smallMedium" color={offColor}>

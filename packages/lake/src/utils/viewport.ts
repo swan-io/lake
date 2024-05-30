@@ -2,7 +2,10 @@ import { Future } from "@swan-io/boxed";
 import { isNotNullish } from "./nullish";
 import { isSafari } from "./userAgent";
 
-// Prevents Safari from zooming automatically on inputs, still allow user to zoom manually
+/**
+ * Prevents Safari from zooming automatically on inputs, still allow user to zoom manually
+ * @deprecated
+ */
 export const preventSafariAutoZoomOnInputs = () => {
   if (isSafari) {
     const viewport = document.querySelector("meta[name=viewport]");
