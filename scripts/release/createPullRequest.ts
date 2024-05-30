@@ -7,6 +7,8 @@ import prompts from "prompts";
 import semver from "semver";
 import { PackageJson } from "type-fest";
 
+const REPOSITORY_URL = "https://github.com/swan-io/lake";
+
 const logError = (...error: string[]) =>
   console.error(`${chalk.red("ERROR")} ${error.join("\n")}` + "\n");
 
@@ -88,13 +90,15 @@ const getWorkspacePackages = () =>
     info => JSON.parse(info) as Record<string, { location: string }>,
   );
 
-const createGhPullRequest = (title: string) => exec(`gh pr create -t "${title}" -b ""`);
 const gitAddAll = () => exec("git add . -u");
 const gitCheckout = (branch: string) => exec(`git checkout ${branch}`);
 const gitCheckoutNewBranch = (branch: string) => exec(`git checkout -b ${branch}`);
 const gitCommit = (message: string) => exec(`git commit -m "${message}"`);
 const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
 const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} ${branch}`);
+
+const createGhPullRequest = (title: string, body: string) =>
+  exec(`gh pr create -t "${title}" -b "${body}"`);
 
 void (async () => {
   if (await isProgramMissing("git")) {
@@ -138,7 +142,7 @@ void (async () => {
   const commits = await getGitCommits(currentVersionTag, "main");
 
   if (commits.length > 0) {
-    console.log("\n" + chalk.bold("Commits"));
+    console.log("\n" + chalk.bold("What's included"));
     console.log(commits.join("\n") + "\n");
   }
 
@@ -195,7 +199,13 @@ void (async () => {
   await gitPush(releaseBranch, "origin");
 
   await updateGhPagerConfig();
-  const url = await createGhPullRequest(releaseTag);
+
+  const body = [
+    ...(commits.length > 0 ? ["### What's included", commits.join("\n")] : []),
+    `**Diff**: ${REPOSITORY_URL}/compare/${currentVersionTag}...${releaseBranch}`,
+  ].join("\n\n");
+
+  const url = await createGhPullRequest(releaseTag, body);
 
   console.log("\n" + chalk.bold("✨ Pull request created:"));
   console.log(url + "\n");
