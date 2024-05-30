@@ -100,7 +100,7 @@ const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} 
 const createGhPullRequest = (title: string, body: string) =>
   exec(`gh pr create -t "${title}" -b "${body}"`);
 
-void (async () => {
+const createPullRequest = async () => {
   if (await isProgramMissing("git")) {
     logError("git needs to be installed", "https://git-scm.com");
     process.exit(1);
@@ -212,4 +212,9 @@ void (async () => {
 
   await gitCheckout("main");
   await gitDeleteLocalBranch(releaseBranch);
-})();
+};
+
+createPullRequest().catch(error => {
+  console.error(error);
+  process.exit(1);
+});
