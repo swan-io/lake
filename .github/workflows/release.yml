@@ -45,9 +45,5 @@ jobs:
           yarn workspace @swan-io/lake publish
           yarn workspace @swan-io/shared-business publish
 
-      - name: Get version
-        id: version
-        run: echo version="$REF_BRANCH" | sed -e 's/release-//g' >> $GITHUB_OUTPUT
-
       - name: Create GitHub release
-        run: gh release create ${{ steps.version.outputs.version }} --title ${{ steps.version.outputs.version }}
+        run: yarn tsx scripts/release/createRelease.ts
