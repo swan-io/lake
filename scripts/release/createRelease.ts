@@ -2,6 +2,7 @@ import semver from "semver";
 import {
   createGhCompareUrl,
   createGhRelease,
+  createGitTag,
   getGhReleasePullRequest,
   getGitCommits,
   getLatestGhRelease,
@@ -39,6 +40,7 @@ import {
     process.exit(1);
   }
 
+  await createGitTag(nextVersionTag);
   const commits = await getGitCommits(currentVersionTag, nextVersionTag);
 
   const releaseNotes = [
