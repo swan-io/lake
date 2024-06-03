@@ -80,7 +80,7 @@ if (currentVersion == null) {
   const commits = await getGitCommits(currentVersionTag, "main");
 
   if (commits.length > 0) {
-    console.log("\n" + chalk.bold("What's included"));
+    console.log("\n" + chalk.bold("What's Included"));
     console.log(commits.join("\n") + "\n");
   }
 
@@ -139,7 +139,7 @@ if (currentVersion == null) {
   await updateGhPagerConfig();
 
   const body = [
-    ...(commits.length > 0 ? ["### What's included", commits.join("\n")] : []),
+    ...(commits.length > 0 ? ["### What's Included", commits.join("\n")] : []),
     `**Diff**: ${createGhCompareUrl(currentVersionTag, releaseBranch)}`,
   ].join("\n\n");
 
