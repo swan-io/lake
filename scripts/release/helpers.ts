@@ -84,6 +84,11 @@ export const gitPush = (branch: string, remote: string) => exec(`git push -u ${r
 
 export const createGitTag = (name: string) => exec(`git tag -a ${name}`);
 
+export const setGitUser = async (name: string, email: string) => {
+  await exec(`git config --global user.name "${name}"`);
+  await exec(`git config --global user.email "${email}"`);
+};
+
 export const createGhCompareUrl = (from: string | undefined, to: string) =>
   `https://github.com/swan-io/${REPOSITORY}/compare/${from != null ? `${from}..${to}` : ""}`;
 

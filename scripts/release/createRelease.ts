@@ -7,6 +7,7 @@ import {
   getGitCommits,
   getLatestGhRelease,
   logError,
+  setGitUser,
   updateGhPagerConfig,
 } from "./helpers";
 
@@ -40,7 +41,9 @@ import {
     process.exit(1);
   }
 
+  await setGitUser("Matthias Le Brun", "bloodyowl@icloud.com");
   await createGitTag(nextVersionTag);
+
   const commits = await getGitCommits(currentVersionTag, nextVersionTag);
 
   const releaseNotes = [
