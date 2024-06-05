@@ -2,13 +2,13 @@ import semver from "semver";
 import {
   createGhCompareUrl,
   createGhRelease,
-  createGitTag,
+  fetchGitRemote,
   getGhReleasePullRequest,
   getGitCommits,
   getLatestGhRelease,
   logError,
-  setGitUser,
   updateGhPagerConfig,
+  updateGhReleaseNotes,
 } from "./helpers";
 
 (async () => {
@@ -41,8 +41,8 @@ import {
     process.exit(1);
   }
 
-  await setGitUser("Matthias Le Brun", "bloodyowl@icloud.com");
-  await createGitTag(nextVersionTag);
+  await createGhRelease(nextVersionTag);
+  await fetchGitRemote("origin");
 
   const commits = await getGitCommits(currentVersionTag, nextVersionTag);
 
@@ -51,7 +51,7 @@ import {
     `**Full Changelog**: ${createGhCompareUrl(currentVersionTag, nextVersionTag)}`,
   ].join("\n\n");
 
-  await createGhRelease(nextVersionTag, releaseNotes);
+  await updateGhReleaseNotes(nextVersionTag, releaseNotes);
 })().catch(error => {
   console.error(error);
   process.exit(1);
