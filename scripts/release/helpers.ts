@@ -82,13 +82,6 @@ export const gitCommit = (message: string) => exec(`git commit -m "${message}"`)
 export const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
 export const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} ${branch}`);
 
-export const createGitTag = (name: string) => exec(`git tag -a ${name} -m "${name}"`);
-
-export const setGitUser = async (name: string, email: string) => {
-  await exec(`git config --global user.name "${name}"`);
-  await exec(`git config --global user.email "${email}"`);
-};
-
 export const createGhCompareUrl = (from: string | undefined, to: string) =>
   `https://github.com/swan-io/${REPOSITORY}/compare/${from != null ? `${from}..${to}` : ""}`;
 
@@ -105,5 +98,8 @@ export const getGhReleasePullRequest = () =>
     .then(output => JSON.parse(output) as { title: string }[])
     .then(output => output.map(({ title }) => title).find(title => /^v\d+\.\d+.\d+$/.test(title)));
 
-export const createGhRelease = async (version: string, notes: string) =>
-  exec(`gh release create ${version} --title ${version}  --notes "${notes}"`);
+export const createGhRelease = async (version: string) =>
+  exec(`gh release create ${version} --title ${version} --generate-notes`);
+
+export const updateGhReleaseNotes = async (version: string, notes: string) =>
+  exec(`gh release edit ${version} --notes "${notes}"`);
