@@ -1,16 +1,42 @@
-import { PKClient } from "@placekit/client-js";
-import { useEffect, useState } from "react";
+import type { PKClient } from "@placekit/client-js/lite";
+import { useEffect, useMemo, useState } from "react";
 
-export const usePlacekit = ({ apiKey }: { apiKey?: string }) => {
-  const [placekit, setPlacekit] = useState<PKClient | undefined>(undefined);
+const debounce = <A extends unknown[], R>(fn: (...args: A) => Promise<R>, ms: number) => {
+  let timer: NodeJS.Timeout | undefined;
+
+  return (...args: A) => {
+    clearTimeout(timer);
+
+    return new Promise<R>(resolve => {
+      timer = setTimeout(() => resolve(fn(...args)), ms);
+    });
+  };
+};
+
+export const usePlacekit = ({
+  apiKey,
+  debounceInterval = 500,
+}: {
+  apiKey?: string;
+  debounceInterval?: number;
+}) => {
+  const [client, setClient] = useState<PKClient>();
 
   useEffect(() => {
     if (apiKey != null) {
-      void import("@placekit/client-js").then(({ default: placekit }) => {
-        setPlacekit(placekit(apiKey));
+      void import("@placekit/client-js/lite").then(({ default: placekit }) => {
+        setClient(placekit(apiKey));
       });
     }
   }, [apiKey]);
 
-  return placekit;
+  return useMemo<PKClient | undefined>(() => {
+    if (client != null) {
+      return {
+        ...client,
+        search: debounce(client.search, debounceInterval),
+        reverse: debounce(client.reverse, debounceInterval),
+      };
+    }
+  }, [client, debounceInterval]);
 };
