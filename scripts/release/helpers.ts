@@ -82,7 +82,7 @@ export const gitCommit = (message: string) => exec(`git commit -m "${message}"`)
 export const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
 export const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} ${branch}`);
 
-export const createGitTag = (name: string) => exec(`git tag -a ${name}`);
+export const createGitTag = (name: string) => exec(`git tag -a ${name} -m "${name}"`);
 
 export const setGitUser = async (name: string, email: string) => {
   await exec(`git config --global user.name "${name}"`);
