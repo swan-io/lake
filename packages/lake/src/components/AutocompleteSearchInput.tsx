@@ -1,10 +1,17 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { MutableRefObject, ReactNode, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 import { P, match } from "ts-pattern";
 import { colors } from "../constants/design";
 import { LakeCombobox } from "./LakeCombobox";
 import { LakeText } from "./LakeText";
 import { Separator } from "./Separator";
+
+const styles = StyleSheet.create({
+  unselectable: {
+    userSelect: "none",
+  },
+});
 
 type Suggestion<T> = {
   title: string;
@@ -100,11 +107,11 @@ export const AutocompleteSearchInput = <T,>({
       emptyResultText={emptyResultText}
       renderItem={item => (
         <>
-          <LakeText numberOfLines={1} selectable={false} color={colors.gray[900]}>
+          <LakeText numberOfLines={1} style={styles.unselectable} color={colors.gray[900]}>
             {item.title}
           </LakeText>
 
-          <LakeText numberOfLines={1} selectable={false} variant="smallRegular">
+          <LakeText numberOfLines={1} style={styles.unselectable} variant="smallRegular">
             {item.subtitle}
           </LakeText>
         </>
