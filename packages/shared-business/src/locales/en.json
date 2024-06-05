@@ -208,7 +208,7 @@
   "rib.nationalCode": "National code",
   "rib.number": "Number",
   "rib.partnership": "In partnership with",
-  "supportingDocuments.informations": "Document informations",
+  "supportingDocuments.informations": "Document details",
   "supportingDocuments.documentTypes": "Supported documents: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Download template",
   "supportingDocuments.errorUpload": "Failed to upload file",
