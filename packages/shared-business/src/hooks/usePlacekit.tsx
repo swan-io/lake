@@ -15,7 +15,7 @@ const debounce = <A extends unknown[], R>(fn: (...args: A) => Promise<R>, ms: nu
 
 export const usePlacekit = ({
   apiKey,
-  debounceInterval = 500,
+  debounceInterval = 1000,
 }: {
   apiKey?: string;
   debounceInterval?: number;
