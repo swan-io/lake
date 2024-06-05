@@ -1,32 +1,20 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { PanResponder, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
+import { backgroundColor, radii, shadows } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
-import { limitElastic } from "../utils/math";
 import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
 import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
-const ELASTIC_LENGTH = 100; // the maximum value you can reach
-const ELASTIC_STRENGTH = 0.008; // higher value, maximum value reached faster
-
-const limitGrab = limitElastic({
-  elasticLength: ELASTIC_LENGTH,
-  elasticStrength: ELASTIC_STRENGTH,
-});
-
-const DELTA_Y_CLOSE_THRESHOLD = 100;
-const SWIPE_CLOSE_VELOCITY = 0.5;
-
 const BACKGROUND_COLOR = "rgba(0, 0, 0, 0.6)";
 
 const styles = StyleSheet.create({
   fill: {
     ...StyleSheet.absoluteFillObject,
-    position: "fixed",
+    position: "absolute",
     animationFillMode: "forwards",
     visibility: "visible",
   },
@@ -73,13 +61,6 @@ const styles = StyleSheet.create({
     transitionDuration: "300ms",
     transitionProperty: "transform",
   },
-  bottomCache: {
-    position: "absolute",
-    bottom: -ELASTIC_LENGTH + 1,
-    width: "100%",
-    height: ELASTIC_LENGTH,
-    backgroundColor: backgroundColor.accented,
-  },
   modalContainer: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -104,15 +85,6 @@ const styles = StyleSheet.create({
     opacity: 0,
     order: -1,
   },
-  grabContainer: {
-    paddingHorizontal: 128,
-    paddingVertical: spacings[12],
-  },
-  grabLine: {
-    backgroundColor: colors.gray[100],
-    height: 5,
-    borderRadius: radii[4],
-  },
 });
 
 type Props = {
@@ -135,42 +107,6 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
       setRootElement(undefined);
     };
   }, []);
-
-  const panResponder = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderGrant: () => {
-          if (container.current instanceof HTMLElement) {
-            container.current.style.transitionDuration = "0ms";
-          }
-        },
-        onPanResponderMove: (_event, { dy }) => {
-          const translateY = dy > 0 ? dy : -limitGrab(-dy);
-
-          if (container.current instanceof HTMLElement) {
-            container.current.style.transform = `translateY(${translateY}px)`;
-          }
-        },
-        onPanResponderRelease: (_event, gestureState) => {
-          if (container.current instanceof HTMLElement) {
-            // @ts-expect-error
-            container.current.style.transitionDuration = null;
-          }
-
-          const shouldClose =
-            gestureState.dy > DELTA_Y_CLOSE_THRESHOLD || gestureState.vy > SWIPE_CLOSE_VELOCITY;
-          if (shouldClose) {
-            onPressClose();
-          } else {
-            if (container.current instanceof HTMLElement) {
-              container.current.style.transform = `translateY(0px)`;
-            }
-          }
-        },
-      }),
-    [onPressClose],
-  );
 
   useBodyClassName("BottomPanelOpen", { enabled: visible });
 
@@ -203,22 +139,13 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
                   }}
                   style={styles.trap}
                 >
-                  <View style={styles.modal}>
-                    <View style={styles.grabContainer} {...panResponder.panHandlers}>
-                      <View style={styles.grabLine} />
-                    </View>
-
-                    {children}
-                  </View>
+                  <View style={styles.modal}>{children}</View>
 
                   {onPressClose != null ? (
                     <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
                   ) : null}
                 </FocusTrap>
               </ScrollView>
-
-              {/* use to expend white background on grab up */}
-              <View style={styles.bottomCache} />
             </View>
           ) : null}
         </TransitionView>
