@@ -1,12 +1,12 @@
 import semver from "semver";
 import {
-  createGhDraftRelease,
+  createGhRelease,
   getGhReleaseNotes,
   getGhReleasePullRequest,
   getLatestGhRelease,
   logError,
-  publishGhRelease,
   updateGhPagerConfig,
+  updateGhReleaseNotes,
 } from "./helpers";
 
 (async () => {
@@ -39,13 +39,16 @@ import {
     process.exit(1);
   }
 
-  await createGhDraftRelease(nextVersionTag);
-  const releaseNotes = await getGhReleaseNotes(nextVersionTag);
+  await createGhRelease(nextVersionTag);
 
-  await publishGhRelease(
-    nextVersionTag,
-    releaseNotes.replace(/^\* v\d+\.\d+.\d+.*\r\n/gm, ""), // Remove release pull request from changelog
-  );
+  const releaseNotes = (await getGhReleaseNotes(nextVersionTag))
+    .split("\n")
+    .filter(entry => !/^[*-] v\d+\.\d+.\d+/.test(entry)) // remove release PR
+    .map(line => line.replace(/\r/, "")) // remove windows line breaks
+    .map(line => line.replace(/by @[^\s]+ in (.+)/, "($1)")) // set link between parentheses
+    .join("\n");
+
+  await updateGhReleaseNotes(nextVersionTag, releaseNotes);
 })().catch(error => {
   console.error(error);
   process.exit(1);
