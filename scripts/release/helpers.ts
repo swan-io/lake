@@ -101,10 +101,10 @@ export const getGhReleasePullRequest = () =>
 export const createGhRelease = (version: string) =>
   exec(`gh release create ${version} --title ${version} --generate-notes`);
 
+export const updateGhReleaseNotes = (version: string, notes: string) =>
+  exec(`gh release edit ${version} --notes "${notes}"`);
+
 export const getGhReleaseNotes = (version: string) =>
   exec(`gh release view ${version} --json body`)
     .then(output => JSON.parse(output) as { body: string })
     .then(output => output.body);
-
-export const updateGhReleaseNotes = (version: string, notes: string) =>
-  exec(`gh release edit ${version} --notes "${notes}"`);
