@@ -28,6 +28,7 @@
   "common.form.invalidTaxIdentificationNumber": "Diese Steueridentifikationsnummer ist ungültig",
   "common.form.taxIdentificationNumber.placeholder": "Steueridentifikationsnummer",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (auch Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr oder Steuer-ID gemäß § 139b AO)",
+  "common.form.taxIdentificationNumber.tooltip.ita": "Steuernummer (Codice fiscale)",
   "common.next": "Weiter",
   "common.noResult": "Leeres Ergebnis",
   "common.open": "Öffnen",

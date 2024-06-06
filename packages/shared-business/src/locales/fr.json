@@ -27,6 +27,7 @@
   "common.form.help.nbDigits": "{nbDigits} chiffres",
   "common.form.invalidTaxIdentificationNumber": "Ce numéro d'identification fiscale n'est pas valide",
   "common.form.taxIdentificationNumber.placeholder": "Numéro d'identification fiscale",
+  "common.form.taxIdentificationNumber.tooltip.ita": "Numéro d'identification fiscale (Codice fiscale)",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (également Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr ou Steuer-ID, selon § 139b AO)",
   "common.next": "Suivant",
   "common.noResult": "Résultat vide",

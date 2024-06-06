@@ -28,6 +28,7 @@
   "common.form.invalidTaxIdentificationNumber": "Dit fiscale identificatienummer is ongeldig",
   "common.form.taxIdentificationNumber.placeholder": "BTW-nummer",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (ook Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IDnr., IDnr of Steuer-ID, volgens § 139b AO)",
+  "common.form.taxIdentificationNumber.tooltip.ita": "BTW-nummer (Codice fiscale)",
   "common.next": "Volgende",
   "common.noResult": "Leeg resultaat",
   "common.open": "Openen",

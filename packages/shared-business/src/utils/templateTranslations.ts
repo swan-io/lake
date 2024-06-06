@@ -14,6 +14,7 @@ export const getIndividualTaxNumberPlaceholder = (accountCountry: AccountCountry
       () =>
         `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
     )
+    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
     .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
 
 export const getCompanyTaxNumberPlaceholder = (accountCountry: AccountCountry) =>
@@ -24,18 +25,21 @@ export const getCompanyTaxNumberPlaceholder = (accountCountry: AccountCountry) =
       () =>
         `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
     )
+    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
     .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
 
 export const getTaxNumberTooltip = (accountCountry: AccountCountry) =>
   match(accountCountry)
     .with("DEU", () => t("common.form.taxIdentificationNumber.tooltip.deu"))
     .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
+    .with("ITA", () => t("common.form.taxIdentificationNumber.tooltip.ita"))
     .otherwise(() => undefined);
 
 export const getCompanyTaxNumberHelp = (accountCountry: AccountCountry) =>
   match(accountCountry)
     .with("DEU", () => t("common.form.help.nbDigits", { nbDigits: "10-11" }))
     .with("ESP", () => t("common.form.help.nbCharacters", { nbCharacters: "9" }))
+    .with("ITA", () => t("common.form.help.nbCharacters", { nbCharacters: "16" }))
     .otherwise(() => "");
 
 export const getIndividualTaxNumberHelp = (accountCountry: AccountCountry) =>
