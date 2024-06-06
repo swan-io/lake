@@ -1,14 +1,12 @@
 import semver from "semver";
 import {
-  createGhCompareUrl,
-  createGhRelease,
-  fetchGitRemote,
+  createGhDraftRelease,
+  getGhReleaseNotes,
   getGhReleasePullRequest,
-  getGitCommits,
   getLatestGhRelease,
   logError,
+  publishGhRelease,
   updateGhPagerConfig,
-  updateGhReleaseNotes,
 } from "./helpers";
 
 (async () => {
@@ -41,17 +39,13 @@ import {
     process.exit(1);
   }
 
-  await createGhRelease(nextVersionTag);
-  await fetchGitRemote("origin");
+  await createGhDraftRelease(nextVersionTag);
+  const releaseNotes = await getGhReleaseNotes(nextVersionTag);
 
-  const commits = await getGitCommits(currentVersionTag, nextVersionTag);
-
-  const releaseNotes = [
-    ...(commits.length > 0 ? ["## What's Changed", commits.join("\n")] : []),
-    `**Full Changelog**: ${createGhCompareUrl(currentVersionTag, nextVersionTag)}`,
-  ].join("\n\n");
-
-  await updateGhReleaseNotes(nextVersionTag, releaseNotes);
+  await publishGhRelease(
+    nextVersionTag,
+    releaseNotes.replace(/^\* v\d+\.\d+.\d+.*\r\n/gm, ""), // Remove release pull request from changelog
+  );
 })().catch(error => {
   console.error(error);
   process.exit(1);
