@@ -30,6 +30,7 @@
     "release": "tsx scripts/release/createPullRequest.ts",
     "icons": "tsx scripts/fluent-icons/generateIcons.ts",
     "ai-translate": "tsx -r dotenv/config scripts/locales/aiTranslate.ts",
+    "pull-translations": "localazy download shared-business -k localazy.keys.shared-business.json && prettier '**/locales/*.json' --write",
     "sort-locales": "tsx scripts/locales/sort.ts",
     "remove-unused-locales": "tsx scripts/locales/removeUnused.ts",
     "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts",
