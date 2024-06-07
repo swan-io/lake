@@ -1,10 +1,8 @@
 import semver from "semver";
 import {
-  createGhCompareUrl,
   createGhRelease,
-  fetchGitRemote,
+  getGhReleaseNotes,
   getGhReleasePullRequest,
-  getGitCommits,
   getLatestGhRelease,
   logError,
   updateGhPagerConfig,
@@ -42,14 +40,13 @@ import {
   }
 
   await createGhRelease(nextVersionTag);
-  await fetchGitRemote("origin");
 
-  const commits = await getGitCommits(currentVersionTag, nextVersionTag);
-
-  const releaseNotes = [
-    ...(commits.length > 0 ? ["## What's Changed", commits.join("\n")] : []),
-    `**Full Changelog**: ${createGhCompareUrl(currentVersionTag, nextVersionTag)}`,
-  ].join("\n\n");
+  const releaseNotes = (await getGhReleaseNotes(nextVersionTag))
+    .split("\n")
+    .filter(entry => !/^[*-] v\d+\.\d+.\d+/.test(entry)) // remove release PR
+    .map(line => line.replace(/\r/, "")) // remove windows line breaks
+    .map(line => line.replace(/by @[^\s]+ in (.+)/, "($1)")) // set link between parentheses
+    .join("\n");
 
   await updateGhReleaseNotes(nextVersionTag, releaseNotes);
 })().catch(error => {

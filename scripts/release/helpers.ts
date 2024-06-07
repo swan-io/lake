@@ -98,8 +98,13 @@ export const getGhReleasePullRequest = () =>
     .then(output => JSON.parse(output) as { title: string }[])
     .then(output => output.map(({ title }) => title).find(title => /^v\d+\.\d+.\d+$/.test(title)));
 
-export const createGhRelease = async (version: string) =>
+export const createGhRelease = (version: string) =>
   exec(`gh release create ${version} --title ${version} --generate-notes`);
 
-export const updateGhReleaseNotes = async (version: string, notes: string) =>
+export const updateGhReleaseNotes = (version: string, notes: string) =>
   exec(`gh release edit ${version} --notes "${notes}"`);
+
+export const getGhReleaseNotes = (version: string) =>
+  exec(`gh release view ${version} --json body`)
+    .then(output => JSON.parse(output) as { body: string })
+    .then(output => output.body);
