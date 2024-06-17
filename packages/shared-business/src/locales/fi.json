@@ -212,6 +212,7 @@
   "supportingDocuments.documentTypes": "Tuetut asiakirjat: .pdf, .png, .jpg.\nMax: {maxSizeMB} MT",
   "supportingDocuments.downloadTemplate": "Lataa malli",
   "supportingDocuments.errorUpload": "Tiedoston lataaminen epäonnistui",
+  "supportingDocuments.help.downloadTemplate": "Lataa malli",
   "supportingDocuments.help.whatIsThis": "Mikä tämä on?",
   "supportingDocuments.informations": "Asiakirjan tiedot",
   "supportingDocuments.noDocuments": "Ei asiakirjoja.",

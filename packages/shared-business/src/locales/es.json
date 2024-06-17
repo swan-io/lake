@@ -212,6 +212,7 @@
   "supportingDocuments.documentTypes": "Documentos admitidos: .pdf, .png, .jpg\nMáx: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Descargar una plantilla",
   "supportingDocuments.errorUpload": "No se ha podido cargar el archivo",
+  "supportingDocuments.help.downloadTemplate": "Descargar una plantilla",
   "supportingDocuments.help.whatIsThis": "¿Qué es esto?",
   "supportingDocuments.informations": "Información de documentos",
   "supportingDocuments.noDocuments": "Sin documentos.",
