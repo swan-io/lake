@@ -212,6 +212,7 @@
   "supportingDocuments.documentTypes": "Ondersteunde documenten: .pdf, .png, .jpg\nMax: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Een sjabloon downloaden",
   "supportingDocuments.errorUpload": "Bestand uploaden mislukt",
+  "supportingDocuments.help.downloadTemplate": "Download een sjabloon",
   "supportingDocuments.help.whatIsThis": "Wat is dit?",
   "supportingDocuments.informations": "Documentinformatie",
   "supportingDocuments.noDocuments": "Geen documenten.",

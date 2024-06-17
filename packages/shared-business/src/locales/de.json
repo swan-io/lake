@@ -212,6 +212,7 @@
   "supportingDocuments.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg\nMaximal: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Vorlage herunterladen",
   "supportingDocuments.errorUpload": "Datei konnte nicht hochgeladen werden",
+  "supportingDocuments.help.downloadTemplate": "Vorlage herunterladen",
   "supportingDocuments.help.whatIsThis": "Was ist das?",
   "supportingDocuments.informations": "Informationen zum Dokument",
   "supportingDocuments.noDocuments": "Keine Dokumente.",

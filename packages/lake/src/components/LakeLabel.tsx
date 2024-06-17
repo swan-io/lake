@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     ...texts.medium,
     fontFamily: fonts.primary,
     color: colors.gray[700],
+    display: "flex",
   },
   shrink: {
     flexShrink: 1,
@@ -47,6 +48,7 @@ type Props = {
   actions?: ReactNode;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
+  description?: string;
 };
 
 const Label = (
@@ -60,6 +62,7 @@ const defaultLabelType: LabelType = "formSmall";
 export const LakeLabel = ({
   label,
   optionalLabel,
+  description,
   extra,
   readOnly = false,
   color = "current",
@@ -96,22 +99,31 @@ export const LakeLabel = ({
         <Box direction="row" justifyContent="spaceBetween" alignItems="center">
           <Box direction="row" style={styles.shrink}>
             {type === "form" || type === "formSmall" || type === "radioGroup" ? (
-              <Label
-                onClick={onClick}
-                htmlFor={id}
-                style={[styles.label, readOnly && { color: readOnlyColor }]}
-              >
-                {label}
+              <Box style={styles.shrink}>
+                <Label
+                  onClick={onClick}
+                  htmlFor={id}
+                  style={[styles.label, readOnly && { color: readOnlyColor }]}
+                >
+                  {label}
 
-                {optionalLabel != null ? (
+                  {optionalLabel != null ? (
+                    <>
+                      {" - "}
+                      <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
+                        {optionalLabel}
+                      </LakeText>
+                    </>
+                  ) : null}
+                </Label>
+
+                {description != null ? (
                   <>
-                    {" - "}
-                    <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
-                      {optionalLabel}
-                    </LakeText>
+                    <LakeText variant="smallRegular">{description}</LakeText>
+                    <Space height={8} />
                   </>
                 ) : null}
-              </Label>
+              </Box>
             ) : (
               <LakeText variant="medium" color={readOnlyColor} id={id}>
                 {label}

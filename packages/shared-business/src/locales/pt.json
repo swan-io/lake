@@ -212,6 +212,7 @@
   "supportingDocuments.documentTypes": "Documentos suportados: .pdf, .png, .jpg\nMáx: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Descarregar um modelo",
   "supportingDocuments.errorUpload": "Falha ao carregar ficheiro",
+  "supportingDocuments.help.downloadTemplate": "Descarregar um modelo",
   "supportingDocuments.help.whatIsThis": "O que é isto?",
   "supportingDocuments.informations": "Informações do documento",
   "supportingDocuments.noDocuments": "Sem documentos.",
