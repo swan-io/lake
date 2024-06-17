@@ -1,5 +1,6 @@
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { Form } from "@swan-io/lake/src/components/Form";
+import { IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
 import { LakeCopyButton } from "@swan-io/lake/src/components/LakeCopyButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
@@ -8,7 +9,7 @@ import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { ReadOnlyFieldList } from "@swan-io/lake/src/components/ReadOnlyFieldList";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
-import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
 import {
   ForwardedRef,
@@ -88,11 +89,13 @@ type HelpProps =
   | {
       type: "tooltip";
       text: string;
+      icon?: IconName;
       width?: number;
     }
   | {
       type: "button";
       label: string;
+      icon?: IconName;
       onPress: () => void;
     };
 
@@ -110,7 +113,7 @@ const Help = (props: HelpProps) => {
           mode="tertiary"
           size="small"
           color="gray"
-          icon="question-circle-regular"
+          icon={props.icon ?? "question-circle-regular"}
           disabled={true}
           style={[styles.button, styles.buttonWithDefaultCursor]}
           ariaLabel={t("supportingDocuments.help.whatIsThis")}
@@ -122,7 +125,7 @@ const Help = (props: HelpProps) => {
         mode="tertiary"
         size="small"
         color="gray"
-        icon="question-circle-regular"
+        icon={props.icon ?? "question-circle-regular"}
         onPress={onPress}
         style={styles.button}
         ariaLabel={t("supportingDocuments.help.whatIsThis")}
@@ -276,10 +279,13 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
       {showableDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
         const metadata = getPurposeMetadata?.(purpose);
 
+        const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
+
         return (
           <Fragment key={purpose}>
             <LakeLabel
               label={getSupportingDocumentPurposeLabel(purpose)}
+              description={label}
               help={
                 isNotNullish(metadata) ? (
                   <Help
@@ -292,23 +298,20 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                     .with("PowerOfAttorney", () => (
                       <Help
                         type="button"
-                        label={t("supportingDocuments.help.whatIsThis")}
+                        icon="arrow-down-filled"
+                        label={t("supportingDocuments.help.downloadTemplate")}
                         onPress={() => setShowPowerOfAttorneyModal(true)}
                       />
                     ))
                     .with("SwornStatement", () => (
                       <Help
                         type="button"
-                        label={t("supportingDocuments.help.whatIsThis")}
+                        icon="arrow-down-filled"
+                        label={t("supportingDocuments.help.downloadTemplate")}
                         onPress={() => setShowSwornStatementModal(true)}
                       />
                     ))
-                    .otherwise(() => {
-                      const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
-                      return isNotNullishOrEmpty(label) ? (
-                        <Help type="tooltip" text={label} />
-                      ) : null;
-                    })
+                    .otherwise(() => null)
                 )
               }
               render={() => (
