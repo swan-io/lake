@@ -15,7 +15,8 @@ type Props<T> = {
   ListHeaderComponent?: ReactNode;
   contentContainerStyle?: StyleProp<ViewStyle>;
   data: T[];
-  itemHeight?: number;
+  horizontal?: boolean;
+  itemSize?: number;
   keyExtractor: (item: T, index: number) => string;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
@@ -33,7 +34,8 @@ const FlatListWithRef = <T,>(
     ListHeaderComponent,
     contentContainerStyle,
     data,
-    itemHeight,
+    horizontal = false,
+    itemSize,
     keyExtractor,
     onKeyDown,
     onScroll,
@@ -45,10 +47,17 @@ const FlatListWithRef = <T,>(
   forwardedRef: ForwardedRef<FlatListRef>,
 ) => {
   const separator = ItemSeparatorComponent != null ? <ItemSeparatorComponent /> : null;
+  const vertical = !horizontal;
+
+  const itemStyle =
+    itemSize != null
+      ? { height: vertical ? itemSize : undefined, width: horizontal ? itemSize : undefined }
+      : undefined;
 
   return (
     <ScrollView
       ref={forwardedRef}
+      horizontal={horizontal}
       onKeyDown={onKeyDown}
       onScroll={onScroll}
       role={role}
@@ -63,7 +72,7 @@ const FlatListWithRef = <T,>(
             <Fragment key={keyExtractor(item, index)}>
               {index !== 0 && separator}
 
-              <View style={{ height: itemHeight }}>{renderItem({ item, index })}</View>
+              <View style={itemStyle}>{renderItem({ item, index })}</View>
             </Fragment>
           ))
         : ListEmptyComponent}
