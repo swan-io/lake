@@ -1,13 +1,32 @@
 import semver from "semver";
-import {
-  createGhRelease,
-  getGhReleaseNotes,
-  getGhReleasePullRequest,
-  getLatestGhRelease,
-  logError,
-  updateGhPagerConfig,
-  updateGhReleaseNotes,
-} from "./helpers";
+import { exec, logError, updateGhPagerConfig } from "./helpers";
+
+const getLatestGhRelease = () =>
+  exec("gh release list --json tagName --limit 1")
+    .then(output => JSON.parse(output) as { tagName: string }[])
+    .then(output => output[0]?.tagName);
+
+const getGhReleasePullRequest = () =>
+  exec("gh pr list --state merged --json title")
+    .then(output => JSON.parse(output) as { title: string }[])
+    .then(output => output.map(({ title }) => title).find(title => /^v\d+\.\d+.\d+$/.test(title)));
+
+const createGhRelease = async (version: string) => {
+  await exec(`gh release create ${version} --title ${version} --generate-notes`);
+
+  const notes = (
+    await exec(`gh release view ${version} --json body`)
+      .then(output => JSON.parse(output) as { body: string })
+      .then(output => output.body)
+  )
+    .split("\n")
+    .filter(entry => !/^[*-] v\d+\.\d+.\d+/.test(entry)) // remove release PR
+    .map(line => line.replace(/\r/, "")) // remove windows line breaks
+    .map(line => line.replace(/by @[^\s]+ in (.+)/, "($1)")) // set link between parentheses
+    .join("\n");
+
+  await exec(`gh release edit ${version} --notes "${notes}"`);
+};
 
 (async () => {
   await updateGhPagerConfig();
@@ -40,15 +59,6 @@ import {
   }
 
   await createGhRelease(nextVersionTag);
-
-  const releaseNotes = (await getGhReleaseNotes(nextVersionTag))
-    .split("\n")
-    .filter(entry => !/^[*-] v\d+\.\d+.\d+/.test(entry)) // remove release PR
-    .map(line => line.replace(/\r/, "")) // remove windows line breaks
-    .map(line => line.replace(/by @[^\s]+ in (.+)/, "($1)")) // set link between parentheses
-    .join("\n");
-
-  await updateGhReleaseNotes(nextVersionTag, releaseNotes);
 })().catch(error => {
   console.error(error);
   process.exit(1);

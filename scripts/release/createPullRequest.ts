@@ -4,29 +4,7 @@ import path from "pathe";
 import prompts from "prompts";
 import semver from "semver";
 import { PackageJson } from "type-fest";
-import {
-  createGhCompareUrl,
-  createGhPullRequest,
-  fetchGitRemote,
-  getGitBranch,
-  getGitCommits,
-  getLastGitCommitHash,
-  getWorkspacePackages,
-  gitAddAll,
-  gitCheckout,
-  gitCheckoutNewBranch,
-  gitCommit,
-  gitDeleteLocalBranch,
-  gitPush,
-  hasGitLocalBranch,
-  hasGitRemoteBranch,
-  isGitRepoDirty,
-  isNotGitRepo,
-  isProgramMissing,
-  logError,
-  resetGitBranch,
-  updateGhPagerConfig,
-} from "./helpers";
+import { exec, isExecKo, isExecOk, logError, updateGhPagerConfig } from "./helpers";
 
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");
@@ -37,6 +15,72 @@ if (currentVersion == null) {
   logError("Invalid current package version");
   process.exit(1);
 }
+
+const isProgramMissing = (program: string) => isExecKo(`which ${program}`);
+
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-repo
+const isNotGitRepo = () => isExecKo("git rev-parse --git-dir");
+
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-current-branch
+const getGitBranch = () => exec("git rev-parse --abbrev-ref HEAD");
+
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-is-clean
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-show-skipped
+const isGitRepoDirty = () =>
+  Promise.all([
+    isExecOk("git diff-index --cached --quiet --ignore-submodules --exit-code HEAD --"),
+    isExecOk("! git diff --no-ext-diff --ignore-submodules --quiet --exit-code"),
+    isExecOk("nbr=$(git ls-files --other --exclude-standard | wc -l); [ $nbr -gt 0 ]"),
+    isExecOk('nbr=$(git ls-files -v | grep "^S" | cut -c3- | wc -l); test $nbr -eq 0'),
+  ]).then(([isIndexClean, hasUnstagedChanges, hasUntrackedFiles, isSkipped]) => {
+    const isWorktreeClean = !hasUnstagedChanges && !hasUntrackedFiles;
+    return !isIndexClean || !isWorktreeClean || !isSkipped;
+  });
+
+const fetchGitRemote = (remote: string) =>
+  exec(`git fetch ${remote} --tags --prune --prune-tags --force`);
+
+const getLastGitCommitHash = (branch: string) =>
+  exec(`git log -n 1 ${branch} --pretty=format:"%H"`);
+
+const resetGitBranch = (branch: string, remote: string) =>
+  exec(`git switch -C ${branch} ${remote}/${branch}`);
+
+const getGitCommits = (from: string | undefined, to: string) =>
+  exec(`git log ${from != null ? `${from}..${to}` : ""} --pretty="format:%s"`)
+    .then(_ => _.split("\n"))
+    .then(entries =>
+      entries
+        .filter(entry => !/^v\d+\.\d+.\d+/.test(entry))
+        .map(entry => "- " + entry.trim().replace(/["]/g, "*"))
+        .toReversed(),
+    );
+
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-local-branch-exists
+const hasGitLocalBranch = (branch: string) =>
+  isExecOk(`git show-ref --heads --quiet --verify -- "refs/heads/${branch}"`);
+
+// https://github.com/nvie/git-toolbelt/blob/v1.9.0/git-remote-branch-exists
+const hasGitRemoteBranch = (branch: string, remote: string) =>
+  isExecOk(`git show-ref --quiet --verify -- "refs/remotes/${remote}/${branch}"`);
+
+const getWorkspacePackages = () =>
+  exec("yarn workspaces info --json").then(
+    info => JSON.parse(info) as Record<string, { location: string }>,
+  );
+
+const gitAddAll = () => exec("git add . -u");
+const gitCheckout = (branch: string) => exec(`git checkout ${branch}`);
+const gitCheckoutNewBranch = (branch: string) => exec(`git checkout -b ${branch}`);
+const gitCommit = (message: string) => exec(`git commit -m "${message}"`);
+const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
+const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} ${branch}`);
+
+const createGhCompareUrl = (from: string | undefined, to: string) =>
+  `https://github.com/swan-io/lake/compare/${from != null ? `${from}..${to}` : ""}`;
+
+const createGhPullRequest = (title: string, body: string) =>
+  exec(`gh pr create -t "${title}" -b "${body}"`);
 
 (async () => {
   if (await isProgramMissing("git")) {
