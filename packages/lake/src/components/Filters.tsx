@@ -15,7 +15,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
-import { FlatList, ListRenderItemInfo } from "./FlatList";
+import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
@@ -176,7 +176,7 @@ function FilterRadio<T>({
             data={items}
             contentContainerStyle={styles.content}
             keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }: ListRenderItemInfo<Item<T>>) => {
+            renderItem={({ item }) => {
               const isSelected = value === item.value;
 
               return (

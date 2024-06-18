@@ -1,11 +1,16 @@
 import { ComponentType, ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
 import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from "react-native";
 
-export type FlatListRef = ScrollView;
+export type SectionListRef = ScrollView;
 
 type ListRenderItemInfo<T> = {
   item: T;
   index: number;
+};
+
+type Section<T> = {
+  title: string;
+  data: T[];
 };
 
 type Props<T> = {
@@ -14,35 +19,37 @@ type Props<T> = {
   ListFooterComponent?: ReactNode;
   ListHeaderComponent?: ReactNode;
   contentContainerStyle?: StyleProp<ViewStyle>;
-  data: T[];
   itemHeight?: number;
   keyExtractor: (item: T, index: number) => string;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
   renderItem: (info: ListRenderItemInfo<T>) => ReactNode;
+  renderSectionHeader?: (section: Section<T>) => ReactNode;
   role?: WebRole;
   scrollEventThrottle?: number;
+  sections: Section<T>[];
   style?: StyleProp<ViewStyle>;
 };
 
-const FlatListWithRef = <T,>(
+const SectionListWithRef = <T,>(
   {
     ItemSeparatorComponent,
     ListEmptyComponent,
     ListFooterComponent,
     ListHeaderComponent,
     contentContainerStyle,
-    data,
     itemHeight,
     keyExtractor,
     onKeyDown,
     onScroll,
     renderItem,
+    renderSectionHeader,
     role,
     scrollEventThrottle = 16,
+    sections,
     style,
   }: Props<T>,
-  forwardedRef: ForwardedRef<FlatListRef>,
+  forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
   const separator = ItemSeparatorComponent != null ? <ItemSeparatorComponent /> : null;
 
@@ -58,12 +65,18 @@ const FlatListWithRef = <T,>(
     >
       {ListHeaderComponent}
 
-      {data.length > 0
-        ? data.map((item, index) => (
-            <Fragment key={keyExtractor(item, index)}>
-              {index !== 0 && separator}
+      {sections.length > 0
+        ? sections.map(section => (
+            <Fragment key={`group-${section.title}`}>
+              {renderSectionHeader?.(section)}
 
-              <View style={{ height: itemHeight }}>{renderItem({ item, index })}</View>
+              {section.data.map((item, index) => (
+                <Fragment key={keyExtractor(item, index)}>
+                  {index !== 0 && separator}
+
+                  <View style={{ height: itemHeight }}>{renderItem({ item, index })}</View>
+                </Fragment>
+              ))}
             </Fragment>
           ))
         : ListEmptyComponent}
@@ -73,6 +86,6 @@ const FlatListWithRef = <T,>(
   );
 };
 
-export const FlatList = forwardRef(FlatListWithRef) as <T>(
-  props: Props<T> & { ref?: ForwardedRef<FlatListRef> },
-) => ReturnType<typeof FlatListWithRef>;
+export const SectionList = forwardRef(SectionListWithRef) as <T>(
+  props: Props<T> & { ref?: ForwardedRef<SectionListRef> },
+) => ReturnType<typeof SectionListWithRef>;

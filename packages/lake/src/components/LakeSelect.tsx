@@ -31,7 +31,7 @@ import { getFocusableElements } from "../utils/a11y";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
-import { FlatList, FlatListRef, ListRenderItemInfo } from "./FlatList";
+import { FlatList, FlatListRef } from "./FlatList";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
@@ -384,7 +384,7 @@ const LakeSelectWithRef = <V,>(
             }
           }}
           keyExtractor={(_, index) => `select-item-${index}`}
-          renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
+          renderItem={({ item, index }) => {
             const isSelected = value === item.value;
             const disablement = disabledItems.find(({ value }) => value === item.value);
 

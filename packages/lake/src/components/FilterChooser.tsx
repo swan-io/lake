@@ -4,7 +4,7 @@ import { colors } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
-import { FlatList, ListRenderItemInfo } from "./FlatList";
+import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeText } from "./LakeText";
@@ -94,7 +94,7 @@ export function FilterChooser<FilterName extends string>({
             role="list"
             data={availableFilters}
             keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }: ListRenderItemInfo<{ name: FilterName; label: string }>) => {
+            renderItem={({ item }) => {
               const isSet = Boolean(filters[item.name]) || openFilters.includes(item.name);
               return (
                 <Pressable
