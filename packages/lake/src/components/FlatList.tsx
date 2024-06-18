@@ -23,6 +23,7 @@ type Props<T> = {
   renderItem: (info: ListRenderItemInfo<T>) => ReactNode;
   role?: WebRole;
   scrollEventThrottle?: number;
+  showsScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -42,6 +43,7 @@ const FlatListWithRef = <T,>(
     renderItem,
     role,
     scrollEventThrottle = 16,
+    showsScrollIndicator = true,
     style,
   }: Props<T>,
   forwardedRef: ForwardedRef<FlatListRef>,
@@ -61,6 +63,8 @@ const FlatListWithRef = <T,>(
       onScroll={onScroll}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
+      showsHorizontalScrollIndicator={showsScrollIndicator}
+      showsVerticalScrollIndicator={showsScrollIndicator}
       style={style}
       contentContainerStyle={contentContainerStyle}
     >

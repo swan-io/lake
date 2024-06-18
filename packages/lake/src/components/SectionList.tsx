@@ -29,6 +29,7 @@ type Props<T> = {
   role?: WebRole;
   scrollEventThrottle?: number;
   sections: Section<T>[];
+  showsScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -49,6 +50,7 @@ const SectionListWithRef = <T,>(
     role,
     scrollEventThrottle = 16,
     sections,
+    showsScrollIndicator = true,
     style,
   }: Props<T>,
   forwardedRef: ForwardedRef<SectionListRef>,
@@ -68,6 +70,8 @@ const SectionListWithRef = <T,>(
       onScroll={onScroll}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
+      showsHorizontalScrollIndicator={showsScrollIndicator}
+      showsVerticalScrollIndicator={showsScrollIndicator}
       style={style}
       contentContainerStyle={contentContainerStyle}
     >
