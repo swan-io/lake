@@ -1,12 +1,8 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
 import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from "react-native";
+import { ListRenderItemInfo } from "./FlatList";
 
 export type SectionListRef = ScrollView;
-
-type ListRenderItemInfo<T> = {
-  item: T;
-  index: number;
-};
 
 type Section<T> = {
   title: string;

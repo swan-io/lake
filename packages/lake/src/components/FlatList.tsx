@@ -3,7 +3,7 @@ import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from
 
 export type FlatListRef = ScrollView;
 
-type ListRenderItemInfo<T> = {
+export type ListRenderItemInfo<T> = {
   item: T;
   index: number;
 };
