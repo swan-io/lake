@@ -1,8 +1,6 @@
 import { Array, Dict, Option } from "@swan-io/boxed";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
-  FlatList,
-  ListRenderItemInfo,
   Pressable,
   SectionList,
   SectionListData,
@@ -22,6 +20,7 @@ import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { safeSplitAround } from "../utils/string";
 import { Box } from "./Box";
+import { FlatList, ListRenderItemInfo } from "./FlatList";
 import { Icon } from "./Icon";
 import { InputError } from "./InputError";
 import { Popover } from "./Popover";
@@ -196,7 +195,6 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     const shouldScrollToBottomRef = useRef(false);
     const selectedTagListRef = useRef<View & Element>(null);
     const inputRef = useRef<View>(null);
-    const listRef = useRef<FlatList>(null);
     const [visible, { open, close }] = useDisclosure(false);
 
     const tint50 = colors[color][50];
@@ -422,10 +420,8 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
               />
             ) : (
               <FlatList
-                ref={listRef}
                 role="list"
                 data={filteredItems}
-                extraData={filter}
                 keyExtractor={item => `field-${item.value}`}
                 ListHeaderComponent={ListHeaderComponent}
                 ListEmptyComponent={ListEmptyComponent}

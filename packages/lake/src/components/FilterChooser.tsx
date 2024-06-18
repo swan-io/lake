@@ -1,9 +1,10 @@
 import { useRef } from "react";
-import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { colors } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
+import { FlatList, ListRenderItemInfo } from "./FlatList";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeText } from "./LakeText";

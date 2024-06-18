@@ -6,7 +6,7 @@ import {
 import { ValidatorResult, useForm } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, ListRenderItemInfo, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
 import { colors, shadows, spacings } from "../constants/design";
@@ -15,6 +15,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
+import { FlatList, ListRenderItemInfo } from "./FlatList";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
