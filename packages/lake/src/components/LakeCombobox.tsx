@@ -303,7 +303,7 @@ const LakeComboboxWithRef = <I,>(
                         role="list"
                         data={items}
                         style={styles.flatList}
-                        ItemSeparatorComponent={Separator}
+                        ItemSeparatorComponent={<Separator />}
                         renderItem={({ item }) => {
                           const rendered = renderItem(item);
 

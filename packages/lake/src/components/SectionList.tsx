@@ -1,4 +1,4 @@
-import { ComponentType, ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
+import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
 import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from "react-native";
 
 export type SectionListRef = ScrollView;
@@ -14,7 +14,7 @@ type Section<T> = {
 };
 
 type Props<T> = {
-  ItemSeparatorComponent?: ComponentType;
+  ItemSeparatorComponent?: ReactNode;
   ListEmptyComponent?: ReactNode;
   ListFooterComponent?: ReactNode;
   ListHeaderComponent?: ReactNode;
@@ -53,7 +53,6 @@ const SectionListWithRef = <T,>(
   }: Props<T>,
   forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
-  const separator = ItemSeparatorComponent != null ? <ItemSeparatorComponent /> : null;
   const vertical = !horizontal;
 
   const itemStyle =
@@ -81,7 +80,7 @@ const SectionListWithRef = <T,>(
 
               {section.data.map((item, index) => (
                 <Fragment key={keyExtractor(item, index)}>
-                  {index !== 0 && separator}
+                  {index !== 0 && ItemSeparatorComponent}
 
                   <View style={itemStyle}>{renderItem({ item, index })}</View>
                 </Fragment>

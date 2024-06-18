@@ -402,7 +402,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                     )}
                   </Pressable>
                 )}
-                ItemSeparatorComponent={Separator}
+                ItemSeparatorComponent={<Separator />}
                 renderItem={({ item }) => (
                   <LineItem
                     color={color}
