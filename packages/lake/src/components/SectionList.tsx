@@ -1,4 +1,4 @@
-import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
+import { ForwardedRef, Fragment, ReactNode, forwardRef, useId } from "react";
 import { ScrollView, ScrollViewProps, StyleProp, ViewStyle, WebRole } from "react-native";
 import { ListRenderItemInfo } from "./FlatList";
 
@@ -49,6 +49,8 @@ const SectionListWithRef = <T,>(
   }: Props<T>,
   forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
+  const groupId = useId();
+
   return (
     <ScrollView
       contentContainerStyle={contentContainerStyle}
@@ -66,7 +68,7 @@ const SectionListWithRef = <T,>(
 
       {sections.length > 0
         ? sections.map(section => (
-            <Fragment key={`group-${section.title}`}>
+            <Fragment key={`group-${groupId}-${section.title}`}>
               {renderSectionHeader?.(section)}
 
               {section.data.map((item, index) => (
