@@ -1,5 +1,23 @@
-import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
-import { ScrollView, ScrollViewProps, StyleProp, ViewStyle, WebRole } from "react-native";
+import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useRef } from "react";
+import {
+  ScrollView,
+  ScrollViewProps,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+  WebRole,
+} from "react-native";
+
+const styles = StyleSheet.create({
+  scrollTracker: {
+    position: "absolute",
+    pointerEvents: "none",
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+});
 
 export type FlatListRef = ScrollView;
 
@@ -17,6 +35,8 @@ type Props<T> = {
   data: T[];
   horizontal?: boolean;
   keyExtractor: (item: T, index: number) => string;
+  onEndReached?: () => void;
+  onEndReachedThresholdPx?: number;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
   renderItem: (info: ListRenderItemInfo<T>) => ReactNode;
@@ -36,6 +56,8 @@ const FlatListWithRef = <T,>(
     data,
     horizontal = false,
     keyExtractor,
+    onEndReached,
+    onEndReachedThresholdPx = 200,
     onKeyDown,
     onScroll,
     renderItem,
@@ -46,6 +68,28 @@ const FlatListWithRef = <T,>(
   }: Props<T>,
   forwardedRef: ForwardedRef<FlatListRef>,
 ) => {
+  const scrollTrackerRef = useRef<View>(null);
+
+  useEffect(() => {
+    const element = scrollTrackerRef.current as unknown as HTMLElement;
+
+    if (element != null && onEndReached != null) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            onEndReached();
+          }
+        });
+      });
+
+      observer.observe(element);
+
+      return () => {
+        observer.unobserve(element);
+      };
+    }
+  }, [onEndReached]);
+
   return (
     <ScrollView
       contentContainerStyle={contentContainerStyle}
@@ -61,14 +105,23 @@ const FlatListWithRef = <T,>(
     >
       {ListHeaderComponent}
 
-      {data.length > 0
-        ? data.map((item, index) => (
+      {data.length > 0 ? (
+        <View>
+          {data.map((item, index) => (
             <Fragment key={keyExtractor(item, index)}>
               {index !== 0 && ItemSeparatorComponent}
               {renderItem({ item, index })}
             </Fragment>
-          ))
-        : ListEmptyComponent}
+          ))}
+
+          <View
+            ref={scrollTrackerRef}
+            style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
+          />
+        </View>
+      ) : (
+        ListEmptyComponent
+      )}
 
       {ListFooterComponent}
     </ScrollView>

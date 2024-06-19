@@ -1,6 +1,24 @@
-import { ForwardedRef, Fragment, ReactNode, forwardRef, useId } from "react";
-import { ScrollView, ScrollViewProps, StyleProp, ViewStyle, WebRole } from "react-native";
+import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useId, useRef } from "react";
+import {
+  ScrollView,
+  ScrollViewProps,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+  WebRole,
+} from "react-native";
 import { ListRenderItemInfo } from "./FlatList";
+
+const styles = StyleSheet.create({
+  scrollTracker: {
+    position: "absolute",
+    pointerEvents: "none",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+});
 
 export type SectionListRef = ScrollView;
 
@@ -17,6 +35,8 @@ type Props<T> = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   horizontal?: boolean;
   keyExtractor: (item: T, index: number) => string;
+  onEndReached?: () => void;
+  onEndReachedThresholdPx?: number;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
   renderItem: (info: ListRenderItemInfo<T>) => ReactNode;
@@ -37,6 +57,8 @@ const SectionListWithRef = <T,>(
     contentContainerStyle,
     horizontal = false,
     keyExtractor,
+    onEndReached,
+    onEndReachedThresholdPx = 200,
     onKeyDown,
     onScroll,
     renderItem,
@@ -50,6 +72,27 @@ const SectionListWithRef = <T,>(
   forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
   const groupId = useId();
+  const scrollTrackerRef = useRef<View>(null);
+
+  useEffect(() => {
+    const element = scrollTrackerRef.current as unknown as HTMLElement;
+
+    if (element != null && onEndReached != null) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            onEndReached();
+          }
+        });
+      });
+
+      observer.observe(element);
+
+      return () => {
+        observer.unobserve(element);
+      };
+    }
+  }, [onEndReached]);
 
   return (
     <ScrollView
@@ -66,8 +109,9 @@ const SectionListWithRef = <T,>(
     >
       {ListHeaderComponent}
 
-      {sections.length > 0
-        ? sections.map(section => (
+      {sections.length > 0 ? (
+        <View>
+          {sections.map(section => (
             <Fragment key={`group-${groupId}-${section.title}`}>
               {renderSectionHeader?.(section)}
 
@@ -78,8 +122,16 @@ const SectionListWithRef = <T,>(
                 </Fragment>
               ))}
             </Fragment>
-          ))
-        : ListEmptyComponent}
+          ))}
+
+          <View
+            ref={scrollTrackerRef}
+            style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
+          />
+        </View>
+      ) : (
+        ListEmptyComponent
+      )}
 
       {ListFooterComponent}
     </ScrollView>
