@@ -23,7 +23,6 @@ import { InputError } from "./InputError";
 import { Popover } from "./Popover";
 import { PressableText } from "./Pressable";
 import { SectionList } from "./SectionList";
-import { Separator } from "./Separator";
 import { Space } from "./Space";
 import { Tag } from "./Tag";
 
@@ -402,7 +401,6 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                     )}
                   </Pressable>
                 )}
-                ItemSeparatorComponent={<Separator />}
                 renderItem={({ item }) => (
                   <LineItem
                     color={color}
