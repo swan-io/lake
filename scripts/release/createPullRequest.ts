@@ -127,6 +127,14 @@ const createGhPullRequest = (title: string, body: string) =>
 
   console.log(`🚀 Let's release ${pkg.name} (currently at ${currentPkgVersion.raw})`);
 
+  const currentVersionTag = await getLatestGhRelease();
+  const commits = await getGitCommits(currentVersionTag, "main");
+
+  if (commits.length > 0) {
+    console.log("\n" + chalk.bold("What's Included"));
+    console.log(commits.join("\n") + "\n");
+  }
+
   const patch = semver.inc(currentPkgVersion, "patch");
   const minor = semver.inc(currentPkgVersion, "minor");
   const major = semver.inc(currentPkgVersion, "major");
@@ -142,14 +150,6 @@ const createGhPullRequest = (title: string, body: string) =>
       { title: `major (${major})`, value: major },
     ],
   });
-
-  const currentVersionTag = await getLatestGhRelease();
-  const commits = await getGitCommits(currentVersionTag, "main");
-
-  if (commits.length > 0) {
-    console.log("\n" + chalk.bold("What's Included"));
-    console.log(commits.join("\n") + "\n");
-  }
 
   const nextVersion = semver.parse(response.value as string);
 
