@@ -299,7 +299,6 @@ const LakeComboboxWithRef = <I,>(
                     ) : (
                       <FlatList
                         keyExtractor={keyExtractor}
-                        itemSize={DEFAULT_ELEMENT_HEIGHT}
                         role="list"
                         data={items}
                         style={styles.flatList}

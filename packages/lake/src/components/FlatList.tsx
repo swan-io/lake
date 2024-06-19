@@ -1,5 +1,5 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
-import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from "react-native";
+import { ScrollView, ScrollViewProps, StyleProp, ViewStyle, WebRole } from "react-native";
 
 export type FlatListRef = ScrollView;
 
@@ -16,14 +16,14 @@ type Props<T> = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   data: T[];
   horizontal?: boolean;
-  itemSize?: number;
   keyExtractor: (item: T, index: number) => string;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
   renderItem: (info: ListRenderItemInfo<T>) => ReactNode;
   role?: WebRole;
   scrollEventThrottle?: number;
-  showsScrollIndicator?: boolean;
+  showsHorizontalScrollIndicator?: boolean;
+  showsVerticalScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -36,37 +36,30 @@ const FlatListWithRef = <T,>(
     contentContainerStyle,
     data,
     horizontal = false,
-    itemSize,
     keyExtractor,
     onKeyDown,
     onScroll,
     renderItem,
     role,
     scrollEventThrottle = 0,
-    showsScrollIndicator = true,
+    showsHorizontalScrollIndicator = true,
+    showsVerticalScrollIndicator = true,
     style,
   }: Props<T>,
   forwardedRef: ForwardedRef<FlatListRef>,
 ) => {
-  const vertical = !horizontal;
-
-  const itemStyle =
-    itemSize != null
-      ? { height: vertical ? itemSize : undefined, width: horizontal ? itemSize : undefined }
-      : undefined;
-
   return (
     <ScrollView
-      ref={forwardedRef}
+      contentContainerStyle={contentContainerStyle}
       horizontal={horizontal}
       onKeyDown={onKeyDown}
       onScroll={onScroll}
+      ref={forwardedRef}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
-      showsHorizontalScrollIndicator={showsScrollIndicator}
-      showsVerticalScrollIndicator={showsScrollIndicator}
+      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
+      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
       style={style}
-      contentContainerStyle={contentContainerStyle}
     >
       {ListHeaderComponent}
 
@@ -74,8 +67,7 @@ const FlatListWithRef = <T,>(
         ? data.map((item, index) => (
             <Fragment key={keyExtractor(item, index)}>
               {index !== 0 && ItemSeparatorComponent}
-
-              <View style={itemStyle}>{renderItem({ item, index })}</View>
+              {renderItem({ item, index })}
             </Fragment>
           ))
         : ListEmptyComponent}

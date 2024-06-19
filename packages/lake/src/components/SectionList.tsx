@@ -1,5 +1,5 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef } from "react";
-import { ScrollView, ScrollViewProps, StyleProp, View, ViewStyle, WebRole } from "react-native";
+import { ScrollView, ScrollViewProps, StyleProp, ViewStyle, WebRole } from "react-native";
 import { ListRenderItemInfo } from "./FlatList";
 
 export type SectionListRef = ScrollView;
@@ -16,7 +16,6 @@ type Props<T> = {
   ListHeaderComponent?: ReactNode;
   contentContainerStyle?: StyleProp<ViewStyle>;
   horizontal?: boolean;
-  itemSize?: number;
   keyExtractor: (item: T, index: number) => string;
   onKeyDown?: ScrollViewProps["onKeyDown"];
   onScroll?: ScrollViewProps["onScroll"];
@@ -25,7 +24,8 @@ type Props<T> = {
   role?: WebRole;
   scrollEventThrottle?: number;
   sections: Section<T>[];
-  showsScrollIndicator?: boolean;
+  showsHorizontalScrollIndicator?: boolean;
+  showsVerticalScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -37,7 +37,6 @@ const SectionListWithRef = <T,>(
     ListHeaderComponent,
     contentContainerStyle,
     horizontal = false,
-    itemSize,
     keyExtractor,
     onKeyDown,
     onScroll,
@@ -46,30 +45,24 @@ const SectionListWithRef = <T,>(
     role,
     scrollEventThrottle = 0,
     sections,
-    showsScrollIndicator = true,
+    showsHorizontalScrollIndicator = true,
+    showsVerticalScrollIndicator = true,
     style,
   }: Props<T>,
   forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
-  const vertical = !horizontal;
-
-  const itemStyle =
-    itemSize != null
-      ? { height: vertical ? itemSize : undefined, width: horizontal ? itemSize : undefined }
-      : undefined;
-
   return (
     <ScrollView
-      ref={forwardedRef}
+      contentContainerStyle={contentContainerStyle}
       horizontal={horizontal}
       onKeyDown={onKeyDown}
       onScroll={onScroll}
+      ref={forwardedRef}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
-      showsHorizontalScrollIndicator={showsScrollIndicator}
-      showsVerticalScrollIndicator={showsScrollIndicator}
+      showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
+      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
       style={style}
-      contentContainerStyle={contentContainerStyle}
     >
       {ListHeaderComponent}
 
@@ -81,8 +74,7 @@ const SectionListWithRef = <T,>(
               {section.data.map((item, index) => (
                 <Fragment key={keyExtractor(item, index)}>
                   {index !== 0 && ItemSeparatorComponent}
-
-                  <View style={itemStyle}>{renderItem({ item, index })}</View>
+                  {renderItem({ item, index })}
                 </Fragment>
               ))}
             </Fragment>
