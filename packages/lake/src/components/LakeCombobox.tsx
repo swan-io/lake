@@ -12,7 +12,6 @@ import {
   useState,
 } from "react";
 import {
-  FlatList,
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
@@ -26,6 +25,7 @@ import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { isNotEmpty } from "../utils/nullish";
 import { Box } from "./Box";
+import { FlatList } from "./FlatList";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { LakeTextInput, LakeTextInputProps } from "./LakeTextInput";
@@ -41,7 +41,9 @@ const styles = StyleSheet.create({
   list: {
     marginVertical: spacings[8],
   },
-  flatList: { scrollBehavior: "smooth" },
+  flatList: {
+    scrollBehavior: "smooth",
+  },
   item: {
     flexShrink: 1,
     flexGrow: 1,
@@ -92,19 +94,6 @@ const styles = StyleSheet.create({
     width: 1,
     flexGrow: 1,
   },
-});
-
-const getItemLayout: <I>(
-  data: ArrayLike<I> | null | undefined,
-  index: number,
-) => {
-  length: number;
-  offset: number;
-  index: number;
-} = (_data, index) => ({
-  length: DEFAULT_ELEMENT_HEIGHT,
-  offset: DEFAULT_ELEMENT_HEIGHT * index,
-  index,
 });
 
 export type LakeComboboxProps<I> = {
@@ -159,7 +148,6 @@ const LakeComboboxWithRef = <I,>(
 
   const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
 
-  const listRef = useRef<FlatList>(null);
   const listContainerRef = useRef<View>(null);
   const blurTimeoutId = useRef<number | undefined>(undefined);
   const [isFetchingAdditionalInfo, setIsFetchingAdditionalInfo] = useState(false);
@@ -310,13 +298,11 @@ const LakeComboboxWithRef = <I,>(
                       </Box>
                     ) : (
                       <FlatList
-                        ref={listRef}
                         keyExtractor={keyExtractor}
-                        getItemLayout={getItemLayout}
                         role="list"
                         data={items}
                         style={styles.flatList}
-                        ItemSeparatorComponent={Separator}
+                        ItemSeparatorComponent={<Separator />}
                         renderItem={({ item }) => {
                           const rendered = renderItem(item);
 

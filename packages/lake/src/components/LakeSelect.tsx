@@ -8,8 +8,6 @@ import {
   useRef,
 } from "react";
 import {
-  FlatList,
-  ListRenderItemInfo,
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
@@ -33,6 +31,7 @@ import { getFocusableElements } from "../utils/a11y";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
+import { FlatList, FlatListRef } from "./FlatList";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
@@ -190,7 +189,7 @@ const LakeSelectWithRef = <V,>(
   forwardedRef: ForwardedRef<View>,
 ) => {
   const inputRef = useRef<View>(null);
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatListRef>(null);
   const typingTimeoutRef = useRef<number | undefined>(undefined);
   const currentlyTypedRef = useRef<string | undefined>(undefined);
   const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
@@ -385,7 +384,7 @@ const LakeSelectWithRef = <V,>(
             }
           }}
           keyExtractor={(_, index) => `select-item-${index}`}
-          renderItem={({ item, index }: ListRenderItemInfo<Item<V>>) => {
+          renderItem={({ item, index }) => {
             const isSelected = value === item.value;
             const disablement = disabledItems.find(({ value }) => value === item.value);
 

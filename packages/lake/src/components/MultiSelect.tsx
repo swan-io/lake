@@ -1,12 +1,7 @@
 import { Array, Dict, Option } from "@swan-io/boxed";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
-  FlatList,
-  ListRenderItemInfo,
   Pressable,
-  SectionList,
-  SectionListData,
-  SectionListRenderItemInfo,
   StyleProp,
   StyleSheet,
   Text,
@@ -22,10 +17,12 @@ import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { safeSplitAround } from "../utils/string";
 import { Box } from "./Box";
+import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
 import { InputError } from "./InputError";
 import { Popover } from "./Popover";
 import { PressableText } from "./Pressable";
+import { SectionList } from "./SectionList";
 import { Space } from "./Space";
 import { Tag } from "./Tag";
 
@@ -196,7 +193,6 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
     const shouldScrollToBottomRef = useRef(false);
     const selectedTagListRef = useRef<View & Element>(null);
     const inputRef = useRef<View>(null);
-    const listRef = useRef<FlatList>(null);
     const [visible, { open, close }] = useDisclosure(false);
 
     const tint50 = colors[color][50];
@@ -382,16 +378,11 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                 role="listbox"
                 aria-multiselectable={true}
                 keyExtractor={(item, index) => `group-field-${item.value}-${index}`}
-                extraData={filter}
                 ListHeaderComponent={ListHeaderComponent}
                 ListEmptyComponent={ListEmptyComponent}
                 ListFooterComponent={<Space height={16} />}
                 sections={sections}
-                renderSectionHeader={({
-                  section: { title, data },
-                }: {
-                  section: SectionListData<MultiSelectItem>;
-                }) => (
+                renderSectionHeader={({ title, data }) => (
                   <Pressable
                     role="listitem"
                     onPress={() => handleSelectGroup(data)}
@@ -410,7 +401,7 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
                     )}
                   </Pressable>
                 )}
-                renderItem={({ item }: SectionListRenderItemInfo<MultiSelectItem>) => (
+                renderItem={({ item }) => (
                   <LineItem
                     color={color}
                     filter={filter}
@@ -422,15 +413,13 @@ export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
               />
             ) : (
               <FlatList
-                ref={listRef}
                 role="list"
                 data={filteredItems}
-                extraData={filter}
                 keyExtractor={item => `field-${item.value}`}
                 ListHeaderComponent={ListHeaderComponent}
                 ListEmptyComponent={ListEmptyComponent}
                 ListFooterComponent={<Space height={8} />}
-                renderItem={({ item }: ListRenderItemInfo<MultiSelectItem>) => (
+                renderItem={({ item }) => (
                   <LineItem
                     color={color}
                     filter={filter}
