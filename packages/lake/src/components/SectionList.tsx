@@ -72,22 +72,16 @@ const SectionListWithRef = <T,>(
   forwardedRef: ForwardedRef<SectionListRef>,
 ) => {
   const groupId = useId();
-  const onEndReachedRef = useRef(onEndReached);
   const scrollTrackerRef = useRef<View>(null);
 
   useEffect(() => {
-    onEndReachedRef.current = onEndReached;
-  });
-
-  useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
-    const onEndReached = onEndReachedRef.current;
 
-    if (element != null && onEndReached != null) {
+    if (element != null) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            onEndReached();
+            onEndReached?.();
           }
         });
       });
@@ -98,7 +92,8 @@ const SectionListWithRef = <T,>(
         observer.unobserve(element);
       };
     }
-  }, []);
+    // re-create an observer only on list length change
+  }, [sections.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ScrollView
