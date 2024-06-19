@@ -42,12 +42,7 @@ export const Default = () => {
       title="Segmented control"
       description="You can reduce window's width to see behavior when there isn't enough space to display all controls"
     >
-      <SegmentedControl
-        mode="desktop"
-        selected={selected}
-        items={items}
-        onValueChange={setSelected}
-      />
+      <SegmentedControl selected={selected} items={items} onValueChange={setSelected} />
     </StoryBlock>
   );
 };
