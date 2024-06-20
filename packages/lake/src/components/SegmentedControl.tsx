@@ -1,5 +1,6 @@
 import { ReactNode, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { P, match } from "ts-pattern";
 import { backgroundColor, colors, radii, spacings, texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 import { BottomPanel } from "./BottomPanel";
@@ -84,6 +85,7 @@ export type Item<T extends string> = {
   name: string;
   id: T;
   icon?: ReactNode;
+  activeIcon?: ReactNode;
 };
 
 type Props<T extends string> = {
@@ -114,13 +116,16 @@ export const SegmentedControl = <T extends string>({
                 setPressed(true);
               }}
             >
-              {isNotNullish(selectedItem?.icon) && (
-                <>
-                  {selectedItem.icon}
+              {isNotNullish(selectedItem?.icon) &&
+                match(selectedItem)
+                  .with(
+                    { icon: P.nonNullable, activeIcon: P.nonNullable },
+                    () => selectedItem.activeIcon,
+                  )
+                  .with({ icon: P.nonNullable }, () => selectedItem.icon)
+                  .otherwise(() => null)}
 
-                  <Space height={8} width={12} />
-                </>
-              )}
+              <Space height={8} width={12} />
 
               <LakeText
                 color={colors.gray[900]}
@@ -152,13 +157,15 @@ export const SegmentedControl = <T extends string>({
                       setPressed(false);
                     }}
                   >
-                    {isNotNullish(item.icon) && (
-                      <>
-                        {item.icon}
+                    {isNotNullish(item.icon) &&
+                      match(item)
+                        .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
+                          selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
+                        )
+                        .with({ icon: P.nonNullable }, () => item.icon)
+                        .otherwise(() => null)}
 
-                        <Space height={8} width={12} />
-                      </>
-                    )}
+                    <Space height={8} width={12} />
 
                     <LakeText
                       color={colors.gray[900]}
@@ -213,13 +220,17 @@ export const SegmentedControl = <T extends string>({
                   onValueChange(item.id);
                 }}
               >
-                {isNotNullish(item.icon) && (
-                  <>
-                    {item.icon}
+                <>
+                  {isNotNullish(item.icon) &&
+                    match(item)
+                      .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
+                        selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
+                      )
+                      .with({ icon: P.nonNullable }, () => item.icon)
+                      .otherwise(() => null)}
 
-                    <Space height={8} width={12} />
-                  </>
-                )}
+                  <Space height={8} width={12} />
+                </>
 
                 <LakeText
                   color={colors.gray[900]}
