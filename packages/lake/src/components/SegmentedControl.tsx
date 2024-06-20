@@ -92,21 +92,23 @@ type Props<T extends string> = {
   selected: T;
   items: ReadonlyArray<Item<T>>;
   onValueChange: (value: T) => void;
+  minItemWidth?: number;
 };
 
 export const SegmentedControl = <T extends string>({
   selected,
   items,
   onValueChange,
+  minItemWidth = 250,
 }: Props<T>) => {
   const selectedItemIndex = items.findIndex(item => item.id === selected);
 
-  const selectedItem = items.find(item => item.id === selected);
+  const selectedItem = items[selectedItemIndex];
 
   const [pressed, setPressed] = useState<boolean>(false);
 
   return (
-    <ResponsiveContainer style={styles.container}>
+    <ResponsiveContainer breakpoint={items.length * minItemWidth} style={styles.container}>
       {({ small }) =>
         small ? (
           <Box direction="row" alignItems="center" justifyContent="spaceBetween">
@@ -144,14 +146,13 @@ export const SegmentedControl = <T extends string>({
               }}
             >
               {items.map(item => (
-                <Box direction="row">
+                <Box direction="row" key={item.id}>
                   <Pressable
                     style={
                       selectedItem?.id === item.id
                         ? styles.dropdownItemSelected
                         : styles.dropdownItem
                     }
-                    key={item.id}
                     onPress={() => {
                       onValueChange(item.id);
                       setPressed(false);
@@ -188,6 +189,8 @@ export const SegmentedControl = <T extends string>({
                 </Box>
               ))}
             </BottomPanel>
+
+            <Space width={4} />
 
             <LakeButton
               mode="tertiary"
