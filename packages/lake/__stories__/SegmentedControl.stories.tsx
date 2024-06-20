@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
+import { Icon } from "../src/components/Icon";
 import { SegmentedControl } from "../src/components/SegmentedControl";
 import { Path, Svg } from "../src/components/Svg";
 import { TabView } from "../src/components/TabView";
@@ -27,8 +28,13 @@ const icon = (
 );
 
 const items = [
-  { id: "sct", name: "SEPA Credit Transfer", icon },
-  { id: "sdd", name: "SEPA Direct Debit", icon },
+  { id: "sct", name: "SEPA Credit Transfer", icon: <Icon name="arrow-swap-regular" size={24} /> },
+  {
+    id: "check",
+    name: "Check",
+    icon: <Icon name="check-regular" size={24} />,
+    activeIcon: <Icon name="check-filled" size={24} />,
+  },
   { id: "card", name: "Card", icon },
 ] as const;
 
@@ -42,12 +48,7 @@ export const Default = () => {
       title="Segmented control"
       description="You can reduce window's width to see behavior when there isn't enough space to display all controls"
     >
-      <SegmentedControl
-        mode="desktop"
-        selected={selected}
-        items={items}
-        onValueChange={setSelected}
-      />
+      <SegmentedControl selected={selected} items={items} onValueChange={setSelected} />
     </StoryBlock>
   );
 };
