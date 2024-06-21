@@ -1,10 +1,11 @@
 import { Meta } from "@storybook/react";
 import { LakeModal, LakeModalProps } from "@swan-io/shared-business/src/components/LakeModal";
 import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import { Grid } from "../src/components/Grid";
 import { LakeButton } from "../src/components/LakeButton";
+import { ScrollView } from "../src/components/ScrollView";
 import { Space } from "../src/components/Space";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";

@@ -1,6 +1,7 @@
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeRadio } from "@swan-io/lake/src/components/LakeRadio";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { ScrollView, ScrollViewRef } from "@swan-io/lake/src/components/ScrollView";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Tile } from "@swan-io/lake/src/components/Tile";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
@@ -9,7 +10,7 @@ import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { clampValue } from "@swan-io/lake/src/utils/math";
 import { detectScrollAnimationEnd } from "@swan-io/lake/src/utils/viewport";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
 
@@ -125,7 +126,7 @@ export const ChoicePicker = <T,>({
   disabled = false,
   onChange,
 }: Props<T>) => {
-  const containerRef = useRef<ScrollView | null>(null);
+  const containerRef = useRef<ScrollViewRef | null>(null);
   const { desktop } = useResponsive(breakpoints.medium);
   const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 
@@ -137,6 +138,7 @@ export const ChoicePicker = <T,>({
     // auto scroll to selected value on mobile
     const scrollContainer = containerRef.current;
     const index = items.findIndex(item => value === item);
+
     if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
       const width = scrollContainer.offsetWidth;
       scrollContainer.scrollTo({ x: index * width, animated: false });

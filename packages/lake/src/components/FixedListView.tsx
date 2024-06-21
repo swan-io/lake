@@ -50,7 +50,6 @@ import {
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
   StyleSheet,
   View,
   ViewProps,
@@ -74,6 +73,7 @@ import { BorderedIcon } from "./BorderedIcon";
 import { Icon, IconName } from "./Icon";
 import { LakeHeading } from "./LakeHeading";
 import { LakeText } from "./LakeText";
+import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
 
 export type ColumnTitleConfig<ExtraInfo> = {
@@ -664,9 +664,9 @@ export const FixedListView = <T, ExtraInfo>({
 }: FixedListViewProps<T, ExtraInfo>) => {
   const [viewId] = useState(() => uuid());
   // Those three refs are used to synchronize the horizontal scroll in the center columns
-  const centerHeadersRef = useRef<ScrollView | null>(null);
-  const centerColumnsRef = useRef<ScrollView | null>(null);
-  const horizontalScrollbarRef = useRef<ScrollView | null>(null);
+  const centerHeadersRef = useRef<ScrollViewRef | null>(null);
+  const centerColumnsRef = useRef<ScrollViewRef | null>(null);
+  const horizontalScrollbarRef = useRef<ScrollViewRef | null>(null);
   const totalRowHeight = rowHeight + rowVerticalSpacing;
   const rowsHeight = originalData.length * totalRowHeight;
   const totalHeight = headerHeight + rowsHeight;

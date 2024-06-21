@@ -1,26 +1,18 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useId, useRef } from "react";
-import {
-  ScrollView,
-  ScrollViewProps,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-  WebRole,
-} from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
 import { ListRenderItemInfo } from "./FlatList";
+import { ScrollView, ScrollViewProps, ScrollViewRef } from "./ScrollView";
 
 const styles = StyleSheet.create({
   scrollTracker: {
     position: "absolute",
     pointerEvents: "none",
-    bottom: 0,
-    left: 0,
     right: 0,
+    bottom: 0,
   },
 });
 
-export type SectionListRef = ScrollView;
+export type SectionListRef = ScrollViewRef;
 
 type Section<T> = {
   title: string;
@@ -64,7 +56,7 @@ const SectionListWithRef = <T,>(
     renderItem,
     renderSectionHeader,
     role,
-    scrollEventThrottle = 0,
+    scrollEventThrottle = 16,
     sections,
     showsScrollIndicators = true,
     style,
@@ -75,8 +67,8 @@ const SectionListWithRef = <T,>(
   const scrollTrackerRef = useRef<View>(null);
 
   const scrollTrackerStyle = horizontal
-    ? { width: onEndReachedThresholdPx }
-    : { height: onEndReachedThresholdPx };
+    ? { top: 0, width: onEndReachedThresholdPx }
+    : { left: 0, height: onEndReachedThresholdPx };
 
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
@@ -108,8 +100,7 @@ const SectionListWithRef = <T,>(
       ref={forwardedRef}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
-      showsHorizontalScrollIndicator={showsScrollIndicators}
-      showsVerticalScrollIndicator={showsScrollIndicators}
+      showsScrollIndicators={showsScrollIndicators}
       style={style}
     >
       {ListHeaderComponent}
@@ -129,9 +120,9 @@ const SectionListWithRef = <T,>(
             </Fragment>
           ))}
 
-      <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
-
       {ListFooterComponent}
+
+      <View role="none" ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
     </ScrollView>
   );
 };

@@ -1,25 +1,17 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useRef } from "react";
-import {
-  ScrollView,
-  ScrollViewProps,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-  WebRole,
-} from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
+import { ScrollView, ScrollViewProps, ScrollViewRef } from "./ScrollView";
 
 const styles = StyleSheet.create({
   scrollTracker: {
     position: "absolute",
     pointerEvents: "none",
-    left: 0,
-    bottom: 0,
     right: 0,
+    bottom: 0,
   },
 });
 
-export type FlatListRef = ScrollView;
+export type FlatListRef = ScrollViewRef;
 
 export type ListRenderItemInfo<T> = {
   item: T;
@@ -62,7 +54,7 @@ const FlatListWithRef = <T,>(
     onScroll,
     renderItem,
     role,
-    scrollEventThrottle = 0,
+    scrollEventThrottle = 16,
     showsScrollIndicators = true,
     style,
   }: Props<T>,
@@ -71,8 +63,8 @@ const FlatListWithRef = <T,>(
   const scrollTrackerRef = useRef<View>(null);
 
   const scrollTrackerStyle = horizontal
-    ? { width: onEndReachedThresholdPx }
-    : { height: onEndReachedThresholdPx };
+    ? { top: 0, width: onEndReachedThresholdPx }
+    : { left: 0, height: onEndReachedThresholdPx };
 
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
@@ -104,8 +96,7 @@ const FlatListWithRef = <T,>(
       ref={forwardedRef}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
-      showsHorizontalScrollIndicator={showsScrollIndicators}
-      showsVerticalScrollIndicator={showsScrollIndicators}
+      showsScrollIndicators={showsScrollIndicators}
       style={style}
     >
       {ListHeaderComponent}
@@ -119,9 +110,9 @@ const FlatListWithRef = <T,>(
             </Fragment>
           ))}
 
-      <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
-
       {ListFooterComponent}
+
+      <View role="none" ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
     </ScrollView>
   );
 };

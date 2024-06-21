@@ -1,11 +1,12 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, radii, shadows } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
 import { FocusTrap } from "./FocusTrap";
 import { LoadingView } from "./LoadingView";
 import { Portal } from "./Portal";
+import { ScrollView } from "./ScrollView";
 import { Suspendable } from "./Suspendable";
 import { TransitionView } from "./TransitionView";
 
