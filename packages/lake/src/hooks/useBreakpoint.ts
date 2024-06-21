@@ -1,20 +1,15 @@
-// Based on https://github.com/necolas/react-native-web/blob/0.19.10/packages/react-native-web/src/exports/useWindowDimensions/index.js
+// Based on https://github.com/necolas/react-native-web/blob/0.19.12/packages/react-native-web/src/exports/useWindowDimensions/index.js
 
 import { useCallback, useSyncExternalStore } from "react";
-import { Dimensions } from "react-native";
+import { windowSize } from "../utils/windowSize";
 
 export const useBreakpoint = (breakpoint: number) =>
   useSyncExternalStore(
     useCallback(onStoreChange => {
-      const subscription = Dimensions.addEventListener("change", ({ window }) => {
-        if (window != null) {
-          onStoreChange();
-        }
-      });
-
-      return subscription.remove;
+      const unsubscribe = windowSize.subscribe(onStoreChange);
+      return unsubscribe;
     }, []),
     useCallback(() => {
-      return Dimensions.get("window").width >= breakpoint;
+      return windowSize.get().width >= breakpoint;
     }, [breakpoint]),
   );
