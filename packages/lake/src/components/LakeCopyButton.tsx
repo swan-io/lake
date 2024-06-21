@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Clipboard } from "react-native";
+import { setClipboardText } from "../utils/clipboard";
 import { Icon } from "./Icon";
 import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
@@ -34,7 +34,7 @@ export const LakeCopyButton = ({
         onPress={event => {
           event.stopPropagation();
           event.preventDefault();
-          Clipboard.setString(valueToCopy);
+          setClipboardText(valueToCopy);
           setVisibleState("copied");
         }}
       >

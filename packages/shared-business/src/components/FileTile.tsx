@@ -16,10 +16,11 @@ import {
   shadows,
   spacings,
 } from "@swan-io/lake/src/constants/design";
+import { setClipboardText } from "@swan-io/lake/src/utils/clipboard";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useCallback, useState } from "react";
-import { Clipboard, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { SwanFile } from "../utils/SwanFile";
 import { t } from "../utils/i18n";
@@ -123,7 +124,7 @@ export const FileTile = ({
                     onPress={event => {
                       event.stopPropagation();
                       event.preventDefault();
-                      Clipboard.setString(id);
+                      setClipboardText(id);
                       setVisibleState("copied");
                     }}
                   >
