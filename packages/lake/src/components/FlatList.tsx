@@ -70,6 +70,10 @@ const FlatListWithRef = <T,>(
 ) => {
   const scrollTrackerRef = useRef<View>(null);
 
+  const scrollTrackerStyle = horizontal
+    ? { width: onEndReachedThresholdPx }
+    : { height: onEndReachedThresholdPx };
+
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 
@@ -107,7 +111,7 @@ const FlatListWithRef = <T,>(
       {ListHeaderComponent}
 
       {data.length > 0 ? (
-        <View>
+        <>
           {data.map((item, index) => (
             <Fragment key={keyExtractor(item, index)}>
               {index !== 0 && ItemSeparatorComponent}
@@ -115,11 +119,8 @@ const FlatListWithRef = <T,>(
             </Fragment>
           ))}
 
-          <View
-            ref={scrollTrackerRef}
-            style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
-          />
-        </View>
+          <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
+        </>
       ) : (
         ListEmptyComponent
       )}

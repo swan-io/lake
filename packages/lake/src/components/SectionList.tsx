@@ -74,6 +74,10 @@ const SectionListWithRef = <T,>(
   const groupId = useId();
   const scrollTrackerRef = useRef<View>(null);
 
+  const scrollTrackerStyle = horizontal
+    ? { width: onEndReachedThresholdPx }
+    : { height: onEndReachedThresholdPx };
+
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 
@@ -111,7 +115,7 @@ const SectionListWithRef = <T,>(
       {ListHeaderComponent}
 
       {sections.length > 0 ? (
-        <View>
+        <>
           {sections.map(section => (
             <Fragment key={`group-${groupId}-${section.title}`}>
               {renderSectionHeader?.(section)}
@@ -125,11 +129,8 @@ const SectionListWithRef = <T,>(
             </Fragment>
           ))}
 
-          <View
-            ref={scrollTrackerRef}
-            style={[styles.scrollTracker, { height: onEndReachedThresholdPx }]}
-          />
-        </View>
+          <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
+        </>
       ) : (
         ListEmptyComponent
       )}
