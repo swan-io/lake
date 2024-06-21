@@ -1,15 +1,7 @@
 import { Ref, forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewProps,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from "react-native";
 import { useMergeRefs } from "../hooks/useMergeRefs";
-import { ScrollViewBase } from "./ScrollViewBase";
+import { ScrollEvent, ScrollViewBase } from "./ScrollViewBase";
 
 const styles = StyleSheet.create({
   base: {
@@ -38,7 +30,7 @@ export type ScrollViewRef = {
 type Props = ViewProps & {
   contentContainerStyle?: StyleProp<ViewStyle>;
   horizontal?: boolean;
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onScroll?: (event: ScrollEvent) => void;
   scrollEventThrottle?: number;
 };
 

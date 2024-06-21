@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useRef } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View, ViewProps } from "react-native";
+import { NativeSyntheticEvent, StyleSheet, View, ViewProps } from "react-native";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 
 const styles = StyleSheet.create({
@@ -8,36 +8,43 @@ const styles = StyleSheet.create({
   },
 });
 
-const normalizeScrollEvent = (event: object): NativeSyntheticEvent<NativeScrollEvent> => ({
-  // @ts-expect-error
-  nativeEvent: {
-    contentOffset: {
-      get x() {
-        return event.target.scrollLeft;
-      },
-      get y() {
-        return event.target.scrollTop;
-      },
+const normalizeScrollEvent = (event: NativeSyntheticEvent<React.UIEvent>) => {
+  const target = event.target as unknown as HTMLElement;
+
+  const contentOffset = {
+    get x() {
+      return target.scrollLeft;
     },
-    contentSize: {
-      get height() {
-        return event.target.scrollHeight;
-      },
-      get width() {
-        return event.target.scrollWidth;
-      },
+    get y() {
+      return target.scrollTop;
     },
-    layoutMeasurement: {
-      get height() {
-        return event.target.offsetHeight;
-      },
-      get width() {
-        return event.target.offsetWidth;
-      },
+  };
+
+  const contentSize = {
+    get height() {
+      return target.scrollHeight;
     },
-  },
-  timeStamp: Date.now(),
-});
+    get width() {
+      return target.scrollWidth;
+    },
+  };
+
+  const layoutMeasurement = {
+    get height() {
+      return target.offsetHeight;
+    },
+    get width() {
+      return target.offsetWidth;
+    },
+  };
+
+  return {
+    nativeEvent: { contentOffset, contentSize, layoutMeasurement },
+    timeStamp: Date.now(),
+  };
+};
+
+export type ScrollEvent = ReturnType<typeof normalizeScrollEvent>;
 
 const shouldEmitScrollEvent = (lastTick: number, eventThrottle: number) => {
   const timeSinceLastTick = Date.now() - lastTick;
@@ -45,7 +52,7 @@ const shouldEmitScrollEvent = (lastTick: number, eventThrottle: number) => {
 };
 
 type Props = ViewProps & {
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onScroll?: (event: ScrollEvent) => void;
   scrollEventThrottle?: number;
   showsScrollIndicators?: boolean;
 };
@@ -61,7 +68,7 @@ export const ScrollViewBase = forwardRef<View, Props>(
     const mergedRef = useMergeRefs(scrollRef, forwardedRef);
 
     const handleOnScroll = useCallback(
-      (event: object) => {
+      (event: NativeSyntheticEvent<React.UIEvent>) => {
         event.stopPropagation();
 
         if (event.target === scrollRef.current) {
@@ -74,10 +81,7 @@ export const ScrollViewBase = forwardRef<View, Props>(
 
           scrollTimeout.current = setTimeout(() => {
             scrollState.current.isScrolling = false;
-
-            if (onScroll) {
-              onScroll(normalizeScrollEvent(event));
-            }
+            onScroll?.(normalizeScrollEvent(event));
           }, 100);
 
           if (scrollState.current.isScrolling) {
