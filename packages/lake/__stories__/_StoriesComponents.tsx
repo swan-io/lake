@@ -1,9 +1,10 @@
 import { Highlight, themes } from "prism-react-renderer";
 import { CSSProperties, ReactNode, memo, useMemo } from "react";
-import { ScrollView, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { P, match } from "ts-pattern";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
+import { ScrollView } from "../src/components/ScrollView";
 import { Separator } from "../src/components/Separator";
 import { Space } from "../src/components/Space";
 import { colors, radii, texts } from "../src/constants/design";

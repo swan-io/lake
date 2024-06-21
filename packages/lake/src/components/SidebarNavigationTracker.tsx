@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ScrollView, ScrollViewProps, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { ScrollView, ScrollViewProps } from "./ScrollView";
 
 const styles = StyleSheet.create({
   track: {

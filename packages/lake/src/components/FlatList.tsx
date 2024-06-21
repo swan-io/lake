@@ -1,13 +1,6 @@
 import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useRef } from "react";
-import {
-  ScrollView,
-  ScrollViewProps,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-  WebRole,
-} from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
+import { ScrollView, ScrollViewProps, ScrollViewRef } from "./ScrollView";
 
 const styles = StyleSheet.create({
   scrollTracker: {
@@ -19,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export type FlatListRef = ScrollView;
+export type FlatListRef = ScrollViewRef;
 
 export type ListRenderItemInfo<T> = {
   item: T;
@@ -104,8 +97,7 @@ const FlatListWithRef = <T,>(
       ref={forwardedRef}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
-      showsHorizontalScrollIndicator={showsScrollIndicators}
-      showsVerticalScrollIndicator={showsScrollIndicators}
+      showsScrollIndicators={showsScrollIndicators}
       style={style}
     >
       {ListHeaderComponent}

@@ -7,7 +7,15 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
-import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from "react-native";
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewProps,
+  ViewStyle,
+} from "react-native";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 
 const styles = StyleSheet.create({
@@ -69,8 +77,6 @@ const normalizeScrollEvent = (event: SyntheticEvent<UIEvent>) => {
   };
 };
 
-export type ScrollEvent = ReturnType<typeof normalizeScrollEvent>;
-
 export type ScrollViewRef = {
   scrollTo: (event: { x?: number; y?: number; animated?: boolean }) => void;
 };
@@ -80,15 +86,15 @@ const shouldEmitScrollEvent = (lastTick: number, eventThrottle: number) => {
   return eventThrottle > 0 && timeSinceLastTick >= eventThrottle;
 };
 
-type Props = ViewProps & {
+export type ScrollViewProps = ViewProps & {
   contentContainerStyle?: StyleProp<ViewStyle>;
   horizontal?: boolean;
-  onScroll?: (event: ScrollEvent) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   scrollEventThrottle?: number;
   showsScrollIndicators?: boolean;
 };
 
-export const ScrollView = forwardRef<ScrollViewRef, Props>(
+export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
   (
     {
       children,

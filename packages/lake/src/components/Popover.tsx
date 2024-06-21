@@ -3,7 +3,6 @@ import {
   AnimationStyles,
   GestureResponderEvent,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -23,6 +22,7 @@ import { noop } from "../utils/function";
 import { BottomPanel } from "./BottomPanel";
 import { FocusTrap } from "./FocusTrap";
 import { Portal } from "./Portal";
+import { ScrollView } from "./ScrollView";
 import { TransitionView } from "./TransitionView";
 
 type Props = {

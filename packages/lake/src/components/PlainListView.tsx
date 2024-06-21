@@ -11,7 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { PressableStateCallbackType, ScrollView, StyleSheet, View, ViewStyle } from "react-native";
+import { PressableStateCallbackType, StyleSheet, View, ViewStyle } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, breakpoints, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
@@ -24,6 +24,7 @@ import {
 } from "./FixedListView";
 import { LakeHeading } from "./LakeHeading";
 import { ResponsiveContainer } from "./ResponsiveContainer";
+import { ScrollView } from "./ScrollView";
 
 export type ColumnConfig<T, ExtraInfo> = {
   id: string;

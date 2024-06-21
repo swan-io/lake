@@ -1,13 +1,7 @@
 import { ReactNode, useCallback, useState } from "react";
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  View,
-  ViewProps,
-} from "react-native";
+import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View, ViewProps } from "react-native";
 import { backgroundColor } from "../constants/design";
+import { ScrollView } from "./ScrollView";
 
 const HORIZONTAL_SAFE_AREA = 20;
 
