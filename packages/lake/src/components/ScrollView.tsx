@@ -112,27 +112,27 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
     forwardedRef,
   ) => {
     const innerRef = useRef<ScrollViewRef>(null);
+    const stateRef = useRef<State>({ lastTick: 0, scrolling: false });
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const mergedRef = useMergeRefs(innerRef, forwardedRef) as Ref<View>;
-    const state = useRef<State>({ lastTick: 0, scrolling: false });
-    const timeout = useRef<NodeJS.Timeout | null>(null);
 
     const handleOnScroll = useCallback(
       (event: SyntheticEvent<UIEvent>) => {
         event.stopPropagation();
 
         // A scroll happened, so the scroll resets the scrollend timeout.
-        if (timeout.current != null) {
-          clearTimeout(timeout.current);
+        if (timeoutRef.current != null) {
+          clearTimeout(timeoutRef.current);
         }
 
-        timeout.current = setTimeout(() => {
-          state.current.scrolling = false;
+        timeoutRef.current = setTimeout(() => {
+          stateRef.current.scrolling = false;
           onScroll?.(normalizeScrollEvent(event));
         }, 100);
 
-        if (shouldEmitScrollEvent(state.current, scrollEventThrottle)) {
-          state.current.scrolling = true;
-          state.current.lastTick = Date.now();
+        if (shouldEmitScrollEvent(stateRef.current, scrollEventThrottle)) {
+          stateRef.current.scrolling = true;
+          stateRef.current.lastTick = Date.now();
           onScroll?.(normalizeScrollEvent(event));
         }
       },

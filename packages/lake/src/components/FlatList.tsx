@@ -6,9 +6,8 @@ const styles = StyleSheet.create({
   scrollTracker: {
     position: "absolute",
     pointerEvents: "none",
-    left: 0,
-    bottom: 0,
     right: 0,
+    bottom: 0,
   },
 });
 
@@ -64,8 +63,8 @@ const FlatListWithRef = <T,>(
   const scrollTrackerRef = useRef<View>(null);
 
   const scrollTrackerStyle = horizontal
-    ? { width: onEndReachedThresholdPx }
-    : { height: onEndReachedThresholdPx };
+    ? { top: 0, width: onEndReachedThresholdPx }
+    : { left: 0, height: onEndReachedThresholdPx };
 
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
@@ -111,9 +110,9 @@ const FlatListWithRef = <T,>(
             </Fragment>
           ))}
 
-      <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
-
       {ListFooterComponent}
+
+      <View role="none" ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
     </ScrollView>
   );
 };
