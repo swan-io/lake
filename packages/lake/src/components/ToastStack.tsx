@@ -1,7 +1,7 @@
 import { Array, Option } from "@swan-io/boxed";
 import { t } from "@swan-io/shared-business/src/utils/i18n";
 import { memo, useEffect, useRef, useState } from "react";
-import { Clipboard, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { ColorVariants, animations, colors, shadows } from "../constants/design";
 import {
@@ -11,6 +11,7 @@ import {
   hideToast,
   useToasts,
 } from "../state/toasts";
+import { setClipboardText } from "../utils/clipboard";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
@@ -196,7 +197,7 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
                     onPress={event => {
                       event.stopPropagation();
                       event.preventDefault();
-                      Clipboard.setString(requestId ?? "");
+                      setClipboardText(requestId ?? "");
                       setVisibleState("copied");
                     }}
                   >

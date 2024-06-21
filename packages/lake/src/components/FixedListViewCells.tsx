@@ -1,8 +1,9 @@
 import { ComponentProps, ReactNode, useCallback, useState } from "react";
-import { Clipboard, GestureResponderEvent, StyleSheet, View } from "react-native";
+import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
 import { ColorVariants, colors, spacings } from "../constants/design";
+import { setClipboardText } from "../utils/clipboard";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
@@ -253,7 +254,7 @@ export const CopyableRegularTextCell = ({
   const onPress = useCallback(
     (event: GestureResponderEvent) => {
       event.preventDefault();
-      Clipboard.setString(clipboardText);
+      setClipboardText(clipboardText);
       setVisibleState("copied");
     },
     [clipboardText],
