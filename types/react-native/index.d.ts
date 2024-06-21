@@ -450,6 +450,7 @@ declare module "react-native" {
     scrollBehavior?: "auto" | "smooth";
     scrollSnapAlign?: "start" | "end" | "center";
     scrollSnapType?: string;
+    scrollbarWidth?: "auto" | "thin" | "none";
     transform?: string;
     visibility?: VisibilityValue;
 

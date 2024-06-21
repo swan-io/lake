@@ -62,7 +62,7 @@ const FlatListWithRef = <T,>(
     onScroll,
     renderItem,
     role,
-    scrollEventThrottle = 0,
+    scrollEventThrottle = 16,
     showsScrollIndicators = true,
     style,
   }: Props<T>,

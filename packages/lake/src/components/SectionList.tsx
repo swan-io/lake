@@ -64,7 +64,7 @@ const SectionListWithRef = <T,>(
     renderItem,
     renderSectionHeader,
     role,
-    scrollEventThrottle = 0,
+    scrollEventThrottle = 16,
     sections,
     showsScrollIndicators = true,
     style,
