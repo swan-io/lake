@@ -81,10 +81,13 @@ export type ScrollViewRef = {
   scrollTo: (event: { x?: number; y?: number; animated?: boolean }) => void;
 };
 
-const shouldEmitScrollEvent = (lastTick: number, eventThrottle: number) => {
-  const timeSinceLastTick = Date.now() - lastTick;
-  return eventThrottle > 0 && timeSinceLastTick >= eventThrottle;
+type State = {
+  lastTick: number;
+  scrolling: boolean;
 };
+
+const shouldEmitScrollEvent = (state: State, eventThrottle: number) =>
+  !state.scrolling || (eventThrottle > 0 && Date.now() - state.lastTick >= eventThrottle);
 
 export type ScrollViewProps = ViewProps & {
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -110,38 +113,27 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
   ) => {
     const innerRef = useRef<ScrollViewRef>(null);
     const mergedRef = useMergeRefs(innerRef, forwardedRef) as Ref<View>;
-    const state = useRef({ isScrolling: false, scrollLastTick: 0 });
+    const state = useRef<State>({ lastTick: 0, scrolling: false });
     const timeout = useRef<NodeJS.Timeout | null>(null);
 
     const handleOnScroll = useCallback(
       (event: SyntheticEvent<UIEvent>) => {
         event.stopPropagation();
 
-        if (event.target === (innerRef.current as HTMLElement)) {
-          event.persist();
+        // A scroll happened, so the scroll resets the scrollend timeout.
+        if (timeout.current != null) {
+          clearTimeout(timeout.current);
+        }
 
-          // A scroll happened, so the scroll resets the scrollend timeout.
-          if (timeout.current != null) {
-            clearTimeout(timeout.current);
-          }
+        timeout.current = setTimeout(() => {
+          state.current.scrolling = false;
+          onScroll?.(normalizeScrollEvent(event));
+        }, 100);
 
-          timeout.current = setTimeout(() => {
-            state.current.isScrolling = false;
-            onScroll?.(normalizeScrollEvent(event));
-          }, 100);
-
-          if (state.current.isScrolling) {
-            // Scroll last tick may have changed, check if we need to notify
-            if (shouldEmitScrollEvent(state.current.scrollLastTick, scrollEventThrottle)) {
-              state.current.scrollLastTick = Date.now();
-              onScroll?.(normalizeScrollEvent(event));
-            }
-          } else {
-            // Weren't scrolling, so we must have just started
-            state.current.isScrolling = true;
-            state.current.scrollLastTick = Date.now();
-            onScroll?.(normalizeScrollEvent(event));
-          }
+        if (shouldEmitScrollEvent(state.current, scrollEventThrottle)) {
+          state.current.scrolling = true;
+          state.current.lastTick = Date.now();
+          onScroll?.(normalizeScrollEvent(event));
         }
       },
       [onScroll, scrollEventThrottle],
