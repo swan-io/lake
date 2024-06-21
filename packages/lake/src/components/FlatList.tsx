@@ -110,20 +110,16 @@ const FlatListWithRef = <T,>(
     >
       {ListHeaderComponent}
 
-      {data.length > 0 ? (
-        <>
-          {data.map((item, index) => (
+      {data.length <= 0
+        ? ListEmptyComponent
+        : data.map((item, index) => (
             <Fragment key={keyExtractor(item, index)}>
               {index !== 0 && ItemSeparatorComponent}
               {renderItem({ item, index })}
             </Fragment>
           ))}
 
-          <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
-        </>
-      ) : (
-        ListEmptyComponent
-      )}
+      <View ref={scrollTrackerRef} style={[styles.scrollTracker, scrollTrackerStyle]} />
 
       {ListFooterComponent}
     </ScrollView>
