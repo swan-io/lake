@@ -152,7 +152,7 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
       }
     }, []);
 
-    useImperativeHandle(innerRef, () => ({ scrollTo }));
+    useImperativeHandle(forwardedRef, () => ({ scrollTo }));
 
     return (
       <View
