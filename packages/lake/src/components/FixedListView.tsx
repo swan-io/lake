@@ -916,15 +916,9 @@ export const FixedListView = <T, ExtraInfo>({
 
   // Used to fix some scrollbar behavior. See `main.css`.
   useLayoutEffect(() => {
-    if (centerHeadersRef.current instanceof Element) {
-      centerHeadersRef.current.setAttribute("data-hide-scrollbar", String(true));
-    }
-    if (centerColumnsRef.current instanceof Element) {
-      centerColumnsRef.current.setAttribute("data-hide-scrollbar", String(true));
-    }
-    if (horizontalScrollbarRef.current instanceof Element) {
-      horizontalScrollbarRef.current.setAttribute("data-force-scrollbar", String(true));
-    }
+    centerHeadersRef.current?.element?.setAttribute("data-hide-scrollbar", String(true));
+    centerColumnsRef.current?.element?.setAttribute("data-hide-scrollbar", String(true));
+    horizontalScrollbarRef.current?.element?.setAttribute("data-force-scrollbar", String(true));
   }, []);
 
   // To synchronize scrolls, we keep track of the initiator in order to ignore the scroll events
@@ -944,9 +938,9 @@ export const FixedListView = <T, ExtraInfo>({
       isNotNullish(horizontalScrollbarRef.current)
     ) {
       const SCROLL_THRESHOLD_MS = 500;
-      const centerColumns = centerColumnsRef.current as unknown as HTMLElement;
-      const centerHeaders = centerHeadersRef.current as unknown as HTMLElement;
-      const horizontalScrollbar = horizontalScrollbarRef.current as unknown as HTMLElement;
+      const centerColumns = centerColumnsRef.current.element as HTMLElement;
+      const centerHeaders = centerHeadersRef.current.element as HTMLElement;
+      const horizontalScrollbar = horizontalScrollbarRef.current.element as HTMLElement;
       const onColumnsScroll = () => {
         const now = Date.now();
         if (

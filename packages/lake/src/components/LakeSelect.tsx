@@ -222,9 +222,7 @@ const LakeSelectWithRef = <V,>(
 
         if (selected != null) {
           if (visible) {
-            const listElement = listRef.current;
-
-            if (listElement != null) {
+            if (listRef.current?.element != null) {
               listItemRefs.current[selectedIndex]?.focus();
             }
           } else {

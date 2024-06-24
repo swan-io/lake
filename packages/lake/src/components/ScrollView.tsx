@@ -16,7 +16,6 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native";
-import { useMergeRefs } from "../hooks/useMergeRefs";
 
 const styles = StyleSheet.create({
   base: {
@@ -78,6 +77,7 @@ const normalizeScrollEvent = (event: SyntheticEvent<UIEvent>) => {
 };
 
 export type ScrollViewRef = {
+  element: HTMLElement | null;
   scrollTo: (event: { x?: number; y?: number; animated?: boolean }) => void;
 };
 
@@ -111,10 +111,9 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
     },
     forwardedRef,
   ) => {
-    const innerRef = useRef<ScrollViewRef>(null);
+    const innerRef = useRef<HTMLElement>(null);
     const stateRef = useRef<State>({ lastTick: 0, scrolling: false });
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const mergedRef = useMergeRefs(innerRef, forwardedRef) as Ref<View>;
 
     const handleOnScroll = useCallback(
       (event: SyntheticEvent<UIEvent>) => {
@@ -152,12 +151,15 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
       }
     }, []);
 
-    useImperativeHandle(forwardedRef, () => ({ scrollTo }));
+    useImperativeHandle(forwardedRef, () => ({
+      element: innerRef.current,
+      scrollTo,
+    }));
 
     return (
       <View
         {...viewProps}
-        ref={mergedRef}
+        ref={innerRef as unknown as Ref<View>}
         onScroll={handleOnScroll}
         style={[
           styles.base,
