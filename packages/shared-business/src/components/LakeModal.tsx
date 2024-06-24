@@ -6,6 +6,7 @@ import { LoadingView } from "@swan-io/lake/src/components/LoadingView";
 import { Portal } from "@swan-io/lake/src/components/Portal";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Context, ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
+import { ScrollView } from "@swan-io/lake/src/components/ScrollView";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Suspendable } from "@swan-io/lake/src/components/Suspendable";
 import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
@@ -21,7 +22,7 @@ import {
 } from "@swan-io/lake/src/constants/design";
 import { useBodyClassName } from "@swan-io/lake/src/hooks/useBodyClassName";
 import { ReactNode, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { t } from "../utils/i18n";
 
 export type LakeModalProps = {
