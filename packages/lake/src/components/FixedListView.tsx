@@ -1616,20 +1616,19 @@ export const FixedListViewEmpty = ({
       <Icon name={icon} size={96} color={colors.current.primary} />
     )}
 
-    <Space height={32} />
+    <Space height={24} />
 
     {isNotNullish(title) && (
-      <LakeHeading level={3} variant="h3" color={colors.gray[700]} align="center">
-        {title}
-      </LakeHeading>
+      <>
+        <LakeHeading align="center" level={3} variant="h5">
+          {title}
+        </LakeHeading>
+
+        <Space height={8} />
+      </>
     )}
 
-    <Space height={8} />
-
     {isNotNullish(subtitle) && <LakeText align="center">{subtitle}</LakeText>}
-
-    <Space height={8} />
-
     {children}
   </View>
 );
