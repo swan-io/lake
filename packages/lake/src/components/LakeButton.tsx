@@ -172,6 +172,7 @@ export const LakeButton = memo(
       },
       forwardedRef,
     ) => {
+      const isPrimary = mode === "primary";
       const isSmall = size === "small";
       const iconSize = isSmall ? 18 : 20;
 
@@ -242,14 +243,13 @@ export const LakeButton = memo(
           ]}
         >
           {({ pressed, hovered }) => {
-            const textColor =
-              mode === "secondary" || mode === "tertiary"
-                ? disabled && forceBackground
-                  ? colors[color][300]
-                  : hovered || pressed
-                    ? colors[color][700]
-                    : colors[color][600]
-                : colors[color].contrast;
+            const textColor = isPrimary
+              ? colors[color].contrast
+              : disabled && forceBackground
+                ? colors[color][300]
+                : hovered || pressed
+                  ? colors[color][700]
+                  : colors[color][600];
 
             return (
               <>
@@ -287,27 +287,22 @@ export const LakeButton = memo(
                     style={[
                       styles.loaderContainer,
                       {
-                        backgroundColor:
-                          mode === "secondary" || mode === "tertiary"
+                        backgroundColor: isPrimary
+                          ? colors[color].primary
+                          : forceBackground
                             ? backgroundColor.accented
-                            : colors[color].primary,
+                            : invariantColors.transparent,
                       },
                     ]}
                   >
                     <ActivityIndicator
-                      color={
-                        mode === "secondary" || mode === "tertiary"
-                          ? colors[color].primary
-                          : colors[color].contrast
-                      }
+                      color={isPrimary ? colors[color].contrast : colors[color].primary}
                       size={iconSize}
                     />
                   </View>
                 )}
 
-                <View
-                  style={[styles.hiddenView, pressed && mode === "primary" && styles.pressed]}
-                />
+                <View style={[styles.hiddenView, pressed && isPrimary && styles.pressed]} />
 
                 {pill === true ? <View style={styles.pill} /> : null}
               </>
