@@ -74,7 +74,7 @@ import { Icon, IconName } from "./Icon";
 import { LakeHeading } from "./LakeHeading";
 import { LakeText } from "./LakeText";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
-import { Space } from "./Space";
+import { Space, SpacingValue } from "./Space";
 
 export type ColumnTitleConfig<ExtraInfo> = {
   title: string;
@@ -1595,6 +1595,7 @@ export const PlainListViewPlaceholder = ({
 type EmptyProps = {
   icon: IconName;
   borderedIcon?: boolean;
+  borderedIconPadding?: SpacingValue | 0;
   title?: string;
   subtitle?: ReactNode;
   children?: ReactNode;
@@ -1603,13 +1604,14 @@ type EmptyProps = {
 export const FixedListViewEmpty = ({
   icon,
   borderedIcon = false,
+  borderedIconPadding,
   title,
   subtitle,
   children,
 }: EmptyProps) => (
   <View style={styles.emptyList}>
     {borderedIcon ? (
-      <BorderedIcon name={icon} />
+      <BorderedIcon name={icon} padding={borderedIconPadding} />
     ) : (
       <Icon name={icon} size={96} color={colors.current.primary} />
     )}
