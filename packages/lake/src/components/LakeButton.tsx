@@ -22,6 +22,7 @@ import {
   texts,
 } from "../constants/design";
 import { isNotNullish, isNullish } from "../utils/nullish";
+import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     transform: "translateZ(0px)",
-    borderRadius: radii[6],
   },
   group: {
     flexDirection: "row",
@@ -117,6 +117,12 @@ const styles = StyleSheet.create({
     top: -3,
     right: -3,
   },
+  column: {
+    flexDirection: "column",
+  },
+  hidden: {
+    visibility: "hidden",
+  },
 });
 
 export type ButtonProps = {
@@ -124,6 +130,7 @@ export type ButtonProps = {
   ariaExpanded?: boolean;
   color?: ColorVariants;
   disabled?: boolean;
+  direction?: "column" | "row";
   loading?: boolean;
   grow?: boolean;
   icon?: IconName;
@@ -156,6 +163,7 @@ export const LakeButton = memo(
         ariaLabel,
         children,
         color = "gray",
+        direction = "row",
         disabled = false,
         icon,
         grow = false,
@@ -168,7 +176,7 @@ export const LakeButton = memo(
         forceBackground = false,
         href,
         hrefAttrs,
-        pill,
+        pill = false,
       },
       forwardedRef,
     ) => {
@@ -176,9 +184,10 @@ export const LakeButton = memo(
       const isSmall = size === "small";
       const iconSize = isSmall ? 18 : 20;
 
-      const hasIconStart = isNotNullish(icon) && iconPosition === "start";
-      const hasIconEnd = isNotNullish(icon) && iconPosition === "end";
-      const hasOnlyIcon = isNullish(children) && isNotNullish(icon);
+      const hasIcon = isNotNullish(icon);
+      const hasIconStart = hasIcon && iconPosition === "start";
+      const hasIconEnd = hasIcon && iconPosition === "end";
+      const hasOnlyIcon = hasIcon && isNullish(children);
 
       return (
         <Pressable
@@ -195,6 +204,7 @@ export const LakeButton = memo(
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
             styles.base,
+            direction !== "row" && styles.column,
             isSmall && styles.small,
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
@@ -255,7 +265,12 @@ export const LakeButton = memo(
               <>
                 {hasIconStart && (
                   <>
-                    <Icon color={textColor} name={icon} size={iconSize} />
+                    <Icon
+                      color={textColor}
+                      name={icon}
+                      size={iconSize}
+                      style={loading && styles.hidden}
+                    />
 
                     {isNotNullish(children) && <Space width={isSmall ? 8 : 12} />}
                   </>
@@ -265,36 +280,40 @@ export const LakeButton = memo(
                   <LakeText
                     numberOfLines={1}
                     userSelect="none"
-                    style={[isSmall ? styles.textSmall : styles.text, { color: textColor }]}
+                    style={[
+                      isSmall ? styles.textSmall : styles.text,
+                      loading && styles.hidden,
+                      { color: textColor },
+                    ]}
                   >
                     {children}
                   </LakeText>
                 ) : (
-                  children
+                  <Box
+                    direction={direction}
+                    alignItems="center"
+                    justifyContent="center"
+                    style={loading && styles.hidden}
+                  >
+                    {children}
+                  </Box>
                 )}
 
                 {hasIconEnd && (
                   <>
                     {isNotNullish(children) && <Space width={isSmall ? 8 : 12} />}
 
-                    <Icon color={textColor} name={icon} size={iconSize} />
+                    <Icon
+                      color={textColor}
+                      name={icon}
+                      size={iconSize}
+                      style={loading && styles.hidden}
+                    />
                   </>
                 )}
 
                 {loading && (
-                  <View
-                    role="none"
-                    style={[
-                      styles.loaderContainer,
-                      {
-                        backgroundColor: isPrimary
-                          ? colors[color].primary
-                          : forceBackground
-                            ? backgroundColor.accented
-                            : invariantColors.transparent,
-                      },
-                    ]}
-                  >
+                  <View style={styles.loaderContainer}>
                     <ActivityIndicator
                       color={isPrimary ? colors[color].contrast : colors[color].primary}
                       size={iconSize}
@@ -302,9 +321,8 @@ export const LakeButton = memo(
                   </View>
                 )}
 
-                <View style={[styles.hiddenView, pressed && isPrimary && styles.pressed]} />
-
-                {pill === true ? <View style={styles.pill} /> : null}
+                {isPrimary && <View style={[styles.hiddenView, pressed && styles.pressed]} />}
+                {pill && <View style={styles.pill} />}
               </>
             );
           }}
