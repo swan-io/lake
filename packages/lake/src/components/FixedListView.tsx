@@ -1489,7 +1489,7 @@ export const FixedListViewPlaceholder = ({
   const totalRowHeight = rowHeight + rowVerticalSpacing;
 
   return (
-    <View style={[styles.container, styles.containerTile, { paddingHorizontal }]}>
+    <View style={[styles.container, styles.containerTile]}>
       {isNotNullish(headerHeight) ? <View style={{ height: headerHeight }} /> : null}
       {isNotNullish(groupHeaderHeight) ? <View style={{ height: headerHeight }} /> : null}
 
@@ -1513,8 +1513,11 @@ export const FixedListViewPlaceholder = ({
               />
 
               <View
-                style={[styles.placeholderRowContainer, { top, height: totalRowHeight }]}
                 key={String(index)}
+                style={[
+                  styles.placeholderRowContainer,
+                  { height: totalRowHeight, top, paddingHorizontal },
+                ]}
               >
                 <View style={styles.placeholderRow} />
                 <Space width={32} />
@@ -1544,7 +1547,7 @@ export const PlainListViewPlaceholder = ({
   const totalRowHeight = rowHeight + rowVerticalSpacing;
 
   return (
-    <View style={[styles.container, { paddingHorizontal }]}>
+    <View style={styles.container}>
       {isNotNullish(headerHeight) ? <View style={{ height: headerHeight }} /> : null}
       {isNotNullish(groupHeaderHeight) ? <View style={{ height: headerHeight }} /> : null}
 
@@ -1568,12 +1571,12 @@ export const PlainListViewPlaceholder = ({
               />
 
               <View
+                key={String(index)}
                 style={[
                   styles.placeholderRowContainer,
                   styles.placeholderRowContainerPlain,
-                  { top, height: totalRowHeight },
+                  { height: totalRowHeight, top, paddingHorizontal },
                 ]}
-                key={String(index)}
               >
                 <View style={styles.placeholderRow} />
                 <Space width={32} />
