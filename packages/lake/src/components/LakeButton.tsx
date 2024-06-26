@@ -117,8 +117,10 @@ const styles = StyleSheet.create({
     top: -3,
     right: -3,
   },
-  column: {
+  vertical: {
     flexDirection: "column",
+    height: "auto",
+    paddingVertical: spacings[12],
   },
   hidden: {
     visibility: "hidden",
@@ -138,6 +140,7 @@ export type ButtonProps = {
   mode?: "primary" | "secondary" | "tertiary";
   onPress?: (event: GestureResponderEvent) => void;
   size?: "large" | "small";
+  iconSize?: number;
   style?: StyleProp<ViewStyle> | ((props: PressableStateCallbackType) => StyleProp<ViewStyle>);
   forceBackground?: boolean;
   href?: string;
@@ -172,6 +175,7 @@ export const LakeButton = memo(
         mode = "primary",
         onPress,
         size = "large",
+        iconSize = size === "small" ? 18 : 20,
         style,
         forceBackground = false,
         href,
@@ -182,7 +186,10 @@ export const LakeButton = memo(
     ) => {
       const isPrimary = mode === "primary";
       const isSmall = size === "small";
-      const iconSize = isSmall ? 18 : 20;
+
+      const vertical = direction === "column";
+      const spaceHeight = vertical ? 4 : undefined;
+      const spaceWidth = vertical ? undefined : isSmall ? 8 : 12;
 
       const hasIcon = isNotNullish(icon);
       const hasIconStart = hasIcon && iconPosition === "start";
@@ -204,8 +211,8 @@ export const LakeButton = memo(
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
             styles.base,
-            direction !== "row" && styles.column,
             isSmall && styles.small,
+            vertical && styles.vertical,
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
@@ -272,7 +279,7 @@ export const LakeButton = memo(
                       style={loading && styles.hidden}
                     />
 
-                    {isNotNullish(children) && <Space width={isSmall ? 8 : 12} />}
+                    {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
                   </>
                 )}
 
@@ -290,10 +297,9 @@ export const LakeButton = memo(
                   </LakeText>
                 ) : (
                   <Box
-                    direction={direction}
                     alignItems="center"
                     justifyContent="center"
-                    style={loading && styles.hidden}
+                    style={[vertical && styles.vertical, loading && styles.hidden]}
                   >
                     {children}
                   </Box>
@@ -301,7 +307,7 @@ export const LakeButton = memo(
 
                 {hasIconEnd && (
                   <>
-                    {isNotNullish(children) && <Space width={isSmall ? 8 : 12} />}
+                    {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
 
                     <Icon
                       color={textColor}

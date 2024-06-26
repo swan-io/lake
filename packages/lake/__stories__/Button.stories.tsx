@@ -291,6 +291,30 @@ export const ButtonStates = () => {
           </ButtonWithCounter>
         </Box>
       </StoryPart>
+
+      <StoryPart title="Vertical">
+        <Box direction="row" style={styles.buttons}>
+          <ButtonWithCounter
+            icon="add-circle-regular"
+            color="positive"
+            direction="column"
+            mode="secondary"
+          >
+            Add
+          </ButtonWithCounter>
+
+          <ButtonWithCounter
+            icon="delete-regular"
+            iconPosition="end"
+            color="negative"
+            direction="column"
+            size="small"
+            mode="secondary"
+          >
+            Remove
+          </ButtonWithCounter>
+        </Box>
+      </StoryPart>
     </StoryBlock>
   );
 };
