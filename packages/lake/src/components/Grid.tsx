@@ -40,7 +40,8 @@ export const Grid = ({
     ]}
   >
     {Children.map(children, child => {
-      if (isNullish(child)) {
+      // null, undefined, true and false are valid children. They simply don’t render
+      if (isNullish(child) || typeof child === "boolean") {
         return child;
       }
 
