@@ -122,6 +122,9 @@ const styles = StyleSheet.create({
     height: "auto",
     paddingVertical: spacings[12],
   },
+  verticalSmall: {
+    paddingVertical: spacings[8],
+  },
   hidden: {
     visibility: "hidden",
   },
@@ -212,10 +215,13 @@ export const LakeButton = memo(
           style={({ hovered, pressed, focused }) => [
             styles.base,
             isSmall && styles.small,
-            vertical && styles.vertical,
+
+            vertical && [styles.vertical, isSmall && styles.verticalSmall],
+
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
+
             disabled && commonStyles.disabled,
             disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
