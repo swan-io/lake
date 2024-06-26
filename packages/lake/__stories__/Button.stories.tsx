@@ -5,6 +5,8 @@ import { Except } from "type-fest";
 import { Box } from "../src/components/Box";
 import { ButtonProps, LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
+import { Space } from "../src/components/Space";
+import { Stack } from "../src/components/Stack";
 import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -42,6 +44,22 @@ const ButtonWithCounter = (props: Except<ButtonProps, "onPress" | "style">) => {
         {counter}
       </LakeText>
     </Box>
+  );
+};
+
+const LoadingButton = (props: Except<ButtonProps, "loading" | "onPress">) => {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <LakeButton
+      color="live"
+      {...props}
+      loading={loading}
+      onPress={() => {
+        setLoading(true);
+        setTimeout(() => setLoading(false), 2000);
+      }}
+    />
   );
 };
 
@@ -97,9 +115,163 @@ export const ButtonStates = () => {
       </StoryPart>
 
       <StoryPart title="Loading">
-        <ButtonWithCounter loading={true} color="live">
-          Loading
-        </ButtonWithCounter>
+        <Stack alignItems="center" direction="row" space={12}>
+          <LoadingButton size="large" mode="primary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton size="small" mode="primary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton size="large" mode="secondary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton size="small" mode="secondary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton size="large" mode="tertiary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton size="small" mode="tertiary">
+            Refresh
+          </LoadingButton>
+        </Stack>
+
+        <Space height={12} />
+
+        <Stack alignItems="center" direction="row" space={12}>
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="large"
+            mode="primary"
+          />
+
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="small"
+            mode="primary"
+          />
+
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="large"
+            mode="secondary"
+          />
+
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="small"
+            mode="secondary"
+          />
+
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="large"
+            mode="tertiary"
+          />
+
+          <LoadingButton
+            ariaLabel="Refresh"
+            icon="arrow-clockwise-filled"
+            size="small"
+            mode="tertiary"
+          />
+        </Stack>
+
+        <Space height={12} />
+
+        <Stack alignItems="center" direction="row" space={12}>
+          <LoadingButton icon="arrow-clockwise-filled" size="large" mode="primary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton icon="arrow-clockwise-filled" size="small" mode="primary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton icon="arrow-clockwise-filled" size="large" mode="secondary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton icon="arrow-clockwise-filled" size="small" mode="secondary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton icon="arrow-clockwise-filled" size="large" mode="tertiary">
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton icon="arrow-clockwise-filled" size="small" mode="tertiary">
+            Refresh
+          </LoadingButton>
+        </Stack>
+
+        <Space height={12} />
+
+        <Stack alignItems="center" direction="row" space={12}>
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="large"
+            mode="primary"
+          >
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="small"
+            mode="primary"
+          >
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="large"
+            mode="secondary"
+          >
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="small"
+            mode="secondary"
+          >
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="large"
+            mode="tertiary"
+          >
+            Refresh
+          </LoadingButton>
+
+          <LoadingButton
+            icon="arrow-clockwise-filled"
+            iconPosition="end"
+            size="small"
+            mode="tertiary"
+          >
+            Refresh
+          </LoadingButton>
+        </Stack>
       </StoryPart>
 
       <StoryPart title="With pill">
@@ -115,6 +287,30 @@ export const ButtonStates = () => {
           </ButtonWithCounter>
 
           <ButtonWithCounter icon="delete-filled" iconPosition="end" color="negative">
+            Remove
+          </ButtonWithCounter>
+        </Box>
+      </StoryPart>
+
+      <StoryPart title="Vertical">
+        <Box direction="row" style={styles.buttons}>
+          <ButtonWithCounter
+            icon="add-circle-regular"
+            color="positive"
+            direction="column"
+            mode="secondary"
+          >
+            Add
+          </ButtonWithCounter>
+
+          <ButtonWithCounter
+            icon="delete-regular"
+            iconPosition="end"
+            color="negative"
+            direction="column"
+            size="small"
+            mode="secondary"
+          >
             Remove
           </ButtonWithCounter>
         </Box>
