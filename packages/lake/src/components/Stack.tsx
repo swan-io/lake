@@ -17,7 +17,8 @@ export const Stack = forwardRef<View, Props>(
     return (
       <Box ref={forwardedRef} {...props}>
         {Children.map(children, (child, index) => {
-          if (isNullish(child)) {
+          // null, undefined, true and false are valid children. They simply don’t render
+          if (isNullish(child) || typeof child === "boolean") {
             return child;
           }
 
