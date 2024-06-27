@@ -304,6 +304,7 @@ export const LakeButton = memo(
                 ) : (
                   <Box
                     alignItems="center"
+                    direction="row"
                     justifyContent="center"
                     style={[vertical && styles.vertical, loading && styles.hidden]}
                   >
