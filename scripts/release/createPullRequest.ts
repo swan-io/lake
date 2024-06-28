@@ -10,6 +10,7 @@ import {
   isExecKo,
   isExecOk,
   logError,
+  quote,
   updateGhPagerConfig,
 } from "./helpers";
 
@@ -79,7 +80,7 @@ const getWorkspacePackages = () =>
 const gitAddAll = () => exec("git add . -u");
 const gitCheckout = (branch: string) => exec(`git checkout ${branch}`);
 const gitCheckoutNewBranch = (branch: string) => exec(`git checkout -b ${branch}`);
-const gitCommit = (message: string) => exec(`git commit -m "${message}"`);
+const gitCommit = (message: string) => exec(`git commit -m ${quote(message)}`);
 const gitDeleteLocalBranch = (branch: string) => exec(`git branch -D ${branch}`);
 const gitPush = (branch: string, remote: string) => exec(`git push -u ${remote} ${branch}`);
 
@@ -87,7 +88,7 @@ const createGhCompareUrl = (from: string | undefined, to: string) =>
   `https://github.com/swan-io/lake/compare/${from != null ? `${from}..${to}` : ""}`;
 
 const createGhPullRequest = (title: string, body: string) =>
-  exec(`gh pr create -t "${title}" -b "${body}"`);
+  exec(`gh pr create -t ${quote(title)} -b ${quote(body)}`);
 
 (async () => {
   if (await isProgramMissing("git")) {

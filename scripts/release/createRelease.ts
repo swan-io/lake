@@ -1,5 +1,5 @@
 import semver from "semver";
-import { exec, getLatestGhRelease, logError, updateGhPagerConfig } from "./helpers";
+import { exec, getLatestGhRelease, logError, quote, updateGhPagerConfig } from "./helpers";
 
 const getGhReleasePullRequest = () =>
   exec("gh pr list --state merged --json title")
@@ -20,7 +20,7 @@ const createGhRelease = async (version: string) => {
     .map(line => line.replace(/by @[^\s]+ in (.+)/, "($1)")) // set link between parentheses
     .join("\n");
 
-  await exec(`gh release edit ${version} --notes "${notes}"`);
+  await exec(`gh release edit ${version} --notes ${quote(notes)}`);
 };
 
 (async () => {
