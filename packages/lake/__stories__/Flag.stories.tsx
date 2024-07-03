@@ -30,7 +30,7 @@ export const Default = () => {
       <Box direction="row" style={styles.container}>
         {countries.map(country => (
           <Box alignItems="center" style={styles.flag}>
-            <Flag icon={country.cca3} width={18} />
+            <Flag cca2={country.cca2} width={18} />
             <Space height={4} />
 
             <LakeText align="center" variant="smallMedium" numberOfLines={1}>
