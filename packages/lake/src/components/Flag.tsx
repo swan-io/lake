@@ -1,5 +1,9 @@
 import { Lazy } from "@swan-io/boxed";
-import { CountryCCA3, getCCA2forCCA3 } from "@swan-io/shared-business/src/constants/countries";
+import {
+  CountryCCA2,
+  CountryCCA3,
+  getCCA2forCCA3,
+} from "@swan-io/shared-business/src/constants/countries";
 import { useEffect, useMemo, useState } from "react";
 import { Svg, Use } from "./Svg";
 
@@ -14,11 +18,23 @@ const svgUrlGetter = Lazy(async () => {
 });
 
 type Props = {
-  icon: CountryCCA3;
   width?: number;
-};
+} & (
+  | {
+      /**
+       * @deprecated Use cca2 prop instead
+       */
+      icon: CountryCCA3;
+    }
+  | {
+      cca2: CountryCCA2;
+    }
+);
 
-export const Flag = ({ icon, width = 18 }: Props) => {
+export const Flag = (props: Props) => {
+  const cca2 = "cca2" in props ? props.cca2 : getCCA2forCCA3(props.icon);
+  const width = props.width ?? 18;
+
   const [url, setUrl] = useState(svgUrl);
 
   useEffect(() => {
@@ -27,10 +43,11 @@ export const Flag = ({ icon, width = 18 }: Props) => {
     }
   }, []);
 
-  const flag = useMemo(() => {
-    const cca2 = getCCA2forCCA3(icon);
-    return `${(UNICODE_OFFSET + cca2.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + cca2.charCodeAt(1)).toString(16)}`;
-  }, [icon]);
+  const flag = useMemo(
+    () =>
+      `${(UNICODE_OFFSET + cca2.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + cca2.charCodeAt(1)).toString(16)}`,
+    [cca2],
+  );
 
   return (
     <Svg viewBox="0 0 18 18" style={{ height: width, width }}>
