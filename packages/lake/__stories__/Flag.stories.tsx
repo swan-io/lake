@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { countries } from "@swan-io/shared-business/src/constants/countries";
+import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { Flag } from "../src/components/Flag";
@@ -25,12 +26,20 @@ export default {
 } as Meta<typeof Flag>;
 
 export const Default = () => {
+  const items = useMemo(
+    () => [
+      { name: "European Union", code: "EU" as const },
+      ...countries.map(({ cca2, name }) => ({ name, code: cca2 })),
+    ],
+    [],
+  );
+
   return (
     <StoryBlock title="Flag">
       <Box direction="row" style={styles.container}>
-        {countries.map(country => (
+        {items.map(country => (
           <Box alignItems="center" style={styles.flag}>
-            <Flag cca2={country.cca2} width={18} />
+            <Flag code={country.code} width={18} />
             <Space height={4} />
 
             <LakeText align="center" variant="smallMedium" numberOfLines={1}>
