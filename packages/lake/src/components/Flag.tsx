@@ -19,6 +19,8 @@ const svgUrlGetter = Lazy(async () => {
   return value;
 });
 
+export type FlagCode = CountryCCA2 | "EU";
+
 type Props = {
   width?: number;
 } & (
@@ -29,7 +31,7 @@ type Props = {
       icon: CountryCCA3;
     }
   | {
-      code: CountryCCA2 | "EU";
+      code: FlagCode;
     }
 );
 
