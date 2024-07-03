@@ -2,7 +2,7 @@ import { Flag } from "@swan-io/lake/src/components/Flag";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { ForwardedRef, forwardRef, useMemo } from "react";
 import { View } from "react-native";
-import { CountryCCA3, getCountryName } from "../constants/countries";
+import { CountryCCA3, getCountryByCCA3 } from "../constants/countries";
 
 type Props<T extends CountryCCA3> = {
   onValueChange: (country: T) => void;
@@ -33,11 +33,15 @@ const CountryPickerWithRef = <T extends CountryCCA3>(
   const items = useMemo(() => {
     return countries
       .filter((item, index, array) => array.indexOf(item) === index) // deduplicate
-      .map(cca3 => ({
-        name: getCountryName(cca3),
-        icon: <Flag width={14} icon={cca3} />,
-        value: cca3,
-      }))
+      .map(cca3 => {
+        const country = getCountryByCCA3(cca3);
+
+        return {
+          name: country.name,
+          icon: <Flag width={14} cca2={country.cca2} />,
+          value: cca3,
+        };
+      })
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [countries]);
 
