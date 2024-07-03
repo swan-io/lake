@@ -38,7 +38,7 @@ const CountryPickerWithRef = <T extends CountryCCA3>(
 
         return {
           name: country.name,
-          icon: <Flag width={14} cca2={country.cca2} />,
+          icon: <Flag width={14} code={country.cca2} />,
           value: cca3,
         };
       })

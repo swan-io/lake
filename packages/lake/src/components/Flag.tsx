@@ -5,9 +5,13 @@ import {
   getCCA2forCCA3,
 } from "@swan-io/shared-business/src/constants/countries";
 import { useEffect, useMemo, useState } from "react";
+import { match } from "ts-pattern";
 import { Svg, Use } from "./Svg";
 
 const UNICODE_OFFSET = 127462 - 65;
+
+const getFlagGlyphName = (flag: string): string =>
+  `${flag.codePointAt(0)?.toString(16) ?? ""}-${flag.codePointAt(2)?.toString(16) ?? ""}`;
 
 let svgUrl: string | undefined;
 
@@ -27,12 +31,12 @@ type Props = {
       icon: CountryCCA3;
     }
   | {
-      cca2: CountryCCA2;
+      code: CountryCCA2 | "EU";
     }
 );
 
 export const Flag = (props: Props) => {
-  const cca2 = "cca2" in props ? props.cca2 : getCCA2forCCA3(props.icon);
+  const code = "code" in props ? props.code : getCCA2forCCA3(props.icon);
   const width = props.width ?? 18;
 
   const [url, setUrl] = useState(svgUrl);
@@ -43,11 +47,13 @@ export const Flag = (props: Props) => {
     }
   }, []);
 
-  const flag = useMemo(
-    () =>
-      `${(UNICODE_OFFSET + cca2.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + cca2.charCodeAt(1)).toString(16)}`,
-    [cca2],
-  );
+  const flag = useMemo(() => {
+    return match(code)
+      .with("EU", () => getFlagGlyphName("🇪🇺"))
+      .otherwise(() => {
+        return `${(UNICODE_OFFSET + code.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + code.charCodeAt(1)).toString(16)}`;
+      });
+  }, [code]);
 
   return (
     <Svg viewBox="0 0 18 18" style={{ height: width, width }}>
