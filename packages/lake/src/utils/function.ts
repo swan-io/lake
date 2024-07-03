@@ -31,3 +31,29 @@ export const memoize = <Input extends Array<unknown>, Output>(
     return output;
   };
 };
+
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+export const deepEqual = (a: unknown, b: unknown): boolean => {
+  if (Object.is(a, b)) {
+    return true;
+  }
+  if (typeof a !== "object" || a === null || typeof b !== "object" || b === null) {
+    return false;
+  }
+
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+
+  if (aKeys.length !== bKeys.length) {
+    return false;
+  }
+
+  for (const key of aKeys) {
+    if (!hasOwnProperty.call(b, key) || !deepEqual(a[key as never], b[key as never])) {
+      return false;
+    }
+  }
+
+  return true;
+};
