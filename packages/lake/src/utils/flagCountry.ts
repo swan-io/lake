@@ -1,5 +1,6 @@
+import { getFlagGlyphName as fn } from "./string";
+
 /**
- * @deprecated Use the Flag component instead
+ * @deprecated Import this function from string.ts instead
  */
-export const getFlagGlyphName = (flag: string): string =>
-  `${flag.codePointAt(0)?.toString(16) ?? ""}-${flag.codePointAt(2)?.toString(16) ?? ""}`;
+export const getFlagGlyphName = fn;

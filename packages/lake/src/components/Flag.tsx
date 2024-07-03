@@ -6,7 +6,7 @@ import {
 } from "@swan-io/shared-business/src/constants/countries";
 import { useEffect, useMemo, useState } from "react";
 import { match } from "ts-pattern";
-import { getFlagGlyphName } from "../utils/flagCountry";
+import { getFlagGlyphName } from "../utils/string";
 import { Svg, Use } from "./Svg";
 
 const UNICODE_OFFSET = 127462 - 65;
@@ -46,14 +46,11 @@ export const Flag = (props: Props) => {
   }, []);
 
   const flag = useMemo(() => {
-    return (
-      match(code)
-        // TODO: Move getFlagGlyphName in this file, stop exporting it
-        .with("EU", () => getFlagGlyphName("🇪🇺"))
-        .otherwise(() => {
-          return `${(UNICODE_OFFSET + code.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + code.charCodeAt(1)).toString(16)}`;
-        })
-    );
+    return match(code)
+      .with("EU", () => getFlagGlyphName("🇪🇺"))
+      .otherwise(() => {
+        return `${(UNICODE_OFFSET + code.charCodeAt(0)).toString(16)}-${(UNICODE_OFFSET + code.charCodeAt(1)).toString(16)}`;
+      });
   }, [code]);
 
   return (

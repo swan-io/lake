@@ -250,3 +250,6 @@ export const uncapitalize = <T extends string>(value: T) =>
 
 export const optionFromString = (value: string): Option<string> =>
   value !== "" ? Option.Some(value) : Option.None();
+
+export const getFlagGlyphName = (flag: string): string =>
+  `${flag.codePointAt(0)?.toString(16) ?? ""}-${flag.codePointAt(2)?.toString(16) ?? ""}`;
