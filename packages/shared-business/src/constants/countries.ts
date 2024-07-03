@@ -1732,10 +1732,7 @@ const countryNameResolver = Result.fromExecution(() => {
   const DisplayNames = Intl.DisplayNames;
 
   // https://github.com/formatjs/formatjs/blob/%40formatjs/intl-localematcher%400.5.3/packages/intl-displaynames/should-polyfill.ts
-  const hasMissingICUBug =
-    new DisplayNames(["en"], {
-      type: "region",
-    }).of("CA") === "CA";
+  const hasMissingICUBug = new DisplayNames(["en"], { type: "region" }).of("CA") === "CA";
 
   if (hasMissingICUBug) {
     throw new Error("Missing Intl APIs");
@@ -1764,35 +1761,43 @@ export type Country = Simplify<
 export type CountryCCA2 = Country["cca2"];
 export type CountryCCA3 = Country["cca3"];
 
+const countriesByCCA2 = {} as Record<CountryCCA2, Country>;
+const countriesByCCA3 = {} as Record<CountryCCA3, Country>;
+
 export const countries: Country[] = readonlyCountries
-  .map(country => {
+  .map(item => {
     const name = countryNameResolver.match({
-      Ok: resolver => resolver.of(country.cca2) ?? country.name,
-      Error: () => country.name,
+      Ok: resolver => resolver.of(item.cca2) ?? item.name,
+      Error: () => item.name,
     });
 
-    return {
-      ...country,
+    const country = {
+      ...item,
       name,
       deburr: deburr(name.toLowerCase()),
-      uid: `${country.cca2}-${country.idd}`,
+      uid: `${item.cca2}-${item.idd}`,
     };
+
+    countriesByCCA2[country.cca2] = country;
+    countriesByCCA3[country.cca3] = country;
+
+    return country;
   })
   .sort((countryA, countryB) => {
     return countryA.name.localeCompare(countryB.name);
   });
 
-export const getCCA2forCCA3 = (cca3: CountryCCA3): CountryCCA2 | undefined =>
-  countries.find(country => country.cca3 === cca3)?.cca2;
+export const getCountryByCCA2 = (cca2: CountryCCA2): Country => countriesByCCA2[cca2];
+export const getCountryByCCA3 = (cca3: CountryCCA3): Country => countriesByCCA3[cca3];
 
-export const getCCA3forCCA2 = (cca2: CountryCCA2): CountryCCA3 | undefined =>
-  countries.find(country => country.cca2 === cca2)?.cca3;
+export const getCCA2forCCA3 = (cca3: CountryCCA3): CountryCCA2 => countriesByCCA3[cca3].cca2;
+export const getCCA3forCCA2 = (cca2: CountryCCA2): CountryCCA3 => countriesByCCA2[cca2].cca3;
 
 export const companyWithUboCountries = ["BEL", "DEU", "FRA", "ITA", "LTU", "LUX", "NLD"] as const;
 export type CompanyWithUboCountryCCA3 = (typeof companyWithUboCountries)[number];
 
 export const allCountries = countries.map(country => country.cca3);
-export const france = countries.find(country => country.cca3 === "FRA") as Country;
+export const france = countriesByCCA3["FRA"];
 
 export const individualCountries = [
   "AUT",
@@ -1874,10 +1879,10 @@ export const countriesWithMultipleCCA3: Partial<Record<CountryCCA3, CountryCCA3[
 };
 
 export const isCountryCCA3 = (value: unknown): value is CountryCCA3 =>
-  countries.some(({ cca3 }) => cca3 === value);
+  typeof value === "string" && value in countriesByCCA3;
 
 export const isCountryCCA2 = (value: unknown): value is CountryCCA2 =>
-  countries.some(({ cca2 }) => cca2 === value);
+  typeof value === "string" && value in countriesByCCA2;
 
 export const isIndividualCountryCCA3 = (value: unknown): value is IndividualCountryCCA3 =>
   individualCountries.includes(value as IndividualCountryCCA3);
@@ -1893,7 +1898,10 @@ const navigatorCountries = navigator.languages.reduce<CountryCCA3[]>((acc, lang)
 
   if (countryCode != null && isCountryCCA2(countryCode)) {
     const countryCCA3 = getCCA3forCCA2(countryCode);
-    countryCCA3 != null && acc.push(countryCCA3);
+
+    if (countryCCA3 != null) {
+      acc.push(countryCCA3);
+    }
   }
 
   return acc;
@@ -1905,5 +1913,4 @@ export const companyFallbackCountry =
 export const individualFallbackCountry =
   individualCountries.find(cca3 => navigatorCountries.includes(cca3)) ?? "FRA";
 
-export const getCountryName = (cca3: CountryCCA3): string =>
-  countries.find(country => country.cca3 === cca3)?.name ?? cca3;
+export const getCountryName = (cca3: CountryCCA3): string => countriesByCCA3[cca3].name;
