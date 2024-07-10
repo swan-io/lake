@@ -209,7 +209,7 @@
   "rib.nationalCode": "Nationaler Code",
   "rib.number": "Nummer",
   "rib.partnership": "In Partnerschaft mit",
-  "supportingDocuments.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg\nMaximal: {maxSizeMB} MB",
+  "supportingDocuments.documentTypes": "Unterstützte Dokumente: .pdf, .png, .jpg, .heic\nMaximal: {maxSizeMB} MB",
   "supportingDocuments.downloadTemplate": "Vorlage herunterladen",
   "supportingDocuments.errorUpload": "Datei konnte nicht hochgeladen werden",
   "supportingDocuments.help.downloadTemplate": "Vorlage herunterladen",

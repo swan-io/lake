@@ -30,7 +30,7 @@ import { isTranslationKey, locale, t } from "../utils/i18n";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 
-const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg"];
+const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg", "image/heic"];
 
 export type Document<Purpose extends string> = {
   purpose: Purpose;
