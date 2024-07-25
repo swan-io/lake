@@ -1,4 +1,5 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { fireEvent } from "@testing-library/dom";
+import { cleanup, render } from "@testing-library/react";
 import { useState } from "react";
 import { Rifm } from "rifm";
 import { afterEach, expect, test } from "vitest";
