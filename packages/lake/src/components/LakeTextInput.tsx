@@ -286,7 +286,7 @@ export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
                 inputMode={inputMode}
                 {...props}
                 defaultValue={defaultValue}
-                value={isNullish(defaultValue) ? value ?? "" : value}
+                value={isNullish(defaultValue) ? (value ?? "") : value}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 readOnly={!isInteractive}

@@ -6,7 +6,7 @@ export const useResponsive = (breakpoint = 992) => {
 
   const media = useCallback(
     <T>(values: { mobile: T; desktop?: T }): T =>
-      desktop ? values.desktop ?? values.mobile : values.mobile,
+      desktop ? (values.desktop ?? values.mobile) : values.mobile,
     [desktop],
   );
 
