@@ -10,7 +10,6 @@ Name | Version | License | URL | VendorUrl | VendorName
 @types/react | 18.3.3 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react | Unknown
 @types/react-dom | 18.3.0 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom | Unknown
 @types/react-native | 0.72.8 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-native | Unknown
-@types/three | 0.166.0 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three | Unknown
 @types/three | 0.163.0 | MIT | https://github.com/DefinitelyTyped/DefinitelyTyped.git | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three | Unknown
 dayjs | 1.11.12 | MIT | https://github.com/iamkun/dayjs.git | https://day.js.org/ | iamkun
 iban | 0.0.14 | MIT | https://github.com/arhs/iban.js | Unknown | Laurent VB
