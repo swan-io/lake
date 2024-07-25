@@ -34,7 +34,7 @@
     "@swan-io/boxed": "^2.3.0",
     "@swan-io/request": "^1.0.6",
     "@swan-io/use-form": "^2.0.5",
-    "dayjs": "^1.11.11",
+    "dayjs": "^1.11.12",
     "iban": "^0.0.14",
     "react": "^18.3.1",
     "react-atomic-state": "^2.0.0",
@@ -42,8 +42,8 @@
     "react-dropzone": "^14.2.3",
     "react-native-web": "^0.19.12",
     "rifm": "^0.12.1",
-    "ts-pattern": "^5.1.2",
-    "uuid": "^9.0.1"
+    "ts-pattern": "^5.2.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@swan-io/lake": "*",
@@ -51,8 +51,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-native": "^0.72.8",
-    "@types/uuid": "^9.0.8",
-    "jsdom": "^24.1.0",
-    "vitest": "^1.6.0"
+    "jsdom": "^24.1.1",
+    "vitest": "^2.0.4"
   }
 }
