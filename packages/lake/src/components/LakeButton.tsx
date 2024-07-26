@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.15,
     backgroundColor: colors.gray[900],
+    borderRadius: radii[6],
   },
   small: {
     height: 40,
