@@ -4,33 +4,11 @@ import { StyleSheet } from "react-native";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeHeading } from "../src/components/LakeHeading";
 import { ListRightPanel } from "../src/components/ListRightPanel";
-import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
   button: {
     alignSelf: "flex-start",
-  },
-  panelContent: {
-    padding: 16,
-  },
-  block1: {
-    width: 120,
-    height: 60,
-    backgroundColor: colors.gray[200],
-    borderRadius: 8,
-  },
-  block2: {
-    width: 200,
-    height: 60,
-    backgroundColor: colors.gray[200],
-    borderRadius: 8,
-  },
-  block3: {
-    width: 180,
-    height: 60,
-    backgroundColor: colors.gray[200],
-    borderRadius: 8,
   },
 });
 
