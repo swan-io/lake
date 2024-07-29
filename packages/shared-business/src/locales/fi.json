@@ -209,7 +209,7 @@
   "rib.nationalCode": "Maakoodi",
   "rib.number": "Tilin numero",
   "rib.partnership": "Kumppanina",
-  "supportingDocuments.documentTypes": "Tuetut asiakirjat: .pdf, .png, .jpg., .heic\nMax: {maxSizeMB} MT",
+  "supportingDocuments.documentTypes": "Tuetut asiakirjat: .pdf, .png, .jpg, .heic.\nMax: {maxSizeMB} MT",
   "supportingDocuments.downloadTemplate": "Lataa malli",
   "supportingDocuments.errorUpload": "Tiedoston lataaminen epäonnistui",
   "supportingDocuments.help.downloadTemplate": "Lataa malli",
