@@ -71,6 +71,8 @@
   "fileInput.dropFile": "Sleep uw bestand hiernaartoe, of {browse}",
   "fileInput.noFile": "Geen bestand",
   "fileInput.unknownFileName": "onbekende bestandsnaam",
+  "fileTile.deleteModal.delete": "Verwijderen",
+  "fileTile.deleteModal.title": "Weet u zeker dat u dit document wilt verwijderen?",
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "In afwachting van verificatie",
   "fileTile.status.Refused": "Geweigerd",

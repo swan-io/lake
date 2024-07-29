@@ -71,6 +71,8 @@
   "fileInput.dropFile": "Pudota tiedostosi tähän tai {browse}",
   "fileInput.noFile": "Ei tiedostoa",
   "fileInput.unknownFileName": "tuntematon tiedostonimi",
+  "fileTile.deleteModal.delete": "Poista",
+  "fileTile.deleteModal.title": "Haluatko varmasti poistaa tämän asiakirjan?",
   "fileTile.id": "Tunnus: {id}",
   "fileTile.status.Pending": "Vahvistusta odotetaan",
   "fileTile.status.Refused": "Hylätty",

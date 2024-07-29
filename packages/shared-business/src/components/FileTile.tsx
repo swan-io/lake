@@ -2,7 +2,7 @@ import { Future } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeAlert } from "@swan-io/lake/src/components/LakeAlert";
-import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
@@ -24,6 +24,7 @@ import { StyleSheet, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { SwanFile } from "../utils/SwanFile";
 import { t } from "../utils/i18n";
+import { LakeModal } from "./LakeModal";
 
 const styles = StyleSheet.create({
   base: {
@@ -65,11 +66,15 @@ export const FileTile = ({
   onRemove,
 }: Props) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const onPressRemove = useCallback(() => {
     if (onRemove != undefined) {
       setIsDeleting(true);
-      onRemove().tap(() => setIsDeleting(false));
+      onRemove().tap(() => {
+        setIsDeleting(false);
+        setIsDeleteModalVisible(false);
+      });
     }
   }, [onRemove]);
 
@@ -161,11 +166,29 @@ export const FileTile = ({
                 size="small"
                 icon="delete-regular"
                 color="negative"
-                onPress={onPressRemove}
-                loading={isDeleting}
+                onPress={() => setIsDeleteModalVisible(true)}
                 ariaLabel={t("common.remove")}
               />
             )}
+
+            <LakeModal
+              title={t("fileTile.deleteModal.title")}
+              icon="subtract-circle-regular"
+              visible={isDeleteModalVisible}
+              onPressClose={() => setIsDeleteModalVisible(false)}
+              color="negative"
+            >
+              <LakeButtonGroup paddingBottom={0}>
+                <LakeButton
+                  loading={isDeleting}
+                  grow={true}
+                  color="negative"
+                  onPress={onPressRemove}
+                >
+                  {t("fileTile.deleteModal.delete")}
+                </LakeButton>
+              </LakeButtonGroup>
+            </LakeModal>
           </>
         )}
       </Box>
