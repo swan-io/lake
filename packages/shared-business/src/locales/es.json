@@ -71,6 +71,8 @@
   "fileInput.dropFile": "Suelta el archivo o {browse}",
   "fileInput.noFile": "No hay ningún archivo",
   "fileInput.unknownFileName": "nombre de archivo desconocido",
+  "fileTile.deleteModal.delete": "Eliminar",
+  "fileTile.deleteModal.title": "¿Estás seguro de que quieres eliminar este documento?",
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Pendiente de verifación",
   "fileTile.status.Refused": "Rechazado",

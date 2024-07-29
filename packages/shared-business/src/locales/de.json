@@ -71,6 +71,8 @@
   "fileInput.dropFile": "Legen Sie Ihre Datei ab, oder {browse}",
   "fileInput.noFile": "Keine Datei",
   "fileInput.unknownFileName": "unbekannter Dateiname",
+  "fileTile.deleteModal.delete": "Löschen",
+  "fileTile.deleteModal.title": "Möchten Sie dieses Dokument wirklich löschen?",
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Ausstehende Überprüfung",
   "fileTile.status.Refused": "Abgelehnt",
