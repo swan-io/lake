@@ -3,9 +3,9 @@ import {
   DatePickerDate,
   DatePickerModal,
 } from "@swan-io/shared-business/src/components/DatePicker";
-import { ValidatorResult, useForm } from "@swan-io/use-form";
+import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
@@ -17,7 +17,6 @@ import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
-import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
 import { LakeLabel } from "./LakeLabel";
 import { LakeRadio } from "./LakeRadio";
@@ -56,7 +55,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   inputContent: {
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 16,
   },
   radio: {
     display: "flex",
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     whiteSpace: "nowrap",
   },
   input: {
-    minWidth: 200,
+    width: 250,
   },
   value: {
     maxWidth: 130,
@@ -338,9 +339,9 @@ type FilterDateProps = {
   submitText: string;
   dateFormat: DateFormat;
   isSelectable?: (date: DatePickerDate) => boolean;
-  validate?: (val: string) => ValidatorResult;
+  validate?: (value: string) => ValidatorResult;
   initialValue?: string;
-  onSave: (val: string) => void;
+  onValueChange: (value: string) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
 };
@@ -354,7 +355,7 @@ function FilterDate({
   dateFormat,
   isSelectable,
   validate,
-  onSave,
+  onValueChange,
   onPressRemove,
   autoOpen = false,
 }: FilterDateProps) {
@@ -389,7 +390,7 @@ function FilterDate({
         validate={validate}
         onChange={value => {
           const formattedValue = dayjs(value, dateFormat, true).toJSON();
-          onSave(formattedValue);
+          onValueChange(formattedValue);
         }}
         onDismiss={close}
       />
@@ -400,91 +401,97 @@ function FilterDate({
 type FilterInputProps = {
   label: string;
   noValueText: string;
-  submitText: string;
-  validate?: (val: string) => ValidatorResult;
+  validate?: (value: string) => ValidatorResult;
   placeholder?: string;
   initialValue?: string;
-  onSave: (val: string) => void;
+  onValueChange: (value: string) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
 function FilterInput({
   label,
   initialValue = "",
   noValueText,
-  submitText,
   autoOpen = false,
   placeholder,
   validate,
-  onSave,
+  onValueChange,
   onPressRemove,
 }: FilterInputProps) {
-  const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
-  const [value, setValue] = useState(initialValue);
+  const tagRef = useRef<View>(null);
+  const validOnce = useRef(false);
 
-  const { Field, submitForm } = useForm<{ input: string }>({
-    input: {
-      initialValue,
-      validate,
+  const getValueState = useCallback(
+    (inputValue: string, isInitialValue: boolean) => {
+      const value = inputValue.trim();
+      const error = validate?.(value) ?? undefined;
+      const hasError = isNotNullish(error);
+      const validValue = hasError ? "" : value;
+
+      if (!hasError) {
+        validOnce.current = true;
+      }
+      if (!isInitialValue) {
+        onValueChange(validValue);
+      }
+
+      return {
+        inputValue,
+        validValue,
+        error: validOnce.current ? error : undefined,
+      };
     },
-  });
+    [validate, onValueChange],
+  );
 
-  const onSubmit = () => {
-    submitForm({
-      onSuccess: ({ input }) => {
-        if (input.isSome()) {
-          setValue(input.get());
-          onSave(input.get());
-          close();
-        }
-      },
-    });
-  };
+  const [{ inputValue, validValue, error }, setState] = useState(() =>
+    getValueState(initialValue, true),
+  );
+
+  const onChangeText = useCallback(
+    (value: string) => setState(getValueState(value, false)),
+    [getValueState],
+  );
 
   return (
     <View style={styles.container}>
       <FilterTag
         label={label}
         onPress={toggle}
-        ref={inputRef}
+        ref={tagRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={value === "" ? noValueText : value}
+        value={validValue === "" ? noValueText : validValue}
       />
 
       <Popover
         role="listbox"
         matchReferenceWidth={false}
         onDismiss={close}
-        referenceRef={inputRef}
+        referenceRef={tagRef}
         returnFocus={false}
         visible={visible}
       >
         <View style={[styles.dropdown, styles.inputContent]}>
-          <Field name="input">
-            {({ error, value, onChange }) => (
-              <LakeLabel
-                label={label}
-                render={id => (
-                  <LakeTextInput
-                    id={id}
-                    error={error}
-                    style={styles.input}
-                    placeholder={placeholder}
-                    value={value}
-                    onChangeText={onChange}
-                    onSubmitEditing={onSubmit}
-                  />
-                )}
+          <LakeLabel
+            label={label}
+            render={id => (
+              <LakeTextInput
+                id={id}
+                value={inputValue}
+                error={error}
+                style={styles.input}
+                placeholder={placeholder}
+                onChangeText={onChangeText}
               />
             )}
-          </Field>
-
-          <LakeButton size="small" color="current" onPress={onSubmit}>
-            {submitText}
-          </LakeButton>
+          />
         </View>
       </Popover>
     </View>
@@ -537,16 +544,16 @@ export type FilterDateDef<Values = unknown> = {
   validate?: (value: string, filters: Values) => ValidatorResult;
 };
 
-/**
- * @deprecated
- */
 export type FilterInputDef = {
   type: "input";
   label: string;
-  submitText: string;
   noValueText: string;
   placeholder?: string;
   validate?: (value: string) => ValidatorResult;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
 /**
@@ -675,7 +682,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
                     validate={validate ? value => validate(value, filters) : undefined}
                     initialValue={getFilterValue(type, filters, filterName)}
-                    onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
+                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                     onPressRemove={() => {
                       onChangeFilters({ ...filters, [filterName]: undefined });
                       onChangeOpened(openedFilters.filter(f => f !== filterName));
@@ -694,7 +701,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     autoOpen={lastOpenedFilter === filterName}
                     validate={validate}
                     initialValue={getFilterValue(type, filters, filterName)}
-                    onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
+                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                     onPressRemove={() => {
                       onChangeFilters({ ...filters, [filterName]: undefined });
                       onChangeOpened(openedFilters.filter(f => f !== filterName));

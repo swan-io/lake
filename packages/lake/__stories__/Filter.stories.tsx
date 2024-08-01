@@ -53,6 +53,11 @@ const resourceId: FilterInputDef = {
   noValueText: "None",
   submitText: "Save",
   placeholder: "Placeholder...",
+  validate: value => {
+    if (value.length < 3) {
+      return "Not long enough";
+    }
+  },
 };
 
 const definition = {
