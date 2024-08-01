@@ -28,7 +28,7 @@ const status: FilterCheckboxDef<
 > = {
   type: "checkbox",
   label: "Status",
-  submitText: "Apply",
+  checkAllLabel: "All",
   items: [
     { label: "Accepted", value: "Accepted" },
     { label: "Canceled", value: "Canceled" },

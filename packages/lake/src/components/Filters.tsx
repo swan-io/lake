@@ -5,11 +5,11 @@ import {
 } from "@swan-io/shared-business/src/components/DatePicker";
 import { ValidatorResult, useForm } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { colors, shadows, spacings } from "../constants/design";
+import { colors, shadows } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
@@ -76,9 +76,6 @@ const styles = StyleSheet.create({
   value: {
     maxWidth: 130,
     whiteSpace: "nowrap",
-  },
-  buttonContainer: {
-    paddingHorizontal: spacings[24],
   },
 });
 
@@ -170,33 +167,32 @@ function FilterRadio<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={[styles.dropdown, { width }]}>
-          <FlatList
-            role="list"
-            data={items}
-            contentContainerStyle={styles.content}
-            keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }) => {
-              const isSelected = value === item.value;
+        <FlatList
+          role="list"
+          data={items}
+          style={[styles.dropdown, { width }]}
+          contentContainerStyle={styles.content}
+          keyExtractor={(_, index) => `filter-item-${index}`}
+          renderItem={({ item }) => {
+            const isSelected = value === item.value;
 
-              return (
-                <Pressable
-                  role="radio"
-                  aria-checked={isSelected}
-                  style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
-                  onPress={() => {
-                    onValueChange(item.value);
-                    close();
-                  }}
-                >
-                  <LakeRadio value={isSelected} />
-                  <Space width={12} />
-                  <Text style={styles.itemLabel}>{item.label}</Text>
-                </Pressable>
-              );
-            }}
-          />
-        </View>
+            return (
+              <Pressable
+                role="radio"
+                aria-checked={isSelected}
+                style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
+                onPress={() => {
+                  onValueChange(item.value);
+                  close();
+                }}
+              >
+                <LakeRadio value={isSelected} />
+                <Space width={12} />
+                <Text style={styles.itemLabel}>{item.label}</Text>
+              </Pressable>
+            );
+          }}
+        />
       </Popover>
     </View>
   );
@@ -210,8 +206,11 @@ type FilterCheckboxProps<T> = {
   value: T[] | undefined;
   onPressRemove: () => void;
   autoOpen?: boolean;
-  applyButtonLabel: string;
   checkAllLabel?: string;
+  /**
+   * @deprecated
+   */
+  applyButtonLabel?: string;
 };
 
 type CheckAllItem = {
@@ -226,43 +225,36 @@ function FilterCheckbox<T>({
   checkAllLabel,
   value,
   onValueChange,
-  applyButtonLabel,
   onPressRemove,
   autoOpen = false,
 }: FilterCheckboxProps<T>) {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
-  const [localValue, setLocalValue] = useState(value);
 
-  const values = useMemo(() => new Set(localValue), [localValue]);
-  const currentValue = useMemo(() => items.filter(item => values.has(item.value)), [items, values]);
+  const valueSet = useMemo(() => new Set(value), [value]);
 
-  const allChecked = checkAllLabel != null && values.size === items.length;
+  const currentValue = useMemo(
+    () => items.filter(item => valueSet.has(item.value)),
+    [items, valueSet],
+  );
+
+  const allChecked = checkAllLabel != null && valueSet.size === items.length;
 
   const listItems = useMemo(() => {
     if (checkAllLabel == null) {
       return items;
     }
+
     const checked: CheckAllItem["checked"] =
-      values.size === 0 ? false : values.size === items.length ? true : "mixed";
+      valueSet.size === 0 ? false : valueSet.size === items.length ? true : "mixed";
+
     const checkAllItem: CheckAllItem = {
       label: checkAllLabel,
       checked,
     };
 
     return [checkAllItem, ...items];
-  }, [items, checkAllLabel, values]);
-
-  const save = useCallback(() => {
-    onValueChange(localValue);
-    close();
-  }, [onValueChange, localValue, close]);
-
-  useEffect(() => {
-    if (!visible) {
-      setLocalValue(value);
-    }
-  }, [visible, value]);
+  }, [items, checkAllLabel, valueSet]);
 
   return (
     <View style={styles.container}>
@@ -283,68 +275,57 @@ function FilterCheckbox<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={[styles.dropdown, { width }]}>
-          <FlatList
-            role="list"
-            data={listItems}
-            contentContainerStyle={styles.content}
-            keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }) => {
-              const isSelected = match<Item<unknown> | CheckAllItem>(item)
-                .with({ checked: P.any }, ({ checked }) => checked)
-                .with({ value: P.any }, ({ value }) => values.has(value as T))
-                .exhaustive();
+        <FlatList
+          role="list"
+          data={listItems}
+          style={[styles.dropdown, { width }]}
+          contentContainerStyle={styles.content}
+          keyExtractor={(_, index) => `filter-item-${index}`}
+          renderItem={({ item }) => {
+            const isSelected = match<Item<unknown> | CheckAllItem>(item)
+              .with({ checked: P.any }, ({ checked }) => checked)
+              .with({ value: P.any }, ({ value }) => valueSet.has(value as T))
+              .exhaustive();
 
-              const onPress = match<Item<unknown> | CheckAllItem>(item)
-                // Check all item
-                .with({ checked: P.any }, ({ checked }) => () => {
-                  if (checked === true) {
-                    setLocalValue(undefined);
-                  } else {
-                    setLocalValue(items.map(item => item.value));
-                  }
-                })
-                // Regular item
-                .with({ value: P.any }, ({ value }) => () => {
-                  const nextValues = new Set([...values]);
-                  if (isSelected === true) {
-                    nextValues.delete(value as T);
-                  } else {
-                    nextValues.add(value as T);
-                  }
-                  if (nextValues.size === 0) {
-                    setLocalValue(undefined);
-                  } else {
-                    setLocalValue([...nextValues]);
-                  }
-                })
-                .exhaustive();
+            const onPress = match<Item<unknown> | CheckAllItem>(item)
+              // Check all item
+              .with({ checked: P.any }, ({ checked }) => () => {
+                if (checked === true) {
+                  onValueChange(undefined);
+                } else {
+                  onValueChange(items.map(item => item.value));
+                }
+              })
+              // Regular item
+              .with({ value: P.any }, ({ value }) => () => {
+                const nextValues = new Set([...valueSet]);
+                if (isSelected === true) {
+                  nextValues.delete(value as T);
+                } else {
+                  nextValues.add(value as T);
+                }
+                if (nextValues.size === 0) {
+                  onValueChange(undefined);
+                } else {
+                  onValueChange([...nextValues]);
+                }
+              })
+              .exhaustive();
 
-              return (
-                <Pressable
-                  role="radio"
-                  aria-checked={isSelected}
-                  style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
-                  onPress={onPress}
-                >
-                  <LakeCheckbox value={isSelected} />
-                  <Space width={12} />
-                  <Text style={styles.itemLabel}>{item.label}</Text>
-                </Pressable>
-              );
-            }}
-          />
-
-          <Space height={8} />
-
-          <View style={styles.buttonContainer}>
-            <LakeButton color="current" onPress={save}>
-              {applyButtonLabel}
-            </LakeButton>
-          </View>
-
-          <Space height={24} />
-        </View>
+            return (
+              <Pressable
+                role="radio"
+                aria-checked={isSelected}
+                style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
+                onPress={onPress}
+              >
+                <LakeCheckbox value={isSelected} />
+                <Space width={12} />
+                <Text style={styles.itemLabel}>{item.label}</Text>
+              </Pressable>
+            );
+          }}
+        />
       </Popover>
     </View>
   );
@@ -531,8 +512,11 @@ export type FilterCheckboxDef<T> = {
   label: string;
   items: Item<T>[];
   width?: number;
-  submitText: string;
   checkAllLabel?: string;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
 export type FilterRadioDef<T> = {
@@ -553,6 +537,9 @@ export type FilterDateDef<Values = unknown> = {
   validate?: (value: string, filters: Values) => ValidatorResult;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterInputDef = {
   type: "input";
   label: string;
@@ -562,6 +549,9 @@ export type FilterInputDef = {
   validate?: (value: string) => ValidatorResult;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterBooleanDef = {
   type: "boolean";
   label: string;
@@ -648,25 +638,21 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                 />
               ))
-              .with(
-                { type: "checkbox" },
-                ({ type, label, items, width, checkAllLabel, submitText }) => (
-                  <FilterCheckbox
-                    label={label}
-                    items={items}
-                    width={width}
-                    checkAllLabel={checkAllLabel}
-                    autoOpen={lastOpenedFilter === filterName}
-                    applyButtonLabel={submitText}
-                    value={getFilterValue(type, filters, filterName)}
-                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
-                    onPressRemove={() => {
-                      onChangeFilters({ ...filters, [filterName]: undefined });
-                      onChangeOpened(openedFilters.filter(f => f !== filterName));
-                    }}
-                  />
-                ),
-              )
+              .with({ type: "checkbox" }, ({ type, label, items, width, checkAllLabel }) => (
+                <FilterCheckbox
+                  label={label}
+                  items={items}
+                  width={width}
+                  checkAllLabel={checkAllLabel}
+                  autoOpen={lastOpenedFilter === filterName}
+                  value={getFilterValue(type, filters, filterName)}
+                  onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
+                  onPressRemove={() => {
+                    onChangeFilters({ ...filters, [filterName]: undefined });
+                    onChangeOpened(openedFilters.filter(f => f !== filterName));
+                  }}
+                />
+              ))
               .with(
                 { type: "date" },
                 ({
