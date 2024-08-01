@@ -13,7 +13,7 @@ import { colors, shadows } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
@@ -404,7 +404,7 @@ type FilterInputProps = {
   validate?: (value: string) => ValidatorResult;
   placeholder?: string;
   initialValue?: string;
-  onValueChange: (value: string) => void;
+  onValueChange: (value: string | undefined) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
   /**
@@ -425,18 +425,13 @@ function FilterInput({
 }: FilterInputProps) {
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
   const tagRef = useRef<View>(null);
-  const validOnce = useRef(false);
 
   const getValueState = useCallback(
     (inputValue: string, isInitialValue: boolean) => {
-      const value = inputValue.trim();
-      const error = validate?.(value) ?? undefined;
-      const hasError = isNotNullish(error);
-      const validValue = hasError ? "" : value;
+      const trimmed = inputValue.trim();
+      const error = validate?.(trimmed) ?? undefined;
+      const validValue = isNullish(error) ? trimmed : undefined;
 
-      if (!hasError) {
-        validOnce.current = true;
-      }
       if (!isInitialValue) {
         onValueChange(validValue);
       }
@@ -444,7 +439,7 @@ function FilterInput({
       return {
         inputValue,
         validValue,
-        error: validOnce.current ? error : undefined,
+        error: isInitialValue ? undefined : error,
       };
     },
     [validate, onValueChange],
@@ -467,7 +462,7 @@ function FilterInput({
         ref={tagRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={validValue === "" ? noValueText : validValue}
+        value={validValue ?? noValueText}
       />
 
       <Popover
