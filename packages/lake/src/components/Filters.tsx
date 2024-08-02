@@ -3,21 +3,20 @@ import {
   DatePickerDate,
   DatePickerModal,
 } from "@swan-io/shared-business/src/components/DatePicker";
-import { ValidatorResult, useForm } from "@swan-io/use-form";
+import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { colors, shadows, spacings } from "../constants/design";
+import { colors, shadows } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { usePreviousValue } from "../hooks/usePreviousValue";
-import { isNotNullish } from "../utils/nullish";
+import { isNotNullish, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
-import { LakeButton } from "./LakeButton";
 import { LakeCheckbox } from "./LakeCheckbox";
 import { LakeLabel } from "./LakeLabel";
 import { LakeRadio } from "./LakeRadio";
@@ -56,7 +55,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   inputContent: {
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 16,
   },
   radio: {
     display: "flex",
@@ -71,14 +72,11 @@ const styles = StyleSheet.create({
     whiteSpace: "nowrap",
   },
   input: {
-    minWidth: 200,
+    width: 250,
   },
   value: {
     maxWidth: 130,
     whiteSpace: "nowrap",
-  },
-  buttonContainer: {
-    paddingHorizontal: spacings[24],
   },
 });
 
@@ -170,33 +168,32 @@ function FilterRadio<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={[styles.dropdown, { width }]}>
-          <FlatList
-            role="list"
-            data={items}
-            contentContainerStyle={styles.content}
-            keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }) => {
-              const isSelected = value === item.value;
+        <FlatList
+          role="list"
+          data={items}
+          style={[styles.dropdown, { width }]}
+          contentContainerStyle={styles.content}
+          keyExtractor={(_, index) => `filter-item-${index}`}
+          renderItem={({ item }) => {
+            const isSelected = value === item.value;
 
-              return (
-                <Pressable
-                  role="radio"
-                  aria-checked={isSelected}
-                  style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
-                  onPress={() => {
-                    onValueChange(item.value);
-                    close();
-                  }}
-                >
-                  <LakeRadio value={isSelected} />
-                  <Space width={12} />
-                  <Text style={styles.itemLabel}>{item.label}</Text>
-                </Pressable>
-              );
-            }}
-          />
-        </View>
+            return (
+              <Pressable
+                role="radio"
+                aria-checked={isSelected}
+                style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
+                onPress={() => {
+                  onValueChange(item.value);
+                  close();
+                }}
+              >
+                <LakeRadio value={isSelected} />
+                <Space width={12} />
+                <Text style={styles.itemLabel}>{item.label}</Text>
+              </Pressable>
+            );
+          }}
+        />
       </Popover>
     </View>
   );
@@ -210,8 +207,11 @@ type FilterCheckboxProps<T> = {
   value: T[] | undefined;
   onPressRemove: () => void;
   autoOpen?: boolean;
-  applyButtonLabel: string;
   checkAllLabel?: string;
+  /**
+   * @deprecated
+   */
+  applyButtonLabel?: string;
 };
 
 type CheckAllItem = {
@@ -226,43 +226,36 @@ function FilterCheckbox<T>({
   checkAllLabel,
   value,
   onValueChange,
-  applyButtonLabel,
   onPressRemove,
   autoOpen = false,
 }: FilterCheckboxProps<T>) {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
-  const [localValue, setLocalValue] = useState(value);
 
-  const values = useMemo(() => new Set(localValue), [localValue]);
-  const currentValue = useMemo(() => items.filter(item => values.has(item.value)), [items, values]);
+  const valueSet = useMemo(() => new Set(value), [value]);
 
-  const allChecked = checkAllLabel != null && values.size === items.length;
+  const currentValue = useMemo(
+    () => items.filter(item => valueSet.has(item.value)),
+    [items, valueSet],
+  );
+
+  const allChecked = checkAllLabel != null && valueSet.size === items.length;
 
   const listItems = useMemo(() => {
     if (checkAllLabel == null) {
       return items;
     }
+
     const checked: CheckAllItem["checked"] =
-      values.size === 0 ? false : values.size === items.length ? true : "mixed";
+      valueSet.size === 0 ? false : valueSet.size === items.length ? true : "mixed";
+
     const checkAllItem: CheckAllItem = {
       label: checkAllLabel,
       checked,
     };
 
     return [checkAllItem, ...items];
-  }, [items, checkAllLabel, values]);
-
-  const save = useCallback(() => {
-    onValueChange(localValue);
-    close();
-  }, [onValueChange, localValue, close]);
-
-  useEffect(() => {
-    if (!visible) {
-      setLocalValue(value);
-    }
-  }, [visible, value]);
+  }, [items, checkAllLabel, valueSet]);
 
   return (
     <View style={styles.container}>
@@ -283,68 +276,57 @@ function FilterCheckbox<T>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={[styles.dropdown, { width }]}>
-          <FlatList
-            role="list"
-            data={listItems}
-            contentContainerStyle={styles.content}
-            keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }) => {
-              const isSelected = match<Item<unknown> | CheckAllItem>(item)
-                .with({ checked: P.any }, ({ checked }) => checked)
-                .with({ value: P.any }, ({ value }) => values.has(value as T))
-                .exhaustive();
+        <FlatList
+          role="list"
+          data={listItems}
+          style={[styles.dropdown, { width }]}
+          contentContainerStyle={styles.content}
+          keyExtractor={(_, index) => `filter-item-${index}`}
+          renderItem={({ item }) => {
+            const isSelected = match<Item<unknown> | CheckAllItem>(item)
+              .with({ checked: P.any }, ({ checked }) => checked)
+              .with({ value: P.any }, ({ value }) => valueSet.has(value as T))
+              .exhaustive();
 
-              const onPress = match<Item<unknown> | CheckAllItem>(item)
-                // Check all item
-                .with({ checked: P.any }, ({ checked }) => () => {
-                  if (checked === true) {
-                    setLocalValue(undefined);
-                  } else {
-                    setLocalValue(items.map(item => item.value));
-                  }
-                })
-                // Regular item
-                .with({ value: P.any }, ({ value }) => () => {
-                  const nextValues = new Set([...values]);
-                  if (isSelected === true) {
-                    nextValues.delete(value as T);
-                  } else {
-                    nextValues.add(value as T);
-                  }
-                  if (nextValues.size === 0) {
-                    setLocalValue(undefined);
-                  } else {
-                    setLocalValue([...nextValues]);
-                  }
-                })
-                .exhaustive();
+            const onPress = match<Item<unknown> | CheckAllItem>(item)
+              // Check all item
+              .with({ checked: P.any }, ({ checked }) => () => {
+                if (checked === true) {
+                  onValueChange(undefined);
+                } else {
+                  onValueChange(items.map(item => item.value));
+                }
+              })
+              // Regular item
+              .with({ value: P.any }, ({ value }) => () => {
+                const nextValues = new Set([...valueSet]);
+                if (isSelected === true) {
+                  nextValues.delete(value as T);
+                } else {
+                  nextValues.add(value as T);
+                }
+                if (nextValues.size === 0) {
+                  onValueChange(undefined);
+                } else {
+                  onValueChange([...nextValues]);
+                }
+              })
+              .exhaustive();
 
-              return (
-                <Pressable
-                  role="radio"
-                  aria-checked={isSelected}
-                  style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
-                  onPress={onPress}
-                >
-                  <LakeCheckbox value={isSelected} />
-                  <Space width={12} />
-                  <Text style={styles.itemLabel}>{item.label}</Text>
-                </Pressable>
-              );
-            }}
-          />
-
-          <Space height={8} />
-
-          <View style={styles.buttonContainer}>
-            <LakeButton color="current" onPress={save}>
-              {applyButtonLabel}
-            </LakeButton>
-          </View>
-
-          <Space height={24} />
-        </View>
+            return (
+              <Pressable
+                role="radio"
+                aria-checked={isSelected}
+                style={({ hovered }) => [styles.radio, hovered && styles.itemHovered]}
+                onPress={onPress}
+              >
+                <LakeCheckbox value={isSelected} />
+                <Space width={12} />
+                <Text style={styles.itemLabel}>{item.label}</Text>
+              </Pressable>
+            );
+          }}
+        />
       </Popover>
     </View>
   );
@@ -357,9 +339,9 @@ type FilterDateProps = {
   submitText: string;
   dateFormat: DateFormat;
   isSelectable?: (date: DatePickerDate) => boolean;
-  validate?: (val: string) => ValidatorResult;
+  validate?: (value: string) => ValidatorResult;
   initialValue?: string;
-  onSave: (val: string) => void;
+  onValueChange: (value: string) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
 };
@@ -373,7 +355,7 @@ function FilterDate({
   dateFormat,
   isSelectable,
   validate,
-  onSave,
+  onValueChange,
   onPressRemove,
   autoOpen = false,
 }: FilterDateProps) {
@@ -408,7 +390,7 @@ function FilterDate({
         validate={validate}
         onChange={value => {
           const formattedValue = dayjs(value, dateFormat, true).toJSON();
-          onSave(formattedValue);
+          onValueChange(formattedValue);
         }}
         onDismiss={close}
       />
@@ -419,91 +401,92 @@ function FilterDate({
 type FilterInputProps = {
   label: string;
   noValueText: string;
-  submitText: string;
-  validate?: (val: string) => ValidatorResult;
+  validate?: (value: string) => ValidatorResult;
   placeholder?: string;
   initialValue?: string;
-  onSave: (val: string) => void;
+  onValueChange: (value: string | undefined) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
 function FilterInput({
   label,
   initialValue = "",
   noValueText,
-  submitText,
   autoOpen = false,
   placeholder,
   validate,
-  onSave,
+  onValueChange,
   onPressRemove,
 }: FilterInputProps) {
-  const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
-  const [value, setValue] = useState(initialValue);
+  const tagRef = useRef<View>(null);
 
-  const { Field, submitForm } = useForm<{ input: string }>({
-    input: {
-      initialValue,
-      validate,
+  const getValueState = useCallback(
+    (inputValue: string, isInitialValue: boolean) => {
+      const trimmed = inputValue.trim();
+      const error = validate?.(trimmed) ?? undefined;
+      const validValue = isNullish(error) ? trimmed : undefined;
+
+      if (!isInitialValue) {
+        onValueChange(validValue);
+      }
+
+      return {
+        inputValue,
+        validValue,
+        error: isInitialValue ? undefined : error,
+      };
     },
-  });
+    [validate, onValueChange],
+  );
 
-  const onSubmit = () => {
-    submitForm({
-      onSuccess: ({ input }) => {
-        if (input.isSome()) {
-          setValue(input.get());
-          onSave(input.get());
-          close();
-        }
-      },
-    });
-  };
+  const [{ inputValue, validValue, error }, setState] = useState(() =>
+    getValueState(initialValue, true),
+  );
+
+  const onChangeText = useCallback(
+    (value: string) => setState(getValueState(value, false)),
+    [getValueState],
+  );
 
   return (
     <View style={styles.container}>
       <FilterTag
         label={label}
         onPress={toggle}
-        ref={inputRef}
+        ref={tagRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={value === "" ? noValueText : value}
+        value={validValue ?? noValueText}
       />
 
       <Popover
         role="listbox"
         matchReferenceWidth={false}
         onDismiss={close}
-        referenceRef={inputRef}
+        referenceRef={tagRef}
         returnFocus={false}
         visible={visible}
       >
         <View style={[styles.dropdown, styles.inputContent]}>
-          <Field name="input">
-            {({ error, value, onChange }) => (
-              <LakeLabel
-                label={label}
-                render={id => (
-                  <LakeTextInput
-                    id={id}
-                    error={error}
-                    style={styles.input}
-                    placeholder={placeholder}
-                    value={value}
-                    onChangeText={onChange}
-                    onSubmitEditing={onSubmit}
-                  />
-                )}
+          <LakeLabel
+            label={label}
+            render={id => (
+              <LakeTextInput
+                id={id}
+                value={inputValue}
+                error={error}
+                style={styles.input}
+                placeholder={placeholder}
+                onChangeText={onChangeText}
               />
             )}
-          </Field>
-
-          <LakeButton size="small" color="current" onPress={onSubmit}>
-            {submitText}
-          </LakeButton>
+          />
         </View>
       </Popover>
     </View>
@@ -531,8 +514,11 @@ export type FilterCheckboxDef<T> = {
   label: string;
   items: Item<T>[];
   width?: number;
-  submitText: string;
   checkAllLabel?: string;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
 export type FilterRadioDef<T> = {
@@ -556,12 +542,18 @@ export type FilterDateDef<Values = unknown> = {
 export type FilterInputDef = {
   type: "input";
   label: string;
-  submitText: string;
   noValueText: string;
   placeholder?: string;
   validate?: (value: string) => ValidatorResult;
+  /**
+   * @deprecated
+   */
+  submitText?: string;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterBooleanDef = {
   type: "boolean";
   label: string;
@@ -648,25 +640,21 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                 />
               ))
-              .with(
-                { type: "checkbox" },
-                ({ type, label, items, width, checkAllLabel, submitText }) => (
-                  <FilterCheckbox
-                    label={label}
-                    items={items}
-                    width={width}
-                    checkAllLabel={checkAllLabel}
-                    autoOpen={lastOpenedFilter === filterName}
-                    applyButtonLabel={submitText}
-                    value={getFilterValue(type, filters, filterName)}
-                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
-                    onPressRemove={() => {
-                      onChangeFilters({ ...filters, [filterName]: undefined });
-                      onChangeOpened(openedFilters.filter(f => f !== filterName));
-                    }}
-                  />
-                ),
-              )
+              .with({ type: "checkbox" }, ({ type, label, items, width, checkAllLabel }) => (
+                <FilterCheckbox
+                  label={label}
+                  items={items}
+                  width={width}
+                  checkAllLabel={checkAllLabel}
+                  autoOpen={lastOpenedFilter === filterName}
+                  value={getFilterValue(type, filters, filterName)}
+                  onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
+                  onPressRemove={() => {
+                    onChangeFilters({ ...filters, [filterName]: undefined });
+                    onChangeOpened(openedFilters.filter(f => f !== filterName));
+                  }}
+                />
+              ))
               .with(
                 { type: "date" },
                 ({
@@ -689,7 +677,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
                     validate={validate ? value => validate(value, filters) : undefined}
                     initialValue={getFilterValue(type, filters, filterName)}
-                    onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
+                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                     onPressRemove={() => {
                       onChangeFilters({ ...filters, [filterName]: undefined });
                       onChangeOpened(openedFilters.filter(f => f !== filterName));
@@ -708,7 +696,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
                     autoOpen={lastOpenedFilter === filterName}
                     validate={validate}
                     initialValue={getFilterValue(type, filters, filterName)}
-                    onSave={value => onChangeFilters({ ...filters, [filterName]: value })}
+                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                     onPressRemove={() => {
                       onChangeFilters({ ...filters, [filterName]: undefined });
                       onChangeOpened(openedFilters.filter(f => f !== filterName));
