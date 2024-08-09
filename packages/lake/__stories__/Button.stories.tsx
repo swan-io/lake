@@ -100,6 +100,8 @@ export const Colors = () => {
 };
 
 export const ButtonStates = () => {
+  const [endDate, setEndDate] = useState<string | undefined>(undefined);
+
   return (
     <StoryBlock title="Button states">
       <StoryPart title="Small">
@@ -272,6 +274,29 @@ export const ButtonStates = () => {
             Refresh
           </LoadingButton>
         </Stack>
+      </StoryPart>
+
+      <StoryPart title="Disabled until">
+        <Box direction="row">
+          <LakeButton
+            mode="secondary"
+            size="small"
+            onPress={() => {
+              const now = Date.now();
+              const inTenSeconds = now + 10_000;
+              const date = new Date(inTenSeconds);
+              setEndDate(date.toISOString());
+            }}
+          >
+            Set for 10s
+          </LakeButton>
+        </Box>
+
+        <Space height={12} />
+
+        <ButtonWithCounter color="live" disabledUntil={endDate}>
+          Disabled until
+        </ButtonWithCounter>
       </StoryPart>
 
       <StoryPart title="With pill">

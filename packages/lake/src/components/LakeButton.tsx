@@ -1,4 +1,5 @@
-import { Children, forwardRef, Fragment, memo, ReactNode } from "react";
+import { Option } from "@swan-io/boxed";
+import { Children, forwardRef, Fragment, memo, ReactNode, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -9,7 +10,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
@@ -70,6 +71,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray[900],
     borderRadius: radii[6],
   },
+  loaderContainerProgress: {
+    opacity: 0.5,
+    backgroundColor: colors.gray[900],
+    transformOrigin: "0 0",
+    ...StyleSheet.absoluteFillObject,
+  },
   small: {
     height: 40,
     paddingLeft: 16,
@@ -101,6 +108,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     transform: "translateZ(0px)",
+    borderRadius: radii[6],
+    overflow: "hidden",
   },
   group: {
     flexDirection: "row",
@@ -150,6 +159,7 @@ export type ButtonProps = {
   href?: string;
   hrefAttrs?: HrefAttrs;
   pill?: boolean;
+  disabledUntil?: string;
 } & (
   | {
       ariaLabel: string;
@@ -185,9 +195,18 @@ export const LakeButton = memo(
         href,
         hrefAttrs,
         pill = false,
+        disabledUntil,
       },
       forwardedRef,
     ) => {
+      const [progressAnimation, setProgressAnimation] = useState<
+        Option<{
+          startTime: number;
+          duration: number;
+          now: number;
+        }>
+      >(() => Option.None());
+
       const isPrimary = mode === "primary";
       const isSmall = size === "small";
 
@@ -200,6 +219,41 @@ export const LakeButton = memo(
       const hasIconEnd = hasIcon && iconPosition === "end";
       const hasOnlyIcon = hasIcon && isNullish(children);
 
+      useEffect(() => {
+        if (disabledUntil == null) {
+          return;
+        }
+
+        const startTime = Date.now();
+        const endTime = new Date(disabledUntil).getTime();
+
+        const config = {
+          startTime,
+          duration: endTime - startTime,
+          endTime,
+        };
+
+        const tick = () => {
+          const now = Date.now();
+          if (now >= config.endTime) {
+            setProgressAnimation(Option.None());
+          } else {
+            setProgressAnimation(
+              Option.Some({
+                startTime: config.startTime,
+                duration: config.duration,
+                now: Date.now(),
+              }),
+            );
+            animationFrameId = requestAnimationFrame(tick);
+          }
+        };
+        let animationFrameId = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(animationFrameId);
+      }, [disabledUntil]);
+
+      const shouldHideContents = loading || progressAnimation.isSome();
+
       return (
         <Pressable
           href={href}
@@ -210,7 +264,7 @@ export const LakeButton = memo(
           aria-controls={ariaControls}
           aria-expanded={ariaExpanded}
           aria-label={ariaLabel}
-          disabled={loading || disabled}
+          disabled={loading || disabled || progressAnimation.isSome()}
           ref={forwardedRef}
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
@@ -223,7 +277,7 @@ export const LakeButton = memo(
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
 
-            disabled && commonStyles.disabled,
+            (disabled || progressAnimation.isSome()) && commonStyles.disabled,
             disabled && forceBackground && styles.resetOpacity,
             grow && styles.grow,
 
@@ -283,7 +337,7 @@ export const LakeButton = memo(
                       color={textColor}
                       name={icon}
                       size={iconSize}
-                      style={loading && styles.hidden}
+                      style={shouldHideContents && styles.hidden}
                     />
 
                     {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
@@ -296,7 +350,7 @@ export const LakeButton = memo(
                     userSelect="none"
                     style={[
                       isSmall ? styles.textSmall : styles.text,
-                      loading && styles.hidden,
+                      shouldHideContents && styles.hidden,
                       { color: textColor },
                     ]}
                   >
@@ -307,7 +361,7 @@ export const LakeButton = memo(
                     alignItems="center"
                     direction="row"
                     justifyContent="center"
-                    style={[vertical && styles.vertical, loading && styles.hidden]}
+                    style={[vertical && styles.vertical, shouldHideContents && styles.hidden]}
                   >
                     {children}
                   </Box>
@@ -321,7 +375,7 @@ export const LakeButton = memo(
                       color={textColor}
                       name={icon}
                       size={iconSize}
-                      style={loading && styles.hidden}
+                      style={shouldHideContents && styles.hidden}
                     />
                   </>
                 )}
@@ -336,6 +390,24 @@ export const LakeButton = memo(
                 )}
 
                 {isPrimary && <View style={[styles.hiddenView, pressed && styles.pressed]} />}
+
+                {match(progressAnimation)
+                  .with(Option.P.Some(P.select()), ({ startTime, now, duration }) => (
+                    <View style={styles.loaderContainer}>
+                      <View
+                        style={[
+                          styles.loaderContainerProgress,
+                          { transform: `scaleX(${((now - startTime) / duration) * 100}%)` },
+                        ]}
+                      />
+
+                      <LakeText color={isPrimary ? colors[color].contrast : colors[color].primary}>
+                        {Math.ceil((duration - (now - startTime)) / 1000)}
+                      </LakeText>
+                    </View>
+                  ))
+                  .otherwise(() => null)}
+
                 {pill && <View style={styles.pill} />}
               </>
             );
