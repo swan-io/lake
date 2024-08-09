@@ -22,7 +22,7 @@ import { t } from "../utils/i18n";
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
 
-const getTextStyle = (type: "serif" | "mono", fontSize: number): TextStyle => ({
+const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
   ...(type === "mono" ? { fontFamily: fonts.iban } : interFontStyle),
   color: colors.gray[900],
   fontSize,
@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   label: {
-    ...getTextStyle("serif", 10),
+    ...getTextStyle("sans", 10),
   },
   addressText: {
-    ...getTextStyle("serif", 12),
+    ...getTextStyle("sans", 12),
   },
   mainText: {
     ...getTextStyle("mono", 12),
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     ...getTextStyle("mono", 10),
   },
   partnershipText: {
-    ...getTextStyle("serif", 8),
+    ...getTextStyle("sans", 8),
     color: colors.gray[500],
   },
   partnerLabel: {
