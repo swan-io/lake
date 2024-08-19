@@ -175,7 +175,7 @@ export const ChoicePicker = <T,>({
   };
 
   const onPressPrevious = () => {
-    const scrollContainer = containerRef.current;
+    const scrollContainer = containerRef.current?.element;
     if (scrollContainer instanceof HTMLDivElement) {
       const scrollLeft = scrollContainer.scrollLeft;
       const width = scrollContainer.offsetWidth;
@@ -194,7 +194,7 @@ export const ChoicePicker = <T,>({
   };
 
   const onPressNext = () => {
-    const scrollContainer = containerRef.current;
+    const scrollContainer = containerRef.current?.element;
     if (scrollContainer instanceof HTMLDivElement) {
       const scrollLeft = scrollContainer.scrollLeft;
       const width = scrollContainer.offsetWidth;
