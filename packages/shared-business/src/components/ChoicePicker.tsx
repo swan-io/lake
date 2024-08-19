@@ -136,7 +136,7 @@ export const ChoicePicker = <T,>({
     }
 
     // auto scroll to selected value on mobile
-    const scrollContainer = containerRef.current;
+    const scrollContainer = containerRef.current?.element;
     const index = items.findIndex(item => value === item);
 
     if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
@@ -157,7 +157,7 @@ export const ChoicePicker = <T,>({
       return;
     }
 
-    const scrollContainer = containerRef.current;
+    const scrollContainer = containerRef.current?.element;
     if (scrollContainer instanceof HTMLDivElement) {
       const scrollLeft = scrollContainer.scrollLeft;
       const width = scrollContainer.offsetWidth;
