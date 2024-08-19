@@ -136,12 +136,16 @@ export const ChoicePicker = <T,>({
     }
 
     // auto scroll to selected value on mobile
-    const scrollContainer = containerRef.current?.element;
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+    const scrollContainer = container.element;
     const index = items.findIndex(item => value === item);
 
     if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
       const width = scrollContainer.offsetWidth;
-      scrollContainer.scrollTo({ x: index * width, animated: false });
+      container.scrollTo({ x: index * width, animated: false });
     }
 
     // if no value is selected, select first item
