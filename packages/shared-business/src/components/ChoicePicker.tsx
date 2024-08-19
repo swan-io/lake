@@ -140,11 +140,10 @@ export const ChoicePicker = <T,>({
     if (container == null) {
       return;
     }
-    const scrollContainer = container.element;
     const index = items.findIndex(item => value === item);
 
-    if (index !== -1 && scrollContainer instanceof HTMLDivElement) {
-      const width = scrollContainer.offsetWidth;
+    if (index !== -1 && container.element != null) {
+      const width = container.element.offsetWidth;
       container.scrollTo({ x: index * width, animated: false });
     }
 
@@ -161,10 +160,14 @@ export const ChoicePicker = <T,>({
       return;
     }
 
-    const scrollContainer = containerRef.current?.element;
-    if (scrollContainer instanceof HTMLDivElement) {
-      const scrollLeft = scrollContainer.scrollLeft;
-      const width = scrollContainer.offsetWidth;
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+
+    if (container.element != null) {
+      const scrollLeft = container.element.scrollLeft;
+      const width = container.element.offsetWidth;
       const index = clampValue(0, items.length - 1)(Math.round(scrollLeft / width));
       const item = items[index];
       if (item != null) {
@@ -179,39 +182,45 @@ export const ChoicePicker = <T,>({
   };
 
   const onPressPrevious = () => {
-    const scrollContainer = containerRef.current?.element;
-    if (scrollContainer instanceof HTMLDivElement) {
-      const scrollLeft = scrollContainer.scrollLeft;
-      const width = scrollContainer.offsetWidth;
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+    if (container.element != null) {
+      const scrollLeft = container.element.scrollLeft;
+      const width = container.element.offsetWidth;
       const index = Math.round(scrollLeft / width);
       const previousIndex = Math.max(0, index - 1);
 
       // remove scroll snap during scroll animation to avoid weird behavior on older browsers
-      scrollContainer.style.scrollSnapType = "none";
+      container.element.style.scrollSnapType = "none";
       containerRef.current?.scrollTo({ x: previousIndex * width, animated: true });
-      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+      detectScrollAnimationEnd(container.element).onResolve(() => {
         // set back scroll snap
         // @ts-expect-error
-        scrollContainer.style.scrollSnapType = null;
+        container.element.style.scrollSnapType = null;
       });
     }
   };
 
   const onPressNext = () => {
-    const scrollContainer = containerRef.current?.element;
-    if (scrollContainer instanceof HTMLDivElement) {
-      const scrollLeft = scrollContainer.scrollLeft;
-      const width = scrollContainer.offsetWidth;
+    const container = containerRef.current;
+    if (container == null) {
+      return;
+    }
+    if (container.element != null) {
+      const scrollLeft = container.element.scrollLeft;
+      const width = container.element.offsetWidth;
       const index = Math.round(scrollLeft / width);
       const nextIndex = Math.min(items.length - 1, index + 1);
 
       // remove scroll snap during scroll animation to avoid weird behavior on older browsers
-      scrollContainer.style.scrollSnapType = "none";
+      container.element.style.scrollSnapType = "none";
       containerRef.current?.scrollTo({ x: nextIndex * width, animated: true });
-      detectScrollAnimationEnd(scrollContainer).onResolve(() => {
+      detectScrollAnimationEnd(container.element).onResolve(() => {
         // set back scroll snap
         // @ts-expect-error
-        scrollContainer.style.scrollSnapType = null;
+        container.element.style.scrollSnapType = null;
       });
     }
   };
