@@ -40,6 +40,7 @@
   "common.skipToContent": "Skip to content",
   "copyButton.copiedTooltip": "Copied to clipboard",
   "copyButton.copyTooltip": "Click to copy",
+  "datePicker.day": "Day",
   "datePicker.day.friday": "Friday",
   "datePicker.day.monday": "Monday",
   "datePicker.day.saturday": "Saturday",
@@ -47,6 +48,7 @@
   "datePicker.day.thursday": "Thursday",
   "datePicker.day.tuesday": "Tuesday",
   "datePicker.day.wednesday": "Wednesday",
+  "datePicker.month": "Month",
   "datePicker.month.april": "April",
   "datePicker.month.august": "August",
   "datePicker.month.december": "December",
@@ -61,6 +63,7 @@
   "datePicker.month.october": "October",
   "datePicker.month.previous": "Previous month",
   "datePicker.month.september": "September",
+  "datePicker.year": "Year",
   "error.generic": "An error occurred",
   "error.iban.invalid": "This IBAN doesn't look right. Trying entering it again.",
   "error.network.500": "Internal server error",
@@ -293,5 +296,8 @@
   "transactionStatement.title.creditor": "Creditor information",
   "transactionStatement.title.debtor": "Debtor information",
   "transactionStatement.title.document": "Transaction confirmation",
-  "transactionStatement.title.information": "Information"
+  "transactionStatement.title.information": "Information",
+  "validation.invalidYear": "Invalid year",
+  "validation.invalidMonth": "Invalid month",
+  "validation.invalidDay": "Invalid day"
 }
