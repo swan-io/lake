@@ -45,6 +45,7 @@ export type InlineDatePickerProps = {
   onValueChange: (value: ExtractedDate) => void;
   error?: string;
   onBlur?: () => void;
+  order: "day-month-year" | "month-day-year";
 };
 
 export const InlineDatePicker = ({
@@ -53,73 +54,90 @@ export const InlineDatePicker = ({
   onValueChange,
   error,
   onBlur,
+  order,
 }: InlineDatePickerProps) => {
   return (
     <LakeLabel
       label={label}
-      render={id => (
-        <Box>
-          <Stack direction="row" space={12}>
-            <View style={styles.day}>
-              <LakeTextInput
-                id={id}
-                style={isNotNullish(error) && styles.error}
-                placeholder={t("datePicker.day")}
-                value={value.day}
-                onBlur={onBlur}
-                hideErrors={true}
-                onChangeText={day => {
-                  onValueChange({
-                    day,
-                    month: value.month,
-                    year: value.year,
-                  });
-                }}
-                pattern="[0-9]"
-                maxLength={2}
-                autoComplete="bday-day"
-              />
-            </View>
-
-            <LakeSelect
-              value={value.month === "" ? undefined : value.month}
+      render={id => {
+        const day = (
+          <View style={styles.day}>
+            <LakeTextInput
+              id={id}
               style={isNotNullish(error) && styles.error}
-              placeholder={t("datePicker.month")}
+              placeholder={t("datePicker.day")}
+              value={value.day}
+              onBlur={onBlur}
               hideErrors={true}
-              items={months}
-              onValueChange={month => {
+              onChangeText={day => {
                 onValueChange({
-                  day: value.day,
-                  month,
+                  day,
+                  month: value.month,
                   year: value.year,
                 });
               }}
+              pattern="[0-9]"
+              maxLength={2}
+              autoComplete="bday-day"
             />
+          </View>
+        );
 
-            <View style={styles.year}>
-              <LakeTextInput
-                value={value.year}
-                style={isNotNullish(error) && styles.error}
-                placeholder={t("datePicker.year")}
-                onBlur={onBlur}
-                hideErrors={true}
-                onChangeText={year =>
-                  onValueChange({
-                    day: value.day,
-                    month: value.month,
-                    year,
-                  })
-                }
-                pattern="[0-9]"
-                maxLength={4}
-                autoComplete="bday-year"
-              />
-            </View>
-          </Stack>
+        const month = (
+          <LakeSelect
+            value={value.month === "" ? undefined : value.month}
+            style={isNotNullish(error) && styles.error}
+            placeholder={t("datePicker.month")}
+            hideErrors={true}
+            items={months}
+            onValueChange={month => {
+              onValueChange({
+                day: value.day,
+                month,
+                year: value.year,
+              });
+            }}
+          />
+        );
 
-          <InputError message={error} />
-        </Box>
-      )}
+        const year = (
+          <View style={styles.year}>
+            <LakeTextInput
+              value={value.year}
+              style={isNotNullish(error) && styles.error}
+              placeholder={t("datePicker.year")}
+              onBlur={onBlur}
+              hideErrors={true}
+              onChangeText={year =>
+                onValueChange({
+                  day: value.day,
+                  month: value.month,
+                  year,
+                })
+              }
+              pattern="[0-9]"
+              maxLength={4}
+              autoComplete="bday-year"
+            />
+          </View>
+        );
+
+        return (
+          <Box>
+            {order === "day-month-year" ? (
+              <Stack direction="row" space={12}>
+                {day} {month} {year}
+              </Stack>
+            ) : (
+              <Stack direction="row" space={12}>
+                {month} {day} {year}
+              </Stack>
+            )}
+
+            <InputError message={error} />
+          </Box>
+        );
+      }}
     />
   );
 };
