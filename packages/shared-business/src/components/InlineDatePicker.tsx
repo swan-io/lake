@@ -45,7 +45,7 @@ export type InlineDatePickerProps = {
   onValueChange: (value: ExtractedDate) => void;
   error?: string;
   onBlur?: () => void;
-  order: "day-month-year" | "month-day-year";
+  order: "DMY" | "MDY" | "YMD";
 };
 
 export const InlineDatePicker = ({
@@ -124,7 +124,7 @@ export const InlineDatePicker = ({
 
         return (
           <Box>
-            {order === "day-month-year" ? (
+            {order === "DMY" ? (
               <Stack direction="row" space={12}>
                 {day} {month} {year}
               </Stack>
