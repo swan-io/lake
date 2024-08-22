@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
     color: colors.gray[700],
     display: "flex",
   },
-  shrink: {
-    flexShrink: 1,
-  },
   optionalLabel: {
     fontStyle: "italic",
   },
@@ -97,9 +94,9 @@ export const LakeLabel = ({
     >
       <View style={commonStyles.fill} ref={containerRef}>
         <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-          <Box direction="row" style={styles.shrink}>
+          <Box direction="row" alignItems="center" shrink={1}>
             {type === "form" || type === "formSmall" || type === "radioGroup" ? (
-              <Box style={styles.shrink}>
+              <Box shrink={1}>
                 <Label
                   onClick={onClick}
                   htmlFor={id}
@@ -107,35 +104,29 @@ export const LakeLabel = ({
                 >
                   {label}
 
-                  {optionalLabel != null ? (
-                    <>
-                      {" - "}
-                      <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
-                        {optionalLabel}
-                      </LakeText>
-                    </>
-                  ) : null}
+                  {optionalLabel != null && (
+                    <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
+                      {` - ${optionalLabel}`}
+                    </LakeText>
+                  )}
                 </Label>
 
-                {description != null ? (
+                {description != null && (
                   <>
                     <LakeText variant="smallRegular">{description}</LakeText>
                     <Space height={8} />
                   </>
-                ) : null}
+                )}
               </Box>
             ) : (
               <LakeText variant="medium" color={readOnlyColor} id={id}>
                 {label}
 
-                {optionalLabel != null ? (
-                  <>
-                    {" - "}
-                    <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
-                      {optionalLabel}
-                    </LakeText>
-                  </>
-                ) : null}
+                {optionalLabel != null && (
+                  <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
+                    {` - ${optionalLabel}`}
+                  </LakeText>
+                )}
               </LakeText>
             )}
 
