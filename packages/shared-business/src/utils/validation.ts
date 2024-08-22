@@ -1,7 +1,9 @@
 import { noop } from "@swan-io/lake/src/utils/function";
 import { Validator } from "@swan-io/use-form";
+import dayjs from "dayjs";
 import { isValid as isValidIban } from "iban";
 import { match } from "ts-pattern";
+import { ExtractedDate, formatExtractedDate } from "./date";
 import { t } from "./i18n";
 import { AccountCountry } from "./templateTranslations";
 
@@ -120,5 +122,20 @@ export { printFormat as printIbanFormat } from "iban";
 export const validateIban = (iban: string) => {
   if (!isValidIban(iban)) {
     return t("error.iban.invalid");
+  }
+};
+
+export const validateBirthdate = (value: ExtractedDate) => {
+  const date = dayjs.utc(formatExtractedDate(value), "YYYY-MM-DD", true);
+
+  const isBirthdateOver150years = date.isBefore(dayjs.utc().subtract(150, "years"));
+  const isBirthdateWithin4years = date.isAfter(dayjs.utc().subtract(4, "years"));
+
+  if (!date.isValid() || isBirthdateOver150years || isBirthdateWithin4years) {
+    return t("validation.invalidBirthDate");
+  }
+
+  if (date.isAfter(dayjs.utc().add(1, "day"))) {
+    return t("validation.birthdateCannotBeFuture");
   }
 };
