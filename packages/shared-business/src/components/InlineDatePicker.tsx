@@ -136,11 +136,11 @@ export const InlineDatePicker = ({
         return (
           <Box>
             {order === "DMY" ? (
-              <Stack direction="row" space={12}>
+              <Stack direction="row" space={4}>
                 {day} {month} {year}
               </Stack>
             ) : (
-              <Stack direction="row" space={12}>
+              <Stack direction="row" space={4}>
                 {month} {day} {year}
               </Stack>
             )}
