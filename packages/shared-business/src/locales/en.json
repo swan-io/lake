@@ -297,6 +297,6 @@
   "transactionStatement.title.debtor": "Debtor information",
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Information",
-  "validation.invalidBirthDate": "Invalid birthdate",
+  "validation.invalidBirthDate": "Please enter your complete and valid birth date: month, day, and year",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future"
 }

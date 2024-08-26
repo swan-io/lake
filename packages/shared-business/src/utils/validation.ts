@@ -128,7 +128,7 @@ export const validateIban = (iban: string) => {
 export const validateBirthdate = (value: ExtractedDate) => {
   const date = dayjs.utc(formatExtractedDate(value), "YYYY-MM-DD", true);
 
-  const isBirthdateOver150years = date.isBefore(dayjs.utc().subtract(150, "years"));
+  const isBirthdateOver150years = date.isBefore(dayjs.utc().subtract(100, "years"));
   const isBirthdateWithin4years = date.isAfter(dayjs.utc().subtract(4, "years"));
 
   if (!date.isValid() || isBirthdateOver150years || isBirthdateWithin4years) {

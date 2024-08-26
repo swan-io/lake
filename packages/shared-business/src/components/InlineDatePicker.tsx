@@ -4,7 +4,8 @@ import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Stack } from "@swan-io/lake/src/components/Stack";
-import { colors } from "@swan-io/lake/src/constants/design";
+import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
+import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleSheet, View } from "react-native";
 import { ExtractedDate } from "../utils/date";
@@ -26,8 +27,16 @@ const months = [
 ];
 
 const styles = StyleSheet.create({
+  dayMobile: {
+    maxWidth: 60,
+    flexGrow: 0,
+  },
   day: {
     maxWidth: 90,
+    flexGrow: 0,
+  },
+  yearMobile: {
+    maxWidth: 80,
     flexGrow: 0,
   },
   year: {
@@ -45,7 +54,7 @@ export type InlineDatePickerProps = {
   onValueChange: (value: ExtractedDate) => void;
   error?: string;
   onBlur?: () => void;
-  order: "day-month-year" | "month-day-year";
+  order: "DMY" | "MDY" | "YMD";
 };
 
 export const InlineDatePicker = ({
@@ -56,12 +65,14 @@ export const InlineDatePicker = ({
   onBlur,
   order,
 }: InlineDatePickerProps) => {
+  const { desktop } = useResponsive(breakpoints.small);
+
   return (
     <LakeLabel
       label={label}
       render={id => {
         const day = (
-          <View style={styles.day}>
+          <View style={desktop ? styles.day : styles.dayMobile}>
             <LakeTextInput
               id={id}
               style={isNotNullish(error) && styles.error}
@@ -101,7 +112,7 @@ export const InlineDatePicker = ({
         );
 
         const year = (
-          <View style={styles.year}>
+          <View style={desktop ? styles.year : styles.yearMobile}>
             <LakeTextInput
               value={value.year}
               style={isNotNullish(error) && styles.error}
@@ -124,12 +135,12 @@ export const InlineDatePicker = ({
 
         return (
           <Box>
-            {order === "day-month-year" ? (
-              <Stack direction="row" space={12}>
+            {order === "DMY" ? (
+              <Stack direction="row" space={4}>
                 {day} {month} {year}
               </Stack>
             ) : (
-              <Stack direction="row" space={12}>
+              <Stack direction="row" space={4}>
                 {month} {day} {year}
               </Stack>
             )}
