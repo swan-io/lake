@@ -229,7 +229,6 @@ export const Inline = () => {
                   onValueChange={onChange}
                   value={value}
                   error={error}
-                  order="DMY"
                 />
               </View>
             )}

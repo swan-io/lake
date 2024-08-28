@@ -8,8 +8,9 @@ import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleSheet, View } from "react-native";
+import { match } from "ts-pattern";
 import { ExtractedDate } from "../utils/date";
-import { t } from "../utils/i18n";
+import { getCountry, t } from "../utils/i18n";
 
 const months = [
   { value: "01", name: t("datePicker.month.january") },
@@ -28,7 +29,7 @@ const months = [
 
 const styles = StyleSheet.create({
   dayMobile: {
-    maxWidth: 60,
+    maxWidth: 70,
     flexGrow: 0,
   },
   day: {
@@ -54,8 +55,14 @@ export type InlineDatePickerProps = {
   onValueChange: (value: ExtractedDate) => void;
   error?: string;
   onBlur?: () => void;
-  order: "DMY" | "MDY" | "YMD";
 };
+
+// https://en.wikipedia.org/wiki/List_of_date_formats_by_country
+const order = match(getCountry().cca2)
+  .returnType<"DMY" | "MDY" | "YMD">()
+  .with("US", () => "MDY")
+  .with("CN", "JP", "KR", "KP", "TW", "HU", "MN", "LT", "BT", () => "YMD")
+  .otherwise(() => "DMY");
 
 export const InlineDatePicker = ({
   value = { day: "", month: "", year: "" },
@@ -63,7 +70,6 @@ export const InlineDatePicker = ({
   onValueChange,
   error,
   onBlur,
-  order,
 }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
