@@ -11,9 +11,6 @@ import {
   validateDateRangeOrder,
 } from "@swan-io/shared-business/src/components/DatePicker";
 import { InlineDatePicker } from "@swan-io/shared-business/src/components/InlineDatePicker";
-import { extractDate } from "@swan-io/shared-business/src/utils/date";
-import { validateBirthdate } from "@swan-io/shared-business/src/utils/validation";
-import { useForm } from "@swan-io/use-form";
 import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
@@ -204,35 +201,15 @@ export const ButtonWithRangePopover = () => {
 };
 
 export const Inline = () => {
-  const initialValue = extractDate("1990-12-19");
+  const initialValue = undefined;
 
-  const { Field } = useForm({
-    birthDate: {
-      initialValue: {
-        day: initialValue?.day ?? "",
-        month: initialValue?.month ?? "",
-        year: initialValue?.year ?? "",
-      },
-      validate: validateBirthdate,
-    },
-  });
   return (
     <WithPartnerAccentColor color="#0F6FDE">
       <StoryBlock title="Inline picker">
         <StoryPart title="Default">
-          <Field name="birthDate">
-            {({ value, error, onChange, onBlur }) => (
-              <View style={styles.container}>
-                <InlineDatePicker
-                  onBlur={onBlur}
-                  label={"Birthdate"}
-                  onValueChange={onChange}
-                  value={value}
-                  error={error}
-                />
-              </View>
-            )}
-          </Field>
+          <View style={styles.container}>
+            <InlineDatePicker label={"Birthdate"} value={initialValue} />
+          </View>
         </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>

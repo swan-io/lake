@@ -6,11 +6,13 @@ import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Stack } from "@swan-io/lake/src/components/Stack";
 import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
+import { isEmpty, isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { useForm } from "@swan-io/use-form";
 import { StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
-import { ExtractedDate } from "../utils/date";
+import { extractDate } from "../utils/date";
 import { getCountry, t } from "../utils/i18n";
+import { validateBirthdate } from "../utils/validation";
 
 const months = [
   { value: "01", name: t("datePicker.month.january") },
@@ -51,8 +53,7 @@ const styles = StyleSheet.create({
 
 export type InlineDatePickerProps = {
   label: string;
-  value: ExtractedDate | undefined;
-  onValueChange: (value: ExtractedDate) => void;
+  value: string | undefined;
   error?: string;
   onBlur?: () => void;
 };
@@ -64,97 +65,114 @@ const order = match(getCountry().cca2)
   .with("CN", "JP", "KR", "KP", "TW", "HU", "MN", "LT", "BT", () => "YMD")
   .otherwise(() => "DMY");
 
-export const InlineDatePicker = ({
-  value = { day: "", month: "", year: "" },
-  label,
-  onValueChange,
-  error,
-  onBlur,
-}: InlineDatePickerProps) => {
+export const InlineDatePicker = ({ value, label }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
+  const { Field } = useForm({
+    birthdate: {
+      initialValue: isNotNullish(value) ? extractDate(value) : undefined,
+      sanitize: date =>
+        isNotNullish(date)
+          ? {
+              day: date.day.trim(),
+              month: date.month.trim(),
+              year: date.year.trim(),
+            }
+          : undefined,
+      strategy: "onBlur",
+      validate: date =>
+        isNullish(date) || Object.values(date).some(isEmpty)
+          ? (console.log(isNullish(date)), t("datePicker.error.incomplete"))
+          : validateBirthdate(date),
+    },
+  });
+
   return (
-    <LakeLabel
-      label={label}
-      render={id => {
-        const day = (
-          <View style={desktop ? styles.day : styles.dayMobile}>
-            <LakeTextInput
-              id={id}
-              style={isNotNullish(error) && styles.error}
-              placeholder={t("datePicker.day")}
-              value={value.day}
-              onBlur={onBlur}
-              hideErrors={true}
-              onChangeText={day => {
-                onValueChange({
-                  day,
-                  month: value.month,
-                  year: value.year,
-                });
-              }}
-              pattern="[0-9]"
-              maxLength={2}
-              autoComplete="bday-day"
-            />
-          </View>
-        );
+    <Field name="birthdate">
+      {({ error, onBlur, onChange, value }) => (
+        <LakeLabel
+          label={label}
+          render={id => {
+            const day = (
+              <View style={desktop ? styles.day : styles.dayMobile}>
+                <LakeTextInput
+                  id={id}
+                  style={isNotNullish(error) && styles.error}
+                  placeholder={t("datePicker.day")}
+                  value={value?.day ?? undefined}
+                  onBlur={onBlur}
+                  hideErrors={true}
+                  onChangeText={day => {
+                    onChange({
+                      day,
+                      month: value?.month ?? "",
+                      year: value?.year ?? "",
+                    });
+                  }}
+                  pattern="[0-9]"
+                  maxLength={2}
+                  autoComplete="bday-day"
+                />
+              </View>
+            );
 
-        const month = (
-          <LakeSelect
-            value={value.month === "" ? undefined : value.month}
-            style={isNotNullish(error) && styles.error}
-            placeholder={t("datePicker.month")}
-            hideErrors={true}
-            items={months}
-            onValueChange={month => {
-              onValueChange({
-                day: value.day,
-                month,
-                year: value.year,
-              });
-            }}
-          />
-        );
+            const month = (
+              <LakeSelect
+                value={value?.month === "" ? undefined : value?.month}
+                style={isNotNullish(error) && styles.error}
+                placeholder={t("datePicker.month")}
+                hideErrors={true}
+                items={months}
+                onValueChange={month => {
+                  onChange({
+                    day: value?.day ?? "",
+                    month,
+                    year: value?.year ?? "",
+                  });
+                }}
+              />
+            );
 
-        const year = (
-          <View style={desktop ? styles.year : styles.yearMobile}>
-            <LakeTextInput
-              value={value.year}
-              style={isNotNullish(error) && styles.error}
-              placeholder={t("datePicker.year")}
-              onBlur={onBlur}
-              hideErrors={true}
-              onChangeText={year =>
-                onValueChange({
-                  day: value.day,
-                  month: value.month,
-                  year,
-                })
-              }
-              pattern="[0-9]"
-              maxLength={4}
-              autoComplete="bday-year"
-            />
-          </View>
-        );
+            const year = (
+              <View style={desktop ? styles.year : styles.yearMobile}>
+                <LakeTextInput
+                  value={value?.year}
+                  style={isNotNullish(error) && styles.error}
+                  placeholder={t("datePicker.year")}
+                  onBlur={onBlur}
+                  hideErrors={true}
+                  onChangeText={year =>
+                    onChange({
+                      day: value?.day ?? "",
+                      month: value?.month ?? "",
+                      year,
+                    })
+                  }
+                  pattern="[0-9]"
+                  maxLength={4}
+                  autoComplete="bday-year"
+                />
+              </View>
+            );
 
-        return (
-          <Box>
-            {order === "DMY" ? (
-              <Stack direction="row" space={4}>
-                {day} {month} {year}
-              </Stack>
-            ) : (
-              <Stack direction="row" space={4}>
-                {month} {day} {year}
-              </Stack>
-            )}
+            return (
+              <Box>
+                {order === "DMY" ? (
+                  <Stack direction="row" space={4}>
+                    {day} {month} {year}
+                  </Stack>
+                ) : (
+                  <Stack direction="row" space={4}>
+                    {month} {day} {year}
+                  </Stack>
+                )}
 
-            <InputError message={error} />
-          </Box>
-        );
-      }}
-    />
+                <InputError message={error} />
+              </Box>
+            );
+          }}
+        />
+      )}
+    </Field>
   );
 };
