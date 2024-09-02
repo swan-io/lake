@@ -63,6 +63,7 @@
   "datePicker.month.october": "October",
   "datePicker.month.previous": "Previous month",
   "datePicker.month.september": "September",
+  "datePicker.error.incomplete": "Please enter your valid birth date: month, day, and year.",
   "datePicker.year": "Year",
   "error.generic": "An error occurred",
   "error.iban.invalid": "This IBAN doesn't look right. Trying entering it again.",
@@ -297,6 +298,6 @@
   "transactionStatement.title.debtor": "Debtor information",
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Information",
-  "validation.invalidBirthDate": "Please enter your complete and valid birth date: month, day, and year",
+  "validation.invalidBirthDate": "Please enter your valid birth date.",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future"
 }

@@ -40,6 +40,7 @@
   "common.skipToContent": "Salta al contenuto",
   "copyButton.copiedTooltip": "Copiato negli appunti",
   "copyButton.copyTooltip": "Clicca per copiare",
+  "datePicker.day": "Giorno",
   "datePicker.day.friday": "Venerdì",
   "datePicker.day.monday": "Lunedì",
   "datePicker.day.saturday": "Sabato",
@@ -47,6 +48,8 @@
   "datePicker.day.thursday": "Giovedì",
   "datePicker.day.tuesday": "Martedì",
   "datePicker.day.wednesday": "Mercoledì",
+  "datePicker.error.incomplete": "Inserisci la tua data di nascita valida: mese, giorno e anno.",
+  "datePicker.month": "Mese",
   "datePicker.month.april": "Aprile",
   "datePicker.month.august": "Agosto",
   "datePicker.month.december": "Dicembre",
@@ -61,6 +64,7 @@
   "datePicker.month.october": "Ottobre",
   "datePicker.month.previous": "Mese precedente",
   "datePicker.month.september": "Settembre",
+  "datePicker.year": "Anno",
   "error.generic": "Si è verificato un errore",
   "error.iban.invalid": "L'IBAN non è corretto. Provi a inserirlo di nuovo.",
   "error.network.500": "Errore interno del server",
@@ -293,5 +297,7 @@
   "transactionStatement.title.creditor": "Informazioni creditore",
   "transactionStatement.title.debtor": "Informazioni debitore",
   "transactionStatement.title.document": "Conferma transazione",
-  "transactionStatement.title.information": "Informazioni"
+  "transactionStatement.title.information": "Informazioni",
+  "validation.birthdateCannotBeFuture": "La data di nascita non può essere nel futuro",
+  "validation.invalidBirthDate": "Inserisci la tua data di nascita valida."
 }
