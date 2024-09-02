@@ -10,7 +10,7 @@ import { isEmpty, isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullis
 import { useForm } from "@swan-io/use-form";
 import { StyleSheet, View } from "react-native";
 import { match } from "ts-pattern";
-import { extractDate } from "../utils/date";
+import { extractDate, formatExtractedDate } from "../utils/date";
 import { getCountry, t } from "../utils/i18n";
 import { validateBirthdate } from "../utils/validation";
 
@@ -56,6 +56,7 @@ export type InlineDatePickerProps = {
   value: string | undefined;
   error?: string;
   onBlur?: () => void;
+  onValueChange: (value: string | undefined) => void;
 };
 
 // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
@@ -65,7 +66,7 @@ const order = match(getCountry().cca2)
   .with("CN", "JP", "KR", "KP", "TW", "HU", "MN", "LT", "BT", () => "YMD")
   .otherwise(() => "DMY");
 
-export const InlineDatePicker = ({ value, label }: InlineDatePickerProps) => {
+export const InlineDatePicker = ({ value, label, onValueChange }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
   const { Field } = useForm({
@@ -80,10 +81,19 @@ export const InlineDatePicker = ({ value, label }: InlineDatePickerProps) => {
             }
           : undefined,
       strategy: "onBlur",
-      validate: date =>
-        isNullish(date) || Object.values(date).some(isEmpty)
-          ? (console.log(isNullish(date)), t("datePicker.error.incomplete"))
-          : validateBirthdate(date),
+      validate: date => {
+        const errorMessage =
+          isNullish(date) || Object.values(date).some(isEmpty)
+            ? t("datePicker.error.incomplete")
+            : validateBirthdate(date);
+
+        if (isNullish(errorMessage) && isNotNullish(date)) {
+          return onValueChange(formatExtractedDate(date));
+        } else {
+          onValueChange(undefined);
+          return errorMessage;
+        }
+      },
     },
   });
 

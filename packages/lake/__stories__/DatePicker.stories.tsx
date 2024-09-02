@@ -18,6 +18,7 @@ import { LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
+import { isNotNullish } from "../src/utils/nullish";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -203,12 +204,20 @@ export const ButtonWithRangePopover = () => {
 export const Inline = () => {
   const initialValue = undefined;
 
+  const [birthdate, setBirthdate] = useState<string | undefined>(undefined);
+
   return (
     <WithPartnerAccentColor color="#0F6FDE">
       <StoryBlock title="Inline picker">
         <StoryPart title="Default">
           <View style={styles.container}>
-            <InlineDatePicker label={"Birthdate"} value={initialValue} />
+            {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
+
+            <InlineDatePicker
+              label={"Birthdate"}
+              value={initialValue}
+              onValueChange={setBirthdate}
+            />
           </View>
         </StoryPart>
       </StoryBlock>
