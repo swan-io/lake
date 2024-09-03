@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { BirthdatePicker } from "@swan-io/shared-business/src/components/BirthdatePicker";
 import {
   DatePicker,
   DatePickerModal,
@@ -10,15 +11,14 @@ import {
   isTodayOrFutureDate,
   validateDateRangeOrder,
 } from "@swan-io/shared-business/src/components/DatePicker";
-import { InlineDatePicker } from "@swan-io/shared-business/src/components/InlineDatePicker";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
-import { isNotNullish } from "../src/utils/nullish";
+import { isNotNullish, isNullish } from "../src/utils/nullish";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -202,9 +202,18 @@ export const ButtonWithRangePopover = () => {
 };
 
 export const Inline = () => {
-  const initialValue = undefined;
+  const initialValue = "2000-01-01";
 
-  const [birthdate, setBirthdate] = useState<string | undefined>(undefined);
+  const [birthdate, setBirthdate] = useState<string | undefined>(initialValue);
+
+  const [error, setError] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (isNullish(birthdate)) {
+      setError("The birthdate must be filled");
+    } else {
+      setError(undefined);
+    }
+  }, [birthdate]);
 
   return (
     <WithPartnerAccentColor color="#0F6FDE">
@@ -213,10 +222,11 @@ export const Inline = () => {
           <View style={styles.container}>
             {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
 
-            <InlineDatePicker
+            <BirthdatePicker
               label={"Birthdate"}
               value={initialValue}
               onValueChange={setBirthdate}
+              error={error}
             />
           </View>
         </StoryPart>
