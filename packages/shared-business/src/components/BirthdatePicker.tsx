@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export type InlineDatePickerProps = {
+export type BirthdatePickerProps = {
   label: string;
   value: string | undefined;
-  formError?: string;
+  error?: string;
   onValueChange: (value: string | undefined) => void;
 };
 
@@ -65,12 +65,12 @@ const order = match(getCountry().cca2)
   .with("CN", "JP", "KR", "KP", "TW", "HU", "MN", "LT", "BT", () => "YMD")
   .otherwise(() => "DMY");
 
-export const InlineDatePicker = ({
+export const BirthdatePicker = ({
   value,
   label,
   onValueChange,
-  formError,
-}: InlineDatePickerProps) => {
+  error: externalError,
+}: BirthdatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
   const { Field } = useForm({
@@ -111,7 +111,7 @@ export const InlineDatePicker = ({
               <View style={desktop ? styles.day : styles.dayMobile}>
                 <LakeTextInput
                   id={id}
-                  style={(isNotNullish(error) || isNotNullish(formError)) && styles.error}
+                  style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                   placeholder={t("datePicker.day")}
                   value={value?.day ?? undefined}
                   onBlur={onBlur}
@@ -133,7 +133,7 @@ export const InlineDatePicker = ({
             const month = (
               <LakeSelect
                 value={value?.month === "" ? undefined : value?.month}
-                style={(isNotNullish(error) || isNotNullish(formError)) && styles.error}
+                style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                 placeholder={t("datePicker.month")}
                 hideErrors={true}
                 items={months}
@@ -151,7 +151,7 @@ export const InlineDatePicker = ({
               <View style={desktop ? styles.year : styles.yearMobile}>
                 <LakeTextInput
                   value={value?.year}
-                  style={(isNotNullish(error) || isNotNullish(formError)) && styles.error}
+                  style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                   placeholder={t("datePicker.year")}
                   onBlur={onBlur}
                   hideErrors={true}
@@ -181,7 +181,7 @@ export const InlineDatePicker = ({
                   </Stack>
                 )}
 
-                <InputError message={error ?? formError} />
+                <InputError message={error ?? externalError} />
               </Box>
             );
           }}

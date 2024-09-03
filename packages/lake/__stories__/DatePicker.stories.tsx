@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { BirthdatePicker } from "@swan-io/shared-business/src/components/BirthdatePicker";
 import {
   DatePicker,
   DatePickerModal,
@@ -10,7 +11,6 @@ import {
   isTodayOrFutureDate,
   validateDateRangeOrder,
 } from "@swan-io/shared-business/src/components/DatePicker";
-import { InlineDatePicker } from "@swan-io/shared-business/src/components/InlineDatePicker";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
@@ -204,14 +204,14 @@ export const ButtonWithRangePopover = () => {
 export const Inline = () => {
   const initialValue = "2000-01-01";
 
-  const [birthdate, setBirthdate] = useState<string | undefined>(undefined);
+  const [birthdate, setBirthdate] = useState<string | undefined>(initialValue);
 
-  const [err, setErr] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (isNullish(birthdate)) {
-      setErr("ERROR FROM PARENT");
+      setError("The birthdate must be filled");
     } else {
-      setErr(undefined);
+      setError(undefined);
     }
   }, [birthdate]);
 
@@ -222,11 +222,11 @@ export const Inline = () => {
           <View style={styles.container}>
             {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
 
-            <InlineDatePicker
+            <BirthdatePicker
               label={"Birthdate"}
               value={initialValue}
               onValueChange={setBirthdate}
-              formError={err}
+              error={error}
             />
           </View>
         </StoryPart>
