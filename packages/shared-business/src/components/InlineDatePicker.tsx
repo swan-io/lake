@@ -181,7 +181,7 @@ export const InlineDatePicker = ({
                   </Stack>
                 )}
 
-                <InputError message={formError ?? error} />
+                <InputError message={error ?? formError} />
               </Box>
             );
           }}
