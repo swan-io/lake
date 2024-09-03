@@ -8,7 +8,7 @@ import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { isEmpty, isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { useForm } from "@swan-io/use-form";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { extractDate, formatExtractedDate } from "../utils/date";
 import { getCountry, t } from "../utils/i18n";
@@ -56,6 +56,7 @@ export type BirthdatePickerProps = {
   value: string | undefined;
   error?: string;
   onValueChange: (value: string | undefined) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
@@ -70,6 +71,7 @@ export const BirthdatePicker = ({
   label,
   onValueChange,
   error: externalError,
+  style,
 }: BirthdatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
@@ -102,91 +104,93 @@ export const BirthdatePicker = ({
   });
 
   return (
-    <Field name="birthdate">
-      {({ error, onBlur, onChange, value }) => (
-        <LakeLabel
-          label={label}
-          render={id => {
-            const day = (
-              <View style={desktop ? styles.day : styles.dayMobile}>
-                <LakeTextInput
-                  id={id}
+    <View style={style}>
+      <Field name="birthdate">
+        {({ error, onBlur, onChange, value }) => (
+          <LakeLabel
+            label={label}
+            render={id => {
+              const day = (
+                <View style={desktop ? styles.day : styles.dayMobile}>
+                  <LakeTextInput
+                    id={id}
+                    style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
+                    placeholder={t("datePicker.day")}
+                    value={value?.day ?? undefined}
+                    onBlur={onBlur}
+                    hideErrors={true}
+                    onChangeText={day => {
+                      onChange({
+                        day,
+                        month: value?.month ?? "",
+                        year: value?.year ?? "",
+                      });
+                    }}
+                    pattern="[0-9]"
+                    maxLength={2}
+                    autoComplete="bday-day"
+                  />
+                </View>
+              );
+
+              const month = (
+                <LakeSelect
+                  value={value?.month === "" ? undefined : value?.month}
                   style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
-                  placeholder={t("datePicker.day")}
-                  value={value?.day ?? undefined}
-                  onBlur={onBlur}
+                  placeholder={t("datePicker.month")}
                   hideErrors={true}
-                  onChangeText={day => {
+                  items={months}
+                  onValueChange={month => {
                     onChange({
-                      day,
-                      month: value?.month ?? "",
+                      day: value?.day ?? "",
+                      month,
                       year: value?.year ?? "",
                     });
                   }}
-                  pattern="[0-9]"
-                  maxLength={2}
-                  autoComplete="bday-day"
                 />
-              </View>
-            );
+              );
 
-            const month = (
-              <LakeSelect
-                value={value?.month === "" ? undefined : value?.month}
-                style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
-                placeholder={t("datePicker.month")}
-                hideErrors={true}
-                items={months}
-                onValueChange={month => {
-                  onChange({
-                    day: value?.day ?? "",
-                    month,
-                    year: value?.year ?? "",
-                  });
-                }}
-              />
-            );
+              const year = (
+                <View style={desktop ? styles.year : styles.yearMobile}>
+                  <LakeTextInput
+                    value={value?.year}
+                    style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
+                    placeholder={t("datePicker.year")}
+                    onBlur={onBlur}
+                    hideErrors={true}
+                    onChangeText={year =>
+                      onChange({
+                        day: value?.day ?? "",
+                        month: value?.month ?? "",
+                        year,
+                      })
+                    }
+                    pattern="[0-9]"
+                    maxLength={4}
+                    autoComplete="bday-year"
+                  />
+                </View>
+              );
 
-            const year = (
-              <View style={desktop ? styles.year : styles.yearMobile}>
-                <LakeTextInput
-                  value={value?.year}
-                  style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
-                  placeholder={t("datePicker.year")}
-                  onBlur={onBlur}
-                  hideErrors={true}
-                  onChangeText={year =>
-                    onChange({
-                      day: value?.day ?? "",
-                      month: value?.month ?? "",
-                      year,
-                    })
-                  }
-                  pattern="[0-9]"
-                  maxLength={4}
-                  autoComplete="bday-year"
-                />
-              </View>
-            );
+              return (
+                <Box>
+                  {order === "DMY" ? (
+                    <Stack direction="row" space={4}>
+                      {day} {month} {year}
+                    </Stack>
+                  ) : (
+                    <Stack direction="row" space={4}>
+                      {month} {day} {year}
+                    </Stack>
+                  )}
 
-            return (
-              <Box>
-                {order === "DMY" ? (
-                  <Stack direction="row" space={4}>
-                    {day} {month} {year}
-                  </Stack>
-                ) : (
-                  <Stack direction="row" space={4}>
-                    {month} {day} {year}
-                  </Stack>
-                )}
-
-                <InputError message={error ?? externalError} />
-              </Box>
-            );
-          }}
-        />
-      )}
-    </Field>
+                  <InputError message={error ?? externalError} />
+                </Box>
+              );
+            }}
+          />
+        )}
+      </Field>
+    </View>
   );
 };
