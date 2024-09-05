@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/shared-business",
-  "version": "8.14.5",
+  "version": "8.14.6",
   "engines": {
     "node": ">=20.9.0",
     "yarn": "^1.22.0"
