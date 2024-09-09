@@ -299,5 +299,5 @@
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Information",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
-  "validation.invalidBirthDate": "Please enter your valid birth date."
+  "validation.invalidBirthDate": "Please enter a valid birth date."
 }

@@ -298,6 +298,6 @@
   "transactionStatement.title.debtor": "Velallisen tiedot",
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Tiedot",
-  "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
-  "validation.invalidBirthDate": "Please enter your valid birth date."
+  "validation.birthdateCannotBeFuture": "Syntymäpäivä ei voi olla tulevaisuudessa",
+  "validation.invalidBirthDate": "Syötä kelvollinen syntymäpäivä."
 }

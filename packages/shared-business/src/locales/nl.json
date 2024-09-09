@@ -299,5 +299,5 @@
   "transactionStatement.title.document": "Transactiebevestiging",
   "transactionStatement.title.information": "Informatie",
   "validation.birthdateCannotBeFuture": "Geboortedatum kan niet in de toekomst liggen",
-  "validation.invalidBirthDate": "Voer je volledige en geldige geboortedatum in: maand, dag en jaar"
+  "validation.invalidBirthDate": "Voer alstublieft een geldige geboortedatum in."
 }
