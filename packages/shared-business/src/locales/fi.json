@@ -48,7 +48,7 @@
   "datePicker.day.thursday": "Torstai",
   "datePicker.day.tuesday": "Tiistai",
   "datePicker.day.wednesday": "Keskiviikko",
-  "datePicker.error.incomplete": "Please enter your valid birth date: month, day, and year.",
+  "datePicker.error.incomplete": "Syötä kelvollinen syntymäpäivä: kuukausi, päivä ja vuosi.",
   "datePicker.month": "Month",
   "datePicker.month.april": "Huhtikuu",
   "datePicker.month.august": "Elokuu",

@@ -48,7 +48,7 @@
   "datePicker.day.thursday": "Thursday",
   "datePicker.day.tuesday": "Tuesday",
   "datePicker.day.wednesday": "Wednesday",
-  "datePicker.error.incomplete": "Please enter your valid birth date: month, day, and year.",
+  "datePicker.error.incomplete": "Please enter a valid birth date: month, day, and year.",
   "datePicker.month": "Month",
   "datePicker.month.april": "April",
   "datePicker.month.august": "August",

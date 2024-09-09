@@ -48,7 +48,7 @@
   "datePicker.day.thursday": "Jeudi",
   "datePicker.day.tuesday": "Mardi",
   "datePicker.day.wednesday": "Mercredi",
-  "datePicker.error.incomplete": "Veuillez saisir votre date de naissance valide : mois, jour et année.",
+  "datePicker.error.incomplete": "Veuillez saisir une date de naissance valide : mois, jour et année.",
   "datePicker.month": "Mois",
   "datePicker.month.april": "Avril",
   "datePicker.month.august": "Août",

@@ -48,7 +48,7 @@
   "datePicker.day.thursday": "Quinta-feira",
   "datePicker.day.tuesday": "Terça-feira",
   "datePicker.day.wednesday": "Quarta-feira",
-  "datePicker.error.incomplete": "Por favor, insira a sua data de nascimento válida: mês, dia e ano.",
+  "datePicker.error.incomplete": "Por favor, insira uma data de nascimento válida: mês, dia e ano.",
   "datePicker.month": "Mês",
   "datePicker.month.april": "Abril",
   "datePicker.month.august": "Agosto",
