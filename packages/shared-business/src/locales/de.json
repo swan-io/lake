@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Donnerstag",
   "datePicker.day.tuesday": "Dienstag",
   "datePicker.day.wednesday": "Mittwoch",
-  "datePicker.error.incomplete": "Bitte geben Sie Ihr gültiges Geburtsdatum ein: Monat, Tag und Jahr.",
   "datePicker.month": "Monat",
   "datePicker.month.april": "April",
   "datePicker.month.august": "August",
@@ -299,5 +298,5 @@
   "transactionStatement.title.document": "Transaktionsbestätigung",
   "transactionStatement.title.information": "Informationen",
   "validation.birthdateCannotBeFuture": "Geburtsdatum kann nicht in der Zukunft liegen.",
-  "validation.invalidBirthDate": "Bitte geben Sie Ihr gültiges Geburtsdatum ein."
+  "validation.invalidBirthDate": "Bitte geben Sie ein gültiges Geburtsdatum ein."
 }

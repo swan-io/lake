@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Donderdag",
   "datePicker.day.tuesday": "Dinsdag",
   "datePicker.day.wednesday": "Woensdag",
-  "datePicker.error.incomplete": "Voer alstublieft uw geldige geboortedatum in: maand, dag en jaar.",
   "datePicker.month": "Maand",
   "datePicker.month.april": "April",
   "datePicker.month.august": "Augustus",
@@ -299,5 +298,5 @@
   "transactionStatement.title.document": "Transactiebevestiging",
   "transactionStatement.title.information": "Informatie",
   "validation.birthdateCannotBeFuture": "Geboortedatum kan niet in de toekomst liggen",
-  "validation.invalidBirthDate": "Voer je volledige en geldige geboortedatum in: maand, dag en jaar"
+  "validation.invalidBirthDate": "Voer alstublieft een geldige geboortedatum in."
 }

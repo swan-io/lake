@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Jeudi",
   "datePicker.day.tuesday": "Mardi",
   "datePicker.day.wednesday": "Mercredi",
-  "datePicker.error.incomplete": "Veuillez saisir votre date de naissance valide : mois, jour et année.",
   "datePicker.month": "Mois",
   "datePicker.month.april": "Avril",
   "datePicker.month.august": "Août",
@@ -299,5 +298,5 @@
   "transactionStatement.title.document": "Confirmation de transaction",
   "transactionStatement.title.information": "Informations",
   "validation.birthdateCannotBeFuture": "La date de naissance ne peut pas être future",
-  "validation.invalidBirthDate": "Veuillez saisir votre date de naissance valide."
+  "validation.invalidBirthDate": "Veuillez saisir une date de naissance valide."
 }

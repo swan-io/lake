@@ -1,4 +1,5 @@
 import { noop } from "@swan-io/lake/src/utils/function";
+import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { Validator } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { isValid as isValidIban } from "iban";
@@ -125,7 +126,10 @@ export const validateIban = (iban: string) => {
   }
 };
 
-export const validateBirthdate = (value: ExtractedDate) => {
+export const validateBirthdate = (value: ExtractedDate | undefined) => {
+  if (isNullish(value)) {
+    return t("validation.invalidBirthDate");
+  }
   const date = dayjs.utc(formatExtractedDate(value), "YYYY-MM-DD", true);
 
   const isBirthdateOver150years = date.isBefore(dayjs.utc().subtract(100, "years"));
