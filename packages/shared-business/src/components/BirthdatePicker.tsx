@@ -6,7 +6,7 @@ import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Stack } from "@swan-io/lake/src/components/Stack";
 import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
-import { isEmpty, isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { useForm } from "@swan-io/use-form";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
@@ -30,6 +30,7 @@ const months = [
 ];
 
 const styles = StyleSheet.create({
+  container: { paddingTop: 6 },
   dayMobile: {
     maxWidth: 70,
     flexGrow: 0,
@@ -88,10 +89,7 @@ export const BirthdatePicker = ({
           : undefined,
       strategy: "onBlur",
       validate: date => {
-        const errorMessage =
-          isNullish(date) || Object.values(date).some(isEmpty)
-            ? t("datePicker.error.incomplete")
-            : validateBirthdate(date);
+        const errorMessage = validateBirthdate(date);
 
         if (isNullish(errorMessage) && isNotNullish(date)) {
           return onValueChange(formatExtractedDate(date));
@@ -104,7 +102,7 @@ export const BirthdatePicker = ({
   });
 
   return (
-    <View style={style}>
+    <View style={[styles.container, style]}>
       <Field name="birthdate">
         {({ error, onBlur, onChange, value }) => (
           <LakeLabel
