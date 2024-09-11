@@ -298,6 +298,14 @@
   "transactionStatement.title.debtor": "Informazioni debitore",
   "transactionStatement.title.document": "Conferma della transazione",
   "transactionStatement.title.information": "Informazioni",
+  "transactionStatement.type.InternalCreditTransferIn": "Bonifico interno ricevuto",
+  "transactionStatement.type.InternalCreditTransferOut": "Bonifico interno inviato",
+  "transactionStatement.type.InternationalCreditTransferIn": "Bonifico internazionale ricevuto",
+  "transactionStatement.type.InternationalCreditTransferOut": "Bonifico internazionale inviato",
+  "transactionStatement.type.SepaCreditTransferIn": "Bonifico SEPA ricevuto",
+  "transactionStatement.type.SepaCreditTransferOut": "Bonifico SEPA inviato",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "Bonifico SEPA istantaneo ricevuto",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "Bonifico SEPA istantaneo inviato",
   "validation.birthdateCannotBeFuture": "La data di nascita non può essere nel futuro",
   "validation.invalidBirthDate": "Inserisci la tua data di nascita valida."
 }

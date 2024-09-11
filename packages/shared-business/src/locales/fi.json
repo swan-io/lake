@@ -298,6 +298,14 @@
   "transactionStatement.title.debtor": "Velallisen tiedot",
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Tiedot",
+  "transactionStatement.type.InternalCreditTransferIn": "Vastaanotettu sisäinen tilisiirto",
+  "transactionStatement.type.InternalCreditTransferOut": "Lähetetty sisäinen tilisiirto",
+  "transactionStatement.type.InternationalCreditTransferIn": "Vastaanotettu kansainvälinen tilisiirto",
+  "transactionStatement.type.InternationalCreditTransferOut": "Lähetetty kansainvälinen tilisiirto",
+  "transactionStatement.type.SepaCreditTransferIn": "Vastaanotettu SEPA-tilisiirto",
+  "transactionStatement.type.SepaCreditTransferOut": "Lähetetty SEPA-tilisiirto",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "Vastaanotettu SEPA Instant -tilisiirto",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "Lähetetty SEPA Instant -tilisiirto",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
   "validation.invalidBirthDate": "Please enter your valid birth date."
 }

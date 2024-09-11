@@ -5,11 +5,11 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { Stack } from "@swan-io/lake/src/components/Stack";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { colors, fonts, interFontStyle } from "@swan-io/lake/src/constants/design";
-import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
-import { t } from "../utils/i18n";
+import { formatCurrency, t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
@@ -24,9 +24,9 @@ const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 842,
-    width: 595,
-    padding: 42,
+    height: 1050,
+    width: 793,
+    padding: 56,
   },
   partnershipText: {
     ...getTextStyle("sans", 12),
@@ -83,6 +83,21 @@ const Line = ({ name, value }: EntryProps) => (
   </Box>
 );
 
+type Amount = {
+  value: string;
+  currency: string;
+};
+
+type TransactionType =
+  | "SepaCreditTransferIn"
+  | "SepaCreditTransferOut"
+  | "SepaInstantCreditTransferIn"
+  | "SepaInstantCreditTransferOut"
+  | "InternalCreditTransferIn"
+  | "InternalCreditTransferOut"
+  | "InternationalCreditTransferIn"
+  | "InternationalCreditTransferOut";
+
 type TransactionStatementV1Props = {
   version: "v1";
 
@@ -90,11 +105,11 @@ type TransactionStatementV1Props = {
   generationDate: string;
 
   executionDate: string;
-  type: string;
-  amount: string;
-  targetTransferAmount?: string;
-  exchangeRate?: string;
-  fees?: string;
+  type: TransactionType;
+  amount: Amount;
+  targetTransferAmount?: Amount;
+  exchangeRate?: [Amount, Amount];
+  fees?: Amount;
   label: string;
   reference: string;
 
@@ -166,22 +181,65 @@ export const TransactionStatementV1 = ({
 
       <Stack space={8}>
         <Line name={t("transactionStatement.information.executionDate")} value={executionDate} />
-        <Line name={t("transactionStatement.information.type")} value={type} />
-        <Line name={t("transactionStatement.information.amount")} value={amount} />
 
-        {isNotNullishOrEmpty(targetTransferAmount) && (
+        <Line
+          name={t("transactionStatement.information.type")}
+          value={match(type)
+            .with("SepaCreditTransferIn", () => t("transactionStatement.type.SepaCreditTransferIn"))
+            .with("SepaCreditTransferOut", () =>
+              t("transactionStatement.type.SepaCreditTransferOut"),
+            )
+            .with("SepaInstantCreditTransferIn", () =>
+              t("transactionStatement.type.SepaInstantCreditTransferIn"),
+            )
+            .with("SepaInstantCreditTransferOut", () =>
+              t("transactionStatement.type.SepaInstantCreditTransferOut"),
+            )
+            .with("InternalCreditTransferIn", () =>
+              t("transactionStatement.type.InternalCreditTransferIn"),
+            )
+            .with("InternalCreditTransferOut", () =>
+              t("transactionStatement.type.InternalCreditTransferOut"),
+            )
+            .with("InternationalCreditTransferIn", () =>
+              t("transactionStatement.type.InternationalCreditTransferIn"),
+            )
+            .with("InternationalCreditTransferOut", () =>
+              t("transactionStatement.type.InternationalCreditTransferOut"),
+            )
+            .exhaustive()}
+        />
+
+        <Line
+          name={t("transactionStatement.information.amount")}
+          value={formatCurrency(Number(amount.value), amount.currency)}
+        />
+
+        {isNotNullish(targetTransferAmount) && (
           <Line
             name={t("transactionStatement.information.targetTransferAmount")}
-            value={targetTransferAmount}
+            value={formatCurrency(
+              Number(targetTransferAmount.value),
+              targetTransferAmount.currency,
+            )}
           />
         )}
 
-        {isNotNullishOrEmpty(exchangeRate) && (
-          <Line name={t("transactionStatement.information.exchangeRate")} value={exchangeRate} />
+        {isNotNullish(exchangeRate) && (
+          <Line
+            name={t("transactionStatement.information.exchangeRate")}
+            value={`${formatCurrency(
+              Number(exchangeRate[0].value),
+              exchangeRate[0].currency,
+            )} : ${formatCurrency(Number(exchangeRate[1].value), exchangeRate[1].currency)}`}
+          />
         )}
 
-        {isNotNullishOrEmpty(fees) && (
-          <Line name={t("transactionStatement.information.fees")} value={fees} />
+        {isNotNullish(fees) && (
+          <Line
+            name={t("transactionStatement.information.fees")}
+            value={formatCurrency(Number(fees.value), fees.currency)}
+          />
         )}
 
         <Line name="Label" value={label} />

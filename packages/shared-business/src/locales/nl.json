@@ -298,6 +298,14 @@
   "transactionStatement.title.debtor": "Informatie over Debiteur",
   "transactionStatement.title.document": "Transactiebevestiging",
   "transactionStatement.title.information": "Informatie",
+  "transactionStatement.type.InternalCreditTransferIn": "Interne Overschrijving ontvangen",
+  "transactionStatement.type.InternalCreditTransferOut": "Interne Overschrijving verzonden",
+  "transactionStatement.type.InternationalCreditTransferIn": "Internationale Overschrijving ontvangen",
+  "transactionStatement.type.InternationalCreditTransferOut": "Internationale Overschrijving verzonden",
+  "transactionStatement.type.SepaCreditTransferIn": "SEPA Overschrijving ontvangen",
+  "transactionStatement.type.SepaCreditTransferOut": "SEPA Overschrijving verzonden",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Directe Overschrijving ontvangen",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Directe Overschrijving verzonden",
   "validation.birthdateCannotBeFuture": "Geboortedatum kan niet in de toekomst liggen",
   "validation.invalidBirthDate": "Voer je volledige en geldige geboortedatum in: maand, dag en jaar"
 }

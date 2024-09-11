@@ -1,19 +1,20 @@
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { colors } from "../constants/design";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { LakeText } from "./LakeText";
 import { Space, SpacingValue } from "./Space";
 
+const BACKGROUND_IMAGE = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAADElEQVQIHWN48fwFAAVyArgPjAd5AAAAAElFTkSuQmCC")`;
+
 const styles = StyleSheet.create({
   horizontal: {
-    backgroundColor: colors.gray[100],
+    backgroundImage: BACKGROUND_IMAGE,
     width: 1,
     alignSelf: "stretch",
   },
   vertical: {
-    backgroundColor: colors.gray[100],
+    backgroundColor: BACKGROUND_IMAGE,
     height: 1,
     alignSelf: "stretch",
   },

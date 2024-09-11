@@ -298,6 +298,14 @@
   "transactionStatement.title.debtor": "Informações do devedor",
   "transactionStatement.title.document": "Confirmação da transação",
   "transactionStatement.title.information": "Informação",
+  "transactionStatement.type.InternalCreditTransferIn": "Transferência de crédito interna recebida",
+  "transactionStatement.type.InternalCreditTransferOut": "Transferência de crédito interna enviada",
+  "transactionStatement.type.InternationalCreditTransferIn": "Transferência de crédito internacional recebida",
+  "transactionStatement.type.InternationalCreditTransferOut": "Transferência de crédito internacional enviada",
+  "transactionStatement.type.SepaCreditTransferIn": "Transferência de crédito SEPA recebida",
+  "transactionStatement.type.SepaCreditTransferOut": "Transferência de crédito SEPA enviada",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "Transferência de crédito instantânea SEPA recebida",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "Transferência de crédito instantânea SEPA enviada",
   "validation.birthdateCannotBeFuture": "A data de nascimento não pode estar no futuro",
   "validation.invalidBirthDate": "Por favor, introduza a sua data de nascimento completa e válida: mês, dia e ano"
 }
