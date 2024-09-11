@@ -297,6 +297,14 @@
   "transactionStatement.title.debtor": "Informationen zum Zahlungspflichtigen",
   "transactionStatement.title.document": "Transaktionsbestätigung",
   "transactionStatement.title.information": "Informationen",
+  "transactionStatement.type.InternalCreditTransferIn": "Interne Überweisung erhalten",
+  "transactionStatement.type.InternalCreditTransferOut": "Interne Überweisung gesendet",
+  "transactionStatement.type.InternationalCreditTransferIn": "Internationale Überweisung erhalten",
+  "transactionStatement.type.InternationalCreditTransferOut": "Internationale Überweisung gesendet",
+  "transactionStatement.type.SepaCreditTransferIn": "SEPA-Überweisung erhalten",
+  "transactionStatement.type.SepaCreditTransferOut": "SEPA-Überweisung gesendet",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Sofortüberweisung erhalten",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Sofortüberweisung gesendet",
   "validation.birthdateCannotBeFuture": "Geburtsdatum kann nicht in der Zukunft liegen.",
   "validation.invalidBirthDate": "Bitte geben Sie ein gültiges Geburtsdatum ein."
 }

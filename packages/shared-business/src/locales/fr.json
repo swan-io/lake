@@ -297,6 +297,14 @@
   "transactionStatement.title.debtor": "Informations sur le débiteur",
   "transactionStatement.title.document": "Confirmation de transaction",
   "transactionStatement.title.information": "Informations",
+  "transactionStatement.type.InternalCreditTransferIn": "Virement interne reçu",
+  "transactionStatement.type.InternalCreditTransferOut": "Virement interne envoyé",
+  "transactionStatement.type.InternationalCreditTransferIn": "Virement international reçu",
+  "transactionStatement.type.InternationalCreditTransferOut": "Virement international envoyé",
+  "transactionStatement.type.SepaCreditTransferIn": "Virement SEPA reçu",
+  "transactionStatement.type.SepaCreditTransferOut": "Virement SEPA envoyé",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "Virement SEPA instantané reçu",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "Virement SEPA instantané envoyé",
   "validation.birthdateCannotBeFuture": "La date de naissance ne peut pas être future",
   "validation.invalidBirthDate": "Veuillez saisir une date de naissance valide."
 }

@@ -297,6 +297,14 @@
   "transactionStatement.title.debtor": "Debtor information",
   "transactionStatement.title.document": "Transaction confirmation",
   "transactionStatement.title.information": "Information",
+  "transactionStatement.type.SepaCreditTransferIn": "SEPA Credit Transfer received",
+  "transactionStatement.type.SepaCreditTransferOut": "SEPA Credit Transfer sent",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Instant Credit Transfer received",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Instant Credit Transfer sent",
+  "transactionStatement.type.InternalCreditTransferIn": "Internal Credit Transfer received",
+  "transactionStatement.type.InternalCreditTransferOut": "Internal Credit Transfer sent",
+  "transactionStatement.type.InternationalCreditTransferIn": "International Credit Transfer received",
+  "transactionStatement.type.InternationalCreditTransferOut": "International Credit Transfer sent",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
   "validation.invalidBirthDate": "Please enter a valid birth date."
 }

@@ -142,6 +142,9 @@ const intl = createIntl(
 export const t = (key: TranslationKey, params?: TranslationParams) =>
   intl.formatMessage({ id: key, defaultMessage: translationEN[key] }, params).toString();
 
+export const formatCurrency = (value: number, currency: string) =>
+  intl.formatNumber(value, { style: "currency", currency });
+
 export const formatNestedMessage = (
   key: TranslationKey,
   params: Record<string, string | number | ReactElement | ((children: ReactNode) => ReactNode)>,
