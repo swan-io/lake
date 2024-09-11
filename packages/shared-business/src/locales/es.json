@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Jueves",
   "datePicker.day.tuesday": "Martes",
   "datePicker.day.wednesday": "Miércoles",
-  "datePicker.error.incomplete": "Por favor, introduce tu fecha de nacimiento válida: mes, día y año.",
   "datePicker.month": "Mes",
   "datePicker.month.april": "Abril",
   "datePicker.month.august": "Agosto",
@@ -307,5 +306,5 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "Transferencia SEPA Instantánea recibida",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Transferencia SEPA Instantánea enviada",
   "validation.birthdateCannotBeFuture": "La fecha de nacimiento no puede estar en el futuro",
-  "validation.invalidBirthDate": "Por favor, introduce tu fecha de nacimiento válida."
+  "validation.invalidBirthDate": "Por favor, introduce una fecha de nacimiento válida."
 }

@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Giovedì",
   "datePicker.day.tuesday": "Martedì",
   "datePicker.day.wednesday": "Mercoledì",
-  "datePicker.error.incomplete": "Inserisci la tua data di nascita valida: mese, giorno e anno.",
   "datePicker.month": "Mese",
   "datePicker.month.april": "Aprile",
   "datePicker.month.august": "Agosto",
@@ -307,5 +306,5 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "Bonifico SEPA istantaneo ricevuto",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Bonifico SEPA istantaneo inviato",
   "validation.birthdateCannotBeFuture": "La data di nascita non può essere nel futuro",
-  "validation.invalidBirthDate": "Inserisci la tua data di nascita valida."
+  "validation.invalidBirthDate": "Inserisci una data di nascita valida."
 }

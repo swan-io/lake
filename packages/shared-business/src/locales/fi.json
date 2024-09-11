@@ -48,7 +48,6 @@
   "datePicker.day.thursday": "Torstai",
   "datePicker.day.tuesday": "Tiistai",
   "datePicker.day.wednesday": "Keskiviikko",
-  "datePicker.error.incomplete": "Please enter your valid birth date: month, day, and year.",
   "datePicker.month": "Month",
   "datePicker.month.april": "Huhtikuu",
   "datePicker.month.august": "Elokuu",
@@ -306,6 +305,6 @@
   "transactionStatement.type.SepaCreditTransferOut": "Lähetetty SEPA-tilisiirto",
   "transactionStatement.type.SepaInstantCreditTransferIn": "Vastaanotettu SEPA Instant -tilisiirto",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Lähetetty SEPA Instant -tilisiirto",
-  "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
-  "validation.invalidBirthDate": "Please enter your valid birth date."
+  "validation.birthdateCannotBeFuture": "Syntymäpäivä ei voi olla tulevaisuudessa",
+  "validation.invalidBirthDate": "Syötä kelvollinen syntymäpäivä."
 }
