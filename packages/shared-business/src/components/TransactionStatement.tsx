@@ -9,7 +9,7 @@ import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nulli
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
-import { formatCurrency, t } from "../utils/i18n";
+import { formatCurrencyIso, t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
@@ -106,12 +106,14 @@ type TransactionStatementV1Props = {
 
   executionDate: string;
   type: TransactionType;
-  amount: Amount;
+  amount?: Amount;
   targetTransferAmount?: Amount;
+  instructedAmount?: Amount;
+  amountCredited?: Amount;
   exchangeRate?: [Amount, Amount];
   fees?: Amount;
   label: string;
-  reference: string;
+  reference?: string;
 
   debtorName: string;
   debtorAccountNumber: string;
@@ -140,6 +142,8 @@ export const TransactionStatementV1 = ({
   executionDate,
   type,
   amount,
+  instructedAmount,
+  amountCredited,
   targetTransferAmount,
   exchangeRate,
   fees,
@@ -210,15 +214,31 @@ export const TransactionStatementV1 = ({
             .exhaustive()}
         />
 
-        <Line
-          name={t("transactionStatement.information.amount")}
-          value={formatCurrency(Number(amount.value), amount.currency)}
-        />
+        {isNotNullish(instructedAmount) && (
+          <Line
+            name={t("transactionStatement.information.instructedAmount")}
+            value={formatCurrencyIso(Number(instructedAmount.value), instructedAmount.currency)}
+          />
+        )}
+
+        {isNotNullish(amountCredited) && (
+          <Line
+            name={t("transactionStatement.information.amountCredited")}
+            value={formatCurrencyIso(Number(amountCredited.value), amountCredited.currency)}
+          />
+        )}
+
+        {isNotNullish(amount) && (
+          <Line
+            name={t("transactionStatement.information.amount")}
+            value={formatCurrencyIso(Number(amount.value), amount.currency)}
+          />
+        )}
 
         {isNotNullish(targetTransferAmount) && (
           <Line
             name={t("transactionStatement.information.targetTransferAmount")}
-            value={formatCurrency(
+            value={formatCurrencyIso(
               Number(targetTransferAmount.value),
               targetTransferAmount.currency,
             )}
@@ -228,22 +248,23 @@ export const TransactionStatementV1 = ({
         {isNotNullish(exchangeRate) && (
           <Line
             name={t("transactionStatement.information.exchangeRate")}
-            value={`${formatCurrency(
+            value={`${formatCurrencyIso(
               Number(exchangeRate[0].value),
               exchangeRate[0].currency,
-            )} : ${formatCurrency(Number(exchangeRate[1].value), exchangeRate[1].currency)}`}
+            )} = ${formatCurrencyIso(Number(exchangeRate[1].value), exchangeRate[1].currency)}`}
           />
         )}
 
         {isNotNullish(fees) && (
           <Line
             name={t("transactionStatement.information.fees")}
-            value={formatCurrency(Number(fees.value), fees.currency)}
+            value={formatCurrencyIso(Number(fees.value), fees.currency)}
           />
         )}
 
         <Line name="Label" value={label} />
-        <Line name="Reference" value={reference} />
+
+        {isNotNullish(reference) && <Line name="Reference" value={reference} />}
       </Stack>
 
       <Space height={24} />
