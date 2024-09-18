@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
   swanLogo: {
     height: 8,
     width: (45 / 10) * 8,
+    position: "relative",
+    top: 0.5,
   },
 });
 
@@ -262,9 +264,11 @@ export const TransactionStatementV1 = ({
           />
         )}
 
-        <Line name="Label" value={label} />
+        <Line name={t("transactionStatement.information.label")} value={label} />
 
-        {isNotNullish(reference) && <Line name="Reference" value={reference} />}
+        {isNotNullish(reference) && (
+          <Line name={t("transactionStatement.information.reference")} value={reference} />
+        )}
       </Stack>
 
       <Space height={24} />
