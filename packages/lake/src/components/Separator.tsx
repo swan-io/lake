@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   vertical: {
-    backgroundColor: BACKGROUND_IMAGE,
+    backgroundImage: BACKGROUND_IMAGE,
     height: 1,
     alignSelf: "stretch",
   },
