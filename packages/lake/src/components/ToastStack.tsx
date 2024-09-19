@@ -24,7 +24,7 @@ import { TransitionGroupView } from "./TransitionGroupView";
 
 const styles = StyleSheet.create({
   list: {
-    position: "absolute",
+    position: "fixed",
     right: 0,
     bottom: 0,
     maxHeight: "100%",
@@ -32,10 +32,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: "100%",
     zIndex: 10,
+    pointerEvents: "none",
   },
   toastWrapper: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+    pointerEvents: "auto",
   },
   toast: {
     padding: 24,
