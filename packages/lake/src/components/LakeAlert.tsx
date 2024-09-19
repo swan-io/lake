@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5,
     marginHorizontal: -1,
     marginBottom: -1,
+    boxShadow: "none",
   },
   content: {
     marginLeft: 40,

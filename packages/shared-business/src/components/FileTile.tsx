@@ -9,13 +9,7 @@ import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Tag } from "@swan-io/lake/src/components/Tag";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
-import {
-  backgroundColor,
-  colors,
-  gray75,
-  shadows,
-  spacings,
-} from "@swan-io/lake/src/constants/design";
+import { backgroundColor, colors, gray75, spacings } from "@swan-io/lake/src/constants/design";
 import { setClipboardText } from "@swan-io/lake/src/utils/clipboard";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
@@ -30,7 +24,7 @@ const styles = StyleSheet.create({
   base: {
     backgroundColor: backgroundColor.accented,
     borderRadius: 8,
-    boxShadow: shadows.tile,
+    borderWidth: 1,
     overflow: "hidden",
   },
   content: {
@@ -81,7 +75,19 @@ export const FileTile = ({
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
 
   return (
-    <Box style={styles.base}>
+    <Box
+      style={[
+        styles.base,
+        {
+          borderColor: match(statusInfo.status)
+            .with("Uploaded", "Uploading", () => colors.gray[100])
+            .with("Pending", () => colors.shakespear[100])
+            .with("Validated", () => colors.positive[100])
+            .with("Refused", () => colors.negative[100])
+            .exhaustive(),
+        },
+      ]}
+    >
       <Box alignItems="center" direction="row" style={styles.content}>
         {statusInfo.status === "Uploading" ? (
           <>
