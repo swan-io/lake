@@ -82,7 +82,7 @@ export const FileTile = ({
           borderColor: match(statusInfo.status)
             .with("Uploaded", "Uploading", () => colors.gray[100])
             .with("Pending", () => colors.shakespear[100])
-            .with("Validated", () => colors.positive[100])
+            .with("Validated", () => colors.positive[500])
             .with("Refused", () => colors.negative[100])
             .exhaustive(),
         },
@@ -103,15 +103,18 @@ export const FileTile = ({
           </>
         ) : (
           <>
-            <Tag
-              icon={getIconNameFromFilename(name)}
-              iconSize={20}
-              color={match(statusInfo)
-                .with({ status: P.union("Uploaded", "Pending") }, () => "shakespear" as const)
-                .with({ status: "Validated" }, () => "positive" as const)
-                .with({ status: "Refused" }, () => "negative" as const)
-                .exhaustive()}
-            />
+            {statusInfo.status === "Validated" ? (
+              <Icon size={24} color={colors.positive[500]} name="checkmark-circle-regular" />
+            ) : (
+              <Tag
+                icon={getIconNameFromFilename(name)}
+                iconSize={20}
+                color={match(statusInfo)
+                  .with({ status: P.union("Uploaded", "Pending") }, () => "shakespear" as const)
+                  .with({ status: "Refused" }, () => "negative" as const)
+                  .exhaustive()}
+              />
+            )}
 
             <Space width={16} />
 
@@ -202,9 +205,6 @@ export const FileTile = ({
       {match(statusInfo)
         .with({ status: "Pending" }, () => (
           <LakeAlert anchored={true} title={t("fileTile.status.Pending")} variant="info" />
-        ))
-        .with({ status: "Validated" }, () => (
-          <LakeAlert anchored={true} title={t("fileTile.status.Validated")} variant="success" />
         ))
         .with({ status: "Refused" }, ({ reason }) => (
           <LakeAlert anchored={true} title={t("fileTile.status.Refused")} variant="error">
