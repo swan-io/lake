@@ -308,5 +308,5 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Directe Overschrijving ontvangen",
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Directe Overschrijving verzonden",
   "validation.birthdateCannotBeFuture": "Geboortedatum kan niet in de toekomst liggen",
-  "validation.invalidBirthDate": "Voer je volledige en geldige geboortedatum in: maand, dag en jaar"
+  "validation.invalidBirthDate": "Voer een geldige geboortedatum in."
 }

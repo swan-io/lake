@@ -289,7 +289,7 @@
   "transactionStatement.information.exchangeRate": "Tipo de cambio",
   "transactionStatement.information.executionDate": "Fecha de ejecución",
   "transactionStatement.information.fees": "Tasas",
-  "transactionStatement.information.instructedAmount": "Importe instruido",
+  "transactionStatement.information.instructedAmount": "Importe inicial",
   "transactionStatement.information.label": "Etiqueta",
   "transactionStatement.information.reference": "Referencia",
   "transactionStatement.information.targetTransferAmount": "Importe de transferencia objetivo",
@@ -305,8 +305,8 @@
   "transactionStatement.type.InternationalCreditTransferOut": "Transferencia internacional enviada",
   "transactionStatement.type.SepaCreditTransferIn": "Transferencia SEPA recibida",
   "transactionStatement.type.SepaCreditTransferOut": "Transferencia SEPA enviada",
-  "transactionStatement.type.SepaInstantCreditTransferIn": "Transferencia SEPA Instantánea recibida",
-  "transactionStatement.type.SepaInstantCreditTransferOut": "Transferencia SEPA Instantánea enviada",
+  "transactionStatement.type.SepaInstantCreditTransferIn": "Transferencia SEPA instantánea recibida",
+  "transactionStatement.type.SepaInstantCreditTransferOut": "Transferencia SEPA instantánea enviada",
   "validation.birthdateCannotBeFuture": "La fecha de nacimiento no puede estar en el futuro",
   "validation.invalidBirthDate": "Por favor, introduce una fecha de nacimiento válida."
 }

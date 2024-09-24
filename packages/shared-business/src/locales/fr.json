@@ -289,7 +289,7 @@
   "transactionStatement.information.exchangeRate": "Taux de change",
   "transactionStatement.information.executionDate": "Date d'exécution",
   "transactionStatement.information.fees": "Frais",
-  "transactionStatement.information.instructedAmount": "Montant indiqué",
+  "transactionStatement.information.instructedAmount": "Montant d'origine",
   "transactionStatement.information.label": "Libellé",
   "transactionStatement.information.reference": "Référence",
   "transactionStatement.information.targetTransferAmount": "Montant de la demande de transfert",
@@ -301,12 +301,12 @@
   "transactionStatement.title.information": "Informations",
   "transactionStatement.type.InternalCreditTransferIn": "Virement interne reçu",
   "transactionStatement.type.InternalCreditTransferOut": "Virement interne envoyé",
-  "transactionStatement.type.InternationalCreditTransferIn": "Virement international reçu",
+  "transactionStatement.type.InternationalCreditTransferIn": "Réception d'un virement international",
   "transactionStatement.type.InternationalCreditTransferOut": "Virement international envoyé",
   "transactionStatement.type.SepaCreditTransferIn": "Virement SEPA reçu",
   "transactionStatement.type.SepaCreditTransferOut": "Virement SEPA envoyé",
   "transactionStatement.type.SepaInstantCreditTransferIn": "Virement SEPA instantané reçu",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Virement SEPA instantané envoyé",
   "validation.birthdateCannotBeFuture": "La date de naissance ne peut pas être dans le futur",
-  "validation.invalidBirthDate": "Veuillez saisir votre date de naissance valide."
+  "validation.invalidBirthDate": "Veuillez saisir une date de naissance valide."
 }

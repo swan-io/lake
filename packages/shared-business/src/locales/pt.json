@@ -256,7 +256,7 @@
   "supportingDocuments.purpose.ProofOfIdentity": "Documento de identidade",
   "supportingDocuments.purpose.ProofOfIdentity.description": "Documento de identidade aceitável:\n- Passaporte\n- Cartão de cidadão (apenas aplicável a cidadãos de países membros do Espaço Económico Europeu)\n- Cartão de residência (apenas aplicável a residentes de países membros do Espaço Económico Europeu)",
   "supportingDocuments.purpose.ProofOfIndividualAddress": "Comprovativo de morada (emitido nos últimos 3 meses)",
-  "supportingDocuments.purpose.ProofOfIndividualAddress.description": "Qualquer documento que comprove a residência do indivíduo. Eles devem incluir o nome e morada do indivíduo e ser datados em menos de 3 meses.\n\nDocumentos aceitáveis:\n- Documentos relacionados com a habitação (contrato de arrendamento, extrato de hipoteca, etc.)\n- Faturas de serviços domésticos (eletricidade, telefone, serviços de Internet, gás, água, etc.)\n- Recibo de vencimento (se incluir a morada do trabalhador)",
+  "supportingDocuments.purpose.ProofOfIndividualAddress.description": "Qualquer documento que comprove a residência do indivíduo. Eles devem incluir o nome e morada do indivíduo e ser datados em menos de 3 meses.\n\nDocumentos aceitáveis:\n- Faturas de serviços domésticos (eletricidade, telefone, serviços de Internet, gás, água, etc.)\n- Recibo de vencimento (se incluir a morada do trabalhador)",
   "supportingDocuments.purpose.ProofOfIndividualIncome": "Comprovativo de rendimentos",
   "supportingDocuments.purpose.ProofOfIndividualIncome.description": "Um documento ou conjunto de documentos que demonstra os rendimentos de uma pessoa durante um período de tempo específico.\n\nDocumentos aceitáveis:\n- Declaração de imposto de renda com menos de 2 anos\n- Um recibo de vencimento com menos de 3 meses",
   "supportingDocuments.purpose.ProofOfOriginOfFunds": "Comprovativo de fundos",
@@ -285,11 +285,11 @@
   "transactionStatement.generationDate": "Gerado em:{date}",
   "transactionStatement.generationInfos": "Este documento é a confirmação do seu pedido de transação. Não constitui prova da execução da transação. A sua transação será executada ao completar o processo de verificação obrigatório.",
   "transactionStatement.information.amount": "Valor",
-  "transactionStatement.information.amountCredited": "Valor creditado",
+  "transactionStatement.information.amountCredited": "Montante creditado",
   "transactionStatement.information.exchangeRate": "Taxa de câmbio",
   "transactionStatement.information.executionDate": "Data de execução",
   "transactionStatement.information.fees": "Taxas",
-  "transactionStatement.information.instructedAmount": "Valor instruído",
+  "transactionStatement.information.instructedAmount": "Montante instruído",
   "transactionStatement.information.label": "Etiqueta",
   "transactionStatement.information.reference": "Referência",
   "transactionStatement.information.targetTransferAmount": "Montante de transferência pretendido",
@@ -308,5 +308,5 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "Transferência de crédito instantânea SEPA recebida",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Transferência de crédito instantânea SEPA enviada",
   "validation.birthdateCannotBeFuture": "A data de nascimento não pode estar no futuro",
-  "validation.invalidBirthDate": "Por favor, insira a sua data de nascimento válida."
+  "validation.invalidBirthDate": "Por favor, introduza uma data de nascimento válida."
 }

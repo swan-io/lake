@@ -224,7 +224,7 @@
   "supportingDocuments.powerOfAttorneyModal.description": "Ein unterschriebenes und datiertes Dokument, das eine Person ermächtigt, den gesetzlichen Vertreter eines Unternehmens zu vertreten oder in dessen Namen zu handeln.",
   "supportingDocuments.powerOfAttorneyModal.title": "Handlungvollmacht",
   "supportingDocuments.purpose.AdministratorDecisionOfAppointment": "Ernennungsschreiben zum Administrator",
-  "supportingDocuments.purpose.AdministratorDecisionOfAppointment.description": "Dokument, das die Entscheidung zur Ernennung , eine Person zum Administrator Ihrer Organisation zu ernennen.",
+  "supportingDocuments.purpose.AdministratorDecisionOfAppointment.description": "Dokument, das die Entscheidung zur Ernennung einer Person zum Verwalter Ihrer Organisation enthält.",
   "supportingDocuments.purpose.ArticlesOfIncorporation": "Gesellschaftsvertrag",
   "supportingDocuments.purpose.AssociationRegistration": "Nachweis der rechtlichen Existenz des Vereins/Stiftung",
   "supportingDocuments.purpose.AssociationRegistration.description": "Nachweis der rechtlichen Existenz des Vereins/Stiftung, Aktueller Auszug. \n\nAnerkannte Dokumente:\n- Der Nachweis darf nicht älter als drei Monate alt sein",
@@ -235,7 +235,7 @@
   "supportingDocuments.purpose.CompanyRegistration": "Nachweis der rechtlichen Existenz des Unternehmens",
   "supportingDocuments.purpose.CompanyRegistration.description": "Nachweis der rechtlichen Existenz des Unternehmens, Aktueller Auszug. Dies kann aus einem der deutschen Registerportals erfasst werden (Handelsregister, Unternehmensregister, Transparenzregister etc).\n\nAnerkannte Dokumente:\n- Der Nachweis darf nicht älter als drei Monate alt sein",
   "supportingDocuments.purpose.CorporateIncomeTaxReturn": "Körperschaftsteuererklärung",
-  "supportingDocuments.purpose.FinancialStatements": "Letzte Körperschaftssteuererklärung",
+  "supportingDocuments.purpose.FinancialStatements": "Letzte Körperschaftsteuererklärung",
   "supportingDocuments.purpose.FinancialStatements.description": "Eine Kopie des Dokuments, das am Ende des letzten Geschäftszeitraums bei Ihrem Finanzamt eingereicht wurde.",
   "supportingDocuments.purpose.GeneralAssemblyMinutes": "Protokoll der Generalversammlung; Sitzungsprotokoll",
   "supportingDocuments.purpose.GeneralAssemblyMinutes.description": "Das Sitzungsprotokoll dient dazu, einen offiziellen und detaillierten Bericht über den Verlauf der Sitzung bereitzustellen, damit die Teilnehmer und andere Interessierte die diskutierten Themen nachvollziehen und die getroffenen Entscheidungen verstehen können.",
@@ -264,7 +264,7 @@
   "supportingDocuments.purpose.RegisterExtract": "Registerauszug",
   "supportingDocuments.purpose.SignedStatus": "Satzung/Gesellschaftsvertrag",
   "supportingDocuments.purpose.SignedStatus.description": "In der Satzung/in dem Gesellschaftsvertrag finden Sie die rechtlichen Grundlagen des Unternehmens.\n\nAnerkannte Dokumente: \n- Eine unterzeichnete und datierte Kopie der Unternehmenssatzungen",
-  "supportingDocuments.purpose.SwornStatement": "Eidesstattliche Erklärung",
+  "supportingDocuments.purpose.SwornStatement": "Eidesstattliche Erklärung für den wirtschaftlichen Berechtigten (UBO)",
   "supportingDocuments.purpose.SwornStatement.description": "Bitte füllen Sie die Mustervorlage über Ihre wirtschaftlichen Gesellschafter aus. Geben Sie alle Personen an, die 25 % oder mehr der Aktien Ihres Unternehmens halten.",
   "supportingDocuments.purpose.UBODeclaration": "Gesellschafterliste",
   "supportingDocuments.purpose.UBODeclaration.description": "Legen Sie ein offizielles Dokument vor, in dem die wirtschaftlichen Gesellschafter Ihres Unternehmens aufgeführt sind.",
@@ -285,7 +285,7 @@
   "transactionStatement.generationDate": "Generiert am: {date}",
   "transactionStatement.generationInfos": "Dieses Dokument bestätigt Ihren Transaktionsantrag. Es stellt keinen Nachweis der Transaktionsausführung dar. Ihre Transaktion wird nach Bestehen eines obligatorischen Verifizierungsprozesses ausgeführt.",
   "transactionStatement.information.amount": "Betrag",
-  "transactionStatement.information.amountCredited": "Betrag gutgeschrieben",
+  "transactionStatement.information.amountCredited": "Gutgeschriebener Betrag",
   "transactionStatement.information.exchangeRate": "Wechselkurs",
   "transactionStatement.information.executionDate": "Ausführungsdatum",
   "transactionStatement.information.fees": "Gebühren",
@@ -308,5 +308,5 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Sofortüberweisung erhalten",
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Sofortüberweisung gesendet",
   "validation.birthdateCannotBeFuture": "Geburtsdatum darf nicht in der Zukunft liegen",
-  "validation.invalidBirthDate": "Bitte geben Sie Ihr gültiges Geburtsdatum ein."
+  "validation.invalidBirthDate": "Bitte geben Sie ein gültiges Geburtsdatum ein."
 }
