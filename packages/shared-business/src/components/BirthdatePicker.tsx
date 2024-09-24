@@ -56,7 +56,7 @@ export type BirthdatePickerProps = {
   label: string;
   value: string | undefined;
   error?: string;
-  onValueChange: (value: string | undefined) => void;
+  onValueChange?: (value: string | undefined) => void;
   style?: StyleProp<ViewStyle>;
   readOnly?: boolean;
 };
@@ -94,9 +94,9 @@ export const BirthdatePicker = ({
         const errorMessage = validateBirthdate(date);
 
         if (isNullish(errorMessage) && isNotNullish(date)) {
-          return onValueChange(formatExtractedDate(date));
+          return onValueChange?.(formatExtractedDate(date));
         } else {
-          onValueChange(undefined);
+          onValueChange?.(undefined);
           return errorMessage;
         }
       },
