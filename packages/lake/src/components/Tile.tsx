@@ -21,6 +21,7 @@ import {
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";
+import { ResponsiveContainer } from "./ResponsiveContainer";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
@@ -224,56 +225,48 @@ type TileGridProps = {
 const SPACE = <Space height={24} />;
 
 export const TileGrid = ({ children, breakpoint = 1000 }: TileGridProps) => {
-  const [flexDirection, setFlexDirection] = useState<"row" | "column">("row");
-
-  const onLayout = useCallback(
-    ({
-      nativeEvent: {
-        layout: { width },
-      },
-    }: LayoutChangeEvent) => {
-      setFlexDirection(() => (width < breakpoint ? "column" : "row"));
-    },
-    [breakpoint],
-  );
-
-  const childrenArray = Children.toArray(children);
-  const leftColumn: ReactNode[] = [];
-  const rightColumn: ReactNode[] = [];
-
-  const nonNullChildren = childrenArray.filter(isNotNullish);
-
-  nonNullChildren.forEach((item, index) => {
-    if (flexDirection === "column" || index % 2 === 0) {
-      leftColumn.push(
-        <Fragment key={index}>
-          {item}
-          {SPACE}
-        </Fragment>,
-      );
-    } else {
-      rightColumn.push(
-        <Fragment key={index}>
-          {item}
-          {SPACE}
-        </Fragment>,
-      );
-    }
-  });
-
-  const isRow = flexDirection === "row";
   return (
-    <Box direction={flexDirection} onLayout={onLayout}>
-      <View style={[isRow && styles.column, isRow && { flexBasis: breakpoint / 2 }]}>
-        {leftColumn}
-      </View>
+    <ResponsiveContainer breakpoint={breakpoint}>
+      {({ small, large }) => {
+        const childrenArray = Children.toArray(children);
+        const leftColumn: ReactNode[] = [];
+        const rightColumn: ReactNode[] = [];
 
-      <Space width={24} />
+        const nonNullChildren = childrenArray.filter(isNotNullish);
 
-      <View style={[isRow && styles.column, isRow && { flexBasis: breakpoint / 2 }]}>
-        {rightColumn}
-      </View>
-    </Box>
+        nonNullChildren.forEach((item, index) => {
+          if (small || index % 2 === 0) {
+            leftColumn.push(
+              <Fragment key={index}>
+                {item}
+                {SPACE}
+              </Fragment>,
+            );
+          } else {
+            rightColumn.push(
+              <Fragment key={index}>
+                {item}
+                {SPACE}
+              </Fragment>,
+            );
+          }
+        });
+
+        return (
+          <Box direction={small ? "column" : "row"}>
+            <View style={[large && styles.column, large && { flexBasis: breakpoint / 2 }]}>
+              {leftColumn}
+            </View>
+
+            <Space width={24} />
+
+            <View style={[large && styles.column, large && { flexBasis: breakpoint / 2 }]}>
+              {rightColumn}
+            </View>
+          </Box>
+        );
+      }}
+    </ResponsiveContainer>
   );
 };
 
