@@ -230,6 +230,20 @@ export const Inline = () => {
             />
           </View>
         </StoryPart>
+
+        <StoryPart title="Readonly">
+          <View style={styles.container}>
+            {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
+
+            <BirthdatePicker
+              label={"Birthdate"}
+              value={initialValue}
+              readOnly={true}
+              onValueChange={setBirthdate}
+              error={error}
+            />
+          </View>
+        </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>
   );

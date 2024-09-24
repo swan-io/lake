@@ -58,6 +58,7 @@ export type BirthdatePickerProps = {
   error?: string;
   onValueChange: (value: string | undefined) => void;
   style?: StyleProp<ViewStyle>;
+  readOnly?: boolean;
 };
 
 // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
@@ -70,6 +71,7 @@ const order = match(getCountry().cca2)
 export const BirthdatePicker = ({
   value,
   label,
+  readOnly = false,
   onValueChange,
   error: externalError,
   style,
@@ -112,6 +114,7 @@ export const BirthdatePicker = ({
                 <View style={desktop ? styles.day : styles.dayMobile}>
                   <LakeTextInput
                     id={id}
+                    readOnly={readOnly}
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                     placeholder={t("datePicker.day")}
                     value={value?.day ?? undefined}
@@ -135,6 +138,7 @@ export const BirthdatePicker = ({
                 <LakeSelect
                   value={value?.month === "" ? undefined : value?.month}
                   style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
+                  readOnly={readOnly}
                   placeholder={t("datePicker.month")}
                   hideErrors={true}
                   items={months}
@@ -153,6 +157,7 @@ export const BirthdatePicker = ({
                   <LakeTextInput
                     value={value?.year}
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
+                    readOnly={readOnly}
                     placeholder={t("datePicker.year")}
                     onBlur={onBlur}
                     hideErrors={true}
