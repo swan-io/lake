@@ -13,7 +13,7 @@ const borderHeight = 2;
 const desktopPadding = 40;
 
 const mobileNumberSize = 24;
-const mobileBorderWidth = 4;
+const mobileBorderWidth = 2;
 
 const styles = StyleSheet.create({
   container: {
@@ -45,9 +45,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: colors.current[50],
   },
+  mobileNumberActive: {
+    borderColor: colors.current[500],
+  },
   mobileNumberText: {
     position: "relative",
-    top: 1,
   },
   mobileBarContainer: {
     width: mobileNumberSize,
@@ -59,11 +61,15 @@ const styles = StyleSheet.create({
     borderRadius: mobileBorderWidth / 2,
     backgroundColor: colors.gray[100],
   },
+  completeMobileBar: {
+    backgroundColor: colors.current[500],
+  },
 });
 
 export type FlowStep = {
   label: string;
   icon: IconName;
+  isComplete?: boolean;
 };
 
 type Props = {
@@ -103,16 +109,32 @@ export const FlowPresentation = ({ steps, mode }: Props) => {
     ))
     .with("mobile", () => (
       <Box direction="column">
-        {steps.map(({ label }, index) => {
-          const isLast = index === steps.length - 1;
-
+        {steps.map(({ label, isComplete }, index) => {
           return (
             <Fragment key={index}>
+              {index > 0 && (
+                <Box alignItems="center" style={styles.mobileBarContainer}>
+                  <View
+                    style={[
+                      styles.mobileBar,
+                      isComplete === true ? styles.completeMobileBar : null,
+                    ]}
+                  />
+                </Box>
+              )}
+
               <Box direction="row" alignItems="center">
-                <Box alignItems="center" justifyContent="center" style={styles.mobileNumber}>
+                <Box
+                  alignItems="center"
+                  justifyContent="center"
+                  style={[
+                    styles.mobileNumber,
+                    isComplete === true ? styles.mobileNumberActive : null,
+                  ]}
+                >
                   <LakeText
                     color={colors.current.primary}
-                    variant="medium"
+                    variant="smallMedium"
                     style={styles.mobileNumberText}
                   >
                     {index + 1}
@@ -121,16 +143,10 @@ export const FlowPresentation = ({ steps, mode }: Props) => {
 
                 <Space width={12} />
 
-                <LakeText color={colors.gray[400]} variant="smallRegular">
+                <LakeText color={colors.gray[700]} variant="smallMedium">
                   {label}
                 </LakeText>
               </Box>
-
-              {!isLast && (
-                <Box alignItems="center" style={styles.mobileBarContainer}>
-                  <View style={styles.mobileBar} />
-                </Box>
-              )}
             </Fragment>
           );
         })}

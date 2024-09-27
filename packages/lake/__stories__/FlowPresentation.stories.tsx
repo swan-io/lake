@@ -42,6 +42,21 @@ export const Default = () => {
 
           <Space height={32} />
         </StoryPart>
+
+        <StoryPart title="Mobile (with completion)">
+          <FlowPresentation
+            steps={[
+              { label: "Enter your e-mail", icon: "mail-regular", isComplete: true },
+              { label: "Fill in the form", icon: "building-multiple-regular", isComplete: true },
+              { label: "Add an owner", icon: "person-add-regular", isComplete: true },
+              { label: "Attach the documents", icon: "document-regular" },
+              { label: "Finalize", icon: "desktop-regular" },
+            ]}
+            mode="mobile"
+          />
+
+          <Space height={32} />
+        </StoryPart>
       </StoryBlock>
     </WithCurrentColor>
   );
