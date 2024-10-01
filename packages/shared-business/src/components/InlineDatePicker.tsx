@@ -11,7 +11,8 @@ import { useForm } from "@swan-io/use-form";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { extractDate, ExtractedDate, formatExtractedDate } from "../utils/date";
-import { getCountry, t } from "../utils/i18n";
+import { t } from "../utils/i18n";
+import { getMostLikelyUserCountry } from "../utils/localization";
 
 const months = [
   { value: "01", name: t("datePicker.month.january") },
@@ -62,7 +63,7 @@ export type InlineDatePickerProps = {
 };
 
 // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
-const order = match(getCountry().cca2)
+const order = match(getMostLikelyUserCountry().cca2)
   .returnType<"DMY" | "MDY" | "YMD">()
   .with("US", () => "MDY")
   .with("CN", "JP", "KR", "KP", "TW", "HU", "MN", "LT", "BT", () => "YMD")

@@ -31,7 +31,7 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { Rifm } from "rifm";
 import { P, match } from "ts-pattern";
 import { Except } from "type-fest";
-import { t } from "../utils/i18n";
+import { DateFormat, t } from "../utils/i18n";
 import { LakeModal } from "./LakeModal";
 
 const styles = StyleSheet.create({
@@ -186,8 +186,6 @@ export type DatePickerRange = {
   start: Option<DatePickerDate>;
   end: Option<DatePickerDate>;
 };
-
-export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 
 const rifmDateProps = getRifmProps({
   accept: "numeric",
