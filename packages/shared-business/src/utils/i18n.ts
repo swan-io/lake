@@ -1,5 +1,4 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import { BadStatusError } from "@swan-io/request";
 import dayjs from "dayjs";
@@ -17,8 +16,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
 import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
 import { P, match } from "ts-pattern";
-import type { DateFormat } from "../components/DatePicker";
-import { Country, countries, france } from "../constants/countries";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
@@ -28,6 +25,8 @@ import translationIT from "../locales/it.json";
 import translationNL from "../locales/nl.json";
 import translationPT from "../locales/pt.json";
 import { LANGUAGE_FALLBACK, getLanguagesHelpers } from "./languages";
+
+export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 
 // https://day.js.org/docs/en/plugin/plugin
 dayjs.extend(utc);
@@ -183,22 +182,4 @@ export const translateError = (error: unknown) => {
     .otherwise(() => "error.generic");
 
   return t(isTranslationKey(key) ? key : "error.generic");
-};
-
-export const getCountry = (): Country => {
-  const navigatorCountries = navigator.languages
-    .map(language => language.split("-")[1])
-    .filter(isNotNullish);
-
-  for (let index = 0; index < navigatorCountries.length; index++) {
-    const navigatorCountry = navigatorCountries[index];
-    const country = countries.find(({ cca2 }) => cca2 === navigatorCountry);
-
-    if (isNotNullish(country)) {
-      return country;
-    }
-  }
-
-  // fallback to france when no valid country found in navigator locales
-  return france;
 };

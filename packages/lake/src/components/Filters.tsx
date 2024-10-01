@@ -1,8 +1,8 @@
 import {
-  DateFormat,
   DatePickerDate,
   DatePickerModal,
 } from "@swan-io/shared-business/src/components/DatePicker";
+import { DateFormat } from "@swan-io/shared-business/src/utils/i18n";
 import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
