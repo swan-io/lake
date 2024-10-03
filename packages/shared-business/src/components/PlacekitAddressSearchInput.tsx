@@ -1,4 +1,4 @@
-import { PKResult } from "@placekit/client-js/.";
+import { PKOptions, PKResult } from "@placekit/client-js";
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import {
@@ -25,7 +25,8 @@ export type AddressDetail = {
 type Props = {
   inputRef?: MutableRefObject<unknown>;
   id?: string;
-  country: CountryCCA3; // cca3 country
+  types?: PKOptions["types"];
+  country?: CountryCCA3; // cca3 country
   disabled?: boolean;
   error?: string;
   onSuggestion?: (suggestion: AddressDetail) => void;
@@ -46,6 +47,7 @@ export const PlacekitAddressSearchInput = ({
   disabled,
   error,
   value,
+  types = ["street"],
   onValueChange,
   onSuggestion,
   language,
@@ -59,14 +61,18 @@ export const PlacekitAddressSearchInput = ({
   const loadSuggestions = useCallback(
     (value: string): Future<Result<Suggestion[], unknown>> => {
       if (placekit != null) {
-        const countries = Array.filterMap(countriesWithMultipleCCA3[country] ?? [country], cca3 =>
-          Option.fromNullable(getCCA2forCCA3(cca3)),
-        );
+        const countries = Option.fromNullable(country)
+          .map(country =>
+            Array.filterMap(countriesWithMultipleCCA3[country] ?? [country], cca3 =>
+              Option.fromNullable(getCCA2forCCA3(cca3)),
+            ),
+          )
+          .getOr([]);
         const cca2Countries = countries.length === 0 ? Option.None() : Option.Some(countries);
 
         return Future.fromPromise(
           placekit.search(value, {
-            types: ["street"],
+            types,
             language,
             countries: cca2Countries.toUndefined(),
           }),
@@ -74,7 +80,7 @@ export const PlacekitAddressSearchInput = ({
           ({ results }) =>
             results.map(result => ({
               title: result.name,
-              subtitle: result.city,
+              subtitle: `${result.city} (${result.country})`,
               value: result,
             })),
           true,
@@ -83,7 +89,7 @@ export const PlacekitAddressSearchInput = ({
 
       return Future.value(Result.Ok([] as Suggestion[]));
     },
-    [placekit, country, language],
+    [placekit, country, language, types],
   );
 
   const onSuggestionSelected = useCallback(
