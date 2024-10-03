@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Document upload not allowed",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Received direct debit mandate already canceled",
   "rejection.TooManyChildConsentsRejection": "Too many consents added to multi-consent",
-  "rejection.TooManyEmailVerification": "You can’t verify email anymore, please try again in 24 hours",
+  "rejection.TooManyEmailVerificationRejection": "You can’t verify email anymore, please try again in 24 hours",
   "rejection.TooManyItemsRejection": "Too many items",
   "rejection.TransactionNotFoundRejection": "Couldn't find transaction",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Couldn't update user consent settings token",

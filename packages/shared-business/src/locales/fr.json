@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Téléchargement de document non autorisé",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Mandat de prélèvement direct reçu déjà annulé",
   "rejection.TooManyChildConsentsRejection": "Trop de consentements ajoutés au multi-consentement",
-  "rejection.TooManyEmailVerification": "Vous ne pouvez plus vérifier l'e-mail, veuillez réessayer dans 24 heures",
+  "rejection.TooManyEmailVerificationRejection": "Vous ne pouvez plus vérifier l'e-mail, veuillez réessayer dans 24 heures",
   "rejection.TooManyItemsRejection": "Trop d'éléments",
   "rejection.TransactionNotFoundRejection": "Impossible de trouver la transaction",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Impossible de mettre à jour le token",

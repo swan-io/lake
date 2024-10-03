@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Dokumentupload nicht erlaubt",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Erhaltener Lastschriftauftrag bereits storniert",
   "rejection.TooManyChildConsentsRejection": "Zu viele Einwilligungen zur Multi-Einwilligung hinzugefügt",
-  "rejection.TooManyEmailVerification": "Sie können die E-Mail nicht mehr überprüfen. Bitte versuchen Sie es in 24 Stunden erneut",
+  "rejection.TooManyEmailVerificationRejection": "Sie können die E-Mail nicht mehr überprüfen. Bitte versuchen Sie es in 24 Stunden erneut",
   "rejection.TooManyItemsRejection": "Zu viele Elemente",
   "rejection.TransactionNotFoundRejection": "Transaktion konnte nicht gefunden werden",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Benutzer-Einwilligungseinstellungen-Token konnten nicht aktualisiert werden",

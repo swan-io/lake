@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Caricamento del documento non consentito",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Mandato di addebito diretto ricevuto già annullato",
   "rejection.TooManyChildConsentsRejection": "Troppi consensi aggiunti al consenso multiplo",
-  "rejection.TooManyEmailVerification": "Non è possibile verificare l'email, riprova tra 24 ore",
+  "rejection.TooManyEmailVerificationRejection": "Non è possibile verificare l'email, riprova tra 24 ore",
   "rejection.TooManyItemsRejection": "Troppi elementi",
   "rejection.TransactionNotFoundRejection": "Impossibile trovare la transazione",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Impossibile aggiornare il token delle impostazioni del consenso dell'utente",

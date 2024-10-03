@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Asiakirjan latausta ei sallittu",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Suoraveloituksen valtakirja on jo peruutettu",
   "rejection.TooManyChildConsentsRejection": "Moninkertaiseen suostumukseen lisätty liian monta suostumusta",
-  "rejection.TooManyEmailVerification": "Et voi enää varmentaa sähköpostia, yritä uudelleen 24 tunnin kuluttua",
+  "rejection.TooManyEmailVerificationRejection": "Et voi enää varmentaa sähköpostia, yritä uudelleen 24 tunnin kuluttua",
   "rejection.TooManyItemsRejection": "Liian monta kohdetta",
   "rejection.TransactionNotFoundRejection": "Tapahtumaa ei löytynyt",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Käyttäjän suostumuksen asetusten valtuutta ei voitu päivittää",

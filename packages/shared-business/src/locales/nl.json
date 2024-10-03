@@ -196,7 +196,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "Documentupload niet toegestaan",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Ontvangen automatische incasso-mandaat is al geannuleerd",
   "rejection.TooManyChildConsentsRejection": "Te veel toestemmingen toegevoegd aan multi-toestemming",
-  "rejection.TooManyEmailVerification": "U kunt de e-mail niet meer verifiëren, probeer het over 24 uur opnieuw",
+  "rejection.TooManyEmailVerificationRejection": "U kunt de e-mail niet meer verifiëren, probeer het over 24 uur opnieuw",
   "rejection.TooManyItemsRejection": "Te veel items",
   "rejection.TransactionNotFoundRejection": "Kan transactie niet vinden",
   "rejection.UpdateUserConsentSettingsTokenRejection": "Kan gebruikerstoestemmingsinstellingen token niet bijwerken",
