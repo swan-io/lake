@@ -20,6 +20,8 @@ export type AddressDetail = {
   completeAddress: string;
   city: string;
   postalCode?: string;
+  country: string;
+  countryCode: string;
 };
 
 type Props = {
@@ -98,6 +100,8 @@ export const PlacekitAddressSearchInput = ({
         completeAddress: suggestion.value.name,
         postalCode: suggestion.value.zipcode[0],
         city: suggestion.value.city,
+        country: suggestion.value.country,
+        countryCode: suggestion.value.countrycode,
       });
     },
     [onSuggestion],
