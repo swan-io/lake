@@ -199,7 +199,7 @@
   "rejection.SupportingDocumentUploadNotAllowedRejection": "No se permite la carga de documentos",
   "rejection.SuspendReceivedDirectDebitMandatedRejection": "Mandato de domiciliación recibido ya cancelado",
   "rejection.TooManyChildConsentsRejection": "Demasiados consentimientos agregados al consentimiento múltiple",
-  "rejection.TooManyEmailVerification": "Ya no puedes verificar el correo electrónico, por favor inténtalo de nuevo en 24 horas",
+  "rejection.TooManyEmailVerificationRejection": "Ya no puedes verificar el correo electrónico, por favor inténtalo de nuevo en 24 horas",
   "rejection.TooManyItemsRejection": "Demasiados elementos",
   "rejection.TransactionNotFoundRejection": "No se pudo encontrar la transacción",
   "rejection.UpdateUserConsentSettingsTokenRejection": "No se pudo actualizar el token de configuración de consentimiento del usuario",
