@@ -22,6 +22,7 @@ import { Space } from "./Space";
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.fill,
+    height: 1,
     alignSelf: "stretch",
   },
   headerRow: {
