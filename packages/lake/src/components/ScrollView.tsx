@@ -32,6 +32,11 @@ const styles = StyleSheet.create({
     overflowX: "auto",
     overflowY: "hidden",
   },
+  both: {
+    flexDirection: "column",
+    overflowX: "auto",
+    overflowY: "auto",
+  },
   contentHorizontal: {
     flexDirection: "row",
   },
@@ -92,6 +97,7 @@ const shouldEmitScrollEvent = (state: State, eventThrottle: number) =>
 export type ScrollViewProps = ViewProps & {
   contentContainerStyle?: StyleProp<ViewStyle>;
   horizontal?: boolean;
+  both?: boolean;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   scrollEventThrottle?: number;
   showsScrollIndicators?: boolean;
@@ -103,6 +109,7 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
       children,
       contentContainerStyle,
       horizontal = false,
+      both = false,
       onScroll,
       scrollEventThrottle = 16,
       showsScrollIndicators = true,
@@ -165,6 +172,7 @@ export const ScrollView = forwardRef<ScrollViewRef, ScrollViewProps>(
           styles.base,
           style,
           horizontal && styles.horizontal,
+          both && styles.both,
           !showsScrollIndicators && styles.hideScrollbars,
         ]}
       >
