@@ -199,6 +199,7 @@ export type VirtualizedListProps<T, ExtraInfo> = {
   onEndReachedThreshold?: number;
   getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement | undefined;
   renderEmptyList?: () => ReactNode;
+  marginHorizontal?: string;
   loading?: {
     isLoading: boolean;
     count: number;
@@ -219,6 +220,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   loading,
   extraInfo,
   keyExtractor,
+  marginHorizontal,
 }: VirtualizedListProps<T, ExtraInfo>) => {
   // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
   const viewId = useId();
@@ -522,7 +524,7 @@ export const VirtualizedList = <T, ExtraInfo>({
     <ScrollView
       ref={scrollViewRef}
       both={true}
-      style={styles.container}
+      style={[styles.container, { marginHorizontal }]}
       onScroll={onScroll}
       scrollEventThrottle={32}
       contentContainerStyle={{
@@ -768,6 +770,7 @@ type VirtualizedListPlaceholderProps = {
   rowHeight: number;
   groupHeaderHeight?: number;
   headerHeight?: number;
+  marginHorizontal?: string;
 };
 
 export const VirtualizedListPlaceholder = ({
@@ -775,9 +778,10 @@ export const VirtualizedListPlaceholder = ({
   rowHeight,
   groupHeaderHeight,
   headerHeight,
+  marginHorizontal,
 }: VirtualizedListPlaceholderProps) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginHorizontal }]}>
       {headerHeight != null ? <View style={{ height: headerHeight }} /> : null}
       {groupHeaderHeight != groupHeaderHeight ? <View style={{ height: headerHeight }} /> : null}
 
