@@ -11,7 +11,6 @@ import {
   FixedListViewProps,
 } from "../src/components/FixedListView";
 import {
-  ColorPatchCell,
   LinkCell,
   SimpleHeaderCell,
   SimpleRegularTextCell,
@@ -101,15 +100,6 @@ const EditableFixedListView = (props: Pick<FixedListViewProps<TestRow, SortInfo>
 
   const { stickedToStartColumns, columns, stickedToEndColumns } = useMemo(() => {
     const stickedToStartColumns = [
-      {
-        width: 4,
-        id: "color",
-        title: "Color",
-        renderTitle: () => null,
-        renderCell: ({ isHovered }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <ColorPatchCell isHovered={isHovered} color="live" />
-        ),
-      },
       {
         width: 300,
         id: "name",

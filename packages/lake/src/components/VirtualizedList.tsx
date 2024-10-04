@@ -14,10 +14,17 @@ import {
 } from "react";
 import { StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import { backgroundColor as backgroundColorVariants, colors, spacings } from "../constants/design";
+import {
+  backgroundColor as backgroundColorVariants,
+  colors,
+  negativeSpacings,
+  spacings,
+} from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
+
+const HORIZONTAL_ROW_PADDING = 8;
 
 const styles = StyleSheet.create({
   container: {
@@ -31,19 +38,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     zIndex: 2,
+    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
   },
   cellsContainer: {
     flexDirection: "row",
     transform: "translateZ(0)",
+    marginHorizontal: negativeSpacings[HORIZONTAL_ROW_PADDING],
+    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
   },
   stickedToStartColumnGroup: {
     position: "sticky",
     left: 0,
+    marginLeft: negativeSpacings[HORIZONTAL_ROW_PADDING],
+    paddingLeft: spacings[HORIZONTAL_ROW_PADDING],
     zIndex: 1,
   },
   stickedToEndColumnGroup: {
     position: "sticky",
     right: 0,
+    marginRight: negativeSpacings[HORIZONTAL_ROW_PADDING],
+    paddingRight: spacings[HORIZONTAL_ROW_PADDING],
     zIndex: 1,
   },
   rowsContainer: {
@@ -55,6 +69,7 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "row",
     alignItems: "stretch",
+    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
   },
   headerCell: {
     display: "flex",
@@ -258,7 +273,10 @@ export const VirtualizedList = <T, ExtraInfo>({
   );
 
   const contentContainerWidth =
-    stickedToStartColumnsWidth + centerColumnsWidth + stickedToEndColumnsWidth;
+    stickedToStartColumnsWidth +
+    centerColumnsWidth +
+    stickedToEndColumnsWidth +
+    HORIZONTAL_ROW_PADDING * 2;
 
   const backgroundColor = backgroundColorVariants[variant];
 
