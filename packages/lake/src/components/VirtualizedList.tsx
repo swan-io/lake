@@ -14,12 +14,7 @@ import {
 } from "react";
 import { StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
-import {
-  backgroundColor as backgroundColorVariants,
-  colors,
-  negativeSpacings,
-  spacings,
-} from "../constants/design";
+import { backgroundColor as backgroundColorVariants, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
@@ -38,27 +33,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     zIndex: 2,
-    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
   },
   cellsContainer: {
     flexDirection: "row",
     transform: "translateZ(0)",
-    marginHorizontal: negativeSpacings[HORIZONTAL_ROW_PADDING],
-    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
   },
   stickedToStartColumnGroup: {
     position: "sticky",
     left: 0,
-    marginLeft: negativeSpacings[HORIZONTAL_ROW_PADDING],
-    paddingLeft: spacings[HORIZONTAL_ROW_PADDING],
     zIndex: 1,
+  },
+  stickedToStartColumnGroupLocked: {
+    position: "relative",
   },
   stickedToEndColumnGroup: {
     position: "sticky",
     right: 0,
-    marginRight: negativeSpacings[HORIZONTAL_ROW_PADDING],
-    paddingRight: spacings[HORIZONTAL_ROW_PADDING],
     zIndex: 1,
+  },
+  stickedToEndColumnGroupLocked: {
+    position: "relative",
   },
   rowsContainer: {
     position: "relative",
@@ -69,7 +63,10 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "row",
     alignItems: "stretch",
-    paddingHorizontal: spacings[HORIZONTAL_ROW_PADDING],
+    boxShadow: `0 -1px ${colors.gray[100]}`,
+    transitionProperty: "top",
+    transitionDuration: "300ms",
+    transitionTimingFunction: "ease-in-out",
   },
   headerCell: {
     display: "flex",
@@ -82,7 +79,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexGrow: 1,
     alignItems: "stretch",
-    boxShadow: `inset 0 -1px ${colors.gray[100]}`,
   },
   shadowsLayerContainer: {
     position: "absolute",
@@ -251,32 +247,45 @@ export const VirtualizedList = <T, ExtraInfo>({
 
   const containerContainerHeight = headerHeight + fullDataHeight + loadingDataPlaceholderHeight;
 
+  const stickedToStartFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
+    .map(() => HORIZONTAL_ROW_PADDING)
+    .getOr(0);
+  const centerFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
+    .map(() => 0)
+    .getOr(HORIZONTAL_ROW_PADDING);
+  const centerLastCellLeftPadding = Option.fromNullable(stickedToEndColumns)
+    .map(() => 0)
+    .getOr(HORIZONTAL_ROW_PADDING);
+  const stickedToEndLastCellRightPadding = Option.fromNullable(stickedToEndColumns)
+    .map(() => HORIZONTAL_ROW_PADDING)
+    .getOr(0);
+
   const stickedToStartColumnsWidth = useMemo(
     () =>
       Option.fromNullable(stickedToStartColumns)
         .map(columns => columns.reduce((acc, column) => acc + column.width, 0))
-        .getOr(0),
-    [stickedToStartColumns],
+        .getOr(0) + stickedToStartFirstCellLeftPadding,
+    [stickedToStartColumns, stickedToStartFirstCellLeftPadding],
   );
 
   const centerColumnsWidth = useMemo(
-    () => columns.reduce((acc, column) => acc + column.width, 0),
-    [columns],
+    () =>
+      columns.reduce((acc, column) => acc + column.width, 0) +
+      centerFirstCellLeftPadding +
+      centerLastCellLeftPadding,
+    [columns, centerFirstCellLeftPadding, centerLastCellLeftPadding],
   );
 
   const stickedToEndColumnsWidth = useMemo(
     () =>
       Option.fromNullable(stickedToEndColumns)
         .map(columns => columns.reduce((acc, column) => acc + column.width, 0))
-        .getOr(0),
-    [stickedToEndColumns],
+        .getOr(0) + stickedToEndLastCellRightPadding,
+    [stickedToEndColumns, stickedToEndLastCellRightPadding],
   );
 
   const contentContainerWidth =
-    stickedToStartColumnsWidth +
-    centerColumnsWidth +
-    stickedToEndColumnsWidth +
-    HORIZONTAL_ROW_PADDING * 2;
+    stickedToStartColumnsWidth + centerColumnsWidth + stickedToEndColumnsWidth;
 
   const backgroundColor = backgroundColorVariants[variant];
 
@@ -293,14 +302,17 @@ export const VirtualizedList = <T, ExtraInfo>({
   >(undefined);
 
   const rowsToRender = useMemo(() => {
-    return Option.fromNullable(rangeToRender).map(({ startIndex, endIndex }) => ({
-      startIndex,
-      endIndex,
-      data: data.slice(startIndex, endIndex),
-    }));
+    return Option.fromNullable(rangeToRender).map(({ startIndex, endIndex }) => {
+      const clampedEndIndex = Math.min(data.length, endIndex);
+      return {
+        startIndex,
+        endIndex: clampedEndIndex,
+        data: data.slice(startIndex, clampedEndIndex),
+      };
+    });
   }, [data, rangeToRender]);
 
-  useLayoutEffect(() => {
+  const onLayoutUpdate = useCallback(() => {
     const element = Option.fromNullable(scrollViewRef.current).flatMap(ref =>
       Option.fromNullable(ref.element),
     );
@@ -312,10 +324,8 @@ export const VirtualizedList = <T, ExtraInfo>({
             Math.floor((scrollView.scrollTop - renderThreshold) / rowHeight),
           );
 
-          const endIndex = Math.min(
-            data.length,
-            startIndex + Math.ceil((scrollView.scrollHeight + renderThreshold * 2) / rowHeight),
-          );
+          const endIndex =
+            startIndex + Math.ceil((scrollView.scrollHeight + renderThreshold * 2) / rowHeight);
 
           if (
             previousRangeToRender?.startIndex === startIndex &&
@@ -334,7 +344,8 @@ export const VirtualizedList = <T, ExtraInfo>({
     setHasHorizontalScrollPosition(
       element
         .map(scrollView =>
-          scrollView.scrollWidth === scrollView.clientWidth
+          scrollView.scrollWidth === scrollView.clientWidth ||
+          scrollView.clientWidth - (stickedToEndColumnsWidth + stickedToStartColumnsWidth) < 400
             ? "NoScroll"
             : scrollView.scrollLeft <= 0
               ? "Start"
@@ -344,16 +355,16 @@ export const VirtualizedList = <T, ExtraInfo>({
         )
         .toUndefined(),
     );
-  }, [data, renderThreshold, rowHeight]);
+  }, [data, renderThreshold, rowHeight, stickedToStartColumnsWidth, stickedToEndColumnsWidth]);
+
+  useLayoutEffect(() => {
+    onLayoutUpdate();
+  }, [onLayoutUpdate]);
 
   const scrollTimeoutRef = useRef<number | undefined>(undefined);
   const rowsContainerRef = useRef<View>(null);
 
   const onScroll = useCallback(() => {
-    const element = Option.fromNullable(scrollViewRef.current).flatMap(ref =>
-      Option.fromNullable(ref.element),
-    );
-
     // Disable interactions in cells during scroll, avoids useless
     // re-renders
     if (scrollTimeoutRef.current != null) {
@@ -368,45 +379,23 @@ export const VirtualizedList = <T, ExtraInfo>({
       }
     }, 100);
 
-    setRangeToRender(previousRangeToRender =>
-      element
-        .map(scrollView => {
-          const startIndex = Math.max(
-            0,
-            Math.floor((scrollView.scrollTop - renderThreshold) / rowHeight),
-          );
+    onLayoutUpdate();
+  }, [onLayoutUpdate]);
 
-          const endIndex = Math.min(
-            data.length,
-            startIndex + Math.ceil((scrollView.scrollHeight + renderThreshold * 2) / rowHeight),
-          );
-
-          if (
-            previousRangeToRender?.startIndex === startIndex &&
-            previousRangeToRender.endIndex === endIndex
-          ) {
-            return previousRangeToRender;
-          }
-
-          return { startIndex, endIndex };
-        })
-        .toUndefined(),
+  useEffect(() => {
+    const element = Option.fromNullable(scrollViewRef.current).flatMap(ref =>
+      Option.fromNullable(ref.element),
     );
-
-    setHasHorizontalScrollPosition(
-      element
-        .map(scrollView =>
-          scrollView.scrollWidth === scrollView.clientWidth
-            ? "NoScroll"
-            : scrollView.scrollLeft <= 0
-              ? "Start"
-              : scrollView.scrollLeft >= scrollView.scrollWidth - scrollView.clientWidth
-                ? "End"
-                : "Middle",
-        )
-        .toUndefined(),
-    );
-  }, [data, renderThreshold, rowHeight]);
+    return element
+      .map(element => {
+        const resizeObserver = new ResizeObserver(() => {
+          onLayoutUpdate();
+        });
+        resizeObserver.observe(element);
+        return () => resizeObserver.unobserve(element);
+      })
+      .toUndefined();
+  }, [onLayoutUpdate]);
 
   // tracks if the threshold to initiate the next data load is reached
   useEffect(() => {
@@ -436,14 +425,20 @@ export const VirtualizedList = <T, ExtraInfo>({
               style={[
                 styles.cellsContainer,
                 styles.stickedToStartColumnGroup,
+                horizontalScrollPosition === "NoScroll" && styles.stickedToStartColumnGroupLocked,
                 { width: stickedToStartColumnsWidth, backgroundColor },
               ]}
             >
-              {columns.map(({ id, width, title, renderTitle }) => {
+              {columns.map(({ id, width, title, renderTitle }, index) => {
                 const columnId = `${viewId}_${id}`;
+                const paddingLeft = index === 0 ? stickedToStartFirstCellLeftPadding : 0;
 
                 return (
-                  <View style={[styles.headerCell, { width }]} id={columnId} key={columnId}>
+                  <View
+                    style={[styles.headerCell, { width: width + paddingLeft, paddingLeft }]}
+                    id={columnId}
+                    key={columnId}
+                  >
                     {renderTitle({ title, extraInfo, id })}
                   </View>
                 );
@@ -453,11 +448,20 @@ export const VirtualizedList = <T, ExtraInfo>({
           .toNull()}
 
         <View style={[styles.cellsContainer, { width: centerColumnsWidth, backgroundColor }]}>
-          {columns.map(({ id, width, title, renderTitle }) => {
+          {columns.map(({ id, width, title, renderTitle }, index) => {
             const columnId = `${viewId}_${id}`;
+            const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
+            const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
 
             return (
-              <View style={[styles.headerCell, { width }]} id={columnId} key={columnId}>
+              <View
+                style={[
+                  styles.headerCell,
+                  { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
+                ]}
+                id={columnId}
+                key={columnId}
+              >
                 {renderTitle({ title, extraInfo, id })}
               </View>
             );
@@ -470,14 +474,21 @@ export const VirtualizedList = <T, ExtraInfo>({
               style={[
                 styles.cellsContainer,
                 styles.stickedToEndColumnGroup,
+                horizontalScrollPosition === "NoScroll" && styles.stickedToEndColumnGroupLocked,
                 { width: stickedToEndColumnsWidth, backgroundColor },
               ]}
             >
-              {columns.map(({ id, width, title, renderTitle }) => {
+              {columns.map(({ id, width, title, renderTitle }, index) => {
                 const columnId = `${viewId}_${id}`;
+                const paddingRight =
+                  index === columns.length - 1 ? stickedToEndLastCellRightPadding : 0;
 
                 return (
-                  <View style={[styles.headerCell, { width }]} id={columnId} key={columnId}>
+                  <View
+                    style={[styles.headerCell, { width: width + paddingRight, paddingRight }]}
+                    id={columnId}
+                    key={columnId}
+                  >
                     {renderTitle({ title, extraInfo, id })}
                   </View>
                 );
@@ -498,6 +509,11 @@ export const VirtualizedList = <T, ExtraInfo>({
     columns,
     stickedToEndColumns,
     viewId,
+    horizontalScrollPosition,
+    stickedToStartFirstCellLeftPadding,
+    centerFirstCellLeftPadding,
+    centerLastCellLeftPadding,
+    stickedToEndLastCellRightPadding,
   ]);
 
   const startColumnShadow = useMemo(() => {
@@ -570,6 +586,11 @@ export const VirtualizedList = <T, ExtraInfo>({
                 columns={columns}
                 stickedToEndColumns={stickedToEndColumns}
                 extraInfo={extraInfo}
+                horizontalScrollPosition={horizontalScrollPosition ?? "NoScroll"}
+                stickedToStartFirstCellLeftPadding={stickedToStartFirstCellLeftPadding}
+                centerFirstCellLeftPadding={centerFirstCellLeftPadding}
+                centerLastCellLeftPadding={centerLastCellLeftPadding}
+                stickedToEndLastCellRightPadding={stickedToEndLastCellRightPadding}
               />
             ))}
 
@@ -632,7 +653,12 @@ type VirtualizedRowProps<T, ExtraInfo> = {
   stickedToEndColumns?: ColumnConfig<T, ExtraInfo>[];
   extraInfo: ExtraInfo;
   getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement | undefined;
+  horizontalScrollPosition: "NoScroll" | "Start" | "Middle" | "End";
   item: T;
+  stickedToStartFirstCellLeftPadding: number;
+  centerFirstCellLeftPadding: number;
+  centerLastCellLeftPadding: number;
+  stickedToEndLastCellRightPadding: number;
 };
 
 const RawVirtualizedRow = <T, ExtraInfo>({
@@ -648,7 +674,12 @@ const RawVirtualizedRow = <T, ExtraInfo>({
   stickedToEndColumns,
   extraInfo,
   item,
+  horizontalScrollPosition,
   getRowLink,
+  stickedToStartFirstCellLeftPadding,
+  centerFirstCellLeftPadding,
+  centerLastCellLeftPadding,
+  stickedToEndLastCellRightPadding,
 }: VirtualizedRowProps<T, ExtraInfo>) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -669,16 +700,16 @@ const RawVirtualizedRow = <T, ExtraInfo>({
     ref: elementRef,
     style: [
       styles.row,
+      {
+        backgroundColor: backgroundColorVariants[variant],
+        top: absoluteIndex * rowHeight,
+        height: rowHeight,
+      },
       isHovered && {
         backgroundColor:
           variant === "accented"
             ? backgroundColorVariants.default
             : backgroundColorVariants.accented,
-      },
-      {
-        backgroundColor: backgroundColorVariants[variant],
-        top: absoluteIndex * rowHeight,
-        height: rowHeight,
       },
     ],
     children: (
@@ -689,6 +720,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
               style={[
                 styles.cellsContainer,
                 styles.stickedToStartColumnGroup,
+                horizontalScrollPosition === "NoScroll" && styles.stickedToStartColumnGroupLocked,
                 {
                   width: stickedToStartColumnsWidth,
                   backgroundColor: isHovered
@@ -697,11 +729,16 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                 },
               ]}
             >
-              {columns.map(({ id, width, renderCell }) => {
+              {columns.map(({ id, width, renderCell }, index) => {
                 const columnId = `${viewId}_${id}`;
+                const paddingLeft = index === 0 ? stickedToStartFirstCellLeftPadding : 0;
 
                 return (
-                  <View style={[styles.cell, { width }]} key={columnId} aria-describedby={columnId}>
+                  <View
+                    style={[styles.cell, { width: width + paddingLeft, paddingLeft }]}
+                    key={columnId}
+                    aria-describedby={columnId}
+                  >
                     {renderCell({
                       columnId,
                       item,
@@ -727,11 +764,20 @@ const RawVirtualizedRow = <T, ExtraInfo>({
             },
           ]}
         >
-          {columns.map(({ id, width, renderCell }) => {
+          {columns.map(({ id, width, renderCell }, index) => {
             const columnId = `${viewId}_${id}`;
+            const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
+            const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
 
             return (
-              <View style={[styles.cell, { width }]} key={columnId} aria-describedby={columnId}>
+              <View
+                style={[
+                  styles.cell,
+                  { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
+                ]}
+                key={columnId}
+                aria-describedby={columnId}
+              >
                 {renderCell({
                   columnId,
                   item,
@@ -750,6 +796,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
               style={[
                 styles.cellsContainer,
                 styles.stickedToEndColumnGroup,
+                horizontalScrollPosition === "NoScroll" && styles.stickedToEndColumnGroupLocked,
                 {
                   width: stickedToEndColumnsWidth,
                   backgroundColor: isHovered
@@ -758,11 +805,17 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                 },
               ]}
             >
-              {columns.map(({ id, width, renderCell }) => {
+              {columns.map(({ id, width, renderCell }, index) => {
                 const columnId = `${viewId}_${id}`;
+                const paddingRight =
+                  index === columns.length - 1 ? stickedToEndLastCellRightPadding : 0;
 
                 return (
-                  <View style={[styles.cell, { width }]} key={columnId} aria-describedby={columnId}>
+                  <View
+                    style={[styles.cell, { width: width + paddingRight, paddingRight }]}
+                    key={columnId}
+                    aria-describedby={columnId}
+                  >
                     {renderCell({
                       columnId,
                       item,

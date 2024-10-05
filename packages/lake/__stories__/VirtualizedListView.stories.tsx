@@ -10,7 +10,6 @@ import {
   FixedListViewPlaceholder,
 } from "../src/components/FixedListView";
 import {
-  ColorPatchCell,
   EndAlignedCell,
   LinkCell,
   SimpleHeaderCell,
@@ -103,15 +102,6 @@ const EditableFixedListView = () => {
   const { stickedToStartColumns, columns, stickedToEndColumns } = useMemo(() => {
     const stickedToStartColumns = [
       {
-        width: 4,
-        id: "color",
-        title: "Color",
-        renderTitle: () => null,
-        renderCell: ({ isHovered }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <ColorPatchCell isHovered={isHovered} color="live" />
-        ),
-      },
-      {
         width: 300,
         id: "name",
         title: "Name",
@@ -182,7 +172,7 @@ const EditableFixedListView = () => {
 
     const stickedToEndColumns = [
       {
-        width: 100,
+        width: 72,
         id: "dot",
         title: "Settings",
         renderTitle: () => <SimpleHeaderCell text={"End"} justifyContent="flex-end" />,
@@ -203,6 +193,7 @@ const EditableFixedListView = () => {
         <LakeButton
           icon="add-circle-filled"
           color="live"
+          size="small"
           onPress={() => setData(data => [generateItem(), ...data])}
         >
           Prepend
@@ -210,7 +201,29 @@ const EditableFixedListView = () => {
 
         <Space width={16} />
 
-        <LakeButton icon="delete-filled" color="negative" onPress={() => setData([])}>
+        <LakeButton
+          icon="add-circle-filled"
+          color="live"
+          size="small"
+          onPress={() => setData(data => [...data.slice(0, 1), generateItem(), ...data.slice(1)])}
+        >
+          Insert in 2nd
+        </LakeButton>
+
+        <Space width={16} />
+
+        <LakeButton
+          icon="add-circle-filled"
+          color="live"
+          size="small"
+          onPress={() => setData(data => [...data, generateItem()])}
+        >
+          Append
+        </LakeButton>
+
+        <Space width={16} />
+
+        <LakeButton icon="delete-filled" color="negative" size="small" onPress={() => setData([])}>
           Clear
         </LakeButton>
 
