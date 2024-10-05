@@ -27,6 +27,13 @@ const styles = StyleSheet.create({
     height: 1,
     alignSelf: "stretch",
   },
+  emptyListContentContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: spacings[48],
+    minHeight: "100%",
+  },
   headerRow: {
     position: "sticky",
     top: 0,
@@ -209,7 +216,7 @@ export type VirtualizedListProps<T, ExtraInfo> = {
   onEndReached?: () => void;
   onEndReachedThreshold?: number;
   getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement | undefined;
-  renderEmptyList?: () => ReactNode;
+  renderEmptyList: () => ReactNode;
   marginHorizontal?: string;
   loading?: {
     isLoading: boolean;
@@ -232,6 +239,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   extraInfo,
   keyExtractor,
   marginHorizontal,
+  renderEmptyList,
 }: VirtualizedListProps<T, ExtraInfo>) => {
   // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
   const viewId = useId();
@@ -553,6 +561,19 @@ export const VirtualizedList = <T, ExtraInfo>({
       />,
     );
   }, [stickedToEndColumnsWidth, horizontalScrollPosition]);
+
+  if (
+    data.length === 0 &&
+    !Option.fromNullable(loading)
+      .map(({ isLoading }) => isLoading)
+      .getOr(false)
+  ) {
+    return (
+      <ScrollView style={styles.container} contentContainerStyle={styles.emptyListContentContainer}>
+        {renderEmptyList()}
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView
