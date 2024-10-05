@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "stretch",
-    boxShadow: `0 -1px ${colors.gray[100]}`,
     transitionProperty: "top",
     transitionDuration: "300ms",
     transitionTimingFunction: "ease-in-out",
@@ -81,12 +80,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexGrow: 1,
     alignItems: "center",
+    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   cell: {
     display: "flex",
     flexDirection: "row",
     flexGrow: 1,
     alignItems: "stretch",
+    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   shadowsLayerContainer: {
     position: "absolute",
