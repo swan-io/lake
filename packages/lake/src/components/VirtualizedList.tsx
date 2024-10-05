@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
+    display: "flex",
     flexDirection: "row",
     alignItems: "stretch",
     boxShadow: `0 -1px ${colors.gray[100]}`,
@@ -435,7 +436,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 styles.cellsContainer,
                 styles.stickedToStartColumnGroup,
                 horizontalScrollPosition === "NoScroll" && styles.stickedToStartColumnGroupLocked,
-                { width: stickedToStartColumnsWidth, backgroundColor, height: rowHeight },
+                { width: stickedToStartColumnsWidth, backgroundColor, height: headerHeight },
               ]}
             >
               {columns.map(({ id, width, title, renderTitle }, index) => {
@@ -459,7 +460,7 @@ export const VirtualizedList = <T, ExtraInfo>({
         <View
           style={[
             styles.cellsContainer,
-            { width: centerColumnsWidth, backgroundColor, height: rowHeight },
+            { width: centerColumnsWidth, backgroundColor, height: headerHeight },
           ]}
         >
           {columns.map(({ id, width, title, renderTitle }, index) => {
@@ -489,7 +490,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 styles.cellsContainer,
                 styles.stickedToEndColumnGroup,
                 horizontalScrollPosition === "NoScroll" && styles.stickedToEndColumnGroupLocked,
-                { width: stickedToEndColumnsWidth, backgroundColor, height: rowHeight },
+                { width: stickedToEndColumnsWidth, backgroundColor, height: headerHeight },
               ]}
             >
               {columns.map(({ id, width, title, renderTitle }, index) => {
@@ -528,7 +529,6 @@ export const VirtualizedList = <T, ExtraInfo>({
     centerFirstCellLeftPadding,
     centerLastCellLeftPadding,
     stickedToEndLastCellRightPadding,
-    rowHeight,
   ]);
 
   const startColumnShadow = useMemo(() => {
