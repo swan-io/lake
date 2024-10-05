@@ -18,6 +18,7 @@ import {
 } from "../src/components/FixedListViewCells";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
+import { Pressable } from "../src/components/Pressable";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
 import { VirtualizedList } from "../src/components/VirtualizedList";
@@ -263,6 +264,7 @@ const EditableFixedListView = () => {
         renderEmptyList={() => (
           <FixedListViewEmpty icon="lake-inbox-empty" title="Nothing to see here" />
         )}
+        getRowLink={item => <Pressable onPress={() => console.log(item.item)} />}
         loading={{
           isLoading: forceIsLoading || showFakeLoader,
           count: 20,

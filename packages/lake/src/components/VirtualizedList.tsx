@@ -240,6 +240,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   keyExtractor,
   marginHorizontal,
   renderEmptyList,
+  getRowLink,
 }: VirtualizedListProps<T, ExtraInfo>) => {
   // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
   const viewId = useId();
@@ -607,6 +608,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 columns={columns}
                 stickedToEndColumns={stickedToEndColumns}
                 extraInfo={extraInfo}
+                getRowLink={getRowLink}
                 horizontalScrollPosition={horizontalScrollPosition ?? "NoScroll"}
                 stickedToStartFirstCellLeftPadding={stickedToStartFirstCellLeftPadding}
                 centerFirstCellLeftPadding={centerFirstCellLeftPadding}
