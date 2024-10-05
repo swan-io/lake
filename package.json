@@ -1,7 +1,7 @@
 {
   "name": "@swan-io/lake",
   "description": "Swan's component kit",
-  "version": "8.18.5",
+  "version": "8.18.6",
   "engines": {
     "node": ">=20.9.0",
     "yarn": "^1.22.0"
