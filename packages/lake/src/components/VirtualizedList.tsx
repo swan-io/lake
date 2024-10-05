@@ -435,7 +435,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 styles.cellsContainer,
                 styles.stickedToStartColumnGroup,
                 horizontalScrollPosition === "NoScroll" && styles.stickedToStartColumnGroupLocked,
-                { width: stickedToStartColumnsWidth, backgroundColor },
+                { width: stickedToStartColumnsWidth, backgroundColor, height: rowHeight },
               ]}
             >
               {columns.map(({ id, width, title, renderTitle }, index) => {
@@ -456,7 +456,12 @@ export const VirtualizedList = <T, ExtraInfo>({
           ))
           .toNull()}
 
-        <View style={[styles.cellsContainer, { width: centerColumnsWidth, backgroundColor }]}>
+        <View
+          style={[
+            styles.cellsContainer,
+            { width: centerColumnsWidth, backgroundColor, height: rowHeight },
+          ]}
+        >
           {columns.map(({ id, width, title, renderTitle }, index) => {
             const columnId = `${viewId}_${id}`;
             const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
@@ -484,7 +489,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 styles.cellsContainer,
                 styles.stickedToEndColumnGroup,
                 horizontalScrollPosition === "NoScroll" && styles.stickedToEndColumnGroupLocked,
-                { width: stickedToEndColumnsWidth, backgroundColor },
+                { width: stickedToEndColumnsWidth, backgroundColor, height: rowHeight },
               ]}
             >
               {columns.map(({ id, width, title, renderTitle }, index) => {
@@ -523,6 +528,7 @@ export const VirtualizedList = <T, ExtraInfo>({
     centerFirstCellLeftPadding,
     centerLastCellLeftPadding,
     stickedToEndLastCellRightPadding,
+    rowHeight,
   ]);
 
   const startColumnShadow = useMemo(() => {
@@ -745,6 +751,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                 styles.stickedToStartColumnGroup,
                 horizontalScrollPosition === "NoScroll" && styles.stickedToStartColumnGroupLocked,
                 {
+                  height: rowHeight,
                   width: stickedToStartColumnsWidth,
                   backgroundColor: isHovered
                     ? backgroundColorVariants[variant === "accented" ? "default" : "accented"]
@@ -781,6 +788,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
             styles.cellsContainer,
             {
               width: centerColumnsWidth,
+              height: rowHeight,
               backgroundColor: isHovered
                 ? backgroundColorVariants[variant === "accented" ? "default" : "accented"]
                 : backgroundColorVariants[variant],
@@ -822,6 +830,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                 horizontalScrollPosition === "NoScroll" && styles.stickedToEndColumnGroupLocked,
                 {
                   width: stickedToEndColumnsWidth,
+                  height: rowHeight,
                   backgroundColor: isHovered
                     ? backgroundColorVariants[variant === "accented" ? "default" : "accented"]
                     : backgroundColorVariants[variant],
