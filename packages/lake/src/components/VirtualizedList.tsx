@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flexGrow: 1,
-    paddingHorizontal: spacings[20],
+    paddingHorizontal: spacings[24],
   },
   loadingPlaceholder: {
     position: "absolute",
@@ -355,7 +355,7 @@ export const VirtualizedList = <T, ExtraInfo>({
         )
         .toUndefined(),
     );
-  }, [data, renderThreshold, rowHeight, stickedToStartColumnsWidth, stickedToEndColumnsWidth]);
+  }, [renderThreshold, rowHeight, stickedToStartColumnsWidth, stickedToEndColumnsWidth]);
 
   useLayoutEffect(() => {
     onLayoutUpdate();
