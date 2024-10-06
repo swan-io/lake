@@ -3,25 +3,24 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
 import {
-  ColumnCellConfig,
-  ColumnTitleConfig,
-  FixedListView,
-  FixedListViewEmpty,
-  FixedListViewPlaceholder,
-} from "../src/components/FixedListView";
-import {
   EndAlignedCell,
   LinkCell,
   SimpleHeaderCell,
   SimpleRegularTextCell,
   SimpleTitleCell,
-} from "../src/components/FixedListViewCells";
+} from "../src/components/Cells";
+import { EmptyView } from "../src/components/EmptyView";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
 import { Pressable } from "../src/components/Pressable";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
-import { VirtualizedList } from "../src/components/VirtualizedList";
+import {
+  ColumnCellConfig,
+  ColumnTitleConfig,
+  VirtualizedList,
+  VirtualizedListPlaceholder,
+} from "../src/components/VirtualizedList";
 
 export default {
   title: "Layout/VirtualizedList",
@@ -198,7 +197,7 @@ const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
     ];
 
     return { stickedToStartColumns, columns, stickedToEndColumns };
-  }, []);
+  }, [few]);
 
   return (
     <>
@@ -273,9 +272,7 @@ const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
         headerHeight={48}
         onEndReached={onEndReached}
         onEndReachedThreshold={300}
-        renderEmptyList={() => (
-          <FixedListViewEmpty icon="lake-inbox-empty" title="Nothing to see here" />
-        )}
+        renderEmptyList={() => <EmptyView icon="lake-inbox-empty" title="Nothing to see here" />}
         getRowLink={item => <Pressable onPress={() => console.log(item.item)} />}
         loading={{
           isLoading: forceIsLoading || showFakeLoader,
@@ -286,20 +283,18 @@ const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
   );
 };
 
-export const Primary: StoryFn<typeof FixedListView> = () => {
+export const Primary: StoryFn<typeof VirtualizedList> = () => {
   return <EditableFixedListView />;
 };
 
-export const WithoutBackground: StoryFn<typeof FixedListView> = () => {
+export const WithoutBackground: StoryFn<typeof VirtualizedList> = () => {
   return <EditableFixedListView />;
 };
 
-export const FewColumn: StoryFn<typeof FixedListView> = () => {
+export const FewColumn: StoryFn<typeof VirtualizedList> = () => {
   return <EditableFixedListView few={true} />;
 };
 
-export const Placeholder: StoryFn<typeof FixedListView> = () => {
-  return (
-    <FixedListViewPlaceholder rowHeight={48} rowVerticalSpacing={4} headerHeight={48} count={3} />
-  );
+export const Placeholder: StoryFn<typeof VirtualizedList> = () => {
+  return <VirtualizedListPlaceholder rowHeight={48} headerHeight={48} count={3} />;
 };

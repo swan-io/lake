@@ -213,7 +213,6 @@ export type VirtualizedListProps<T, ExtraInfo> = {
   variant: "default" | "accented";
   data: T[];
   keyExtractor: (item: T, index: number) => string;
-  highlightedRowId?: string;
   headerHeight: number;
   rowHeight: number;
   extraInfo: ExtraInfo;

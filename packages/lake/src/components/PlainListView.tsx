@@ -16,15 +16,15 @@ import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, breakpoints, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
 import { isNotNullish, isNullish } from "../utils/nullish";
+import { LakeHeading } from "./LakeHeading";
+import { ResponsiveContainer } from "./ResponsiveContainer";
+import { ScrollView } from "./ScrollView";
 import {
   ColumnCellConfig,
   ColumnTitleConfig,
   LinkConfig,
-  PlainListViewPlaceholder,
-} from "./FixedListView";
-import { LakeHeading } from "./LakeHeading";
-import { ResponsiveContainer } from "./ResponsiveContainer";
-import { ScrollView } from "./ScrollView";
+  VirtualizedListPlaceholder,
+} from "./VirtualizedList";
 
 export type ColumnConfig<T, ExtraInfo> = {
   id: string;
@@ -442,12 +442,7 @@ export const PlainListView = <T, ExtraInfo>({
                   <View>
                     <View aria-busy={isLoading} style={styles.loadingPlaceholder}>
                       {isLoading ? (
-                        <PlainListViewPlaceholder
-                          count={loading.count}
-                          rowHeight={rowHeight}
-                          rowVerticalSpacing={0}
-                          paddingHorizontal={0}
-                        />
+                        <PlainListViewPlaceholder count={loading.count} rowHeight={rowHeight} />
                       ) : null}
                     </View>
                   </View>
@@ -469,3 +464,5 @@ export const PlainListView = <T, ExtraInfo>({
     </ResponsiveContainer>
   );
 };
+
+export const PlainListViewPlaceholder = VirtualizedListPlaceholder;

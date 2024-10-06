@@ -2,17 +2,13 @@ import { Meta, StoryFn } from "@storybook/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
-import { ColumnCellConfig, ColumnTitleConfig } from "../src/components/FixedListView";
-import {
-  SimpleHeaderCell,
-  SimpleRegularTextCell,
-  SimpleTitleCell,
-} from "../src/components/FixedListViewCells";
+import { SimpleHeaderCell, SimpleRegularTextCell, SimpleTitleCell } from "../src/components/Cells";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
 import { ColumnConfig, PlainListView } from "../src/components/PlainListView";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
+import { ColumnCellConfig, ColumnTitleConfig } from "../src/components/VirtualizedList";
 
 export default {
   title: "Layout/PlainListView",
