@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     height: 1,
     alignSelf: "stretch",
   },
+  contentContainer: {
+    minWidth: "100%",
+  },
   emptyListContentContainer: {
     flexDirection: "column",
     alignItems: "center",
@@ -52,6 +55,9 @@ const styles = StyleSheet.create({
   },
   stickedToStartColumnGroupLocked: {
     position: "relative",
+  },
+  centerColumnGroup: {
+    flexGrow: 1,
   },
   stickedToEndColumnGroup: {
     position: "sticky",
@@ -461,6 +467,7 @@ export const VirtualizedList = <T, ExtraInfo>({
         <View
           style={[
             styles.cellsContainer,
+            styles.centerColumnGroup,
             { width: centerColumnsWidth, backgroundColor, height: headerHeight },
           ]}
         >
@@ -590,10 +597,13 @@ export const VirtualizedList = <T, ExtraInfo>({
       style={[styles.container, { marginHorizontal }]}
       onScroll={onScroll}
       scrollEventThrottle={32}
-      contentContainerStyle={{
-        height: containerContainerHeight,
-        width: contentContainerWidth,
-      }}
+      contentContainerStyle={[
+        styles.contentContainer,
+        {
+          height: containerContainerHeight,
+          width: contentContainerWidth,
+        },
+      ]}
     >
       {header}
 
@@ -787,6 +797,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
         <View
           style={[
             styles.cellsContainer,
+            styles.centerColumnGroup,
             {
               width: centerColumnsWidth,
               height: rowHeight,

@@ -73,7 +73,7 @@ const generateItem = (): TestRow => {
   };
 };
 
-const EditableFixedListView = () => {
+const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
   const [sort, setSort] = useState<SortInfo>({ key: "name", order: "Desc" });
   const [endReachedTimes, setEndReachedTimes] = useState(0);
   const [withInfiniteScroll, setWithInfiniteScroll] = useState(false);
@@ -121,7 +121,7 @@ const EditableFixedListView = () => {
 
     const columns = [
       {
-        width: 500,
+        width: few ? 300 : 500,
         id: "event_id",
         title: "Event ID",
         renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
@@ -129,46 +129,58 @@ const EditableFixedListView = () => {
           <SimpleRegularTextCell text={id} />
         ),
       },
-      {
-        width: 150,
-        id: "link_before",
-        title: "Link before",
-        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
-        renderCell: () => (
-          <LinkCell onPress={() => {}} buttonPosition="start">
-            <Tag color="shakespear">Demo link</Tag>
-          </LinkCell>
-        ),
-      },
-      {
-        width: 500,
-        id: "onboarding_id",
-        title: "Onboarding ID",
-        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
-        renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <SimpleRegularTextCell text={id} />
-        ),
-      },
-      {
-        width: 150,
-        id: "link_after",
-        title: "Link after",
-        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
-        renderCell: () => (
-          <LinkCell onPress={() => {}} buttonPosition="end">
-            <Tag color="shakespear">Demo link</Tag>
-          </LinkCell>
-        ),
-      },
-      {
-        width: 500,
-        id: "account_id",
-        title: "Account ID",
-        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
-        renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <SimpleRegularTextCell text={id} />
-        ),
-      },
+      ...(few
+        ? []
+        : [
+            {
+              width: 150,
+              id: "link_before",
+              title: "Link before",
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
+                <SimpleHeaderCell text={title} />
+              ),
+              renderCell: () => (
+                <LinkCell onPress={() => {}} buttonPosition="start">
+                  <Tag color="shakespear">Demo link</Tag>
+                </LinkCell>
+              ),
+            },
+            {
+              width: 500,
+              id: "onboarding_id",
+              title: "Onboarding ID",
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
+                <SimpleHeaderCell text={title} />
+              ),
+              renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
+                <SimpleRegularTextCell text={id} />
+              ),
+            },
+            {
+              width: 150,
+              id: "link_after",
+              title: "Link after",
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
+                <SimpleHeaderCell text={title} />
+              ),
+              renderCell: () => (
+                <LinkCell onPress={() => {}} buttonPosition="end">
+                  <Tag color="shakespear">Demo link</Tag>
+                </LinkCell>
+              ),
+            },
+            {
+              width: 500,
+              id: "account_id",
+              title: "Account ID",
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
+                <SimpleHeaderCell text={title} />
+              ),
+              renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
+                <SimpleRegularTextCell text={id} />
+              ),
+            },
+          ]),
     ];
 
     const stickedToEndColumns = [
@@ -280,6 +292,10 @@ export const Primary: StoryFn<typeof FixedListView> = () => {
 
 export const WithoutBackground: StoryFn<typeof FixedListView> = () => {
   return <EditableFixedListView />;
+};
+
+export const FewColumn: StoryFn<typeof FixedListView> = () => {
+  return <EditableFixedListView few={true} />;
 };
 
 export const Placeholder: StoryFn<typeof FixedListView> = () => {
