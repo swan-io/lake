@@ -897,7 +897,7 @@ export const VirtualizedListPlaceholder = ({
   return (
     <View style={[styles.container, { marginHorizontal }]}>
       {headerHeight != null ? <View style={{ height: headerHeight }} /> : null}
-      {groupHeaderHeight != groupHeaderHeight ? <View style={{ height: headerHeight }} /> : null}
+      {groupHeaderHeight != null ? <View style={{ height: groupHeaderHeight }} /> : null}
 
       <View>
         {Array.from({ length: count }, (_, index) => {
