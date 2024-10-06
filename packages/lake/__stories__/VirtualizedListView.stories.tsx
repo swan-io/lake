@@ -72,7 +72,7 @@ const generateItem = (): TestRow => {
   };
 };
 
-const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
+const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
   const [sort, setSort] = useState<SortInfo>({ key: "name", order: "Desc" });
   const [endReachedTimes, setEndReachedTimes] = useState(0);
   const [withInfiniteScroll, setWithInfiniteScroll] = useState(false);
@@ -284,15 +284,15 @@ const EditableFixedListView = ({ few = false }: { few?: boolean }) => {
 };
 
 export const Primary: StoryFn<typeof VirtualizedList> = () => {
-  return <EditableFixedListView />;
+  return <EditableVirtualizedList />;
 };
 
 export const WithoutBackground: StoryFn<typeof VirtualizedList> = () => {
-  return <EditableFixedListView />;
+  return <EditableVirtualizedList />;
 };
 
 export const FewColumn: StoryFn<typeof VirtualizedList> = () => {
-  return <EditableFixedListView few={true} />;
+  return <EditableVirtualizedList few={true} />;
 };
 
 export const Placeholder: StoryFn<typeof VirtualizedList> = () => {
