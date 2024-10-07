@@ -1,6 +1,5 @@
-import { View } from "@react-three/drei";
 import { ReactNode } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { colors } from "../constants/design";
 import { BorderedIcon } from "./BorderedIcon";
 import { Icon, IconName } from "./Icon";
