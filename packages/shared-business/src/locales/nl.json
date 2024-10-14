@@ -305,7 +305,7 @@
   "transactionStatement.title.creditor": "Crediteur informatie",
   "transactionStatement.title.debtor": "Debiteur informatie",
   "transactionStatement.title.document": "Transactiebevestiging",
-  "transactionStatement.title.information": "Informatie",
+  "transactionStatement.title.transactionInformation": "Transactie-informatie",
   "transactionStatement.type.InternalCreditTransferIn": "Interne Overschrijving ontvangen",
   "transactionStatement.type.InternalCreditTransferOut": "Interne Overschrijving verzonden",
   "transactionStatement.type.InternationalCreditTransferIn": "Internationale Overschrijving ontvangen",

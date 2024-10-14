@@ -305,7 +305,7 @@
   "transactionStatement.title.creditor": "Informazioni creditore",
   "transactionStatement.title.debtor": "Informazioni debitore",
   "transactionStatement.title.document": "Conferma della transazione",
-  "transactionStatement.title.information": "Informazioni",
+  "transactionStatement.title.transactionInformation": "Informazioni sulla transazione",
   "transactionStatement.type.InternalCreditTransferIn": "Bonifico interno ricevuto",
   "transactionStatement.type.InternalCreditTransferOut": "Bonifico interno inviato",
   "transactionStatement.type.InternationalCreditTransferIn": "Bonifico internazionale ricevuto",

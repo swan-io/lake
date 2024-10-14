@@ -305,7 +305,7 @@
   "transactionStatement.title.creditor": "Información del acreedor",
   "transactionStatement.title.debtor": "Información del deudor",
   "transactionStatement.title.document": "Confirmación de la transacción",
-  "transactionStatement.title.information": "Información",
+  "transactionStatement.title.transactionInformation": "Información de la transacción",
   "transactionStatement.type.InternalCreditTransferIn": "Transferencia interna recibida",
   "transactionStatement.type.InternalCreditTransferOut": "Transferencia interna enviada",
   "transactionStatement.type.InternationalCreditTransferIn": "Transferencia internacional recibida",
