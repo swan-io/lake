@@ -305,7 +305,7 @@
   "transactionStatement.title.creditor": "Luotonantajan tiedot",
   "transactionStatement.title.debtor": "Velallisen tiedot",
   "transactionStatement.title.document": "Tapahtuman vahvistus",
-  "transactionStatement.title.information": "Tiedot",
+  "transactionStatement.title.transactionInformation": "Tapahtumatiedot",
   "transactionStatement.type.InternalCreditTransferIn": "Sisäinen tilisiirto vastaanotettu",
   "transactionStatement.type.InternalCreditTransferOut": "Lähetetty sisäinen opintopisteen siirto",
   "transactionStatement.type.InternationalCreditTransferIn": "Vastaanotettu kansainvälinen tilisiirto",

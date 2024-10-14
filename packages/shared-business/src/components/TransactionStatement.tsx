@@ -6,6 +6,7 @@ import { Stack } from "@swan-io/lake/src/components/Stack";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { colors, fonts, interFontStyle } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import IBAN from "iban";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
@@ -29,34 +30,34 @@ const styles = StyleSheet.create({
     padding: 56,
   },
   partnershipText: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 14),
     color: colors.gray[500],
   },
   pageTitle: {
-    ...getTextStyle("sans", 15),
+    ...getTextStyle("sans", 20),
     color: colors.swan[500],
     fontWeight: "500",
   },
   sectionTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 14),
     color: colors.swan[500],
     fontWeight: "600",
   },
   lineName: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 11),
     color: colors.gray[700],
   },
   lineValue: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 11),
     color: colors.swan[500],
     fontWeight: "600",
   },
   generationInfos: {
-    ...getTextStyle("sans", 8),
+    ...getTextStyle("sans", 10),
     color: colors.gray[700],
   },
   footer: {
-    ...getTextStyle("sans", 8),
+    ...getTextStyle("sans", 10),
     color: colors.gray[500],
     fontWeight: "300",
   },
@@ -182,7 +183,11 @@ export const TransactionStatementV1 = ({
       <Space height={24} />
       <Text style={styles.pageTitle}>{t("transactionStatement.title.document")}</Text>
       <Space height={24} />
-      <Text style={styles.sectionTitle}>{t("transactionStatement.title.information")}</Text>
+
+      <Text style={styles.sectionTitle}>
+        {t("transactionStatement.title.transactionInformation")}
+      </Text>
+
       <Space height={8} />
 
       <Stack space={8}>
@@ -277,7 +282,15 @@ export const TransactionStatementV1 = ({
 
       <Stack space={8}>
         <Line name={t("transactionStatement.debtor.name")} value={debtorName} />
-        <Line name={t("transactionStatement.debtor.accountNumber")} value={debtorAccountNumber} />
+
+        <Line
+          name={t("transactionStatement.debtor.accountNumber")}
+          value={
+            IBAN.isValid(debtorAccountNumber)
+              ? IBAN.printFormat(debtorAccountNumber)
+              : debtorAccountNumber
+          }
+        />
 
         {isNotNullishOrEmpty(debtorBankName) && (
           <Line name={t("transactionStatement.debtor.bankName")} value={debtorBankName} />
@@ -300,7 +313,11 @@ export const TransactionStatementV1 = ({
 
         <Line
           name={t("transactionStatement.creditor.accountNumber")}
-          value={creditorAccountNumber}
+          value={
+            IBAN.isValid(creditorAccountNumber)
+              ? IBAN.printFormat(creditorAccountNumber)
+              : creditorAccountNumber
+          }
         />
 
         {isNotNullishOrEmpty(creditorBankName) && (
@@ -322,7 +339,18 @@ export const TransactionStatementV1 = ({
       </Text>
 
       <Space height={8} />
-      <Text style={styles.generationInfos}>{t("transactionStatement.generationInfos")}</Text>
+
+      {match(type)
+        .with(
+          "SepaCreditTransferOut",
+          "SepaInstantCreditTransferOut",
+          "InternationalCreditTransferOut",
+          () => (
+            <Text style={styles.generationInfos}>{t("transactionStatement.generationInfos")}</Text>
+          ),
+        )
+        .otherwise(() => null)}
+
       <Separator space={24} />
       <Text style={styles.footer}>{t("transactionStatement.footer")}</Text>
     </View>
