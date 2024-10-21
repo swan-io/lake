@@ -1,0 +1,2 @@
+import{j as o,B as x,f as d,S as a}from"./ScrollView-Dmfs8He9.js";import{r as e}from"./index-Cs7sjTYM.js";const p=e.forwardRef(({children:i,space:t,...s},m)=>{const{direction:n="column"}=s,c=n==="row"||n==="rowReverse";return o.jsx(x,{ref:m,...s,children:e.Children.map(i,(r,f)=>d(r)||typeof r=="boolean"?r:o.jsxs(e.Fragment,{children:[f!==0&&(c?o.jsx(a,{width:t}):o.jsx(a,{height:t})),r]}))})});p.__docgenInfo={description:"",methods:[],displayName:"Stack"};export{p as S};
+//# sourceMappingURL=Stack-BHoJkCRn.js.map
