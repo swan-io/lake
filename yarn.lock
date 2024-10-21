@@ -1846,10 +1846,10 @@
   resolved "https://registry.yarnpkg.com/@storybook/theming/-/theming-8.2.6.tgz#af7a7c4e227263495bebe6897483af41ad7f42cf"
   integrity sha512-ICnYuLIVsYifVCMQljdHgrp+5vAquNybHxDGWiPeOxBicotwHF8rLhTckD2CdVQbMp0jk6r6jetvjXbFJ2MbvQ==
 
-"@swan-io/boxed@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-2.3.0.tgz#aafa19432a3fa2c00d472be7832632619c4ed5ff"
-  integrity sha512-ubonCw2GLblwsA9rodcDnhLvCY+0d9g0KyMFyzKZa+vPumWQ8IZ6HFjdQT3Nm5yC+/RnSmJ20RMPwOn/06M8Vw==
+"@swan-io/boxed@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@swan-io/boxed/-/boxed-3.0.0.tgz#2118f0362461cd68d813a4286f15b59798074a90"
+  integrity sha512-E5so5kp40ZEwa/vQDxH9BevaKFrm6P4Gy84D2+q9tQeNcUQc2rrE3StH9tHLRCh+LcI5h9Nv3JMbpwpI3p8nQQ==
 
 "@swan-io/chicane@^2.1.0":
   version "2.1.0"
@@ -1864,12 +1864,12 @@
   resolved "https://registry.yarnpkg.com/@swan-io/request/-/request-1.0.6.tgz#e46c7a92d4088a484bfd60e180bd2768adb68568"
   integrity sha512-HirhY0gu6aZk95YGXONcmwrfwQ0u5+uZGAtwtSDmrXfCLEGubXb1qIdRMex1e65TroXnTzBG3A65M5EvUB28ZQ==
 
-"@swan-io/use-form@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-2.0.5.tgz#6220148e0259fc6b1abe271d40b21ce6557d924f"
-  integrity sha512-UZbrngc1JPGJQ47APmWEQ/KVBoR/gNHZJrJNoC1qr95OZnfyxBQtNPmRbuCWqWKLIR8lYejk3Iw8VY4Gbon8CQ==
+"@swan-io/use-form@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@swan-io/use-form/-/use-form-3.1.0.tgz#5b31ae33cdc085cf9423630de06b4c9f4d176946"
+  integrity sha512-X6NpZ7LCeo7eS9RVCZrtpX+3GXZFUfUZpIwtVa2GNmqTLgyDbLhN8N6zBv+dmHL9KAQ+Zng2fTCCQpCZvmDu5A==
   dependencies:
-    "@swan-io/boxed" "^2.3.0"
+    "@swan-io/boxed" "^3.0.0"
 
 "@swc/core-darwin-arm64@1.7.2":
   version "1.7.2"
