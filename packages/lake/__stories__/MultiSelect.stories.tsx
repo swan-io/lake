@@ -17,7 +17,7 @@ export default {
   component: MultiSelect,
 } as Meta<typeof MultiSelect>;
 
-const items: MultiSelectItem[] = [
+const items: MultiSelectItem<string>[] = [
   { label: "Camille", value: "camille", group: "C" },
   { label: "Charlotte", value: "charlotte", group: "C" },
   { label: "Francis", value: "francis", group: "F" },
@@ -33,8 +33,8 @@ const items: MultiSelectItem[] = [
 const EditableMultiSelect = ({
   initialValues = [],
   ...props
-}: Except<MultiSelectProps<MultiSelectItem>, "onValueChange" | "items" | "values"> & {
-  items?: MultiSelectItem[];
+}: Except<MultiSelectProps<string>, "onValueChange" | "items" | "values"> & {
+  items?: MultiSelectItem<string>[];
   initialValues?: string[];
 }) => {
   const [values, setValues] = useState(initialValues);

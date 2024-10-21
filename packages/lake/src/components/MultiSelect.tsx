@@ -1,5 +1,5 @@
 import { Array, Dict, Option } from "@swan-io/boxed";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Pressable,
   StyleProp,
@@ -148,305 +148,306 @@ const styles = StyleSheet.create({
   },
 });
 
-export type MultiSelectItem = {
+export type MultiSelectItem<Value> = {
   disabled?: boolean;
   group: string;
   label: string;
-  value: string;
+  value: Value;
 };
 
-export type MultiSelectProps<I> = {
+export type MultiSelectProps<Value> = {
   color?: ColorVariants;
   disabled?: boolean;
   error?: string;
   emptyResultText?: string;
   enableGroups?: boolean;
   filterPlaceholder?: string;
-  items: I[];
-  onValueChange: (values: string[]) => void;
+  items: MultiSelectItem<Value>[];
+  onValueChange: (values: Value[]) => void;
   placeholder?: string;
-  renderTagGroup?: (items: readonly MultiSelectItem[]) => string;
+  renderTagGroup?: (items: readonly MultiSelectItem<Value>[]) => string;
   style?: StyleProp<ViewStyle>;
-  values: string[];
+  values: Value[];
   id?: string;
 };
 
-export const MultiSelect = memo<MultiSelectProps<MultiSelectItem>>(
-  ({
-    color = "gray",
-    disabled = false,
-    emptyResultText,
-    enableGroups = true,
-    filterPlaceholder,
-    items,
-    onValueChange,
-    placeholder,
-    renderTagGroup,
-    error,
-    style,
-    values,
-    id,
-  }) => {
-    const [filter, setFilter] = useState<string>("");
-    const [filterFocused, setFilterFocused] = useBoolean(false);
+export const MultiSelect = <Value,>({
+  color = "gray",
+  disabled = false,
+  emptyResultText,
+  enableGroups = true,
+  filterPlaceholder,
+  items,
+  onValueChange,
+  placeholder,
+  renderTagGroup,
+  error,
+  style,
+  values,
+  id,
+}: MultiSelectProps<Value>) => {
+  const [filter, setFilter] = useState<string>("");
+  const [filterFocused, setFilterFocused] = useBoolean(false);
 
-    const shouldScrollToBottomRef = useRef(false);
-    const selectedTagListRef = useRef<View & Element>(null);
-    const inputRef = useRef<View>(null);
-    const [visible, { open, close }] = useDisclosure(false);
+  const shouldScrollToBottomRef = useRef(false);
+  const selectedTagListRef = useRef<View & Element>(null);
+  const inputRef = useRef<View>(null);
+  const [visible, { open, close }] = useDisclosure(false);
 
-    const tint50 = colors[color][50];
-    const tint100 = colors[color][100];
+  const tint50 = colors[color][50];
+  const tint100 = colors[color][100];
 
-    useEffect(() => {
-      if (!visible) {
-        setFilter("");
-      }
-    }, [visible]);
+  useEffect(() => {
+    if (!visible) {
+      setFilter("");
+    }
+  }, [visible]);
 
-    useEffect(() => {
-      if (shouldScrollToBottomRef.current) {
-        const top = selectedTagListRef.current?.scrollHeight;
-        selectedTagListRef.current?.scrollTo({ top });
-      }
+  useEffect(() => {
+    if (shouldScrollToBottomRef.current) {
+      const top = selectedTagListRef.current?.scrollHeight;
+      selectedTagListRef.current?.scrollTo({ top });
+    }
 
-      shouldScrollToBottomRef.current = false;
-    }, [values]);
+    shouldScrollToBottomRef.current = false;
+  }, [values]);
 
-    const handleSelectItem = (item: MultiSelectItem) => {
-      shouldScrollToBottomRef.current = true;
-      onValueChange([...values, item.value]);
-    };
+  const handleSelectItem = (item: MultiSelectItem<Value>) => {
+    shouldScrollToBottomRef.current = true;
+    onValueChange([...values, item.value]);
+  };
 
-    const handleRemoveItem = (item: MultiSelectItem) => {
-      onValueChange(values.filter(index => index !== item.value));
-    };
+  const handleRemoveItem = (item: MultiSelectItem<Value>) => {
+    onValueChange(values.filter(index => index !== item.value));
+  };
 
-    const handleClearAll = () => {
-      onValueChange([]);
-    };
+  const handleClearAll = () => {
+    onValueChange([]);
+  };
 
-    const handleSelectGroup = (groupItems: readonly MultiSelectItem[]) => {
-      shouldScrollToBottomRef.current = true;
-      const items = groupItems.map(item => item.value);
-      const newValue = [...new Set([...values, ...items])];
-      onValueChange(newValue);
-    };
+  const handleSelectGroup = (groupItems: readonly MultiSelectItem<Value>[]) => {
+    shouldScrollToBottomRef.current = true;
+    const items = groupItems.map(item => item.value);
+    const newValue = [...new Set([...values, ...items])];
+    onValueChange(newValue);
+  };
 
-    // Used to get full selected value informations in O(1).
-    const valueItemMapping = useMemo(
-      () =>
-        items.reduce((acc: Record<string, MultiSelectItem>, item) => {
-          acc[item.value] = item;
-          return acc;
-        }, {}),
-      [items],
+  // Used to get full selected value informations in O(1).
+  const valueItemMapping = useMemo(() => {
+    const map = new Map<Value, MultiSelectItem<Value>>();
+    items.forEach(item => {
+      map.set(item.value, item);
+    });
+    return map;
+  }, [items]);
+
+  const selectedTags = useMemo(
+    () => values.map(value => valueItemMapping.get(value)).filter(isNotNullish),
+    [values, valueItemMapping],
+  );
+
+  const filteredItems = useMemo(() => {
+    const remainingTags = items.filter(item => !values.includes(item.value));
+    const cleanedFilter = filter.trim().toLowerCase();
+
+    return cleanedFilter === ""
+      ? remainingTags
+      : remainingTags.filter(({ label }) => label.toLowerCase().includes(cleanedFilter));
+  }, [filter, items, values]);
+
+  const sections = useMemo(() => {
+    return Array.filterMap(
+      Dict.entries(groupBy(filteredItems, ({ group }) => group)),
+      ([groupName, data]) =>
+        data === undefined ? Option.None() : Option.Some({ title: groupName, data }),
     );
+  }, [filteredItems]);
 
-    const selectedTags = useMemo(
-      () => values.map(value => valueItemMapping[value]).filter(isNotNullish),
-      [values, valueItemMapping],
-    );
+  const ListHeaderComponent = useMemo(
+    () => (
+      <Box direction="row" alignItems="center" style={styles.filterContainer}>
+        <TextInput
+          autoComplete="off"
+          inputMode="search"
+          multiline={false}
+          rows={1}
+          onChangeText={filterValue => setFilter(filterValue)}
+          placeholder={filterPlaceholder}
+          value={filter}
+          onFocus={setFilterFocused.on}
+          onBlur={setFilterFocused.off}
+          style={[styles.filterInput, filterFocused && styles.filterFocused]}
+        />
 
-    const filteredItems = useMemo(() => {
-      const remainingTags = items.filter(item => !values.includes(item.value));
-      const cleanedFilter = filter.trim().toLowerCase();
+        <Icon
+          name="search-filled"
+          color={colors[color].primary}
+          size={20}
+          style={styles.searchIcon}
+        />
+      </Box>
+    ),
+    [filter, filterFocused, setFilterFocused, filterPlaceholder, color],
+  );
 
-      return cleanedFilter === ""
-        ? remainingTags
-        : remainingTags.filter(({ label }) => label.toLowerCase().includes(cleanedFilter));
-    }, [filter, items, values]);
+  const ListEmptyComponent = useMemo(
+    () => (
+      <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
+        <Icon name="clipboard-search-regular" size={24} color={colors.gray.primary} />
 
-    const sections = useMemo(() => {
-      return Array.filterMap(
-        Dict.entries(groupBy(filteredItems, ({ group }) => group)),
-        ([groupName, data]) =>
-          data === undefined ? Option.None() : Option.Some({ title: groupName, data }),
-      );
-    }, [filteredItems]);
+        {isNotNullishOrEmpty(emptyResultText) && (
+          <>
+            <Space height={8} />
+            <Text style={styles.emptyListText}>{emptyResultText}</Text>
+          </>
+        )}
+      </Box>
+    ),
+    [emptyResultText],
+  );
 
-    const ListHeaderComponent = useMemo(
-      () => (
-        <Box direction="row" alignItems="center" style={styles.filterContainer}>
-          <TextInput
-            autoComplete="off"
-            inputMode="search"
-            multiline={false}
-            rows={1}
-            onChangeText={filterValue => setFilter(filterValue)}
-            placeholder={filterPlaceholder}
-            value={filter}
-            onFocus={setFilterFocused.on}
-            onBlur={setFilterFocused.off}
-            style={[styles.filterInput, filterFocused && styles.filterFocused]}
-          />
-
-          <Icon
-            name="search-filled"
-            color={colors[color].primary}
-            size={20}
-            style={styles.searchIcon}
-          />
+  return (
+    <View style={style}>
+      <Pressable
+        id={id}
+        ref={inputRef}
+        aria-haspopup="listbox"
+        role="button"
+        aria-expanded={visible}
+        disabled={disabled}
+        onPress={open}
+        style={({ hovered, focused }) => [
+          styles.base,
+          hovered && styles.hovered,
+          (focused || visible) && styles.focused,
+          disabled && styles.disabled,
+          isNotNullish(error) && styles.errored,
+        ]}
+      >
+        <Box ref={selectedTagListRef} alignItems="center" direction="row" style={styles.tagsList}>
+          {selectedTags.length > 0 ? (
+            selectedTags.map(item => (
+              <Tag
+                key={String(item.value)}
+                color={color}
+                onPressRemove={disabled ? undefined : () => handleRemoveItem(item)}
+                style={styles.tag}
+              >
+                {item.label}
+              </Tag>
+            ))
+          ) : placeholder !== "" ? (
+            <Text role="label" numberOfLines={1} style={styles.placeholder}>
+              {placeholder}
+            </Text>
+          ) : null}
         </Box>
-      ),
-      [filter, filterFocused, setFilterFocused, filterPlaceholder, color],
-    );
 
-    const ListEmptyComponent = useMemo(
-      () => (
-        <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
-          <Icon name="clipboard-search-regular" size={24} color={colors.gray.primary} />
-
-          {isNotNullishOrEmpty(emptyResultText) && (
+        <Box direction="row" alignItems="center" style={styles.actions}>
+          {selectedTags.length >= 1 && !disabled && (
             <>
-              <Space height={8} />
-              <Text style={styles.emptyListText}>{emptyResultText}</Text>
+              <Pressable role="button" onPress={handleClearAll}>
+                <Icon name="dismiss-filled" color={colors.gray.primary} size={15} />
+              </Pressable>
+
+              <Space width={8} />
             </>
           )}
+
+          <Icon
+            color={colors.gray.primary}
+            name={visible ? "chevron-up-filled" : "chevron-down-filled"}
+            size={20}
+          />
         </Box>
-      ),
-      [emptyResultText],
-    );
+      </Pressable>
 
-    return (
-      <View style={style}>
-        <Pressable
-          id={id}
-          ref={inputRef}
-          aria-haspopup="listbox"
-          role="button"
-          aria-expanded={visible}
-          disabled={disabled}
-          onPress={open}
-          style={({ hovered, focused }) => [
-            styles.base,
-            hovered && styles.hovered,
-            (focused || visible) && styles.focused,
-            disabled && styles.disabled,
-            isNotNullish(error) && styles.errored,
-          ]}
-        >
-          <Box ref={selectedTagListRef} alignItems="center" direction="row" style={styles.tagsList}>
-            {selectedTags.length > 0 ? (
-              selectedTags.map(item => (
-                <Tag
-                  key={item.value}
-                  color={color}
-                  onPressRemove={disabled ? undefined : () => handleRemoveItem(item)}
-                  style={styles.tag}
+      <Popover
+        role="listbox"
+        matchReferenceWidth={true}
+        onDismiss={close}
+        referenceRef={inputRef}
+        returnFocus={true}
+        visible={visible}
+      >
+        <View style={styles.list}>
+          {enableGroups ? (
+            <SectionList
+              role="listbox"
+              aria-multiselectable={true}
+              keyExtractor={(item, index) => `group-field-${String(item.value)}-${index}`}
+              ListHeaderComponent={ListHeaderComponent}
+              ListEmptyComponent={ListEmptyComponent}
+              ListFooterComponent={<Space height={16} />}
+              sections={sections}
+              renderSectionHeader={({ title, data }) => (
+                <Pressable
+                  role="listitem"
+                  onPress={() => handleSelectGroup(data)}
+                  style={({ hovered, pressed, focused }) => [
+                    styles.groupTitleBase,
+                    (hovered || focused) && { backgroundColor: tint50 },
+                    pressed && { backgroundColor: tint100 },
+                  ]}
                 >
-                  {item.label}
-                </Tag>
-              ))
-            ) : placeholder !== "" ? (
-              <Text role="label" numberOfLines={1} style={styles.placeholder}>
-                {placeholder}
-              </Text>
-            ) : null}
-          </Box>
+                  <Text numberOfLines={1} style={styles.groupTitle}>
+                    {title}
+                  </Text>
 
-          <Box direction="row" alignItems="center" style={styles.actions}>
-            {selectedTags.length >= 1 && !disabled && (
-              <>
-                <Pressable role="button" onPress={handleClearAll}>
-                  <Icon name="dismiss-filled" color={colors.gray.primary} size={15} />
+                  {isNotNullish(renderTagGroup) && <Tag color={color}>{renderTagGroup(data)}</Tag>}
                 </Pressable>
-
-                <Space width={8} />
-              </>
-            )}
-
-            <Icon
-              color={colors.gray.primary}
-              name={visible ? "chevron-up-filled" : "chevron-down-filled"}
-              size={20}
+              )}
+              renderItem={({ item }) => (
+                <LineItem
+                  color={color}
+                  filter={filter}
+                  item={item}
+                  handleSelectItem={handleSelectItem}
+                  style={styles.lineInGroup}
+                />
+              )}
             />
-          </Box>
-        </Pressable>
+          ) : (
+            <FlatList
+              role="list"
+              data={filteredItems}
+              keyExtractor={item => `field-${String(item.value)}`}
+              ListHeaderComponent={ListHeaderComponent}
+              ListEmptyComponent={ListEmptyComponent}
+              ListFooterComponent={<Space height={8} />}
+              renderItem={({ item }) => (
+                <LineItem
+                  color={color}
+                  filter={filter}
+                  item={item}
+                  handleSelectItem={handleSelectItem}
+                />
+              )}
+            />
+          )}
+        </View>
+      </Popover>
 
-        <Popover
-          role="listbox"
-          matchReferenceWidth={true}
-          onDismiss={close}
-          referenceRef={inputRef}
-          returnFocus={true}
-          visible={visible}
-        >
-          <View style={styles.list}>
-            {enableGroups ? (
-              <SectionList
-                role="listbox"
-                aria-multiselectable={true}
-                keyExtractor={(item, index) => `group-field-${item.value}-${index}`}
-                ListHeaderComponent={ListHeaderComponent}
-                ListEmptyComponent={ListEmptyComponent}
-                ListFooterComponent={<Space height={16} />}
-                sections={sections}
-                renderSectionHeader={({ title, data }) => (
-                  <Pressable
-                    role="listitem"
-                    onPress={() => handleSelectGroup(data)}
-                    style={({ hovered, pressed, focused }) => [
-                      styles.groupTitleBase,
-                      (hovered || focused) && { backgroundColor: tint50 },
-                      pressed && { backgroundColor: tint100 },
-                    ]}
-                  >
-                    <Text numberOfLines={1} style={styles.groupTitle}>
-                      {title}
-                    </Text>
+      <InputError message={error} />
+    </View>
+  );
+};
 
-                    {isNotNullish(renderTagGroup) && (
-                      <Tag color={color}>{renderTagGroup(data)}</Tag>
-                    )}
-                  </Pressable>
-                )}
-                renderItem={({ item }) => (
-                  <LineItem
-                    color={color}
-                    filter={filter}
-                    item={item}
-                    handleSelectItem={handleSelectItem}
-                    style={styles.lineInGroup}
-                  />
-                )}
-              />
-            ) : (
-              <FlatList
-                role="list"
-                data={filteredItems}
-                keyExtractor={item => `field-${item.value}`}
-                ListHeaderComponent={ListHeaderComponent}
-                ListEmptyComponent={ListEmptyComponent}
-                ListFooterComponent={<Space height={8} />}
-                renderItem={({ item }) => (
-                  <LineItem
-                    color={color}
-                    filter={filter}
-                    item={item}
-                    handleSelectItem={handleSelectItem}
-                  />
-                )}
-              />
-            )}
-          </View>
-        </Popover>
-
-        <InputError message={error} />
-      </View>
-    );
-  },
-);
-
-type LineItemProps = {
+type LineItemProps<Value> = {
   color: ColorVariants;
   filter: string;
-  handleSelectItem: (item: MultiSelectItem) => void;
-  item: MultiSelectItem;
+  handleSelectItem: (item: MultiSelectItem<Value>) => void;
+  item: MultiSelectItem<Value>;
   style?: StyleProp<TextStyle>;
 };
 
-const LineItem = ({ item, color, filter, handleSelectItem, style }: LineItemProps) => {
+const LineItem = <Value,>({
+  item,
+  color,
+  filter,
+  handleSelectItem,
+  style,
+}: LineItemProps<Value>) => {
   const { label, disabled = false } = item;
   const cleanFilter = filter.trim().toLowerCase();
 
