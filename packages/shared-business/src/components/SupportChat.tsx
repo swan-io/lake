@@ -103,7 +103,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
             ...(projectName != null ? { organization: projectName } : null),
           });
         }
-      } catch (err) {
+      } catch {
         // nothing
       }
     });
@@ -113,7 +113,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
     try {
       zE("webWidget", "show");
       zE("webWidget", "open");
-    } catch (err) {
+    } catch {
       // nothing
     }
   }, []);
