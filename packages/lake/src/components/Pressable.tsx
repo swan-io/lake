@@ -77,7 +77,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
 ) => {
   const { applyPressStyle = true } = config;
 
-  return forwardRef((props: P, forwardedRef) => {
+  return forwardRef<unknown, P>((props, forwardedRef) => {
     const {
       children,
       delayLongPress,
