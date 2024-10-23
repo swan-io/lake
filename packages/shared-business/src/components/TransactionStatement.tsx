@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   pageTitle: {
     ...getTextStyle("sans", 20),
     color: colors.swan[500],
-    fontWeight: "500",
+    fontWeight: "600",
   },
   sectionTitle: {
     ...getTextStyle("sans", 14),
@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   lineName: {
-    ...getTextStyle("sans", 11),
+    ...getTextStyle("sans", 14),
     color: colors.gray[700],
   },
   lineValue: {
-    ...getTextStyle("sans", 11),
+    ...getTextStyle("sans", 14),
     color: colors.swan[500],
     fontWeight: "600",
   },
@@ -341,14 +341,9 @@ export const TransactionStatementV1 = ({
       <Space height={8} />
 
       {match(type)
-        .with(
-          "SepaCreditTransferOut",
-          "SepaInstantCreditTransferOut",
-          "InternationalCreditTransferOut",
-          () => (
-            <Text style={styles.generationInfos}>{t("transactionStatement.generationInfos")}</Text>
-          ),
-        )
+        .with("SepaCreditTransferOut", "InternationalCreditTransferOut", () => (
+          <Text style={styles.generationInfos}>{t("transactionStatement.generationInfos")}</Text>
+        ))
         .otherwise(() => null)}
 
       <Separator space={24} />
