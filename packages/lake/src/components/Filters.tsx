@@ -5,7 +5,7 @@ import {
 import { DateFormat } from "@swan-io/shared-business/src/utils/i18n";
 import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
@@ -482,22 +482,6 @@ function FilterInput({
         </View>
       </Popover>
     </View>
-  );
-}
-
-type FilterBooleanTagProps = {
-  children: string;
-  onAdd: () => void;
-  onPressRemove: () => void;
-};
-
-function FilterBooleanTag({ children, onAdd, onPressRemove }: FilterBooleanTagProps) {
-  useEffect(onAdd, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <Tag color="current" onPressRemove={onPressRemove}>
-      {children}
-    </Tag>
   );
 }
 
