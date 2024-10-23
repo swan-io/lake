@@ -1,21 +1,4 @@
 import { Future } from "@swan-io/boxed";
-import { isNotNullish } from "./nullish";
-import { isSafari } from "./userAgent";
-
-/**
- * Prevents Safari from zooming automatically on inputs, still allow user to zoom manually
- * @deprecated
- */
-export const preventSafariAutoZoomOnInputs = () => {
-  if (isSafari) {
-    const viewport = document.querySelector("meta[name=viewport]");
-    const content = viewport?.getAttribute("content");
-
-    if (isNotNullish(viewport) && isNotNullish(content)) {
-      viewport.setAttribute("content", content + ", maximum-scale=1.0");
-    }
-  }
-};
 
 // When using `node.scroll()` with smooth behavior, there isn't any event to detect when the scroll animation is finished
 // We need this also with `ScrollView.scrollTo` (which just call the native node.scroll function)

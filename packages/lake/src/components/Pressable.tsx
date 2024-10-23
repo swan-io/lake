@@ -18,7 +18,6 @@ import {
   PressableStateCallbackType,
   StyleSheet,
   Text,
-  TextInput,
   TextInputProps,
   TextProps,
   View,
@@ -228,14 +227,6 @@ type ExtraProps = {
 export type PressableViewProps = Except<Props<ViewProps>, "children">;
 export type PressableTextProps = Props<TextProps>;
 
-/**
- * @deprecated
- */
-export type PressableTextInputProps = Except<
-  Props<TextInputProps>,
-  "children" | "editable" | "keyboardType" | "numberOfLines"
->;
-
 export const Pressable = memo(
   getPressable<PressableViewProps>(View, { applyPressStyle: true }),
 ) as FC<PressableProps & ExtraProps & { ref?: Ref<View> }>;
@@ -244,12 +235,4 @@ export const PressableText = memo(
   getPressable<PressableTextProps>(Text, { applyPressStyle: true }),
 ) as FC<PressableTextProps & { ref?: Ref<Text> }>;
 
-/**
- * @deprecated
- */
-export const PressableTextInput = memo(
-  getPressable<PressableTextInputProps>(TextInput, { applyPressStyle: false }),
-) as FC<PressableTextInputProps & { ref?: Ref<TextInput> }>;
-
 PressableText.displayName = "PressableText";
-PressableTextInput.displayName = "PressableTextInput";

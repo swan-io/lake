@@ -51,7 +51,6 @@ const resourceId: FilterInputDef = {
   type: "input",
   label: "Resource ID",
   noValueText: "None",
-  submitText: "Save",
   placeholder: "Placeholder...",
   validate: value => {
     if (value.length < 3) {
