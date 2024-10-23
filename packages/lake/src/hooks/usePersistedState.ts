@@ -15,7 +15,7 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
       setState(state);
       try {
         localStorage.setItem(key, JSON.stringify(state));
-      } catch (err) {
+      } catch {
         // ignore
       }
     },

@@ -15,7 +15,7 @@ const isValidColor = (color: string) => {
   try {
     getLuminance(color);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 };

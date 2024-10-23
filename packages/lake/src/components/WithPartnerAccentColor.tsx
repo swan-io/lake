@@ -76,7 +76,7 @@ export const WithPartnerAccentColor = ({ color, scoped = false, children }: Prop
         rootElement.style.setProperty("--color-partner-secondary", colorScale.secondary, "");
         rootElement.style.setProperty("--color-partner-contrast", colorScale.contrast, "");
       }
-    } catch (err) {
+    } catch {
       // will default to white label color
     }
   }, [color, scoped]);
