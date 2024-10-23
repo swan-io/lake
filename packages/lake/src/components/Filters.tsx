@@ -208,10 +208,6 @@ type FilterCheckboxProps<T> = {
   onPressRemove: () => void;
   autoOpen?: boolean;
   checkAllLabel?: string;
-  /**
-   * @deprecated
-   */
-  applyButtonLabel?: string;
 };
 
 type CheckAllItem = {
@@ -407,10 +403,6 @@ type FilterInputProps = {
   onValueChange: (value: string | undefined) => void;
   onPressRemove: () => void;
   autoOpen?: boolean;
-  /**
-   * @deprecated
-   */
-  submitText?: string;
 };
 
 function FilterInput({
@@ -515,10 +507,6 @@ export type FilterCheckboxDef<T> = {
   items: Item<T>[];
   width?: number;
   checkAllLabel?: string;
-  /**
-   * @deprecated
-   */
-  submitText?: string;
 };
 
 export type FilterRadioDef<T> = {
@@ -545,26 +533,9 @@ export type FilterInputDef = {
   noValueText: string;
   placeholder?: string;
   validate?: (value: string) => ValidatorResult;
-  /**
-   * @deprecated
-   */
-  submitText?: string;
 };
 
-/**
- * @deprecated
- */
-export type FilterBooleanDef = {
-  type: "boolean";
-  label: string;
-};
-
-type Filter<T> =
-  | FilterCheckboxDef<T>
-  | FilterRadioDef<T>
-  | FilterDateDef
-  | FilterInputDef
-  | FilterBooleanDef;
+type Filter<T> = FilterCheckboxDef<T> | FilterRadioDef<T> | FilterDateDef | FilterInputDef;
 
 type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox" }
   ? T["items"][number]["value"][] | undefined
@@ -685,37 +656,20 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   />
                 ),
               )
-              .with(
-                { type: "input" },
-                ({ type, label, placeholder, noValueText, submitText, validate }) => (
-                  <FilterInput
-                    label={label}
-                    placeholder={placeholder}
-                    noValueText={noValueText}
-                    submitText={submitText}
-                    autoOpen={lastOpenedFilter === filterName}
-                    validate={validate}
-                    initialValue={getFilterValue(type, filters, filterName)}
-                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
-                    onPressRemove={() => {
-                      onChangeFilters({ ...filters, [filterName]: undefined });
-                      onChangeOpened(openedFilters.filter(f => f !== filterName));
-                    }}
-                  />
-                ),
-              )
-              .with({ type: "boolean" }, ({ label }) => (
-                <FilterBooleanTag
-                  onAdd={() => {
-                    onChangeFilters({ ...filters, [filterName]: true });
-                  }}
+              .with({ type: "input" }, ({ type, label, placeholder, noValueText, validate }) => (
+                <FilterInput
+                  label={label}
+                  placeholder={placeholder}
+                  noValueText={noValueText}
+                  autoOpen={lastOpenedFilter === filterName}
+                  validate={validate}
+                  initialValue={getFilterValue(type, filters, filterName)}
+                  onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                   onPressRemove={() => {
                     onChangeFilters({ ...filters, [filterName]: undefined });
                     onChangeOpened(openedFilters.filter(f => f !== filterName));
                   }}
-                >
-                  {label}
-                </FilterBooleanTag>
+                />
               ))
               .exhaustive()}
           </View>

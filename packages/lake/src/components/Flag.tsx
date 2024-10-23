@@ -1,9 +1,5 @@
 import { Lazy } from "@swan-io/boxed";
-import {
-  CountryCCA2,
-  CountryCCA3,
-  getCCA2forCCA3,
-} from "@swan-io/shared-business/src/constants/countries";
+import { CountryCCA2 } from "@swan-io/shared-business/src/constants/countries";
 import { useEffect, useMemo, useState } from "react";
 import { match } from "ts-pattern";
 import { getFlagGlyphName } from "../utils/string";
@@ -22,21 +18,12 @@ const svgUrlGetter = Lazy(async () => {
 export type FlagCode = CountryCCA2 | "EU";
 
 type Props = {
+  code: FlagCode;
   width?: number;
-} & (
-  | {
-      /**
-       * @deprecated Use cca2 prop instead
-       */
-      icon: CountryCCA3;
-    }
-  | {
-      code: FlagCode;
-    }
-);
+};
 
 export const Flag = (props: Props) => {
-  const code = "code" in props ? props.code : getCCA2forCCA3(props.icon);
+  const { code } = props;
   const width = props.width ?? 18;
 
   const [url, setUrl] = useState(svgUrl);
