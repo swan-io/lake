@@ -1831,7 +1831,6 @@ export const individualCountries = [
   "ROU",
   "SWE",
   "BGR",
-  "MCO",
 ] satisfies CountryCCA3[];
 
 export type IndividualCountryCCA3 = (typeof individualCountries)[number];
@@ -1868,7 +1867,6 @@ export const companyCountries = [
   "BGR",
   "CYP",
   "NOR",
-  "MCO",
 ] satisfies CountryCCA3[];
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
