@@ -15,7 +15,7 @@ $ git clone git@github.com:swan-io/lake.git
 ### Install
 
 ```console
-$ pnpm i
+$ pnpm install
 ```
 
 ## Editor
