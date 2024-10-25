@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: lts/*
 
+      - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
         run: pnpm install --pure-lockfile
 
