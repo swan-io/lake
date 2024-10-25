@@ -23,7 +23,7 @@ jobs:
       - uses: pnpm/action-setup@v4
 
       - name: Install dependencies
-        run: pnpm install --pure-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Typecheck
         run: pnpm typecheck
