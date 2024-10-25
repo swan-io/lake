@@ -1,9 +1,9 @@
 import { Lazy } from "@swan-io/boxed";
-import { CountryCCA2 } from "@swan-io/shared-business/src/constants/countries";
+import { Svg, Use } from "@swan-io/lake/src/components/Svg";
+import { getFlagGlyphName } from "@swan-io/lake/src/utils/string";
 import { useEffect, useMemo, useState } from "react";
 import { match } from "ts-pattern";
-import { getFlagGlyphName } from "../utils/string";
-import { Svg, Use } from "./Svg";
+import { CountryCCA2 } from "../constants/countries";
 
 const UNICODE_OFFSET = 127462 - 65;
 

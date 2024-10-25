@@ -3,7 +3,7 @@
   "version": "10.0.1",
   "engines": {
     "node": ">=20.9.0",
-    "yarn": "^1.22.0"
+    "pnpm": "9.9.0"
   },
   "files": [
     "LICENSE",
@@ -35,7 +35,6 @@
     "polished": "^4.3.1",
     "prism-react-renderer": "^2.4.0",
     "react": "^18.3.1",
-    "react-atomic-state": "^2.0.0",
     "react-dom": "^18.3.1",
     "react-native-web": "^0.19.13",
     "rifm": "^0.12.1",

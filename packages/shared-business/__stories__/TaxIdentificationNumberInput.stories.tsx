@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
-import { TaxIdentificationNumberInput } from "@swan-io/shared-business/src/components/TaxIdentificationNumberInput";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { TaxIdentificationNumberInput } from "../src/components/TaxIdentificationNumberInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

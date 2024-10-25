@@ -1,17 +1,17 @@
 #!/bin/bash
 
 cd packages/lake
-yarn link
+pnpm link
 cd ../..
 
 cd packages/shared-business
-yarn link
+pnpm link
 cd ../..
 
 cd node_modules/react
-yarn link
+pnpm link
 cd ../..
 
 cd node_modules/react-dom
-yarn link
+pnpm link
 cd ../..

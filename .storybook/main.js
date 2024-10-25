@@ -3,7 +3,7 @@ const { version } = require("../package.json");
 /** @type {import('@storybook/react-vite').StorybookConfig} */
 module.exports = {
   addons: ["@storybook/addon-essentials"],
-  stories: ["../packages/lake/__stories__/**/*.stories.@(ts|tsx)"],
+  stories: ["../packages/*/__stories__/**/*.stories.@(ts|tsx)"],
   docs: {
     autodocs: false,
   },
@@ -37,6 +37,16 @@ module.exports = {
       modulePreload: { polyfill: true },
       sourcemap: true,
       assetsDir: `assets/${version}`,
+
+      rollupOptions: {
+        ...config.build.rollupOptions,
+        onwarn: (warning, warn) => {
+          // Silent "use client" directive warnings
+          if (warning.code !== "MODULE_LEVEL_DIRECTIVE") {
+            warn(warning);
+          }
+        },
+      },
     };
 
     return {

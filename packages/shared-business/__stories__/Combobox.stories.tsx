@@ -1,13 +1,13 @@
 import { Meta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { PlacekitAddressSearchInput } from "@swan-io/shared-business/src/components/PlacekitAddressSearchInput";
-import { PlacekitCityInput } from "@swan-io/shared-business/src/components/PlacekitCityInput";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeCombobox, LakeComboboxProps } from "@swan-io/lake/src/components/LakeCombobox";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
-import { Box } from "../src/components/Box";
-import { LakeCombobox, LakeComboboxProps } from "../src/components/LakeCombobox";
-import { LakeText } from "../src/components/LakeText";
+import { PlacekitAddressSearchInput } from "../src/components/PlacekitAddressSearchInput";
+import { PlacekitCityInput } from "../src/components/PlacekitCityInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

@@ -1,14 +1,14 @@
 import { Meta } from "@storybook/react";
 import { Future, Result } from "@swan-io/boxed";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { useRef, useState } from "react";
 import {
   Document,
   SupportingDocumentCollection,
   SupportingDocumentCollectionRef,
   UploadOutput,
-} from "@swan-io/shared-business/src/components/SupportingDocumentCollection";
-import { UploadOutputWithId } from "@swan-io/shared-business/src/hooks/useFilesUploader";
-import { useRef, useState } from "react";
-import { LakeButton } from "../src/components/LakeButton";
+} from "../src/components/SupportingDocumentCollection";
+import { UploadOutputWithId } from "../src/hooks/useFilesUploader";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {

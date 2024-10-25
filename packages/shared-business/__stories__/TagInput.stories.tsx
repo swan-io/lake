@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/react";
-import { isValidEmail } from "@swan-io/shared-business/src/utils/validation";
+import { LakeTagInput, LakeTagInputProps } from "@swan-io/lake/src/components/LakeTagInput";
+import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import { LakeTagInput, LakeTagInputProps } from "../src/components/LakeTagInput";
-import { LakeTextInput } from "../src/components/LakeTextInput";
+import { isValidEmail } from "../src/utils/validation";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

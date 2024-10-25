@@ -1,7 +1,9 @@
 import { Meta } from "@storybook/react";
+import { FilterChooser } from "@swan-io/lake/src/components/FilterChooser";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { useState } from "react";
 import { View } from "react-native";
-import { FilterChooser } from "../src/components/FilterChooser";
 import {
   FilterCheckboxDef,
   FilterDateDef,
@@ -10,8 +12,6 @@ import {
   FiltersStack,
   FiltersState,
 } from "../src/components/Filters";
-import { Space } from "../src/components/Space";
-import { WithCurrentColor } from "../src/components/WithCurrentColor";
 import { StoryBlock } from "./_StoriesComponents";
 
 const mode: FilterRadioDef<"QES" | "Expert"> = {
@@ -88,7 +88,7 @@ const availableFilters: { name: keyof State; label: string }[] = [
 ];
 
 export default {
-  title: "Forms/Filter",
+  title: "Forms/Filters",
   component: FilterChooser,
 } as Meta<typeof FilterChooser>;
 
@@ -103,7 +103,7 @@ export const All = () => {
   });
 
   return (
-    <StoryBlock title="Filter">
+    <StoryBlock title="Filters">
       <WithCurrentColor variant="live">
         <View>
           <FilterChooser

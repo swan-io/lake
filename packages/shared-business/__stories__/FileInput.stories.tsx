@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
-import { FileInput } from "@swan-io/shared-business/src/components/FileInput";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { FileInput } from "../src/components/FileInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

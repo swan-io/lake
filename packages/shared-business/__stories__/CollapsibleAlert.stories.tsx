@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { CollapsibleLakeAlert } from "@swan-io/shared-business/src/components/CollapsibleLakeAlert";
 import { StyleSheet } from "react-native";
+import { CollapsibleLakeAlert } from "../src/components/CollapsibleLakeAlert";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
