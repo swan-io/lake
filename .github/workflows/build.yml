@@ -16,20 +16,22 @@ jobs:
         with:
           node-version: lts/*
 
+      - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
-        run: yarn install --pure-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: yarn typecheck
+        run: pnpm typecheck
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
 
       - name: Run tests
-        run: yarn test
+        run: pnpm test
 
       - name: Build Storybook
-        run: yarn build-storybook
+        run: pnpm build-storybook
 
       - name: Deploy Storybook
         if: ${{ contains('refs/heads/main', github.ref) }}
@@ -40,4 +42,4 @@ jobs:
 
       - name: Push shared-business translation keys
         if: ${{ contains('refs/heads/main', github.ref) }}
-        run: yarn localazy upload shared-business  -r ${{ secrets.LOCALAZY_SHARED_BUSINESS_READ_KEY }} -w ${{ secrets.LOCALAZY_SHARED_BUSINESS_WRITE_KEY }}
+        run: pnpm localazy upload shared-business  -r ${{ secrets.LOCALAZY_SHARED_BUSINESS_READ_KEY }} -w ${{ secrets.LOCALAZY_SHARED_BUSINESS_WRITE_KEY }}

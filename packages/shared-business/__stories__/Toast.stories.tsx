@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { LakeButton } from "../src/components/LakeButton";
-import { Space } from "../src/components/Space";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { Space } from "@swan-io/lake/src/components/Space";
 import { ToastStack } from "../src/components/ToastStack";
 import { registerErrorToRequestId, showToast } from "../src/state/toasts";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";

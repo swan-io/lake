@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { TransactionStatement } from "@swan-io/shared-business/src/components/TransactionStatement";
-import { invariantColors } from "../src/constants/design";
+import { invariantColors } from "@swan-io/lake/src/constants/design";
+import { TransactionStatement } from "../src/components/TransactionStatement";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {

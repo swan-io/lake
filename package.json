@@ -1,19 +1,17 @@
 {
-  "name": "@swan-io/lake",
+  "name": "@swan-io/lake-monorepo",
   "description": "Swan's component kit",
   "version": "10.0.1",
+  "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": ">=20.9.0",
-    "yarn": "^1.22.0"
+    "pnpm": "9.9.0"
   },
   "private": true,
   "repository": {
     "type": "git",
     "url": "git@github.com:swan-io/lake.git"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "start": "storybook dev --port 6006",
     "typecheck": "tsc --noEmit",
@@ -33,20 +31,23 @@
     "ai-translate": "tsx -r dotenv/config scripts/locales/aiTranslate.ts",
     "sort-locales": "tsx scripts/locales/sort.ts",
     "pull-shared-business-locales": "localazy download shared-business -k localazy.keys.shared-business.json",
-    "pull-locales": "yarn pull-shared-business-locales && yarn sort-locales && yarn format-locales",
+    "pull-locales": "pnpm pull-shared-business-locales && pnpm sort-locales && pnpm format-locales",
     "remove-unused-locales": "tsx scripts/locales/removeUnused.ts",
     "extract-rejections": "tsx -r dotenv/config scripts/graphql/extractRejections.ts",
     "extract-supporting-document-purposes": "tsx -r dotenv/config scripts/graphql/extractSupportingDocumentPurposes.ts",
     "configure-hooks": "git config --local core.hooksPath .hooks"
   },
   "lint-staged": {
-    "packages/**/src/locales/*.json": "yarn sort-locales",
+    "packages/**/src/locales/*.json": "pnpm sort-locales",
     "*": "prettier --ignore-unknown --write",
     "**/*.{js,ts,tsx}": "eslint --fix"
   },
-  "resolutions": {
-    "@types/mime": "3.0.4",
-    "jackspeak": "2.1.1"
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "react-native"
+      ]
+    }
   },
   "devDependencies": {
     "@fluentui/svg-icons": "^1.1.261",
@@ -73,6 +74,7 @@
     "openai": "^4.68.1",
     "ora": "^8.1.0",
     "pathe": "^1.1.2",
+    "picocolors": "^1.1.1",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prompts": "^2.4.2",

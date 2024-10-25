@@ -1,9 +1,18 @@
 import { Array, Option } from "@swan-io/boxed";
-import { t } from "@swan-io/shared-business/src/utils/i18n";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { Icon } from "@swan-io/lake/src/components/Icon";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
+import { Portal } from "@swan-io/lake/src/components/Portal";
+import { Pressable } from "@swan-io/lake/src/components/Pressable";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { TransitionGroupView } from "@swan-io/lake/src/components/TransitionGroupView";
+import { ColorVariants, animations, colors, shadows } from "@swan-io/lake/src/constants/design";
+import { setClipboardText } from "@swan-io/lake/src/utils/clipboard";
+import { isNotNullishOrEmpty, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { memo, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { P, match } from "ts-pattern";
-import { ColorVariants, animations, colors, shadows } from "../constants/design";
 import {
   ToastProgress,
   ToastVariant,
@@ -11,16 +20,7 @@ import {
   hideToast,
   useToasts,
 } from "../state/toasts";
-import { setClipboardText } from "../utils/clipboard";
-import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
-import { Box } from "./Box";
-import { Icon } from "./Icon";
-import { LakeText } from "./LakeText";
-import { LakeTooltip } from "./LakeTooltip";
-import { Portal } from "./Portal";
-import { Pressable } from "./Pressable";
-import { Space } from "./Space";
-import { TransitionGroupView } from "./TransitionGroupView";
+import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   list: {

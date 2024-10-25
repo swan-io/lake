@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import glob from "fast-glob";
 import fs from "node:fs/promises";
+import pc from "picocolors";
 
 async function main() {
   const lakeJsFiles = await glob("packages/lake/src/**/*.js");
@@ -17,10 +17,10 @@ async function main() {
 
   try {
     await Promise.all(filesToRemove.map(fs.unlink));
-    console.log(chalk.green("Build files removed"));
+    console.log(pc.green("Build files removed"));
   } catch (e) {
     console.error(e);
-    console.error(chalk.red("Failed to remove build files"));
+    console.error(pc.red("Failed to remove build files"));
   }
 }
 

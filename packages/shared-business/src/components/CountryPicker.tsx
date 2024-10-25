@@ -1,7 +1,7 @@
-import { Flag } from "@swan-io/lake/src/components/Flag";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { ForwardedRef, forwardRef, useMemo } from "react";
 import { View } from "react-native";
+import { Flag } from "../components/Flag";
 import { CountryCCA3, getCountryByCCA3 } from "../constants/countries";
 
 type Props<T extends CountryCCA3> = {

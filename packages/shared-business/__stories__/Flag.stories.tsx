@@ -1,11 +1,11 @@
 import { Meta } from "@storybook/react";
-import { countries } from "@swan-io/shared-business/src/constants/countries";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { Space } from "@swan-io/lake/src/components/Space";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { Box } from "../src/components/Box";
 import { Flag } from "../src/components/Flag";
-import { LakeText } from "../src/components/LakeText";
-import { Space } from "../src/components/Space";
+import { countries } from "../src/constants/countries";
 import { StoryBlock } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

@@ -4,9 +4,9 @@ import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { ColorVariants } from "@swan-io/lake/src/constants/design";
-import { LakeModal } from "@swan-io/shared-business/src/components/LakeModal";
 import { StyleSheet } from "react-native";
 import { t } from "../utils/i18n";
+import { LakeModal } from "./LakeModal";
 
 const styles = StyleSheet.create({
   confirmButton: {

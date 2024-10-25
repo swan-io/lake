@@ -1,5 +1,13 @@
 import { Meta } from "@storybook/react";
-import { BirthdatePicker } from "@swan-io/shared-business/src/components/BirthdatePicker";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartnerAccentColor";
+import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
+import { useEffect, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Except } from "type-fest";
+import { BirthdatePicker } from "../src/components/BirthdatePicker";
 import {
   DatePicker,
   DatePickerModal,
@@ -10,15 +18,7 @@ import {
   isDateInRange,
   isTodayOrFutureDate,
   validateDateRangeOrder,
-} from "@swan-io/shared-business/src/components/DatePicker";
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Except } from "type-fest";
-import { LakeButton } from "../src/components/LakeButton";
-import { LakeText } from "../src/components/LakeText";
-import { Space } from "../src/components/Space";
-import { WithPartnerAccentColor } from "../src/components/WithPartnerAccentColor";
-import { isNotNullish, isNullish } from "../src/utils/nullish";
+} from "../src/components/DatePicker";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

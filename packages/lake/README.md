@@ -7,7 +7,7 @@
 You can start the [Storybook](https://storybook.js.org), a small application that allows you to list and play with the various components.
 
 ```console
-$ yarn start
+$ pnpm start
 ```
 
 ## Consume the design system from apps
@@ -45,5 +45,5 @@ import {
 You can build a static version of the Storybook (e.g. to host a demo space):
 
 ```console
-$ yarn build
+$ pnpm build
 ```

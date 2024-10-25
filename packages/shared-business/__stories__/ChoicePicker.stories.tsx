@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/react";
-import { ChoicePicker } from "@swan-io/shared-business/src/components/ChoicePicker";
+import { Tag } from "@swan-io/lake/src/components/Tag";
+import { spacings } from "@swan-io/lake/src/constants/design";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
-import { Tag } from "../src/components/Tag";
-import { spacings } from "../src/constants/design";
+import { ChoicePicker } from "../src/components/ChoicePicker";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

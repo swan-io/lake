@@ -1,9 +1,10 @@
 {
   "name": "@swan-io/shared-business",
   "version": "10.0.1",
+  "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": ">=20.9.0",
-    "yarn": "^1.22.0"
+    "pnpm": "9.9.0"
   },
   "files": [
     "LICENSE",
@@ -26,7 +27,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@swan-io/lake": "*"
+    "@swan-io/lake": "workspace:*"
   },
   "dependencies": {
     "@formatjs/intl": "^2.10.9",
@@ -46,7 +47,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@swan-io/lake": "*",
+    "@swan-io/lake": "workspace:*",
     "@types/iban": "0.0.35",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",

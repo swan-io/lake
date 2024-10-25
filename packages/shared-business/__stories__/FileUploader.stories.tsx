@@ -1,8 +1,8 @@
 import { Meta } from "@storybook/react";
 import { Future, Result } from "@swan-io/boxed";
-import { FilesUploader } from "@swan-io/shared-business/src/components/FilesUploader";
-import { SwanFile } from "@swan-io/shared-business/src/utils/SwanFile";
 import { StyleSheet } from "react-native";
+import { FilesUploader } from "../src/components/FilesUploader";
+import { SwanFile } from "../src/utils/SwanFile";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

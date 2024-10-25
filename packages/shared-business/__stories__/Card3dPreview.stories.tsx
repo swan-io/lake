@@ -1,6 +1,13 @@
 import { Meta } from "@storybook/react";
 import { Future, Result } from "@swan-io/boxed";
-import { FileInput } from "@swan-io/shared-business/src/components/FileInput";
+import { Box } from "@swan-io/lake/src/components/Box";
+import Card3dPreview, { Card3dAssetsUrls } from "@swan-io/lake/src/components/Card3dPreview";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
+import { LakeSlider } from "@swan-io/lake/src/components/LakeSlider";
+import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
+import { RadioGroup } from "@swan-io/lake/src/components/RadioGroup";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { deburr } from "@swan-io/lake/src/utils/string";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import envNxUrl from "../src/assets/3d-card/environment/nx.png?url";
@@ -16,14 +23,7 @@ import cardGltfUrl from "../src/assets/3d-card/model/card.gltf?url";
 import chipUrl from "../src/assets/3d-card/model/chip.jpg?url";
 import colorBlackUrl from "../src/assets/3d-card/model/color_black.jpg?url";
 import colorSilverUrl from "../src/assets/3d-card/model/color_silver.jpg?url";
-import { Box } from "../src/components/Box";
-import Card3dPreview, { Card3dAssetsUrls } from "../src/components/Card3dPreview";
-import { LakeLabel } from "../src/components/LakeLabel";
-import { LakeSlider } from "../src/components/LakeSlider";
-import { LakeTextInput } from "../src/components/LakeTextInput";
-import { RadioGroup } from "../src/components/RadioGroup";
-import { Space } from "../src/components/Space";
-import { deburr } from "../src/utils/string";
+import { FileInput } from "../src/components/FileInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const assetsUrls: Card3dAssetsUrls = {

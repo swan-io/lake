@@ -1,13 +1,13 @@
 import { Meta } from "@storybook/react";
-import { LakeModal, LakeModalProps } from "@swan-io/shared-business/src/components/LakeModal";
+import { Grid } from "@swan-io/lake/src/components/Grid";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { ScrollView } from "@swan-io/lake/src/components/ScrollView";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { colors } from "@swan-io/lake/src/constants/design";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import { Grid } from "../src/components/Grid";
-import { LakeButton } from "../src/components/LakeButton";
-import { ScrollView } from "../src/components/ScrollView";
-import { Space } from "../src/components/Space";
-import { colors } from "../src/constants/design";
+import { LakeModal, LakeModalProps } from "../src/components/LakeModal";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({

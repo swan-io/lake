@@ -4,7 +4,7 @@
 
 ## Getting started
 
-First, install [yarn](https://yarnpkg.com/en/docs/install).
+First, install [pnpm 9.9.0](https://pnpm.io/installation#installing-a-specific-version).
 
 ### Clone
 
@@ -15,7 +15,7 @@ $ git clone git@github.com:swan-io/lake.git
 ### Install
 
 ```console
-$ yarn
+$ pnpm i
 ```
 
 ## Editor
@@ -35,13 +35,13 @@ For better performance (and confort!), it's recommended to set:
 ## Linting
 
 ```console
-$ yarn lint
+$ pnpm lint
 ```
 
 You can also configure `lint-staged` as a pre-commit hook by running the following command :
 
 ```console
-$ yarn configure-hooks
+$ pnpm configure-hooks
 ```
 
 ## Generate Fluent icons
@@ -49,7 +49,7 @@ $ yarn configure-hooks
 Add the name of the desired icon in `scripts/fluent-icons/icons.json` using the format `icon-name-{filled|regular}`, and run the following command:
 
 ```console
-$ yarn icons
+$ pnpm icons
 ```
 
 And you'll be able to use your icon using the `<Icon />` component using the name you specified!
@@ -57,7 +57,7 @@ And you'll be able to use your icon using the `<Icon />` component using the nam
 ## Testing
 
 ```console
-$ yarn test
+$ pnpm test
 ```
 
 We generally collocate test files next to their implementation, in a `__tests__` directory, with the tested file name suffixed with `.test`:
@@ -73,6 +73,6 @@ We use [Vitest](https://vitest.dev/api/) and [React Testing Library](https://tes
 
 ## Releasing
 
-1. Run `yarn release`, select next version increment.
+1. Run `pnpm release`, select next version increment.
 2. Copy the PR url, make it approved and merge it.
 3. A Github release will automatically be created by the CI.

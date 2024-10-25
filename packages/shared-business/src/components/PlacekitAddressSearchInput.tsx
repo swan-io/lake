@@ -1,13 +1,9 @@
 import { PKOptions, PKResult } from "@placekit/client-js";
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
-import {
-  CountryCCA3,
-  countriesWithMultipleCCA3,
-  getCCA2forCCA3,
-} from "@swan-io/shared-business/src/constants/countries";
 import { MutableRefObject, useCallback } from "react";
 import { StyleProp, ViewStyle } from "react-native";
+import { CountryCCA3, countriesWithMultipleCCA3, getCCA2forCCA3 } from "../constants/countries";
 import { usePlacekit } from "../hooks/usePlacekit";
 
 type Suggestion = {
