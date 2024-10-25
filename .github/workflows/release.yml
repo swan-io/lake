@@ -45,7 +45,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          pnpm publish -r --tag next
+          pnpm publish -r
 
       - name: Create GitHub release
         run: pnpm tsx scripts/release/createRelease.ts
