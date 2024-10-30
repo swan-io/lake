@@ -14,10 +14,17 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
-  initials?: string;
-  size: number;
+type User = {
+  firstName: string | null | undefined;
+  preferredLastName: string | null | undefined;
 };
+
+type Props =
+  | { size: number; user: User | null | undefined }
+  /**
+   * @deprecated
+   */
+  | { size: number; initials?: string };
 
 const initialsToVariant = (initials: string): ColorVariants => {
   const value = (initials.charCodeAt(0) + initials.charCodeAt(1)) % 3;
@@ -32,7 +39,14 @@ const initialsToVariant = (initials: string): ColorVariants => {
   }
 };
 
-export const Avatar = memo<Props>(({ initials = "", size }) => {
+export const Avatar = memo<Props>(props => {
+  const { size } = props;
+
+  const initials =
+    "user" in props
+      ? (props.user?.firstName?.charAt(0) ?? "") + (props.user?.preferredLastName?.charAt(0) ?? "")
+      : (props.initials ?? "");
+
   const variant = initialsToVariant(initials);
 
   return (

@@ -236,9 +236,6 @@ export const deburr = (value: string): string => {
 
 export const trim = (value: string): string => value.trim();
 
-export const initials = (...values: (string | null | undefined)[]) =>
-  values.map(value => value?.charAt(0)).join("");
-
 export const words = (value: string): string[] =>
   value.split(/\b/).filter(x => /^[a-zA-Z0-9]+$/.test(x));
 
