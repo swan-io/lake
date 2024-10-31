@@ -1,7 +1,9 @@
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
+import { match, P } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
-import { ColorVariants, colors } from "../constants/design";
+import { colors, ColorVariants } from "../constants/design";
+import { identity } from "../utils/function";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 
@@ -16,7 +18,9 @@ const styles = StyleSheet.create({
 
 type User = {
   firstName: string | null | undefined;
-  preferredLastName: string | null | undefined;
+  birthLastName?: string | null;
+  lastName?: string | null;
+  preferredLastName?: string | null;
 };
 
 type Props =
@@ -42,10 +46,13 @@ const initialsToVariant = (initials: string): ColorVariants => {
 export const Avatar = memo<Props>(props => {
   const { size } = props;
 
-  const initials =
-    "user" in props
-      ? (props.user?.firstName?.charAt(0) ?? "") + (props.user?.preferredLastName?.charAt(0) ?? "")
-      : (props.initials ?? "");
+  const initials = match(props)
+    .with({ user: P.select(P.nonNullable) }, user => {
+      const lastName = user.preferredLastName ?? user.lastName ?? user.birthLastName;
+      return (user.firstName?.charAt(0) ?? "") + (lastName?.charAt(0) ?? "");
+    })
+    .with({ initials: P.select(P.nonNullable) }, identity)
+    .otherwise(() => "");
 
   const variant = initialsToVariant(initials);
 
