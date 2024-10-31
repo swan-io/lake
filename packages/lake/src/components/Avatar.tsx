@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
 
 type User = {
   firstName: string | null | undefined;
-  birthLastName?: string | null;
   lastName?: string | null;
   preferredLastName?: string | null;
 };
@@ -47,10 +46,12 @@ export const Avatar = memo<Props>(props => {
   const { size } = props;
 
   const initials = match(props)
-    .with({ user: P.select(P.nonNullable) }, user => {
-      const lastName = user.preferredLastName ?? user.lastName ?? user.birthLastName;
-      return (user.firstName?.charAt(0) ?? "") + (lastName?.charAt(0) ?? "");
-    })
+    .with(
+      { user: P.select(P.nonNullable) },
+      user =>
+        (user.firstName?.charAt(0) ?? "") +
+        ((user.preferredLastName ?? user.lastName)?.charAt(0) ?? ""),
+    )
     .with({ initials: P.select(P.nonNullable) }, identity)
     .otherwise(() => "");
 
