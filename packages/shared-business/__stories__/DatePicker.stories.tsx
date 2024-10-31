@@ -3,8 +3,8 @@ import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartnerAccentColor";
-import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
-import { useEffect, useRef, useState } from "react";
+import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import { BirthdatePicker } from "../src/components/BirthdatePicker";
@@ -202,31 +202,21 @@ export const ButtonWithRangePopover = () => {
 };
 
 export const Inline = () => {
-  const initialValue = "2000-01-01";
+  const initialValue = "";
 
   const [birthdate, setBirthdate] = useState<string | undefined>(initialValue);
-
-  const [error, setError] = useState<string | undefined>(undefined);
-  useEffect(() => {
-    if (isNullish(birthdate)) {
-      setError("The birthdate must be filled");
-    } else {
-      setError(undefined);
-    }
-  }, [birthdate]);
 
   return (
     <WithPartnerAccentColor color="#0F6FDE">
       <StoryBlock title="Inline picker">
         <StoryPart title="Default">
           <View style={styles.container}>
-            {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
+            {isNotNullishOrEmpty(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
 
             <BirthdatePicker
               label={"Birthdate"}
               value={initialValue}
               onValueChange={setBirthdate}
-              error={error}
             />
           </View>
         </StoryPart>
@@ -240,7 +230,6 @@ export const Inline = () => {
               value={initialValue}
               readOnly={true}
               onValueChange={setBirthdate}
-              error={error}
             />
           </View>
         </StoryPart>
