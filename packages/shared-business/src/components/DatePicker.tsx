@@ -279,7 +279,11 @@ export const isDateInRange =
       year: maxDate.getFullYear(),
     };
 
-    return isDateAfter(date, min) && isDateBefore(date, max);
+    return (
+      (isDateAfter(date, min) && isDateBefore(date, max)) ||
+      isDateEquals(date, min) ||
+      isDateEquals(date, max)
+    );
   };
 
 const isDateToday = (date: DatePickerDate): boolean => {
