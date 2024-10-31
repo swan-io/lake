@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 });
 
 type User = {
-  firstName: string | null | undefined;
+  firstName?: string | null;
   lastName?: string | null;
   preferredLastName?: string | null;
 };
