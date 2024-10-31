@@ -81,9 +81,14 @@ export const InlineDatePicker = ({
 }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
-  const blurredFields = useRef(new Set<"year" | "day">());
+  // We can't rely on blurred, since 3 inputs / select are mapped on
+  // 1 field. The first onBlur update the field internal state from
+  // not blurred -> blurred, then when the second input is blurred,
+  // validate will not be triggered again since the field has already
+  // blurred = true
+  const touched = useRef(new Set<"day" | "month" | "year">());
 
-  const { Field } = useForm({
+  const { Field, validateField } = useForm({
     date: {
       initialValue: isNotNullish(value) ? extractDate(value) : undefined,
       sanitize: date =>
@@ -94,13 +99,13 @@ export const InlineDatePicker = ({
               year: date.year.trim(),
             }
           : undefined,
-      strategy: "onSuccessOrBlur",
+      strategy: "onSubmit",
       validate: date => {
-        const yearBlurred = blurredFields.current.has("year");
-        const dayBlurred = blurredFields.current.has("day");
-        console.log(blurredFields.current);
-
-        if (yearBlurred && dayBlurred) {
+        if (
+          touched.current.has("day") &&
+          touched.current.has("month") &&
+          touched.current.has("year")
+        ) {
           const errorMessage = validate(date);
 
           if (isNullish(errorMessage) && isNotNullish(date)) {
@@ -117,7 +122,7 @@ export const InlineDatePicker = ({
   return (
     <View style={[styles.container, style]}>
       <Field name="date">
-        {({ error, onBlur, onChange, value }) => (
+        {({ error, onChange, value }) => (
           <LakeLabel
             label={label}
             render={id => {
@@ -130,8 +135,8 @@ export const InlineDatePicker = ({
                     placeholder={t("datePicker.day")}
                     value={value?.day ?? undefined}
                     onBlur={() => {
-                      blurredFields.current.add("day");
-                      onBlur();
+                      touched.current.add("day");
+                      validateField("date");
                     }}
                     hideErrors={true}
                     onChangeText={day => {
@@ -157,6 +162,9 @@ export const InlineDatePicker = ({
                   hideErrors={true}
                   items={months}
                   onValueChange={month => {
+                    touched.current.add("month");
+                    validateField("date");
+
                     onChange({
                       day: value?.day ?? "",
                       month,
@@ -174,8 +182,8 @@ export const InlineDatePicker = ({
                     readOnly={readOnly}
                     placeholder={t("datePicker.year")}
                     onBlur={() => {
-                      blurredFields.current.add("year");
-                      onBlur();
+                      touched.current.add("year");
+                      validateField("date");
                     }}
                     hideErrors={true}
                     onChangeText={year =>
