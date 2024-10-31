@@ -8,6 +8,7 @@ import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { useForm } from "@swan-io/use-form";
+import { useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { extractDate, ExtractedDate, formatExtractedDate } from "../utils/date";
@@ -80,6 +81,8 @@ export const InlineDatePicker = ({
 }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
+  const blurredFields = useRef(new Set<"year" | "day">());
+
   const { Field } = useForm({
     date: {
       initialValue: isNotNullish(value) ? extractDate(value) : undefined,
@@ -91,15 +94,21 @@ export const InlineDatePicker = ({
               year: date.year.trim(),
             }
           : undefined,
-      strategy: "onBlur",
+      strategy: "onSuccessOrBlur",
       validate: date => {
-        const errorMessage = validate(date);
+        const yearBlurred = blurredFields.current.has("year");
+        const dayBlurred = blurredFields.current.has("day");
+        console.log(blurredFields.current);
 
-        if (isNullish(errorMessage) && isNotNullish(date)) {
-          return onValueChange?.(formatExtractedDate(date));
-        } else {
-          onValueChange?.(undefined);
-          return errorMessage;
+        if (yearBlurred && dayBlurred) {
+          const errorMessage = validate(date);
+
+          if (isNullish(errorMessage) && isNotNullish(date)) {
+            return onValueChange?.(formatExtractedDate(date));
+          } else {
+            onValueChange?.(undefined);
+            return errorMessage;
+          }
         }
       },
     },
@@ -120,7 +129,10 @@ export const InlineDatePicker = ({
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                     placeholder={t("datePicker.day")}
                     value={value?.day ?? undefined}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      blurredFields.current.add("day");
+                      onBlur();
+                    }}
                     hideErrors={true}
                     onChangeText={day => {
                       onChange({
@@ -161,7 +173,10 @@ export const InlineDatePicker = ({
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                     readOnly={readOnly}
                     placeholder={t("datePicker.year")}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      blurredFields.current.add("year");
+                      onBlur();
+                    }}
                     hideErrors={true}
                     onChangeText={year =>
                       onChange({
