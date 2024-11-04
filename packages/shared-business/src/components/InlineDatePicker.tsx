@@ -8,6 +8,7 @@ import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { useForm } from "@swan-io/use-form";
+import { useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { extractDate, ExtractedDate, formatExtractedDate } from "../utils/date";
@@ -80,7 +81,14 @@ export const InlineDatePicker = ({
 }: InlineDatePickerProps) => {
   const { desktop } = useResponsive(breakpoints.small);
 
-  const { Field } = useForm({
+  // We can't rely on blurred, since 3 inputs / select are mapped on
+  // 1 field. The first onBlur update the field internal state from
+  // not blurred -> blurred, then when the second input is blurred,
+  // validate will not be triggered again since the field has already
+  // blurred = true
+  const touched = useRef(new Set<"day" | "month" | "year">());
+
+  const { Field, validateField } = useForm({
     date: {
       initialValue: isNotNullish(value) ? extractDate(value) : undefined,
       sanitize: date =>
@@ -91,7 +99,7 @@ export const InlineDatePicker = ({
               year: date.year.trim(),
             }
           : undefined,
-      strategy: "onBlur",
+      strategy: "onSubmit",
       validate: date => {
         const errorMessage = validate(date);
 
@@ -105,10 +113,16 @@ export const InlineDatePicker = ({
     },
   });
 
+  const validateDate = () => {
+    if (touched.current.has("day") && touched.current.has("month") && touched.current.has("year")) {
+      validateField("date");
+    }
+  };
+
   return (
     <View style={[styles.container, style]}>
       <Field name="date">
-        {({ error, onBlur, onChange, value }) => (
+        {({ error, onChange, value }) => (
           <LakeLabel
             label={label}
             render={id => {
@@ -120,7 +134,10 @@ export const InlineDatePicker = ({
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                     placeholder={t("datePicker.day")}
                     value={value?.day ?? undefined}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      touched.current.add("day");
+                      validateDate();
+                    }}
                     hideErrors={true}
                     onChangeText={day => {
                       onChange({
@@ -145,6 +162,9 @@ export const InlineDatePicker = ({
                   hideErrors={true}
                   items={months}
                   onValueChange={month => {
+                    touched.current.add("month");
+                    validateDate();
+
                     onChange({
                       day: value?.day ?? "",
                       month,
@@ -161,7 +181,10 @@ export const InlineDatePicker = ({
                     style={(isNotNullish(error) || isNotNullish(externalError)) && styles.error}
                     readOnly={readOnly}
                     placeholder={t("datePicker.year")}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      touched.current.add("year");
+                      validateDate();
+                    }}
                     hideErrors={true}
                     onChangeText={year =>
                       onChange({
