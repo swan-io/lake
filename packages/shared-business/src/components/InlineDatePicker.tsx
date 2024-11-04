@@ -101,23 +101,23 @@ export const InlineDatePicker = ({
           : undefined,
       strategy: "onSubmit",
       validate: date => {
-        if (
-          touched.current.has("day") &&
-          touched.current.has("month") &&
-          touched.current.has("year")
-        ) {
-          const errorMessage = validate(date);
+        const errorMessage = validate(date);
 
-          if (isNullish(errorMessage) && isNotNullish(date)) {
-            return onValueChange?.(formatExtractedDate(date));
-          } else {
-            onValueChange?.(undefined);
-            return errorMessage;
-          }
+        if (isNullish(errorMessage) && isNotNullish(date)) {
+          return onValueChange?.(formatExtractedDate(date));
+        } else {
+          onValueChange?.(undefined);
+          return errorMessage;
         }
       },
     },
   });
+
+  const validateDate = () => {
+    if (touched.current.has("day") && touched.current.has("month") && touched.current.has("year")) {
+      validateField("date");
+    }
+  };
 
   return (
     <View style={[styles.container, style]}>
@@ -136,7 +136,7 @@ export const InlineDatePicker = ({
                     value={value?.day ?? undefined}
                     onBlur={() => {
                       touched.current.add("day");
-                      validateField("date");
+                      validateDate();
                     }}
                     hideErrors={true}
                     onChangeText={day => {
@@ -163,7 +163,7 @@ export const InlineDatePicker = ({
                   items={months}
                   onValueChange={month => {
                     touched.current.add("month");
-                    validateField("date");
+                    validateDate();
 
                     onChange({
                       day: value?.day ?? "",
@@ -183,7 +183,7 @@ export const InlineDatePicker = ({
                     placeholder={t("datePicker.year")}
                     onBlur={() => {
                       touched.current.add("year");
-                      validateField("date");
+                      validateDate();
                     }}
                     hideErrors={true}
                     onChangeText={year =>
