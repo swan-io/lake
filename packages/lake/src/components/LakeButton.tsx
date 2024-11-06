@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
     minWidth: 90,
     justifyContent: "center",
     paddingHorizontal: 20,
+  },
+  transition: {
     transitionDuration: "150ms",
     transitionProperty: "background-color, color",
   },
@@ -269,17 +271,19 @@ export const LakeButton = memo(
           onPress={onPress}
           style={({ hovered, pressed, focused }) => [
             styles.base,
+
+            (hovered || pressed) && styles.transition,
+
+            grow && styles.grow,
             isSmall && styles.small,
 
             vertical && [styles.vertical, isSmall && styles.verticalSmall],
-
             hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
             hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
             hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
 
             (disabled || progressAnimation.isSome()) && commonStyles.disabled,
             disabled && forceBackground && styles.resetOpacity,
-            grow && styles.grow,
 
             match(mode)
               .with("primary", () => ({
