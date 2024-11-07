@@ -22,8 +22,6 @@
     "clean-build": "tsx scripts/clean/cleanBuild.ts",
     "format": "prettier '**/*' --ignore-unknown --write",
     "format-locales": "prettier '**/locales/*.json' --write",
-    "link-packages": "sh scripts/link-packages/link.sh",
-    "unlink-packages": "sh scripts/link-packages/unlink.sh",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "release": "tsx scripts/release/createPullRequest.ts",
