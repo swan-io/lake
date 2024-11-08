@@ -3,104 +3,22 @@ import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "r
 import { match } from "ts-pattern";
 import { Except } from "type-fest";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
-import { ColorVariants, colors, spacings } from "../constants/design";
+import { ColorVariants, colors, negativeSpacings, spacings } from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
 import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
+import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText, TextVariant } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 
-const styles = StyleSheet.create({
-  cellContainer: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  balanceCellContainer: {
-    width: "100%",
-  },
-  cell: {
-    display: "flex",
-    paddingHorizontal: spacings[16],
-    flexGrow: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  disabledCellHeader: {
-    cursor: "text",
-  },
-  icon: {
-    alignSelf: "stretch",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacings[4],
-  },
-  iconContainer: {
-    flexDirection: "row",
-    alignSelf: "stretch",
-    alignItems: "stretch",
-    justifyContent: "center",
-  },
-  centeredCell: {
-    justifyContent: "center",
-  },
-  endAlignedCell: {
-    justifyContent: "flex-end",
-  },
-  regularText: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: 1,
-    flexGrow: 1,
-    whiteSpace: "nowrap",
-  },
-  mediumText: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    width: 1,
-    flexGrow: 1,
-    whiteSpace: "nowrap",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  colorPatch: {
-    flexGrow: 1,
-  },
-  alternativeText: {
-    ...visuallyHiddenStyle,
-  },
-  sortIcon: {
-    transitionProperty: "transform",
-    transitionDuration: "300ms",
-    transitionTimingFunction: "ease-in-out",
-  },
-  sortIconReversed: {
-    transform: "rotate(-180deg)",
-  },
-  cellAction: {
-    paddingVertical: spacings[16],
-    paddingHorizontal: spacings[8],
-  },
-  underline: {
-    boxShadow: "inset 0 -2px currentColor",
-  },
-  sortHorizontalBar: {
-    position: "absolute",
-    width: "100%",
-    height: 2,
-    bottom: -10,
-    backgroundColor: colors.current[500],
-    borderBottomColor: colors.current[500],
-  },
-});
+const styles = StyleSheet.create({});
 
-type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
 type Align = "left" | "center" | "right";
 type SortDirection = "Desc" | "Asc";
+type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
 
 type HeaderCellProps = {
   align?: Align;
@@ -206,37 +124,14 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
   );
 };
 
-/**
- * @deprecated Use `HeaderCell` instead
- */
-export const SimpleHeaderCell = ({
-  justifyContent = "flex-start",
-  ...props
-}: {
-  justifyContent?: "flex-start" | "center" | "flex-end";
-  text: string;
-  sort?: SortDirection;
-  onPress?: (direction: SortDirection) => void;
-}) => (
-  <HeaderCell
-    {...props}
-    align={match(justifyContent)
-      .returnType<Align>()
-      .with("flex-start", () => "left")
-      .with("flex-end", () => "right")
-      .otherwise(identity)}
-  />
-);
-
 type CellProps = {
-  align?: Align;
   children: ReactNode;
+  align?: Align;
+  direction?: ViewStyle["flexDirection"];
   style?: StyleProp<ViewStyle>;
 };
 
-// Cell + ActionCell;
-// If children is a string, add textAlign with align
-export const Cell = ({ align = "left", children, style }: CellProps) => (
+export const Cell = ({ children, align = "left", direction = "row", style }: CellProps) => (
   <View
     style={[
       {
@@ -252,9 +147,11 @@ export const Cell = ({ align = "left", children, style }: CellProps) => (
       style={[
         {
           flexShrink: 1,
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: direction,
         },
+        direction === "row" || direction === "row-reverse"
+          ? { alignItems: "center" }
+          : { justifyContent: "center" },
         {
           marginLeft: align === "right" || align === "center" ? "auto" : undefined,
           marginRight: align === "left" || align === "center" ? "auto" : undefined,
@@ -265,27 +162,6 @@ export const Cell = ({ align = "left", children, style }: CellProps) => (
     </View>
   </View>
 );
-
-/**
- * @deprecated Avoid usage
- */
-export const ColorPatchCell = ({
-  alternativeText,
-  color,
-  isHovered,
-}: {
-  alternativeText?: string;
-  color: ColorVariants;
-  isHovered: boolean;
-}) => {
-  return isHovered ? (
-    <View style={[styles.colorPatch, { backgroundColor: colors[color].primary }]}>
-      {isNotNullish(alternativeText) ? (
-        <LakeText style={styles.alternativeText}>{alternativeText}</LakeText>
-      ) : null}
-    </View>
-  ) : null;
-};
 
 type TextCellProps = {
   align?: Align;
@@ -308,41 +184,6 @@ export const TextCell = ({
     </LakeText>
   </Cell>
 );
-
-/**
- * @deprecated Use `TextCell` with color={…} and variant="medium" instead
- */
-export const SimpleTitleCell = ({
-  isHighlighted = false,
-  text,
-  tooltip,
-}: {
-  isHighlighted?: boolean;
-  text: string;
-  tooltip?: TooltipProp;
-}) => (
-  <TextCell
-    color={isHighlighted ? colors.current.primary : colors.gray[900]}
-    text={text}
-    tooltip={tooltip}
-    variant="medium"
-  />
-);
-
-/**
- * @deprecated Use `TextCell` instead
- */
-export const SimpleRegularTextCell = ({
-  color = colors.gray[900],
-  text,
-  textAlign = "left",
-  variant = "regular",
-}: {
-  color?: string;
-  text: string;
-  textAlign?: Align;
-  variant?: TextVariant;
-}) => <TextCell align={textAlign} color={color} text={text} variant={variant} />;
 
 type CopyableTextCellProps = {
   copiedWording: string;
@@ -383,6 +224,7 @@ export const CopyableTextCell = ({
           {
             alignSelf: "stretch",
             justifyContent: "center",
+            marginHorizontal: negativeSpacings[8],
           },
           hovered && {
             boxShadow: "inset 0 -2px currentColor",
@@ -396,7 +238,9 @@ export const CopyableTextCell = ({
             placement="center"
             togglableOnFocus={true}
             containerStyle={{
-              paddingVertical: spacings[8],
+              height: "100%",
+              justifyContent: "center",
+              paddingHorizontal: spacings[8],
             }}
           >
             <Icon name={hovered ? "copy-filled" : "copy-regular"} color="currentColor" size={14} />
@@ -412,11 +256,6 @@ export const CopyableTextCell = ({
     </Cell>
   );
 };
-
-/**
- * @deprecated Use `CopyableTextCell` instead
- */
-export const CopyableRegularTextCell = CopyableTextCell;
 
 type BalanceCellProps = {
   align?: Align;
@@ -441,32 +280,38 @@ export const BalanceCell = ({
   value,
   variant = "medium",
 }: BalanceCellProps) => (
-  <Cell align={align}>
-    <View style={{ flexShrink: 1 }}>
-      <LakeText
-        numberOfLines={1}
-        align={align}
-        color={colors.gray[900]}
-        variant={variant}
-        style={[
-          value > 0 && { color: colors.positive.primary },
-          value < 0 && { color: colors.negative.primary },
-        ]}
-      >
-        {(value > 0 ? "+" : "") + formatCurrency(value, currency)}
-      </LakeText>
+  <Cell align={align} direction="column">
+    <LakeText
+      numberOfLines={1}
+      align={align}
+      color={colors.gray[900]}
+      variant={variant}
+      style={[
+        value > 0 && { color: colors.positive.primary },
+        value < 0 && { color: colors.negative.primary },
+      ]}
+    >
+      {(value > 0 ? "+" : "") + formatCurrency(value, currency)}
+    </LakeText>
 
-      {isNotNullish(originalValue) && originalValue.currency !== currency && (
-        <LakeText numberOfLines={1} align={align} color={colors.gray[500]} variant="smallRegular">
-          {(originalValue.value > 0 ? "+" : "") +
-            formatCurrency(originalValue.value, originalValue.currency)}
-        </LakeText>
-      )}
-    </View>
+    {isNotNullish(originalValue) && originalValue.currency !== currency && (
+      <LakeText numberOfLines={1} align={align} color={colors.gray[500]} variant="smallRegular">
+        {(originalValue.value > 0 ? "+" : "") +
+          formatCurrency(originalValue.value, originalValue.currency)}
+      </LakeText>
+    )}
   </Cell>
 );
 
-// TODO: Reuse Cell
+type LinkCellProps = {
+  buttonPosition?: "start" | "end";
+  children: ReactNode;
+  external?: boolean;
+  onPress: () => void;
+  tooltip?: TooltipProp;
+  variant?: TextVariant;
+};
+
 export const LinkCell = ({
   buttonPosition = "start",
   children,
@@ -474,17 +319,21 @@ export const LinkCell = ({
   onPress,
   tooltip,
   variant = "medium",
-}: {
-  buttonPosition?: "start" | "end";
-  children: ReactNode;
-  external?: boolean;
-  onPress: () => void;
-  tooltip?: TooltipProp;
-  variant?: TextVariant;
-}) => {
-  const ArrowButton = (
+}: LinkCellProps) => (
+  <Cell direction={buttonPosition === "end" ? "row-reverse" : "row"}>
     <Pressable
-      style={({ hovered }) => [styles.icon, hovered && styles.underline]}
+      style={({ hovered }) => [
+        {
+          alignSelf: "stretch",
+          justifyContent: "center",
+          marginHorizontal: negativeSpacings[8],
+          paddingHorizontal: spacings[8],
+        },
+
+        hovered && {
+          boxShadow: "inset 0 -2px currentColor",
+        },
+      ]}
       onPress={event => {
         event.preventDefault();
         onPress();
@@ -492,37 +341,97 @@ export const LinkCell = ({
     >
       <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
     </Pressable>
-  );
 
-  return (
-    <View style={styles.cell}>
-      {buttonPosition === "start" && (
-        <>
-          {ArrowButton}
+    <Space width={8} />
 
-          <Space width={8} />
-        </>
-      )}
+    <LakeText numberOfLines={1} color={colors.gray[900]} variant={variant} tooltip={tooltip}>
+      {children}
+    </LakeText>
+  </Cell>
+);
 
-      <LakeText
-        color={colors.gray[900]}
-        variant={variant}
-        style={styles.mediumText}
-        tooltip={tooltip}
-      >
-        {children}
-      </LakeText>
-
-      {buttonPosition === "end" && (
-        <>
-          <Space width={8} />
-
-          {ArrowButton}
-        </>
-      )}
-    </View>
-  );
+/**
+ * @deprecated Avoid usage
+ */
+export const ColorPatchCell = ({
+  alternativeText,
+  color,
+  isHovered,
+}: {
+  alternativeText?: string;
+  color: ColorVariants;
+  isHovered: boolean;
+}) => {
+  return isHovered ? (
+    <Box grow={1} style={{ backgroundColor: colors[color].primary }}>
+      {isNotNullish(alternativeText) ? (
+        <LakeText style={visuallyHiddenStyle}>{alternativeText}</LakeText>
+      ) : null}
+    </Box>
+  ) : null;
 };
+
+/**
+ * @deprecated Use `HeaderCell` instead
+ */
+export const SimpleHeaderCell = ({
+  justifyContent = "flex-start",
+  ...props
+}: {
+  justifyContent?: "flex-start" | "center" | "flex-end";
+  text: string;
+  sort?: SortDirection;
+  onPress?: (direction: SortDirection) => void;
+}) => (
+  <HeaderCell
+    {...props}
+    align={match(justifyContent)
+      .returnType<Align>()
+      .with("flex-start", () => "left")
+      .with("flex-end", () => "right")
+      .otherwise(identity)}
+  />
+);
+
+/**
+ * @deprecated Use `TextCell` with color={…} and variant="medium" instead
+ */
+export const SimpleTitleCell = ({
+  isHighlighted = false,
+  text,
+  tooltip,
+}: {
+  isHighlighted?: boolean;
+  text: string;
+  tooltip?: TooltipProp;
+}) => (
+  <TextCell
+    color={isHighlighted ? colors.current.primary : colors.gray[900]}
+    text={text}
+    tooltip={tooltip}
+    variant="medium"
+  />
+);
+
+/**
+ * @deprecated Use `TextCell` instead
+ */
+export const SimpleRegularTextCell = ({
+  color = colors.gray[900],
+  text,
+  textAlign = "left",
+  variant = "regular",
+}: {
+  color?: string;
+  text: string;
+  textAlign?: Align;
+  variant?: TextVariant;
+}) => <TextCell align={textAlign} color={color} text={text} variant={variant} />;
+
+/**
+ * @deprecated Use `CopyableTextCell` instead
+ */
+export const CopyableRegularTextCell = CopyableTextCell;
 
 /**
  * @deprecated Use `<Cell align="left" />` instead
