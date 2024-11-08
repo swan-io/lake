@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { ColorVariants, colors } from "../constants/design";
+import { ColorVariants, colors, radii } from "../constants/design";
 import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
@@ -29,6 +29,12 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.5,
+  },
+  errorPill: {
+    width: 5,
+    height: 5,
+    backgroundColor: colors.negative[500],
+    borderRadius: radii[6],
   },
 });
 
@@ -129,6 +135,13 @@ export const LakeLabelledCheckbox = ({
       <LakeText color={colors.gray[900]} userSelect="none">
         {label}
       </LakeText>
+
+      {isError ? (
+        <>
+          <Space width={8} />
+          <View style={styles.errorPill} />
+        </>
+      ) : null}
     </Pressable>
   );
 };
