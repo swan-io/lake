@@ -1,6 +1,7 @@
 import { ComponentProps, ReactNode, useCallback, useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
+import { Except } from "type-fest";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
 import { ColorVariants, colors, spacings } from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
@@ -69,7 +70,9 @@ const styles = StyleSheet.create({
   colorPatch: {
     flexGrow: 1,
   },
-  alternativeText: visuallyHiddenStyle,
+  alternativeText: {
+    ...visuallyHiddenStyle,
+  },
   sortIcon: {
     transitionProperty: "transform",
     transitionDuration: "300ms",
@@ -95,21 +98,18 @@ const styles = StyleSheet.create({
   },
 });
 
+type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
 type Align = "left" | "center" | "right";
-type Justify = "flex-start" | "center" | "flex-end";
 type SortDirection = "Desc" | "Asc";
 
-export const HeaderCell = ({
-  align = "left",
-  sort,
-  text,
-  onPress,
-}: {
+type HeaderCellProps = {
   align?: Align;
   sort?: SortDirection;
   text: string;
   onPress?: (direction: SortDirection) => void;
-}) => {
+};
+
+export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellProps) => {
   const sortActive = isNotNullish(sort) && isNotNullish(onPress);
   const disabled = isNullish(onPress);
 
@@ -206,7 +206,6 @@ export const HeaderCell = ({
   );
 };
 
-// TODO: Use `HeaderCell` instead
 /**
  * @deprecated Use `HeaderCell` instead
  */
@@ -229,16 +228,25 @@ export const SimpleHeaderCell = ({
   />
 );
 
+type CellProps = {
+  align?: Align;
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
 // Cell + ActionCell;
 // If children is a string, add textAlign with align
-export const Cell = ({ align = "left", children }: { align?: Align; children: ReactNode }) => (
+export const Cell = ({ align = "left", children, style }: CellProps) => (
   <View
-    style={{
-      flexDirection: "row",
-      flexGrow: 1,
-      flexShrink: 1,
-      paddingHorizontal: spacings[16],
-    }}
+    style={[
+      {
+        flexDirection: "row",
+        flexGrow: 1,
+        flexShrink: 1,
+        paddingHorizontal: spacings[16],
+      },
+      style,
+    ]}
   >
     <View
       style={[
@@ -258,15 +266,17 @@ export const Cell = ({ align = "left", children }: { align?: Align; children: Re
   </View>
 );
 
-// TODO: Deprecate it (it's not visible anymore, as `isHovered` does not work)
+/**
+ * @deprecated Avoid usage
+ */
 export const ColorPatchCell = ({
-  isHovered,
   alternativeText,
   color,
+  isHovered,
 }: {
-  isHovered: boolean;
   alternativeText?: string;
   color: ColorVariants;
+  isHovered: boolean;
 }) => {
   return isHovered ? (
     <View style={[styles.colorPatch, { backgroundColor: colors[color].primary }]}>
@@ -277,7 +287,37 @@ export const ColorPatchCell = ({
   ) : null;
 };
 
-// TODO: Merge this inside TextCell
+type TextCellProps = {
+  align?: Align;
+  color?: string;
+  text: string;
+  tooltip?: TooltipProp;
+  variant?: TextVariant;
+};
+
+export const TextCell = ({
+  align = "left",
+  color = colors.gray[900],
+  text,
+  tooltip,
+  variant = "regular",
+}: TextCellProps) => (
+  <Cell align={align}>
+    <LakeText
+      numberOfLines={1}
+      color={color}
+      style={{ textAlign: align }}
+      tooltip={tooltip}
+      variant={variant}
+    >
+      {text}
+    </LakeText>
+  </Cell>
+);
+
+/**
+ * @deprecated Use `TextCell` with color={…} and variant="medium" instead
+ */
 export const SimpleTitleCell = ({
   isHighlighted = false,
   text,
@@ -285,58 +325,48 @@ export const SimpleTitleCell = ({
 }: {
   isHighlighted?: boolean;
   text: string;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
+  tooltip?: TooltipProp;
 }) => (
-  <View style={styles.cell}>
-    <LakeText
-      numberOfLines={1}
-      color={isHighlighted ? colors.current.primary : colors.gray[900]}
-      style={styles.regularText}
-      variant="medium"
-      tooltip={tooltip}
-    >
-      {text}
-    </LakeText>
-  </View>
+  <TextCell
+    color={isHighlighted ? colors.current.primary : colors.gray[900]}
+    text={text}
+    tooltip={tooltip}
+    variant="medium"
+  />
 );
 
-// TODO: Rename this TextCell
+/**
+ * @deprecated Use `TextCell` instead
+ */
 export const SimpleRegularTextCell = ({
-  variant = "regular",
+  color = colors.gray[900],
   text,
   textAlign = "left",
-  color = colors.gray[900],
+  variant = "regular",
 }: {
-  variant?: TextVariant;
+  color?: string;
   text: string;
   textAlign?: "left" | "center" | "right";
-  color?: string;
-}) => {
-  return (
-    <View style={styles.cell}>
-      <LakeText align={textAlign} color={color} style={styles.regularText} variant={variant}>
-        {text}
-      </LakeText>
-    </View>
-  );
-};
-
-// TODO: Rename this CopyableTextCell
-export const CopyableRegularTextCell = ({
-  variant = "regular",
-  text,
-  textToCopy,
-  copyWording,
-  copiedWording,
-  tooltip,
-}: {
   variant?: TextVariant;
+}) => <TextCell align={textAlign} color={color} text={text} variant={variant} />;
+
+type CopyableTextCellProps = {
+  copiedWording: string;
+  copyWording: string;
   text: string;
   textToCopy?: string;
-  copyWording: string;
-  copiedWording: string;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
-}) => {
+  tooltip?: TooltipProp;
+  variant?: TextVariant;
+};
+
+export const CopyableTextCell = ({
+  copiedWording,
+  copyWording,
+  text,
+  textToCopy,
+  tooltip,
+  variant = "regular",
+}: CopyableTextCellProps) => {
   const [visibleState, setVisibleState] = useState<"copy" | "copied">("copy");
   const clipboardText = textToCopy ?? text;
 
@@ -350,19 +380,34 @@ export const CopyableRegularTextCell = ({
   );
 
   return (
-    <View style={styles.cell}>
+    <Cell>
       <LakeTooltip
         placement="right"
         onHide={() => setVisibleState("copy")}
         togglableOnFocus={true}
         content={visibleState === "copy" ? copyWording : copiedWording}
-        containerStyle={styles.iconContainer}
+        containerStyle={{
+          flexDirection: "row",
+          alignSelf: "stretch",
+          alignItems: "stretch",
+          justifyContent: "center",
+        }}
       >
         <Pressable
           role="button"
           aria-label={copyWording}
           onPress={onPress}
-          style={({ hovered }) => [styles.icon, hovered && styles.underline]}
+          style={({ hovered }) => [
+            {
+              alignSelf: "stretch",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingHorizontal: spacings[4],
+            },
+            hovered && {
+              boxShadow: "inset 0 -2px currentColor",
+            },
+          ]}
         >
           {({ hovered }) => (
             <Icon name={hovered ? "copy-filled" : "copy-regular"} color="currentColor" size={14} />
@@ -372,32 +417,34 @@ export const CopyableRegularTextCell = ({
 
       <Space width={4} />
 
-      <LakeText
-        tooltip={tooltip}
-        color={colors.gray[900]}
-        style={styles.regularText}
-        variant={variant}
-      >
+      <LakeText numberOfLines={1} color={colors.gray[900]} tooltip={tooltip} variant={variant}>
         {text}
       </LakeText>
-    </View>
+    </Cell>
   );
 };
 
+/**
+ * @deprecated Use `CopyableTextCell` instead
+ */
+export const CopyableRegularTextCell = (props: CopyableTextCellProps) => (
+  <CopyableTextCell {...props} />
+);
+
 // TODO: handle `+` sign properly + reuse Cell
 export const BalanceCell = ({
-  value,
   currency,
-  originalValue,
   formatCurrency,
+  originalValue,
   textAlign = "right",
+  value,
   variant = "medium",
 }: {
-  value: number;
   currency: string;
-  originalValue?: { value: number; currency: string };
   formatCurrency: (value: number, currency: string) => string;
+  originalValue?: { value: number; currency: string };
   textAlign?: "left" | "center" | "right";
+  value: number;
   variant?: TextVariant;
 }) => {
   return (
@@ -444,19 +491,19 @@ export const BalanceCell = ({
 
 // TODO: Reuse Cell
 export const LinkCell = ({
+  buttonPosition = "start",
   children,
   external = false,
   onPress,
-  variant = "medium",
   tooltip,
-  buttonPosition = "start",
+  variant = "medium",
 }: {
-  children: ReactNode;
-  onPress: () => void;
-  external?: boolean;
-  variant?: TextVariant;
-  tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
   buttonPosition?: "start" | "end";
+  children: ReactNode;
+  external?: boolean;
+  onPress: () => void;
+  tooltip?: TooltipProp;
+  variant?: TextVariant;
 }) => {
   const ArrowButton = () => (
     <Pressable
@@ -499,31 +546,42 @@ export const LinkCell = ({
 };
 
 /**
- * @deprecated Use <Cell align="left" /> instead
+ * @deprecated Use `<Cell align="left" />` instead
  */
-export const StartAlignedCell = ({ children }: { children: ReactNode }) => {
-  return <View style={styles.cell}>{children}</View>;
-};
+export const StartAlignedCell = (props: Except<CellProps, "align">) => (
+  <Cell align="left" {...props} />
+);
 
 /**
- * @deprecated Use <Cell align="center" /> instead
+ * @deprecated Use `<Cell align="center" />` instead
  */
-export const CenteredCell = ({ children }: { children: ReactNode }) => {
-  return <View style={[styles.cell, styles.centeredCell]}>{children}</View>;
-};
+export const CenteredCell = (props: Except<CellProps, "align">) => (
+  <Cell align="center" {...props} />
+);
 
 /**
- * @deprecated Use <Cell align="right" /> instead
+ * @deprecated Use `<Cell align="right" />` instead
  */
-export const EndAlignedCell = ({ children }: { children: ReactNode }) => {
-  return <View style={[styles.cell, styles.endAlignedCell]}>{children}</View>;
-};
+export const EndAlignedCell = (props: Except<CellProps, "align">) => (
+  <Cell align="right" {...props} />
+);
 
-// TODO: Rename this ActionCell
+export const ActionCell = ({ style, ...props }: CellProps) => (
+  <Cell
+    {...props}
+    style={[
+      style,
+      {
+        paddingVertical: spacings[16],
+        paddingHorizontal: spacings[8],
+      },
+    ]}
+  />
+);
 
 /**
  * @deprecated Use <ActionCell /> instead
  */
-export const CellAction = ({ children }: { children: ReactNode }) => {
-  return <View style={styles.cellAction}>{children}</View>;
-};
+export const CellAction = ({ children }: { children: ReactNode }) => (
+  <ActionCell>{children}</ActionCell>
+);
