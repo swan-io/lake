@@ -154,9 +154,9 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
         >
           <LakeText
             numberOfLines={1}
-            variant="medium"
+            align={align}
             color={sortActive ? colors.current[500] : colors.gray[900]}
-            style={{ textAlign: align }}
+            variant="medium"
           >
             {text}
           </LakeText>
@@ -303,13 +303,7 @@ export const TextCell = ({
   variant = "regular",
 }: TextCellProps) => (
   <Cell align={align}>
-    <LakeText
-      numberOfLines={1}
-      color={color}
-      style={{ textAlign: align }}
-      tooltip={tooltip}
-      variant={variant}
-    >
+    <LakeText numberOfLines={1} align={align} color={color} tooltip={tooltip} variant={variant}>
       {text}
     </LakeText>
   </Cell>
@@ -346,7 +340,7 @@ export const SimpleRegularTextCell = ({
 }: {
   color?: string;
   text: string;
-  textAlign?: "left" | "center" | "right";
+  textAlign?: Align;
   variant?: TextVariant;
 }) => <TextCell align={textAlign} color={color} text={text} variant={variant} />;
 
@@ -382,8 +376,8 @@ export const CopyableTextCell = ({
   return (
     <Cell>
       <Pressable
-        role="button"
         aria-label={copyWording}
+        role="button"
         onPress={onPress}
         style={({ hovered }) => [
           {
@@ -422,67 +416,55 @@ export const CopyableTextCell = ({
 /**
  * @deprecated Use `CopyableTextCell` instead
  */
-export const CopyableRegularTextCell = (props: CopyableTextCellProps) => (
-  <CopyableTextCell {...props} />
-);
+export const CopyableRegularTextCell = CopyableTextCell;
 
-// TODO: handle `+` sign properly + reuse Cell
-export const BalanceCell = ({
-  currency,
-  formatCurrency,
-  originalValue,
-  textAlign = "right",
-  value,
-  variant = "medium",
-}: {
+type BalanceCellProps = {
+  align?: Align;
   currency: string;
   formatCurrency: (value: number, currency: string) => string;
   originalValue?: { value: number; currency: string };
-  textAlign?: "left" | "center" | "right";
+  /**
+   * @deprecated Use `align` prop instead
+   */
+  textAlign?: Align;
   value: number;
   variant?: TextVariant;
-}) => {
-  return (
-    <View style={styles.balanceCellContainer}>
-      <View style={styles.cell}>
-        <LakeText
-          align={textAlign}
-          color={colors.gray[900]}
-          variant={variant}
-          style={[
-            styles.mediumText,
-            {
-              justifyContent: match(textAlign)
-                .with("left", () => "flex-start" as const)
-                .with("center", () => "center" as const)
-                .with("right", () => "flex-end" as const)
-                .exhaustive(),
-            },
-            value > 0 && { color: colors.positive.primary },
-            value < 0 && { color: colors.negative.primary },
-          ]}
-        >
-          {value > 0 && "+"}
-          {formatCurrency(value, currency)}
-        </LakeText>
-      </View>
+};
+
+// TODO: handle `+` sign properly
+export const BalanceCell = ({
+  textAlign = "right",
+  align = textAlign,
+  currency,
+  formatCurrency,
+  originalValue,
+  value,
+  variant = "medium",
+}: BalanceCellProps) => (
+  <Cell align={align}>
+    <View style={{ flexShrink: 1 }}>
+      <LakeText
+        numberOfLines={1}
+        align={align}
+        color={colors.gray[900]}
+        variant={variant}
+        style={[
+          value > 0 && { color: colors.positive.primary },
+          value < 0 && { color: colors.negative.primary },
+        ]}
+      >
+        {(value > 0 ? "+" : "") + formatCurrency(value, currency)}
+      </LakeText>
 
       {isNotNullish(originalValue) && originalValue.currency !== currency && (
-        <View style={styles.cell}>
-          <LakeText
-            style={styles.mediumText}
-            align={textAlign}
-            color={colors.gray[500]}
-            variant="smallRegular"
-          >
-            {originalValue.value > 0 && "+"}
-            {formatCurrency(originalValue.value, originalValue.currency)}
-          </LakeText>
-        </View>
+        <LakeText numberOfLines={1} align={align} color={colors.gray[500]} variant="smallRegular">
+          {(originalValue.value > 0 ? "+" : "") +
+            formatCurrency(originalValue.value, originalValue.currency)}
+        </LakeText>
       )}
     </View>
-  );
-};
+  </Cell>
+);
 
 // TODO: Reuse Cell
 export const LinkCell = ({
@@ -500,7 +482,7 @@ export const LinkCell = ({
   tooltip?: TooltipProp;
   variant?: TextVariant;
 }) => {
-  const ArrowButton = () => (
+  const ArrowButton = (
     <Pressable
       style={({ hovered }) => [styles.icon, hovered && styles.underline]}
       onPress={event => {
@@ -516,7 +498,8 @@ export const LinkCell = ({
     <View style={styles.cell}>
       {buttonPosition === "start" && (
         <>
-          <ArrowButton />
+          {ArrowButton}
+
           <Space width={8} />
         </>
       )}
@@ -533,7 +516,8 @@ export const LinkCell = ({
       {buttonPosition === "end" && (
         <>
           <Space width={8} />
-          <ArrowButton />
+
+          {ArrowButton}
         </>
       )}
     </View>
