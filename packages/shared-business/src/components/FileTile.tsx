@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: colors.current[500],
   },
+  id: {
+    alignSelf: "flex-start",
+  },
 });
 
 type Props = {
@@ -124,34 +127,36 @@ export const FileTile = ({
               </LakeText>
 
               {showId ? (
-                <LakeTooltip
-                  describedBy="copy"
-                  onHide={() => setVisibleState("copy")}
-                  togglableOnFocus={true}
-                  content={
-                    visibleState === "copy"
-                      ? t("copyButton.copyTooltip")
-                      : t("copyButton.copiedTooltip")
-                  }
-                >
-                  <Pressable
-                    onPress={event => {
-                      event.stopPropagation();
-                      event.preventDefault();
-                      setClipboardText(id);
-                      setVisibleState("copied");
-                    }}
+                <View style={styles.id}>
+                  <LakeTooltip
+                    describedBy="copy"
+                    onHide={() => setVisibleState("copy")}
+                    togglableOnFocus={true}
+                    content={
+                      visibleState === "copy"
+                        ? t("copyButton.copyTooltip")
+                        : t("copyButton.copiedTooltip")
+                    }
                   >
-                    <Box direction="row" alignItems="center">
-                      <LakeText numberOfLines={1} variant="smallRegular">
-                        {t("fileTile.id", { id })}
-                      </LakeText>
+                    <Pressable
+                      onPress={event => {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        setClipboardText(id);
+                        setVisibleState("copied");
+                      }}
+                    >
+                      <Box direction="row" alignItems="center">
+                        <LakeText numberOfLines={1} variant="smallRegular">
+                          {t("fileTile.id", { id })}
+                        </LakeText>
 
-                      <Space width={4} />
-                      <Icon size={14} name="copy-regular" />
-                    </Box>
-                  </Pressable>
-                </LakeTooltip>
+                        <Space width={4} />
+                        <Icon size={14} name="copy-regular" />
+                      </Box>
+                    </Pressable>
+                  </LakeTooltip>
+                </View>
               ) : null}
             </Box>
 
