@@ -73,6 +73,10 @@ export const Variations = () => {
         <InteractiveLabelledCheckbox label="Enabled" />
       </StoryPart>
 
+      <StoryPart title="Lablelled error">
+        <InteractiveLabelledCheckbox label="Enabled" isError={true} />
+      </StoryPart>
+
       <StoryPart title="Disabled">
         <InteractiveCheckbox disabled={true} />
       </StoryPart>
