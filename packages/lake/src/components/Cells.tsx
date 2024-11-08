@@ -4,8 +4,8 @@ import { match } from "ts-pattern";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
 import { ColorVariants, colors, spacings } from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
+import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
-import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText, TextVariant } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
@@ -95,18 +95,19 @@ const styles = StyleSheet.create({
   },
 });
 
+type Align = "left" | "center" | "right";
 type Justify = "flex-start" | "center" | "flex-end";
 type SortDirection = "Desc" | "Asc";
 
-export const SimpleHeaderCell = ({
-  text,
+export const HeaderCell = ({
+  align = "left",
   sort,
-  justifyContent = "flex-start",
+  text,
   onPress,
 }: {
-  text: string;
-  justifyContent?: Justify;
+  align?: Align;
   sort?: SortDirection;
+  text: string;
   onPress?: (direction: SortDirection) => void;
 }) => {
   const sortActive = isNotNullish(sort) && isNotNullish(onPress);
@@ -114,6 +115,19 @@ export const SimpleHeaderCell = ({
 
   return (
     <Pressable
+      role="columnheader"
+      disabled={disabled}
+      style={[
+        {
+          flexDirection: "row",
+          flexGrow: 1,
+          flexShrink: 1,
+          paddingHorizontal: spacings[16],
+        },
+        disabled && {
+          cursor: "text",
+        },
+      ]}
       onPress={() => {
         onPress?.(
           match(sort)
@@ -123,56 +137,128 @@ export const SimpleHeaderCell = ({
             .otherwise(() => "Desc"),
         );
       }}
-      disabled={disabled}
-      style={[styles.cellContainer, disabled && styles.disabledCellHeader]}
-      role="columnheader"
     >
       {({ hovered }) => (
-        <View style={[styles.cell, { justifyContent }]}>
-          <View>
-            <Box direction="row" alignItems="center">
-              <LakeText
-                numberOfLines={1}
-                variant="medium"
-                color={sortActive ? colors.current[500] : colors.gray[900]}
-                style={{
-                  textAlign: match(justifyContent)
-                    .with("flex-start", () => "left" as const)
-                    .with("center", () => "center" as const)
-                    .with("flex-end", () => "right" as const)
-                    .exhaustive(),
-                }}
-              >
-                {text}
-              </LakeText>
+        <View
+          style={[
+            {
+              flexShrink: 1,
+              flexDirection: "row",
+              alignItems: "center",
+            },
+            {
+              marginLeft: align === "right" || align === "center" ? "auto" : undefined,
+              marginRight: align === "left" || align === "center" ? "auto" : undefined,
+            },
+          ]}
+        >
+          <LakeText
+            numberOfLines={1}
+            variant="medium"
+            color={sortActive ? colors.current[500] : colors.gray[900]}
+            style={{ textAlign: align }}
+          >
+            {text}
+          </LakeText>
 
-              {isNotNullish(onPress) ? (
-                <>
-                  <Space width={8} />
+          {isNotNullish(onPress) && (
+            <>
+              <Space width={8} />
 
-                  <Box style={[styles.sortIcon, sort === "Asc" && styles.sortIconReversed]}>
-                    <Icon
-                      size={15}
-                      color={sortActive ? colors.current[500] : colors.gray[500]}
-                      name={sortActive ? "arrow-down-filled" : "chevron-up-down-regular"}
-                    />
-                  </Box>
-                </>
-              ) : null}
-            </Box>
+              <Icon
+                size={15}
+                color={sortActive ? colors.current[500] : colors.gray[500]}
+                name={sortActive ? "arrow-down-filled" : "chevron-up-down-regular"}
+                style={[
+                  {
+                    transitionProperty: "transform",
+                    transitionDuration: "300ms",
+                    transitionTimingFunction: "ease-in-out",
+                  },
+                  sort === "Asc" && {
+                    transform: "rotate(-180deg)",
+                  },
+                ]}
+              />
+            </>
+          )}
 
-            {sortActive ? (
-              <View style={styles.sortHorizontalBar} />
-            ) : hovered ? (
-              <View style={[styles.sortHorizontalBar, { backgroundColor: colors.gray[900] }]} />
-            ) : null}
-          </View>
+          {(hovered || sortActive) && (
+            <View
+              style={[
+                {
+                  position: "absolute",
+                  width: "100%",
+                  height: 2,
+                  bottom: -10,
+                  backgroundColor: colors.gray[900],
+                  borderBottomColor: colors.current[500],
+                },
+                sortActive && {
+                  backgroundColor: colors.current[500],
+                },
+              ]}
+            />
+          )}
         </View>
       )}
     </Pressable>
   );
 };
 
+// TODO: Use `HeaderCell` instead
+/**
+ * @deprecated Use `HeaderCell` instead
+ */
+export const SimpleHeaderCell = ({
+  justifyContent = "flex-start",
+  ...props
+}: {
+  justifyContent?: "flex-start" | "center" | "flex-end";
+  text: string;
+  sort?: SortDirection;
+  onPress?: (direction: SortDirection) => void;
+}) => (
+  <HeaderCell
+    {...props}
+    align={match(justifyContent)
+      .returnType<Align>()
+      .with("flex-start", () => "left")
+      .with("flex-end", () => "right")
+      .otherwise(identity)}
+  />
+);
+
+// Cell + ActionCell;
+// If children is a string, add textAlign with align
+export const Cell = ({ align = "left", children }: { align?: Align; children: ReactNode }) => (
+  <View
+    style={{
+      flexDirection: "row",
+      flexGrow: 1,
+      flexShrink: 1,
+      paddingHorizontal: spacings[16],
+    }}
+  >
+    <View
+      style={[
+        {
+          flexShrink: 1,
+          flexDirection: "row",
+          alignItems: "center",
+        },
+        {
+          marginLeft: align === "right" || align === "center" ? "auto" : undefined,
+          marginRight: align === "left" || align === "center" ? "auto" : undefined,
+        },
+      ]}
+    >
+      {children}
+    </View>
+  </View>
+);
+
+// TODO: Deprecate it (it's not visible anymore, as `isHovered` does not work)
 export const ColorPatchCell = ({
   isHovered,
   alternativeText,
@@ -191,6 +277,7 @@ export const ColorPatchCell = ({
   ) : null;
 };
 
+// TODO: Merge this inside TextCell
 export const SimpleTitleCell = ({
   isHighlighted = false,
   text,
@@ -213,6 +300,7 @@ export const SimpleTitleCell = ({
   </View>
 );
 
+// TODO: Rename this TextCell
 export const SimpleRegularTextCell = ({
   variant = "regular",
   text,
@@ -233,6 +321,7 @@ export const SimpleRegularTextCell = ({
   );
 };
 
+// TODO: Rename this CopyableTextCell
 export const CopyableRegularTextCell = ({
   variant = "regular",
   text,
@@ -295,7 +384,7 @@ export const CopyableRegularTextCell = ({
   );
 };
 
-// TODO: handle `+` sign properly
+// TODO: handle `+` sign properly + reuse Cell
 export const BalanceCell = ({
   value,
   currency,
@@ -353,6 +442,7 @@ export const BalanceCell = ({
   );
 };
 
+// TODO: Reuse Cell
 export const LinkCell = ({
   children,
   external = false,
@@ -408,18 +498,32 @@ export const LinkCell = ({
   );
 };
 
+/**
+ * @deprecated Use <Cell align="left" /> instead
+ */
 export const StartAlignedCell = ({ children }: { children: ReactNode }) => {
   return <View style={styles.cell}>{children}</View>;
 };
 
+/**
+ * @deprecated Use <Cell align="center" /> instead
+ */
 export const CenteredCell = ({ children }: { children: ReactNode }) => {
   return <View style={[styles.cell, styles.centeredCell]}>{children}</View>;
 };
 
+/**
+ * @deprecated Use <Cell align="right" /> instead
+ */
 export const EndAlignedCell = ({ children }: { children: ReactNode }) => {
   return <View style={[styles.cell, styles.endAlignedCell]}>{children}</View>;
 };
 
+// TODO: Rename this ActionCell
+
+/**
+ * @deprecated Use <ActionCell /> instead
+ */
 export const CellAction = ({ children }: { children: ReactNode }) => {
   return <View style={styles.cellAction}>{children}</View>;
 };
