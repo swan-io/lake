@@ -14,11 +14,115 @@ import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 
-const styles = StyleSheet.create({});
+/* eslint-disable react-native/no-unused-styles */
+const directionStyles = StyleSheet.create({
+  column: {
+    flexShrink: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  columnReverse: {
+    flexShrink: 1,
+    flexDirection: "column-reverse",
+    justifyContent: "center",
+  },
+  row: {
+    flexShrink: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rowReverse: {
+    flexShrink: 1,
+    flexDirection: "row-reverse",
+    alignItems: "center",
+  },
+});
+/* eslint-enable react-native/no-unused-styles */
+
+const styles = StyleSheet.create({
+  cell: {
+    flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 1,
+    paddingHorizontal: spacings[16],
+  },
+  noCursor: {
+    cursor: "text",
+  },
+  marginLeftAuto: {
+    marginLeft: "auto",
+  },
+  marginRightAuto: {
+    marginRight: "auto",
+  },
+  sortIcon: {
+    transitionProperty: "transform",
+    transitionDuration: "300ms",
+    transitionTimingFunction: "ease-in-out",
+  },
+  rotated: {
+    transform: "rotate(-180deg)",
+  },
+  headerUnderline: {
+    backgroundColor: colors.gray[900],
+    borderBottomColor: colors.current[500],
+    bottom: -10,
+    height: 2,
+    position: "absolute",
+    width: "100%",
+  },
+  headerUnderlineActive: {
+    backgroundColor: colors.current[500],
+  },
+  buttonUnderline: {
+    boxShadow: "inset 0 -2px currentColor",
+  },
+  copyButton: {
+    justifyContent: "center",
+    alignSelf: "stretch",
+    marginHorizontal: negativeSpacings[8],
+  },
+  copyButtonTooltip: {
+    justifyContent: "center",
+    height: "100%",
+    paddingHorizontal: spacings[8],
+  },
+  linkButton: {
+    justifyContent: "center",
+    alignSelf: "stretch",
+    marginHorizontal: negativeSpacings[8],
+    paddingHorizontal: spacings[8],
+  },
+  actionCell: {
+    paddingVertical: spacings[16],
+    paddingHorizontal: spacings[8],
+  },
+});
 
 type Align = "left" | "center" | "right";
 type SortDirection = "Desc" | "Asc";
 type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
+
+type CellProps = {
+  children: ReactNode;
+  align?: Align;
+  direction?: keyof typeof directionStyles;
+  style?: StyleProp<ViewStyle>;
+};
+
+export const Cell = ({ children, align = "left", direction = "row", style }: CellProps) => (
+  <View style={[styles.cell, style]}>
+    <View
+      style={[
+        directionStyles[direction],
+        (align === "right" || align === "center") && styles.marginLeftAuto,
+        (align === "left" || align === "center") && styles.marginRightAuto,
+      ]}
+    >
+      {children}
+    </View>
+  </View>
+);
 
 type HeaderCellProps = {
   align?: Align;
@@ -35,23 +139,12 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
     <Pressable
       role="columnheader"
       disabled={disabled}
-      style={[
-        {
-          flexDirection: "row",
-          flexGrow: 1,
-          flexShrink: 1,
-          paddingHorizontal: spacings[16],
-        },
-        disabled && {
-          cursor: "text",
-        },
-      ]}
+      style={[styles.cell, disabled && styles.noCursor]}
       onPress={() => {
         onPress?.(
           match(sort)
             .returnType<SortDirection>()
             .with("Desc", () => "Asc")
-            .with("Asc", () => "Desc")
             .otherwise(() => "Desc"),
         );
       }}
@@ -59,15 +152,9 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
       {({ hovered }) => (
         <View
           style={[
-            {
-              flexShrink: 1,
-              flexDirection: "row",
-              alignItems: "center",
-            },
-            {
-              marginLeft: align === "right" || align === "center" ? "auto" : undefined,
-              marginRight: align === "left" || align === "center" ? "auto" : undefined,
-            },
+            directionStyles["row"],
+            (align === "right" || align === "center") && styles.marginLeftAuto,
+            (align === "left" || align === "center") && styles.marginRightAuto,
           ]}
         >
           <LakeText
@@ -87,81 +174,19 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
                 size={15}
                 color={sortActive ? colors.current[500] : colors.gray[500]}
                 name={sortActive ? "arrow-down-filled" : "chevron-up-down-regular"}
-                style={[
-                  {
-                    transitionProperty: "transform",
-                    transitionDuration: "300ms",
-                    transitionTimingFunction: "ease-in-out",
-                  },
-                  sort === "Asc" && {
-                    transform: "rotate(-180deg)",
-                  },
-                ]}
+                style={[styles.sortIcon, sort === "Asc" && styles.rotated]}
               />
             </>
           )}
 
           {(hovered || sortActive) && (
-            <View
-              style={[
-                {
-                  position: "absolute",
-                  width: "100%",
-                  height: 2,
-                  bottom: -10,
-                  backgroundColor: colors.gray[900],
-                  borderBottomColor: colors.current[500],
-                },
-                sortActive && {
-                  backgroundColor: colors.current[500],
-                },
-              ]}
-            />
+            <View style={[styles.headerUnderline, sortActive && styles.headerUnderlineActive]} />
           )}
         </View>
       )}
     </Pressable>
   );
 };
-
-type CellProps = {
-  children: ReactNode;
-  align?: Align;
-  direction?: ViewStyle["flexDirection"];
-  style?: StyleProp<ViewStyle>;
-};
-
-export const Cell = ({ children, align = "left", direction = "row", style }: CellProps) => (
-  <View
-    style={[
-      {
-        flexDirection: "row",
-        flexGrow: 1,
-        flexShrink: 1,
-        paddingHorizontal: spacings[16],
-      },
-      style,
-    ]}
-  >
-    <View
-      style={[
-        {
-          flexShrink: 1,
-          flexDirection: direction,
-        },
-        direction === "row" || direction === "row-reverse"
-          ? { alignItems: "center" }
-          : { justifyContent: "center" },
-        {
-          marginLeft: align === "right" || align === "center" ? "auto" : undefined,
-          marginRight: align === "left" || align === "center" ? "auto" : undefined,
-        },
-      ]}
-    >
-      {children}
-    </View>
-  </View>
-);
 
 type TextCellProps = {
   align?: Align;
@@ -220,16 +245,7 @@ export const CopyableTextCell = ({
         aria-label={copyWording}
         role="button"
         onPress={onPress}
-        style={({ hovered }) => [
-          {
-            alignSelf: "stretch",
-            justifyContent: "center",
-            marginHorizontal: negativeSpacings[8],
-          },
-          hovered && {
-            boxShadow: "inset 0 -2px currentColor",
-          },
-        ]}
+        style={({ hovered }) => [styles.copyButton, hovered && styles.buttonUnderline]}
       >
         {({ hovered }) => (
           <LakeTooltip
@@ -237,11 +253,7 @@ export const CopyableTextCell = ({
             onHide={() => setVisibleState("copy")}
             placement="center"
             togglableOnFocus={true}
-            containerStyle={{
-              height: "100%",
-              justifyContent: "center",
-              paddingHorizontal: spacings[8],
-            }}
+            containerStyle={styles.copyButtonTooltip}
           >
             <Icon name={hovered ? "copy-filled" : "copy-regular"} color="currentColor" size={14} />
           </LakeTooltip>
@@ -320,20 +332,9 @@ export const LinkCell = ({
   tooltip,
   variant = "medium",
 }: LinkCellProps) => (
-  <Cell direction={buttonPosition === "end" ? "row-reverse" : "row"}>
+  <Cell direction={buttonPosition === "end" ? "rowReverse" : "row"}>
     <Pressable
-      style={({ hovered }) => [
-        {
-          alignSelf: "stretch",
-          justifyContent: "center",
-          marginHorizontal: negativeSpacings[8],
-          paddingHorizontal: spacings[8],
-        },
-
-        hovered && {
-          boxShadow: "inset 0 -2px currentColor",
-        },
-      ]}
+      style={({ hovered }) => [styles.linkButton, hovered && styles.buttonUnderline]}
       onPress={event => {
         event.preventDefault();
         onPress();
@@ -455,16 +456,7 @@ export const EndAlignedCell = (props: Except<CellProps, "align">) => (
 );
 
 export const ActionCell = ({ style, ...props }: CellProps) => (
-  <Cell
-    {...props}
-    style={[
-      style,
-      {
-        paddingVertical: spacings[16],
-        paddingHorizontal: spacings[8],
-      },
-    ]}
-  />
+  <Cell {...props} style={[styles.actionCell, style]} />
 );
 
 /**
