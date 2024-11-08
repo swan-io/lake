@@ -381,41 +381,36 @@ export const CopyableTextCell = ({
 
   return (
     <Cell>
-      <LakeTooltip
-        placement="right"
-        onHide={() => setVisibleState("copy")}
-        togglableOnFocus={true}
-        content={visibleState === "copy" ? copyWording : copiedWording}
-        containerStyle={{
-          flexDirection: "row",
-          alignSelf: "stretch",
-          alignItems: "stretch",
-          justifyContent: "center",
-        }}
+      <Pressable
+        role="button"
+        aria-label={copyWording}
+        onPress={onPress}
+        style={({ hovered }) => [
+          {
+            alignSelf: "stretch",
+            justifyContent: "center",
+          },
+          hovered && {
+            boxShadow: "inset 0 -2px currentColor",
+          },
+        ]}
       >
-        <Pressable
-          role="button"
-          aria-label={copyWording}
-          onPress={onPress}
-          style={({ hovered }) => [
-            {
-              alignSelf: "stretch",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: spacings[4],
-            },
-            hovered && {
-              boxShadow: "inset 0 -2px currentColor",
-            },
-          ]}
-        >
-          {({ hovered }) => (
+        {({ hovered }) => (
+          <LakeTooltip
+            content={visibleState === "copy" ? copyWording : copiedWording}
+            onHide={() => setVisibleState("copy")}
+            placement="center"
+            togglableOnFocus={true}
+            containerStyle={{
+              paddingVertical: spacings[8],
+            }}
+          >
             <Icon name={hovered ? "copy-filled" : "copy-regular"} color="currentColor" size={14} />
-          )}
-        </Pressable>
-      </LakeTooltip>
+          </LakeTooltip>
+        )}
+      </Pressable>
 
-      <Space width={4} />
+      <Space width={8} />
 
       <LakeText numberOfLines={1} color={colors.gray[900]} tooltip={tooltip} variant={variant}>
         {text}
