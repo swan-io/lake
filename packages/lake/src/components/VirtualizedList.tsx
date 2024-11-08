@@ -192,6 +192,9 @@ export type ColumnCellConfig<T, ExtraInfo> = {
   item: T;
   index: number;
   extraInfo: ExtraInfo;
+  /**
+   * @deprecated Always false in VirtualizedList
+   */
   isHovered: boolean;
 };
 

@@ -26,6 +26,8 @@ import {
   VirtualizedListPlaceholder,
 } from "./VirtualizedList";
 
+export type { LinkConfig } from "./VirtualizedList";
+
 export type ColumnConfig<T, ExtraInfo> = {
   id: string;
   width: number | "grow";
