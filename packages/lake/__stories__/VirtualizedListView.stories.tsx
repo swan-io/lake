@@ -133,9 +133,6 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               renderCell: () => (
                 <LinkCell onPress={() => {}} buttonPosition="start">
                   <Tag color="shakespear">Demo link</Tag>
-                  <Tag color="shakespear">Demo link</Tag>
-                  <Tag color="shakespear">Demo link</Tag>
-                  <Tag color="shakespear">Demo link</Tag>
                 </LinkCell>
               ),
             },
