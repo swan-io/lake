@@ -2,7 +2,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
-import { SimpleHeaderCell, SimpleRegularTextCell, SimpleTitleCell } from "../src/components/Cells";
+import { HeaderCell, TextCell } from "../src/components/Cells";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
 import { ColumnConfig, PlainListView } from "../src/components/PlainListView";
@@ -104,14 +104,14 @@ export const Primary: StoryFn<typeof PlainListView> = () => {
         width: "grow" as const,
         title: "Name",
         renderTitle: ({ title, extraInfo, id }: ColumnTitleConfig<SortInfo>) => (
-          <SimpleHeaderCell
+          <HeaderCell
             text={title}
             sort={extraInfo.key === id ? extraInfo.order : undefined}
             onPress={() => setSort({ key: id, order: extraInfo.order === "Desc" ? "Asc" : "Desc" })}
           />
         ),
         renderCell: ({ item: { name } }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <SimpleTitleCell text={name} />
+          <TextCell variant="medium" text={name} />
         ),
       },
     ];
@@ -685,52 +685,50 @@ export const MultiColumn: StoryFn<typeof PlainListView> = () => {
       id: "id",
       width: "grow",
       title: "ID",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleTitleCell text={item.id} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell variant="medium" text={item.id} />,
     },
     {
       id: "fullName",
       width: 200,
       title: "Full name",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => (
-        <SimpleRegularTextCell text={`${item.firstName} ${item.lastName}`} />
-      ),
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={`${item.firstName} ${item.lastName}`} />,
     },
     {
       id: "email",
       width: 220,
       title: "Email",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleRegularTextCell text={item.email} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={item.email} />,
     },
     {
       id: "gender",
       width: 100,
       title: "Gender",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleRegularTextCell text={item.gender} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={item.gender} />,
     },
     {
       id: "age",
       width: 80,
       title: "Age",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleRegularTextCell text={item.age.toString()} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={item.age.toString()} />,
     },
     {
       id: "language",
       width: 150,
       title: "Language",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleRegularTextCell text={item.language} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={item.language} />,
     },
     {
       id: "iban",
       width: 180,
       title: "IBAN",
-      renderTitle: ({ title }) => <SimpleHeaderCell text={title} />,
-      renderCell: ({ item }) => <SimpleRegularTextCell text={item.iban} />,
+      renderTitle: ({ title }) => <HeaderCell text={title} />,
+      renderCell: ({ item }) => <TextCell text={item.iban} />,
     },
   ];
 

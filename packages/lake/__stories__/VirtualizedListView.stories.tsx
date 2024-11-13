@@ -2,13 +2,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Box } from "../src/components/Box";
-import {
-  EndAlignedCell,
-  LinkCell,
-  SimpleHeaderCell,
-  SimpleRegularTextCell,
-  SimpleTitleCell,
-} from "../src/components/Cells";
+import { Cell, HeaderCell, LinkCell, TextCell } from "../src/components/Cells";
 import { EmptyView } from "../src/components/EmptyView";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeLabelledCheckbox } from "../src/components/LakeCheckbox";
@@ -106,14 +100,14 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
         id: "name",
         title: "Name",
         renderTitle: ({ title, extraInfo, id }: ColumnTitleConfig<SortInfo>) => (
-          <SimpleHeaderCell
+          <HeaderCell
             text={title}
             sort={extraInfo.key === id ? extraInfo.order : undefined}
             onPress={() => setSort({ key: id, order: extraInfo.order === "Desc" ? "Asc" : "Desc" })}
           />
         ),
         renderCell: ({ item: { name } }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <SimpleTitleCell text={name} />
+          <TextCell variant="medium" text={name} />
         ),
       },
     ];
@@ -123,9 +117,9 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
         width: few ? 300 : 500,
         id: "event_id",
         title: "Event ID",
-        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <SimpleHeaderCell text={title} />,
+        renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
         renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
-          <SimpleRegularTextCell text={id} />
+          <TextCell text={id} />
         ),
       },
       ...(few
@@ -135,11 +129,12 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               width: 150,
               id: "link_before",
               title: "Link before",
-              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
-                <SimpleHeaderCell text={title} />
-              ),
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
               renderCell: () => (
                 <LinkCell onPress={() => {}} buttonPosition="start">
+                  <Tag color="shakespear">Demo link</Tag>
+                  <Tag color="shakespear">Demo link</Tag>
+                  <Tag color="shakespear">Demo link</Tag>
                   <Tag color="shakespear">Demo link</Tag>
                 </LinkCell>
               ),
@@ -148,20 +143,16 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               width: 500,
               id: "onboarding_id",
               title: "Onboarding ID",
-              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
-                <SimpleHeaderCell text={title} />
-              ),
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
               renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
-                <SimpleRegularTextCell text={id} />
+                <TextCell text={id} />
               ),
             },
             {
               width: 150,
               id: "link_after",
               title: "Link after",
-              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
-                <SimpleHeaderCell text={title} />
-              ),
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
               renderCell: () => (
                 <LinkCell onPress={() => {}} buttonPosition="end">
                   <Tag color="shakespear">Demo link</Tag>
@@ -172,11 +163,9 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               width: 500,
               id: "account_id",
               title: "Account ID",
-              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => (
-                <SimpleHeaderCell text={title} />
-              ),
+              renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
               renderCell: ({ item: { id } }: ColumnCellConfig<TestRow, SortInfo>) => (
-                <SimpleRegularTextCell text={id} />
+                <TextCell text={id} />
               ),
             },
           ]),
@@ -187,11 +176,11 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
         width: 72,
         id: "dot",
         title: "Settings",
-        renderTitle: () => <SimpleHeaderCell text={"End"} justifyContent="flex-end" />,
+        renderTitle: () => <HeaderCell text={"End"} align="right" />,
         renderCell: () => (
-          <EndAlignedCell>
+          <Cell align="right">
             <LakeButton mode="tertiary" icon="chevron-right-filled" ariaLabel="test" size="small" />
-          </EndAlignedCell>
+          </Cell>
         ),
       },
     ];

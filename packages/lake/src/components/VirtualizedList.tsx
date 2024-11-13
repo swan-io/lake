@@ -82,14 +82,12 @@ const styles = StyleSheet.create({
     transitionTimingFunction: "ease-in-out",
   },
   headerCell: {
-    display: "flex",
     flexDirection: "row",
     flexGrow: 1,
     alignItems: "center",
     boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   cell: {
-    display: "flex",
     flexDirection: "row",
     flexGrow: 1,
     alignItems: "stretch",
@@ -190,12 +188,12 @@ export type ColumnTitleConfig<ExtraInfo> = {
 export type ColumnCellConfig<T, ExtraInfo> = {
   columnId: string;
   item: T;
-  index: number;
-  extraInfo: ExtraInfo;
   /**
-   * @deprecated Always false in VirtualizedList
+   * isHovered is only set for PlainListView
    */
   isHovered: boolean;
+  index: number;
+  extraInfo: ExtraInfo;
 };
 
 export type ColumnConfig<T, ExtraInfo> = {
@@ -738,6 +736,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
     ) : (
       <View />
     );
+
   return cloneElement(rootElement, {
     ref: elementRef,
     style: [
