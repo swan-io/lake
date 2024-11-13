@@ -447,6 +447,7 @@ declare module "react-native" {
     backgroundSize?: string;
     boxShadow?: string;
     display?: DisplayValue;
+    maskImage?: string;
     position?: PositionValue;
     scrollBehavior?: "auto" | "smooth";
     scrollSnapAlign?: "start" | "end" | "center";
@@ -454,6 +455,8 @@ declare module "react-native" {
     scrollbarWidth?: "auto" | "thin" | "none";
     transform?: string;
     visibility?: VisibilityValue;
+
+    WebkitMaskImage?: string;
 
     bottom?: WebDimensionValue;
     flexBasis?: WebDimensionValue;

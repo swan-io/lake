@@ -3,7 +3,13 @@ import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "r
 import { match } from "ts-pattern";
 import { Except } from "type-fest";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
-import { ColorVariants, colors, negativeSpacings, spacings } from "../constants/design";
+import {
+  ColorVariants,
+  colors,
+  invariantColors,
+  negativeSpacings,
+  spacings,
+} from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
 import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
@@ -33,6 +39,9 @@ const justifyContentStyles = StyleSheet.create({
 });
 /* eslint-enable react-native/no-unused-styles */
 
+const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
+const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
+
 const styles = StyleSheet.create({
   cell: {
     flexDirection: "row",
@@ -44,6 +53,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     overflow: "hidden",
+  },
+  fadeOnLeft: {
+    maskImage: fadeOnLeftMask,
+    WebkitMaskImage: fadeOnLeftMask,
+  },
+  fadeOnRight: {
+    maskImage: fadeOnRightMask,
+    WebkitMaskImage: fadeOnRightMask,
   },
   noCursor: {
     cursor: "text",
@@ -93,6 +110,7 @@ const styles = StyleSheet.create({
 });
 
 type Align = "left" | "center" | "right";
+type FadeOn = "left" | "right";
 type SortDirection = "Desc" | "Asc";
 type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
 
@@ -100,6 +118,7 @@ type CellProps = {
   children: ReactNode;
   align?: Align;
   direction?: keyof typeof directionStyles;
+  fadeOn?: FadeOn;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
 };
@@ -108,6 +127,7 @@ export const Cell = ({
   children,
   align = "left",
   direction = "row",
+  fadeOn,
   style,
   contentContainerStyle,
 }: CellProps) => (
@@ -118,6 +138,8 @@ export const Cell = ({
         directionStyles[direction],
         alignItemsStyles[direction === "row" ? "center" : align],
         justifyContentStyles[direction === "row" ? align : "center"],
+        fadeOn === "left" && styles.fadeOnLeft,
+        fadeOn === "right" && styles.fadeOnRight,
         contentContainerStyle,
       ]}
     >
@@ -322,6 +344,7 @@ type LinkCellProps = {
   buttonPosition?: "start" | "end";
   children: ReactNode;
   external?: boolean;
+  fadeOn?: FadeOn;
   onPress: () => void;
   tooltip?: TooltipProp;
   variant?: TextVariant;
@@ -331,6 +354,7 @@ export const LinkCell = ({
   buttonPosition = "start",
   children,
   external = false,
+  fadeOn,
   onPress,
   tooltip,
   variant = "medium",
@@ -357,7 +381,7 @@ export const LinkCell = ({
     elements.reverse();
   }
 
-  return <Cell>{elements}</Cell>;
+  return <Cell fadeOn={fadeOn}>{elements}</Cell>;
 };
 
 /**
