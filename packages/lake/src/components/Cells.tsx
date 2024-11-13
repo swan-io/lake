@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     paddingHorizontal: spacings[16],
   },
-  innerCell: {
+  cellContentContainer: {
     flexGrow: 1,
     flexShrink: 1,
     overflow: "hidden",
@@ -114,7 +114,7 @@ export const Cell = ({
   <View style={[styles.cell, style]}>
     <View
       style={[
-        styles.innerCell,
+        styles.cellContentContainer,
         directionStyles[direction],
         alignItemsStyles[direction === "row" ? "center" : align],
         justifyContentStyles[direction === "row" ? align : "center"],
@@ -154,7 +154,7 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
       {({ hovered }) => (
         <View
           style={[
-            styles.innerCell,
+            styles.cellContentContainer,
             directionStyles["row"],
             alignItemsStyles["center"],
             justifyContentStyles[align],
