@@ -4,7 +4,7 @@
 
 ## Getting started
 
-First, install [pnpm 9.9.0](https://pnpm.io/installation#installing-a-specific-version).
+First, install [pnpm](https://pnpm.io/installation).
 
 ### Clone
 
