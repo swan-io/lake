@@ -1,10 +1,10 @@
 {
   "name": "@swan-io/shared-business",
   "version": "11.1.4",
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.13.0",
   "engines": {
     "node": ">=20.9.0",
-    "pnpm": "9.9.0"
+    "pnpm": "^9.13.0"
   },
   "files": [
     "LICENSE",

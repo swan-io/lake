@@ -3,7 +3,13 @@ import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "r
 import { match } from "ts-pattern";
 import { Except } from "type-fest";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
-import { ColorVariants, colors, negativeSpacings, spacings } from "../constants/design";
+import {
+  ColorVariants,
+  colors,
+  invariantColors,
+  negativeSpacings,
+  spacings,
+} from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
 import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
@@ -16,28 +22,25 @@ import { Space } from "./Space";
 
 /* eslint-disable react-native/no-unused-styles */
 const directionStyles = StyleSheet.create({
-  column: {
-    flexShrink: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  columnReverse: {
-    flexShrink: 1,
-    flexDirection: "column-reverse",
-    justifyContent: "center",
-  },
-  row: {
-    flexShrink: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  rowReverse: {
-    flexShrink: 1,
-    flexDirection: "row-reverse",
-    alignItems: "center",
-  },
+  column: { flexDirection: "column" },
+  row: { flexDirection: "row" },
+});
+
+const alignItemsStyles = StyleSheet.create({
+  left: { alignItems: "flex-start" },
+  center: { alignItems: "center" },
+  right: { alignItems: "flex-end" },
+});
+
+const justifyContentStyles = StyleSheet.create({
+  left: { justifyContent: "flex-start" },
+  center: { justifyContent: "center" },
+  right: { justifyContent: "flex-end" },
 });
 /* eslint-enable react-native/no-unused-styles */
+
+const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
+const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
 
 const styles = StyleSheet.create({
   cell: {
@@ -46,14 +49,21 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     paddingHorizontal: spacings[16],
   },
+  cellContentContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    overflow: "hidden",
+  },
+  fadeOnLeft: {
+    maskImage: fadeOnLeftMask,
+    WebkitMaskImage: fadeOnLeftMask,
+  },
+  fadeOnRight: {
+    maskImage: fadeOnRightMask,
+    WebkitMaskImage: fadeOnRightMask,
+  },
   noCursor: {
     cursor: "text",
-  },
-  marginLeftAuto: {
-    marginLeft: "auto",
-  },
-  marginRightAuto: {
-    marginRight: "auto",
   },
   sortIcon: {
     transitionProperty: "transform",
@@ -100,6 +110,7 @@ const styles = StyleSheet.create({
 });
 
 type Align = "left" | "center" | "right";
+type FadeOn = "left" | "right";
 type SortDirection = "Desc" | "Asc";
 type TooltipProp = Except<ComponentProps<typeof LakeTooltip>, "children">;
 
@@ -107,16 +118,29 @@ type CellProps = {
   children: ReactNode;
   align?: Align;
   direction?: keyof typeof directionStyles;
+  fadeOn?: FadeOn;
   style?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 };
 
-export const Cell = ({ children, align = "left", direction = "row", style }: CellProps) => (
+export const Cell = ({
+  children,
+  align = "left",
+  direction = "row",
+  fadeOn,
+  style,
+  contentContainerStyle,
+}: CellProps) => (
   <View style={[styles.cell, style]}>
     <View
       style={[
+        styles.cellContentContainer,
         directionStyles[direction],
-        (align === "right" || align === "center") && styles.marginLeftAuto,
-        (align === "left" || align === "center") && styles.marginRightAuto,
+        alignItemsStyles[direction === "row" ? "center" : align],
+        justifyContentStyles[direction === "row" ? align : "center"],
+        fadeOn === "left" && styles.fadeOnLeft,
+        fadeOn === "right" && styles.fadeOnRight,
+        contentContainerStyle,
       ]}
     >
       {children}
@@ -152,9 +176,10 @@ export const HeaderCell = ({ align = "left", sort, text, onPress }: HeaderCellPr
       {({ hovered }) => (
         <View
           style={[
+            styles.cellContentContainer,
             directionStyles["row"],
-            (align === "right" || align === "center") && styles.marginLeftAuto,
-            (align === "left" || align === "center") && styles.marginRightAuto,
+            alignItemsStyles["center"],
+            justifyContentStyles[align],
           ]}
         >
           <LakeText
@@ -319,6 +344,7 @@ type LinkCellProps = {
   buttonPosition?: "start" | "end";
   children: ReactNode;
   external?: boolean;
+  fadeOn?: FadeOn;
   onPress: () => void;
   tooltip?: TooltipProp;
   variant?: TextVariant;
@@ -328,11 +354,12 @@ export const LinkCell = ({
   buttonPosition = "start",
   children,
   external = false,
+  fadeOn,
   onPress,
   tooltip,
   variant = "medium",
-}: LinkCellProps) => (
-  <Cell direction={buttonPosition === "end" ? "rowReverse" : "row"}>
+}: LinkCellProps) => {
+  const elements = [
     <Pressable
       style={({ hovered }) => [styles.linkButton, hovered && styles.buttonUnderline]}
       onPress={event => {
@@ -341,15 +368,21 @@ export const LinkCell = ({
       }}
     >
       <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
-    </Pressable>
+    </Pressable>,
 
-    <Space width={8} />
+    <Space width={8} />,
 
     <LakeText numberOfLines={1} color={colors.gray[900]} variant={variant} tooltip={tooltip}>
       {children}
-    </LakeText>
-  </Cell>
-);
+    </LakeText>,
+  ];
+
+  if (buttonPosition === "end") {
+    elements.reverse();
+  }
+
+  return <Cell fadeOn={fadeOn}>{elements}</Cell>;
+};
 
 /**
  * @deprecated Avoid usage
