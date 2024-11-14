@@ -3,13 +3,7 @@ import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "r
 import { match } from "ts-pattern";
 import { Except } from "type-fest";
 import { visuallyHiddenStyle } from "../constants/commonStyles";
-import {
-  ColorVariants,
-  colors,
-  invariantColors,
-  negativeSpacings,
-  spacings,
-} from "../constants/design";
+import { ColorVariants, colors, invariantColors, spacings } from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
 import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
@@ -84,24 +78,30 @@ const styles = StyleSheet.create({
   headerUnderlineActive: {
     backgroundColor: colors.current[500],
   },
+  // eslint-disable-next-line react-native/no-color-literals
   buttonUnderline: {
-    boxShadow: "inset 0 -2px currentColor",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: spacings[8],
+    height: 2,
+    backgroundColor: "currentColor",
   },
-  copyButton: {
-    justifyContent: "center",
-    alignSelf: "stretch",
-    marginHorizontal: negativeSpacings[8],
+  buttonEndUnderline: {
+    right: 0,
+    left: spacings[8],
   },
-  copyButtonTooltip: {
+  fullHeight: {
+    height: "100%",
+  },
+  button: {
     justifyContent: "center",
     height: "100%",
-    paddingHorizontal: spacings[8],
+    paddingRight: spacings[8],
   },
-  linkButton: {
-    justifyContent: "center",
-    alignSelf: "stretch",
-    marginHorizontal: negativeSpacings[8],
-    paddingHorizontal: spacings[8],
+  buttonEnd: {
+    paddingRight: 0,
+    paddingLeft: spacings[8],
   },
   actionCell: {
     paddingVertical: spacings[16],
@@ -265,27 +265,28 @@ export const CopyableTextCell = ({
   );
 
   return (
-    <Cell>
-      <Pressable
-        aria-label={copyWording}
-        role="button"
-        onPress={onPress}
-        style={({ hovered }) => [styles.copyButton, hovered && styles.buttonUnderline]}
+    <Cell style={styles.fullHeight}>
+      <LakeTooltip
+        content={visibleState === "copy" ? copyWording : copiedWording}
+        onHide={() => setVisibleState("copy")}
+        placement="left"
+        togglableOnFocus={true}
+        containerStyle={styles.fullHeight}
       >
-        {({ hovered }) => (
-          <LakeTooltip
-            content={visibleState === "copy" ? copyWording : copiedWording}
-            onHide={() => setVisibleState("copy")}
-            placement="center"
-            togglableOnFocus={true}
-            containerStyle={styles.copyButtonTooltip}
-          >
-            <Icon name={hovered ? "copy-filled" : "copy-regular"} color="currentColor" size={14} />
-          </LakeTooltip>
-        )}
-      </Pressable>
+        <Pressable aria-label={copyWording} role="button" onPress={onPress} style={styles.button}>
+          {({ hovered }) => (
+            <>
+              <Icon
+                name={hovered ? "copy-filled" : "copy-regular"}
+                color="currentColor"
+                size={14}
+              />
 
-      <Space width={8} />
+              {hovered && <View role="none" style={styles.buttonUnderline} />}
+            </>
+          )}
+        </Pressable>
+      </LakeTooltip>
 
       <LakeText numberOfLines={1} color={colors.gray[900]} tooltip={tooltip} variant={variant}>
         {text}
@@ -359,25 +360,36 @@ export const LinkCell = ({
   tooltip,
   variant = "medium",
 }: LinkCellProps) => {
+  const atEnd = buttonPosition === "end";
+
   const elements = [
     <Pressable
-      style={({ hovered }) => [styles.linkButton, hovered && styles.buttonUnderline]}
+      style={[styles.button, atEnd && styles.buttonEnd]}
       onPress={event => {
         event.preventDefault();
         onPress();
       }}
     >
-      <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
-    </Pressable>,
+      {({ hovered }) => (
+        <>
+          <Icon size={14} name={external ? "open-regular" : "arrow-right-filled"} />
 
-    <Space width={8} />,
+          {hovered && (
+            <View
+              role="none"
+              style={[styles.buttonUnderline, atEnd && styles.buttonEndUnderline]}
+            />
+          )}
+        </>
+      )}
+    </Pressable>,
 
     <LakeText numberOfLines={1} color={colors.gray[900]} variant={variant} tooltip={tooltip}>
       {children}
     </LakeText>,
   ];
 
-  if (buttonPosition === "end") {
+  if (atEnd) {
     elements.reverse();
   }
 
