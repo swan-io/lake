@@ -247,7 +247,7 @@
   "supportingDocuments.purpose.GeneralAssemblyMinutes": "General meeting minutes",
   "supportingDocuments.purpose.GeneralAssemblyMinutes.description": "Meeting minutes are a formal written record of the discussions, decisions, and actions taken during an organization or company meeting. A list of the association's board must appear on the minutes. The minutes must be the latest submitted version.",
   "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity": "Identity document of your legal representative",
-  "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity.description": "Document proving your legal representative’s identity.\n\nAcceptable documents:\n- Passport\n- ID card (only applicable to citizens of member countries of the EEA zone)\n- Residence permit (only applicable to residents of member countries of the EEA zone)",
+  "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity.description": "Document proving your legal representative’s identity.\n\nAcceptable documents:\n- Passport\n- ID card (only applicable to citizens of member countries of the EEA zone)\n- Residence permit (only applicable to residents of member countries of the EEA zone)\n- For French capital deposits only, provide the EEA ID card",
   "supportingDocuments.purpose.NIFAccreditationCard": "NIF accreditation card",
   "supportingDocuments.purpose.NIFAccreditationCard.description": "Copy of your NIF accreditation card to provide your tax identification number.",
   "supportingDocuments.purpose.Other": "Other",
