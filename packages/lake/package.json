@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/lake",
-  "version": "11.1.6",
+  "version": "11.1.7",
   "packageManager": "pnpm@9.13.0",
   "engines": {
     "node": ">=20.9.0",
