@@ -312,7 +312,6 @@ export const MultiSelect = <Value,>({
         id={id}
         ref={inputRef}
         aria-haspopup="listbox"
-        role="button"
         aria-expanded={visible}
         disabled={disabled}
         onPress={open}
