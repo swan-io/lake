@@ -37,8 +37,12 @@ dayjs.extend(localizedFormat);
 const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt", "fi"] as const;
 type SupportedLanguage = (typeof supportedLanguages)[number];
 
-type TranslationParams = Record<string, string | number>;
 export type TranslationKey = keyof typeof translationEN;
+
+type TranslationParams = Record<
+  string,
+  string | number | ReactElement | ((children: ReactNode) => ReactNode)
+>;
 
 type Locale = {
   language: SupportedLanguage;
@@ -138,28 +142,27 @@ const intl = createIntl(
   createIntlCache(),
 );
 
-export const t = (key: TranslationKey, params?: TranslationParams) =>
-  intl.formatMessage({ id: key, defaultMessage: translationEN[key] }, params).toString();
+export const t = (key: TranslationKey, params?: TranslationParams) => {
+  const result = intl.formatMessage(
+    { id: key, defaultMessage: translationEN[key] },
+    params as Record<string, string>,
+  ) as string | (string | ReactElement)[];
+
+  return typeof result === "string"
+    ? result
+    : result.map((item, index) =>
+        isValidElement(item) ? cloneElement(item, { key: `t-${key}-${index}` }) : item,
+      );
+};
 
 export const formatCurrencyIso = (value: number, currency: string) =>
   `${intl.formatNumber(value, { style: "decimal", minimumFractionDigits: 2 })} ${currency}`;
 
-export const formatNestedMessage = (
-  key: TranslationKey,
-  params: Record<string, string | number | ReactElement | ((children: ReactNode) => ReactNode)>,
-) => {
-  const result = intl.formatMessage(
-    { id: key, defaultMessage: translationEN[key] },
-    // @ts-expect-error
-    params,
-  );
-
-  const resultArray: (string | ReactElement)[] = typeof result === "string" ? [result] : result;
-
-  return resultArray.map((item, index) =>
-    isValidElement(item) ? cloneElement(item, { key: `t-${key}-${index}` }) : item,
-  );
-};
+/**
+ * @deprecated Use `t` instead
+ */
+export const formatNestedMessage = (key: TranslationKey, params: TranslationParams) =>
+  t(key, params);
 
 export const rifmDateProps: RifmProps = getRifmProps({
   accept: "numeric",

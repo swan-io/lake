@@ -37,8 +37,8 @@ export const Default = () => {
   return (
     <StoryBlock title="Flag">
       <Box direction="row" style={styles.container}>
-        {items.map(country => (
-          <Box alignItems="center" style={styles.flag}>
+        {items.map((country, index) => (
+          <Box key={`${country.code}-${index}`} alignItems="center" style={styles.flag}>
             <Flag code={country.code} width={18} />
             <Space height={4} />
 
