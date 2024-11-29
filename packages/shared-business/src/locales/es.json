@@ -284,7 +284,7 @@
   "supportingDocuments.purpose.GeneralAssemblyMinutes": "Actas de la Junta General",
   "supportingDocuments.purpose.GeneralAssemblyMinutes.description": "Las actas de una reunión son un registro escrito formal de las discusiones, decisiones y acciones tomadas durante una reunión de una organización o empresa. En ella debe incluirse una lista de los miembros de la junta directiva de la asociación. Las actas deben ser la última versión presentada.",
   "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity": "Documento de identidad de tu representante legal",
-  "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity.description": "Documento que pruebe la identidad de tu representante legal.\n\nDocumentos aceptables:\n- Pasaporte\n- DNI/Tarjeta de identidad (solo aplicable a ciudadanos de países miembros del Espacio Económico Europeo)\n- Permiso de residencia (solo aplicable a ciudadanos de países miembros del Espacio Económico Europeo)",
+  "supportingDocuments.purpose.LegalRepresentativeProofOfIdentity.description": "Documento que pruebe la identidad de tu representante legal.\n\nDocumentos aceptables:\n- Pasaporte\n- DNI/Tarjeta de identidad (solo aplicable a ciudadanos de países miembros del Espacio Económico Europeo)\n- Permiso de residencia (solo aplicable a ciudadanos de países miembros del Espacio Económico Europeo)\n- Solo para depósitos de capital francés, proporciona el DNI",
   "supportingDocuments.purpose.NIFAccreditationCard": "Tarjeta de acreditación del NIF",
   "supportingDocuments.purpose.NIFAccreditationCard.description": "Copia de tu tarjeta de acreditación del NIF para proporcionar tu número de identificación fiscal.",
   "supportingDocuments.purpose.Other": "Otro",
