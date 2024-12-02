@@ -19,7 +19,7 @@ import { useHover } from "../hooks/useHover";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
 
-const HORIZONTAL_ROW_PADDING = 8;
+const HORIZONTAL_ROW_PADDING = 16;
 
 const styles = StyleSheet.create({
   container: {
