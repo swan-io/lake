@@ -33,15 +33,15 @@ const justifyContentStyles = StyleSheet.create({
 });
 /* eslint-enable react-native/no-unused-styles */
 
-const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[12]})`;
-const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[12]})`;
+const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
+const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
 
 const styles = StyleSheet.create({
   cell: {
     flexDirection: "row",
     flexGrow: 1,
     flexShrink: 1,
-    paddingHorizontal: spacings[12],
+    paddingHorizontal: spacings[8],
   },
   cellContentContainer: {
     flexGrow: 1,

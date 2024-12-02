@@ -264,12 +264,15 @@ export const VirtualizedList = <T, ExtraInfo>({
   const stickedToStartFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
     .map(() => HORIZONTAL_ROW_PADDING)
     .getOr(0);
+
   const centerFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
     .map(() => 0)
     .getOr(HORIZONTAL_ROW_PADDING);
+
   const centerLastCellLeftPadding = Option.fromNullable(stickedToEndColumns)
     .map(() => 0)
     .getOr(HORIZONTAL_ROW_PADDING);
+
   const stickedToEndLastCellRightPadding = Option.fromNullable(stickedToEndColumns)
     .map(() => HORIZONTAL_ROW_PADDING)
     .getOr(0);
