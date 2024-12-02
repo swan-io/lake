@@ -188,9 +188,6 @@ export type ColumnTitleConfig<ExtraInfo> = {
 export type ColumnCellConfig<T, ExtraInfo> = {
   columnId: string;
   item: T;
-  /**
-   * isHovered is only set for PlainListView
-   */
   isHovered: boolean;
   index: number;
   extraInfo: ExtraInfo;
@@ -786,7 +783,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                       item,
                       index: absoluteIndex,
                       extraInfo,
-                      isHovered: false,
+                      isHovered,
                     })}
                   </View>
                 );
@@ -827,7 +824,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                   item,
                   index: absoluteIndex,
                   extraInfo,
-                  isHovered: false,
+                  isHovered,
                 })}
               </View>
             );
@@ -866,7 +863,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                       item,
                       index: absoluteIndex,
                       extraInfo,
-                      isHovered: false,
+                      isHovered,
                     })}
                   </View>
                 );
