@@ -48,7 +48,7 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
 
   useEffect(() => {
     const listener = (event: StorageEvent) => {
-      if (event.key == null || event.key === key) {
+      if (event.storageArea === localStorage && (event.key === key || event.key === null)) {
         const rawValue = getItem(key);
         updateRawValue(rawValue);
       }
