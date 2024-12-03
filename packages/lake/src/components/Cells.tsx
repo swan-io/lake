@@ -391,13 +391,13 @@ export const LinkCell = ({
     <Cell fadeOn={fadeOn}>
       {atEnd ? (
         <>
-          {button}
           {text}
+          {button}
         </>
       ) : (
         <>
-          {text}
           {button}
+          {text}
         </>
       )}
     </Cell>
