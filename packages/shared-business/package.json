@@ -1,6 +1,6 @@
 {
   "name": "@swan-io/shared-business",
-  "version": "11.1.8",
+  "version": "11.1.9",
   "packageManager": "pnpm@9.13.0",
   "engines": {
     "node": ">=20.9.0",
