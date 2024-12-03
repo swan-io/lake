@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "stretch",
     overflow: "hidden",
-    paddingHorizontal: spacings[8],
+    paddingHorizontal: spacings[16],
   },
   segmentLarge: {
-    paddingHorizontal: spacings[24],
+    paddingHorizontal: spacings[32],
   },
   row: {
     boxShadow: `inset 0 -1px ${colors.gray[100]}`,

@@ -19,7 +19,7 @@ import { useHover } from "../hooks/useHover";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
 
-const HORIZONTAL_ROW_PADDING = 8;
+const HORIZONTAL_ROW_PADDING = 16;
 
 const styles = StyleSheet.create({
   container: {
@@ -264,12 +264,15 @@ export const VirtualizedList = <T, ExtraInfo>({
   const stickedToStartFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
     .map(() => HORIZONTAL_ROW_PADDING)
     .getOr(0);
+
   const centerFirstCellLeftPadding = Option.fromNullable(stickedToStartColumns)
     .map(() => 0)
     .getOr(HORIZONTAL_ROW_PADDING);
+
   const centerLastCellLeftPadding = Option.fromNullable(stickedToEndColumns)
     .map(() => 0)
     .getOr(HORIZONTAL_ROW_PADDING);
+
   const stickedToEndLastCellRightPadding = Option.fromNullable(stickedToEndColumns)
     .map(() => HORIZONTAL_ROW_PADDING)
     .getOr(0);

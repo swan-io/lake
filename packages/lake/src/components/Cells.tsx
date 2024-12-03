@@ -33,15 +33,15 @@ const justifyContentStyles = StyleSheet.create({
 });
 /* eslint-enable react-native/no-unused-styles */
 
-const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
-const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[16]})`;
+const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
+const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
 
 const styles = StyleSheet.create({
   cell: {
     flexDirection: "row",
     flexGrow: 1,
     flexShrink: 1,
-    paddingHorizontal: spacings[16],
+    paddingHorizontal: spacings[8],
   },
   cellContentContainer: {
     flexGrow: 1,
@@ -102,10 +102,6 @@ const styles = StyleSheet.create({
   buttonEnd: {
     paddingRight: 0,
     paddingLeft: spacings[8],
-  },
-  actionCell: {
-    paddingVertical: spacings[16],
-    paddingHorizontal: spacings[8],
   },
 });
 
@@ -500,9 +496,10 @@ export const EndAlignedCell = (props: Except<CellProps, "align">) => (
   <Cell align="right" {...props} />
 );
 
-export const ActionCell = ({ style, ...props }: CellProps) => (
-  <Cell {...props} style={[styles.actionCell, style]} />
-);
+/**
+ * @deprecated Use `<Cell align="right" />` instead
+ */
+export const ActionCell = (props: CellProps) => <Cell align="right" {...props} />;
 
 /**
  * @deprecated Use <ActionCell /> instead
