@@ -358,7 +358,7 @@ export const LinkCell = ({
 }: LinkCellProps) => {
   const atEnd = buttonPosition === "end";
 
-  const elements = [
+  const button = (
     <Pressable
       style={[styles.button, atEnd && styles.buttonEnd]}
       onPress={event => {
@@ -378,18 +378,30 @@ export const LinkCell = ({
           )}
         </>
       )}
-    </Pressable>,
+    </Pressable>
+  );
 
+  const text = (
     <LakeText numberOfLines={1} color={colors.gray[900]} variant={variant} tooltip={tooltip}>
       {children}
-    </LakeText>,
-  ];
+    </LakeText>
+  );
 
-  if (atEnd) {
-    elements.reverse();
-  }
-
-  return <Cell fadeOn={fadeOn}>{elements}</Cell>;
+  return (
+    <Cell fadeOn={fadeOn}>
+      {atEnd ? (
+        <>
+          {text}
+          {button}
+        </>
+      ) : (
+        <>
+          {button}
+          {text}
+        </>
+      )}
+    </Cell>
+  );
 };
 
 /**
