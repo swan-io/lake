@@ -95,7 +95,7 @@ export const useContextualLayer = ({
           };
 
     const horizontalPosition = match(inferedPlacement)
-      .with("left", () => ({ left: rect.left - 12 }))
+      .with("left", () => ({ left: rect.left }))
       .with("right", () => ({ right: window.innerWidth - rect.right }))
       .with("center", () => ({ left: rect.left + width / 2, transform: "translateX(-50%)" }))
       .exhaustive();
