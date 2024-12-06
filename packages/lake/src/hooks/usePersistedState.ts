@@ -40,18 +40,16 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
       if (typeof value !== "function") {
         const rawValue = value != null ? stringifyValue(value) : null;
         setItem(key, rawValue);
-        return setRawValue(rawValue);
+        setRawValue(rawValue);
+      } else {
+        setRawValue(prevState => {
+          const prevValue = parseRawValue(prevState, stableDefaultValue);
+          const nextValue = (value as (prevState: T) => T)(prevValue);
+          const rawValue = stringifyValue(nextValue);
+          setItem(key, rawValue);
+          return rawValue;
+        });
       }
-
-      setRawValue(prevState => {
-        const nextValue = (value as (prevState: T) => T)(
-          parseRawValue(prevState, stableDefaultValue),
-        );
-
-        const rawValue = stringifyValue(nextValue);
-        setItem(key, rawValue);
-        return rawValue;
-      });
     },
     [key, stableDefaultValue],
   );
