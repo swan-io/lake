@@ -1,8 +1,7 @@
 import { Option, Result } from "@swan-io/boxed";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const getItem = (key: string): string | null =>
-  Result.fromExecution(() => localStorage.getItem(key)).getOr(null);
+const getItem = (key: string) => Result.fromExecution(() => localStorage.getItem(key)).getOr(null);
 
 const setItem = (key: string, value: string | null) => {
   try {
@@ -59,8 +58,7 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
   useEffect(() => {
     const listener = (event: StorageEvent) => {
       if (event.storageArea === localStorage && (event.key === key || event.key === null)) {
-        const rawValue = getItem(key);
-        setRawValue(rawValue);
+        setRawValue(getItem(key));
       }
     };
 
