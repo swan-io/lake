@@ -38,25 +38,20 @@ export const usePersistedState = <T>(key: string, defaultValue: T) => {
 
   const setPersistedState = useCallback(
     (value: T | null | ((prevState: T) => T)): void => {
-      if (value == null) {
-        setItem(key, null);
-        return setRawValue(null);
-      }
+      if (typeof value === "function") {
+        setRawValue(prevState => {
+          const prevValue = parseRawValue(prevState, stableDefaultValue);
+          const nextValue = (value as (prevState: T) => T)(prevValue);
+          const rawValue = stringifyValue(nextValue);
 
-      if (typeof value !== "function") {
-        const rawValue = stringifyValue(value);
+          setItem(key, rawValue);
+          return rawValue;
+        });
+      } else {
+        const rawValue = value != null ? stringifyValue(value) : null;
         setItem(key, rawValue);
-        return setRawValue(rawValue);
+        setRawValue(rawValue);
       }
-
-      setRawValue(prevState => {
-        const prevValue = parseRawValue(prevState, stableDefaultValue);
-        const nextValue = (value as (prevState: T) => T)(prevValue);
-        const rawValue = stringifyValue(nextValue);
-
-        setItem(key, rawValue);
-        return rawValue;
-      });
     },
     [key, stableDefaultValue],
   );
