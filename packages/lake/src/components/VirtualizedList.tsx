@@ -87,12 +87,10 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     flexDirection: "row",
-    flexGrow: 0,
     alignItems: "center",
   },
   cell: {
     flexDirection: "row",
-    flexGrow: 0,
     alignItems: "stretch",
   },
   shadowsLayerContainer: {

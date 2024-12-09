@@ -115,6 +115,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
     const columns = [
       {
         width: few ? 300 : 500,
+        grow: few,
         id: "event_id",
         title: "Event ID",
         renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
