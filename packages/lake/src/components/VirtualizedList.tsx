@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     height: 1,
     alignSelf: "stretch",
   },
+  grow: {
+    flexGrow: 1,
+  },
   contentContainer: {
     minWidth: "100%",
   },
@@ -45,6 +48,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   cellsContainer: {
+    boxShadow: `0 -1px ${colors.gray[100]}`,
     flexDirection: "row",
     transform: "translateZ(0)",
   },
@@ -83,15 +87,11 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     flexDirection: "row",
-    flexGrow: 1,
     alignItems: "center",
-    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   cell: {
     flexDirection: "row",
-    flexGrow: 1,
     alignItems: "stretch",
-    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   shadowsLayerContainer: {
     position: "absolute",
@@ -195,6 +195,7 @@ export type ColumnCellConfig<T, ExtraInfo> = {
 
 export type ColumnConfig<T, ExtraInfo> = {
   id: string;
+  grow?: boolean;
   width: number;
   title: string;
   renderTitle: (props: ColumnTitleConfig<ExtraInfo>) => ReactNode;
@@ -471,7 +472,7 @@ export const VirtualizedList = <T, ExtraInfo>({
             { width: centerColumnsWidth, backgroundColor, height: headerHeight },
           ]}
         >
-          {columns.map(({ id, width, title, renderTitle }, index) => {
+          {columns.map(({ id, grow = false, width, title, renderTitle }, index) => {
             const columnId = `${viewId}_${id}`;
             const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
             const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
@@ -480,6 +481,7 @@ export const VirtualizedList = <T, ExtraInfo>({
               <View
                 style={[
                   styles.headerCell,
+                  grow && styles.grow,
                   { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
                 ]}
                 id={columnId}
@@ -808,7 +810,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
             },
           ]}
         >
-          {columns.map(({ id, width, renderCell }, index) => {
+          {columns.map(({ id, grow = false, width, renderCell }, index) => {
             const columnId = `${viewId}_${id}`;
             const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
             const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
@@ -817,6 +819,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
               <View
                 style={[
                   styles.cell,
+                  grow && styles.grow,
                   { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
                 ]}
                 key={columnId}
