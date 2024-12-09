@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   cellsContainer: {
+    boxShadow: `0 -1px ${colors.gray[100]}`,
     flexDirection: "row",
     transform: "translateZ(0)",
   },
@@ -83,15 +84,13 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     flexDirection: "row",
-    flexGrow: 1,
+    flexGrow: 0,
     alignItems: "center",
-    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   cell: {
     flexDirection: "row",
-    flexGrow: 1,
+    flexGrow: 0,
     alignItems: "stretch",
-    boxShadow: `0 -1px ${colors.gray[100]}`,
   },
   shadowsLayerContainer: {
     position: "absolute",
