@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     height: 1,
     alignSelf: "stretch",
   },
+  grow: {
+    flexGrow: 1,
+  },
   contentContainer: {
     minWidth: "100%",
   },
@@ -473,12 +476,14 @@ export const VirtualizedList = <T, ExtraInfo>({
           {columns.map(({ id, width, title, renderTitle }, index) => {
             const columnId = `${viewId}_${id}`;
             const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
-            const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
+            const last = index === columns.length - 1;
+            const paddingRight = last ? centerLastCellLeftPadding : 0;
 
             return (
               <View
                 style={[
                   styles.headerCell,
+                  last && styles.grow,
                   { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
                 ]}
                 id={columnId}
@@ -810,12 +815,14 @@ const RawVirtualizedRow = <T, ExtraInfo>({
           {columns.map(({ id, width, renderCell }, index) => {
             const columnId = `${viewId}_${id}`;
             const paddingLeft = index === 0 ? centerFirstCellLeftPadding : 0;
-            const paddingRight = index === columns.length - 1 ? centerLastCellLeftPadding : 0;
+            const last = index === columns.length - 1;
+            const paddingRight = last ? centerLastCellLeftPadding : 0;
 
             return (
               <View
                 style={[
                   styles.cell,
+                  last && styles.grow,
                   { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
                 ]}
                 key={columnId}
