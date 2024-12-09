@@ -306,7 +306,7 @@ type BalanceCellProps = {
 
 // TODO: handle `+` sign properly
 export const BalanceCell = ({
-  textAlign = "right",
+  textAlign = "left",
   align = textAlign,
   currency,
   formatCurrency,
