@@ -363,7 +363,7 @@ export const VirtualizedList = <T, ExtraInfo>({
       element
         .map(scrollView =>
           scrollView.scrollWidth === scrollView.clientWidth ||
-          scrollView.clientWidth - (stickedToEndColumnsWidth + stickedToStartColumnsWidth) < 400
+          scrollView.clientWidth - (stickedToEndColumnsWidth + stickedToStartColumnsWidth) < 300
             ? "NoScroll"
             : scrollView.scrollLeft <= 0
               ? "Start"
