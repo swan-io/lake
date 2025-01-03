@@ -262,7 +262,8 @@ export const FileTile = ({
                   .with("UnacceptableDocument", () =>
                     t("supportingDocuments.rejectionReason.UnacceptableDocument"),
                   )
-                  .otherwise(() => null)}
+                  .with("other", () => null)
+                  .otherwise(reasonCode => reasonCode)}
               </LakeText>
 
               <LakeText>{reason}</LakeText>

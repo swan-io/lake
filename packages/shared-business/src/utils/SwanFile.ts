@@ -6,24 +6,7 @@ export type SwanFileStatusInfo =
   | {
       status: "Refused";
       reason: string;
-      reasonCode?:
-        | "CompanyNameMismatch"
-        | "ExpiredDocument"
-        | "InvalidAddress"
-        | "InvalidDocument"
-        | "InvalidOrMissingData"
-        | "UnacceptableDocument"
-        | "ProviderColorIdDocumentRequired"
-        | "MissingSignature"
-        | "BadDocumentQuality"
-        | "FullDocumentRequired"
-        | "MissingDescription"
-        | "InvalidTransaction"
-        | "TransactionNameMismatch"
-        | "TransactionDateMismatch"
-        | "TransactionAmountMismatch"
-        | "IbanMismatch"
-        | "Other";
+      reasonCode?: string;
     };
 
 export type SwanFile = {
