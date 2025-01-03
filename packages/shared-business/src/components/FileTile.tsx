@@ -222,6 +222,9 @@ export const FileTile = ({
                   .with("CompanyNameMismatch", () =>
                     t("supportingDocuments.rejectionReason.CompanyNameMismatch"),
                   )
+                  .with("DeclaredAmountMismatch", () =>
+                    t("supportingDocuments.rejectionReason.DeclaredAmountMismatch"),
+                  )
                   .with("ExpiredDocument", () =>
                     t("supportingDocuments.rejectionReason.ExpiredDocument"),
                   )
@@ -241,11 +244,39 @@ export const FileTile = ({
                   .with("InvalidTransaction", () =>
                     t("supportingDocuments.rejectionReason.InvalidTransaction"),
                   )
+                  .with("HandwrittenOrCertifiedElectronicSignatureRequired", () =>
+                    t(
+                      "supportingDocuments.rejectionReason.HandwrittenOrCertifiedElectronicSignatureRequired",
+                    ),
+                  )
+                  .with("MissingAccommodationProviderId", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderId"),
+                  )
+                  .with("MissingAccommodationProviderIdLetter", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderIdLetter"),
+                  )
+                  .with("MissingAccommodationProviderLetter", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderLetter"),
+                  )
+                  .with("MissingCompanyDomiciliationStatement", () =>
+                    t("supportingDocuments.rejectionReason.MissingCompanyDomiciliationStatement"),
+                  )
+                  .with("MissingProviderProofOfAddress", () =>
+                    t("supportingDocuments.rejectionReason.MissingProviderProofOfAddress"),
+                  )
+                  .with("MissingProviderProofOfAddressAndIdDocument", () =>
+                    t(
+                      "supportingDocuments.rejectionReason.MissingProviderProofOfAddressAndIdDocument",
+                    ),
+                  )
                   .with("MissingDescription", () =>
                     t("supportingDocuments.rejectionReason.MissingDescription"),
                   )
                   .with("MissingSignature", () =>
                     t("supportingDocuments.rejectionReason.MissingSignature"),
+                  )
+                  .with("PowerOfAttorneyToSwanRequired", () =>
+                    t("supportingDocuments.rejectionReason.PowerOfAttorneyToSwanRequired"),
                   )
                   .with("ProviderColorIdDocumentRequired", () =>
                     t("supportingDocuments.rejectionReason.ProviderColorIdDocumentRequired"),
