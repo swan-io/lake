@@ -214,8 +214,6 @@ export const FileTile = ({
         .with({ status: "Refused" }, ({ reason, reasonCode }) => (
           <LakeAlert anchored={true} title={t("fileTile.status.Refused")} variant="error">
             <Box direction="column">
-              <LakeText>{reasonCode}</LakeText>
-
               <LakeText>
                 {match(reasonCode)
                   .with("BadDocumentQuality", () =>
@@ -264,8 +262,10 @@ export const FileTile = ({
                   .with("UnacceptableDocument", () =>
                     t("supportingDocuments.rejectionReason.UnacceptableDocument"),
                   )
-                  .otherwise(() => reason)}
+                  .otherwise(() => null)}
               </LakeText>
+
+              <LakeText>{reason}</LakeText>
             </Box>
           </LakeAlert>
         ))

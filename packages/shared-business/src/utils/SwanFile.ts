@@ -6,7 +6,7 @@ export type SwanFileStatusInfo =
   | {
       status: "Refused";
       reason: string;
-      reasonCode:
+      reasonCode?:
         | "CompanyNameMismatch"
         | "ExpiredDocument"
         | "InvalidAddress"

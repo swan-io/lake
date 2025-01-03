@@ -301,7 +301,11 @@ export const ReadOnlyWithDocs = () => {
                 id: "id",
                 name: "IdCard.pdf",
                 url: "https://swan.io",
-                statusInfo: { status: "Refused", reason: "Invalid document" },
+                statusInfo: {
+                  status: "Refused",
+                  reason: "Invalid document",
+                  reasonCode: "InvalidDocument",
+                },
               },
             },
           ]}
