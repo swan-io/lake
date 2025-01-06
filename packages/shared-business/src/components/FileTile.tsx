@@ -211,9 +211,94 @@ export const FileTile = ({
         .with({ status: "Pending" }, () => (
           <LakeAlert anchored={true} title={t("fileTile.status.Pending")} variant="info" />
         ))
-        .with({ status: "Refused" }, ({ reason }) => (
+        .with({ status: "Refused" }, ({ reason, reasonCode }) => (
           <LakeAlert anchored={true} title={t("fileTile.status.Refused")} variant="error">
-            {reason}
+            <Box direction="column">
+              <LakeText>
+                {match(reasonCode)
+                  .with("BadDocumentQuality", () =>
+                    t("supportingDocuments.rejectionReason.BadDocumentQuality"),
+                  )
+                  .with("CompanyNameMismatch", () =>
+                    t("supportingDocuments.rejectionReason.CompanyNameMismatch"),
+                  )
+                  .with("DeclaredAmountMismatch", () =>
+                    t("supportingDocuments.rejectionReason.DeclaredAmountMismatch"),
+                  )
+                  .with("ExpiredDocument", () =>
+                    t("supportingDocuments.rejectionReason.ExpiredDocument"),
+                  )
+                  .with("FullDocumentRequired", () =>
+                    t("supportingDocuments.rejectionReason.FullDocumentRequired"),
+                  )
+                  .with("IbanMismatch", () => t("supportingDocuments.rejectionReason.IbanMismatch"))
+                  .with("InvalidAddress", () =>
+                    t("supportingDocuments.rejectionReason.InvalidAddress"),
+                  )
+                  .with("InvalidDocument", () =>
+                    t("supportingDocuments.rejectionReason.InvalidDocument"),
+                  )
+                  .with("InvalidOrMissingData", () =>
+                    t("supportingDocuments.rejectionReason.InvalidOrMissingData"),
+                  )
+                  .with("InvalidTransaction", () =>
+                    t("supportingDocuments.rejectionReason.InvalidTransaction"),
+                  )
+                  .with("HandwrittenOrCertifiedElectronicSignatureRequired", () =>
+                    t(
+                      "supportingDocuments.rejectionReason.HandwrittenOrCertifiedElectronicSignatureRequired",
+                    ),
+                  )
+                  .with("MissingAccommodationProviderId", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderId"),
+                  )
+                  .with("MissingAccommodationProviderIdLetter", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderIdLetter"),
+                  )
+                  .with("MissingAccommodationProviderLetter", () =>
+                    t("supportingDocuments.rejectionReason.MissingAccommodationProviderLetter"),
+                  )
+                  .with("MissingCompanyDomiciliationStatement", () =>
+                    t("supportingDocuments.rejectionReason.MissingCompanyDomiciliationStatement"),
+                  )
+                  .with("MissingProviderProofOfAddress", () =>
+                    t("supportingDocuments.rejectionReason.MissingProviderProofOfAddress"),
+                  )
+                  .with("MissingProviderProofOfAddressAndIdDocument", () =>
+                    t(
+                      "supportingDocuments.rejectionReason.MissingProviderProofOfAddressAndIdDocument",
+                    ),
+                  )
+                  .with("MissingDescription", () =>
+                    t("supportingDocuments.rejectionReason.MissingDescription"),
+                  )
+                  .with("MissingSignature", () =>
+                    t("supportingDocuments.rejectionReason.MissingSignature"),
+                  )
+                  .with("PowerOfAttorneyToSwanRequired", () =>
+                    t("supportingDocuments.rejectionReason.PowerOfAttorneyToSwanRequired"),
+                  )
+                  .with("ProviderColorIdDocumentRequired", () =>
+                    t("supportingDocuments.rejectionReason.ProviderColorIdDocumentRequired"),
+                  )
+                  .with("TransactionAmountMismatch", () =>
+                    t("supportingDocuments.rejectionReason.TransactionAmountMismatch"),
+                  )
+                  .with("TransactionDateMismatch", () =>
+                    t("supportingDocuments.rejectionReason.TransactionDateMismatch"),
+                  )
+                  .with("TransactionNameMismatch", () =>
+                    t("supportingDocuments.rejectionReason.TransactionNameMismatch"),
+                  )
+                  .with("UnacceptableDocument", () =>
+                    t("supportingDocuments.rejectionReason.UnacceptableDocument"),
+                  )
+                  .with("other", () => null)
+                  .otherwise(reasonCode => reasonCode)}
+              </LakeText>
+
+              <LakeText>{reason}</LakeText>
+            </Box>
           </LakeAlert>
         ))
         .otherwise(() => null)}

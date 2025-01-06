@@ -3,7 +3,11 @@ export type SwanFileStatusInfo =
   | { status: "Uploaded" }
   | { status: "Pending" }
   | { status: "Validated" }
-  | { status: "Refused"; reason: string };
+  | {
+      status: "Refused";
+      reason: string;
+      reasonCode?: string;
+    };
 
 export type SwanFile = {
   id: string;
