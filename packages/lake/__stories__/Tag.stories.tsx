@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
     marginRight: spacings[12],
     marginBottom: spacings[12],
   },
+  limited: {
+    maxWidth: 150,
+  },
   rightsIcon: {
     marginHorizontal: spacings[4],
   },
@@ -115,7 +118,7 @@ export const All = () => {
               key={color}
               label="Label"
               onPressRemove={noop}
-              style={[styles.tag, { maxWidth: 150 }]}
+              style={[styles.tag, styles.limited]}
               color={color as ColorVariants}
             >
               Value with long long text and ellipsis ({color})

@@ -1,5 +1,0 @@
-**/*.js
-**/*.mjs
-*.d.ts
-clients/**/graphql/*.ts
-vite.config.ts

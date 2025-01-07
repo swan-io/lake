@@ -43,7 +43,6 @@ export const sortedIndexOf = <T>(array: T[], value: T) => {
   let startIndex = 0;
   let endIndex = array.length;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const searchIndex = startIndex + Math.round((endIndex - startIndex) / 2);
 
