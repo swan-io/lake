@@ -149,7 +149,7 @@ export const LakeTagInput = forwardRef<TagInputRef, LakeTagInputProps>(
 
     const onTextInputChange = useCallback(
       (value: string) => {
-        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length))];
+        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length > 0))];
         if (input.length > 1 || input[0] !== value) {
           pushNewValues(input);
         }

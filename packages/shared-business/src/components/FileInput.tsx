@@ -166,7 +166,9 @@ export const FileInput = ({
     <View style={commonStyles.fill}>
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
         <View
-          aria-errormessage={error ?? fileRejections[0]?.errors.join(", ")}
+          aria-errormessage={
+            error ?? fileRejections[0]?.errors.map(error => error.message).join(", ")
+          }
           style={[
             styles.container,
             disabled && styles.disabled,

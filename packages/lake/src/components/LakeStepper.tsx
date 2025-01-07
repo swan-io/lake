@@ -135,7 +135,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
         const hasErrors = match(step)
           .with({ hasErrors: true }, () => true)
           .with({ children: P.array(P.any) }, ({ children }) =>
-            children.some(({ hasErrors }) => hasErrors),
+            children.some(({ hasErrors }) => hasErrors === true),
           )
           .otherwise(() => false);
 
