@@ -1,8 +1,0 @@
-{
-  "name": "eslint-plugin-swan",
-  "version": "1.0.0",
-  "type": "module",
-  "peerDependencies": {
-    "eslint": ">=9.0.0"
-  }
-}
