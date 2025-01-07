@@ -17,8 +17,10 @@ const typescriptRules = [
 /** @type {import("eslint").Linter.Config[]} */
 export default [
   {
-    files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
     ignores: ["**/*.js", "**/*.mjs", "**/*.d.ts", "vite.config.ts"],
+  },
+  {
+    files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
 
     plugins: {
       react,
