@@ -6,8 +6,7 @@ export type UploadFileInput<UploadOutput> = {
   id: string;
   upload: UploadOutput;
   file: File;
-  onLoadStart: (event: ProgressEvent<XMLHttpRequestEventTarget>) => void;
-  onProgress: (event: ProgressEvent<XMLHttpRequestEventTarget>) => void;
+  onProgress: (progress: number) => void;
 };
 
 export type UploadOutputWithId<UploadOutput> = { id: string; upload: UploadOutput };
@@ -58,7 +57,7 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
             },
           ]);
 
-          const onProgress = (event: ProgressEvent<XMLHttpRequestEventTarget>) => {
+          const onProgress = (progress: number) => {
             setFiles(files =>
               files.map(file => {
                 if (file.id !== id) {
@@ -66,7 +65,7 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
                 }
                 return {
                   ...file,
-                  statusInfo: { status: "Uploading", progress: event.loaded / event.total },
+                  statusInfo: { status: "Uploading", progress },
                 };
               }),
             );
@@ -77,7 +76,6 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
               id,
               upload,
               file,
-              onLoadStart: onProgress,
               onProgress,
             })
             .tapOk(() => {
