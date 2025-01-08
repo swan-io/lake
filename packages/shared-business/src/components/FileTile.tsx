@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   progress: {
     height: 4,
     transitionProperty: "width",
-    transitionDuration: "300ms",
+    transitionDuration: "1000ms",
     transitionTimingFunction: "ease-in-out",
     borderRadius: 2,
     backgroundColor: colors.current[500],

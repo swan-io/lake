@@ -211,8 +211,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(typescript@5.7.2)
       '@swan-io/request':
-        specifier: ^1.0.6
-        version: 1.0.6(@swan-io/boxed@3.2.0(typescript@5.7.2))
+        specifier: ^2.0.0
+        version: 2.0.0(@swan-io/boxed@3.2.0(typescript@5.7.2))
       '@swan-io/use-form':
         specifier: ^3.1.0
         version: 3.1.0(react@18.3.1)(typescript@5.7.2)
@@ -1255,8 +1255,8 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
 
-  '@swan-io/request@1.0.6':
-    resolution: {integrity: sha512-HirhY0gu6aZk95YGXONcmwrfwQ0u5+uZGAtwtSDmrXfCLEGubXb1qIdRMex1e65TroXnTzBG3A65M5EvUB28ZQ==, tarball: https://registry.npmjs.org/@swan-io/request/-/request-1.0.6.tgz}
+  '@swan-io/request@2.0.0':
+    resolution: {integrity: sha512-5RVY6bOCQ+H5jr9Ar+k+dQ9s3W/D4+I9Ba9O1pTtWjLw/xXqgfITwlvKS+9d7GVS3Yqi7g4vEp98mOCjWR+SkQ==, tarball: https://registry.npmjs.org/@swan-io/request/-/request-2.0.0.tgz}
     peerDependencies:
       '@swan-io/boxed': '>=2.2.1'
 
@@ -4410,7 +4410,7 @@ snapshots:
       react: 18.3.1
       use-sync-external-store: 1.4.0(react@18.3.1)
 
-  '@swan-io/request@1.0.6(@swan-io/boxed@3.2.0(typescript@5.7.2))':
+  '@swan-io/request@2.0.0(@swan-io/boxed@3.2.0(typescript@5.7.2))':
     dependencies:
       '@swan-io/boxed': 3.2.0(typescript@5.7.2)
 

@@ -33,7 +33,7 @@
     "@formatjs/intl": "^3.1.0",
     "@placekit/client-js": "^2.3.0",
     "@swan-io/boxed": "^3.2.0",
-    "@swan-io/request": "^1.0.6",
+    "@swan-io/request": "^2.0.0",
     "@swan-io/use-form": "^3.1.0",
     "dayjs": "^1.11.13",
     "iban": "^0.0.14",

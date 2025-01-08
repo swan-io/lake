@@ -334,16 +334,16 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
                   uploadFile={
                     isNotNullish(uploadFile)
                       ? uploadFile
-                      : ({ upload, file, onLoadStart, onProgress }) => {
+                      : ({ upload, file, onProgress }) => {
                           const body = new FormData();
                           upload.fields.forEach(({ key, value }) => body.append(key, value));
                           body.append("file", file);
+                          setTimeout(() => onProgress(0.8), 100);
                           return Request.make({
                             url: upload.url,
                             method: "POST",
-                            onLoadStart,
-                            onProgress,
                             body,
+                            type: "text",
                           }).mapOkToResult(badStatusToError);
                         }
                   }
