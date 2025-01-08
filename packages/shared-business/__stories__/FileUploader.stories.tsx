@@ -63,32 +63,11 @@ export const WithSeveralDocuments = () => {
               setTimeout(() => resolve(Result.Ok(undefined)), 1_000);
             })
           }
-          uploadFile={({ onLoadStart, onProgress }) => {
-            return Future.make<Result<unknown, unknown>>(resolve => {
-              onLoadStart({
-                loaded: 0,
-                total: 1000,
-              } as ProgressEvent<XMLHttpRequestEventTarget>);
-              setTimeout(
-                () =>
-                  onProgress({
-                    loaded: 100,
-                    total: 1000,
-                  } as ProgressEvent<XMLHttpRequestEventTarget>),
-                100,
-              );
-              setTimeout(
-                () =>
-                  onProgress({
-                    loaded: 600,
-                    total: 1000,
-                  } as ProgressEvent<XMLHttpRequestEventTarget>),
-                500,
-              );
-              setTimeout(() => {
-                resolve(Result.Ok(undefined));
-              }, 1_000);
-            });
+          uploadFile={({ onProgress }) => {
+            return Future.wait(1)
+              .tap(() => onProgress(0.8))
+              .flatMap(() => Future.wait(1200))
+              .map(Result.Ok);
           }}
           formatAndSizeDescription={"20MB max"}
         />
