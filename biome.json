@@ -21,9 +21,7 @@
       "recommended": true,
       "a11y": {
         "useSemanticElements": "off",
-        "useValidAriaRole": "off",
-
-        "useAltText": "off"
+        "useValidAriaRole": "off"
       },
       "complexity": {
         "noForEach": "off",

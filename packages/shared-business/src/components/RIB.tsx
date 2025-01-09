@@ -173,6 +173,7 @@ const RIBv1 = ({
             <img
               src={partnerLogoUrl}
               style={{ ...logoStyle, height: LOGO_MAX_HEIGHT, maxWidth: LOGO_MAX_WIDTH }}
+              alt="Logo"
             />
           ) : (
             <SwanLogo style={styles.defaultLogo} />

@@ -169,7 +169,7 @@ export const TransactionStatementV1 = ({
     <View style={[styles.container, style]}>
       <Box direction="row" alignItems="center">
         {isNotNullishOrEmpty(partnerLogoUrl) ? (
-          <img src={partnerLogoUrl} style={logoStyle} />
+          <img alt="Logo" src={partnerLogoUrl} style={logoStyle} />
         ) : (
           <SwanLogo style={styles.defaultLogo} />
         )}
