@@ -42,9 +42,7 @@
       "style": {
         "noUselessElse": "off",
         "useImportType": "off",
-        "useTemplate": "off",
-
-        "useNumberNamespace": "off"
+        "useTemplate": "off"
       },
       "suspicious": {
         "noConfusingVoidType": "off",
