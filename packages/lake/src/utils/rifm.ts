@@ -30,7 +30,7 @@ export const getRifmProps = ({
       const char = charMap[charMapIndex];
 
       if (isNullish(char)) {
-        throw new Error(`Invalid mask character value`);
+        throw new Error("Invalid mask character value");
       }
       if (char.length !== 1) {
         throw new Error(`Invalid mask character value: "${char}"`);

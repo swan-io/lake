@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   horizontalLinkTextHovered: {
     color: colors.gray[900],
-    boxShadow: `0 1px currentColor`,
+    boxShadow: "0 1px currentColor",
   },
   activeHorizontalLinkText: {
     color: colors.gray[800],
