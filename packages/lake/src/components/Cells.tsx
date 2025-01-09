@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   headerUnderlineActive: {
     backgroundColor: colors.current[500],
   },
-  // eslint-disable-next-line react-native/no-color-literals
   buttonUnderline: {
     position: "absolute",
     bottom: 0,

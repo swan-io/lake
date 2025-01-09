@@ -49,8 +49,7 @@
         "noMisleadingCharacterClass": "off",
         "noShadowRestrictedNames": "off",
 
-        "noArrayIndexKey": "off",
-        "noExplicitAny": "off"
+        "noArrayIndexKey": "off"
       }
     }
   }

@@ -70,7 +70,7 @@ type Props<BaseProps extends TextProps | TextInputProps> = Merge<
 >;
 
 const getPressable = <P extends Props<TextProps | TextInputProps>>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: required
   Component: ComponentType<any>,
   config: { applyPressStyle?: boolean } = {},
 ) => {
