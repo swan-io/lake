@@ -232,7 +232,7 @@ export const LakeModal = ({
                           ) : null}
                         </View>
 
-                        {typeof children == "function" ? children({ large, small }) : children}
+                        {typeof children === "function" ? children({ large, small }) : children}
                       </View>
                     </ScrollView>
                   </FocusTrap>

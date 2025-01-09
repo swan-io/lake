@@ -6,7 +6,7 @@ export const sortBy = <K extends string, T extends Record<K, unknown>>(
     let index = -1;
     while (++index < keys.length) {
       const key = keys[index];
-      if (key == undefined) {
+      if (key == null) {
         return 0;
       }
       if (b[key] === a[key]) {

@@ -98,7 +98,7 @@ const Toast = memo<ToastProps>(({ variant, uid, title, description, error, progr
   const hasDescription = isNotNullishOrEmpty(description);
 
   const [requestId] = useState<Option<string>>(() => {
-    if (error == undefined) {
+    if (error == null) {
       return Option.None();
     }
     return Array.findMap(errorsToArray(error), error =>

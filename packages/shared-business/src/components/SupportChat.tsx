@@ -50,7 +50,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
     document.body.append(script);
     script.addEventListener("load", () => {
       const intervalId = setInterval(() => {
-        if (typeof zE != "undefined") {
+        if (typeof zE !== "undefined") {
           setZendeskApi(zE);
           clearInterval(intervalId);
         }

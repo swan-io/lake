@@ -177,7 +177,7 @@ export const Popover = memo<Props>(
     if (mode === "BottomPanel") {
       return (
         <BottomPanel visible={visible} onPressClose={onDismiss} returnFocus={false}>
-          {typeof children == "function" ? children({ mode: "panel" }) : children}
+          {typeof children === "function" ? children({ mode: "panel" }) : children}
         </BottomPanel>
       );
     }
@@ -225,7 +225,7 @@ export const Popover = memo<Props>(
                     onClickOutside={underlay ? undefined : onClickOutside}
                   >
                     <Pressable tabIndex={-1} onPress={onPress} style={styles.defaultCursor}>
-                      {typeof children == "function" ? children({ mode: "dropdown" }) : children}
+                      {typeof children === "function" ? children({ mode: "dropdown" }) : children}
                     </Pressable>
                   </FocusTrap>
                 </ScrollView>

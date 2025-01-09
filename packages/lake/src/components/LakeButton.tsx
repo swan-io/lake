@@ -321,7 +321,7 @@ export const LakeButton = memo(
               }))
               .exhaustive(),
 
-            typeof style == "function" ? style({ hovered, pressed, focused }) : style,
+            typeof style === "function" ? style({ hovered, pressed, focused }) : style,
           ]}
         >
           {({ pressed, hovered }) => {
