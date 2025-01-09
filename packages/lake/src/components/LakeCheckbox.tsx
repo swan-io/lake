@@ -126,7 +126,7 @@ export const LakeLabelledCheckbox = ({
       role="checkbox"
       aria-checked={value}
       style={styles.labelled}
-      onPress={() => onValueChange(value === true ? false : true)}
+      onPress={() => onValueChange(value !== true)}
       disabled={disabled}
     >
       <LakeCheckbox value={value} color={color} disabled={disabled} isError={isError} />
