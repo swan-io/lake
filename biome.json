@@ -42,11 +42,10 @@
         "useTemplate": "off"
       },
       "suspicious": {
+        "noArrayIndexKey": "off",
         "noConfusingVoidType": "off",
         "noMisleadingCharacterClass": "off",
-        "noShadowRestrictedNames": "off",
-
-        "noArrayIndexKey": "off"
+        "noShadowRestrictedNames": "off"
       }
     }
   }
