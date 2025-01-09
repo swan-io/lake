@@ -423,8 +423,9 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
         onPressClose={() => setCurrentMetadata(undefined)}
       >
         <ReadOnlyFieldList>
-          {currentMetadata?.values.map(({ title, value, type }) => (
+          {currentMetadata?.values.map(({ title, value, type }, index) => (
             <LakeLabel
+              key={`metadata-${index}`}
               type="viewSmall"
               label={title}
               actions={
