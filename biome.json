@@ -51,7 +51,6 @@
 
         "noArrayIndexKey": "off",
         "noDoubleEquals": "off",
-        "noGlobalIsNan": "off",
         "noAssignInExpressions": "off",
         "noExplicitAny": "off"
       }
