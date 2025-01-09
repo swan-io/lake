@@ -40,10 +40,10 @@
         "noAccumulatingSpread": "off"
       },
       "style": {
+        "noUselessElse": "off",
         "useImportType": "off",
         "useTemplate": "off",
 
-        "noUselessElse": "off",
         "useNumberNamespace": "off"
       },
       "suspicious": {

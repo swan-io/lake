@@ -138,20 +138,12 @@ const Help = (props: HelpProps) => {
 
 export const getSupportingDocumentPurposeLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}`;
-  if (isTranslationKey(key)) {
-    return t(key);
-  } else {
-    return purpose;
-  }
+  return isTranslationKey(key) ? t(key) : purpose;
 };
 
 export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}.description`;
-  if (isTranslationKey(key)) {
-    return t(key);
-  } else {
-    return "";
-  }
+  return isTranslationKey(key) ? t(key) : "";
 };
 
 export type SupportingDocumentCollectionRef<Purpose extends string> = {
