@@ -50,7 +50,6 @@
         "noShadowRestrictedNames": "off",
 
         "noArrayIndexKey": "off",
-        "noAssignInExpressions": "off",
         "noExplicitAny": "off"
       }
     }

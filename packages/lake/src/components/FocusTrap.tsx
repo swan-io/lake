@@ -41,7 +41,9 @@ export const FocusTrap = forwardRef<FocusTrapRef, Props>(
     const hasFocusedOutside = useRef(false);
 
     useImperativeHandle(ref, () => ({
-      setInitiallyFocusedElement: element => (previouslyFocusedRef.current = element),
+      setInitiallyFocusedElement: element => {
+        previouslyFocusedRef.current = element;
+      },
     }));
 
     const [initialEscapeListenerCount] = useState(escapeListenerCount);

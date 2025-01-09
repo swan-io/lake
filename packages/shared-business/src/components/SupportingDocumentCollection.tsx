@@ -308,7 +308,9 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
               }
               render={() => (
                 <FilesUploader
-                  ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
+                  ref={ref => {
+                    filesUploaderRefByPurpose.current[purpose] = ref;
+                  }}
                   // Only allow uploading is the Supporting Document Collection awaits for docs
                   // and that the specific purpose isn't already fully validated
                   canUpload={
