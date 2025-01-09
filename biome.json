@@ -29,7 +29,6 @@
         "noForEach": "off",
         "useLiteralKeys": "off",
 
-        "useFlatMap": "off",
         "noUselessTernary": "off"
       },
       "correctness": {

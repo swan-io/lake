@@ -100,14 +100,13 @@ type Props = {
 };
 
 export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
-  const stepIds = steps
-    .map(step =>
-      match(step)
-        .with({ id: P.string }, ({ id }) => [id])
-        .with({ children: P.array(P.any) }, ({ children }) => children.map(({ id }) => id))
-        .exhaustive(),
-    )
-    .flat();
+  const stepIds = steps.flatMap(step =>
+    match(step)
+      .with({ id: P.string }, ({ id }) => [id])
+      .with({ children: P.array(P.any) }, ({ children }) => children.map(({ id }) => id))
+      .exhaustive(),
+  );
+
   const activeStepIndex = stepIds.indexOf(activeStepId);
 
   return (
@@ -195,7 +194,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
 export const MobileStepTitle = ({ steps, activeStepId }: Props) => {
   const currentStep = Option.fromNullable(
     steps
-      .map((step, index) =>
+      .flatMap((step, index) =>
         match(step)
           .with({ id: P.string }, step => ({ ...step, number: `${index + 1}` }))
           .with({ children: P.array(P.any) }, ({ children }) =>
@@ -206,7 +205,6 @@ export const MobileStepTitle = ({ steps, activeStepId }: Props) => {
           )
           .exhaustive(),
       )
-      .flat()
       .find(({ id }) => id === activeStepId),
   ).map(({ label, hasErrors, number }) => ({
     number,
