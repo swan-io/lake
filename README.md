@@ -23,14 +23,10 @@ $ pnpm install
 We recommend the following setup for an optimal developer experience:
 
 - [VS Code](https://code.visualstudio.com)
-- [VS Code ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [VS Code Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
 - [VS Code Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 By default, the VS Code TypeScript extension only checks the types in open files. If you want your IDE to check types in the whole project, check `typescript.tsserver.experimental.enableProjectDiagnostics` in your VS Code preferences.
-
-For better performance (and confort!), it's recommended to set:
-
-- `eslint.run` to `"onSave"`.
 
 ## Linting
 
