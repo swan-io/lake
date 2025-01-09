@@ -43,7 +43,6 @@
         "useImportType": "off",
         "useTemplate": "off",
 
-        "useSelfClosingElements": "off",
         "noUnusedTemplateLiteral": "off",
         "noUselessElse": "off",
         "useNumberNamespace": "off"

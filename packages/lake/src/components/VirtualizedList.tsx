@@ -666,7 +666,7 @@ export const VirtualizedList = <T, ExtraInfo>({
             <View style={[styles.shadowsLayer, { height: clientHeight - 12 }]}>
               {startColumnShadow.toNull()}
 
-              <View style={[styles.centerColumnGroup, { width: centerColumnsWidth }]}></View>
+              <View style={[styles.centerColumnGroup, { width: centerColumnsWidth }]} />
 
               {endColumnShadow.toNull()}
             </View>
