@@ -135,7 +135,7 @@ export const All = () => {
               icon="arrow-down-filled"
               style={styles.tag}
               color={color as ColorVariants}
-            ></Tag>
+            />
           ))}
         </Box>
       </StoryPart>
@@ -149,7 +149,7 @@ export const All = () => {
               style={styles.tag}
               color={color as ColorVariants}
               size="large"
-            ></Tag>
+            />
           ))}
         </Box>
       </StoryPart>
