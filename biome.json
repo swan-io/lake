@@ -33,8 +33,7 @@
         "noVoidTypeReturn": "off",
 
         "useExhaustiveDependencies": "off",
-        "useJsxKeyInIterable": "off",
-        "noUnnecessaryContinue": "off"
+        "useJsxKeyInIterable": "off"
       },
       "performance": {
         "noAccumulatingSpread": "off"

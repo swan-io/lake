@@ -66,7 +66,6 @@ export const sortedIndexOf = <T>(array: T[], value: T) => {
       }
       if (item < value) {
         startIndex = searchIndex;
-        continue;
       }
     }
   }
