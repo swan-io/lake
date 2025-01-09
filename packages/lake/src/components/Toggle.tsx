@@ -78,6 +78,7 @@ export const Toggle = ({
     );
   }, [value]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(reajustLayout, [reajustLayout, value, isMobileMode, onLabel, offLabel]);
 
   return (

@@ -416,6 +416,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   }, [onLayoutUpdate]);
 
   // tracks if the threshold to initiate the next data load is reached
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(() => {
     const scrollTracker = scrollTrackerRef.current;
     if (scrollTracker != null) {

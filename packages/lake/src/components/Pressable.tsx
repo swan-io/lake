@@ -70,7 +70,7 @@ type Props<BaseProps extends TextProps | TextInputProps> = Merge<
 >;
 
 const getPressable = <P extends Props<TextProps | TextInputProps>>(
-  // biome-ignore lint/suspicious/noExplicitAny: required
+  // biome-ignore lint/suspicious/noExplicitAny:
   Component: ComponentType<any>,
   config: { applyPressStyle?: boolean } = {},
 ) => {
@@ -150,6 +150,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
 
     const interactionState = { hovered, focused, pressed };
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies:
     const blurHandler = useCallback(
       (e: NativeSyntheticEvent<React.FocusEvent>) => {
         if (e.nativeEvent.target === hostRef.current) {
@@ -160,6 +161,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       [hostRef, setFocused, onBlur],
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies:
     const focusHandler = useCallback(
       (e: NativeSyntheticEvent<React.FocusEvent>) => {
         if (e.nativeEvent.target === hostRef.current) {

@@ -132,6 +132,7 @@ const Tooltip = memo(
         },
       });
 
+      // biome-ignore lint/correctness/useExhaustiveDependencies:
       useEffect(() => {
         const node = referenceRef.current;
 

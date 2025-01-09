@@ -29,9 +29,7 @@
       },
       "correctness": {
         "noVoidTypeReturn": "off",
-        "useJsxKeyInIterable": "off",
-
-        "useExhaustiveDependencies": "off"
+        "useJsxKeyInIterable": "off"
       },
       "performance": {
         "noAccumulatingSpread": "off"
