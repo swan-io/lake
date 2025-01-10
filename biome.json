@@ -26,6 +26,8 @@
     "rules": {
       "recommended": true,
       "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useAltText": "off",
         "useSemanticElements": "off",
         "useValidAriaRole": "off"
       },
@@ -34,6 +36,7 @@
         "useLiteralKeys": "off"
       },
       "correctness": {
+        "noFlatMapIdentity": "off",
         "noUnusedVariables": "error",
         "noVoidTypeReturn": "off",
         "useArrayLiterals": "error",
