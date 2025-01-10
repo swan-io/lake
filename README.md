@@ -55,7 +55,7 @@ For example:
 namespace foo {}
 ```
 
-For `useExhaustiveDependencies` (equivalent of `react-hooks/exhaustive-deps`), you can even specify which dependencies are ignored:
+For `useExhaustiveDependencies` (equivalent of `react-hooks/exhaustive-deps`), you can even specify which dependencies are ignored, on multiple lines:
 
 ```ts
 // biome-ignore lint/correctness/useExhaustiveDependencies(fn):
