@@ -66,6 +66,8 @@ const FlatListWithRef = <T,>(
     ? { top: 0, width: onEndReachedThresholdPx }
     : { left: 0, height: onEndReachedThresholdPx };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(data.length):
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 
@@ -85,7 +87,7 @@ const FlatListWithRef = <T,>(
       };
     }
     // re-create an observer only on list length change
-  }, [data.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [data.length]);
 
   return (
     <ScrollView

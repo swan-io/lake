@@ -29,7 +29,7 @@ const InteractiveCheckbox = ({
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => {
-    setValue(v => (v === true ? false : true));
+    setValue(v => v !== true);
   };
 
   return (
@@ -48,7 +48,7 @@ const InteractiveLabelledCheckbox = ({
   const [value, setValue] = useState(defaultValue);
 
   const toggle = () => {
-    setValue(v => (v === true ? false : true));
+    setValue(v => v !== true);
   };
 
   return (

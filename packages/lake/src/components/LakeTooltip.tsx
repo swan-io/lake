@@ -182,7 +182,7 @@ const Tooltip = memo(
 
           node.removeEventListener("mousedown", onPress);
         };
-      }, [referenceRef, togglableOnFocus, setVisible, onHide]);
+      }, [referenceRef, togglableOnFocus, onHide]);
 
       useEffect(() => {
         return () => clearTimeout(timeoutRef.current);

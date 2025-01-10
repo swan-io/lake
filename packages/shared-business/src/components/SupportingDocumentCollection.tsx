@@ -138,20 +138,12 @@ const Help = (props: HelpProps) => {
 
 export const getSupportingDocumentPurposeLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}`;
-  if (isTranslationKey(key)) {
-    return t(key);
-  } else {
-    return purpose;
-  }
+  return isTranslationKey(key) ? t(key) : purpose;
 };
 
 export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}.description`;
-  if (isTranslationKey(key)) {
-    return t(key);
-  } else {
-    return "";
-  }
+  return isTranslationKey(key) ? t(key) : "";
 };
 
 export type SupportingDocumentCollectionRef<Purpose extends string> = {
@@ -316,7 +308,9 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
               }
               render={() => (
                 <FilesUploader
-                  ref={ref => (filesUploaderRefByPurpose.current[purpose] = ref)}
+                  ref={ref => {
+                    filesUploaderRefByPurpose.current[purpose] = ref;
+                  }}
                   // Only allow uploading is the Supporting Document Collection awaits for docs
                   // and that the specific purpose isn't already fully validated
                   canUpload={
@@ -429,8 +423,9 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
         onPressClose={() => setCurrentMetadata(undefined)}
       >
         <ReadOnlyFieldList>
-          {currentMetadata?.values.map(({ title, value, type }) => (
+          {currentMetadata?.values.map(({ title, value, type }, index) => (
             <LakeLabel
+              key={`metadata-${index}`}
               type="viewSmall"
               label={title}
               actions={

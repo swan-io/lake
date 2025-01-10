@@ -19,10 +19,10 @@ export const getSvgSize = (svg: SVGElement): Result<Size, string> => {
   const widthAttr = svg.getAttribute("width");
   const heightAttr = svg.getAttribute("height");
 
-  const width = isNotNullish(widthAttr) ? parseInt(widthAttr) : NaN;
-  const height = isNotNullish(heightAttr) ? parseInt(heightAttr) : NaN;
+  const width = isNotNullish(widthAttr) ? Number.parseInt(widthAttr) : Number.NaN;
+  const height = isNotNullish(heightAttr) ? Number.parseInt(heightAttr) : Number.NaN;
 
-  if (!isNaN(width) || !isNaN(height)) {
+  if (!Number.isNaN(width) || !Number.isNaN(height)) {
     return Result.Ok({ width, height });
   }
 
@@ -30,10 +30,10 @@ export const getSvgSize = (svg: SVGElement): Result<Size, string> => {
   const viewBox = svg.getAttribute("viewBox");
   const [, , boxWidthAttr, boxHeightAttr] = viewBox?.split(" ") ?? [];
 
-  const boxWidth = isNotNullish(boxWidthAttr) ? parseInt(boxWidthAttr) : NaN;
-  const boxHeight = isNotNullish(boxHeightAttr) ? parseInt(boxHeightAttr) : NaN;
+  const boxWidth = isNotNullish(boxWidthAttr) ? Number.parseInt(boxWidthAttr) : Number.NaN;
+  const boxHeight = isNotNullish(boxHeightAttr) ? Number.parseInt(boxHeightAttr) : Number.NaN;
 
-  if (isNaN(boxWidth) || isNaN(boxHeight)) {
+  if (Number.isNaN(boxWidth) || Number.isNaN(boxHeight)) {
     return Result.Error("VIEWBOX_MISSING");
   }
 

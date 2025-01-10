@@ -416,6 +416,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   }, [onLayoutUpdate]);
 
   // tracks if the threshold to initiate the next data load is reached
+  // biome-ignore lint/correctness/useExhaustiveDependencies(data.length):
   useEffect(() => {
     const scrollTracker = scrollTrackerRef.current;
     if (scrollTracker != null) {
@@ -666,7 +667,7 @@ export const VirtualizedList = <T, ExtraInfo>({
             <View style={[styles.shadowsLayer, { height: clientHeight - 12 }]}>
               {startColumnShadow.toNull()}
 
-              <View style={[styles.centerColumnGroup, { width: centerColumnsWidth }]}></View>
+              <View style={[styles.centerColumnGroup, { width: centerColumnsWidth }]} />
 
               {endColumnShadow.toNull()}
             </View>

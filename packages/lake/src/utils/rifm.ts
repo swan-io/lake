@@ -30,7 +30,7 @@ export const getRifmProps = ({
       const char = charMap[charMapIndex];
 
       if (isNullish(char)) {
-        throw new Error(`Invalid mask character value`);
+        throw new Error("Invalid mask character value");
       }
       if (char.length !== 1) {
         throw new Error(`Invalid mask character value: "${char}"`);
@@ -45,8 +45,8 @@ export const getRifmProps = ({
   const regExp = accepted[accept];
 
   const shiftedCharMap = charIndexes.reduce<Record<number, string>>((acc, charIndex, index) => {
-    const char = charMap[charIndex] ?? "";
-    return { ...acc, [charIndex + index]: char };
+    acc[charIndex + index] = charMap[charIndex] ?? "";
+    return acc;
   }, {});
 
   const shiftedCharIndexes = Object.keys(shiftedCharMap).map(Number);

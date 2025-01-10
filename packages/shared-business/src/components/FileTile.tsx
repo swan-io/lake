@@ -66,7 +66,7 @@ export const FileTile = ({
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const onPressRemove = useCallback(() => {
-    if (onRemove != undefined) {
+    if (onRemove != null) {
       setIsDeleting(true);
       onRemove().tap(() => {
         setIsDeleting(false);

@@ -67,14 +67,12 @@ const steps: TopLevelStep[] = [
   },
 ];
 
-const stepIds = steps
-  .map(step =>
-    match(step)
-      .with({ id: P.string }, ({ id }) => [id])
-      .with({ children: P.array(P.any) }, ({ children }) => children.map(child => child.id))
-      .exhaustive(),
-  )
-  .flat();
+const stepIds = steps.flatMap(step =>
+  match(step)
+    .with({ id: P.string }, ({ id }) => [id])
+    .with({ children: P.array(P.any) }, ({ children }) => children.map(child => child.id))
+    .exhaustive(),
+);
 
 export const Interactive = () => {
   const [activeStepId, setActiveStepId] = useState("attach_the_documents_part_2");

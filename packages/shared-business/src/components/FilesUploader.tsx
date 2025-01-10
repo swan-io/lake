@@ -71,7 +71,7 @@ const FilesUploaderWithRef = <UploadInput, UploadOutput, GenerateUploadError, Up
       return;
     }
     const onChange = onChangeRef.current;
-    if (onChange != undefined) {
+    if (onChange != null) {
       onChange(files);
     }
   }, [files]);
@@ -105,7 +105,7 @@ const FilesUploaderWithRef = <UploadInput, UploadOutput, GenerateUploadError, Up
             file={file}
             showId={showIds}
             onRemove={
-              onRemoveFile != undefined && file.statusInfo.status === "Uploaded"
+              onRemoveFile != null && file.statusInfo.status === "Uploaded"
                 ? () =>
                     onRemoveFile(file).tapOk(() => {
                       remove(file.id);

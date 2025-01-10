@@ -37,24 +37,22 @@ export const WithPartnerAccentColor = ({ color, scoped = false, children }: Prop
       if (isNotNullish(containerRef.current)) {
         const element = containerRef.current as unknown as HTMLElement;
         let scalePower = 1;
-        while (
-          !meetsContrastGuidelines(setLightness(Math.pow(0.5, scalePower), color), "#fff").AALarge
-        ) {
+        while (!meetsContrastGuidelines(setLightness(0.5 ** scalePower, color), "#fff").AALarge) {
           scalePower += 0.1;
         }
 
         const colorScale: ColorScale = {
-          0: setLightness(Math.pow(1.0, scalePower), color),
-          50: setLightness(Math.pow(0.97, scalePower), color),
-          100: setLightness(Math.pow(0.9, scalePower), color),
-          200: setLightness(Math.pow(0.8, scalePower), color),
-          300: setLightness(Math.pow(0.7, scalePower), color),
-          400: setLightness(Math.pow(0.6, scalePower), color),
-          500: setLightness(Math.pow(0.5, scalePower), color),
-          600: setLightness(Math.pow(0.4, scalePower), color),
-          700: setLightness(Math.pow(0.3, scalePower), color),
-          800: setLightness(Math.pow(0.2, scalePower), color),
-          900: setLightness(Math.pow(0.1, scalePower), color),
+          0: setLightness(1.0 ** scalePower, color),
+          50: setLightness(0.97 ** scalePower, color),
+          100: setLightness(0.9 ** scalePower, color),
+          200: setLightness(0.8 ** scalePower, color),
+          300: setLightness(0.7 ** scalePower, color),
+          400: setLightness(0.6 ** scalePower, color),
+          500: setLightness(0.5 ** scalePower, color),
+          600: setLightness(0.4 ** scalePower, color),
+          700: setLightness(0.3 ** scalePower, color),
+          800: setLightness(0.2 ** scalePower, color),
+          900: setLightness(0.1 ** scalePower, color),
           primary: color,
           contrast: getContrastColor(color),
           secondary: shade(0.2, color),

@@ -14,7 +14,6 @@ import { LakeTooltip } from "./LakeTooltip";
 import { Pressable } from "./Pressable";
 import { Space } from "./Space";
 
-/* eslint-disable react-native/no-unused-styles */
 const directionStyles = StyleSheet.create({
   column: { flexDirection: "column" },
   row: { flexDirection: "row" },
@@ -31,7 +30,6 @@ const justifyContentStyles = StyleSheet.create({
   center: { justifyContent: "center" },
   right: { justifyContent: "flex-end" },
 });
-/* eslint-enable react-native/no-unused-styles */
 
 const fadeOnLeftMask = `linear-gradient(to right, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
 const fadeOnRightMask = `linear-gradient(to left, ${invariantColors.transparent}, ${invariantColors.black} ${spacings[8]})`;
@@ -78,7 +76,6 @@ const styles = StyleSheet.create({
   headerUnderlineActive: {
     backgroundColor: colors.current[500],
   },
-  // eslint-disable-next-line react-native/no-color-literals
   buttonUnderline: {
     position: "absolute",
     bottom: 0,

@@ -159,7 +159,7 @@ export const RightPanel = forwardRef<FocusTrapRef, Props>(
                         >
                           <View style={styles.contents}>
                             <View style={styles.contentsContainer}>
-                              {typeof children == "function" ? (
+                              {typeof children === "function" ? (
                                 <ResponsiveContainer
                                   style={styles.root}
                                   breakpoint={breakpoints.small}

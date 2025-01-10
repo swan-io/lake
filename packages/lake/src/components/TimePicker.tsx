@@ -41,7 +41,7 @@ const rifmTimeProps = getRifmProps({
 export const parseTime = (time: string): Option<Time> => {
   const [hours, minutes] = time.split(":").map(Number);
 
-  if (isNullish(hours) || isNaN(hours) || isNullish(minutes) || isNaN(minutes)) {
+  if (isNullish(hours) || Number.isNaN(hours) || isNullish(minutes) || Number.isNaN(minutes)) {
     return Option.None();
   }
 
@@ -71,7 +71,7 @@ const parseTypingHours = (time: string): Option<number> => {
     return Option.None();
   }
 
-  if (isNaN(parsedHours)) {
+  if (Number.isNaN(parsedHours)) {
     return Option.None();
   }
 

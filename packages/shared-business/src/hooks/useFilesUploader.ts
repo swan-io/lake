@@ -43,7 +43,7 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
       return config
         .generateUpload(uploadInput)
         .tapError(error => {
-          if (config.onError != undefined) {
+          if (config.onError != null) {
             config.onError(error);
           }
         })
@@ -92,7 +92,7 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
               );
             })
             .tapError(error => {
-              if (config.onError != undefined) {
+              if (config.onError != null) {
                 config.onError(error);
               }
               setFiles(files => files.filter(file => file.id !== id));

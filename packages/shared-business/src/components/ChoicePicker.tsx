@@ -130,6 +130,7 @@ export const ChoicePicker = <T,>({
   const { desktop } = useResponsive(breakpoints.medium);
   const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(() => {
     if (desktop) {
       return;
@@ -152,7 +153,7 @@ export const ChoicePicker = <T,>({
       onChange(items[0]);
     }
     // disable exhaustive-deps because we only want to run this effect only when screen size go from desktop to mobile
-  }, [desktop]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [desktop]);
 
   const onScroll = () => {
     // prevent scroll event when we change screen size from mobile to desktop

@@ -54,6 +54,7 @@ export const LakeCheckbox = ({
   const isFirstRender = useRef(true);
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(value):
   useEffect(() => {
     if (!isFirstRender.current) {
       setShouldAnimate(true);
@@ -126,7 +127,7 @@ export const LakeLabelledCheckbox = ({
       role="checkbox"
       aria-checked={value}
       style={styles.labelled}
-      onPress={() => onValueChange(value === true ? false : true)}
+      onPress={() => onValueChange(value !== true)}
       disabled={disabled}
     >
       <LakeCheckbox value={value} color={color} disabled={disabled} isError={isError} />

@@ -21,7 +21,7 @@ export const encodeBase64 = (value: string) => {
 
 const unURI = (base64: string) =>
   base64
-    .replace(/[-_]/g, substring => (substring == "-" ? "+" : "/"))
+    .replace(/[-_]/g, substring => (substring === "-" ? "+" : "/"))
     .replace(/[^A-Za-z0-9+/]/g, "");
 
 export const decodeBase64 = (base64: string) =>

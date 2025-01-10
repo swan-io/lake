@@ -393,7 +393,9 @@ const LakeSelectWithRef = <V,>(
                 disabled={isNullishOrEmpty(disablement?.message)}
               >
                 <Pressable
-                  ref={element => (listItemRefs.current[index] = element as unknown as HTMLElement)}
+                  ref={element => {
+                    listItemRefs.current[index] = element as unknown as HTMLElement;
+                  }}
                   onKeyDown={onKeyDown}
                   disabled={isNotNullish(disablement)}
                   style={({ hovered, focused }) => [
