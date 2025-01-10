@@ -150,7 +150,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
 
     const interactionState = { hovered, focused, pressed };
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies:
+    // biome-ignore lint/correctness/useExhaustiveDependencies(hostRef):
     const blurHandler = useCallback(
       (e: NativeSyntheticEvent<React.FocusEvent>) => {
         if (e.nativeEvent.target === hostRef.current) {
@@ -161,7 +161,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       [hostRef, setFocused, onBlur],
     );
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies:
+    // biome-ignore lint/correctness/useExhaustiveDependencies(hostRef):
     const focusHandler = useCallback(
       (e: NativeSyntheticEvent<React.FocusEvent>) => {
         if (e.nativeEvent.target === hostRef.current) {

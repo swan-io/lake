@@ -43,7 +43,7 @@ declare function zE(
 const [zendeskApi, setZendeskApi] = Deferred.make();
 
 export const SupportChat = ({ children, accentColor, type, additionalInfo }: Props) => {
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(zE):
   useEffect(() => {
     const script = document.createElement("script");
     script.id = "ze-snippet";
@@ -69,7 +69,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
     };
   }, [accentColor]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(zE):
   useEffect(() => {
     const { firstName, lastName, email, projectName, ...fieldInfos } = additionalInfo;
     const values = Dict.entries({ ...fieldInfos, email });
@@ -111,7 +111,7 @@ export const SupportChat = ({ children, accentColor, type, additionalInfo }: Pro
     });
   }, [accentColor, additionalInfo]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(zE):
   const onPressShow = useCallback(() => {
     try {
       zE("webWidget", "show");

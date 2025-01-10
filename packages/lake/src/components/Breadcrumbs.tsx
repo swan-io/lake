@@ -201,7 +201,8 @@ export const BreadcrumbsRoot = ({ rootLevelCrumbs = emptyCrumbArray, children }:
     [crumbs],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(setCrumbs):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(currentIndexRef):
   const value = useMemo(
     () => [rootCrumbs, orderedCrumbs, setCrumbs, currentIndexRef] as const,
     [rootCrumbs, orderedCrumbs, setCrumbs, currentIndexRef],

@@ -70,7 +70,8 @@ const SectionListWithRef = <T,>(
     ? { top: 0, width: onEndReachedThresholdPx }
     : { left: 0, height: onEndReachedThresholdPx };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(sections.length):
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 

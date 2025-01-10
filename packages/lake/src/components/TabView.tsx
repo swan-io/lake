@@ -528,7 +528,8 @@ export const TabView = ({
   const { path } = location;
   const currentLocationURL = location.toString();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(kept):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(collapsed):
   useEffect(() => {
     if (isNotNullish(linksRefs.current)) {
       const values = Object.entries(linksRefs.current);

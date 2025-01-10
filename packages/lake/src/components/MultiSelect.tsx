@@ -203,7 +203,7 @@ export const MultiSelect = <Value,>({
     }
   }, [visible]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies(values):
   useEffect(() => {
     if (shouldScrollToBottomRef.current) {
       const top = selectedTagListRef.current?.scrollHeight;
