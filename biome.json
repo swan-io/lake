@@ -28,6 +28,7 @@
       "a11y": {
         "noSvgWithoutTitle": "off",
         "useAltText": "off",
+        "useIframeTitle": "off",
         "useSemanticElements": "off",
         "useValidAriaRole": "off"
       },
