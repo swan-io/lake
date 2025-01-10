@@ -6,13 +6,14 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": true,
     "include": [
       "packages/*/__stories__/**/*.ts",
       "packages/*/__stories__/**/*.tsx",
       "packages/*/src/**/*.ts",
       "packages/*/src/**/*.tsx"
-    ]
+    ],
+    "ignoreUnknown": true,
+    "ignore": ["**/*.d.ts"]
   },
   "formatter": {
     "enabled": false
