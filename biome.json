@@ -46,8 +46,8 @@
       },
       "suspicious": {
         "noArrayIndexKey": "off",
-        "noConfusingVoidType": "off",
         "noMisleadingCharacterClass": "off",
+        "noConfusingVoidType": "off",
         "noShadowRestrictedNames": "off"
       }
     }
