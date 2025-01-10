@@ -16,7 +16,7 @@ import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { useMemo } from "react";
-import { useDropzone } from "react-dropzone";
+import { Accept, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { formatNestedMessage, t } from "../utils/i18n";
@@ -155,7 +155,10 @@ export const FileInput = ({
   }, [value]);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
-    accept: accept.reduce((acc, item) => ({ ...acc, [item]: [] }), {}),
+    accept: accept.reduce<Accept>((acc, item) => {
+      acc[item] = [];
+      return acc;
+    }, {}),
     onDropAccepted: onFiles,
     onDropRejected: onError,
     disabled,

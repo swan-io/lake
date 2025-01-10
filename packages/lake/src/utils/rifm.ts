@@ -45,8 +45,8 @@ export const getRifmProps = ({
   const regExp = accepted[accept];
 
   const shiftedCharMap = charIndexes.reduce<Record<number, string>>((acc, charIndex, index) => {
-    const char = charMap[charIndex] ?? "";
-    return { ...acc, [charIndex + index]: char };
+    acc[charIndex + index] = charMap[charIndex] ?? "";
+    return acc;
   }, {});
 
   const shiftedCharIndexes = Object.keys(shiftedCharMap).map(Number);

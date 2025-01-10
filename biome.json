@@ -33,14 +33,20 @@
         "useLiteralKeys": "off"
       },
       "correctness": {
+        "noUnusedVariables": "error",
         "noVoidTypeReturn": "off",
+        "useArrayLiterals": "error",
+        "useHookAtTopLevel": "warn",
         "useJsxKeyInIterable": "off"
       },
-      "performance": {
-        "noAccumulatingSpread": "off"
+      "nursery": {
+        "noCommonJs": "error"
       },
       "style": {
+        "noImplicitBoolean": "error",
+        "noNamespace": "error",
         "noUselessElse": "off",
+        "useBlockStatements": "warn",
         "useImportType": "off",
         "useTemplate": "off"
       },
