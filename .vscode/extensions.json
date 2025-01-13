@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql-syntax"
+  ]
+}
