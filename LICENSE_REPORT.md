@@ -27,4 +27,4 @@
 | ts-pattern           | 5.6.1   | MIT              | Gabriel Vergnaud    | https://github.com/gvergnaud/ts-pattern#readme                                    |
 | type-fest            | 4.32.0  | (MIT OR CC0-1.0) | Sindre Sorhus       | https://github.com/sindresorhus/type-fest#readme                                  |
 | uuid                 | 11.0.5  | MIT              | Unknown             | https://github.com/uuidjs/uuid#readme                                             |
-| vitest               | 3.0.2   | MIT              | Anthony Fu          | https://github.com/vitest-dev/vitest#readme                                       |
+| vitest               | 2.1.8   | MIT              | Anthony Fu          | https://github.com/vitest-dev/vitest#readme                                       |
