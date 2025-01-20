@@ -2,10 +2,10 @@
 
 | Name                 | Version | License          | Author              | Homepage                                                                          |
 | -------------------- | ------- | ---------------- | ------------------- | --------------------------------------------------------------------------------- |
-| @formatjs/intl       | 3.1.0   | MIT              | Long Ho             | https://formatjs.github.io                                                        |
+| @formatjs/intl       | 3.1.3   | MIT              | Long Ho             | https://formatjs.github.io                                                        |
 | @placekit/client-js  | 2.3.0   | MIT              | PlaceKit            | https://github.com/placekit/client-js#readme                                      |
-| @react-three/drei    | 9.120.5 | MIT              | Unknown             | https://github.com/pmndrs/drei                                                    |
-| @react-three/fiber   | 8.17.10 | MIT              | Paul Henschel       | https://github.com/pmndrs/react-three-fiber#readme                                |
+| @react-three/drei    | 9.121.2 | MIT              | Unknown             | https://github.com/pmndrs/drei                                                    |
+| @react-three/fiber   | 8.17.12 | MIT              | Paul Henschel       | https://github.com/pmndrs/react-three-fiber#readme                                |
 | @types/iban          | 0.0.35  | MIT              | Unknown             | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/iban         |
 | @types/react         | 18.3.18 | MIT              | Unknown             | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react        |
 | @types/react-dom     | 18.3.5  | MIT              | Unknown             | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom    |
@@ -13,7 +13,7 @@
 | @types/three         | 0.172.0 | MIT              | Unknown             | https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three        |
 | dayjs                | 1.11.13 | MIT              | iamkun              | https://day.js.org                                                                |
 | iban                 | 0.0.14  | MIT              | Laurent VB          | https://github.com/arhs/iban.js#readme                                            |
-| jsdom                | 25.0.1  | MIT              | Unknown             | https://github.com/jsdom/jsdom#readme                                             |
+| jsdom                | 26.0.0  | MIT              | Unknown             | https://github.com/jsdom/jsdom#readme                                             |
 | polished             | 4.3.1   | MIT              | Brian Hough         | https://polished.js.org                                                           |
 | prism-react-renderer | 2.4.1   | MIT              | Unknown             | https://github.com/FormidableLabs/prism-react-renderer#readme                     |
 | react                | 18.3.1  | MIT              | Unknown             | https://reactjs.org/                                                              |
@@ -24,7 +24,7 @@
 | rifm                 | 0.12.1  | MIT              | istarkov            | https://github.com/istarkov/rifm#readme                                           |
 | three                | 0.172.0 | MIT              | mrdoob              | https://threejs.org/                                                              |
 | ts-dedent            | 2.2.0   | MIT              | Tamino Martinius    | https://github.com/tamino-martinius/node-ts-dedent#readme                         |
-| ts-pattern           | 5.6.0   | MIT              | Gabriel Vergnaud    | https://github.com/gvergnaud/ts-pattern#readme                                    |
-| type-fest            | 4.31.0  | (MIT OR CC0-1.0) | Sindre Sorhus       | https://github.com/sindresorhus/type-fest#readme                                  |
-| uuid                 | 11.0.4  | MIT              | Unknown             | https://github.com/uuidjs/uuid#readme                                             |
-| vitest               | 2.1.8   | MIT              | Anthony Fu          | https://github.com/vitest-dev/vitest#readme                                       |
+| ts-pattern           | 5.6.1   | MIT              | Gabriel Vergnaud    | https://github.com/gvergnaud/ts-pattern#readme                                    |
+| type-fest            | 4.32.0  | (MIT OR CC0-1.0) | Sindre Sorhus       | https://github.com/sindresorhus/type-fest#readme                                  |
+| uuid                 | 11.0.5  | MIT              | Unknown             | https://github.com/uuidjs/uuid#readme                                             |
+| vitest               | 3.0.2   | MIT              | Anthony Fu          | https://github.com/vitest-dev/vitest#readme                                       |
