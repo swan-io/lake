@@ -41,7 +41,7 @@
     "rifm": "^0.12.1",
     "three": "^0.172.0",
     "ts-dedent": "^2.2.0",
-    "ts-pattern": "^5.6.1",
+    "ts-pattern": "^5.6.0",
     "uuid": "^11.0.5"
   },
   "devDependencies": {
