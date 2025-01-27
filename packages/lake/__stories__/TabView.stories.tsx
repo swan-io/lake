@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { TabView } from "../src/components/TabView";
+import { Tag } from "../src/components/Tag";
 import { StoryBlock } from "./_StoriesComponents";
 
 export default {
@@ -19,6 +20,15 @@ export const Default = () => {
             label: "SEPA Credit Transfers",
             url: "/simulator/sct",
             count: 2,
+          },
+          {
+            label: "Physical card",
+            url: "/simulator/endElement",
+            endElement: (
+              <Tag size="small" color="shakespear">
+                Expiring soon
+              </Tag>
+            ),
           },
           {
             label: "SEPA Direct Debits",
