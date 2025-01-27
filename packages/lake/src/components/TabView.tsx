@@ -52,6 +52,7 @@ export const tabsViewHeight = TABS_HEIGHT + 1;
 type Tab = ({ id: string } | { url: string }) & {
   count?: number;
   icon?: IconName;
+  endElement?: ReactNode;
   label: string;
   withSeparator?: boolean;
 };
@@ -691,7 +692,7 @@ export const TabView = ({
     >
       <View style={styles.placeholder} aria-hidden={true} ref={placeholderRef} onLayout={onLayout}>
         {tabs.map(tab => {
-          const { label, icon, count } = tab;
+          const { label, icon, count, endElement } = tab;
           const tabId = getTabId(tab);
 
           return (
@@ -719,6 +720,13 @@ export const TabView = ({
 
                 <Text>{label}</Text>
 
+                {isNotNullish(endElement) && (
+                  <>
+                    <Space width={8} />
+                    {endElement}
+                  </>
+                )}
+
                 {count != null ? (
                   <>
                     <Space width={8} />
@@ -742,7 +750,7 @@ export const TabView = ({
       </View>
 
       {kept.map(tab => {
-        const { label, icon, withSeparator, count } = tab;
+        const { label, icon, withSeparator, count, endElement } = tab;
         const tabId = getTabId(tab);
 
         return (
@@ -772,6 +780,13 @@ export const TabView = ({
               )}
 
               <Text>{label}</Text>
+
+              {isNotNullish(endElement) && (
+                <>
+                  <Space width={8} />
+                  {endElement}
+                </>
+              )}
 
               {count != null ? (
                 <>
