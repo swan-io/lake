@@ -3,7 +3,7 @@
   "version": "11.3.5",
   "packageManager": "pnpm@10.2.1",
   "engines": {
-    "node": ">=22.12.0",
+    "node": "^22.12.0",
     "pnpm": "^10.2.0"
   },
   "files": [
@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@react-three/drei": "^9.121.4",
+    "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.17.14",
     "@swan-io/boxed": "^3.2.0",
     "@swan-io/chicane": "^2.1.0",
@@ -50,6 +50,6 @@
     "@types/react-native": "^0.72.8",
     "@types/three": "^0.173.0",
     "jsdom": "^26.0.0",
-    "type-fest": "^4.33.0"
+    "type-fest": "^4.35.0"
   }
 }
