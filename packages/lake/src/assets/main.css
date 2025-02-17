@@ -318,9 +318,9 @@ body {
 
   --focus-ring-color: #0019fe;
 
-  --font-family-primary: Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica,
-    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji,
-    sans-serif;
+  --font-family-primary:
+    Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji, sans-serif;
   --font-family-card-font: "Inter Card", monospace;
   --font-family-code: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
   --font-family-iban: "Roboto Mono", monospace;
