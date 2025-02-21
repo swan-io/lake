@@ -40,7 +40,6 @@ const status: FilterCheckboxDef<
 const startDate: FilterDateDef = {
   type: "date",
   label: "Start Date",
-  dateFormat: "DD/MM/YYYY",
 };
 
 const resourceId: FilterInputDef = {

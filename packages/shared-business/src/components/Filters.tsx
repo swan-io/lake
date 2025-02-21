@@ -20,7 +20,7 @@ import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { DateFormat, t } from "../utils/i18n";
+import { locale, t } from "../utils/i18n";
 import { DatePickerDate, DatePickerModal } from "./DatePicker";
 
 const styles = StyleSheet.create({
@@ -319,7 +319,6 @@ function FilterCheckbox<T>({
 
 type FilterDateProps = {
   label: string;
-  dateFormat: DateFormat;
   isSelectable?: (date: DatePickerDate) => boolean;
   validate?: (value: string) => ValidatorResult;
   initialValue?: string;
@@ -331,7 +330,6 @@ type FilterDateProps = {
 function FilterDate({
   label,
   initialValue,
-  dateFormat,
   isSelectable,
   validate,
   onValueChange,
@@ -342,8 +340,8 @@ function FilterDate({
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
   const value = useMemo(
-    () => (isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : ""),
-    [initialValue, dateFormat],
+    () => (isNotNullish(initialValue) ? dayjs(initialValue).format(locale.dateFormat) : ""),
+    [initialValue],
   );
 
   return (
@@ -356,14 +354,14 @@ function FilterDate({
         isActive={visible}
         value={
           isNotNullish(initialValue)
-            ? dayjs(initialValue).format(dateFormat)
+            ? dayjs(initialValue).format(locale.dateFormat)
             : t("common.filters.none")
         }
       />
 
       <DatePickerModal
         visible={visible}
-        format={dateFormat}
+        format={locale.dateFormat}
         firstWeekDay="monday"
         label={label}
         cancelLabel={t("common.filters.cancel")}
@@ -372,7 +370,7 @@ function FilterDate({
         isSelectable={isSelectable}
         validate={validate}
         onChange={value => {
-          const formattedValue = dayjs(value, dateFormat, true).toJSON();
+          const formattedValue = dayjs(value, locale.dateFormat, true).toJSON();
           onValueChange(formattedValue);
         }}
         onDismiss={close}
@@ -482,12 +480,11 @@ export type FilterRadioDef<T> = {
   items: Item<T>[];
 };
 
-export type FilterDateDef<Values = unknown> = {
+export type FilterDateDef = {
   type: "date";
   label: string;
-  dateFormat: DateFormat;
-  isSelectable?: (date: DatePickerDate, filters: Values) => boolean;
-  validate?: (value: string, filters: Values) => ValidatorResult;
+  isSelectable?: (date: DatePickerDate, filters: unknown) => boolean;
+  validate?: (value: string, filters: unknown) => ValidatorResult;
 };
 
 export type FilterInputDef = {
@@ -585,10 +582,9 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   }}
                 />
               ))
-              .with({ type: "date" }, ({ type, label, dateFormat, isSelectable, validate }) => (
+              .with({ type: "date" }, ({ type, label, isSelectable, validate }) => (
                 <FilterDate
                   label={label}
-                  dateFormat={dateFormat}
                   autoOpen={lastOpenedFilter === filterName}
                   isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
                   validate={validate ? value => validate(value, filters) : undefined}
