@@ -500,9 +500,7 @@ type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox
   ? T["items"][number]["value"][] | undefined
   : T extends { type: "radio" }
     ? T["items"][number]["value"] | undefined
-    : T extends { type: "boolean" }
-      ? boolean | undefined
-      : string | undefined;
+    : string | undefined;
 
 const getFilterValue = <T extends Filter<unknown>["type"]>(
   _type: T,
@@ -535,6 +533,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
   onChangeFilters,
 }: FiltersStackProps<T>) => {
   const previousOpened = usePreviousValue(openedFilters);
+
   const lastOpenedFilter =
     openedFilters.length > previousOpened.length
       ? openedFilters[openedFilters.length - 1]
