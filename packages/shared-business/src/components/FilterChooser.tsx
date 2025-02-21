@@ -1,4 +1,3 @@
-import { Box } from "@swan-io/lake/src/components/Box";
 import { FlatList } from "@swan-io/lake/src/components/FlatList";
 import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
@@ -59,20 +58,18 @@ export function FilterChooser<FilterName extends string>({
 
   return (
     <>
-      <Box direction="row" justifyContent="start" alignItems="center">
-        <LakeButton
-          size="small"
-          mode="secondary"
-          color="gray"
-          onPress={toggle}
-          ref={inputRef}
-          icon={large ? "chevron-down-filled" : "filter-filled"}
-          iconPosition="end"
-          ariaLabel={label}
-        >
-          {large ? label : null}
-        </LakeButton>
-      </Box>
+      <LakeButton
+        size="small"
+        mode="secondary"
+        color="gray"
+        onPress={toggle}
+        ref={inputRef}
+        icon={large ? "chevron-down-filled" : "filter-filled"}
+        iconPosition="end"
+        ariaLabel={label}
+      >
+        {large ? label : null}
+      </LakeButton>
 
       <Popover
         role="listbox"
