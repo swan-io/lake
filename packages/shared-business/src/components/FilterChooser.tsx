@@ -1,15 +1,15 @@
+import { Box } from "@swan-io/lake/src/components/Box";
+import { FlatList } from "@swan-io/lake/src/components/FlatList";
+import { Icon } from "@swan-io/lake/src/components/Icon";
+import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { Popover } from "@swan-io/lake/src/components/Popover";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { colors } from "@swan-io/lake/src/constants/design";
+import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
+import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
-import { isNotNullishOrEmpty } from "../utils/nullish";
-import { Box } from "./Box";
-import { FlatList } from "./FlatList";
-import { Icon } from "./Icon";
-import { LakeButton } from "./LakeButton";
-import { LakeText } from "./LakeText";
-import { Popover } from "./Popover";
-import { Space } from "./Space";
 
 const styles = StyleSheet.create({
   selected: {
