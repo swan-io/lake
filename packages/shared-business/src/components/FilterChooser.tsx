@@ -3,10 +3,8 @@ import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Popover } from "@swan-io/lake/src/components/Popover";
-import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
-import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { t } from "../utils/i18n";
@@ -40,14 +38,12 @@ const styles = StyleSheet.create({
 export function FilterChooser<FilterName extends string>({
   filters,
   openFilters,
-  title,
   availableFilters,
   large = true,
   onAddFilter,
 }: {
   filters: Partial<Record<FilterName, unknown>>;
   openFilters: FilterName[];
-  title?: string;
   availableFilters: { label: string; name: FilterName }[];
   large?: boolean;
   onAddFilter: (filterName: FilterName) => void;
@@ -78,41 +74,33 @@ export function FilterChooser<FilterName extends string>({
         returnFocus={false}
         visible={visible}
       >
-        <View style={styles.list}>
-          {isNotNullishOrEmpty(title) ? (
-            <>
-              <LakeText style={styles.availableFiltersTitle}>{title}</LakeText>
-              <Space height={8} />
-            </>
-          ) : null}
+        <FlatList
+          role="list"
+          data={availableFilters}
+          style={styles.list}
+          keyExtractor={(_, index) => `filter-item-${index}`}
+          renderItem={({ item }) => {
+            const isSet = Boolean(filters[item.name]) || openFilters.includes(item.name);
 
-          <FlatList
-            role="list"
-            data={availableFilters}
-            keyExtractor={(_, index) => `filter-item-${index}`}
-            renderItem={({ item }) => {
-              const isSet = Boolean(filters[item.name]) || openFilters.includes(item.name);
+            return (
+              <Pressable
+                style={({ hovered }) => [styles.item, hovered && styles.itemHovered]}
+                role="button"
+                disabled={isSet}
+                onPress={() => {
+                  onAddFilter(item.name);
+                  close();
+                }}
+              >
+                <LakeText variant="smallRegular" style={isSet && styles.selected}>
+                  {item.label}
+                </LakeText>
 
-              return (
-                <Pressable
-                  style={({ hovered }) => [styles.item, hovered && styles.itemHovered]}
-                  role="button"
-                  disabled={isSet}
-                  onPress={() => {
-                    onAddFilter(item.name);
-                    close();
-                  }}
-                >
-                  <LakeText variant="smallRegular" style={isSet && styles.selected}>
-                    {item.label}
-                  </LakeText>
-
-                  {isSet && <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />}
-                </Pressable>
-              );
-            }}
-          />
-        </View>
+                {isSet && <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />}
+              </Pressable>
+            );
+          }}
+        />
       </Popover>
     </>
   );
