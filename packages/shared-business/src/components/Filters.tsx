@@ -20,7 +20,7 @@ import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { DateFormat } from "../utils/i18n";
+import { DateFormat, t } from "../utils/i18n";
 import { DatePickerDate, DatePickerModal } from "./DatePicker";
 
 const styles = StyleSheet.create({
@@ -204,7 +204,6 @@ type FilterCheckboxProps<T> = {
   value: T[] | undefined;
   onPressRemove: () => void;
   autoOpen?: boolean;
-  checkAllLabel?: string;
 };
 
 type CheckAllItem = {
@@ -216,7 +215,6 @@ function FilterCheckbox<T>({
   label,
   items,
   width,
-  checkAllLabel,
   value,
   onValueChange,
   onPressRemove,
@@ -232,23 +230,19 @@ function FilterCheckbox<T>({
     [items, valueSet],
   );
 
-  const allChecked = checkAllLabel != null && valueSet.size === items.length;
+  const allChecked = valueSet.size === items.length;
 
   const listItems = useMemo(() => {
-    if (checkAllLabel == null) {
-      return items;
-    }
-
     const checked: CheckAllItem["checked"] =
       valueSet.size === 0 ? false : valueSet.size === items.length ? true : "mixed";
 
     const checkAllItem: CheckAllItem = {
-      label: checkAllLabel,
+      label: t("common.filters.all"),
       checked,
     };
 
     return [checkAllItem, ...items];
-  }, [items, checkAllLabel, valueSet]);
+  }, [items, valueSet]);
 
   return (
     <View style={styles.container}>
@@ -258,7 +252,9 @@ function FilterCheckbox<T>({
         ref={inputRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={allChecked ? checkAllLabel : currentValue.map(item => item.label).join(", ")}
+        value={
+          allChecked ? t("common.filters.all") : currentValue.map(item => item.label).join(", ")
+        }
       />
 
       <Popover
@@ -487,7 +483,6 @@ export type FilterCheckboxDef<T> = {
   label: string;
   items: Item<T>[];
   width?: number;
-  checkAllLabel?: string;
 };
 
 export type FilterRadioDef<T> = {
@@ -592,12 +587,11 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                 />
               ))
-              .with({ type: "checkbox" }, ({ type, label, items, width, checkAllLabel }) => (
+              .with({ type: "checkbox" }, ({ type, label, items, width }) => (
                 <FilterCheckbox
                   label={label}
                   items={items}
                   width={width}
-                  checkAllLabel={checkAllLabel}
                   autoOpen={lastOpenedFilter === filterName}
                   value={getFilterValue(type, filters, filterName)}
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}

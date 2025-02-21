@@ -24,6 +24,8 @@
   "common.cancel": "Annuler",
   "common.close": "Fermer",
   "common.filters": "Filtres",
+  "common.filters.all": "Tout",
+  "common.filters.apply": "Appliquer",
   "common.form.help.nbCharacters": "{nbCharacters} caractères",
   "common.form.help.nbDigits": "{nbDigits} chiffres",
   "common.form.invalidTaxIdentificationNumber": "Ce numéro d'identification fiscale n'est pas valide",

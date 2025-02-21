@@ -24,6 +24,8 @@
   "common.cancel": "Cancel",
   "common.close": "Close",
   "common.filters": "Filters",
+  "common.filters.all": "All",
+  "common.filters.apply": "Apply",
   "common.form.help.nbCharacters": "{nbCharacters} characters",
   "common.form.help.nbDigits": "{nbDigits} digits",
   "common.form.invalidTaxIdentificationNumber": "This tax identification number is invalid",

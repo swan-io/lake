@@ -24,6 +24,8 @@
   "common.cancel": "Abbrechen",
   "common.close": "Schließen",
   "common.filters": "Filter",
+  "common.filters.all": "Alle",
+  "common.filters.apply": "Anwenden",
   "common.form.help.nbCharacters": "{nbCharacters} Zeichen",
   "common.form.help.nbDigits": "{nbDigits} Ziffern",
   "common.form.invalidTaxIdentificationNumber": "Diese Steueridentifikationsnummer ist ungültig",
