@@ -9,6 +9,7 @@ import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useRef } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import { t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
   selected: {
@@ -39,7 +40,6 @@ const styles = StyleSheet.create({
 export function FilterChooser<FilterName extends string>({
   filters,
   openFilters,
-  label,
   title,
   availableFilters,
   large = true,
@@ -47,7 +47,6 @@ export function FilterChooser<FilterName extends string>({
 }: {
   filters: Partial<Record<FilterName, unknown>>;
   openFilters: FilterName[];
-  label: string;
   title?: string;
   availableFilters: { label: string; name: FilterName }[];
   large?: boolean;
@@ -66,9 +65,9 @@ export function FilterChooser<FilterName extends string>({
         ref={inputRef}
         icon={large ? "chevron-down-filled" : "filter-filled"}
         iconPosition="end"
-        ariaLabel={label}
+        ariaLabel={t("common.filters")}
       >
-        {large ? label : null}
+        {large ? t("common.filters") : null}
       </LakeButton>
 
       <Popover
@@ -93,6 +92,7 @@ export function FilterChooser<FilterName extends string>({
             keyExtractor={(_, index) => `filter-item-${index}`}
             renderItem={({ item }) => {
               const isSet = Boolean(filters[item.name]) || openFilters.includes(item.name);
+
               return (
                 <Pressable
                   style={({ hovered }) => [styles.item, hovered && styles.itemHovered]}

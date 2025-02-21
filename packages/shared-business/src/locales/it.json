@@ -23,6 +23,7 @@
   "businessActivity.transportation": "Trasporto",
   "common.cancel": "Annulla",
   "common.close": "Chiudi",
+  "common.filters": "Filtri",
   "common.form.help.nbCharacters": "{nbCharacters} caratteri",
   "common.form.help.nbDigits": "{nbDigits} cifre",
   "common.form.invalidTaxIdentificationNumber": "Codice fiscale non valido",
