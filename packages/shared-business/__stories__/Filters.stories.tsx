@@ -1,9 +1,9 @@
 import { Meta } from "@storybook/react";
-import { FilterChooser } from "@swan-io/lake/src/components/FilterChooser";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { useState } from "react";
 import { View } from "react-native";
+import { FilterChooser } from "../src/components/FilterChooser";
 import {
   FilterCheckboxDef,
   FilterDateDef,
@@ -108,8 +108,6 @@ export const All = () => {
         <View>
           <FilterChooser
             filters={filters}
-            label="Choose filters"
-            title="Filters"
             onAddFilter={filter => setOpenFilters(filters => [...filters, filter])}
             availableFilters={availableFilters}
             openFilters={openFilters}
