@@ -26,6 +26,8 @@
   "common.filters": "Suodattimet",
   "common.filters.all": "Kaikki",
   "common.filters.apply": "Käytä",
+  "common.filters.cancel": "Peruuta",
+  "common.filters.none": "Ei yhtään",
   "common.form.help.nbCharacters": "{nbCharacters} merkkiä",
   "common.form.help.nbDigits": "{nbDigits} numeroa",
   "common.form.invalidTaxIdentificationNumber": "Virheellinen verotunnistenumero",

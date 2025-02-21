@@ -126,7 +126,6 @@ const FilterTag = forwardRef<View, TagProps>(
 type FilterRadioProps<T> = {
   autoOpen?: boolean;
   items: Item<T>[];
-  width?: number;
   label: string;
   value: T | undefined;
   onPressRemove: () => void;
@@ -136,7 +135,6 @@ type FilterRadioProps<T> = {
 function FilterRadio<T>({
   label,
   items,
-  width,
   value,
   onValueChange,
   onPressRemove,
@@ -168,7 +166,7 @@ function FilterRadio<T>({
         <FlatList
           role="list"
           data={items}
-          style={[styles.dropdown, { width }]}
+          style={styles.dropdown}
           contentContainerStyle={styles.content}
           keyExtractor={(_, index) => `filter-item-${index}`}
           renderItem={({ item }) => {
@@ -199,7 +197,6 @@ function FilterRadio<T>({
 type FilterCheckboxProps<T> = {
   label: string;
   items: Item<T>[];
-  width?: number;
   onValueChange: (value: T[] | undefined) => void;
   value: T[] | undefined;
   onPressRemove: () => void;
@@ -214,7 +211,6 @@ type CheckAllItem = {
 function FilterCheckbox<T>({
   label,
   items,
-  width,
   value,
   onValueChange,
   onPressRemove,
@@ -268,7 +264,7 @@ function FilterCheckbox<T>({
         <FlatList
           role="list"
           data={listItems}
-          style={[styles.dropdown, { width }]}
+          style={styles.dropdown}
           contentContainerStyle={styles.content}
           keyExtractor={(_, index) => `filter-item-${index}`}
           renderItem={({ item }) => {
@@ -323,9 +319,6 @@ function FilterCheckbox<T>({
 
 type FilterDateProps = {
   label: string;
-  noValueText: string;
-  cancelText: string;
-  submitText: string;
   dateFormat: DateFormat;
   isSelectable?: (date: DatePickerDate) => boolean;
   validate?: (value: string) => ValidatorResult;
@@ -338,9 +331,6 @@ type FilterDateProps = {
 function FilterDate({
   label,
   initialValue,
-  noValueText,
-  cancelText,
-  submitText,
   dateFormat,
   isSelectable,
   validate,
@@ -364,7 +354,11 @@ function FilterDate({
         ref={inputRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={isNotNullish(initialValue) ? dayjs(initialValue).format(dateFormat) : noValueText}
+        value={
+          isNotNullish(initialValue)
+            ? dayjs(initialValue).format(dateFormat)
+            : t("common.filters.none")
+        }
       />
 
       <DatePickerModal
@@ -372,8 +366,8 @@ function FilterDate({
         format={dateFormat}
         firstWeekDay="monday"
         label={label}
-        cancelLabel={cancelText}
-        confirmLabel={submitText}
+        cancelLabel={t("common.filters.cancel")}
+        confirmLabel={t("common.filters.apply")}
         value={value}
         isSelectable={isSelectable}
         validate={validate}
@@ -389,7 +383,6 @@ function FilterDate({
 
 type FilterInputProps = {
   label: string;
-  noValueText: string;
   validate?: (value: string) => ValidatorResult;
   placeholder?: string;
   initialValue?: string;
@@ -401,7 +394,6 @@ type FilterInputProps = {
 function FilterInput({
   label,
   initialValue = "",
-  noValueText,
   autoOpen = false,
   placeholder,
   validate,
@@ -447,7 +439,7 @@ function FilterInput({
         ref={tagRef}
         onPressRemove={onPressRemove}
         isActive={visible}
-        value={validValue ?? noValueText}
+        value={validValue ?? t("common.filters.none")}
       />
 
       <Popover
@@ -482,22 +474,17 @@ export type FilterCheckboxDef<T> = {
   type: "checkbox";
   label: string;
   items: Item<T>[];
-  width?: number;
 };
 
 export type FilterRadioDef<T> = {
   type: "radio";
   label: string;
   items: Item<T>[];
-  width?: number;
 };
 
 export type FilterDateDef<Values = unknown> = {
   type: "date";
   label: string;
-  cancelText: string;
-  submitText: string;
-  noValueText: string;
   dateFormat: DateFormat;
   isSelectable?: (date: DatePickerDate, filters: Values) => boolean;
   validate?: (value: string, filters: Values) => ValidatorResult;
@@ -506,7 +493,6 @@ export type FilterDateDef<Values = unknown> = {
 export type FilterInputDef = {
   type: "input";
   label: string;
-  noValueText: string;
   placeholder?: string;
   validate?: (value: string) => ValidatorResult;
 };
@@ -573,11 +559,10 @@ export const FiltersStack = <T extends FiltersDefinition>({
         return (
           <View key={filterName}>
             {match<Filter<unknown>>(filterDefinition)
-              .with({ type: "radio" }, ({ type, label, items, width }) => (
+              .with({ type: "radio" }, ({ type, label, items }) => (
                 <FilterRadio
                   label={label}
                   items={items}
-                  width={width}
                   autoOpen={lastOpenedFilter === filterName}
                   onPressRemove={() => {
                     onChangeFilters({ ...filters, [filterName]: undefined });
@@ -587,11 +572,10 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
                 />
               ))
-              .with({ type: "checkbox" }, ({ type, label, items, width }) => (
+              .with({ type: "checkbox" }, ({ type, label, items }) => (
                 <FilterCheckbox
                   label={label}
                   items={items}
-                  width={width}
                   autoOpen={lastOpenedFilter === filterName}
                   value={getFilterValue(type, filters, filterName)}
                   onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
@@ -601,41 +585,25 @@ export const FiltersStack = <T extends FiltersDefinition>({
                   }}
                 />
               ))
-              .with(
-                { type: "date" },
-                ({
-                  type,
-                  label,
-                  noValueText,
-                  cancelText,
-                  submitText,
-                  dateFormat,
-                  isSelectable,
-                  validate,
-                }) => (
-                  <FilterDate
-                    label={label}
-                    noValueText={noValueText}
-                    cancelText={cancelText}
-                    submitText={submitText}
-                    dateFormat={dateFormat}
-                    autoOpen={lastOpenedFilter === filterName}
-                    isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
-                    validate={validate ? value => validate(value, filters) : undefined}
-                    initialValue={getFilterValue(type, filters, filterName)}
-                    onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
-                    onPressRemove={() => {
-                      onChangeFilters({ ...filters, [filterName]: undefined });
-                      onChangeOpened(openedFilters.filter(f => f !== filterName));
-                    }}
-                  />
-                ),
-              )
-              .with({ type: "input" }, ({ type, label, placeholder, noValueText, validate }) => (
+              .with({ type: "date" }, ({ type, label, dateFormat, isSelectable, validate }) => (
+                <FilterDate
+                  label={label}
+                  dateFormat={dateFormat}
+                  autoOpen={lastOpenedFilter === filterName}
+                  isSelectable={isSelectable ? date => isSelectable(date, filters) : undefined}
+                  validate={validate ? value => validate(value, filters) : undefined}
+                  initialValue={getFilterValue(type, filters, filterName)}
+                  onValueChange={value => onChangeFilters({ ...filters, [filterName]: value })}
+                  onPressRemove={() => {
+                    onChangeFilters({ ...filters, [filterName]: undefined });
+                    onChangeOpened(openedFilters.filter(f => f !== filterName));
+                  }}
+                />
+              ))
+              .with({ type: "input" }, ({ type, label, placeholder, validate }) => (
                 <FilterInput
                   label={label}
                   placeholder={placeholder}
-                  noValueText={noValueText}
                   autoOpen={lastOpenedFilter === filterName}
                   validate={validate}
                   initialValue={getFilterValue(type, filters, filterName)}

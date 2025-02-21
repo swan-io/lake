@@ -26,6 +26,8 @@
   "common.filters": "Filters",
   "common.filters.all": "Alle",
   "common.filters.apply": "Toepassen",
+  "common.filters.cancel": "Annuleren",
+  "common.filters.none": "Geen",
   "common.form.help.nbCharacters": "{nbCharacters} tekens",
   "common.form.help.nbDigits": "{nbDigits} cijfers",
   "common.form.invalidTaxIdentificationNumber": "Dit fiscale identificatienummer is ongeldig",

@@ -40,16 +40,12 @@ const status: FilterCheckboxDef<
 const startDate: FilterDateDef = {
   type: "date",
   label: "Start Date",
-  cancelText: "Cancel",
-  submitText: "Save",
-  noValueText: "None",
   dateFormat: "DD/MM/YYYY",
 };
 
 const resourceId: FilterInputDef = {
   type: "input",
   label: "Resource ID",
-  noValueText: "None",
   placeholder: "Placeholder...",
   validate: value => {
     if (value.length < 3) {
