@@ -133,7 +133,7 @@ type FilterRadioProps<T> = {
   onValueChange: (value: T | undefined) => void;
 };
 
-function FilterRadio<T>({
+const FilterRadio = <T,>({
   label,
   items,
   width,
@@ -141,7 +141,7 @@ function FilterRadio<T>({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterRadioProps<T>) {
+}: FilterRadioProps<T>) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
   const currentValue = useMemo(() => items.find(i => i.value === value), [items, value]);
@@ -194,7 +194,7 @@ function FilterRadio<T>({
       </Popover>
     </View>
   );
-}
+};
 
 type FilterCheckboxProps<T> = {
   label: string;
@@ -212,7 +212,7 @@ type CheckAllItem = {
   checked: boolean | "mixed";
 };
 
-function FilterCheckbox<T>({
+const FilterCheckbox = <T,>({
   label,
   items,
   width,
@@ -221,7 +221,7 @@ function FilterCheckbox<T>({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterCheckboxProps<T>) {
+}: FilterCheckboxProps<T>) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
@@ -323,7 +323,7 @@ function FilterCheckbox<T>({
       </Popover>
     </View>
   );
-}
+};
 
 type FilterDateProps = {
   label: string;
@@ -339,7 +339,7 @@ type FilterDateProps = {
   autoOpen?: boolean;
 };
 
-function FilterDate({
+const FilterDate = ({
   label,
   initialValue,
   noValueText,
@@ -351,7 +351,7 @@ function FilterDate({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterDateProps) {
+}: FilterDateProps) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
@@ -389,7 +389,7 @@ function FilterDate({
       />
     </View>
   );
-}
+};
 
 type FilterInputProps = {
   label: string;
@@ -402,7 +402,7 @@ type FilterInputProps = {
   autoOpen?: boolean;
 };
 
-function FilterInput({
+const FilterInput = ({
   label,
   initialValue = "",
   noValueText,
@@ -411,7 +411,7 @@ function FilterInput({
   validate,
   onValueChange,
   onPressRemove,
-}: FilterInputProps) {
+}: FilterInputProps) => {
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
   const tagRef = useRef<View>(null);
 
@@ -480,7 +480,7 @@ function FilterInput({
       </Popover>
     </View>
   );
-}
+};
 
 export type FilterCheckboxDef<T> = {
   type: "checkbox";
@@ -522,9 +522,7 @@ type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox
   ? T["items"][number]["value"][] | undefined
   : T extends { type: "radio" }
     ? T["items"][number]["value"] | undefined
-    : T extends { type: "boolean" }
-      ? boolean | undefined
-      : string | undefined;
+    : string | undefined;
 
 const getFilterValue = <T extends Filter<unknown>["type"]>(
   _type: T,
@@ -557,6 +555,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
   onChangeFilters,
 }: FiltersStackProps<T>) => {
   const previousOpened = usePreviousValue(openedFilters);
+
   const lastOpenedFilter =
     openedFilters.length > previousOpened.length
       ? openedFilters[openedFilters.length - 1]
