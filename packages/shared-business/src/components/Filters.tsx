@@ -1,4 +1,4 @@
-import { Dict } from "@swan-io/boxed";
+import { Array, Dict, Option } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { FlatList } from "@swan-io/lake/src/components/FlatList";
 import { Icon } from "@swan-io/lake/src/components/Icon";
@@ -706,16 +706,23 @@ export const useFiltersProps = <
   Definition extends FiltersDefinition,
   Filters extends Record<string, unknown>,
 >({
-  filtersDefinition,
+  available,
   filters,
+  definition,
 }: {
-  filtersDefinition: Definition;
+  available?: (keyof Filters)[];
   filters: Filters;
+  definition: Definition;
 }) => {
-  const availableFilters = useMemo(
-    () => Dict.entries(filtersDefinition).map(([name, { label }]) => ({ name, label })),
-    [filtersDefinition],
-  );
+  const availableFilters: { name: keyof Definition; label: string }[] = useMemo(() => {
+    const availableSet = new Set<PropertyKey>(
+      isNullish(available) ? Dict.keys(definition) : available,
+    );
+
+    return Array.filterMap(Dict.entries(definition), ([name, { label }]) =>
+      availableSet.has(name) ? Option.Some({ name, label }) : Option.None(),
+    );
+  }, [available, definition]);
 
   const [openFilters, setOpenFilters] = useState(() =>
     Dict.entries(filters)
@@ -733,10 +740,9 @@ export const useFiltersProps = <
     });
   }, [filters]);
 
-  const onAddFilter = useCallback(
-    (filter: keyof Filters) => setOpenFilters(openFilters => [...openFilters, filter]),
-    [],
-  );
+  const onAddFilter = useCallback((filter: keyof Filters) => {
+    setOpenFilters(openFilters => [...openFilters, filter]);
+  }, []);
 
   return {
     chooser: {
@@ -747,7 +753,7 @@ export const useFiltersProps = <
       openFilters,
     },
     stack: {
-      definition: filtersDefinition,
+      definition,
       filters,
       openedFilters: openFilters,
       onChangeOpened: setOpenFilters,
