@@ -57,7 +57,7 @@ export const All = () => {
     startDate: undefined,
   });
 
-  const filtersProps = useFiltersProps({ definition: filtersDefinition, filters });
+  const filtersProps = useFiltersProps({ filtersDefinition, filters });
 
   return (
     <StoryBlock title="Filters">

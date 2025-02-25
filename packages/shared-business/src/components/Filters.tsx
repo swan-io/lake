@@ -708,21 +708,21 @@ export const useFiltersProps = <
 >({
   available,
   filters,
-  definition,
+  filtersDefinition,
 }: {
   available?: (keyof Filters)[];
   filters: Filters;
-  definition: Definition;
+  filtersDefinition: Definition;
 }) => {
   const availableFilters: { name: keyof Definition; label: string }[] = useMemo(() => {
     const availableSet = new Set<PropertyKey>(
-      isNullish(available) ? Dict.keys(definition) : available,
+      isNullish(available) ? Dict.keys(filtersDefinition) : available,
     );
 
-    return Array.filterMap(Dict.entries(definition), ([name, { label }]) =>
+    return Array.filterMap(Dict.entries(filtersDefinition), ([name, { label }]) =>
       availableSet.has(name) ? Option.Some({ name, label }) : Option.None(),
     );
-  }, [available, definition]);
+  }, [available, filtersDefinition]);
 
   const [openFilters, setOpenFilters] = useState(() =>
     Dict.entries(filters)
@@ -753,7 +753,7 @@ export const useFiltersProps = <
       openFilters,
     },
     stack: {
-      definition,
+      definition: filtersDefinition,
       filters,
       openedFilters: openFilters,
       onChangeOpened: setOpenFilters,
