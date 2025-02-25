@@ -702,16 +702,19 @@ export const filter = {
   }),
 } as const;
 
-export const useFilters = <
+export const useFiltersProps = <
   Definition extends FiltersDefinition,
   Filters extends Record<string, string | string[] | undefined>,
->(
-  definition: Definition,
-  filters: Filters,
-) => {
+>({
+  filtersDefinition,
+  filters,
+}: {
+  filtersDefinition: Definition;
+  filters: Filters;
+}) => {
   const availableFilters = useMemo(
-    () => Dict.entries(definition).map(([name, { label }]) => ({ name, label })),
-    [definition],
+    () => Dict.entries(filtersDefinition).map(([name, { label }]) => ({ name, label })),
+    [filtersDefinition],
   );
 
   const [openFilters, setOpenFilters] = useState(() =>
@@ -744,7 +747,7 @@ export const useFilters = <
       openFilters,
     },
     stack: {
-      definition,
+      definition: filtersDefinition,
       filters,
       openedFilters: openFilters,
       onChangeOpened: setOpenFilters,

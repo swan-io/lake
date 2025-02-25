@@ -4,10 +4,10 @@ import { FilterChooser } from "@swan-io/lake/src/components/FilterChooser";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { useState } from "react";
-import { filter, FiltersStack, FiltersState, useFilters } from "../src/components/Filters";
+import { filter, FiltersStack, FiltersState, useFiltersProps } from "../src/components/Filters";
 import { StoryBlock } from "./_StoriesComponents";
 
-const definition = {
+const filtersDefinition = {
   mode: filter.radio({
     label: "Mode",
     items: [
@@ -42,7 +42,7 @@ const definition = {
   }),
 };
 
-type State = FiltersState<typeof definition>;
+type State = FiltersState<typeof filtersDefinition>;
 
 export default {
   title: "Forms/Filters",
@@ -57,7 +57,7 @@ export const All = () => {
     startDate: undefined,
   });
 
-  const filtersProps = useFilters(definition, filters);
+  const filtersProps = useFiltersProps({ filtersDefinition, filters });
 
   return (
     <StoryBlock title="Filters">
