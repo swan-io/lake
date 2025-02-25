@@ -1,3 +1,4 @@
+import { Dict } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { FlatList } from "@swan-io/lake/src/components/FlatList";
 import { Icon } from "@swan-io/lake/src/components/Icon";
@@ -16,11 +17,11 @@ import { usePreviousValue } from "@swan-io/lake/src/hooks/usePreviousValue";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { DateFormat } from "../utils/i18n";
+import { DateFormat, locale, t } from "../utils/i18n";
 import { DatePickerDate, DatePickerModal } from "./DatePicker";
 
 const styles = StyleSheet.create({
@@ -657,4 +658,96 @@ export const FiltersStack = <T extends FiltersDefinition>({
       })}
     </Stack>
   );
+};
+
+export const filter = {
+  checkbox: <T,>(config: { label: string; items: Item<T>[] }): FilterCheckboxDef<T> => ({
+    type: "checkbox",
+    label: config.label,
+    items: config.items,
+    checkAllLabel: t("common.filters.all"),
+  }),
+
+  date: (config: {
+    label: string;
+    isSelectable?: (date: DatePickerDate, filters: unknown) => boolean;
+    validate?: (value: string, filters: unknown) => ValidatorResult;
+  }): FilterDateDef => ({
+    type: "date",
+    label: config.label,
+    cancelText: t("common.filters.cancel"),
+    submitText: t("common.filters.apply"),
+    noValueText: t("common.filters.none"),
+    dateFormat: locale.dateFormat,
+    isSelectable: config.isSelectable,
+    validate: config.validate,
+  }),
+
+  input: (config: {
+    label: string;
+    placeholder?: string;
+    validate?: (value: string) => ValidatorResult;
+  }): FilterInputDef => ({
+    type: "input",
+    label: config.label,
+    noValueText: t("common.filters.none"),
+    placeholder: config.placeholder,
+    validate: config.validate,
+  }),
+
+  radio: <T,>(config: { label: string; items: Item<T>[] }): FilterRadioDef<T> => ({
+    type: "radio",
+    label: config.label,
+    items: config.items,
+  }),
+} as const;
+
+export const useFilters = <
+  Definition extends FiltersDefinition,
+  Filters extends Record<string, string | string[] | undefined>,
+>(
+  definition: Definition,
+  filters: Filters,
+) => {
+  const availableFilters = useMemo(
+    () => Dict.entries(definition).map(([name, { label }]) => ({ name, label })),
+    [definition],
+  );
+
+  const [openFilters, setOpenFilters] = useState(() =>
+    Dict.entries(filters)
+      .filter(([, value]) => isNotNullish(value))
+      .map(([name]) => name),
+  );
+
+  useEffect(() => {
+    setOpenFilters(openFilters => {
+      const currentlyOpenFilters = new Set(openFilters);
+      const openFiltersNotYetInState = Dict.entries(filters)
+        .filter(([name, value]) => isNotNullish(value) && !currentlyOpenFilters.has(name))
+        .map(([name]) => name);
+      return [...openFilters, ...openFiltersNotYetInState];
+    });
+  }, [filters]);
+
+  const onAddFilter = useCallback(
+    (filter: keyof Filters) => setOpenFilters(openFilters => [...openFilters, filter]),
+    [],
+  );
+
+  return {
+    chooser: {
+      availableFilters,
+      filters,
+      label: t("common.filters"),
+      onAddFilter,
+      openFilters,
+    },
+    stack: {
+      definition,
+      filters,
+      openedFilters: openFilters,
+      onChangeOpened: setOpenFilters,
+    },
+  };
 };

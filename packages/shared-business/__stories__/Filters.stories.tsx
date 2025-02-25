@@ -1,91 +1,48 @@
 import { Meta } from "@storybook/react";
+import { Box } from "@swan-io/lake/src/components/Box";
 import { FilterChooser } from "@swan-io/lake/src/components/FilterChooser";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { useState } from "react";
-import { View } from "react-native";
-import {
-  FilterCheckboxDef,
-  FilterDateDef,
-  FilterInputDef,
-  FilterRadioDef,
-  FiltersStack,
-  FiltersState,
-} from "../src/components/Filters";
+import { filter, FiltersStack, FiltersState, useFilters } from "../src/components/Filters";
 import { StoryBlock } from "./_StoriesComponents";
 
-const mode: FilterRadioDef<"QES" | "Expert"> = {
-  type: "radio",
-  label: "Mode",
-  items: [
-    { label: "QES", value: "QES" },
-    { label: "Expert", value: "Expert" },
-  ],
-};
-
-const status: FilterCheckboxDef<
-  "Accepted" | "Canceled" | "Failed" | "Expired" | "CustomerRefused"
-> = {
-  type: "checkbox",
-  label: "Status",
-  checkAllLabel: "All",
-  items: [
-    { label: "Accepted", value: "Accepted" },
-    { label: "Canceled", value: "Canceled" },
-    { label: "Failed", value: "Failed" },
-    { label: "Expired", value: "Expired" },
-    { label: "CustomerRefused", value: "CustomerRefused" },
-  ],
-};
-
-const startDate: FilterDateDef = {
-  type: "date",
-  label: "Start Date",
-  cancelText: "Cancel",
-  submitText: "Save",
-  noValueText: "None",
-  dateFormat: "DD/MM/YYYY",
-};
-
-const resourceId: FilterInputDef = {
-  type: "input",
-  label: "Resource ID",
-  noValueText: "None",
-  placeholder: "Placeholder...",
-  validate: value => {
-    if (value.length < 3) {
-      return "Not long enough";
-    }
-  },
-};
-
 const definition = {
-  mode,
-  status,
-  startDate,
-  resourceId,
+  mode: filter.radio({
+    label: "Mode",
+    items: [
+      { label: "QES", value: "QES" },
+      { label: "Expert", value: "Expert" },
+    ],
+  }),
+
+  status: filter.checkbox({
+    label: "Status",
+    items: [
+      { label: "Accepted", value: "Accepted" },
+      { label: "Canceled", value: "Canceled" },
+      { label: "Failed", value: "Failed" },
+      { label: "Expired", value: "Expired" },
+      { label: "CustomerRefused", value: "CustomerRefused" },
+    ],
+  }),
+
+  startDate: filter.date({
+    label: "Start Date",
+  }),
+
+  resourceId: filter.input({
+    label: "Resource ID",
+    placeholder: "Placeholder...",
+    validate: value => {
+      if (value.length < 3) {
+        return "Not long enough";
+      }
+    },
+  }),
 };
 
 type State = FiltersState<typeof definition>;
-
-const availableFilters: { name: keyof State; label: string }[] = [
-  {
-    name: "mode",
-    label: "Mode",
-  },
-  {
-    name: "status",
-    label: "Status",
-  },
-  {
-    name: "startDate",
-    label: "Start date",
-  },
-  {
-    name: "resourceId",
-    label: "Ressource ID",
-  },
-];
 
 export default {
   title: "Forms/Filters",
@@ -93,8 +50,6 @@ export default {
 } as Meta<typeof FilterChooser>;
 
 export const All = () => {
-  const [openFilters, setOpenFilters] = useState<(keyof State)[]>([]);
-
   const [filters, setFilters] = useState<State>({
     mode: undefined,
     status: undefined,
@@ -102,29 +57,16 @@ export const All = () => {
     startDate: undefined,
   });
 
+  const filtersProps = useFilters(definition, filters);
+
   return (
     <StoryBlock title="Filters">
       <WithCurrentColor variant="live">
-        <View>
-          <FilterChooser
-            filters={filters}
-            label="Choose filters"
-            title="Filters"
-            onAddFilter={filter => setOpenFilters(filters => [...filters, filter])}
-            availableFilters={availableFilters}
-            openFilters={openFilters}
-          />
-
+        <Box alignItems="start">
+          <FilterChooser {...filtersProps.chooser} />
           <Space height={8} />
-
-          <FiltersStack
-            definition={definition}
-            filters={filters}
-            openedFilters={openFilters}
-            onChangeFilters={setFilters}
-            onChangeOpened={setOpenFilters}
-          />
-        </View>
+          <FiltersStack {...filtersProps.stack} onChangeFilters={setFilters} />
+        </Box>
       </WithCurrentColor>
     </StoryBlock>
   );
