@@ -1,4 +1,4 @@
-import { createContext, MutableRefObject, ReactElement, useLayoutEffect, useRef } from "react";
+import { createContext, MutableRefObject, ReactNode, useLayoutEffect, useRef } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { colors, ColorVariants } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -6,7 +6,7 @@ import { isNotNullish } from "../utils/nullish";
 type Props = {
   variant?: ColorVariants;
   style?: ViewProps["style"];
-  children: ReactElement;
+  children: ReactNode;
 };
 
 const styles = StyleSheet.create({

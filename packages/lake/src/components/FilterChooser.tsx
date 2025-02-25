@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { colors } from "../constants/design";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { isNotNullishOrEmpty } from "../utils/nullish";
-import { Box } from "./Box";
 import { FlatList } from "./FlatList";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function FilterChooser<FilterName extends string>({
+export const FilterChooser = <FilterName extends string>({
   filters,
   openFilters,
   label,
@@ -53,26 +52,24 @@ export function FilterChooser<FilterName extends string>({
   availableFilters: { label: string; name: FilterName }[];
   large?: boolean;
   onAddFilter: (filterName: FilterName) => void;
-}) {
+}) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(false);
 
   return (
     <>
-      <Box direction="row" justifyContent="start" alignItems="center">
-        <LakeButton
-          size="small"
-          mode="secondary"
-          color="gray"
-          onPress={toggle}
-          ref={inputRef}
-          icon={large ? "chevron-down-filled" : "filter-filled"}
-          iconPosition="end"
-          ariaLabel={label}
-        >
-          {large ? label : null}
-        </LakeButton>
-      </Box>
+      <LakeButton
+        size="small"
+        mode="secondary"
+        color="gray"
+        onPress={toggle}
+        ref={inputRef}
+        icon={large ? "chevron-down-filled" : "filter-filled"}
+        iconPosition="end"
+        ariaLabel={label}
+      >
+        {large ? label : null}
+      </LakeButton>
 
       <Popover
         role="listbox"
@@ -119,4 +116,4 @@ export function FilterChooser<FilterName extends string>({
       </Popover>
     </>
   );
-}
+};

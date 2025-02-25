@@ -447,6 +447,7 @@ declare module "react-native" {
     backgroundSize?: string;
     boxShadow?: string;
     display?: DisplayValue;
+    listStyleType?: string;
     maskImage?: string;
     position?: PositionValue;
     scrollBehavior?: "auto" | "smooth";
