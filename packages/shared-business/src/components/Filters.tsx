@@ -704,7 +704,7 @@ export const filter = {
 
 export const useFiltersProps = <
   Definition extends FiltersDefinition,
-  Filters extends Record<string, string | string[] | undefined>,
+  Filters extends Record<string, unknown>,
 >({
   filtersDefinition,
   filters,
