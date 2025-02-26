@@ -1,3 +1,4 @@
+import { Array, Dict, Option } from "@swan-io/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { FlatList } from "@swan-io/lake/src/components/FlatList";
 import { Icon } from "@swan-io/lake/src/components/Icon";
@@ -16,11 +17,11 @@ import { usePreviousValue } from "@swan-io/lake/src/hooks/usePreviousValue";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
-import { DateFormat } from "../utils/i18n";
+import { DateFormat, locale, t } from "../utils/i18n";
 import { DatePickerDate, DatePickerModal } from "./DatePicker";
 
 const styles = StyleSheet.create({
@@ -133,7 +134,7 @@ type FilterRadioProps<T> = {
   onValueChange: (value: T | undefined) => void;
 };
 
-function FilterRadio<T>({
+const FilterRadio = <T,>({
   label,
   items,
   width,
@@ -141,7 +142,7 @@ function FilterRadio<T>({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterRadioProps<T>) {
+}: FilterRadioProps<T>) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
   const currentValue = useMemo(() => items.find(i => i.value === value), [items, value]);
@@ -194,7 +195,7 @@ function FilterRadio<T>({
       </Popover>
     </View>
   );
-}
+};
 
 type FilterCheckboxProps<T> = {
   label: string;
@@ -212,7 +213,7 @@ type CheckAllItem = {
   checked: boolean | "mixed";
 };
 
-function FilterCheckbox<T>({
+const FilterCheckbox = <T,>({
   label,
   items,
   width,
@@ -221,7 +222,7 @@ function FilterCheckbox<T>({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterCheckboxProps<T>) {
+}: FilterCheckboxProps<T>) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
@@ -323,7 +324,7 @@ function FilterCheckbox<T>({
       </Popover>
     </View>
   );
-}
+};
 
 type FilterDateProps = {
   label: string;
@@ -339,7 +340,7 @@ type FilterDateProps = {
   autoOpen?: boolean;
 };
 
-function FilterDate({
+const FilterDate = ({
   label,
   initialValue,
   noValueText,
@@ -351,7 +352,7 @@ function FilterDate({
   onValueChange,
   onPressRemove,
   autoOpen = false,
-}: FilterDateProps) {
+}: FilterDateProps) => {
   const inputRef = useRef<View>(null);
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
 
@@ -389,7 +390,7 @@ function FilterDate({
       />
     </View>
   );
-}
+};
 
 type FilterInputProps = {
   label: string;
@@ -402,7 +403,7 @@ type FilterInputProps = {
   autoOpen?: boolean;
 };
 
-function FilterInput({
+const FilterInput = ({
   label,
   initialValue = "",
   noValueText,
@@ -411,7 +412,7 @@ function FilterInput({
   validate,
   onValueChange,
   onPressRemove,
-}: FilterInputProps) {
+}: FilterInputProps) => {
   const [visible, { close, toggle }] = useDisclosure(autoOpen);
   const tagRef = useRef<View>(null);
 
@@ -480,7 +481,7 @@ function FilterInput({
       </Popover>
     </View>
   );
-}
+};
 
 export type FilterCheckboxDef<T> = {
   type: "checkbox";
@@ -522,9 +523,7 @@ type ExtractFilterValue<T extends Filter<unknown>> = T extends { type: "checkbox
   ? T["items"][number]["value"][] | undefined
   : T extends { type: "radio" }
     ? T["items"][number]["value"] | undefined
-    : T extends { type: "boolean" }
-      ? boolean | undefined
-      : string | undefined;
+    : string | undefined;
 
 const getFilterValue = <T extends Filter<unknown>["type"]>(
   _type: T,
@@ -557,6 +556,7 @@ export const FiltersStack = <T extends FiltersDefinition>({
   onChangeFilters,
 }: FiltersStackProps<T>) => {
   const previousOpened = usePreviousValue(openedFilters);
+
   const lastOpenedFilter =
     openedFilters.length > previousOpened.length
       ? openedFilters[openedFilters.length - 1]
@@ -658,4 +658,105 @@ export const FiltersStack = <T extends FiltersDefinition>({
       })}
     </Stack>
   );
+};
+
+export const filter = {
+  checkbox: <T,>(config: { label: string; items: Item<T>[] }): FilterCheckboxDef<T> => ({
+    type: "checkbox",
+    label: config.label,
+    items: config.items,
+    checkAllLabel: t("common.filters.all"),
+  }),
+
+  date: (config: {
+    label: string;
+    isSelectable?: (date: DatePickerDate, filters: unknown) => boolean;
+    validate?: (value: string, filters: unknown) => ValidatorResult;
+  }): FilterDateDef => ({
+    type: "date",
+    label: config.label,
+    cancelText: t("common.filters.cancel"),
+    submitText: t("common.filters.apply"),
+    noValueText: t("common.filters.none"),
+    dateFormat: locale.dateFormat,
+    isSelectable: config.isSelectable,
+    validate: config.validate,
+  }),
+
+  input: (config: {
+    label: string;
+    placeholder?: string;
+    validate?: (value: string) => ValidatorResult;
+  }): FilterInputDef => ({
+    type: "input",
+    label: config.label,
+    noValueText: t("common.filters.none"),
+    placeholder: config.placeholder,
+    validate: config.validate,
+  }),
+
+  radio: <T,>(config: { label: string; items: Item<T>[] }): FilterRadioDef<T> => ({
+    type: "radio",
+    label: config.label,
+    items: config.items,
+  }),
+} as const;
+
+export const useFiltersProps = <
+  Definition extends FiltersDefinition,
+  Filters extends Record<string, unknown>,
+>({
+  available,
+  filters,
+  filtersDefinition,
+}: {
+  available?: (keyof Filters)[];
+  filters: Filters;
+  filtersDefinition: Definition;
+}) => {
+  const availableFilters: { name: keyof Definition; label: string }[] = useMemo(() => {
+    const availableSet = new Set<PropertyKey>(
+      isNullish(available) ? Dict.keys(filtersDefinition) : available,
+    );
+
+    return Array.filterMap(Dict.entries(filtersDefinition), ([name, { label }]) =>
+      availableSet.has(name) ? Option.Some({ name, label }) : Option.None(),
+    );
+  }, [available, filtersDefinition]);
+
+  const [openFilters, setOpenFilters] = useState(() =>
+    Dict.entries(filters)
+      .filter(([, value]) => isNotNullish(value))
+      .map(([name]) => name),
+  );
+
+  useEffect(() => {
+    setOpenFilters(openFilters => {
+      const currentlyOpenFilters = new Set(openFilters);
+      const openFiltersNotYetInState = Dict.entries(filters)
+        .filter(([name, value]) => isNotNullish(value) && !currentlyOpenFilters.has(name))
+        .map(([name]) => name);
+      return [...openFilters, ...openFiltersNotYetInState];
+    });
+  }, [filters]);
+
+  const onAddFilter = useCallback((filter: keyof Filters) => {
+    setOpenFilters(openFilters => [...openFilters, filter]);
+  }, []);
+
+  return {
+    chooser: {
+      availableFilters,
+      filters,
+      label: t("common.filters"),
+      onAddFilter,
+      openFilters,
+    },
+    stack: {
+      definition: filtersDefinition,
+      filters,
+      openedFilters: openFilters,
+      onChangeOpened: setOpenFilters,
+    },
+  };
 };
