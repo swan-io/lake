@@ -710,7 +710,7 @@ export const useFiltersProps = <
   filters,
   filtersDefinition,
 }: {
-  available?: (keyof Filters)[];
+  available?: ReadonlyArray<keyof Filters>;
   filters: Filters;
   filtersDefinition: Definition;
 }) => {
