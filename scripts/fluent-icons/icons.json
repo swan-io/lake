@@ -18,6 +18,7 @@
   "arrow-right-regular",
   "arrow-swap-filled",
   "arrow-swap-regular",
+  "arrow-sync-regular",
   "arrow-up-filled",
   "arrow-up-regular",
   "arrow-upload-filled",
@@ -34,9 +35,11 @@
   "building-regular",
   "building-shop-filled",
   "building-shop-regular",
+  "lightbulb-regular",
   "calculator-regular",
   "calendar-ltr-regular",
   "call-regular",
+  "camera-regular",
   "cart-regular",
   "chat-help-filled",
   "chat-help-regular",
@@ -191,6 +194,7 @@
   "vehicle-subway-regular",
   "warning-filled",
   "warning-regular",
+  "wifi-1-regular",
   "window-dev-tools-filled",
   "window-dev-tools-regular"
 ]
