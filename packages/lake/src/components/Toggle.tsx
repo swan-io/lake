@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     userSelect: "none",
     flexDirection: "row",
     borderRadius: HEIGHT / 2,
+    height: HEIGHT,
     transform: "translateZ(0px)",
     width: "min-content",
     borderColor: colors.gray[100],
