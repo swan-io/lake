@@ -4,14 +4,19 @@ import { animations, backgroundColor, colors, radii, spacings } from "../constan
 import { useBoolean } from "../hooks/useBoolean";
 import { useDebounce } from "../hooks/useDebounce";
 import { isNotNullishOrEmpty } from "../utils/nullish";
+import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeTextInput } from "./LakeTextInput";
 import { ResponsiveContainer } from "./ResponsiveContainer";
-import { Line, Svg } from "./Svg";
 import { TransitionView } from "./TransitionView";
+
+const INPUT_MIN_WIDTH = 38;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
     flexGrow: 1,
     flexShrink: 1,
   },
@@ -20,8 +25,7 @@ const styles = StyleSheet.create({
     // ResponsiveContainer uses a 200 breaking,
     // we give the opportunity to the component to grow 2px more
     // to trigger the change
-    maxWidth: 202,
-    minWidth: 38,
+    minWidth: INPUT_MIN_WIDTH,
     justifyContent: "flex-end",
   },
   focus: {
@@ -29,21 +33,8 @@ const styles = StyleSheet.create({
     borderColor: colors.current.primary,
   },
   clearButton: {
-    marginRight: spacings[8],
-  },
-  clear: {
-    width: 8,
-    height: 8,
-  },
-  smallButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    flexGrow: 1,
-  },
-  largeInputContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    flexGrow: 1,
+    padding: spacings[8],
+    borderRadius: radii[4],
   },
   openSearchFieldContainer: {
     position: "absolute",
@@ -67,6 +58,7 @@ type Props = {
   onChangeText: (text: string) => void;
   debounceDuration?: number;
   maxWidth?: number;
+  children?: ReactNode;
   renderEnd?: () => ReactNode;
 };
 
@@ -82,7 +74,7 @@ type InternalProps = {
   renderEnd?: () => ReactNode;
 };
 
-const CollapsibleSeachField = ({
+const CollapsibleSearchField = ({
   inputRef,
   placeholder,
   initialValue,
@@ -94,15 +86,13 @@ const CollapsibleSeachField = ({
   renderEnd,
 }: InternalProps) => {
   return (
-    <View style={styles.smallButtonContainer}>
+    <View>
       <LakeButton
         mode="secondary"
         size="small"
         ariaLabel={placeholder}
         icon="search-filled"
-        onPress={() => {
-          setFocused.on();
-        }}
+        onPress={setFocused.on}
         pill={currentValue !== ""}
       />
 
@@ -157,37 +147,16 @@ const ExpandedSearchField = ({
         <>
           {isNotNullishOrEmpty(currentValue) && (
             <Pressable
+              role="button"
+              style={styles.clearButton}
               onPress={() => {
                 if (timeoutRef.current != null) {
                   clearTimeout(timeoutRef.current);
                 }
                 clear();
               }}
-              style={styles.clearButton}
             >
-              <Svg viewBox="0 0 16 16" style={styles.clear}>
-                <>
-                  <Line
-                    x1="0"
-                    x2="16"
-                    y1="0"
-                    y2="16"
-                    strokeLinecap="round"
-                    stroke={colors.gray[500]}
-                    strokeWidth={2}
-                  />
-
-                  <Line
-                    x1="0"
-                    x2="16"
-                    y1="16"
-                    y2="0"
-                    strokeLinecap="round"
-                    stroke={colors.gray[500]}
-                    strokeWidth={2}
-                  />
-                </>
-              </Svg>
+              <Icon name="dismiss-filled" size={12} color={colors.gray[500]} />
             </Pressable>
           )}
 
@@ -205,8 +174,7 @@ const ExpandedSearchField = ({
           setFocused.off();
         }, 300);
       }}
-      containerStyle={styles.largeInputContainer}
-      style={[styles.input, hasFocus ? styles.focus : null]}
+      style={[styles.input, hasFocus && styles.focus]}
     />
   );
 };
@@ -216,8 +184,9 @@ export const LakeSearchField = ({
   placeholder,
   onChangeText,
   debounceDuration = 500,
-  maxWidth,
+  maxWidth: maxWidthProp = 350,
   renderEnd,
+  children,
 }: Props) => {
   const [hasFocus, setFocused] = useBoolean(false);
   const inputRef = useRef<TextInput>(null);
@@ -250,14 +219,19 @@ export const LakeSearchField = ({
     renderEnd,
   };
 
+  const maxWidth = Math.max(maxWidthProp, INPUT_MIN_WIDTH);
+
   return (
-    <ResponsiveContainer
-      breakpoint={200}
-      style={[styles.container, maxWidth != null && { maxWidth }]}
-    >
+    <ResponsiveContainer breakpoint={maxWidth} style={[styles.container, { maxWidth }]}>
       {({ large }) => {
-        const Component = large ? ExpandedSearchField : CollapsibleSeachField;
-        return <Component {...props} />;
+        const Component = large ? ExpandedSearchField : CollapsibleSearchField;
+
+        return (
+          <>
+            {children}
+            <Component {...props} />
+          </>
+        );
       }}
     </ResponsiveContainer>
   );
