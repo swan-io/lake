@@ -10,7 +10,7 @@ import { LakeTextInput } from "./LakeTextInput";
 import { ResponsiveContainer } from "./ResponsiveContainer";
 import { TransitionView } from "./TransitionView";
 
-const INPUT_MIN_WIDTH = 38;
+const BREAKPOINT = 350;
 
 const styles = StyleSheet.create({
   container: {
@@ -22,10 +22,6 @@ const styles = StyleSheet.create({
   },
   input: {
     transition: "300ms ease-in-out border-color",
-    // ResponsiveContainer uses a 200 breaking,
-    // we give the opportunity to the component to grow 2px more
-    // to trigger the change
-    minWidth: INPUT_MIN_WIDTH,
     justifyContent: "flex-end",
   },
   focus: {
@@ -199,7 +195,7 @@ export const LakeSearchField = ({
   }, debounceDuration);
 
   const clear = useCallback(() => {
-    if (inputRef.current instanceof HTMLInputElement) {
+    if (inputRef.current != null) {
       inputRef.current.clear();
       inputRef.current.focus();
       onChangeText("");
@@ -219,10 +215,10 @@ export const LakeSearchField = ({
     renderEnd,
   };
 
-  const maxWidth = Math.max(maxWidthProp, INPUT_MIN_WIDTH);
+  const maxWidth = Math.max(maxWidthProp, BREAKPOINT);
 
   return (
-    <ResponsiveContainer breakpoint={maxWidth} style={[styles.container, { maxWidth }]}>
+    <ResponsiveContainer breakpoint={BREAKPOINT} style={[styles.container, { maxWidth }]}>
       {({ large }) => {
         const Component = large ? ExpandedSearchField : CollapsibleSearchField;
 
