@@ -26,6 +26,7 @@ type Props = {
   isCompany: boolean;
   required?: boolean;
   label?: string;
+  placeholder?: string;
 };
 
 export const TaxIdentificationNumberInput = forwardRef<TextInput | null, Props>(
@@ -41,6 +42,9 @@ export const TaxIdentificationNumberInput = forwardRef<TextInput | null, Props>(
       isCompany,
       required,
       label = t("taxIdentificationNumber.label"),
+      placeholder = isCompany
+        ? getCompanyTaxNumberPlaceholder(accountCountry)
+        : getIndividualTaxNumberPlaceholder(accountCountry),
     }: Props,
     ref,
   ) => {
@@ -64,11 +68,7 @@ export const TaxIdentificationNumberInput = forwardRef<TextInput | null, Props>(
           <LakeTextInput
             id={id}
             ref={ref}
-            placeholder={
-              isCompany
-                ? getCompanyTaxNumberPlaceholder(accountCountry)
-                : getIndividualTaxNumberPlaceholder(accountCountry)
-            }
+            placeholder={placeholder}
             help={
               isCompany
                 ? getCompanyTaxNumberHelp(accountCountry)
