@@ -1,12 +1,4 @@
-import {
-  ForwardedRef,
-  KeyboardEvent,
-  ReactElement,
-  ReactNode,
-  forwardRef,
-  useCallback,
-  useRef,
-} from "react";
+import { KeyboardEvent, ReactElement, ReactNode, Ref, useCallback, useRef } from "react";
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -143,6 +135,7 @@ export type Item<V> = {
 };
 
 export type SelectProps<V> = {
+  ref?: Ref<View>;
   placeholder?: string;
   items: Item<V>[];
   matchReferenceWidth?: boolean;
@@ -164,37 +157,35 @@ export type SelectProps<V> = {
   style?: StyleProp<ViewStyle>;
 };
 
-const LakeSelectWithRef = <V,>(
-  {
-    title,
-    items,
-    valueStyle,
-    size,
-    color = "current",
-    disabled = false,
-    mode = "normal",
-    placeholder,
-    readOnly = false,
-    id,
-    matchReferenceWidth = true,
-    value,
-    error,
-    hideErrors = false,
-    icon,
-    onValueChange,
-    disabledItems = [],
-    PopoverFooter,
-    style,
-  }: SelectProps<V>,
-  forwardedRef: ForwardedRef<View>,
-) => {
+export const LakeSelect = <V,>({
+  ref,
+  title,
+  items,
+  valueStyle,
+  size,
+  color = "current",
+  disabled = false,
+  mode = "normal",
+  placeholder,
+  readOnly = false,
+  id,
+  matchReferenceWidth = true,
+  value,
+  error,
+  hideErrors = false,
+  icon,
+  onValueChange,
+  disabledItems = [],
+  PopoverFooter,
+  style,
+}: SelectProps<V>) => {
   const inputRef = useRef<View>(null);
   const listRef = useRef<FlatListRef>(null);
-  const typingTimeoutRef = useRef<number | undefined>(undefined);
-  const currentlyTypedRef = useRef<string | undefined>(undefined);
+  const typingTimeoutRef = useRef<number>(undefined);
+  const currentlyTypedRef = useRef<string>(undefined);
   const listItemRefs = useRef<HTMLElement[]>(Array(items.length) as HTMLElement[]);
 
-  const mergedRef = useMergeRefs(inputRef, forwardedRef);
+  const mergedRef = useMergeRefs(inputRef, ref);
 
   const [visible, { close, open }] = useDisclosure(false);
 
@@ -443,7 +434,3 @@ const LakeSelectWithRef = <V,>(
     </View>
   );
 };
-
-export const LakeSelect = forwardRef(LakeSelectWithRef) as <I>(
-  props: SelectProps<I> & { ref?: ForwardedRef<View> },
-) => ReturnType<typeof LakeSelectWithRef>;

@@ -1,5 +1,5 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
-import { MutableRefObject, ReactNode, useRef, useState } from "react";
+import { ReactNode, Ref, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { P, match } from "ts-pattern";
 import { colors } from "../constants/design";
@@ -20,7 +20,7 @@ type Suggestion<T> = {
 };
 
 type Props<T> = {
-  inputRef?: MutableRefObject<unknown>;
+  inputRef?: Ref<unknown>;
   value?: string;
   onValueChange: (value: string) => void;
   disabled?: boolean;
@@ -53,7 +53,7 @@ export const AutocompleteSearchInput = <T,>({
   onLoadError,
 }: Props<T>) => {
   const [state, setState] = useState<State<T>>(AsyncData.NotAsked());
-  const lastRequest = useRef<Future<Result<Suggestion<T>[], unknown>>>();
+  const lastRequest = useRef<Future<Result<Suggestion<T>[], unknown>>>(undefined);
 
   return (
     <LakeCombobox<Suggestion<T>>

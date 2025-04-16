@@ -3,7 +3,7 @@ import {
   Fragment,
   ReactElement,
   ReactNode,
-  RefObject,
+  Ref,
   useCallback,
   useEffect,
   useId,
@@ -11,7 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { PressableStateCallbackType, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor, breakpoints, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
@@ -52,9 +52,11 @@ type Props<T, ExtraInfo> = {
   onEndReachedThresholdPx?: number;
   headerStyle?: ViewStyle | null | undefined;
   rowStyle?: (item: T, large: boolean) => ViewStyle | null | undefined;
-  getRowLink?: (
-    config: LinkConfig<T, ExtraInfo>,
-  ) => ReactElement<{ children: (state: PressableStateCallbackType) => React.ReactNode }>;
+  getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement<{
+    children: ReactNode;
+    ref?: Ref<View>;
+    style?: ViewStyle;
+  }>;
   renderEmptyList?: () => ReactNode;
   groupBy?: (item: T) => string;
   onActiveRowChange?: (element: HTMLElement) => void;
@@ -298,7 +300,7 @@ export const PlainListView = <T, ExtraInfo>({
       extraInfo: ExtraInfo;
     }): ReactElement<{
       children: ReactNode;
-      ref: RefObject<View> | null;
+      ref?: Ref<View>;
       style?: ViewStyle;
     }> => {
       const customLinkElement = getRowLink?.({ item, index: absoluteIndex, extraInfo });

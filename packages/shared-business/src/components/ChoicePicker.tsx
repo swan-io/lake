@@ -126,7 +126,7 @@ export const ChoicePicker = <T,>({
   disabled = false,
   onChange,
 }: Props<T>) => {
-  const containerRef = useRef<ScrollViewRef | null>(null);
+  const containerRef = useRef<ScrollViewRef>(null);
   const { desktop } = useResponsive(breakpoints.medium);
   const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 

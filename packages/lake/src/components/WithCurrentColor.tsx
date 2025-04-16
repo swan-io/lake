@@ -1,4 +1,4 @@
-import { createContext, MutableRefObject, ReactNode, useLayoutEffect, useRef } from "react";
+import { createContext, ReactNode, RefObject, useLayoutEffect, useRef } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { colors, ColorVariants } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 export const CurrentColorContext = createContext<ColorVariants | undefined>(undefined);
 
 export const useCurrentColor = (
-  containerRef: MutableRefObject<HTMLElement | null>,
+  containerRef: RefObject<HTMLElement | null>,
   variant: ColorVariants | undefined,
 ) => {
   useLayoutEffect(() => {

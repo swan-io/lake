@@ -1,4 +1,4 @@
-// Based on https://github.com/necolas/react-native-web/blob/0.19.12/packages/react-native-web/src/exports/Clipboard/index.js
+// Based on https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/exports/Clipboard/index.js
 
 export const setClipboardText = (text: string): boolean => {
   // add the text to a hidden node

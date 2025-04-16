@@ -97,7 +97,7 @@ type Props = {
 
 export const BottomPanel = ({ visible, onPressClose, children, returnFocus = true }: Props) => {
   const [rootElement, setRootElement] = useState<Element | undefined>(() => undefined);
-  const container = useRef<View | null>(null);
+  const container = useRef<View>(null);
 
   useEffect(() => {
     const rootElement = document.createElement("div");

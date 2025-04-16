@@ -11,17 +11,7 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
-import {
-  ForwardedRef,
-  Fragment,
-  Ref,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Fragment, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
@@ -56,7 +46,13 @@ type PurposeMetadata = {
   }[];
 };
 
+export type SupportingDocumentCollectionRef<Purpose extends string> = {
+  areAllRequiredDocumentsFilled: () => boolean;
+  addDocument: (document: Document<Purpose>) => void;
+};
+
 type Props<Purpose extends string> = {
+  ref?: Ref<SupportingDocumentCollectionRef<Purpose>>;
   status: SupportingDocumentCollectionStatus;
   generateUpload: (
     input: UploadInput<Purpose>,
@@ -146,27 +142,20 @@ export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) =>
   return isTranslationKey(key) ? t(key) : "";
 };
 
-export type SupportingDocumentCollectionRef<Purpose extends string> = {
-  areAllRequiredDocumentsFilled: () => boolean;
-  addDocument: (document: Document<Purpose>) => void;
-};
-
-export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
-  {
-    documents,
-    generateUpload,
-    uploadFile,
-    requiredDocumentPurposes,
-    templateLanguage = locale.language,
-    status,
-    onRemoveFile,
-    showIds = false,
-    readOnly = false,
-    getPurposeMetadata,
-    readonlyDocumentPurposes = [],
-  }: Props<Purpose>,
-  ref: Ref<SupportingDocumentCollectionRef<Purpose>>,
-) => {
+export const SupportingDocumentCollection = <Purpose extends string>({
+  ref,
+  documents,
+  generateUpload,
+  uploadFile,
+  requiredDocumentPurposes,
+  templateLanguage = locale.language,
+  status,
+  onRemoveFile,
+  showIds = false,
+  readOnly = false,
+  getPurposeMetadata,
+  readonlyDocumentPurposes = [],
+}: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
   const [currentMetadata, setCurrentMetadata] = useState<PurposeMetadata | undefined>(undefined);
@@ -449,9 +438,3 @@ export const SupportingDocumentCollectionWithRef = <Purpose extends string>(
     </Form>
   );
 };
-
-export const SupportingDocumentCollection = forwardRef(SupportingDocumentCollectionWithRef) as <
-  I extends string,
->(
-  props: Props<I> & { ref?: ForwardedRef<SupportingDocumentCollectionRef<I>> },
-) => ReturnType<typeof SupportingDocumentCollectionWithRef>;

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { Ref, useCallback, useImperativeHandle, useRef, useState } from "react";
 import {
   NativeSyntheticEvent,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { Merge } from "type-fest";
 import { backgroundColor, colors, radii, shadows, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
@@ -87,9 +87,14 @@ const styles = StyleSheet.create({
   },
 });
 
+export type TagInputRef = TextInput & {
+  pushPendingValue: () => void;
+};
+
 export type LakeTagInputProps = Merge<
   TextInputProps,
   {
+    ref?: Ref<TagInputRef>;
     readOnly?: boolean;
     error?: string;
     disabled?: boolean;
@@ -106,92 +111,102 @@ export type LakeTagInputProps = Merge<
 
 const SEPARATORS_REGEX = /,| /;
 
-export type TagInputRef = TextInput & { pushPendingValue: () => void };
+export const LakeTagInput = ({
+  ref,
+  validator = () => true,
+  onFocus: originalOnFocus,
+  onBlur: originalOnBlur,
+  validateOnBlur = true,
+  values,
+  onValuesChanged,
+  readOnly = false,
+  disabled = false,
+  valid = false,
+  hideErrors = false,
+  placeholder,
+  help,
+  error,
+}: LakeTagInputProps) => {
+  const inputRef = useRef<TextInput>(null);
+  const containerRef = useRef<View>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-export const LakeTagInput = forwardRef<TagInputRef, LakeTagInputProps>(
-  (
-    {
-      validator = () => true,
-      onFocus: originalOnFocus,
-      onBlur: originalOnBlur,
-      validateOnBlur = true,
-      values,
-      onValuesChanged,
-      readOnly = false,
-      disabled = false,
-      valid = false,
-      hideErrors = false,
-      placeholder,
-      help,
-      error,
-    }: LakeTagInputProps,
-    forwardedRef,
-  ) => {
-    const inputRef = useRef<TextInput | null>(null);
-    const containerRef = useRef<View | null>(null);
-    const [isFocused, setIsFocused] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+  const mergedRef = useMergeRefs(inputRef, ref);
 
-    const mergedRef = useMergeRefs(inputRef, forwardedRef);
+  useHover(containerRef, {
+    onHoverStart: () => setIsHovered(true),
+    onHoverEnd: () => setIsHovered(false),
+  });
 
-    useHover(containerRef, {
-      onHoverStart: () => setIsHovered(true),
-      onHoverEnd: () => setIsHovered(false),
-    });
+  const pushNewValues = useCallback(
+    (vals: string[]) => {
+      onValuesChanged([...values, ...vals.filter(v => !values.includes(v))]);
+      inputRef.current?.clear();
+    },
+    [values, onValuesChanged],
+  );
 
-    const pushNewValues = useCallback(
-      (vals: string[]) => {
-        onValuesChanged([...values, ...vals.filter(v => !values.includes(v))]);
-        inputRef.current?.clear();
-      },
-      [values, onValuesChanged],
-    );
+  const onTextInputChange = useCallback(
+    (value: string) => {
+      const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length > 0))];
+      if (input.length > 1 || input[0] !== value) {
+        pushNewValues(input);
+      }
+    },
+    [pushNewValues],
+  );
 
-    const onTextInputChange = useCallback(
-      (value: string) => {
-        const input = [...new Set(value.split(SEPARATORS_REGEX).filter(s => s.length > 0))];
-        if (input.length > 1 || input[0] !== value) {
-          pushNewValues(input);
-        }
-      },
-      [pushNewValues],
-    );
+  const onTextInputKeyPress = useCallback(
+    ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+      if (disabled || readOnly) {
+        return;
+      }
 
-    const onTextInputKeyPress = useCallback(
-      ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        if (disabled || readOnly) {
-          return;
-        }
+      match({ key: nativeEvent.key, input: inputRef.current })
+        .with({ key: "Backspace", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
+          if (isNullishOrEmpty(input.value)) {
+            onValuesChanged(values.filter(current => current !== values[values.length - 1]));
+          }
+        })
+        .with({ key: "Enter", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
+          if (isNotNullishOrEmpty(input.value)) {
+            pushNewValues([input.value]);
+          }
+        });
+    },
+    [onValuesChanged, pushNewValues, values, disabled, readOnly],
+  );
 
-        match({ key: nativeEvent.key, input: inputRef.current })
-          .with({ key: "Backspace", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
-            if (isNullishOrEmpty(input.value)) {
-              onValuesChanged(values.filter(current => current !== values[values.length - 1]));
-            }
-          })
-          .with({ key: "Enter", input: P.instanceOf(HTMLInputElement) }, ({ input }) => {
-            if (isNotNullishOrEmpty(input.value)) {
-              pushNewValues([input.value]);
-            }
-          });
-      },
-      [onValuesChanged, pushNewValues, values, disabled, readOnly],
-    );
+  const autoFocus = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
 
-    const autoFocus = useCallback(() => {
-      inputRef.current?.focus();
-    }, []);
+  const onFocus = useCallback(
+    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(true);
+      originalOnFocus?.(event);
+    },
+    [originalOnFocus],
+  );
 
-    const onFocus = useCallback(
-      (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        setIsFocused(true);
-        originalOnFocus?.(event);
-      },
-      [originalOnFocus],
-    );
+  const onBlur = useCallback(
+    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      const input = inputRef.current;
+      if (input instanceof HTMLInputElement && isNotNullishOrEmpty(input.value) && validateOnBlur) {
+        pushNewValues([input.value]);
+      }
 
-    const onBlur = useCallback(
-      (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(false);
+      originalOnBlur?.(event);
+    },
+    [pushNewValues, originalOnBlur, validateOnBlur],
+  );
+
+  useImperativeHandle<Pick<TagInputRef, "pushPendingValue">, Pick<TagInputRef, "pushPendingValue">>(
+    ref,
+    () => ({
+      pushPendingValue: () => {
         const input = inputRef.current;
         if (
           input instanceof HTMLInputElement &&
@@ -200,94 +215,71 @@ export const LakeTagInput = forwardRef<TagInputRef, LakeTagInputProps>(
         ) {
           pushNewValues([input.value]);
         }
-
-        setIsFocused(false);
-        originalOnBlur?.(event);
       },
-      [pushNewValues, originalOnBlur, validateOnBlur],
-    );
+    }),
+    [pushNewValues, validateOnBlur],
+  );
 
-    useImperativeHandle<
-      Pick<TagInputRef, "pushPendingValue">,
-      Pick<TagInputRef, "pushPendingValue">
-    >(
-      forwardedRef,
-      () => ({
-        pushPendingValue: () => {
-          const input = inputRef.current;
-          if (
-            input instanceof HTMLInputElement &&
-            isNotNullishOrEmpty(input.value) &&
-            validateOnBlur
-          ) {
-            pushNewValues([input.value]);
-          }
-        },
-      }),
-      [pushNewValues, validateOnBlur],
-    );
+  const hasError = isNotNullishOrEmpty(error);
 
-    const hasError = isNotNullishOrEmpty(error);
+  return (
+    <View>
+      <Pressable
+        style={[
+          styles.root,
+          readOnly && hasError && styles.readOnlyError,
+          disabled && styles.disabled,
+          readOnly && styles.readOnly,
+          isFocused && styles.focused,
+          hasError && styles.error,
+          valid && styles.valid,
+          isHovered && styles.hovered,
+        ]}
+        aria-errormessage={error}
+        onPress={autoFocus}
+        ref={containerRef}
+      >
+        {values.map((value, i) => (
+          <Tag
+            key={i}
+            onPressRemove={
+              !readOnly && !disabled
+                ? () => onValuesChanged(values.filter(current => current !== value))
+                : undefined
+            }
+            style={styles.tag}
+            color={validator(value) ? "gray" : "negative"}
+          >
+            {value}
+          </Tag>
+        ))}
 
-    return (
-      <View>
-        <Pressable
-          style={[
-            styles.root,
-            readOnly && hasError && styles.readOnlyError,
-            disabled && styles.disabled,
-            readOnly && styles.readOnly,
-            isFocused && styles.focused,
-            hasError && styles.error,
-            valid && styles.valid,
-            isHovered && styles.hovered,
-          ]}
-          aria-errormessage={error}
-          onPress={autoFocus}
-          ref={containerRef}
-        >
-          {values.map((value, i) => (
-            <Tag
-              key={i}
-              onPressRemove={
-                !readOnly && !disabled
-                  ? () => onValuesChanged(values.filter(current => current !== value))
-                  : undefined
-              }
-              style={styles.tag}
-              color={validator(value) ? "gray" : "negative"}
-            >
-              {value}
-            </Tag>
-          ))}
+        <TextInput
+          ref={mergedRef}
+          style={[styles.input, disabled && styles.disabled]}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          aria-disabled={disabled}
+          onChangeText={onTextInputChange}
+          onKeyPress={onTextInputKeyPress}
+          readOnly={readOnly}
+          placeholder={placeholder}
+        />
+      </Pressable>
 
-          <TextInput
-            ref={mergedRef}
-            style={[styles.input, disabled && styles.disabled]}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            aria-disabled={disabled}
-            onChangeText={onTextInputChange}
-            onKeyPress={onTextInputKeyPress}
-            readOnly={readOnly}
-            placeholder={placeholder}
-          />
-        </Pressable>
-
-        {!hideErrors && (
-          <Box direction="row" style={styles.errorContainer}>
-            {isNotNullish(error) ? (
-              <LakeText variant="smallRegular" color={colors.negative[500]}>
-                {error}
-              </LakeText>
-            ) : (
-              <LakeText variant="smallRegular" color={colors.gray[500]}>
-                {help ?? " "}
-              </LakeText>
-            )}
-          </Box>
-        )}
-      </View>
-    );
-  },
-);
+      {!hideErrors && (
+        <Box direction="row" style={styles.errorContainer}>
+          {isNotNullish(error) ? (
+            <LakeText variant="smallRegular" color={colors.negative[500]}>
+              {error}
+            </LakeText>
+          ) : (
+            <LakeText variant="smallRegular" color={colors.gray[500]}>
+              {help ?? " "}
+            </LakeText>
+          )}
+        </Box>
+      )}
+    </View>
+  );
+};

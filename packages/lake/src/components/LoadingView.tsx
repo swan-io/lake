@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { Ref } from "react";
 import { ActivityIndicator, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { colors } from "../constants/design";
 
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  ref?: Ref<View>;
   color?: string;
   delay?: number;
   style?: StyleProp<ViewStyle>;
@@ -31,14 +32,17 @@ type Props = {
 
 const isDev = process.env.NODE_ENV === "development";
 
-export const LoadingView = forwardRef<View, Props>(
-  ({ color = colors.gray[400], delay = isDev ? 0 : 1000, style }, forwardedRef) => (
-    <View ref={forwardedRef} style={[styles.base, style]}>
-      <ActivityIndicator
-        size="small"
-        color={color}
-        style={[styles.indicator, delay > 0 && { animationDelay: delay.toString() + "ms" }]}
-      />
-    </View>
-  ),
+export const LoadingView = ({
+  ref,
+  color = colors.gray[400],
+  delay = isDev ? 0 : 1000,
+  style,
+}: Props) => (
+  <View ref={ref} style={[styles.base, style]}>
+    <ActivityIndicator
+      size="small"
+      color={color}
+      style={[styles.indicator, delay > 0 && { animationDelay: delay.toString() + "ms" }]}
+    />
+  </View>
 );

@@ -1,4 +1,4 @@
-import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useId, useRef } from "react";
+import { Fragment, ReactNode, Ref, useEffect, useId, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
 import { ListRenderItemInfo } from "./FlatList";
 import { ScrollView, ScrollViewProps, ScrollViewRef } from "./ScrollView";
@@ -20,6 +20,7 @@ type Section<T> = {
 };
 
 type Props<T> = {
+  ref?: Ref<SectionListRef>;
   ItemSeparatorComponent?: ReactNode;
   ListEmptyComponent?: ReactNode;
   ListFooterComponent?: ReactNode;
@@ -40,29 +41,27 @@ type Props<T> = {
   style?: StyleProp<ViewStyle>;
 };
 
-const SectionListWithRef = <T,>(
-  {
-    ItemSeparatorComponent,
-    ListEmptyComponent,
-    ListFooterComponent,
-    ListHeaderComponent,
-    contentContainerStyle,
-    horizontal = false,
-    keyExtractor,
-    onEndReached,
-    onEndReachedThresholdPx = 200,
-    onKeyDown,
-    onScroll,
-    renderItem,
-    renderSectionHeader,
-    role,
-    scrollEventThrottle = 16,
-    sections,
-    showsScrollIndicators = true,
-    style,
-  }: Props<T>,
-  forwardedRef: ForwardedRef<SectionListRef>,
-) => {
+export const SectionList = <T,>({
+  ref,
+  ItemSeparatorComponent,
+  ListEmptyComponent,
+  ListFooterComponent,
+  ListHeaderComponent,
+  contentContainerStyle,
+  horizontal = false,
+  keyExtractor,
+  onEndReached,
+  onEndReachedThresholdPx = 200,
+  onKeyDown,
+  onScroll,
+  renderItem,
+  renderSectionHeader,
+  role,
+  scrollEventThrottle = 16,
+  sections,
+  showsScrollIndicators = true,
+  style,
+}: Props<T>) => {
   const groupId = useId();
   const scrollTrackerRef = useRef<View>(null);
 
@@ -99,7 +98,7 @@ const SectionListWithRef = <T,>(
       horizontal={horizontal}
       onKeyDown={onKeyDown}
       onScroll={onScroll}
-      ref={forwardedRef}
+      ref={ref}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
       showsScrollIndicators={showsScrollIndicators}
@@ -128,7 +127,3 @@ const SectionListWithRef = <T,>(
     </ScrollView>
   );
 };
-
-export const SectionList = forwardRef(SectionListWithRef) as <T>(
-  props: Props<T> & { ref?: ForwardedRef<SectionListRef> },
-) => ReturnType<typeof SectionListWithRef>;

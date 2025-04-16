@@ -30,7 +30,7 @@ const getContrastColor = (color: string) => {
 };
 
 export const WithPartnerAccentColor = ({ color, scoped = false, children }: Props) => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<View>(null);
 
   useLayoutEffect(() => {
     try {

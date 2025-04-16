@@ -1,8 +1,8 @@
-import { MutableRefObject, useLayoutEffect } from "react";
+import { RefObject, useLayoutEffect } from "react";
 import { isNotNullish } from "../utils/nullish";
 
 export const useNativeProp = <T>(
-  ref: MutableRefObject<T | null>,
+  ref: RefObject<T | null>,
   name: string,
   value: number | string | undefined,
 ) => {

@@ -57,9 +57,9 @@ export const Toggle = ({
   onLabel,
   offLabel,
 }: Props) => {
-  const containerRef = useRef<View | null>(null);
-  const onItemRef = useRef<Text | null>(null);
-  const offItemRef = useRef<Text | null>(null);
+  const containerRef = useRef<View>(null);
+  const onItemRef = useRef<Text>(null);
+  const offItemRef = useRef<Text>(null);
   const [handleStyle, setHandleStyle] = useState<ViewStyle>();
   const isMobileMode = mode === "mobile";
   const onColor = value ? colors.positive[500] : colors.gray[500];

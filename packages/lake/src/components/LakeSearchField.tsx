@@ -127,7 +127,7 @@ const ExpandedSearchField = ({
   renderEnd,
   currentValue,
 }: InternalProps) => {
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number>(null);
 
   return (
     <LakeTextInput

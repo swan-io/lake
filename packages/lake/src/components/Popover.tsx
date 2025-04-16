@@ -35,7 +35,7 @@ type Props = {
   matchReferenceMinWidth?: boolean;
   onDismiss?: () => void;
   onEscapeKey?: () => void;
-  referenceRef: RefObject<View | Text>;
+  referenceRef: RefObject<View | Text | null>;
   returnFocus?: boolean;
   autoFocus?: boolean;
   visible: boolean;
@@ -111,7 +111,7 @@ export const Popover = memo<Props>(
     forcedMode,
   }) => {
     const [rootElement, setRootElement] = useState<Element | null>(null);
-    const underlayRef = useRef<View | null>(null);
+    const underlayRef = useRef<View>(null);
     const { desktop } = useResponsive(VIEWPORT_WIDTH_THRESHOLD);
 
     const { position } = useContextualLayer({

@@ -1,7 +1,7 @@
 import {
   Dispatch,
-  MutableRefObject,
   ReactNode,
+  RefObject,
   SetStateAction,
   createContext,
   useCallback,
@@ -169,7 +169,7 @@ const defaultContext: readonly [
   readonly CrumbWithId[],
   readonly CrumbWithId[],
   Dispatch<SetStateAction<readonly CrumbWithId[]>>,
-  MutableRefObject<number>,
+  RefObject<number>,
 ] = [emptyCrumbWithIdArray, emptyCrumbWithIdArray, noop, { current: -1 }];
 
 const BreadcrumbsContext = createContext(defaultContext);
@@ -481,7 +481,7 @@ const BreadcrumbsDropdownItems = ({ crumbs }: { crumbs: CrumbWithIdAndPosition[]
     "Closed",
   );
 
-  const timeoutRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<number>(undefined);
   const handleRef = useRef<View>(null);
   const containerRef = useRef<View>(null);
 

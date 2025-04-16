@@ -294,7 +294,11 @@ export const TileRows = ({ children, breakpoint = 1000 }: TileGridProps) => {
       {nonNullChildren.map((item, index) => {
         return (
           <View key={index} style={[styles.rowCol, isRow && { flexBasis: breakpoint / 2 }]}>
-            {cloneElement(item as unknown as ReactElement, { flexGrow: 1 })}
+            {cloneElement(
+              item as ReactElement,
+              // @ts-expect-error
+              { flexGrow: 1 },
+            )}
           </View>
         );
       })}

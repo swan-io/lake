@@ -1,5 +1,5 @@
 import { Array, Deferred, Dict, Option } from "@swan-io/boxed";
-import { ReactElement, useCallback, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 const keys = {
   "end-user": "275d1c72-3760-4303-a7f0-806f5266a251",
@@ -20,7 +20,7 @@ export type AdditionalInfo = {
 
 type Props = {
   accentColor?: string;
-  children: (props: { onPressShow: () => void }) => ReactElement;
+  children: (props: { onPressShow: () => void }) => ReactNode;
   type: keyof typeof keys;
   additionalInfo: AdditionalInfo;
 };

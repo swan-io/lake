@@ -1,5 +1,5 @@
 import { Option } from "@swan-io/boxed";
-import { Children, forwardRef, Fragment, memo, ReactNode, useEffect, useState } from "react";
+import { Children, Fragment, memo, ReactNode, Ref, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   GestureResponderEvent,
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
 });
 
 export type ButtonProps = {
+  ref?: Ref<View>;
   ariaControls?: string;
   ariaExpanded?: boolean;
   color?: ColorVariants;
@@ -174,252 +175,248 @@ export type ButtonProps = {
 );
 
 export const LakeButton = memo(
-  forwardRef<View, ButtonProps>(
-    (
-      {
-        ariaControls,
-        ariaExpanded,
-        ariaLabel,
-        children,
-        color = "gray",
-        direction = "row",
-        disabled = false,
-        icon,
-        grow = false,
-        iconPosition = "start",
-        loading = false,
-        mode = "primary",
-        onPress,
-        size = "large",
-        iconSize = size === "small" ? 18 : 20,
-        style,
-        forceBackground = false,
-        href,
-        hrefAttrs,
-        pill = false,
-        disabledUntil,
-      },
-      forwardedRef,
-    ) => {
-      const [progressAnimation, setProgressAnimation] = useState<
-        Option<{
-          startTime: number;
-          duration: number;
-          now: number;
-        }>
-      >(() => Option.None());
+  ({
+    ref,
+    ariaControls,
+    ariaExpanded,
+    ariaLabel,
+    children,
+    color = "gray",
+    direction = "row",
+    disabled = false,
+    icon,
+    grow = false,
+    iconPosition = "start",
+    loading = false,
+    mode = "primary",
+    onPress,
+    size = "large",
+    iconSize = size === "small" ? 18 : 20,
+    style,
+    forceBackground = false,
+    href,
+    hrefAttrs,
+    pill = false,
+    disabledUntil,
+  }: ButtonProps) => {
+    const [progressAnimation, setProgressAnimation] = useState<
+      Option<{
+        startTime: number;
+        duration: number;
+        now: number;
+      }>
+    >(() => Option.None());
 
-      const isPrimary = mode === "primary";
-      const isSmall = size === "small";
+    const isPrimary = mode === "primary";
+    const isSmall = size === "small";
 
-      const vertical = direction === "column";
-      const spaceHeight = vertical ? 4 : undefined;
-      const spaceWidth = vertical ? undefined : isSmall ? 8 : 12;
+    const vertical = direction === "column";
+    const spaceHeight = vertical ? 4 : undefined;
+    const spaceWidth = vertical ? undefined : isSmall ? 8 : 12;
 
-      const hasIcon = isNotNullish(icon);
-      const hasIconStart = hasIcon && iconPosition === "start";
-      const hasIconEnd = hasIcon && iconPosition === "end";
-      const hasOnlyIcon = hasIcon && isNullish(children);
+    const hasIcon = isNotNullish(icon);
+    const hasIconStart = hasIcon && iconPosition === "start";
+    const hasIconEnd = hasIcon && iconPosition === "end";
+    const hasOnlyIcon = hasIcon && isNullish(children);
 
-      useEffect(() => {
-        if (disabledUntil == null) {
-          return;
+    useEffect(() => {
+      if (disabledUntil == null) {
+        return;
+      }
+
+      const startTime = Date.now();
+      const endTime = new Date(disabledUntil).getTime();
+
+      const config = {
+        startTime,
+        duration: endTime - startTime,
+        endTime,
+      };
+
+      const tick = () => {
+        const now = Date.now();
+        if (now >= config.endTime) {
+          setProgressAnimation(Option.None());
+        } else {
+          setProgressAnimation(
+            Option.Some({
+              startTime: config.startTime,
+              duration: config.duration,
+              now: Date.now(),
+            }),
+          );
+          animationFrameId = requestAnimationFrame(tick);
         }
+      };
+      let animationFrameId = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(animationFrameId);
+    }, [disabledUntil]);
 
-        const startTime = Date.now();
-        const endTime = new Date(disabledUntil).getTime();
+    const shouldHideContents = loading || progressAnimation.isSome();
 
-        const config = {
-          startTime,
-          duration: endTime - startTime,
-          endTime,
-        };
+    return (
+      <Pressable
+        href={href}
+        hrefAttrs={hrefAttrs}
+        role={href != null ? "link" : "button"}
+        aria-busy={loading}
+        aria-disabled={disabled}
+        aria-controls={ariaControls}
+        aria-expanded={ariaExpanded}
+        aria-label={ariaLabel}
+        disabled={loading || disabled || progressAnimation.isSome()}
+        ref={ref}
+        onPress={onPress}
+        style={({ hovered, pressed, focused }) => [
+          styles.base,
 
-        const tick = () => {
-          const now = Date.now();
-          if (now >= config.endTime) {
-            setProgressAnimation(Option.None());
-          } else {
-            setProgressAnimation(
-              Option.Some({
-                startTime: config.startTime,
-                duration: config.duration,
-                now: Date.now(),
-              }),
-            );
-            animationFrameId = requestAnimationFrame(tick);
-          }
-        };
-        let animationFrameId = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(animationFrameId);
-      }, [disabledUntil]);
+          (hovered || pressed) && styles.transition,
 
-      const shouldHideContents = loading || progressAnimation.isSome();
+          grow && styles.grow,
+          isSmall && styles.small,
 
-      return (
-        <Pressable
-          href={href}
-          hrefAttrs={hrefAttrs}
-          role={href != null ? "link" : "button"}
-          aria-busy={loading}
-          aria-disabled={disabled}
-          aria-controls={ariaControls}
-          aria-expanded={ariaExpanded}
-          aria-label={ariaLabel}
-          disabled={loading || disabled || progressAnimation.isSome()}
-          ref={forwardedRef}
-          onPress={onPress}
-          style={({ hovered, pressed, focused }) => [
-            styles.base,
+          vertical && [styles.vertical, isSmall && styles.verticalSmall],
+          hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
+          hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
+          hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
 
-            (hovered || pressed) && styles.transition,
+          (disabled || progressAnimation.isSome()) && commonStyles.disabled,
+          disabled && forceBackground && styles.resetOpacity,
 
-            grow && styles.grow,
-            isSmall && styles.small,
-
-            vertical && [styles.vertical, isSmall && styles.verticalSmall],
-            hasIconStart && isSmall ? styles.withIconStartSmall : styles.withIconStart,
-            hasIconEnd && (isSmall ? styles.withIconEndSmall : styles.withIconEnd),
-            hasOnlyIcon && (isSmall ? styles.iconSmallOnly : styles.iconOnly),
-
-            (disabled || progressAnimation.isSome()) && commonStyles.disabled,
-            disabled && forceBackground && styles.resetOpacity,
-
-            match(mode)
-              .with("primary", () => ({
-                backgroundColor:
-                  color === "warning"
-                    ? hovered
-                      ? colors[color][600]
-                      : colors[color][500]
-                    : hovered
-                      ? colors[color].secondary
-                      : colors[color].primary,
-              }))
-              .with("secondary", () => ({
-                backgroundColor: pressed
+          match(mode)
+            .with("primary", () => ({
+              backgroundColor:
+                color === "warning"
+                  ? hovered
+                    ? colors[color][600]
+                    : colors[color][500]
+                  : hovered
+                    ? colors[color].secondary
+                    : colors[color].primary,
+            }))
+            .with("secondary", () => ({
+              backgroundColor: pressed
+                ? colors[color][100]
+                : hovered
+                  ? colors[color][50]
+                  : forceBackground
+                    ? backgroundColor.accented
+                    : invariantColors.transparent,
+              borderWidth: 1,
+              borderColor:
+                disabled && forceBackground
                   ? colors[color][100]
                   : hovered
-                    ? colors[color][50]
-                    : forceBackground
-                      ? backgroundColor.accented
-                      : invariantColors.transparent,
-                borderWidth: 1,
-                borderColor:
-                  disabled && forceBackground
-                    ? colors[color][100]
-                    : hovered
-                      ? colors[color][600]
-                      : colors[color][300],
-              }))
-              .with("tertiary", () => ({
-                backgroundColor: pressed
-                  ? colors[color][200]
-                  : hovered
-                    ? colors[color][100]
-                    : invariantColors.transparent,
-              }))
-              .exhaustive(),
+                    ? colors[color][600]
+                    : colors[color][300],
+            }))
+            .with("tertiary", () => ({
+              backgroundColor: pressed
+                ? colors[color][200]
+                : hovered
+                  ? colors[color][100]
+                  : invariantColors.transparent,
+            }))
+            .exhaustive(),
 
-            typeof style === "function" ? style({ hovered, pressed, focused }) : style,
-          ]}
-        >
-          {({ pressed, hovered }) => {
-            const textColor = isPrimary
-              ? colors[color].contrast
-              : disabled && forceBackground
-                ? colors[color][300]
-                : hovered || pressed
-                  ? colors[color][700]
-                  : colors[color][600];
+          typeof style === "function" ? style({ hovered, pressed, focused }) : style,
+        ]}
+      >
+        {({ pressed, hovered }) => {
+          const textColor = isPrimary
+            ? colors[color].contrast
+            : disabled && forceBackground
+              ? colors[color][300]
+              : hovered || pressed
+                ? colors[color][700]
+                : colors[color][600];
 
-            return (
-              <>
-                {hasIconStart && (
-                  <>
-                    <Icon
-                      color={textColor}
-                      name={icon}
-                      size={iconSize}
-                      style={shouldHideContents && styles.hidden}
-                    />
+          return (
+            <>
+              {hasIconStart && (
+                <>
+                  <Icon
+                    color={textColor}
+                    name={icon}
+                    size={iconSize}
+                    style={shouldHideContents && styles.hidden}
+                  />
 
-                    {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
-                  </>
-                )}
+                  {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
+                </>
+              )}
 
-                {typeof children === "string" || typeof children === "number" ? (
-                  <LakeText
-                    numberOfLines={1}
-                    userSelect="none"
-                    style={[
-                      isSmall ? styles.textSmall : styles.text,
-                      shouldHideContents && styles.hidden,
-                      { color: textColor },
-                    ]}
-                  >
-                    {children}
-                  </LakeText>
-                ) : (
-                  <Box
-                    alignItems="center"
-                    direction="row"
-                    justifyContent="center"
-                    style={[vertical && styles.vertical, shouldHideContents && styles.hidden]}
-                  >
-                    {children}
-                  </Box>
-                )}
+              {typeof children === "string" || typeof children === "number" ? (
+                <LakeText
+                  numberOfLines={1}
+                  userSelect="none"
+                  style={[
+                    isSmall ? styles.textSmall : styles.text,
+                    shouldHideContents && styles.hidden,
+                    { color: textColor },
+                  ]}
+                >
+                  {children}
+                </LakeText>
+              ) : (
+                <Box
+                  alignItems="center"
+                  direction="row"
+                  justifyContent="center"
+                  style={[vertical && styles.vertical, shouldHideContents && styles.hidden]}
+                >
+                  {children}
+                </Box>
+              )}
 
-                {hasIconEnd && (
-                  <>
-                    {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
+              {hasIconEnd && (
+                <>
+                  {isNotNullish(children) && <Space height={spaceHeight} width={spaceWidth} />}
 
-                    <Icon
-                      color={textColor}
-                      name={icon}
-                      size={iconSize}
-                      style={shouldHideContents && styles.hidden}
-                    />
-                  </>
-                )}
+                  <Icon
+                    color={textColor}
+                    name={icon}
+                    size={iconSize}
+                    style={shouldHideContents && styles.hidden}
+                  />
+                </>
+              )}
 
-                {loading && (
+              {loading && (
+                <View style={styles.loaderContainer}>
+                  <ActivityIndicator
+                    color={isPrimary ? colors[color].contrast : colors[color].primary}
+                    size={iconSize}
+                  />
+                </View>
+              )}
+
+              {isPrimary && <View style={[styles.hiddenView, pressed && styles.pressed]} />}
+
+              {match(progressAnimation)
+                .with(Option.P.Some(P.select()), ({ startTime, now, duration }) => (
                   <View style={styles.loaderContainer}>
-                    <ActivityIndicator
-                      color={isPrimary ? colors[color].contrast : colors[color].primary}
-                      size={iconSize}
+                    <View
+                      style={[
+                        styles.loaderContainerProgress,
+                        { transform: `scaleX(${((now - startTime) / duration) * 100}%)` },
+                      ]}
                     />
+
+                    <LakeText color={isPrimary ? colors[color].contrast : colors[color].primary}>
+                      {Math.ceil((duration - (now - startTime)) / 1000)}
+                    </LakeText>
                   </View>
-                )}
+                ))
+                .otherwise(() => null)}
 
-                {isPrimary && <View style={[styles.hiddenView, pressed && styles.pressed]} />}
-
-                {match(progressAnimation)
-                  .with(Option.P.Some(P.select()), ({ startTime, now, duration }) => (
-                    <View style={styles.loaderContainer}>
-                      <View
-                        style={[
-                          styles.loaderContainerProgress,
-                          { transform: `scaleX(${((now - startTime) / duration) * 100}%)` },
-                        ]}
-                      />
-
-                      <LakeText color={isPrimary ? colors[color].contrast : colors[color].primary}>
-                        {Math.ceil((duration - (now - startTime)) / 1000)}
-                      </LakeText>
-                    </View>
-                  ))
-                  .otherwise(() => null)}
-
-                {pill && <View style={styles.pill} />}
-              </>
-            );
-          }}
-        </Pressable>
-      );
-    },
-  ),
+              {pill && <View style={styles.pill} />}
+            </>
+          );
+        }}
+      </Pressable>
+    );
+  },
 );
 
 LakeButton.displayName = "Button";

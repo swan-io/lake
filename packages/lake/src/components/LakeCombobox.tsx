@@ -1,16 +1,5 @@
 import { AsyncData, Result } from "@swan-io/boxed";
-import {
-  ForwardedRef,
-  ReactNode,
-  Ref,
-  RefObject,
-  forwardRef,
-  useCallback,
-  useId,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, Ref, useCallback, useId, useImperativeHandle, useRef, useState } from "react";
 import {
   NativeSyntheticEvent,
   Pressable,
@@ -96,8 +85,14 @@ const styles = StyleSheet.create({
   },
 });
 
+export type LakeComboboxRef = {
+  close: () => void;
+  open: () => void;
+};
+
 export type LakeComboboxProps<I> = {
-  inputRef?: RefObject<unknown>;
+  ref?: Ref<LakeComboboxRef>;
+  inputRef?: Ref<unknown>;
   value: string;
   items: AsyncData<Result<I[], unknown>>;
   itemHeight?: number;
@@ -118,38 +113,33 @@ export type LakeComboboxProps<I> = {
   readOnly?: boolean;
 };
 
-export type LakeComboboxRef = { close: () => void; open: () => void };
-
-const LakeComboboxWithRef = <I,>(
-  {
-    inputRef,
-    value,
-    items,
-    itemHeight = DEFAULT_ELEMENT_HEIGHT,
-    nbItemsDisplayed = DEFAULT_NB_SUGGESTION_DISPLAYED,
-    ListFooterComponent,
-    onChange,
-    onValueChange,
-    onSelectItem,
-    renderItem,
-    keyExtractor,
-    icon,
-    placeholder,
-    disabled = false,
-    emptyResultText,
-    readOnly,
-    id,
-    error,
-    hideErrors,
-  }: LakeComboboxProps<I>,
-  forwardedRef: ForwardedRef<LakeComboboxRef>,
-) => {
-  const ref = useRef<TextInput>(null);
-
-  const inputTextRef = useMergeRefs(ref, inputRef as RefObject<unknown>);
+export const LakeCombobox = <I,>({
+  ref,
+  inputRef,
+  value,
+  items,
+  itemHeight = DEFAULT_ELEMENT_HEIGHT,
+  nbItemsDisplayed = DEFAULT_NB_SUGGESTION_DISPLAYED,
+  ListFooterComponent,
+  onChange,
+  onValueChange,
+  onSelectItem,
+  renderItem,
+  keyExtractor,
+  icon,
+  placeholder,
+  disabled = false,
+  emptyResultText,
+  readOnly,
+  id,
+  error,
+  hideErrors,
+}: LakeComboboxProps<I>) => {
+  const innerInputRef = useRef<TextInput>(null);
+  const inputTextRef = useMergeRefs(innerInputRef, inputRef);
 
   const listContainerRef = useRef<View>(null);
-  const blurTimeoutId = useRef<number | undefined>(undefined);
+  const blurTimeoutId = useRef<number>(undefined);
   const [isFetchingAdditionalInfo, setIsFetchingAdditionalInfo] = useState(false);
 
   // The Combobox has two distinct closed states: "closed" and "dismissed"
@@ -160,7 +150,7 @@ const LakeComboboxWithRef = <I,>(
   const close = useCallback(() => setState("closed"), []);
   const dismiss = useCallback(() => setState("dismissed"), []);
 
-  useImperativeHandle(forwardedRef, () => {
+  useImperativeHandle(ref, () => {
     return {
       open,
       close,
@@ -202,7 +192,7 @@ const LakeComboboxWithRef = <I,>(
           event.preventDefault();
 
           if (nextIndex === -1) {
-            ref.current?.focus();
+            innerInputRef.current?.focus();
           } else {
             focusableElements[nextIndex === focusableElements.length ? 0 : nextIndex]?.focus();
           }
@@ -267,7 +257,7 @@ const LakeComboboxWithRef = <I,>(
         role="listbox"
         matchReferenceWidth={true}
         onEscapeKey={dismiss}
-        referenceRef={ref}
+        referenceRef={innerInputRef}
         autoFocus={false}
         returnFocus={true}
         visible={state === "opened" && !items.isNotAsked()}
@@ -359,7 +349,3 @@ const LakeComboboxWithRef = <I,>(
     </View>
   );
 };
-
-export const LakeCombobox = forwardRef(LakeComboboxWithRef) as <I>(
-  props: LakeComboboxProps<I> & { ref?: RefObject<LakeComboboxRef> },
-) => ReturnType<typeof LakeComboboxWithRef>;

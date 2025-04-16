@@ -1,12 +1,4 @@
-import {
-  ChangeEventHandler,
-  forwardRef,
-  ReactNode,
-  Ref,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEventHandler, ReactNode, Ref, useCallback, useRef, useState } from "react";
 import {
   ActivityIndicator,
   NativeSyntheticEvent,
@@ -157,6 +149,7 @@ export type LakeTextInputProps = Except<
   TextInputProps,
   "editable" | "keyboardType" | "onChange"
 > & {
+  ref?: Ref<TextInput>;
   ariaExpanded?: boolean;
   ariaControls?: string;
   error?: string;
@@ -184,215 +177,207 @@ export type LakeTextInputProps = Except<
   containerRef?: Ref<View>;
 };
 
-export const LakeTextInput = forwardRef<TextInput | null, LakeTextInputProps>(
-  (
-    {
-      ariaExpanded,
-      ariaControls,
-      error,
-      disabled = false,
-      validating = false,
-      valid = false,
-      readOnly = false,
-      icon,
-      children,
-      unit,
-      units,
-      color = "gray",
-      inputMode = "text",
-      hideErrors = false,
-      onChange,
-      onUnitChange,
-      pattern,
-      style: stylesFromProps,
-      containerStyle: containerStylesFromProps,
-      onFocus: originalOnFocus,
-      onBlur: originalOnBlur,
-      value,
-      defaultValue,
-      multiline = false,
-      containerRef,
-      //maxCharCount is different from maxLength(props inherited of TextInput)
-      //maxLength truncates the text in the limitation asked,
-      //maxCharCount doesn't have limitation but displays a counter of characters
-      maxCharCount,
-      help,
-      warning = false,
-      renderEnd,
-      ...props
-    }: LakeTextInputProps,
-    forwardRef,
-  ) => {
-    const inputRef = useRef<TextInput | null>(null);
-    const [isHovered, setIsHovered] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+export const LakeTextInput = ({
+  ref,
+  ariaExpanded,
+  ariaControls,
+  error,
+  disabled = false,
+  validating = false,
+  valid = false,
+  readOnly = false,
+  icon,
+  children,
+  unit,
+  units,
+  color = "gray",
+  inputMode = "text",
+  hideErrors = false,
+  onChange,
+  onUnitChange,
+  pattern,
+  style: stylesFromProps,
+  containerStyle: containerStylesFromProps,
+  onFocus: originalOnFocus,
+  onBlur: originalOnBlur,
+  value,
+  defaultValue,
+  multiline = false,
+  containerRef,
+  //maxCharCount is different from maxLength(props inherited of TextInput)
+  //maxLength truncates the text in the limitation asked,
+  //maxCharCount doesn't have limitation but displays a counter of characters
+  maxCharCount,
+  help,
+  warning = false,
+  renderEnd,
+  ...props
+}: LakeTextInputProps) => {
+  const inputRef = useRef<TextInput>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-    useNativeProp(inputRef, "pattern", pattern);
+  useNativeProp(inputRef, "pattern", pattern);
 
-    useHover(inputRef, {
-      onHoverStart: () => setIsHovered(true),
-      onHoverEnd: () => setIsHovered(false),
-    });
+  useHover(inputRef, {
+    onHoverStart: () => setIsHovered(true),
+    onHoverEnd: () => setIsHovered(false),
+  });
 
-    const onFocus = useCallback(
-      (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        setIsFocused(true);
-        originalOnFocus?.(event);
-      },
-      [originalOnFocus],
-    );
+  const onFocus = useCallback(
+    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(true);
+      originalOnFocus?.(event);
+    },
+    [originalOnFocus],
+  );
 
-    const onBlur = useCallback(
-      (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        setIsFocused(false);
-        originalOnBlur?.(event);
-      },
-      [originalOnBlur],
-    );
+  const onBlur = useCallback(
+    (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      setIsFocused(false);
+      originalOnBlur?.(event);
+    },
+    [originalOnBlur],
+  );
 
-    const mergedRef = useMergeRefs(inputRef, forwardRef);
-    const isInteractive = !disabled && !readOnly;
-    const hasError = isNotNullishOrEmpty(error);
-    const charCount = isNullish(value) ? 0 : value.length;
+  const mergedRef = useMergeRefs(inputRef, ref);
+  const isInteractive = !disabled && !readOnly;
+  const hasError = isNotNullishOrEmpty(error);
+  const charCount = isNullish(value) ? 0 : value.length;
 
-    return (
-      <View style={commonStyles.fill}>
-        <View style={styles.root} aria-errormessage={error}>
-          <View style={[styles.container, containerStylesFromProps]}>
-            <View
+  return (
+    <View style={commonStyles.fill}>
+      <View style={styles.root} aria-errormessage={error}>
+        <View style={[styles.container, containerStylesFromProps]}>
+          <View
+            style={[
+              styles.contents,
+              isHovered && isInteractive && styles.hovered,
+              isFocused && { borderColor: colors[color][500] },
+              readOnly && hasError && styles.readOnlyError,
+              disabled && styles.disabled,
+              readOnly && styles.readOnly,
+              isFocused && styles.focused,
+              isNotNullish(unit ?? units) && styles.inputWithUnit,
+              warning && { borderColor: colors.warning[500] },
+              hasError && styles.error,
+              valid && styles.valid,
+              stylesFromProps,
+            ]}
+            ref={containerRef}
+          >
+            {isNotNullish(icon) && (
+              <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
+            )}
+
+            <TextInput
+              aria-expanded={ariaExpanded}
+              aria-controls={ariaControls}
+              inputMode={inputMode}
+              {...props}
+              defaultValue={defaultValue}
+              value={isNullish(defaultValue) ? (value ?? "") : value}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              readOnly={!isInteractive}
+              onChange={onChange as TextInputProps["onChange"]}
+              multiline={multiline}
+              ref={mergedRef}
               style={[
-                styles.contents,
-                isHovered && isInteractive && styles.hovered,
-                isFocused && { borderColor: colors[color][500] },
+                styles.input,
+                multiline && styles.multilineInput,
                 readOnly && hasError && styles.readOnlyError,
                 disabled && styles.disabled,
                 readOnly && styles.readOnly,
-                isFocused && styles.focused,
-                isNotNullish(unit ?? units) && styles.inputWithUnit,
-                warning && { borderColor: colors.warning[500] },
-                hasError && styles.error,
-                valid && styles.valid,
-                stylesFromProps,
               ]}
-              ref={containerRef}
-            >
-              {isNotNullish(icon) && (
-                <Icon name={icon} size={20} color={colors.current.primary} style={styles.icon} />
-              )}
+            />
 
-              <TextInput
-                aria-expanded={ariaExpanded}
-                aria-controls={ariaControls}
-                inputMode={inputMode}
-                {...props}
-                defaultValue={defaultValue}
-                value={isNullish(defaultValue) ? (value ?? "") : value}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                readOnly={!isInteractive}
-                onChange={onChange as TextInputProps["onChange"]}
-                multiline={multiline}
-                ref={mergedRef}
-                style={[
-                  styles.input,
-                  multiline && styles.multilineInput,
-                  readOnly && hasError && styles.readOnlyError,
-                  disabled && styles.disabled,
-                  readOnly && styles.readOnly,
-                ]}
+            {isNotNullish(renderEnd) && <View style={styles.endComponents}>{renderEnd()}</View>}
+
+            {validating && (
+              <ActivityIndicator size="small" style={styles.endIcon} color={colors.current[500]} />
+            )}
+
+            {!validating && hasError && (
+              <Icon
+                name="warning-regular"
+                size={20}
+                color={colors.negative[400]}
+                style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
               />
+            )}
 
-              {isNotNullish(renderEnd) && <View style={styles.endComponents}>{renderEnd()}</View>}
+            {!validating && warning && !hasError && (
+              <Icon
+                name="warning-regular"
+                size={20}
+                color={colors.warning[500]}
+                style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
+              />
+            )}
 
-              {validating && (
-                <ActivityIndicator
-                  size="small"
-                  style={styles.endIcon}
-                  color={colors.current[500]}
-                />
-              )}
-
-              {!validating && hasError && (
-                <Icon
-                  name="warning-regular"
-                  size={20}
-                  color={colors.negative[400]}
-                  style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
-                />
-              )}
-
-              {!validating && warning && !hasError && (
-                <Icon
-                  name="warning-regular"
-                  size={20}
-                  color={colors.warning[500]}
-                  style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
-                />
-              )}
-
-              {!validating && !hasError && valid && (
-                <Icon
-                  name="checkmark-filled"
-                  size={20}
-                  color={colors.positive[400]}
-                  style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
-                />
-              )}
-            </View>
-
-            {isNotNullish(units) && isNotNullish(onUnitChange) ? (
-              <Box>
-                <LakeSelect
-                  value={unit}
-                  onValueChange={onUnitChange}
-                  items={units.map(value => ({ name: value, value }))}
-                  disabled={disabled}
-                  style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
-                  mode="borderless"
-                  hideErrors={true}
-                />
-              </Box>
-            ) : isNotNullish(unit) ? (
-              <LakeText
-                color={colors.gray[900]}
-                style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
-              >
-                {unit}
-              </LakeText>
-            ) : null}
+            {!validating && !hasError && valid && (
+              <Icon
+                name="checkmark-filled"
+                size={20}
+                color={colors.positive[400]}
+                style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
+              />
+            )}
           </View>
 
-          {children}
+          {isNotNullish(units) && isNotNullish(onUnitChange) ? (
+            <Box>
+              <LakeSelect
+                value={unit}
+                onValueChange={onUnitChange}
+                items={units.map(value => ({ name: value, value }))}
+                disabled={disabled}
+                style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
+                mode="borderless"
+                hideErrors={true}
+              />
+            </Box>
+          ) : isNotNullish(unit) ? (
+            <LakeText
+              color={colors.gray[900]}
+              style={[styles.unit, (disabled || readOnly) && styles.unitDisabled]}
+            >
+              {unit}
+            </LakeText>
+          ) : null}
         </View>
 
-        {!hideErrors && (
-          <Box direction="row" style={styles.errorContainer}>
-            {isNotNullish(error) ? (
-              <LakeText variant="smallRegular" color={colors.negative[500]}>
-                {error}
-              </LakeText>
-            ) : (
-              <LakeText variant="smallRegular" color={colors.gray[500]}>
-                {help ?? " "}
-              </LakeText>
-            )}
-
-            {isNotNullish(maxCharCount) && (
-              <>
-                <Fill minWidth={4} />
-
-                <LakeText
-                  variant="smallRegular"
-                  color={charCount > maxCharCount ? colors.negative[500] : colors.gray[400]}
-                  style={styles.descriptionLimitation}
-                >
-                  {charCount} / {maxCharCount}
-                </LakeText>
-              </>
-            )}
-          </Box>
-        )}
+        {children}
       </View>
-    );
-  },
-);
+
+      {!hideErrors && (
+        <Box direction="row" style={styles.errorContainer}>
+          {isNotNullish(error) ? (
+            <LakeText variant="smallRegular" color={colors.negative[500]}>
+              {error}
+            </LakeText>
+          ) : (
+            <LakeText variant="smallRegular" color={colors.gray[500]}>
+              {help ?? " "}
+            </LakeText>
+          )}
+
+          {isNotNullish(maxCharCount) && (
+            <>
+              <Fill minWidth={4} />
+
+              <LakeText
+                variant="smallRegular"
+                color={charCount > maxCharCount ? colors.negative[500] : colors.gray[400]}
+                style={styles.descriptionLimitation}
+              >
+                {charCount} / {maxCharCount}
+              </LakeText>
+            </>
+          )}
+        </Box>
+      )}
+    </View>
+  );
+};

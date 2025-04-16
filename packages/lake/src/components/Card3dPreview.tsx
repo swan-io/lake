@@ -1,10 +1,10 @@
 import { Environment, OrbitControls, Text, useGLTF, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Result } from "@swan-io/boxed";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { JSX, Ref, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GLTF } from "three-stdlib";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { isNotNullish, isNullish } from "../utils/nullish";
 import { createSvgImage, getMonochromeSvg } from "../utils/svg";
 
@@ -75,6 +75,7 @@ export type Card3dAssetsUrls = {
 };
 
 type CardParams = {
+  ref?: Ref<THREE.Group>;
   ownerName: string;
   cardNumber: string;
   expirationDate: string;
@@ -196,396 +197,393 @@ const setTextureColorSpace = (texture: THREE.Texture | THREE.Texture[]) => {
   }
 };
 
-export const Card = forwardRef<THREE.Group, CardProps>(
-  (
-    {
-      ownerName,
-      cardNumber,
-      expirationDate,
-      cvv,
-      color,
-      logo,
-      logoScale,
-      assetsUrls,
-      onSvgError,
-      ...props
-    },
-    ref,
-  ) => {
-    const { nodes, materials } = useGLTF(assetsUrls.cardGltf) as CardGLTFResult;
-    const [logoData, setLogoData] = useState<{
-      size: [number, number];
-      alphaMap: THREE.Texture;
-    } | null>(null);
+export const Card = ({
+  ref,
+  ownerName,
+  cardNumber,
+  expirationDate,
+  cvv,
+  color,
+  logo,
+  logoScale,
+  assetsUrls,
+  onSvgError,
+  ...props
+}: CardProps) => {
+  const { nodes, materials } = useGLTF(assetsUrls.cardGltf) as unknown as CardGLTFResult;
 
-    const silverTexture = useTexture(assetsUrls.colorSilver, setTextureColorSpace);
-    const blackTexture = useTexture(assetsUrls.colorBlack, setTextureColorSpace);
-    const chipTexture = useTexture(assetsUrls.chipTexture, setTextureColorSpace);
-    const bandRoughnessTexture = useTexture(assetsUrls.bandRoughness); // keep default color space because it's grayscale
+  const [logoData, setLogoData] = useState<{
+    size: [number, number];
+    alphaMap: THREE.Texture;
+  } | null>(null);
 
-    // Set environment map intensity for all materials
-    useEffect(() => {
-      Object.values(materials).forEach(material => {
-        material.envMapIntensity = ENV_MAP_INTENSITY;
+  const silverTexture = useTexture(assetsUrls.colorSilver, setTextureColorSpace);
+  const blackTexture = useTexture(assetsUrls.colorBlack, setTextureColorSpace);
+  const chipTexture = useTexture(assetsUrls.chipTexture, setTextureColorSpace);
+  const bandRoughnessTexture = useTexture(assetsUrls.bandRoughness); // keep default color space because it's grayscale
+
+  // Set environment map intensity for all materials
+  useEffect(() => {
+    Object.values(materials).forEach(material => {
+      material.envMapIntensity = ENV_MAP_INTENSITY;
+    });
+  }, [materials]);
+
+  // Set rainbow mastercard text custom fragment shader
+  useEffect(() => {
+    materials.rainbow_mastercard.onBeforeCompile = shader => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <color_fragment>",
+        shinyColorFragmentShader,
+      );
+    };
+  }, [materials.rainbow_mastercard]);
+
+  // Set band roughness and chip texture
+  useEffect(() => {
+    materials.black_band.roughness = 0.8;
+    materials.black_band.roughnessMap = bandRoughnessTexture;
+    materials.chip.map = chipTexture;
+  }, [materials.black_band, materials.chip, bandRoughnessTexture, chipTexture]);
+
+  // Set color texture
+  useEffect(() => {
+    match(color)
+      .with("Silver", () => {
+        materials.card.map = silverTexture;
+      })
+      .with("Black", () => {
+        materials.card.map = blackTexture;
+      })
+      .otherwise(texture => {
+        materials.card.map = texture;
       });
-    }, [materials]);
 
-    // Set rainbow mastercard text custom fragment shader
-    useEffect(() => {
-      materials.rainbow_mastercard.onBeforeCompile = shader => {
-        shader.fragmentShader = shader.fragmentShader.replace(
-          "#include <color_fragment>",
-          shinyColorFragmentShader,
-        );
-      };
-    }, [materials.rainbow_mastercard]);
+    // force threejs to update material
+    // because sometimes it doesn't apply texture on load randomly
+    materials.card.needsUpdate = true;
+  }, [color, materials.card, silverTexture, blackTexture]);
 
-    // Set band roughness and chip texture
-    useEffect(() => {
-      materials.black_band.roughness = 0.8;
-      materials.black_band.roughnessMap = bandRoughnessTexture;
-      materials.chip.map = chipTexture;
-    }, [materials.black_band, materials.chip, bandRoughnessTexture, chipTexture]);
+  // this avoid to have onSvgError as dependency of the effect below which should run only on logo change
+  const handleSvgError = useRef(onSvgError);
+  useEffect(() => {
+    handleSvgError.current = onSvgError;
+  }, [onSvgError]);
 
-    // Set color texture
-    useEffect(() => {
-      match(color)
-        .with("Silver", () => {
-          materials.card.map = silverTexture;
-        })
-        .with("Black", () => {
-          materials.card.map = blackTexture;
-        })
-        .otherwise(texture => {
-          materials.card.map = texture;
-        });
+  // Handle logo
+  useEffect(() => {
+    if (isNullish(logo)) {
+      setLogoData(null);
+      return;
+    }
 
-      // force threejs to update material
-      // because sometimes it doesn't apply texture on load randomly
-      materials.card.needsUpdate = true;
-    }, [color, materials.card, silverTexture, blackTexture]);
-
-    // this avoid to have onSvgError as dependency of the effect below which should run only on logo change
-    const handleSvgError = useRef(onSvgError);
-    useEffect(() => {
-      handleSvgError.current = onSvgError;
-    }, [onSvgError]);
-
-    // Handle logo
-    useEffect(() => {
-      if (isNullish(logo)) {
-        setLogoData(null);
-        return;
-      }
-
-      const image = match(logo)
-        .with(P.instanceOf(HTMLImageElement), image => Result.Ok(image))
-        .otherwise(logo => {
-          // We transform the logo to white to be able to use it as alpha map
-          const whiteLogo = getMonochromeSvg(logo, "white");
-          // Convert to Image element to be able to use it as texture
-          return createSvgImage(whiteLogo);
-        });
-
-      if (image.isError()) {
-        handleSvgError.current?.(image.getError());
-        return;
-      }
-
-      // Compute logo size depending on constraints
-      const { width: logoWidth, height: logoHeight } = computeCardLogoSize(image.get());
-      const alphaMap = new THREE.Texture(image.get());
-      alphaMap.needsUpdate = true;
-
-      setLogoData({
-        size: [logoWidth, logoHeight],
-        alphaMap,
+    const image = match(logo)
+      .with(P.instanceOf(HTMLImageElement), image => Result.Ok(image))
+      .otherwise(logo => {
+        // We transform the logo to white to be able to use it as alpha map
+        const whiteLogo = getMonochromeSvg(logo, "white");
+        // Convert to Image element to be able to use it as texture
+        return createSvgImage(whiteLogo);
       });
-    }, [logo]);
 
-    const mainTextMaterial = (
-      <meshStandardMaterial
-        color={match(color)
-          .with("Silver", () => 0x000000)
-          .with("Black", () => 0xeeeeee)
-          .otherwise(() => 0xeeeeee)}
-        metalness={0.1}
-        roughness={0.55}
-        envMapIntensity={ENV_MAP_INTENSITY}
-      />
-    );
+    if (image.isError()) {
+      handleSvgError.current?.(image.getError());
+      return;
+    }
 
-    const secondaryTextMaterial = (
-      <meshStandardMaterial
-        color={0x666666}
-        metalness={0.1}
-        roughness={0.55}
-        envMapIntensity={ENV_MAP_INTENSITY}
-      />
-    );
+    // Compute logo size depending on constraints
+    const { width: logoWidth, height: logoHeight } = computeCardLogoSize(image.get());
+    const alphaMap = new THREE.Texture(image.get());
+    alphaMap.needsUpdate = true;
 
-    return (
-      <group ref={ref} {...props} dispose={null}>
-        <mesh geometry={nodes.card.geometry} material={materials.card}>
-          {/* Front face text */}
-          <group position={[0, 0, FRONT_TEXT_POSITION]}>
-            {/* Card owner name */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.2}
-              anchorX="left"
-              anchorY={"bottom"}
-              position={[-3.4, -1.95, 0]}
-            >
-              {ownerName}
-              {mainTextMaterial}
-            </Text>
+    setLogoData({
+      size: [logoWidth, logoHeight],
+      alphaMap,
+    });
+  }, [logo]);
 
-            {/* TM next to master card logo */}
-            <Text
-              font={assetsUrls.fontMarkProRegular}
-              fontSize={0.03}
-              anchorX="left"
-              anchorY={"bottom"}
-              position={[3.85, -2.15, 0]}
-            >
-              TM
-              {mainTextMaterial}
-            </Text>
-          </group>
+  const mainTextMaterial = (
+    <meshStandardMaterial
+      color={match(color)
+        .with("Silver", () => 0x000000)
+        .with("Black", () => 0xeeeeee)
+        .otherwise(() => 0xeeeeee)}
+      metalness={0.1}
+      roughness={0.55}
+      envMapIntensity={ENV_MAP_INTENSITY}
+    />
+  );
 
-          {/* Back face text */}
-          <group position={[0, 0, BACK_TEXT_POSITION]}>
-            {/* Support address */}
-            <Text
-              font={assetsUrls.fontMarkProRegular}
-              anchorX="left"
-              anchorY={"bottom"}
-              fontSize={0.12}
-              rotation={[0, Math.PI, 0]}
-              position={[4, 2.38, 0]}
-            >
-              support@swan.io
-              {secondaryTextMaterial}
-            </Text>
+  const secondaryTextMaterial = (
+    <meshStandardMaterial
+      color={0x666666}
+      metalness={0.1}
+      roughness={0.55}
+      envMapIntensity={ENV_MAP_INTENSITY}
+    />
+  );
 
-            {/* Idemia */}
-            <Text
-              font={assetsUrls.fontMarkProRegular}
-              anchorX="right"
-              anchorY={"bottom"}
-              fontSize={0.12}
-              rotation={[0, Math.PI, 0]}
-              position={[-4, 2.38, 0]}
-            >
-              IDEMIA 9 1212121L 09/21
-              {secondaryTextMaterial}
-            </Text>
-
-            {/* Identifier */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.24}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[4, 0.68, 0]}
-            >
-              Identifier: 0000000000
-              {mainTextMaterial}
-            </Text>
-
-            {/* Issue by */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.2}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[4, 0.15, 0]}
-            >
-              This card is issued by Swan, pursuant to license
-              {secondaryTextMaterial}
-            </Text>
-
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.2}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[4, -0.15, 0]}
-            >
-              from Mastercard International.
-              {secondaryTextMaterial}
-            </Text>
-
-            {/* Card number */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.48}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[4, -1.85, 0]}
-            >
-              {cardNumber}
-              {mainTextMaterial}
-            </Text>
-
-            {/* Expire date */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.29}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[4, -2.3, 0]}
-            >
-              {expirationDate}
-              {mainTextMaterial}
-            </Text>
-
-            {/* CVC */}
-            <Text
-              font={assetsUrls.fontMaisonNeueBook}
-              fontSize={0.29}
-              anchorX="left"
-              anchorY={"bottom"}
-              rotation={[0, Math.PI, 0]}
-              position={[2.55, -2.3, 0]}
-            >
-              CVC {cvv}
-              {mainTextMaterial}
-            </Text>
-
-            {/* Debit */}
-            <Text
-              font={assetsUrls.fontMarkProRegular}
-              anchorX="center"
-              anchorY={"bottom"}
-              fontSize={0.36}
-              rotation={[0, Math.PI, 0]}
-              position={[-2.35, -1.15, 0]}
-            >
-              debit
-              {mainTextMaterial}
-            </Text>
-          </group>
-
-          {/* Logo */}
-          <group
-            // move group to change scale center at top right corner
-            position={[
-              CARD_WIDTH / 2 - LOGO_MARGIN_RIGHT,
-              CARD_HEIGHT / 2 - LOGO_MARGIN_TOP,
-              FRONT_TEXT_POSITION,
-            ]}
-            scale={logoScale}
+  return (
+    <group ref={ref} {...props} dispose={null}>
+      <mesh geometry={nodes.card.geometry} material={materials.card}>
+        {/* Front face text */}
+        <group position={[0, 0, FRONT_TEXT_POSITION]}>
+          {/* Card owner name */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.2}
+            anchorX="left"
+            anchorY={"bottom"}
+            position={[-3.4, -1.95, 0]}
           >
-            {isNotNullish(logoData) && (
-              <mesh position={[-logoData.size[0] / 2, -logoData.size[1] / 2, 0]}>
-                <planeGeometry args={logoData.size} />
+            {ownerName}
+            {mainTextMaterial}
+          </Text>
 
-                <meshStandardMaterial
-                  ref={material => {
-                    if (!material) {
-                      return;
-                    }
-                    material.onBeforeCompile = shader => {
-                      shader.fragmentShader = shader.fragmentShader.replace(
-                        "#include <alphamap_fragment>",
-                        logoAlphaMapFragmentShader,
-                      );
-                    };
-                  }}
-                  color={match(color)
-                    .with("Silver", () => 0x000000)
-                    .with("Black", () => 0xffffff)
-                    .otherwise(() => 0xffffff)}
-                  metalness={0.1}
-                  roughness={0.35}
-                  envMapIntensity={ENV_MAP_INTENSITY}
-                  transparent={true}
-                  alphaMap={logoData.alphaMap}
-                />
-              </mesh>
-            )}
-          </group>
+          {/* TM next to master card logo */}
+          <Text
+            font={assetsUrls.fontMarkProRegular}
+            fontSize={0.03}
+            anchorX="left"
+            anchorY={"bottom"}
+            position={[3.85, -2.15, 0]}
+          >
+            TM
+            {mainTextMaterial}
+          </Text>
+        </group>
 
-          <mesh
-            geometry={nodes.black_band.geometry}
-            material={materials.black_band}
-            position={[0, 1.774, BACK_TEXT_POSITION]}
-            rotation={[0, Math.PI / 2, 0]}
-          />
+        {/* Back face text */}
+        <group position={[0, 0, BACK_TEXT_POSITION]}>
+          {/* Support address */}
+          <Text
+            font={assetsUrls.fontMarkProRegular}
+            anchorX="left"
+            anchorY={"bottom"}
+            fontSize={0.12}
+            rotation={[0, Math.PI, 0]}
+            position={[4, 2.38, 0]}
+          >
+            support@swan.io
+            {secondaryTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.chip.geometry}
-            material={materials.chip}
-            position={[-2.78, 0.439, FRONT_TEXT_POSITION]}
-            rotation={[0, Math.PI / 2, 0]}
-          />
+          {/* Idemia */}
+          <Text
+            font={assetsUrls.fontMarkProRegular}
+            anchorX="right"
+            anchorY={"bottom"}
+            fontSize={0.12}
+            rotation={[0, Math.PI, 0]}
+            position={[-4, 2.38, 0]}
+          >
+            IDEMIA 9 1212121L 09/21
+            {secondaryTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.chip_pattern.geometry}
-            material={materials.chip_pattern}
-            position={[-2.778, 0.442, FRONT_TEXT_POSITION + 0.001]}
-            rotation={[0, Math.PI / 2, 0]}
-          />
+          {/* Identifier */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.24}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[4, 0.68, 0]}
+          >
+            Identifier: 0000000000
+            {mainTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.mc_center.geometry}
-            material={materials.mastercard_orange}
-            position={[3.052, -1.832, FRONT_TEXT_POSITION]}
-            rotation={[Math.PI / 2, 0, 0]}
-          />
+          {/* Issue by */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.2}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[4, 0.15, 0]}
+          >
+            This card is issued by Swan, pursuant to license
+            {secondaryTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.mc_left.geometry}
-            material={materials.mastercard_red}
-            position={[2.676, -1.773, FRONT_TEXT_POSITION]}
-            rotation={[Math.PI / 2, 0, 0]}
-          />
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.2}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[4, -0.15, 0]}
+          >
+            from Mastercard International.
+            {secondaryTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.mc_right.geometry}
-            material={materials.mastercard_yellow}
-            position={[3.47, -1.773, FRONT_TEXT_POSITION]}
-            rotation={[-Math.PI / 2, 0, 0]}
-          />
+          {/* Card number */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.48}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[4, -1.85, 0]}
+          >
+            {cardNumber}
+            {mainTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.metal_circle.geometry}
-            material={materials.rainbow}
-            position={[-2.33, -1.849, BACK_TEXT_POSITION]}
-            rotation={[-Math.PI / 2, Math.PI / 2, 0]}
-          />
+          {/* Expire date */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.29}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[4, -2.3, 0]}
+          >
+            {expirationDate}
+            {mainTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.metal_circle001.geometry}
-            material={materials.rainbow_rough}
-            position={[-2.629, -1.849, BACK_TEXT_POSITION - 0.001]}
-            rotation={[-Math.PI / 2, Math.PI / 2, 0]}
-            scale={[0.35, 1, 0.35]}
-          />
+          {/* CVC */}
+          <Text
+            font={assetsUrls.fontMaisonNeueBook}
+            fontSize={0.29}
+            anchorX="left"
+            anchorY={"bottom"}
+            rotation={[0, Math.PI, 0]}
+            position={[2.55, -2.3, 0]}
+          >
+            CVC {cvv}
+            {mainTextMaterial}
+          </Text>
 
-          <mesh
-            geometry={nodes.metal_circle002.geometry}
-            material={materials.rainbow_rough}
-            position={[-2.33, -1.849, BACK_TEXT_POSITION - 0.001]}
-            rotation={[-Math.PI / 2, Math.PI / 2, 0]}
-          />
+          {/* Debit */}
+          <Text
+            font={assetsUrls.fontMarkProRegular}
+            anchorX="center"
+            anchorY={"bottom"}
+            fontSize={0.36}
+            rotation={[0, Math.PI, 0]}
+            position={[-2.35, -1.15, 0]}
+          >
+            debit
+            {mainTextMaterial}
+          </Text>
+        </group>
 
-          <mesh
-            geometry={nodes.metal_mastercard.geometry}
-            material={materials.rainbow_mastercard}
-            position={[0.914, -1.298, BACK_TEXT_POSITION - 0.001]}
-            rotation={[Math.PI / 2, 0, Math.PI]}
-            scale={0.09}
-          />
-        </mesh>
-      </group>
-    );
-  },
-);
+        {/* Logo */}
+        <group
+          // move group to change scale center at top right corner
+          position={[
+            CARD_WIDTH / 2 - LOGO_MARGIN_RIGHT,
+            CARD_HEIGHT / 2 - LOGO_MARGIN_TOP,
+            FRONT_TEXT_POSITION,
+          ]}
+          scale={logoScale}
+        >
+          {isNotNullish(logoData) && (
+            <mesh position={[-logoData.size[0] / 2, -logoData.size[1] / 2, 0]}>
+              <planeGeometry args={logoData.size} />
+
+              <meshStandardMaterial
+                ref={material => {
+                  if (!material) {
+                    return;
+                  }
+                  material.onBeforeCompile = shader => {
+                    shader.fragmentShader = shader.fragmentShader.replace(
+                      "#include <alphamap_fragment>",
+                      logoAlphaMapFragmentShader,
+                    );
+                  };
+                }}
+                color={match(color)
+                  .with("Silver", () => 0x000000)
+                  .with("Black", () => 0xffffff)
+                  .otherwise(() => 0xffffff)}
+                metalness={0.1}
+                roughness={0.35}
+                envMapIntensity={ENV_MAP_INTENSITY}
+                transparent={true}
+                alphaMap={logoData.alphaMap}
+              />
+            </mesh>
+          )}
+        </group>
+
+        <mesh
+          geometry={nodes.black_band.geometry}
+          material={materials.black_band}
+          position={[0, 1.774, BACK_TEXT_POSITION]}
+          rotation={[0, Math.PI / 2, 0]}
+        />
+
+        <mesh
+          geometry={nodes.chip.geometry}
+          material={materials.chip}
+          position={[-2.78, 0.439, FRONT_TEXT_POSITION]}
+          rotation={[0, Math.PI / 2, 0]}
+        />
+
+        <mesh
+          geometry={nodes.chip_pattern.geometry}
+          material={materials.chip_pattern}
+          position={[-2.778, 0.442, FRONT_TEXT_POSITION + 0.001]}
+          rotation={[0, Math.PI / 2, 0]}
+        />
+
+        <mesh
+          geometry={nodes.mc_center.geometry}
+          material={materials.mastercard_orange}
+          position={[3.052, -1.832, FRONT_TEXT_POSITION]}
+          rotation={[Math.PI / 2, 0, 0]}
+        />
+
+        <mesh
+          geometry={nodes.mc_left.geometry}
+          material={materials.mastercard_red}
+          position={[2.676, -1.773, FRONT_TEXT_POSITION]}
+          rotation={[Math.PI / 2, 0, 0]}
+        />
+
+        <mesh
+          geometry={nodes.mc_right.geometry}
+          material={materials.mastercard_yellow}
+          position={[3.47, -1.773, FRONT_TEXT_POSITION]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        />
+
+        <mesh
+          geometry={nodes.metal_circle.geometry}
+          material={materials.rainbow}
+          position={[-2.33, -1.849, BACK_TEXT_POSITION]}
+          rotation={[-Math.PI / 2, Math.PI / 2, 0]}
+        />
+
+        <mesh
+          geometry={nodes.metal_circle001.geometry}
+          material={materials.rainbow_rough}
+          position={[-2.629, -1.849, BACK_TEXT_POSITION - 0.001]}
+          rotation={[-Math.PI / 2, Math.PI / 2, 0]}
+          scale={[0.35, 1, 0.35]}
+        />
+
+        <mesh
+          geometry={nodes.metal_circle002.geometry}
+          material={materials.rainbow_rough}
+          position={[-2.33, -1.849, BACK_TEXT_POSITION - 0.001]}
+          rotation={[-Math.PI / 2, Math.PI / 2, 0]}
+        />
+
+        <mesh
+          geometry={nodes.metal_mastercard.geometry}
+          material={materials.rainbow_mastercard}
+          position={[0.914, -1.298, BACK_TEXT_POSITION - 0.001]}
+          rotation={[Math.PI / 2, 0, Math.PI]}
+          scale={0.09}
+        />
+      </mesh>
+    </group>
+  );
+};

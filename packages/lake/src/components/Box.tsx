@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode } from "react";
+import { ReactNode, Ref } from "react";
 import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from "react-native";
 
 const alignItemsStyles = StyleSheet.create({
@@ -39,6 +39,7 @@ type BoxJustifyContent = keyof typeof justifyContentStyles | "normal";
 type BoxWrap = keyof typeof wrapStyles | "nowrap";
 
 export type BoxProps = ViewProps & {
+  ref?: Ref<View>;
   alignItems?: BoxAlignItems;
   children?: ReactNode;
   direction?: BoxDirection;
@@ -49,33 +50,29 @@ export type BoxProps = ViewProps & {
   style?: StyleProp<ViewStyle>;
 };
 
-export const Box = forwardRef<View, BoxProps>(
-  (
-    // Default <View /> styles https://github.com/necolas/react-native-web/blob/0.19.10/packages/react-native-web/src/exports/View/index.js#L146
-    {
-      alignItems = "stretch",
-      direction = "column",
-      justifyContent = "normal",
-      wrap = "nowrap",
-      grow = 0,
-      shrink = 0,
+// Default <View /> styles https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/exports/View/index.js#L149
+export const Box = ({
+  ref,
+  alignItems = "stretch",
+  direction = "column",
+  justifyContent = "normal",
+  wrap = "nowrap",
+  grow = 0,
+  shrink = 0,
+  style,
+  ...props
+}: BoxProps) => (
+  <View
+    ref={ref}
+    {...props}
+    style={[
+      alignItems !== "stretch" && alignItemsStyles[alignItems],
+      direction !== "column" && directionStyles[direction],
+      justifyContent !== "normal" && justifyContentStyles[justifyContent],
+      wrap !== "nowrap" && wrapStyles[wrap],
+      grow !== 0 && (grow === 1 ? otherStyles.grow1 : { flexGrow: grow }),
+      shrink !== 0 && (shrink === 1 ? otherStyles.shrink1 : { flexShrink: shrink }),
       style,
-      ...props
-    },
-    forwardedRef,
-  ) => (
-    <View
-      ref={forwardedRef}
-      {...props}
-      style={[
-        alignItems !== "stretch" && alignItemsStyles[alignItems],
-        direction !== "column" && directionStyles[direction],
-        justifyContent !== "normal" && justifyContentStyles[justifyContent],
-        wrap !== "nowrap" && wrapStyles[wrap],
-        grow !== 0 && (grow === 1 ? otherStyles.grow1 : { flexGrow: grow }),
-        shrink !== 0 && (shrink === 1 ? otherStyles.shrink1 : { flexShrink: shrink }),
-        style,
-      ]}
-    />
-  ),
+    ]}
+  />
 );

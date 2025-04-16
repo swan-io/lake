@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode } from "react";
+import { ReactNode, Ref } from "react";
 import { StyleSheet, Text, TextProps, TextStyle } from "react-native";
 import { Except } from "type-fest";
 import { texts } from "../constants/design";
@@ -23,6 +23,7 @@ type HeadingAlign = keyof typeof alignments;
 type HeadingVariant = keyof typeof variants;
 
 type Props = Except<TextProps, "role"> & {
+  ref?: Ref<Text>;
   align?: HeadingAlign;
   children: ReactNode;
   color?: string;
@@ -31,25 +32,30 @@ type Props = Except<TextProps, "role"> & {
   variant?: HeadingVariant;
 };
 
-export const LakeHeading = forwardRef<Text, Props>(
-  (
-    { align = "left", children, color, level, style, userSelect, variant = "h1", ...props }: Props,
-    forwardedRef,
-  ) => (
-    <Text
-      ref={forwardedRef}
-      role={level === "none" ? undefined : "heading"}
-      aria-level={level === "none" ? undefined : level}
-      style={[
-        variants[variant],
-        alignments[align],
-        isNotNullish(color) && { color },
-        isNotNullish(userSelect) && { userSelect },
-        style,
-      ]}
-      {...props}
-    >
-      {children}
-    </Text>
-  ),
+export const LakeHeading = ({
+  ref,
+  align = "left",
+  children,
+  color,
+  level,
+  style,
+  userSelect,
+  variant = "h1",
+  ...props
+}: Props) => (
+  <Text
+    ref={ref}
+    role={level === "none" ? undefined : "heading"}
+    aria-level={level === "none" ? undefined : level}
+    style={[
+      variants[variant],
+      alignments[align],
+      isNotNullish(color) && { color },
+      isNotNullish(userSelect) && { userSelect },
+      style,
+    ]}
+    {...props}
+  >
+    {children}
+  </Text>
 );

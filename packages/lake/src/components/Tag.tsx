@@ -1,4 +1,4 @@
-import { ReactElement, ReactFragment, ReactText, isValidElement } from "react";
+import { ReactNode, isValidElement } from "react";
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { ColorVariants, colors, radii, spacings } from "../constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  children?: ReactElement | ReactText | ReactFragment;
+  children?: ReactNode;
   label?: string;
   icon?: IconName;
   iconSize?: number;

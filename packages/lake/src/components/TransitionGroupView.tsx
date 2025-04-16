@@ -14,12 +14,7 @@ type Props = {
 };
 
 export const TransitionGroupView = ({ children, enter, leave, style, childStyle }: Props) => {
-  const leavingKeysAndIndicesRef = useRef<
-    {
-      index: number;
-      key: string;
-    }[]
-  >([]);
+  const leavingKeysAndIndicesRef = useRef<{ index: number; key: string }[]>([]);
   const [, forceUpdate] = useReducer(() => [], []);
 
   const onLeave = (key: string) => {

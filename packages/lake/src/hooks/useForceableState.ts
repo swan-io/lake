@@ -1,4 +1,4 @@
-// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/Pressable/index.js#L221
+// https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/exports/Pressable/index.js#L221
 
 import { useState } from "react";
 

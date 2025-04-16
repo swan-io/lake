@@ -379,7 +379,7 @@ export const VirtualizedList = <T, ExtraInfo>({
     onLayoutUpdate();
   }, [onLayoutUpdate]);
 
-  const scrollTimeoutRef = useRef<number | undefined>(undefined);
+  const scrollTimeoutRef = useRef<number>(undefined);
   const rowsContainerRef = useRef<View>(null);
 
   const onScroll = useCallback(() => {
