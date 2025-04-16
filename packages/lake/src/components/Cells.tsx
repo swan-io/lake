@@ -2,12 +2,9 @@ import { ComponentProps, ReactNode, useCallback, useState } from "react";
 import { GestureResponderEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { Except } from "type-fest";
-import { visuallyHiddenStyle } from "../constants/commonStyles";
-import { ColorVariants, colors, invariantColors, spacings } from "../constants/design";
+import { colors, invariantColors, spacings } from "../constants/design";
 import { setClipboardText } from "../utils/clipboard";
-import { identity } from "../utils/function";
 import { isNotNullish, isNullish } from "../utils/nullish";
-import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeText, TextVariant } from "./LakeText";
 import { LakeTooltip } from "./LakeTooltip";
@@ -293,18 +290,13 @@ type BalanceCellProps = {
   currency: string;
   formatCurrency: (value: number, currency: string) => string;
   originalValue?: { value: number; currency: string };
-  /**
-   * @deprecated Use `align` prop instead
-   */
-  textAlign?: Align;
   value: number;
   variant?: TextVariant;
 };
 
 // TODO: handle `+` sign properly
 export const BalanceCell = ({
-  textAlign = "left",
-  align = textAlign,
+  align = "left",
   currency,
   formatCurrency,
   originalValue,
@@ -400,119 +392,3 @@ export const LinkCell = ({
     </Cell>
   );
 };
-
-/**
- * @deprecated Avoid usage
- */
-export const ColorPatchCell = ({
-  alternativeText,
-  color,
-  isHovered,
-}: {
-  alternativeText?: string;
-  color: ColorVariants;
-  isHovered: boolean;
-}) => {
-  return isHovered ? (
-    <Box grow={1} style={{ backgroundColor: colors[color].primary }}>
-      {isNotNullish(alternativeText) ? (
-        <LakeText style={visuallyHiddenStyle}>{alternativeText}</LakeText>
-      ) : null}
-    </Box>
-  ) : null;
-};
-
-/**
- * @deprecated Use `HeaderCell` instead
- */
-export const SimpleHeaderCell = ({
-  justifyContent = "flex-start",
-  ...props
-}: {
-  justifyContent?: "flex-start" | "center" | "flex-end";
-  text: string;
-  sort?: SortDirection;
-  onPress?: (direction: SortDirection) => void;
-}) => (
-  <HeaderCell
-    {...props}
-    align={match(justifyContent)
-      .returnType<Align>()
-      .with("flex-start", () => "left")
-      .with("flex-end", () => "right")
-      .otherwise(identity)}
-  />
-);
-
-/**
- * @deprecated Use `TextCell` with color={…} and variant="medium" instead
- */
-export const SimpleTitleCell = ({
-  isHighlighted = false,
-  text,
-  tooltip,
-}: {
-  isHighlighted?: boolean;
-  text: string;
-  tooltip?: TooltipProp;
-}) => (
-  <TextCell
-    color={isHighlighted ? colors.current.primary : colors.gray[900]}
-    text={text}
-    tooltip={tooltip}
-    variant="medium"
-  />
-);
-
-/**
- * @deprecated Use `TextCell` instead
- */
-export const SimpleRegularTextCell = ({
-  color = colors.gray[900],
-  text,
-  textAlign = "left",
-  variant = "regular",
-}: {
-  color?: string;
-  text: string;
-  textAlign?: Align;
-  variant?: TextVariant;
-}) => <TextCell align={textAlign} color={color} text={text} variant={variant} />;
-
-/**
- * @deprecated Use `CopyableTextCell` instead
- */
-export const CopyableRegularTextCell = CopyableTextCell;
-
-/**
- * @deprecated Use `<Cell align="left" />` instead
- */
-export const StartAlignedCell = (props: Except<CellProps, "align">) => (
-  <Cell align="left" {...props} />
-);
-
-/**
- * @deprecated Use `<Cell align="center" />` instead
- */
-export const CenteredCell = (props: Except<CellProps, "align">) => (
-  <Cell align="center" {...props} />
-);
-
-/**
- * @deprecated Use `<Cell align="right" />` instead
- */
-export const EndAlignedCell = (props: Except<CellProps, "align">) => (
-  <Cell align="right" {...props} />
-);
-
-/**
- * @deprecated Use `<Cell align="right" />` instead
- */
-export const ActionCell = (props: CellProps) => <Cell align="right" {...props} />;
-
-/**
- * @deprecated Use <ActionCell /> instead
- */
-export const CellAction = ({ children }: { children: ReactNode }) => (
-  <ActionCell>{children}</ActionCell>
-);

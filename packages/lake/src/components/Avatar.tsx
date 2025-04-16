@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { match, P } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import { colors, ColorVariants } from "../constants/design";
-import { identity } from "../utils/function";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 
@@ -22,12 +21,10 @@ type User = {
   preferredLastName?: string | null;
 };
 
-type Props =
-  | { size: number; user: User | null | undefined }
-  /**
-   * @deprecated
-   */
-  | { size: number; initials?: string };
+type Props = {
+  size: number;
+  user: User | null | undefined;
+};
 
 const initialsToVariant = (initials: string): ColorVariants => {
   const value = (initials.charCodeAt(0) + initials.charCodeAt(1)) % 3;
@@ -42,17 +39,14 @@ const initialsToVariant = (initials: string): ColorVariants => {
   }
 };
 
-export const Avatar = memo<Props>(props => {
-  const { size } = props;
-
-  const initials = match(props)
+export const Avatar = memo<Props>(({ user, size }) => {
+  const initials = match(user)
     .with(
-      { user: P.select(P.nonNullable) },
+      P.nonNullable,
       user =>
         (user.firstName?.charAt(0) ?? "") +
         ((user.preferredLastName ?? user.lastName)?.charAt(0) ?? ""),
     )
-    .with({ initials: P.select(P.nonNullable) }, identity)
     .otherwise(() => "");
 
   const variant = initialsToVariant(initials);
