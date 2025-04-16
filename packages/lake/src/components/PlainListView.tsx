@@ -3,7 +3,6 @@ import {
   Fragment,
   ReactElement,
   ReactNode,
-  Ref,
   useCallback,
   useEffect,
   useId,
@@ -52,11 +51,7 @@ type Props<T, ExtraInfo> = {
   onEndReachedThresholdPx?: number;
   headerStyle?: ViewStyle | null | undefined;
   rowStyle?: (item: T, large: boolean) => ViewStyle | null | undefined;
-  getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement<{
-    children: ReactNode;
-    ref?: Ref<View>;
-    style?: ViewStyle;
-  }>;
+  getRowLink?: (config: LinkConfig<T, ExtraInfo>) => ReactElement;
   renderEmptyList?: () => ReactNode;
   groupBy?: (item: T) => string;
   onActiveRowChange?: (element: HTMLElement) => void;
@@ -298,11 +293,7 @@ export const PlainListView = <T, ExtraInfo>({
       item: T;
       absoluteIndex: number;
       extraInfo: ExtraInfo;
-    }): ReactElement<{
-      children: ReactNode;
-      ref?: Ref<View>;
-      style?: ViewStyle;
-    }> => {
+    }) => {
       const customLinkElement = getRowLink?.({ item, index: absoluteIndex, extraInfo });
       return isNullish(customLinkElement) ? <View /> : customLinkElement;
     },
