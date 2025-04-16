@@ -1,4 +1,4 @@
-import { createContext, ReactNode, Ref, RefObject, useLayoutEffect, useRef } from "react";
+import { createContext, ReactNode, RefObject, useLayoutEffect, useRef } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { colors, ColorVariants } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -73,13 +73,13 @@ export const useCurrentColor = (
 };
 
 export const WithCurrentColor = ({ variant, style, children }: Props) => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef(null);
 
   useCurrentColor(containerRef, variant);
 
   return (
     <CurrentColorContext.Provider value={variant}>
-      <View style={style ?? styles.container} ref={containerRef as Ref<View>}>
+      <View style={style ?? styles.container} ref={containerRef}>
         {children}
       </View>
     </CurrentColorContext.Provider>
