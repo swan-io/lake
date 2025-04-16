@@ -1,7 +1,7 @@
 // https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
 // https://github.com/getsentry/sentry-javascript/blob/7.56.0/packages/react/src/errorboundary.tsx
 
-import { Component, ErrorInfo, ReactNode, isValidElement } from "react";
+import { Component, ErrorInfo, ReactElement, ReactNode, isValidElement } from "react";
 import { isNotNullish } from "../utils/nullish";
 
 const isError = (value: unknown): value is Error => {
@@ -43,7 +43,7 @@ const setCause = (error: Error, cause: Error): void => {
 
 type Props = {
   children: ReactNode;
-  fallback: (data: { error: Error; resetError: () => void }) => ReactNode;
+  fallback: (data: { error: Error; resetError: () => void }) => ReactElement;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 };
 
