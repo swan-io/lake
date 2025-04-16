@@ -23,7 +23,6 @@
 | react-native-web     | 0.20.0  | MIT              | Nicolas Gallagher   | https://github.com/necolas/react-native-web#readme                                |
 | rifm                 | 0.12.1  | MIT              | istarkov            | https://github.com/istarkov/rifm#readme                                           |
 | three                | 0.175.0 | MIT              | mrdoob              | https://threejs.org/                                                              |
-| ts-dedent            | 2.2.0   | MIT              | Tamino Martinius    | https://github.com/tamino-martinius/node-ts-dedent#readme                         |
 | ts-pattern           | 5.7.0   | MIT              | Gabriel Vergnaud    | https://github.com/gvergnaud/ts-pattern#readme                                    |
 | type-fest            | 4.40.0  | (MIT OR CC0-1.0) | Sindre Sorhus       | https://github.com/sindresorhus/type-fest#readme                                  |
 | uuid                 | 11.1.0  | MIT              | Unknown             | https://github.com/uuidjs/uuid#readme                                             |
