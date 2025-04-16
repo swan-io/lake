@@ -27,29 +27,29 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@react-three/drei": "^9.121.5",
-    "@react-three/fiber": "^8.17.14",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
     "@swan-io/boxed": "^3.2.0",
-    "@swan-io/chicane": "^2.1.0",
+    "@swan-io/chicane": "^2.2.0",
     "@swan-io/use-form": "^3.1.0",
     "dayjs": "^1.11.13",
     "polished": "^4.3.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-native-web": "^0.19.13",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-native-web": "^0.20.0",
     "rifm": "^0.12.1",
-    "three": "^0.173.0",
+    "three": "^0.175.0",
     "ts-dedent": "^2.2.0",
-    "ts-pattern": "^5.6.2",
-    "uuid": "^11.0.5"
+    "ts-pattern": "^5.7.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@types/react-native": "^0.72.8",
-    "@types/three": "^0.173.0",
-    "jsdom": "^26.0.0",
-    "type-fest": "^4.35.0"
+    "@types/three": "^0.175.0",
+    "jsdom": "^26.1.0",
+    "type-fest": "^4.40.0"
   }
 }
