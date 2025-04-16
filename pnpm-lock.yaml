@@ -152,9 +152,6 @@ importers:
       three:
         specifier: ^0.175.0
         version: 0.175.0
-      ts-dedent:
-        specifier: ^2.2.0
-        version: 2.2.0
       ts-pattern:
         specifier: ^5.7.0
         version: 5.7.0

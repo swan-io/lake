@@ -40,7 +40,6 @@
     "react-native-web": "^0.20.0",
     "rifm": "^0.12.1",
     "three": "^0.175.0",
-    "ts-dedent": "^2.2.0",
     "ts-pattern": "^5.7.0",
     "uuid": "^11.1.0"
   },
