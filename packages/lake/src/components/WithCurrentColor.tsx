@@ -25,7 +25,7 @@ export const useCurrentColor = (
   variant: ColorVariants | undefined,
 ) => {
   useLayoutEffect(() => {
-    if (containerRef != null && isNotNullish(containerRef.current) && variant != null) {
+    if (isNotNullish(containerRef.current) && variant != null) {
       const element = containerRef.current as unknown as HTMLElement;
       const colorScale = colors[variant];
       const style = element.style;
