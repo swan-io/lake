@@ -1,4 +1,4 @@
-import { KeyboardEvent, ReactNode, Ref, useCallback, useRef } from "react";
+import { KeyboardEvent, ReactElement, ReactNode, Ref, useCallback, useRef } from "react";
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -142,7 +142,7 @@ export type SelectProps<V> = {
   mode?: "normal" | "borderless";
   title?: string;
   valueStyle?: StyleProp<TextStyle>;
-  PopoverFooter?: ReactNode;
+  PopoverFooter?: ReactElement;
   size?: "small" | "large";
   icon?: IconName;
   color?: ColorVariants;
