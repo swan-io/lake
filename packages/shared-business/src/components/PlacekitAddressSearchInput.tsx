@@ -1,7 +1,7 @@
 import { PKOptions, PKResult } from "@placekit/client-js";
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
-import { MutableRefObject, useCallback } from "react";
+import { Ref, useCallback } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { CountryCCA3, countriesWithMultipleCCA3, getCCA2forCCA3 } from "../constants/countries";
 import { usePlacekit } from "../hooks/usePlacekit";
@@ -21,7 +21,7 @@ export type AddressDetail = {
 };
 
 type Props = {
-  inputRef?: MutableRefObject<unknown>;
+  inputRef?: Ref<unknown>;
   id?: string;
   types?: PKOptions["types"];
   country?: CountryCCA3; // cca3 country

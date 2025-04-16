@@ -1,4 +1,4 @@
-import { forwardRef, memo } from "react";
+import { memo, Ref } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { backgroundColor, colors, shadows } from "../constants/design";
 import { Icon } from "./Icon";
@@ -64,38 +64,35 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  ref?: Ref<View>;
   value: boolean;
   onValueChange?: (value: boolean) => void;
   disabled?: boolean;
 };
 
-export const Switch = memo(
-  forwardRef<View, Props>(({ value, disabled = false, onValueChange }, ref) => {
-    return (
-      <Pressable
-        ref={ref}
-        role="switch"
-        aria-checked={value}
-        disabled={disabled}
-        onPress={() => onValueChange?.(!value)}
-      >
-        {({ hovered }) => (
-          <>
-            <View style={[styles.shadow, hovered && styles.opaque]} />
+export const Switch = memo(({ ref, value, disabled = false, onValueChange }: Props) => (
+  <Pressable
+    ref={ref}
+    role="switch"
+    aria-checked={value}
+    disabled={disabled}
+    onPress={() => onValueChange?.(!value)}
+  >
+    {({ hovered }) => (
+      <>
+        <View style={[styles.shadow, hovered && styles.opaque]} />
 
-            <View style={[styles.base, value && styles.active, disabled && styles.disabled]}>
-              <View style={[styles.button, value && styles.buttonActive]}>
-                <Icon
-                  color={colors.positive[400]}
-                  name="checkmark-filled"
-                  size={10}
-                  style={[styles.icon, value && styles.opaque]}
-                />
-              </View>
-            </View>
-          </>
-        )}
-      </Pressable>
-    );
-  }),
-);
+        <View style={[styles.base, value && styles.active, disabled && styles.disabled]}>
+          <View style={[styles.button, value && styles.buttonActive]}>
+            <Icon
+              color={colors.positive[400]}
+              name="checkmark-filled"
+              size={10}
+              style={[styles.icon, value && styles.opaque]}
+            />
+          </View>
+        </View>
+      </>
+    )}
+  </Pressable>
+));

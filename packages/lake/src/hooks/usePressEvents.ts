@@ -1,6 +1,6 @@
-// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/modules/usePressEvents/index.js
+// https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/modules/usePressEvents/index.js
 
-import { MutableRefObject } from "react";
+import { Ref } from "react";
 import { GestureResponderEvent } from "react-native";
 // @ts-expect-error
 import originalUsePressEvents from "react-native-web/dist/cjs/modules/usePressEvents";
@@ -36,6 +36,6 @@ type EventHandlers = {
 };
 
 export const usePressEvents = originalUsePressEvents as <T>(
-  ref: MutableRefObject<T | null>,
+  ref: Ref<T | null>,
   config: PressResponderConfig,
 ) => EventHandlers;

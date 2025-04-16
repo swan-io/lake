@@ -22,7 +22,7 @@ type Props = Merge<
 >;
 
 export const ResponsiveContainer = ({ breakpoint = 1000, children, style, ...props }: Props) => {
-  const containerRef = useRef<View | null>(null);
+  const containerRef = useRef<View>(null);
   const [small, setSmall] = useState<boolean | null>(null);
 
   const onLayout = useCallback(

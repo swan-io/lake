@@ -1,4 +1,4 @@
-import { ForwardedRef, Fragment, ReactNode, forwardRef, useEffect, useRef } from "react";
+import { Fragment, ReactNode, Ref, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
 import { ScrollView, ScrollViewProps, ScrollViewRef } from "./ScrollView";
 
@@ -19,6 +19,7 @@ export type ListRenderItemInfo<T> = {
 };
 
 type Props<T> = {
+  ref?: Ref<FlatListRef>;
   ItemSeparatorComponent?: ReactNode;
   ListEmptyComponent?: ReactNode;
   ListFooterComponent?: ReactNode;
@@ -38,28 +39,26 @@ type Props<T> = {
   style?: StyleProp<ViewStyle>;
 };
 
-const FlatListWithRef = <T,>(
-  {
-    ItemSeparatorComponent,
-    ListEmptyComponent,
-    ListFooterComponent,
-    ListHeaderComponent,
-    contentContainerStyle,
-    data,
-    horizontal = false,
-    keyExtractor,
-    onEndReached,
-    onEndReachedThresholdPx = 200,
-    onKeyDown,
-    onScroll,
-    renderItem,
-    role,
-    scrollEventThrottle = 16,
-    showsScrollIndicators = true,
-    style,
-  }: Props<T>,
-  forwardedRef: ForwardedRef<FlatListRef>,
-) => {
+export const FlatList = <T,>({
+  ref,
+  ItemSeparatorComponent,
+  ListEmptyComponent,
+  ListFooterComponent,
+  ListHeaderComponent,
+  contentContainerStyle,
+  data,
+  horizontal = false,
+  keyExtractor,
+  onEndReached,
+  onEndReachedThresholdPx = 200,
+  onKeyDown,
+  onScroll,
+  renderItem,
+  role,
+  scrollEventThrottle = 16,
+  showsScrollIndicators = true,
+  style,
+}: Props<T>) => {
   const scrollTrackerRef = useRef<View>(null);
 
   const scrollTrackerStyle = horizontal
@@ -95,7 +94,7 @@ const FlatListWithRef = <T,>(
       horizontal={horizontal}
       onKeyDown={onKeyDown}
       onScroll={onScroll}
-      ref={forwardedRef}
+      ref={ref}
       role={role}
       scrollEventThrottle={scrollEventThrottle}
       showsScrollIndicators={showsScrollIndicators}
@@ -118,7 +117,3 @@ const FlatListWithRef = <T,>(
     </ScrollView>
   );
 };
-
-export const FlatList = forwardRef(FlatListWithRef) as <T>(
-  props: Props<T> & { ref?: ForwardedRef<FlatListRef> },
-) => ReturnType<typeof FlatListWithRef>;

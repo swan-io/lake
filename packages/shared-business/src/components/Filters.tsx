@@ -12,12 +12,11 @@ import { Stack } from "@swan-io/lake/src/components/Stack";
 import { Tag } from "@swan-io/lake/src/components/Tag";
 import { colors, shadows } from "@swan-io/lake/src/constants/design";
 import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
-import { useMergeRefs } from "@swan-io/lake/src/hooks/useMergeRefs";
 import { usePreviousValue } from "@swan-io/lake/src/hooks/usePreviousValue";
 import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 import { ValidatorResult } from "@swan-io/use-form";
 import dayjs from "dayjs";
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Ref, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { P, match } from "ts-pattern";
 import { Simplify } from "type-fest";
@@ -84,6 +83,7 @@ type Item<T> = {
 };
 
 type TagProps = {
+  ref?: Ref<View>;
   isActive: boolean;
   label: string;
   value?: string;
@@ -91,37 +91,30 @@ type TagProps = {
   onPressRemove: () => void;
 };
 
-const FilterTag = forwardRef<View, TagProps>(
-  ({ onPress, onPressRemove, label, value = "", isActive }, forwardRef) => {
-    const ref = useRef<View>(null);
-    const mergedRef = useMergeRefs(ref, forwardRef);
+const FilterTag = ({ ref, onPress, onPressRemove, label, value = "", isActive }: TagProps) => (
+  <Pressable ref={ref} onPress={onPress}>
+    {({ hovered }) => (
+      <>
+        <View style={[styles.shadowed, hovered && styles.hovered]} />
 
-    return (
-      <Pressable ref={mergedRef} onPress={onPress}>
-        {({ hovered }) => (
-          <>
-            <View style={[styles.shadowed, hovered && styles.hovered]} />
+        <Tag label={label} color="current" onPressRemove={onPressRemove}>
+          <Box direction="row" alignItems="center">
+            <Text numberOfLines={1} style={styles.value}>
+              {value}
+            </Text>
 
-            <Tag label={label} color="current" onPressRemove={onPressRemove}>
-              <Box direction="row" alignItems="center">
-                <Text numberOfLines={1} style={styles.value}>
-                  {value}
-                </Text>
+            <Space width={4} />
 
-                <Space width={4} />
-
-                <Icon
-                  color={colors.current.primary}
-                  name={isActive ? "chevron-up-filled" : "chevron-down-filled"}
-                  size={16}
-                />
-              </Box>
-            </Tag>
-          </>
-        )}
-      </Pressable>
-    );
-  },
+            <Icon
+              color={colors.current.primary}
+              name={isActive ? "chevron-up-filled" : "chevron-down-filled"}
+              size={16}
+            />
+          </Box>
+        </Tag>
+      </>
+    )}
+  </Pressable>
 );
 
 type FilterRadioProps<T> = {

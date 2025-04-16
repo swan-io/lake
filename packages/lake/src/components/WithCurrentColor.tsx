@@ -1,4 +1,4 @@
-import { createContext, MutableRefObject, ReactNode, useLayoutEffect, useRef } from "react";
+import { createContext, ReactNode, Ref, RefObject, useLayoutEffect, useRef } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
 import { colors, ColorVariants } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
 export const CurrentColorContext = createContext<ColorVariants | undefined>(undefined);
 
 export const useCurrentColor = (
-  containerRef: MutableRefObject<HTMLElement | null>,
+  containerRef: RefObject<HTMLElement | null>,
   variant: ColorVariants | undefined,
 ) => {
   useLayoutEffect(() => {
-    if (isNotNullish(containerRef.current) && variant != null) {
+    if (containerRef != null && isNotNullish(containerRef.current) && variant != null) {
       const element = containerRef.current as unknown as HTMLElement;
       const colorScale = colors[variant];
       const style = element.style;
@@ -73,13 +73,13 @@ export const useCurrentColor = (
 };
 
 export const WithCurrentColor = ({ variant, style, children }: Props) => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   useCurrentColor(containerRef, variant);
 
   return (
     <CurrentColorContext.Provider value={variant}>
-      <View style={style ?? styles.container} ref={containerRef}>
+      <View style={style ?? styles.container} ref={containerRef as Ref<View>}>
         {children}
       </View>
     </CurrentColorContext.Provider>

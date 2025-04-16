@@ -1,5 +1,5 @@
 import { Option } from "@swan-io/boxed";
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 
@@ -25,7 +25,7 @@ type Config = {
   visible: boolean;
   matchReferenceWidth?: boolean;
   matchReferenceMinWidth?: boolean;
-  referenceRef?: MutableRefObject<View | Text | null>;
+  referenceRef?: RefObject<View | Text | null>;
 };
 
 export type ContextualLayerPosition = {
@@ -36,7 +36,7 @@ export type ContextualLayerPosition = {
 };
 
 type ContextualLayerConfig = {
-  referenceRef: MutableRefObject<View | Text | null>;
+  referenceRef: RefObject<View | Text | null>;
   position: Option<ContextualLayerPosition>;
 };
 
@@ -49,7 +49,7 @@ export const useContextualLayer = ({
   matchReferenceMinWidth = false,
   referenceRef: externalReferenceRef,
 }: Config): ContextualLayerConfig => {
-  const referenceRef = useRef<View | Text | null>(null);
+  const referenceRef = useRef<View | Text>(null);
 
   const usedRef = externalReferenceRef ?? referenceRef;
 

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 
 export const TransitionView = ({ enter, leave, style, children, onLeave }: Props) => {
   const viewRef = useRef<View>(null);
-  const childrenForLeaveAnimationRef = useRef<ReactNode | null>(null);
+  const childrenForLeaveAnimationRef = useRef<ReactNode>(null);
   const [, forceUpdate] = useReducer(() => [], []);
 
   const previousChildren = usePreviousValue(children);

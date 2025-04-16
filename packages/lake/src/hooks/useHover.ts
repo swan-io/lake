@@ -1,6 +1,6 @@
-// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/modules/useHover/index.js
+// https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/modules/useHover/index.js
 
-import { MutableRefObject } from "react";
+import { Ref } from "react";
 // @ts-expect-error
 import originaUseHover from "react-native-web/dist/cjs/modules/useHover";
 
@@ -14,6 +14,6 @@ type HoverEventsConfig = {
 };
 
 export const useHover = originaUseHover as <T>(
-  ref: MutableRefObject<T | null>,
+  ref: Ref<T | null>,
   config: HoverEventsConfig,
 ) => void;

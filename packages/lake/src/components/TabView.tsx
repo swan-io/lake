@@ -3,7 +3,6 @@ import {
   Fragment,
   ReactNode,
   Ref,
-  forwardRef,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -162,6 +161,7 @@ const styles = StyleSheet.create({
 });
 
 type TabViewLinkProps = {
+  ref?: Ref<Text>;
   onChange: ((id: string) => void) | undefined;
   tab: Tab;
   children: ReactNode;
@@ -174,35 +174,43 @@ type TabViewLinkProps = {
   ariaCurrentValue?: "page" | "location";
 };
 
-const TabViewLink = forwardRef<Text, TabViewLinkProps>(
-  ({ children, style, tab, onChange, activeTabId, onBlur, onFocus, onPress }, ref) => {
-    return match(tab)
-      .with({ url: P.string }, ({ url }) => (
-        <Link ref={ref} to={url} style={style} onFocus={onFocus} onBlur={onBlur} onPress={onPress}>
-          {children}
-        </Link>
-      ))
-      .with({ id: P.string }, ({ id }) => {
-        const isActive = id === activeTabId;
+const TabViewLink = ({
+  ref,
+  children,
+  style,
+  tab,
+  onChange,
+  activeTabId,
+  onBlur,
+  onFocus,
+  onPress,
+}: TabViewLinkProps) => {
+  return match(tab)
+    .with({ url: P.string }, ({ url }) => (
+      <Link ref={ref} to={url} style={style} onFocus={onFocus} onBlur={onBlur} onPress={onPress}>
+        {children}
+      </Link>
+    ))
+    .with({ id: P.string }, ({ id }) => {
+      const isActive = id === activeTabId;
 
-        return (
-          <PressableText
-            ref={ref}
-            style={state => style({ ...state, active: isActive })}
-            onPress={() => {
-              onChange?.(id);
-              onPress?.();
-            }}
-            onFocus={onFocus}
-            onBlur={onBlur}
-          >
-            {children}
-          </PressableText>
-        );
-      })
-      .exhaustive();
-  },
-);
+      return (
+        <PressableText
+          ref={ref}
+          style={state => style({ ...state, active: isActive })}
+          onPress={() => {
+            onChange?.(id);
+            onPress?.();
+          }}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        >
+          {children}
+        </PressableText>
+      );
+    })
+    .exhaustive();
+};
 
 const Dropdown = ({
   tabs,
@@ -268,16 +276,21 @@ const SHOULD_AUTOFOCUS = new Set<DropdownOpeningState>(["ForcedOpen", "OpenFromF
 const SHOULD_OPEN = new Set<DropdownOpeningState>(["Open", "ForcedOpen", "OpenFromFocus"]);
 const SHOULD_LOCK_FOCUS = new Set<DropdownOpeningState>(["ForcedOpen"]);
 
-const DropdownItems = forwardRef<
-  View,
-  {
-    tabs: Tab[];
-    currentUrl: string;
-    otherLabel: string;
-    activeTabId: string | undefined;
-    onChange: ((id: string) => void) | undefined;
-  }
->(({ tabs, otherLabel, currentUrl, activeTabId, onChange }, ref) => {
+const DropdownItems = ({
+  ref,
+  tabs,
+  otherLabel,
+  currentUrl,
+  activeTabId,
+  onChange,
+}: {
+  ref?: Ref<View>;
+  tabs: Tab[];
+  currentUrl: string;
+  otherLabel: string;
+  activeTabId: string | undefined;
+  onChange: ((id: string) => void) | undefined;
+}) => {
   const [openingStatus, dispatch] = useReducer(
     (state: DropdownOpeningState, action: DropdownAction): DropdownOpeningState => {
       return match([action, state])
@@ -305,11 +318,11 @@ const DropdownItems = forwardRef<
     "Closed",
   );
 
-  const timeoutRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<number>(undefined);
   const handleRef = useRef<View>(null);
   const containerRef = useRef<View>(null);
+  const lastFocusTimeout = useRef<number>(null);
 
-  const lastFocusTimeout = useRef<number | null>(null);
   const {
     onHandleFocus,
     onLinkFocus,
@@ -477,7 +490,7 @@ const DropdownItems = forwardRef<
       </TransitionView>
     </View>
   );
-});
+};
 
 type Props = {
   activeTabId?: string;
@@ -515,12 +528,13 @@ export const TabView = ({
   activeTabId,
   onChange,
 }: Props) => {
-  const containerRef = useRef<View | null>(null);
-  const placeholderRef = useRef<View | null>(null);
-  const otherPlaceholderRef = useRef<View | null>(null);
+  const containerRef = useRef<View>(null);
+  const placeholderRef = useRef<View>(null);
+  const otherPlaceholderRef = useRef<View>(null);
 
-  const linksRefs: Ref<Record<string, Text | null>> = useRef({});
-  const placeholderLinkRef: Ref<Record<string, Text | null>> = useRef({});
+  const linksRefs = useRef<Record<string, Text | null>>({});
+  const placeholderLinkRef = useRef<Record<string, Text | null>>({});
+
   const [{ left, width }, setUnderlinePosition] = useState({ left: 0, width: 0 });
   const [hasRendered, setHasRendered] = useState(false);
   const [[kept, collapsed], setKeptCollapsed] = useState<[Tab[], Tab[]]>([[], []]);

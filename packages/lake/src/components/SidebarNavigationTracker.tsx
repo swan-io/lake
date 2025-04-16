@@ -52,8 +52,8 @@ const getCoordinates = (element: HTMLElement, guide: HTMLElement) => {
 
 export const SidebarNavigationTracker = ({ style, contentContainerStyle, children }: Props) => {
   const [track, setTrackRaw] = useState<Layout | null>(null);
-  const trackRef = useRef<View | null>(null);
-  const lastElementRef = useRef<View | null>(null);
+  const trackRef = useRef<View>(null);
+  const lastElementRef = useRef<View>(null);
 
   const setTrack = useCallback(({ color, element }: Track) => {
     if (trackRef.current != null) {
@@ -120,7 +120,7 @@ type MarkerProps = {
 
 export const SidebarNavigationTrackerActiveMarker = ({ color }: MarkerProps) => {
   const setLayoutReference = useContext(Context);
-  const elementRef = useRef<View | null>(null);
+  const elementRef = useRef<View>(null);
 
   const onLayout = useCallback(() => {
     if (elementRef.current != null) {

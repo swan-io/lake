@@ -71,7 +71,7 @@ export const LakeLabel = ({
   style,
 }: Props) => {
   const [id] = useState(() => uuid());
-  const containerRef = useRef<View | null>(null);
+  const containerRef = useRef<View>(null);
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {

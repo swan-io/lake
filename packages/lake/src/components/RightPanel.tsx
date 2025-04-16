@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef, useEffect, useState } from "react";
+import { ReactNode, Ref, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { backgroundColor, breakpoints } from "../constants/design";
 import { useBodyClassName } from "../hooks/useBodyClassName";
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  ref?: Ref<FocusTrapRef>;
   visible: boolean;
   children: ReactNode | ((context: Context) => ReactNode);
   onPressClose?: () => void;
@@ -107,80 +108,78 @@ type Props = {
 
 const rootNode = document.querySelector("#full-page-layer-root") as Element;
 
-export const RightPanel = forwardRef<FocusTrapRef, Props>(
-  ({ visible, children, onPressClose }: Props, ref) => {
-    const [delayedVisible, setDelayedVisible] = useState(visible);
+export const RightPanel = ({ ref, visible, children, onPressClose }: Props) => {
+  const [delayedVisible, setDelayedVisible] = useState(visible);
 
-    useEffect(() => {
-      setDelayedVisible(visible);
-    }, [visible]);
+  useEffect(() => {
+    setDelayedVisible(visible);
+  }, [visible]);
 
-    useBodyClassName("RightPanelOpen", { enabled: visible });
+  useBodyClassName("RightPanelOpen", { enabled: visible });
 
-    return (
-      <Portal container={rootNode}>
-        <View style={[styles.root, !visible && styles.inert]}>
-          <ResponsiveContainer style={styles.root} breakpoint={breakpoints.small}>
-            {({ large }) => (
-              <>
+  return (
+    <Portal container={rootNode}>
+      <View style={[styles.root, !visible && styles.inert]}>
+        <ResponsiveContainer style={styles.root} breakpoint={breakpoints.small}>
+          {({ large }) => (
+            <>
+              <TransitionView
+                style={styles.fill}
+                enter={styles.overlayEnter}
+                leave={styles.overlayLeave}
+              >
+                {visible ? (
+                  onPressClose != null ? (
+                    <Pressable style={styles.overlay} onPress={onPressClose} />
+                  ) : (
+                    <View style={styles.overlay} />
+                  )
+                ) : null}
+              </TransitionView>
+
+              <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
                 <TransitionView
-                  style={styles.fill}
-                  enter={styles.overlayEnter}
-                  leave={styles.overlayLeave}
+                  style={[styles.fillMax, large && styles.fillMaxLarge]}
+                  enter={styles.containerEnter}
+                  leave={styles.containerLeave}
                 >
-                  {visible ? (
-                    onPressClose != null ? (
-                      <Pressable style={styles.overlay} onPress={onPressClose} />
-                    ) : (
-                      <View style={styles.overlay} />
-                    )
+                  {delayedVisible ? (
+                    <FocusTrap
+                      onEscapeKey={onPressClose}
+                      focusLock={true}
+                      autoFocus={true}
+                      returnFocus={true}
+                      ref={ref}
+                      style={styles.container}
+                    >
+                      <TransitionView
+                        style={styles.contentsContainer}
+                        enter={styles.contentsEnter}
+                        leave={styles.contentsLeave}
+                      >
+                        <View style={styles.contents}>
+                          <View style={styles.contentsContainer}>
+                            {typeof children === "function" ? (
+                              <ResponsiveContainer
+                                style={styles.root}
+                                breakpoint={breakpoints.small}
+                              >
+                                {children}
+                              </ResponsiveContainer>
+                            ) : (
+                              children
+                            )}
+                          </View>
+                        </View>
+                      </TransitionView>
+                    </FocusTrap>
                   ) : null}
                 </TransitionView>
-
-                <Suspendable fallback={<LoadingView color={backgroundColor.accented} delay={0} />}>
-                  <TransitionView
-                    style={[styles.fillMax, large && styles.fillMaxLarge]}
-                    enter={styles.containerEnter}
-                    leave={styles.containerLeave}
-                  >
-                    {delayedVisible ? (
-                      <FocusTrap
-                        onEscapeKey={onPressClose}
-                        focusLock={true}
-                        autoFocus={true}
-                        returnFocus={true}
-                        ref={ref}
-                        style={styles.container}
-                      >
-                        <TransitionView
-                          style={styles.contentsContainer}
-                          enter={styles.contentsEnter}
-                          leave={styles.contentsLeave}
-                        >
-                          <View style={styles.contents}>
-                            <View style={styles.contentsContainer}>
-                              {typeof children === "function" ? (
-                                <ResponsiveContainer
-                                  style={styles.root}
-                                  breakpoint={breakpoints.small}
-                                >
-                                  {children}
-                                </ResponsiveContainer>
-                              ) : (
-                                children
-                              )}
-                            </View>
-                          </View>
-                        </TransitionView>
-                      </FocusTrap>
-                    ) : null}
-                  </TransitionView>
-                </Suspendable>
-              </>
-            )}
-          </ResponsiveContainer>
-        </View>
-      </Portal>
-    );
-  },
-);
+              </Suspendable>
+            </>
+          )}
+        </ResponsiveContainer>
+      </View>
+    </Portal>
+  );
+};

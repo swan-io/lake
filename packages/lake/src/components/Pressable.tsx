@@ -1,16 +1,6 @@
-// https://github.com/necolas/react-native-web/blob/0.19.1/packages/react-native-web/src/exports/Pressable/index.js
+// https://github.com/necolas/react-native-web/blob/0.20.0/packages/react-native-web/src/exports/Pressable/index.js
 
-import {
-  ComponentType,
-  FC,
-  forwardRef,
-  memo,
-  ReactNode,
-  Ref,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
+import { ComponentType, FC, memo, ReactNode, Ref, useCallback, useMemo, useRef } from "react";
 import {
   HrefAttrs,
   NativeSyntheticEvent,
@@ -43,6 +33,7 @@ const styles = StyleSheet.create({
 type Props<BaseProps extends TextProps | TextInputProps> = Merge<
   BaseProps,
   {
+    ref?: Ref<unknown>;
     children?: ReactNode | ((state: PressableStateCallbackType) => ReactNode);
     delayLongPress?: number;
     delayPressIn?: number;
@@ -76,8 +67,9 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
 ) => {
   const { applyPressStyle = true } = config;
 
-  return forwardRef<unknown, P>((props, forwardedRef) => {
+  return (props: P) => {
     const {
+      ref,
       children,
       delayLongPress,
       delayPressIn,
@@ -106,7 +98,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
     const [pressed, setPressed] = useForceableState(testOnly_pressed === true);
 
     const hostRef = useRef<Element>(null);
-    const setRef = useMergeRefs(forwardedRef, hostRef);
+    const setRef = useMergeRefs(ref, hostRef);
 
     const pressConfig = useMemo(
       () => ({
@@ -218,7 +210,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
         {typeof children === "function" ? children(interactionState) : children}
       </Component>
     );
-  });
+  };
 };
 
 type ExtraProps = {

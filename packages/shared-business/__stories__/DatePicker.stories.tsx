@@ -114,7 +114,7 @@ export const Default = () => {
 };
 
 export const ButtonWithModal = () => {
-  const buttonRef = useRef<View | null>(null);
+  const buttonRef = useRef<View>(null);
   const [value, setValue] = useState("");
   const [isOpened, setIsOpened] = useState(false);
 
