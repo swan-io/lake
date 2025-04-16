@@ -309,7 +309,7 @@ export const PlainListView = <T, ExtraInfo>({
     [getRowLink],
   );
 
-  const activeItemRef = useRef<View | null>(null);
+  const activeItemRef = useRef<View>(null);
 
   useEffect(() => {
     const ref = activeItemRef.current;
