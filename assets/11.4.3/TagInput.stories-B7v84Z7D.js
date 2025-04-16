@@ -1,0 +1,32 @@
+import{j as e}from"./jsx-runtime-BjG_zV1W.js";import{r as a}from"./index-D9D9kDko.js";import{y as Q,z as U,N as R,o as Y,k as T,V as L,s as _,B as Z,i as O,L as C,c as s,h as l,l as w,e as ee,r as te}from"./ScrollView-BXYY5pE1.js";import{u as re,P as oe}from"./Pressable-Bcg9LWlT.js";import{T as ae}from"./Tag-BZRwK38S.js";import{T as se}from"./index-CTWc7shG.js";import{L as ne}from"./LakeTextInput-Msujw07e.js";import{i as ie}from"./validation-CbEx5xdI.js";import{S as le,a as d}from"./_StoriesComponents-xx8RMcrB.js";import"./_commonjsHelpers-BosuxZz1.js";import"./index-D0hBKHsB.js";import"./index-CmAykTSy.js";import"./extends-CF3RwP-h.js";import"./commonStyles-BBEkV6IC.js";import"./Fill-DXEBun0Z.js";import"./LakeSelect-CTXSgBIV.js";import"./useDisclosure-XMIqX_nt.js";import"./FocusTrap-S_CBQvXI.js";import"./array-BfAlyugE.js";import"./Popover-DJoyYaU3.js";import"./useResponsive-DVbm4z6j.js";import"./function-JnkGXj6o.js";import"./BottomPanel-BhIOPlrO.js";import"./useBodyClassName-CPyC-r4W.js";import"./Suspendable-B7PinCkT.js";import"./index-BiKzkAzw.js";import"./TransitionView-BH9VOP6x.js";import"./Separator-C6_iuU14.js";import"./utc-JZaFi-_r.js";import"./iban-CwF7f66m.js";import"./i18n-C5vCEoDB.js";import"./rifm-BchRB_o4.js";const ue="transparent",o=_.create({container:{flexGrow:1,flexShrink:1,flexDirection:"row",alignItems:"stretch"},root:{flexDirection:"row",display:"flex",alignItems:"center",flexWrap:"wrap",borderRadius:te[6],backgroundColor:ee.accented,borderColor:s.gray[100],borderWidth:1,paddingHorizontal:l[4],paddingTop:l[4],outlineStyle:"none",cursor:"text"},focused:{borderColor:s.gray[500],boxShadow:w.tile},hovered:{boxShadow:w.tile},disabled:{backgroundColor:s.gray[50],borderColor:s.gray[50],color:s.gray[900],cursor:"not-allowed"},readOnly:{backgroundColor:s.gray[50],borderColor:s.gray[50],color:s.gray[900]},readOnlyError:{borderColor:ue,paddingRight:l[32]},error:{borderColor:s.negative[400]},valid:{borderColor:s.positive[500]},input:{height:28,marginBottom:l[4],marginLeft:l[4],outlineStyle:"none",flexGrow:1},tag:{marginRight:l[4],marginBottom:l[4],maxWidth:350},errorContainer:{paddingTop:l[4]}}),de=/,| /,q=({ref:x,validator:I=()=>!0,onFocus:c,onBlur:b,validateOnBlur:S=!0,values:n,onValuesChanged:h,readOnly:m=!1,disabled:f=!1,valid:D=!1,hideErrors:W=!1,placeholder:M,help:A,error:E})=>{const y=a.useRef(null),j=a.useRef(null),[B,v]=a.useState(!1),[F,k]=a.useState(!1),G=re(y,x);Q(j,{onHoverStart:()=>k(!0),onHoverEnd:()=>k(!1)});const i=a.useCallback(t=>{var r;h([...n,...t.filter(u=>!n.includes(u))]),(r=y.current)==null||r.clear()},[n,h]),z=a.useCallback(t=>{const r=[...new Set(t.split(de).filter(u=>u.length>0))];(r.length>1||r[0]!==t)&&i(r)},[i]),K=a.useCallback(({nativeEvent:t})=>{f||m||U({key:t.key,input:y.current}).with({key:"Backspace",input:R.instanceOf(HTMLInputElement)},({input:r})=>{Y(r.value)&&h(n.filter(u=>u!==n[n.length-1]))}).with({key:"Enter",input:R.instanceOf(HTMLInputElement)},({input:r})=>{T(r.value)&&i([r.value])})},[h,i,n,f,m]),X=a.useCallback(()=>{var t;(t=y.current)==null||t.focus()},[]),$=a.useCallback(t=>{v(!0),c==null||c(t)},[c]),J=a.useCallback(t=>{const r=y.current;r instanceof HTMLInputElement&&T(r.value)&&S&&i([r.value]),v(!1),b==null||b(t)},[i,b,S]);a.useImperativeHandle(x,()=>({pushPendingValue:()=>{const t=y.current;t instanceof HTMLInputElement&&T(t.value)&&S&&i([t.value])}}),[i,S]);const P=T(E);return e.jsxs(L,{children:[e.jsxs(oe,{style:[o.root,m&&P&&o.readOnlyError,f&&o.disabled,m&&o.readOnly,B&&o.focused,P&&o.error,D&&o.valid,F&&o.hovered],"aria-errormessage":E,onPress:X,ref:j,children:[n.map((t,r)=>e.jsx(ae,{onPressRemove:!m&&!f?()=>h(n.filter(u=>u!==t)):void 0,style:o.tag,color:I(t)?"gray":"negative",children:t},r)),e.jsx(se,{ref:G,style:[o.input,f&&o.disabled],onFocus:$,onBlur:J,"aria-disabled":f,onChangeText:z,onKeyPress:K,readOnly:m,placeholder:M})]}),!W&&e.jsx(Z,{direction:"row",style:o.errorContainer,children:O(E)?e.jsx(C,{variant:"smallRegular",color:s.negative[500],children:E}):e.jsx(C,{variant:"smallRegular",color:s.gray[500],children:A??" "})})]})};q.__docgenInfo={description:"",methods:[{name:"pushPendingValue",docblock:null,modifiers:[],params:[],returns:null}],displayName:"LakeTagInput",props:{validator:{defaultValue:{value:"() => true",computed:!1},required:!1},validateOnBlur:{defaultValue:{value:"true",computed:!1},required:!1},readOnly:{defaultValue:{value:"false",computed:!1},required:!1},disabled:{defaultValue:{value:"false",computed:!1},required:!1},valid:{defaultValue:{value:"false",computed:!1},required:!1},hideErrors:{defaultValue:{value:"false",computed:!1},required:!1}}};const pe=_.create({input:{maxWidth:400}}),ze={title:"Forms/TagInput",component:ne},p=x=>{const[I,c]=a.useState(["toto","dfghj@iouy.fr"]);return e.jsx(L,{style:pe.input,children:e.jsx(q,{validator:ie,onValuesChanged:c,values:I,...x})})},g=()=>e.jsxs(le,{title:"Input variations",children:[e.jsx(d,{title:"Default",children:e.jsx(p,{})}),e.jsx(d,{title:"Disabled",children:e.jsx(p,{disabled:!0})}),e.jsx(d,{title:"Error",children:e.jsx(p,{error:"Nop"})}),e.jsx(d,{title:"Hidden errors",children:e.jsx(p,{error:"Nop",hideErrors:!0})}),e.jsx(d,{title:"Valid",children:e.jsx(p,{valid:!0})}),e.jsx(d,{title:"With help",children:e.jsx(p,{help:"Fill me"})}),e.jsx(d,{title:"Read only",children:e.jsx(p,{readOnly:!0})})]});g.__docgenInfo={description:"",methods:[],displayName:"Variations"};var N,V,H;g.parameters={...g.parameters,docs:{...(N=g.parameters)==null?void 0:N.docs,source:{originalSource:`() => {
+  return <StoryBlock title="Input variations">
+      <StoryPart title="Default">
+        <EditableTagInput />
+      </StoryPart>
+
+      <StoryPart title="Disabled">
+        <EditableTagInput disabled={true} />
+      </StoryPart>
+
+      <StoryPart title="Error">
+        <EditableTagInput error="Nop" />
+      </StoryPart>
+
+      <StoryPart title="Hidden errors">
+        <EditableTagInput error="Nop" hideErrors={true} />
+      </StoryPart>
+
+      <StoryPart title="Valid">
+        <EditableTagInput valid={true} />
+      </StoryPart>
+
+      <StoryPart title="With help">
+        <EditableTagInput help="Fill me" />
+      </StoryPart>
+
+      <StoryPart title="Read only">
+        <EditableTagInput readOnly={true} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...(H=(V=g.parameters)==null?void 0:V.docs)==null?void 0:H.source}}};const Ke=["Variations"];export{g as Variations,Ke as __namedExportsOrder,ze as default};
+//# sourceMappingURL=TagInput.stories-B7v84Z7D.js.map
