@@ -29,6 +29,7 @@ type Props = {
   children: ReactNode | ((state: { mode: "dropdown" | "panel" }) => ReactNode);
   id?: string;
   label?: string;
+  placement?: "left" | "right" | "center";
   role?: "listbox" | "combobox" | "dialog";
   describedBy?: string;
   matchReferenceWidth?: boolean;
@@ -97,6 +98,7 @@ export const Popover = memo<Props>(
     children,
     id,
     label,
+    placement,
     role = "dialog",
     describedBy,
     matchReferenceWidth = false,
@@ -115,6 +117,7 @@ export const Popover = memo<Props>(
     const { desktop } = useResponsive(VIEWPORT_WIDTH_THRESHOLD);
 
     const { position } = useContextualLayer({
+      placement,
       referenceRef,
       visible,
       matchReferenceWidth,
