@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
 import { invariantColors } from "@swan-io/lake/src/constants/design";
-import { AccountStatement } from "../src/components/AccountStatement";
+import { AccountStatement, TransactionType } from "../src/components/AccountStatement";
+import { CountryCCA3 } from "../src/constants/countries";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
@@ -14,7 +15,7 @@ export const Default = () => {
     addressLine2: "wesh",
     city: "toulouse",
     postalCode: "31200",
-    country: "FRA",
+    country: "FRA" as CountryCCA3,
   };
 
   const openingBalance = {
@@ -30,8 +31,8 @@ export const Default = () => {
       },
       transactionDate: "01/01/2025",
       transactionLabel: "This is a description",
-      transactionType: "SepaDirectDebitIn",
-      transactionSide: "Credit",
+      transactionType: "CheckIn" as TransactionType,
+      transactionSide: "Credit" as const,
     },
     {
       transactionAmount: {
@@ -40,8 +41,8 @@ export const Default = () => {
       },
       transactionDate: "10/01/2025",
       transactionLabel: "This is a description",
-      transactionType: "SepaDirectDebitIn",
-      transactionSide: "Debit",
+      transactionType: "CardOutDebit" as TransactionType,
+      transactionSide: "Debit" as const,
 
       totalsCredit: {
         value: "0.00",

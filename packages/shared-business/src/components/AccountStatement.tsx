@@ -99,7 +99,7 @@ const Title = ({
   </Text>
 );
 
-type TransactionType =
+export type TransactionType =
   | "SepaCreditTransferIn"
   | "SepaCreditTransferOut"
   | "SepaInstantCreditTransferIn"
@@ -149,7 +149,7 @@ type AddressInfo = {
   city: string;
   postalCode: string;
   state?: string;
-  country: CountryCCA3[number];
+  country: CountryCCA3;
 };
 
 type Amount = {
