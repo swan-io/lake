@@ -399,5 +399,10 @@
   "accountStatement.column.debit": "Debit (€)",
   "accountStatement.column.fees": "Fees",
   "accountStatement.column.totals": "Totals",
-  "accountStatement.closingBalance": "Closing balance"
+  "accountStatement.closingBalance": "Closing balance",
+  "accountStatement.card": "Card",
+  "accountStatement.check": "Check",
+  "accountStatement.creditTransfer": "Credit transfer",
+  "accountStatement.fees": "Fees",
+  "accountStatement.directDebit": "Direct debit"
 }

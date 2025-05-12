@@ -1,5 +1,7 @@
 {
   "accountStatement.bic": "BIC",
+  "accountStatement.card": "Karte",
+  "accountStatement.check": "Scheck",
   "accountStatement.closingBalance": "Endsaldo",
   "accountStatement.column.credit": "Guthaben (€)",
   "accountStatement.column.date": "Datum",
@@ -9,7 +11,10 @@
   "accountStatement.column.totals": "Summen",
   "accountStatement.column.type": "Typ",
   "accountStatement.contactSupport": "Kontaktiere Swan",
+  "accountStatement.creditTransfer": "Überweisung",
   "accountStatement.date": "Von {openingDate} bis {closingDate}",
+  "accountStatement.directDebit": "Lastschrift",
+  "accountStatement.fees": "Gebühren",
   "accountStatement.iban": "IBAN",
   "accountStatement.openingBalance": "Anfangssaldo",
   "accountStatement.partnership": "In Partnerschaft mit",

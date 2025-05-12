@@ -6,6 +6,7 @@ import { colors, fonts, interFontStyle, spacings } from "@swan-io/lake/src/const
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle, ViewStyle } from "react-native";
+import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
 import { formatCurrencyIso, t } from "../utils/i18n";
 
@@ -50,15 +51,27 @@ const styles = StyleSheet.create({
     paddingVertical: spacings[4],
     minWidth: spacings[96],
   },
+  openingBalanceText: {
+    ...getTextStyle("sans", 13),
+    textAlign: "right",
+  },
   textColumn: {
     paddingVertical: spacings[8],
     ...getTextStyle("sans", 13),
+  },
+  text: {
+    ...getTextStyle("sans", 14),
   },
   row: {
     textAlign: "right",
     paddingVertical: spacings[4],
     fontWeight: "600",
     width: "20%",
+  },
+  closingBalanceRow: {
+    ...getTextStyle("sans", 14),
+    backgroundColor: colors.gray[50],
+    width: "50%",
   },
   footer: {
     ...getTextStyle("sans", 10),
@@ -143,6 +156,60 @@ export type TransactionType =
   | "CardInChargeback"
   | "CardInChargebackReversal";
 
+const translateTransaction = (transaction: TransactionType) => {
+  return match(transaction)
+    .with(
+      "CardInChargeback",
+      "CardInChargebackReversal",
+      "CardInCredit",
+      "CardOutAuthorization",
+      "CardOutCredit",
+      "CardOutCreditReversal",
+      "CardOutDebit",
+      "CardOutDebitReversal",
+      () => t("accountStatement.card"),
+    )
+    .with("CheckIn", "CheckInReturn", () => t("accountStatement.check"))
+    .with("FeesIn", "FeesOut", () => t("accountStatement.fees"))
+    .with(
+      "SepaCreditTransferIn",
+      "SepaCreditTransferOut",
+      "SepaInstantCreditTransferIn",
+      "SepaInstantCreditTransferOut",
+      "InternalCreditTransferIn",
+      "InternalCreditTransferOut",
+      "InternationalCreditTransferIn",
+      "InternationalCreditTransferOut",
+      "InternalCreditTransferOutReturn",
+      "InternalCreditTransferOutRecall",
+      "InternalCreditTransferInReturn",
+      "InternalCreditTransferInRecall",
+      "SepaCreditTransferOutReturn",
+      "SepaInstantCreditTransferOutRecall",
+      "SepaInstantCreditTransferInRecall",
+      "SepaCreditTransferOutRecall",
+      "SepaCreditTransferInReturn",
+      "SepaCreditTransferInRecall",
+      "InternationalCreditTransferInReturn",
+      "InternationalCreditTransferOutReturn",
+      () => t("accountStatement.creditTransfer"),
+    )
+    .with(
+      "SepaDirectDebitIn",
+      "SepaDirectDebitInReturn",
+      "SepaDirectDebitInReversal",
+      "SepaDirectDebitOut",
+      "SepaDirectDebitOutReturn",
+      "SepaDirectDebitOutReversal",
+      "InternalDirectDebitIn",
+      "InternalDirectDebitInReturn",
+      "InternalDirectDebitOut",
+      "InternalDirectDebitOutReturn",
+      () => t("accountStatement.directDebit"),
+    )
+    .exhaustive();
+};
+
 type AddressInfo = {
   addressLine1: string;
   addressLine2?: string;
@@ -158,6 +225,7 @@ type Amount = {
 };
 
 type Transaction = {
+  transactionId: string;
   transactionLabel: string;
   transactionDate: string;
   transactionType: TransactionType;
@@ -165,7 +233,8 @@ type Transaction = {
   transactionAmount: Amount;
 };
 
-type Props = {
+type AccountStatementV1Props = {
+  version: "v1";
   partnerLogoUrl?: string;
   style?: StyleProp<ViewStyle>;
   accountHolderType: "Individual" | "Company";
@@ -177,10 +246,11 @@ type Props = {
   closingDate: string;
   openingBalance: Amount;
   transactions: Transaction[];
-  fees: Amount;
   totalsCredit: Amount;
   totalsDebit: Amount;
   closingBalance: Amount;
+  feesDebit: Amount;
+  feesCredit: Amount;
 };
 
 const logoStyle: CSSProperties = {
@@ -190,7 +260,7 @@ const logoStyle: CSSProperties = {
   objectPosition: "left",
 };
 
-export const AccountStatement = ({
+export const AccountStatementV1 = ({
   partnerLogoUrl,
   style,
   accountHolderType,
@@ -202,11 +272,12 @@ export const AccountStatement = ({
   closingDate,
   openingBalance,
   transactions,
-  fees,
+  feesDebit,
+  feesCredit,
   totalsCredit,
   totalsDebit,
   closingBalance,
-}: Props) => {
+}: AccountStatementV1Props) => {
   return (
     <Box style={[styles.container, style]} direction="column" justifyContent="spaceBetween">
       <Box>
@@ -223,16 +294,12 @@ export const AccountStatement = ({
             <Space width={4} />
             <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
           </Box>
-
-          <Box>
-            <Text style={{ ...getTextStyle("sans", 20), fontWeight: "600" }}>Page 1/1</Text>
-          </Box>
         </Box>
         <Space height={24} />
         <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
         <Space height={8} />
 
-        <Text>
+        <Text style={styles.text}>
           {accountHolderType === "Company"
             ? t("accountStatement.titleDocument.companyDescription")
             : t("accountStatement.titleDocument.individualDescription")}
@@ -243,26 +310,28 @@ export const AccountStatement = ({
           <Box direction="column">
             <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
-            <Text>{accountHolderAddress.addressLine1}</Text>
+            <Text style={styles.text}>{accountHolderAddress.addressLine1}</Text>
             {isNotNullish(accountHolderAddress.addressLine2) && (
               <Text>{accountHolderAddress.addressLine2}</Text>
             )}
-            <Text>{`${accountHolderAddress.postalCode} ${accountHolderAddress.city}`}</Text>
-            <Text>{getCountryName(accountHolderAddress.country)}</Text>
+            <Text
+              style={styles.text}
+            >{`${accountHolderAddress.postalCode} ${accountHolderAddress.city}`}</Text>
+            <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
           </Box>
           <Box direction="column" alignItems="end">
             <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
-            <Text>{"support@swan.io"}</Text>
+            <Text style={styles.text}>{"support@swan.io"}</Text>
           </Box>
         </Box>
         <Space height={24} />
 
         <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-        <Text>{iban}</Text>
+        <Text style={styles.text}>{iban}</Text>
 
         <Space height={12} />
         <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-        <Text>{bic}</Text>
+        <Text style={styles.text}>{bic}</Text>
 
         <Space height={48} />
         <Box direction="row" justifyContent="spaceBetween">
@@ -273,7 +342,7 @@ export const AccountStatement = ({
           </Box>
 
           <Box direction="column">
-            <Text style={{ textAlign: "right" }}>{t("accountStatement.openingBalance")}</Text>
+            <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
             <Text style={styles.totalAmount}>
               {formatCurrencyIso(Number(openingBalance.value), openingBalance.currency)}
             </Text>
@@ -307,10 +376,13 @@ export const AccountStatement = ({
                 transactionLabel,
                 transactionSide,
                 transactionType,
+                transactionId,
               }) => (
-                <Box direction="row">
+                <Box direction="row" key={transactionId}>
                   <Text style={[styles.textColumn, { width: "15%" }]}>{transactionDate}</Text>
-                  <Text style={[styles.textColumn, { width: "22%" }]}>{transactionType}</Text>
+                  <Text style={[styles.textColumn, { width: "22%" }]}>
+                    {translateTransaction(transactionType)}
+                  </Text>
                   <Text style={[styles.textColumn, { width: "33%" }]}>{transactionLabel}</Text>
                   <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
                     {transactionSide === "Credit" ? transactionAmount.value : ""}
@@ -327,8 +399,8 @@ export const AccountStatement = ({
         <Box direction="column">
           <Box direction="row" justifyContent="end">
             <Text style={styles.row}>{t("accountStatement.column.fees")}</Text>
-            <Text style={styles.row}>{fees.value}</Text>
-            <Text style={styles.row}>{fees.value}</Text>
+            <Text style={styles.row}>{feesCredit.value}</Text>
+            <Text style={styles.row}>{feesDebit.value}</Text>
           </Box>
 
           <Box direction="row" justifyContent="end">
@@ -342,15 +414,10 @@ export const AccountStatement = ({
           <Box
             direction="row"
             alignItems="center"
-            style={{ backgroundColor: colors.gray[50], width: "50%" }}
+            style={styles.closingBalanceRow}
             justifyContent="spaceBetween"
           >
-            <Title
-              text={t("accountStatement.closingBalance")}
-              style={{
-                paddingHorizontal: spacings[8],
-              }}
-            />
+            <Title text={t("accountStatement.closingBalance")} />
 
             <Title
               text={formatCurrencyIso(Number(closingBalance.value), closingBalance.currency)}
@@ -369,9 +436,9 @@ export const AccountStatement = ({
   );
 };
 
-// export type AccountStatementProps = Props;
+export type AccountStatementProps = AccountStatementV1Props;
 
-// export const TransactionStatement = (props: AccountStatementProps) =>
-//   match(props)
-//     .with({ version: "v1" }, props => <AccountStatement {...props} />)
-//     .exhaustive();
+export const AccountStatement = (props: AccountStatementProps) =>
+  match(props)
+    .with({ version: "v1" }, props => <AccountStatementV1 {...props} />)
+    .exhaustive();

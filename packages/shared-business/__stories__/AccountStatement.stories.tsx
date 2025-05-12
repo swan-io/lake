@@ -11,36 +11,37 @@ export default {
 
 export const Default = () => {
   const address = {
-    addressLine1: "1 rue de Joey",
-    addressLine2: "wesh",
-    city: "toulouse",
-    postalCode: "31200",
+    addressLine1: "1 rue de la Paix",
+    city: "Paris",
+    postalCode: "75002",
     country: "FRA" as CountryCCA3,
   };
 
   const openingBalance = {
-    value: "30503",
+    value: "10000",
     currency: "EUR",
   };
 
   const transactions = [
     {
+      transactionId: "1",
       transactionAmount: {
-        value: "303.00",
+        value: "303.50",
         currency: "EUR",
       },
       transactionDate: "01/01/2025",
-      transactionLabel: "This is a description",
+      transactionLabel: "Sport subscription",
       transactionType: "CheckIn" as TransactionType,
       transactionSide: "Credit" as const,
     },
     {
+      transactionId: "2",
       transactionAmount: {
         value: "200.00",
         currency: "EUR",
       },
       transactionDate: "10/01/2025",
-      transactionLabel: "This is a description",
+      transactionLabel: "Ikea",
       transactionType: "CardOutDebit" as TransactionType,
       transactionSide: "Debit" as const,
 
@@ -59,8 +60,13 @@ export const Default = () => {
     },
   ];
 
-  const fees = {
-    value: "0.00",
+  const feesDebit = {
+    value: "4.00",
+    currency: "EUR",
+  };
+
+  const feesCredit = {
+    value: "1.00",
     currency: "EUR",
   };
 
@@ -83,7 +89,7 @@ export const Default = () => {
     <StoryBlock title="Account statement">
       <StoryPart title="Default">
         <AccountStatement
-          // version="v1"
+          version="v1"
           partnerLogoUrl="https://s3.eu-west-1.amazonaws.com/data.master.oina.ws/7a90851b-40f8-479d-9e0e-86d12fb001b5/SANDBOX/logo-749a2fb5-230b-4ae6-98bd-65bdb3c987c9.png"
           accountHolderType="Individual"
           accountHolderName="Sandrine Da Silva"
@@ -95,7 +101,8 @@ export const Default = () => {
           closingDate="31/01/2025"
           openingBalance={openingBalance}
           transactions={transactions}
-          fees={fees}
+          feesDebit={feesDebit}
+          feesCredit={feesCredit}
           totalsCredit={totalsCredit}
           totalsDebit={totalsDebit}
           closingBalance={closingBalance}

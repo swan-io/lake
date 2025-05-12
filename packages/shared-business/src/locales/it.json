@@ -1,5 +1,7 @@
 {
   "accountStatement.bic": "BIC",
+  "accountStatement.card": "Carta",
+  "accountStatement.check": "Assegno",
   "accountStatement.closingBalance": "Saldo finale",
   "accountStatement.column.credit": "Credito (€)",
   "accountStatement.column.date": "Data",
@@ -9,7 +11,10 @@
   "accountStatement.column.totals": "Totali",
   "accountStatement.column.type": "Tipo",
   "accountStatement.contactSupport": "Contatta Swan",
+  "accountStatement.creditTransfer": "Bonifico",
   "accountStatement.date": "Da {openingDate} a {closingDate}",
+  "accountStatement.directDebit": "Addebito diretto",
+  "accountStatement.fees": "Commissioni",
   "accountStatement.iban": "IBAN",
   "accountStatement.openingBalance": "Saldo iniziale",
   "accountStatement.partnership": "In collaborazione con",

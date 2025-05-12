@@ -1,5 +1,7 @@
 {
   "accountStatement.bic": "BIC",
+  "accountStatement.card": "Kortti",
+  "accountStatement.check": "Shekki",
   "accountStatement.closingBalance": "Päätössaldo",
   "accountStatement.column.credit": "Hyvitys (€)",
   "accountStatement.column.date": "Päivämäärä",
@@ -9,7 +11,10 @@
   "accountStatement.column.totals": "Yhteensä",
   "accountStatement.column.type": "Tyyppi",
   "accountStatement.contactSupport": "Ota yhteyttä Swan:iin",
+  "accountStatement.creditTransfer": "Tilisiirto",
   "accountStatement.date": "{openingDate} - {closingDate} välillä",
+  "accountStatement.directDebit": "Suoraveloitus",
+  "accountStatement.fees": "Kulut",
   "accountStatement.iban": "IBAN",
   "accountStatement.openingBalance": "Aloitussaldo",
   "accountStatement.partnership": "Kumppanuudessa",

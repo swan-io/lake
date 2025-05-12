@@ -1,5 +1,7 @@
 {
   "accountStatement.bic": "BIC",
+  "accountStatement.card": "Carte",
+  "accountStatement.check": "Chèque",
   "accountStatement.closingBalance": "Solde de clôture",
   "accountStatement.column.credit": "Crédit (€)",
   "accountStatement.column.date": "Date",
@@ -9,7 +11,10 @@
   "accountStatement.column.totals": "Totals",
   "accountStatement.column.type": "Type",
   "accountStatement.contactSupport": "Contacter Swan",
+  "accountStatement.creditTransfer": "Virement bancaire",
   "accountStatement.date": "Du {openingDate} au {closingDate}",
+  "accountStatement.directDebit": "Prélèvement automatique",
+  "accountStatement.fees": "Frais",
   "accountStatement.iban": "IBAN",
   "accountStatement.openingBalance": "Solde d'ouverture",
   "accountStatement.partnership": "En partenariat avec",

@@ -1,5 +1,7 @@
 {
   "accountStatement.bic": "BIC",
+  "accountStatement.card": "Kaart",
+  "accountStatement.check": "Cheque",
   "accountStatement.closingBalance": "Eindbalans",
   "accountStatement.column.credit": "Credit (€)",
   "accountStatement.column.date": "Datum",
@@ -9,7 +11,10 @@
   "accountStatement.column.totals": "Totaal",
   "accountStatement.column.type": "Type",
   "accountStatement.contactSupport": "Neem contact op met Swan",
+  "accountStatement.creditTransfer": "Overschrijving",
   "accountStatement.date": "Van {openingDate} tot {closingDate}",
+  "accountStatement.directDebit": "Automatische incasso",
+  "accountStatement.fees": "Kosten",
   "accountStatement.iban": "IBAN",
   "accountStatement.openingBalance": "Beginbalans",
   "accountStatement.partnership": "In samenwerking met",
