@@ -23,7 +23,6 @@ const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 1050,
     width: 793,
     padding: 56,
   },
