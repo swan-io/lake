@@ -22,10 +22,7 @@ import { LakeModal } from "./LakeModal";
 
 const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg", "image/heic"];
 
-export type Document<Purpose extends string> = {
-  purpose: Purpose;
-  file: SwanFile;
-};
+export type Document<Purpose extends string> = { purpose: Purpose; file: SwanFile };
 
 type UploadInput<Purpose extends string> = { fileName: string; purpose: Purpose };
 export type UploadOutput = { url: string; fields: { key: string; value: string }[] };
@@ -39,11 +36,7 @@ type SupportingDocumentCollectionStatus =
 
 type PurposeMetadata = {
   title: string;
-  values: {
-    type?: "text" | "copy";
-    title: string;
-    value: string;
-  }[];
+  values: { type?: "text" | "copy"; title: string; value: string }[];
 };
 
 export type SupportingDocumentCollectionRef<Purpose extends string> = {
@@ -69,31 +62,17 @@ type Props<Purpose extends string> = {
   readOnly?: boolean;
   getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
   readonlyDocumentPurposes?: Purpose[];
+  purposeLabelOverrides?: Partial<Record<Purpose, string>>;
 };
 
 const styles = StyleSheet.create({
-  button: {
-    opacity: 1,
-  },
-  buttonWithDefaultCursor: {
-    opacity: 1,
-    cursor: "default",
-  },
+  button: { opacity: 1 },
+  buttonWithDefaultCursor: { opacity: 1, cursor: "default" },
 });
 
 type HelpProps =
-  | {
-      type: "tooltip";
-      text: string;
-      icon?: IconName;
-      width?: number;
-    }
-  | {
-      type: "button";
-      label: string;
-      icon?: IconName;
-      onPress: () => void;
-    };
+  | { type: "tooltip"; text: string; icon?: IconName; width?: number }
+  | { type: "button"; label: string; icon?: IconName; onPress: () => void };
 
 const Help = (props: HelpProps) => {
   return match(props)
@@ -155,6 +134,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   readOnly = false,
   getPurposeMetadata,
   readonlyDocumentPurposes = [],
+  purposeLabelOverrides,
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
@@ -265,7 +245,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
         return (
           <Fragment key={purpose}>
             <LakeLabel
-              label={getSupportingDocumentPurposeLabel(purpose)}
+              label={purposeLabelOverrides?.[purpose] ?? getSupportingDocumentPurposeLabel(purpose)}
               description={label}
               help={
                 isNotNullish(metadata) ? (
