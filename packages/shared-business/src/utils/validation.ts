@@ -104,8 +104,8 @@ export const validateCompanyTaxNumber =
 
     return match(accountCountry)
       .with("DEU", () => {
-        // accept 10 or 11 digits
-        if (!/^\d{10,11}$/.test(value)) {
+        // accept 10 to 13 digits
+        if (!/^\d{10,13}$/.test(value)) {
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
