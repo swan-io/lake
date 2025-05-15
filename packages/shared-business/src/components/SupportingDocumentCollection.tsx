@@ -63,6 +63,7 @@ type Props<Purpose extends string> = {
   getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
   readonlyDocumentPurposes?: Purpose[];
   purposeLabelOverrides?: Partial<Record<Purpose, string>>;
+  purposeDescriptionLabelOverrides?: Partial<Record<Purpose, string>>;
 };
 
 const styles = StyleSheet.create({
@@ -135,6 +136,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   getPurposeMetadata,
   readonlyDocumentPurposes = [],
   purposeLabelOverrides,
+  purposeDescriptionLabelOverrides,
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
@@ -240,7 +242,9 @@ export const SupportingDocumentCollection = <Purpose extends string>({
       {showableDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
         const metadata = getPurposeMetadata?.(purpose);
 
-        const label = getSupportingDocumentPurposeDescriptionLabel(purpose);
+        const label =
+          purposeDescriptionLabelOverrides?.[purpose] ??
+          getSupportingDocumentPurposeDescriptionLabel(purpose);
 
         return (
           <Fragment key={purpose}>
