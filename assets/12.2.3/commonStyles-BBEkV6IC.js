@@ -1,2 +1,0 @@
-const e={alignItems:"stretch",backgroundColor:"transparent",borderColor:"black",borderStyle:"solid",borderWidth:0,boxSizing:"border-box",display:"flex",flexBasis:"auto",flexDirection:"column",flexShrink:0,listStyle:"none",margin:0,minHeight:0,minWidth:0,padding:0,position:"relative",textDecoration:"none",zIndex:0},o={center:{alignItems:"center",justifyContent:"center"},fill:{flexGrow:1,flexShrink:1},disabled:{cursor:"not-allowed",opacity:.5},view:e};export{o as c};
-//# sourceMappingURL=commonStyles-BBEkV6IC.js.map
