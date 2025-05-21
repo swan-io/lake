@@ -12,7 +12,7 @@
   "accountStatement.column.type": "Tipo",
   "accountStatement.contactSupport": "Contacte a Swan",
   "accountStatement.creditTransfer": "Transferência de crédito",
-  "accountStatement.date": "De {openingDate} a {closingDate}",
+  "accountStatement.date": "De {openingDate} até {closingDate}",
   "accountStatement.directDebit": "Débito direto",
   "accountStatement.fees": "Taxas",
   "accountStatement.iban": "IBAN",

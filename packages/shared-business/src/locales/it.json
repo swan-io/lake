@@ -12,7 +12,7 @@
   "accountStatement.column.type": "Tipo",
   "accountStatement.contactSupport": "Contatta Swan",
   "accountStatement.creditTransfer": "Bonifico",
-  "accountStatement.date": "Da {openingDate} a {closingDate}",
+  "accountStatement.date": "Dal {openingDate} al {closingDate}",
   "accountStatement.directDebit": "Addebito diretto",
   "accountStatement.fees": "Commissioni",
   "accountStatement.iban": "IBAN",
