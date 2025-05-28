@@ -112,110 +112,28 @@ const Title = ({
 );
 
 export type TransactionType =
-  | "SepaCreditTransferIn"
-  | "SepaCreditTransferOut"
-  | "SepaInstantCreditTransferIn"
-  | "SepaInstantCreditTransferOut"
-  | "InternalCreditTransferIn"
-  | "InternalCreditTransferOut"
-  | "InternationalCreditTransferIn"
-  | "InternationalCreditTransferOut"
-  | "InternalCreditTransferOutReturn"
-  | "InternalCreditTransferOutRecall"
-  | "InternalCreditTransferInReturn"
-  | "InternalCreditTransferInRecall"
-  | "SepaCreditTransferOutReturn"
-  | "SepaInstantCreditTransferOutRecall"
-  | "SepaInstantCreditTransferInRecall"
-  | "SepaCreditTransferOutRecall"
-  | "SepaCreditTransferInReturn"
-  | "SepaCreditTransferInRecall"
-  | "FeesOut"
-  | "FeesIn"
-  | "SepaDirectDebitIn"
-  | "SepaDirectDebitInReturn"
-  | "SepaDirectDebitInReversal"
-  | "SepaDirectDebitOut"
-  | "SepaDirectDebitOutReturn"
-  | "SepaDirectDebitOutReversal"
-  | "CardOutAuthorization"
-  | "CardOutDebit"
-  | "CardOutDebitReversal"
-  | "CardOutCredit"
-  | "CardOutCreditReversal"
-  | "InternalDirectDebitIn"
-  | "InternalDirectDebitInReturn"
-  | "InternalDirectDebitOut"
-  | "InternalDirectDebitOutReturn"
-  | "CheckIn"
-  | "CheckInReturn"
-  | "InternationalCreditTransferInReturn"
-  | "InternationalCreditTransferOutReturn"
-  | "CardInCredit"
-  | "CardInChargeback"
-  | "CardInChargebackReversal";
+  | "Card"
+  | "Check"
+  | "Fees"
+  | "IDD"
+  | "InternationalCreditTransfer"
+  | "SCT"
+  | "SDD";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
-    .with(
-      "CardInChargeback",
-      "CardInChargebackReversal",
-      "CardInCredit",
-      "CardOutAuthorization",
-      "CardOutCredit",
-      "CardOutCreditReversal",
-      "CardOutDebit",
-      "CardOutDebitReversal",
-      () => t("accountStatement.card"),
-    )
-    .with("CheckIn", "CheckInReturn", () => t("accountStatement.check"))
-    .with("FeesIn", "FeesOut", () => t("accountStatement.fees"))
-    .with(
-      "SepaCreditTransferIn",
-      "SepaCreditTransferOut",
-      "SepaInstantCreditTransferIn",
-      "SepaInstantCreditTransferOut",
-      "InternalCreditTransferIn",
-      "InternalCreditTransferOut",
-      "InternationalCreditTransferIn",
-      "InternationalCreditTransferOut",
-      "InternalCreditTransferOutReturn",
-      "InternalCreditTransferOutRecall",
-      "InternalCreditTransferInReturn",
-      "InternalCreditTransferInRecall",
-      "SepaCreditTransferOutReturn",
-      "SepaInstantCreditTransferOutRecall",
-      "SepaInstantCreditTransferInRecall",
-      "SepaCreditTransferOutRecall",
-      "SepaCreditTransferInReturn",
-      "SepaCreditTransferInRecall",
-      "InternationalCreditTransferInReturn",
-      "InternationalCreditTransferOutReturn",
-      () => t("accountStatement.creditTransfer"),
-    )
-    .with(
-      "SepaDirectDebitIn",
-      "SepaDirectDebitInReturn",
-      "SepaDirectDebitInReversal",
-      "SepaDirectDebitOut",
-      "SepaDirectDebitOutReturn",
-      "SepaDirectDebitOutReversal",
-      "InternalDirectDebitIn",
-      "InternalDirectDebitInReturn",
-      "InternalDirectDebitOut",
-      "InternalDirectDebitOutReturn",
-      () => t("accountStatement.directDebit"),
-    )
+    .with("Card", () => t("accountStatement.card"))
+    .with("Check", () => t("accountStatement.check"))
+    .with("Fees", () => t("accountStatement.fees"))
+    .with("IDD", "SDD", () => t("accountStatement.directDebit"))
+    .with("SCT", "InternationalCreditTransfer", () => t("accountStatement.creditTransfer"))
     .exhaustive();
 };
 
 type AddressInfo = {
-  addressLine1: string;
-  addressLine2?: string;
+  street: string;
   city: string;
-  postalCode: string;
-  state?: string;
-  country: CountryCCA3;
+  country?: CountryCCA3;
 };
 
 type Amount = {
@@ -223,13 +141,13 @@ type Amount = {
   currency: string;
 };
 
-type Transaction = {
-  transactionId: string;
-  transactionLabel: string;
-  transactionDate: string;
-  transactionType: TransactionType;
-  transactionSide: "Credit" | "Debit";
-  transactionAmount: Amount;
+export type Transaction = {
+  id: string;
+  label: string;
+  date: string;
+  type: "Card" | "Check" | "Fees" | "IDD" | "InternationalCreditTransfer" | "SCT" | "SDD";
+  credit?: Amount;
+  debit?: Amount;
 };
 
 type AccountStatementV1Props = {
@@ -309,14 +227,11 @@ export const AccountStatementV1 = ({
           <Box direction="column">
             <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
-            <Text style={styles.text}>{accountHolderAddress.addressLine1}</Text>
-            {isNotNullish(accountHolderAddress.addressLine2) && (
-              <Text>{accountHolderAddress.addressLine2}</Text>
+            <Text style={styles.text}>{accountHolderAddress.street}</Text>
+            <Text style={styles.text}>{accountHolderAddress.city}</Text>
+            {isNotNullish(accountHolderAddress.country) && (
+              <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
             )}
-            <Text
-              style={styles.text}
-            >{`${accountHolderAddress.postalCode} ${accountHolderAddress.city}`}</Text>
-            <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
           </Box>
           <Box direction="column" alignItems="end">
             <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
@@ -368,30 +283,21 @@ export const AccountStatementV1 = ({
             </Text>
           </Box>
           <Box direction="column">
-            {transactions.map(
-              ({
-                transactionAmount,
-                transactionDate,
-                transactionLabel,
-                transactionSide,
-                transactionType,
-                transactionId,
-              }) => (
-                <Box direction="row" key={transactionId}>
-                  <Text style={[styles.textColumn, { width: "15%" }]}>{transactionDate}</Text>
-                  <Text style={[styles.textColumn, { width: "22%" }]}>
-                    {translateTransaction(transactionType)}
-                  </Text>
-                  <Text style={[styles.textColumn, { width: "33%" }]}>{transactionLabel}</Text>
-                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                    {transactionSide === "Credit" ? transactionAmount.value : ""}
-                  </Text>
-                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                    {transactionSide === "Debit" ? transactionAmount.value : ""}
-                  </Text>
-                </Box>
-              ),
-            )}
+            {transactions.map(transaction => (
+              <Box direction="row" key={transaction.id}>
+                <Text style={[styles.textColumn, { width: "15%" }]}>{transaction.date}</Text>
+                <Text style={[styles.textColumn, { width: "22%" }]}>
+                  {translateTransaction(transaction.type)}
+                </Text>
+                <Text style={[styles.textColumn, { width: "33%" }]}>{transaction.label}</Text>
+                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                  {transaction.credit ? transaction.credit.value : ""}
+                </Text>
+                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                  {transaction.debit ? transaction.debit.value : ""}
+                </Text>
+              </Box>
+            ))}
           </Box>
         </>
 
