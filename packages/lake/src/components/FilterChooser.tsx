@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
   },
 });
 
+/**
+ * @deprecated
+ */
 export const FilterChooser = <FilterName extends string>({
   filters,
   openFilters,

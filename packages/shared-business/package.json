@@ -1,10 +1,9 @@
 {
   "name": "@swan-io/shared-business",
   "version": "12.2.6",
-  "packageManager": "pnpm@10.2.1",
+  "packageManager": "pnpm@10.11.0",
   "engines": {
-    "node": "^22.12.0",
-    "pnpm": "^10.2.0"
+    "node": "^22.12.0"
   },
   "files": [
     "LICENSE",
@@ -43,16 +42,16 @@
     "react-dropzone": "^14.3.8",
     "react-native-web": "^0.20.0",
     "rifm": "^0.12.1",
-    "ts-pattern": "^5.7.0",
+    "ts-pattern": "^5.7.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@swan-io/lake": "workspace:*",
     "@types/iban": "0.0.35",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
     "@types/react-native": "^0.72.8",
     "jsdom": "^26.1.0",
-    "vitest": "^2.1.8"
+    "vitest": "^3.2.0"
   }
 }
