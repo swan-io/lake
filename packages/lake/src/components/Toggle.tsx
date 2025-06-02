@@ -49,6 +49,9 @@ type Props = {
   offLabel: string;
 };
 
+/**
+ * @deprecated
+ */
 export const Toggle = ({
   onToggle,
   value,
