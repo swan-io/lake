@@ -2,7 +2,6 @@ const { version } = require("../package.json");
 
 /** @type {import('@storybook/react-vite').StorybookConfig} */
 module.exports = {
-  addons: ["@storybook/addon-essentials"],
   stories: ["../packages/*/__stories__/**/*.stories.@(ts|tsx)"],
   docs: {
     autodocs: false,

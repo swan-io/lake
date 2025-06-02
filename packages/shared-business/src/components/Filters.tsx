@@ -476,6 +476,9 @@ const FilterInput = ({
   );
 };
 
+/**
+ * @deprecated
+ */
 export type FilterCheckboxDef<T> = {
   type: "checkbox";
   label: string;
@@ -484,6 +487,9 @@ export type FilterCheckboxDef<T> = {
   checkAllLabel?: string;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterRadioDef<T> = {
   type: "radio";
   label: string;
@@ -491,6 +497,9 @@ export type FilterRadioDef<T> = {
   width?: number;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterDateDef<Values = unknown> = {
   type: "date";
   label: string;
@@ -502,6 +511,9 @@ export type FilterDateDef<Values = unknown> = {
   validate?: (value: string, filters: Values) => ValidatorResult;
 };
 
+/**
+ * @deprecated
+ */
 export type FilterInputDef = {
   type: "input";
   label: string;
@@ -526,6 +538,9 @@ const getFilterValue = <T extends Filter<unknown>["type"]>(
 
 type FiltersDefinition = Record<string, Filter<unknown>>;
 
+/**
+ * @deprecated
+ */
 export type FiltersState<T extends FiltersDefinition> = Simplify<{
   [K in keyof T]: Simplify<ExtractFilterValue<T[K]>>;
 }>;
@@ -541,6 +556,9 @@ type FiltersStackProps<
   onChangeFilters: (value: State) => void;
 };
 
+/**
+ * @deprecated
+ */
 export const FiltersStack = <T extends FiltersDefinition>({
   filters,
   openedFilters,
@@ -653,6 +671,9 @@ export const FiltersStack = <T extends FiltersDefinition>({
   );
 };
 
+/**
+ * @deprecated
+ */
 export const filter = {
   checkbox: <T,>(config: { label: string; items: Item<T>[] }): FilterCheckboxDef<T> => ({
     type: "checkbox",
@@ -695,6 +716,9 @@ export const filter = {
   }),
 } as const;
 
+/**
+ * @deprecated
+ */
 export const useFiltersProps = <
   Definition extends FiltersDefinition,
   Filters extends Record<string, unknown>,
