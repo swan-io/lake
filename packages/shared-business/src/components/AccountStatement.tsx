@@ -115,18 +115,20 @@ export type TransactionType =
   | "Card"
   | "Check"
   | "Fees"
-  | "IDD"
+  | "InternationalDirectDebit"
   | "InternationalCreditTransfer"
-  | "SCT"
-  | "SDD";
+  | "SepaCreditTransfer"
+  | "SepaDirectDebit";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
     .with("Card", () => t("accountStatement.card"))
     .with("Check", () => t("accountStatement.check"))
     .with("Fees", () => t("accountStatement.fees"))
-    .with("IDD", "SDD", () => t("accountStatement.directDebit"))
-    .with("SCT", "InternationalCreditTransfer", () => t("accountStatement.creditTransfer"))
+    .with("InternationalDirectDebit", "SepaDirectDebit", () => t("accountStatement.directDebit"))
+    .with("InternationalCreditTransfer", "SepaCreditTransfer", () =>
+      t("accountStatement.creditTransfer"),
+    )
     .exhaustive();
 };
 
@@ -145,7 +147,14 @@ export type Transaction = {
   id: string;
   label: string;
   date: string;
-  type: "Card" | "Check" | "Fees" | "IDD" | "InternationalCreditTransfer" | "SCT" | "SDD";
+  type:
+    | "Card"
+    | "Check"
+    | "Fees"
+    | "InternationalDirectDebit"
+    | "InternationalCreditTransfer"
+    | "SepaCreditTransfer"
+    | "SepaDirectDebit";
   credit?: Amount;
   debit?: Amount;
 };
