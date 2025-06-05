@@ -52,7 +52,7 @@
   "common.filters.none": "Geen",
   "common.form.help.nbCharacters": "{nbCharacters} tekens",
   "common.form.help.nbDigits": "{nbDigits} cijfers",
-  "common.form.invalidTaxIdentificationNumber": "Dit fiscale identificatienummer is ongeldig",
+  "common.form.invalidTaxIdentificationNumber": "Dit veld is ongeldig",
   "common.form.taxIdentificationNumber.placeholder": "BTW-nummer",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (ook Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IDnr., IDnr of Steuer-ID, volgens § 139b AO)",
   "common.form.taxIdentificationNumber.tooltip.ita": "Btw-nummer (Codice fiscale)",
