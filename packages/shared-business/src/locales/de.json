@@ -52,7 +52,7 @@
   "common.filters.none": "Keine",
   "common.form.help.nbCharacters": "{nbCharacters} Zeichen",
   "common.form.help.nbDigits": "{nbDigits} Ziffern",
-  "common.form.invalidTaxIdentificationNumber": "Diese Steueridentifikationsnummer ist ungültig",
+  "common.form.invalidTaxIdentificationNumber": "Dieses Feld ist ungültig",
   "common.form.taxIdentificationNumber.placeholder": "Steueridentifikationsnummer",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (auch Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr oder Steuer-ID gemäß § 139b AO)",
   "common.form.taxIdentificationNumber.tooltip.ita": "Steuer-ID (Codice fiscale)",

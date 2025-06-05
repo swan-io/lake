@@ -52,7 +52,7 @@
   "common.filters.none": "Ei yhtään",
   "common.form.help.nbCharacters": "{nbCharacters} merkkiä",
   "common.form.help.nbDigits": "{nbDigits} numeroa",
-  "common.form.invalidTaxIdentificationNumber": "Virheellinen verotunnistenumero",
+  "common.form.invalidTaxIdentificationNumber": "Tämä kenttä on virheellinen",
   "common.form.taxIdentificationNumber.placeholder": "verotunnus",
   "common.form.taxIdentificationNumber.tooltip.deu": "Identifikationsnummer (also Steuerliche Identifikationsnummer, Persönliche Identificationsnummer, Identifikationsnummer, Steuer-IdNr., IdNr or Steuer-ID, according to § 139b AO)",
   "common.form.taxIdentificationNumber.tooltip.ita": "Verotunnus (Codice fiscale)",
