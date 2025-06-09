@@ -80,7 +80,7 @@ export const AppOpeningAnimation = ({ accentColor, appLogo, playing = true, styl
             height={89.6}
             rx={27}
             style={[styles.icon, animationStyle]}
-            transform-origin="221.2 365.8"
+            transformOrigin="221.2 365.8"
           />
         </G>
 
@@ -92,7 +92,7 @@ export const AppOpeningAnimation = ({ accentColor, appLogo, playing = true, styl
           height={62}
           width={62}
           style={[styles.logo, animationStyle]}
-          transform-origin="221.2 365.8"
+          transformOrigin="221.2 365.8"
         />
 
         <Circle
@@ -103,7 +103,7 @@ export const AppOpeningAnimation = ({ accentColor, appLogo, playing = true, styl
           r={157.5}
           fill="none"
           style={[styles.circle, animationStyle]}
-          transform-origin="219.5 439.5"
+          transformOrigin="219.5 439.5"
         />
 
         <Path

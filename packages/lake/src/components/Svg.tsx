@@ -10,9 +10,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type ChildrenProp = { children?: ReactNode };
 type FillRule = "evenodd" | "nonzero";
-type CommonProps = Pick<ViewProps, "id" | "role" | "style" | "tabIndex" | "testID"> & ChildrenProp;
+
+type CommonProps = Pick<ViewProps, "id" | "role" | "style" | "tabIndex" | "testID"> & {
+  children?: ReactNode;
+  transformOrigin?: string;
+};
 
 type SvgProps = CommonProps & {
   height?: number;
@@ -143,7 +146,7 @@ export const Svg = ({ style, ...props }: SvgProps) =>
   createElement("svg", { ...props, style: [styles.svg, style] });
 
 export const Circle = (props: CircleProps) => createElement("circle", props);
-export const Defs = (props: ChildrenProp) => createElement("defs", props);
+export const Defs = (props: { children?: ReactNode }) => createElement("defs", props);
 export const G = (props: GProps) => createElement("g", props);
 export const Use = (props: UseProps) => createElement("use", props);
 export const Mask = (props: CommonProps) => createElement("mask", props);

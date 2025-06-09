@@ -75,7 +75,7 @@ export const SmsOpeningAnimation = ({ playing = true, style }: Props) => {
             height={149}
             rx={32}
             style={[styles.icon, animationStyle]}
-            transform-origin="221.2 150"
+            transformOrigin="221.2 150"
           />
         </G>
 
@@ -84,7 +84,7 @@ export const SmsOpeningAnimation = ({ playing = true, style }: Props) => {
           fill={colors.swan[400]}
           fillRule="nonzero"
           style={[styles.logo, animationStyle]}
-          transform-origin="221.2 150"
+          transformOrigin="221.2 150"
         />
 
         <Circle
@@ -95,7 +95,7 @@ export const SmsOpeningAnimation = ({ playing = true, style }: Props) => {
           r={157.5}
           fill="none"
           style={[styles.circle, animationStyle]}
-          transform-origin="219.5 439.5"
+          transformOrigin="219.5 439.5"
         />
 
         <Path
