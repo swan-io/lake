@@ -1,17 +1,11 @@
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { Country, countries, france } from "../constants/countries";
+import { Country, france, getCountryByCCA2, isCountryCCA2 } from "../constants/countries";
 
 export const getMostLikelyUserCountry = (): Country => {
-  const navigatorCountries = navigator.languages
-    .map(language => language.split("-")[1])
-    .filter(isNotNullish);
+  const countries = navigator.languages.map(language => language.split("-")[1]);
 
-  for (let index = 0; index < navigatorCountries.length; index++) {
-    const navigatorCountry = navigatorCountries[index];
-    const country = countries.find(({ cca2 }) => cca2 === navigatorCountry);
-
-    if (isNotNullish(country)) {
-      return country;
+  for (const country of countries) {
+    if (isCountryCCA2(country)) {
+      return getCountryByCCA2(country);
     }
   }
 
