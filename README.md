@@ -45,21 +45,21 @@ $ pnpm configure-hooks
 If you want to ignore a lint rule for a specific line of the code, you can add a suppression comment above the line that emits the lint diagnostic:
 
 ```ts
-// biome-ignore <rule>: <optional-explanation>
+// biome-ignore <rule>: <explanation>
 ```
 
 For example:
 
 ```ts
-// biome-ignore lint/suspicious/noNamespace:
+// biome-ignore lint/suspicious/noNamespace: _
 namespace foo {}
 ```
 
 For `useExhaustiveDependencies` (equivalent of `react-hooks/exhaustive-deps`), you can even specify which dependencies are ignored, on multiple lines:
 
 ```ts
-// biome-ignore lint/correctness/useExhaustiveDependencies(fn):
-// biome-ignore lint/correctness/useExhaustiveDependencies(value):
+// biome-ignore lint/correctness/useExhaustiveDependencies(fn): _
+// biome-ignore lint/correctness/useExhaustiveDependencies(value): _
 useEffect(fn, [fn, value]);
 ```
 

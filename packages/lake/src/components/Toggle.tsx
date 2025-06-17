@@ -82,11 +82,11 @@ export const Toggle = ({
     );
   }, [value]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(reajustLayout):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(value):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(isMobileMode):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(onLabel):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(offLabel):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(reajustLayout): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(value): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(isMobileMode): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(onLabel): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(offLabel): _
   useEffect(reajustLayout, [reajustLayout, value, isMobileMode, onLabel, offLabel]);
 
   return (
