@@ -65,8 +65,8 @@ export const FlatList = <T,>({
     ? { top: 0, width: onEndReachedThresholdPx }
     : { left: 0, height: onEndReachedThresholdPx };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached): _
-  // biome-ignore lint/correctness/useExhaustiveDependencies(data.length): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(data.length):
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 

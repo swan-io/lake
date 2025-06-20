@@ -4,7 +4,7 @@ import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 export const LANGUAGE_FALLBACK = "en";
 const PREFERRED_LANGUAGE_KEY = "swan__PreferredLanguage";
 
-let supportedLanguages: readonly string[] | undefined;
+let supportedLanguages: readonly string[] | undefined = undefined;
 
 export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]>(
   languages: SupportedLanguages,
