@@ -130,7 +130,7 @@ export const ChoicePicker = <T,>({
   const { desktop } = useResponsive(breakpoints.medium);
   const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: _
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   useEffect(() => {
     if (desktop) {
       return;

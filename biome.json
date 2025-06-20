@@ -1,36 +1,31 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "vcs": {
     "clientKind": "git",
     "enabled": false,
     "useIgnoreFile": false
   },
   "files": {
+    "include": [
+      "packages/*/__stories__/**/*.ts",
+      "packages/*/__stories__/**/*.tsx",
+      "packages/*/src/**/*.ts",
+      "packages/*/src/**/*.tsx"
+    ],
     "ignoreUnknown": true,
-    "includes": [
-      "!**/*.d.ts",
-      "**/packages/**/*/__stories__/**/*.ts",
-      "**/packages/**/*/__stories__/**/*.tsx",
-      "**/packages/**/*/src/**/*.ts",
-      "**/packages/**/*/src/**/*.tsx"
-    ]
+    "ignore": ["**/*.d.ts"]
   },
   "formatter": {
     "enabled": false
   },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "off"
-      }
-    }
+  "organizeImports": {
+    "enabled": false
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "a11y": {
-        "noStaticElementInteractions": "off",
         "noSvgWithoutTitle": "off",
         "useAltText": "off",
         "useIframeTitle": "off",
@@ -38,37 +33,26 @@
         "useValidAriaRole": "off"
       },
       "complexity": {
-        "noFlatMapIdentity": "off",
         "noForEach": "off",
         "useLiteralKeys": "off"
       },
       "correctness": {
+        "noFlatMapIdentity": "off",
         "noUnusedVariables": "error",
         "noVoidTypeReturn": "off",
+        "useArrayLiterals": "error",
         "useHookAtTopLevel": "warn",
         "useJsxKeyInIterable": "off"
       },
       "nursery": {
-        "noNestedComponentDefinitions": "off",
-        "useUniqueElementIds": "off"
+        "noCommonJs": "error"
       },
       "style": {
-        "noCommonJs": "error",
         "noImplicitBoolean": "error",
-        "noInferrableTypes": "error",
         "noNamespace": "error",
-        "noParameterAssign": "error",
-        "noUnusedTemplateLiteral": "error",
         "noUselessElse": "off",
-        "useArrayLiterals": "error",
-        "useAsConstAssertion": "error",
         "useBlockStatements": "warn",
-        "useDefaultParameterLast": "error",
-        "useEnumInitializers": "error",
         "useImportType": "off",
-        "useNumberNamespace": "error",
-        "useSelfClosingElements": "error",
-        "useSingleVarDeclarator": "error",
         "useTemplate": "off"
       },
       "suspicious": {
