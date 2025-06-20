@@ -223,17 +223,15 @@ export const SegmentedControl = <T extends string>({
                   onValueChange(item.id);
                 }}
               >
-                <>
-                  {isNotNullish(item.icon) &&
-                    match(item)
-                      .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
-                        selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
-                      )
-                      .with({ icon: P.nonNullable }, () => item.icon)
-                      .otherwise(() => null)}
+                {isNotNullish(item.icon) &&
+                  match(item)
+                    .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
+                      selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
+                    )
+                    .with({ icon: P.nonNullable }, () => item.icon)
+                    .otherwise(() => null)}
 
-                  <Space height={8} width={12} />
-                </>
+                <Space height={8} width={12} />
 
                 <LakeText
                   color={colors.gray[900]}

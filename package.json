@@ -52,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.0",
     "@fluentui/svg-icons": "^1.1.302",
     "@localazy/cli": "^1.7.15",
     "@storybook/react": "^9.0.4",
