@@ -39,7 +39,7 @@ export const getCompanyTaxNumberHelp = (accountCountry: AccountCountry) =>
   match(accountCountry)
     .with("DEU", () => t("common.form.help.nbDigits", { nbDigits: "10-13" }))
     .with("ESP", () => t("common.form.help.nbCharacters", { nbCharacters: "9" }))
-    .with("ITA", () => t("common.form.help.nbCharacters", { nbCharacters: "16" }))
+    .with("ITA", () => t("common.form.help.nbCharacters", { nbCharacters: "11" }))
     .otherwise(() => "");
 
 export const getIndividualTaxNumberHelp = (accountCountry: AccountCountry) =>
