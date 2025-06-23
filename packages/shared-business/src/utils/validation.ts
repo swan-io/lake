@@ -116,8 +116,8 @@ export const validateCompanyTaxNumber =
         }
       })
       .with("ITA", () => {
-        // accept 16 characters
-        if (!/^[a-zA-Z0-9]{16}$/.test(value)) {
+        // accept 11 characters
+        if (!/^[a-zA-Z0-9]{11}$/.test(value)) {
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
