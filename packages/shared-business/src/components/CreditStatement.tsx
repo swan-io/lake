@@ -2,7 +2,13 @@ import { Box } from "@swan-io/lake/src/components/Box";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import { colors, fonts, interFontStyle, spacings } from "@swan-io/lake/src/constants/design";
+import {
+  colors,
+  fonts,
+  interFontStyle,
+  invariantColors,
+  spacings,
+} from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle, ViewStyle } from "react-native";
@@ -24,7 +30,8 @@ const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
 const styles = StyleSheet.create({
   container: {
     width: 793,
-    padding: 32,
+    padding: 56,
+    backgroundColor: invariantColors.white,
   },
   partnershipText: {
     ...getTextStyle("sans", 14),
@@ -268,7 +275,6 @@ const logoStyle: CSSProperties = {
 
 export const CreditStatementV1 = ({
   partnerLogoUrl,
-  style,
   accountHolderType,
   accountHolderName,
   accountHolderAddress,
@@ -285,7 +291,7 @@ export const CreditStatementV1 = ({
   closingBalance,
 }: CreditStatementV1Props) => {
   return (
-    <Box style={[styles.container, style]} direction="column" justifyContent="spaceBetween">
+    <Box style={styles.container} direction="column" justifyContent="spaceBetween">
       <Box>
         <Box direction="row" justifyContent="spaceBetween">
           <Box direction="row" alignItems="center">
@@ -302,7 +308,7 @@ export const CreditStatementV1 = ({
           </Box>
         </Box>
         <Space height={24} />
-        <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
+        <Text style={styles.pageTitle}>{t("creditStatement.titleDocument")}</Text>
 
         <Text style={styles.text}>
           {accountHolderType === "Company"
@@ -360,10 +366,10 @@ export const CreditStatementV1 = ({
               {t("accountStatement.column.description")}
             </Text>
             <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("accountStatement.column.credit")}
+              {t("creditStatement.column.credit")}
             </Text>
             <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("accountStatement.column.debit")}
+              {t("creditStatement.column.debit")}
             </Text>
           </Box>
           <Box direction="column">

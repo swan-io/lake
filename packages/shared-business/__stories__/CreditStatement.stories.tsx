@@ -1,5 +1,4 @@
 import { Meta } from "@storybook/react";
-import { invariantColors } from "@swan-io/lake/src/constants/design";
 import { CreditStatement, TransactionType } from "../src/components/CreditStatement";
 import { CountryCCA3 } from "../src/constants/countries";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -736,7 +735,6 @@ export const Default = () => {
           accountHolderType="Individual"
           accountHolderName="Sandrine Da Silva"
           accountHolderAddress={address}
-          style={{ backgroundColor: invariantColors.white }}
           iban={"DE63 1111 1111 8189 3774 57"}
           bic={"SWNBDEBB"}
           openingDate="01/01/2025"
