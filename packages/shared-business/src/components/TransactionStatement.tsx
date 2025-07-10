@@ -4,7 +4,7 @@ import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Stack } from "@swan-io/lake/src/components/Stack";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import { colors, fonts, interFontStyle } from "@swan-io/lake/src/constants/design";
+import { colors, fonts, primaryFontStyle } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import IBAN from "iban";
 import { CSSProperties } from "react";
@@ -16,7 +16,7 @@ const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
 
 const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : interFontStyle),
+  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
   color: colors.gray[900],
   fontSize,
   lineHeight: fontSize * 1.25,

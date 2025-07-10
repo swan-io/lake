@@ -325,6 +325,8 @@ body {
   --font-family-code: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
   --font-family-iban: "Roboto Mono", monospace;
 
+  --letter-spacing-primary: -0.011em; /* Computed by Inter dynamic metrics tool */
+
   --heading-color: var(--color-gray-900);
   --heading-line-height: 1.25;
 

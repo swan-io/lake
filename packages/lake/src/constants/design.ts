@@ -299,32 +299,31 @@ export const gradients = {
   oblique: "var(--gradient-oblique)",
 } as const;
 
-export const interFontStyle = {
-  fontFamily: [
-    "Inter",
-    "-apple-system",
-    "system-ui",
-    "BlinkMacSystemFont",
-    "Segoe UI",
-    "Helvetica",
-    "Arial",
-    "sans-serif",
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji",
-  ].join(","),
-
-  // Computed by Inter dynamic metrics tool
-  letterSpacing: "-0.011em" as unknown as number,
+export const fonts = {
+  primary: "var(--font-family-primary)",
+  card: "var( --font-family-card-font)",
+  code: "var(--font-family-code)",
+  iban: "var(--font-family-iban)",
 };
+
+export type Fonts = keyof typeof fonts;
+
+export const primaryFontStyle = {
+  fontFamily: fonts.primary,
+  letterSpacing: "var(--letter-spacing-primary)" as unknown as number,
+} satisfies TextStyle;
+
+/**
+ * @deprecated use primaryFontStyle instead
+ */
+export const interFontStyle = primaryFontStyle;
 
 const asTextStyle = (x: { [K in keyof TextStyle]: string | number }) => {
   return x as unknown as TextStyle;
 };
 
 const h1 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-1-font-weight)",
   fontSize: "var(--heading-1-font-size)",
@@ -332,7 +331,7 @@ const h1 = asTextStyle({
 });
 
 const h2 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-2-font-weight)",
   fontSize: "var(--heading-2-font-size)",
@@ -340,7 +339,7 @@ const h2 = asTextStyle({
 });
 
 const h3 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-3-font-weight)",
   fontSize: "var(--heading-3-font-size)",
@@ -348,7 +347,7 @@ const h3 = asTextStyle({
 });
 
 const h4 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-4-font-weight)",
   fontSize: "var(--heading-4-font-size)",
@@ -356,7 +355,7 @@ const h4 = asTextStyle({
 });
 
 const h5 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-5-font-weight)",
   fontSize: "var(--heading-5-font-size)",
@@ -364,7 +363,7 @@ const h5 = asTextStyle({
 });
 
 const h6 = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--heading-color)",
   fontWeight: "var(--heading-6-font-weight)",
   fontSize: "var(--heading-6-font-size)",
@@ -372,7 +371,7 @@ const h6 = asTextStyle({
 });
 
 const semibold = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-semibold-font-weight)",
   fontSize: "var(--text-semibold-font-size)",
@@ -380,7 +379,7 @@ const semibold = asTextStyle({
 });
 
 const medium = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-medium-font-weight)",
   fontSize: "var(--text-medium-font-size)",
@@ -388,7 +387,7 @@ const medium = asTextStyle({
 });
 
 const regular = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-regular-font-weight)",
   fontSize: "var(--text-regular-font-size)",
@@ -396,7 +395,7 @@ const regular = asTextStyle({
 });
 
 const light = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-light-font-weight)",
   fontSize: "var(--text-light-font-size)",
@@ -404,7 +403,7 @@ const light = asTextStyle({
 });
 
 const smallSemibold = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-small-semibold-font-weight)",
   fontSize: "var(--text-small-semibold-font-size)",
@@ -412,7 +411,7 @@ const smallSemibold = asTextStyle({
 });
 
 const smallMedium = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-small-medium-font-weight)",
   fontSize: "var(--text-small-medium-font-size)",
@@ -420,7 +419,7 @@ const smallMedium = asTextStyle({
 });
 
 const smallRegular = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--text-color)",
   fontWeight: "var(--text-small-regular-font-weight)",
   fontSize: "var(--text-small-regular-font-size)",
@@ -428,7 +427,7 @@ const smallRegular = asTextStyle({
 });
 
 const placeholder = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--placeholder-color)",
   fontStyle: "italic",
   fontWeight: "var(--placeholder-font-weight)",
@@ -437,7 +436,7 @@ const placeholder = asTextStyle({
 });
 
 const smallPlaceholder = asTextStyle({
-  ...interFontStyle,
+  ...primaryFontStyle,
   color: "var(--placeholder-color)",
   fontStyle: "italic",
   fontWeight: "var(--placeholder-small-font-weight)",
@@ -512,15 +511,6 @@ export const radii = {
 } as const;
 
 export type Radii = keyof typeof radii;
-
-export const fonts = {
-  primary: "var(--font-family-primary)",
-  card: "var( --font-family-card-font)",
-  code: "var(--font-family-code)",
-  iban: "var(--font-family-iban)",
-};
-
-export type Fonts = keyof typeof fonts;
 
 export type Animation = {
   enter: AnimationStyles;
