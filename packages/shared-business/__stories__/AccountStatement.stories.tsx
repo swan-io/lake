@@ -9,7 +9,7 @@ export default {
   component: AccountStatement,
 } as Meta<typeof AccountStatement>;
 
-export const transactions: Transaction[] = [
+const transactions: Transaction[] = [
   {
     id: "1",
     label: "Sport subscription",

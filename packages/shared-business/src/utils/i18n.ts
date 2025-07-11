@@ -144,6 +144,13 @@ export const t = (key: TranslationKey, params?: TranslationParams) =>
 export const formatCurrencyIso = (value: number, currency: string) =>
   `${intl.formatNumber(value, { style: "decimal", minimumFractionDigits: 2 })} ${currency}`;
 
+export const formatCurrencySymbol = (value: number, currency: string) =>
+  intl.formatNumber(value, {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 2,
+  });
+
 export const formatNestedMessage = (
   key: TranslationKey,
   params: Record<string, string | number | ReactElement | ((children: ReactNode) => ReactNode)>,
