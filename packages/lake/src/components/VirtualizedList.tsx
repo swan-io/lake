@@ -4,6 +4,7 @@ import {
   memo,
   ReactElement,
   ReactNode,
+  RefObject,
   useCallback,
   useEffect,
   useId,
@@ -252,9 +253,10 @@ type ResizeHandleProps = {
   width: number;
   end?: boolean;
   onResize?: (values: { id: string; width: number }) => void;
+  scrollViewRef: RefObject<ScrollViewRef | null>;
 };
 
-const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) => {
+const ResizeHandle = ({ id, end = false, width, onResize, scrollViewRef }: ResizeHandleProps) => {
   const ref = useRef<View>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -282,6 +284,9 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
       };
 
       const onMouseUp = (event: MouseEvent) => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "";
+        }
         if (startX != null && startWidth != null) {
           onResizeRef.current?.({
             id,
@@ -294,6 +299,9 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
       };
 
       const onMouseDown = (event: MouseEvent) => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "none";
+        }
         startX = event.clientX;
         startWidth = widthRef.current;
         document.documentElement.addEventListener("mousemove", onMouseMove);
@@ -304,6 +312,9 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
       element.addEventListener("mousedown", onMouseDown);
 
       return () => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "";
+        }
         setIsDragging(false);
         element.removeEventListener("mousedown", onMouseDown);
         document.documentElement.removeEventListener("mousemove", onMouseMove);
@@ -554,7 +565,12 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
-                    <ResizeHandle width={width} id={id} onResize={onColumnResize} />
+                    <ResizeHandle
+                      width={width}
+                      id={id}
+                      onResize={onColumnResize}
+                      scrollViewRef={scrollViewRef}
+                    />
                   </View>
                 );
               })}
@@ -585,7 +601,12 @@ export const VirtualizedList = <T, ExtraInfo>({
                 key={columnId}
               >
                 {renderTitle({ title, extraInfo, id })}
-                <ResizeHandle width={width} id={id} onResize={onColumnResize} />
+                <ResizeHandle
+                  width={width}
+                  id={id}
+                  onResize={onColumnResize}
+                  scrollViewRef={scrollViewRef}
+                />
               </View>
             );
           })}
@@ -613,7 +634,13 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
-                    <ResizeHandle end={true} width={width} id={id} onResize={onColumnResize} />
+                    <ResizeHandle
+                      end={true}
+                      width={width}
+                      id={id}
+                      onResize={onColumnResize}
+                      scrollViewRef={scrollViewRef}
+                    />
                   </View>
                 );
               })}
