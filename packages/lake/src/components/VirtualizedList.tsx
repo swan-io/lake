@@ -310,7 +310,7 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
         document.documentElement.removeEventListener("mouseup", onMouseUp);
       };
     }
-  }, [id]);
+  }, [id, end]);
 
   return (
     <Pressable
@@ -638,6 +638,7 @@ export const VirtualizedList = <T, ExtraInfo>({
     centerFirstCellLeftPadding,
     centerLastCellLeftPadding,
     stickedToEndLastCellRightPadding,
+    onColumnResize,
   ]);
 
   const startColumnShadow = useMemo(() => {
