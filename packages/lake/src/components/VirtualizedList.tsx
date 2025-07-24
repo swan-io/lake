@@ -259,10 +259,12 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
   const [isDragging, setIsDragging] = useState(false);
 
   const widthRef = useRef(width);
+  const onResizeRef = useRef(onResize);
 
   useLayoutEffect(() => {
     widthRef.current = width;
-  }, [width]);
+    onResizeRef.current = onResize;
+  }, [width, onResize]);
 
   useEffect(() => {
     const element = ref.current as HTMLDivElement | null;
@@ -272,7 +274,7 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
 
       const onMouseMove = (event: MouseEvent) => {
         if (startX != null && startWidth != null) {
-          onResize?.({
+          onResizeRef.current?.({
             id,
             width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
           });
@@ -281,7 +283,7 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
 
       const onMouseUp = (event: MouseEvent) => {
         if (startX != null && startWidth != null) {
-          onResize?.({
+          onResizeRef.current?.({
             id,
             width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
           });
