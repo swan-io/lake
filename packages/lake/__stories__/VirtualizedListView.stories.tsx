@@ -93,10 +93,12 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
     }
   });
 
+  const [columnSizes, setColumnSizes] = useState<Record<string, number>>({});
+
   const { stickedToStartColumns, columns, stickedToEndColumns } = useMemo(() => {
     const stickedToStartColumns = [
       {
-        width: 300,
+        width: columnSizes.name ?? 300,
         id: "name",
         title: "Name",
         renderTitle: ({ title, extraInfo, id }: ColumnTitleConfig<SortInfo>) => (
@@ -114,7 +116,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
 
     const columns = [
       {
-        width: few ? 300 : 500,
+        width: columnSizes.event_id ?? (few ? 300 : 500),
         grow: few,
         id: "event_id",
         title: "Event ID",
@@ -127,7 +129,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
         ? []
         : [
             {
-              width: 150,
+              width: columnSizes.link_before ?? 150,
               id: "link_before",
               title: "Link before",
               renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
@@ -138,7 +140,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               ),
             },
             {
-              width: 500,
+              width: columnSizes.onboarding_id ?? 500,
               id: "onboarding_id",
               title: "Onboarding ID",
               renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
@@ -147,7 +149,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               ),
             },
             {
-              width: 150,
+              width: columnSizes.link_after ?? 150,
               id: "link_after",
               title: "Link after",
               renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
@@ -158,7 +160,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
               ),
             },
             {
-              width: 500,
+              width: columnSizes.account_id ?? 500,
               id: "account_id",
               title: "Account ID",
               renderTitle: ({ title }: ColumnTitleConfig<SortInfo>) => <HeaderCell text={title} />,
@@ -171,7 +173,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
 
     const stickedToEndColumns = [
       {
-        width: 72,
+        width: columnSizes.dot ?? 72,
         id: "dot",
         title: "Settings",
         renderTitle: () => <HeaderCell text={"End"} align="right" />,
@@ -184,7 +186,7 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
     ];
 
     return { stickedToStartColumns, columns, stickedToEndColumns };
-  }, [few]);
+  }, [few, columnSizes]);
 
   return (
     <>
@@ -250,6 +252,9 @@ const EditableVirtualizedList = ({ few = false }: { few?: boolean }) => {
       <VirtualizedList
         variant="default"
         extraInfo={sort}
+        onColumnResize={config =>
+          setColumnSizes(values => ({ ...values, [config.id]: config.width }))
+        }
         keyExtractor={keyExtractor}
         data={data}
         stickedToStartColumns={stickedToStartColumns}

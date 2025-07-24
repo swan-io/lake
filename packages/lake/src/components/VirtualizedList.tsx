@@ -4,6 +4,7 @@ import {
   memo,
   ReactElement,
   ReactNode,
+  RefObject,
   useCallback,
   useEffect,
   useId,
@@ -16,6 +17,7 @@ import { StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor as backgroundColorVariants, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
+import { Pressable } from "./Pressable";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
 
@@ -177,6 +179,37 @@ const styles = StyleSheet.create({
   smallPlaceholderRow: {
     width: "10%",
   },
+  resizeHandleZone: {
+    position: "absolute",
+    cursor: "ew-resize",
+    top: 0,
+    bottom: 0,
+    width: spacings[24],
+  },
+  resizeHandleZoneStart: {
+    right: 0,
+    alignItems: "flex-end",
+  },
+  resizeHandleZoneEnd: {
+    right: "auto",
+    left: 0,
+    alignItems: "flex-start",
+  },
+  resizeHandleLeft: {
+    right: "auto",
+    left: 0,
+  },
+  resizeHandle: {
+    backgroundColor: colors.gray[200],
+    height: "100%",
+    opacity: 0,
+    transitionDuration: "200ms",
+    transitionProperty: "opacity",
+    width: 3,
+  },
+  resizeHandleActive: {
+    opacity: 1,
+  },
 });
 
 export type ColumnTitleConfig<ExtraInfo> = {
@@ -228,6 +261,100 @@ export type VirtualizedListProps<T, ExtraInfo> = {
     isLoading: boolean;
     count: number;
   };
+  onColumnResize?: (values: { id: string; width: number }) => void;
+};
+
+type ResizeHandleProps = {
+  id: string;
+  width: number;
+  end?: boolean;
+  onResize?: (values: { id: string; width: number }) => void;
+  scrollViewRef: RefObject<ScrollViewRef | null>;
+};
+
+const ResizeHandle = ({ id, end = false, width, onResize, scrollViewRef }: ResizeHandleProps) => {
+  const ref = useRef<View>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const widthRef = useRef(width);
+  const onResizeRef = useRef(onResize);
+
+  useLayoutEffect(() => {
+    widthRef.current = width;
+    onResizeRef.current = onResize;
+  }, [width, onResize]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies(scrollViewRef.current.element.style): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(scrollViewRef.current?.element): _
+  useEffect(() => {
+    const element = ref.current as HTMLDivElement | null;
+    if (element != null) {
+      let startX: number | null = null;
+      let startWidth: number | null = null;
+
+      const onMouseMove = (event: MouseEvent) => {
+        if (startX != null && startWidth != null) {
+          onResizeRef.current?.({
+            id,
+            width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
+          });
+        }
+      };
+
+      const onMouseUp = (event: MouseEvent) => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "";
+        }
+        if (startX != null && startWidth != null) {
+          onResizeRef.current?.({
+            id,
+            width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
+          });
+        }
+        startX = null;
+        document.documentElement.removeEventListener("mousemove", onMouseMove);
+        setIsDragging(false);
+      };
+
+      const onMouseDown = (event: MouseEvent) => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "none";
+        }
+        startX = event.clientX;
+        startWidth = widthRef.current;
+        document.documentElement.addEventListener("mousemove", onMouseMove);
+        document.documentElement.addEventListener("mouseup", onMouseUp);
+        setIsDragging(true);
+      };
+
+      element.addEventListener("mousedown", onMouseDown);
+
+      return () => {
+        if (scrollViewRef.current?.element != null) {
+          scrollViewRef.current.element.style.webkitUserSelect = "";
+        }
+        setIsDragging(false);
+        element.removeEventListener("mousedown", onMouseDown);
+        document.documentElement.removeEventListener("mousemove", onMouseMove);
+        document.documentElement.removeEventListener("mouseup", onMouseUp);
+      };
+    }
+  }, [id, end]);
+
+  return (
+    <Pressable
+      ref={ref}
+      role="none"
+      style={[
+        styles.resizeHandleZone,
+        end ? styles.resizeHandleZoneEnd : styles.resizeHandleZoneStart,
+      ]}
+    >
+      {({ hovered }) => (
+        <View style={[styles.resizeHandle, (hovered || isDragging) && styles.resizeHandleActive]} />
+      )}
+    </Pressable>
+  );
 };
 
 export const VirtualizedList = <T, ExtraInfo>({
@@ -246,6 +373,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   keyExtractor,
   marginHorizontal,
   renderEmptyList,
+  onColumnResize,
   getRowLink,
 }: VirtualizedListProps<T, ExtraInfo>) => {
   // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
@@ -459,6 +587,12 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
+                    <ResizeHandle
+                      width={width}
+                      id={id}
+                      onResize={onColumnResize}
+                      scrollViewRef={scrollViewRef}
+                    />
                   </View>
                 );
               })}
@@ -489,6 +623,12 @@ export const VirtualizedList = <T, ExtraInfo>({
                 key={columnId}
               >
                 {renderTitle({ title, extraInfo, id })}
+                <ResizeHandle
+                  width={width}
+                  id={id}
+                  onResize={onColumnResize}
+                  scrollViewRef={scrollViewRef}
+                />
               </View>
             );
           })}
@@ -516,6 +656,13 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
+                    <ResizeHandle
+                      end={true}
+                      width={width}
+                      id={id}
+                      onResize={onColumnResize}
+                      scrollViewRef={scrollViewRef}
+                    />
                   </View>
                 );
               })}
@@ -540,6 +687,7 @@ export const VirtualizedList = <T, ExtraInfo>({
     centerFirstCellLeftPadding,
     centerLastCellLeftPadding,
     stickedToEndLastCellRightPadding,
+    onColumnResize,
   ]);
 
   const startColumnShadow = useMemo(() => {
