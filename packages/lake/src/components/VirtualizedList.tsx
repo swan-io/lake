@@ -16,6 +16,7 @@ import { StyleSheet, View } from "react-native";
 import { commonStyles } from "../constants/commonStyles";
 import { backgroundColor as backgroundColorVariants, colors, spacings } from "../constants/design";
 import { useHover } from "../hooks/useHover";
+import { Pressable } from "./Pressable";
 import { ScrollView, ScrollViewRef } from "./ScrollView";
 import { Space } from "./Space";
 
@@ -177,6 +178,21 @@ const styles = StyleSheet.create({
   smallPlaceholderRow: {
     width: "10%",
   },
+  resizeHandle: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 5,
+    cursor: "ew-resize",
+  },
+  resizeHandleHover: {
+    backgroundColor: colors.gray[200],
+  },
+  resizeHandleEnd: {
+    right: "auto",
+    left: 0,
+  },
 });
 
 export type ColumnTitleConfig<ExtraInfo> = {
@@ -228,6 +244,74 @@ export type VirtualizedListProps<T, ExtraInfo> = {
     isLoading: boolean;
     count: number;
   };
+  onColumnResize?: (values: { id: string; width: number }) => void;
+};
+
+type ResizeHandleProps = {
+  id: string;
+  width: number;
+  end?: boolean;
+  onResize?: (values: { id: string; width: number }) => void;
+};
+
+const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) => {
+  const ref = useRef<View>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current as HTMLDivElement | null;
+    if (element != null) {
+      let startX: number | null = null;
+
+      const onMouseMove = (event: MouseEvent) => {
+        if (startX != null) {
+          onResize?.({
+            id,
+            width: Math.max(24, width + (event.clientX - startX) * (end ? -1 : 1)),
+          });
+        }
+      };
+
+      const onMouseUp = (event: MouseEvent) => {
+        if (startX != null) {
+          onResize?.({
+            id,
+            width: Math.max(24, width + (event.clientX - startX) * (end ? -1 : 1)),
+          });
+        }
+        startX = null;
+        document.documentElement.removeEventListener("mousemove", onMouseMove);
+        setIsDragging(false);
+      };
+
+      const onMouseDown = (event: MouseEvent) => {
+        startX = event.clientX;
+        document.documentElement.addEventListener("mousemove", onMouseMove);
+        document.documentElement.addEventListener("mouseup", onMouseUp);
+        setIsDragging(true);
+      };
+
+      element.addEventListener("mousedown", onMouseDown);
+
+      return () => {
+        setIsDragging(false);
+        element.removeEventListener("mousedown", onMouseDown);
+        document.documentElement.removeEventListener("mousemove", onMouseMove);
+        document.documentElement.removeEventListener("mouseup", onMouseUp);
+      };
+    }
+  }, [id]);
+
+  return (
+    <Pressable
+      style={({ hovered }) => [
+        styles.resizeHandle,
+        end && styles.resizeHandleEnd,
+        (hovered || isDragging) && styles.resizeHandleHover,
+      ]}
+      ref={ref}
+    />
+  );
 };
 
 export const VirtualizedList = <T, ExtraInfo>({
@@ -246,6 +330,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   keyExtractor,
   marginHorizontal,
   renderEmptyList,
+  onColumnResize,
   getRowLink,
 }: VirtualizedListProps<T, ExtraInfo>) => {
   // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
@@ -459,6 +544,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
+                    <ResizeHandle width={width} id={id} onResize={onColumnResize} />
                   </View>
                 );
               })}
@@ -489,6 +575,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                 key={columnId}
               >
                 {renderTitle({ title, extraInfo, id })}
+                <ResizeHandle width={width} id={id} onResize={onColumnResize} />
               </View>
             );
           })}
@@ -516,6 +603,7 @@ export const VirtualizedList = <T, ExtraInfo>({
                     key={columnId}
                   >
                     {renderTitle({ title, extraInfo, id })}
+                    <ResizeHandle end={true} width={width} id={id} onResize={onColumnResize} />
                   </View>
                 );
               })}
