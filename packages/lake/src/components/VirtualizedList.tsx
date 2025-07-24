@@ -258,25 +258,32 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
   const ref = useRef<View>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const widthRef = useRef(width);
+
+  useLayoutEffect(() => {
+    widthRef.current = width;
+  }, [width]);
+
   useEffect(() => {
     const element = ref.current as HTMLDivElement | null;
     if (element != null) {
       let startX: number | null = null;
+      let startWidth: number | null = null;
 
       const onMouseMove = (event: MouseEvent) => {
-        if (startX != null) {
+        if (startX != null && startWidth != null) {
           onResize?.({
             id,
-            width: Math.max(24, width + (event.clientX - startX) * (end ? -1 : 1)),
+            width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
           });
         }
       };
 
       const onMouseUp = (event: MouseEvent) => {
-        if (startX != null) {
+        if (startX != null && startWidth != null) {
           onResize?.({
             id,
-            width: Math.max(24, width + (event.clientX - startX) * (end ? -1 : 1)),
+            width: Math.max(24, startWidth + (event.clientX - startX) * (end ? -1 : 1)),
           });
         }
         startX = null;
@@ -286,6 +293,7 @@ const ResizeHandle = ({ id, end = false, width, onResize }: ResizeHandleProps) =
 
       const onMouseDown = (event: MouseEvent) => {
         startX = event.clientX;
+        startWidth = widthRef.current;
         document.documentElement.addEventListener("mousemove", onMouseMove);
         document.documentElement.addEventListener("mouseup", onMouseUp);
         setIsDragging(true);
