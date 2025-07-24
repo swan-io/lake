@@ -179,20 +179,36 @@ const styles = StyleSheet.create({
   smallPlaceholderRow: {
     width: "10%",
   },
-  resizeHandle: {
+  resizeHandleZone: {
     position: "absolute",
-    right: 0,
+    cursor: "ew-resize",
     top: 0,
     bottom: 0,
-    width: 5,
-    cursor: "ew-resize",
+    width: spacings[24],
   },
-  resizeHandleHover: {
-    backgroundColor: colors.gray[200],
+  resizeHandleZoneStart: {
+    right: 0,
+    alignItems: "flex-end",
   },
-  resizeHandleEnd: {
+  resizeHandleZoneEnd: {
     right: "auto",
     left: 0,
+    alignItems: "flex-start",
+  },
+  resizeHandleLeft: {
+    right: "auto",
+    left: 0,
+  },
+  resizeHandle: {
+    backgroundColor: colors.gray[200],
+    height: "100%",
+    opacity: 0,
+    transitionDuration: "200ms",
+    transitionProperty: "opacity",
+    width: 3,
+  },
+  resizeHandleActive: {
+    opacity: 1,
   },
 });
 
@@ -325,13 +341,17 @@ const ResizeHandle = ({ id, end = false, width, onResize, scrollViewRef }: Resiz
 
   return (
     <Pressable
-      style={({ hovered }) => [
-        styles.resizeHandle,
-        end && styles.resizeHandleEnd,
-        (hovered || isDragging) && styles.resizeHandleHover,
-      ]}
       ref={ref}
-    />
+      role="none"
+      style={[
+        styles.resizeHandleZone,
+        end ? styles.resizeHandleZoneEnd : styles.resizeHandleZoneStart,
+      ]}
+    >
+      {({ hovered }) => (
+        <View style={[styles.resizeHandle, (hovered || isDragging) && styles.resizeHandleActive]} />
+      )}
+    </Pressable>
   );
 };
 
