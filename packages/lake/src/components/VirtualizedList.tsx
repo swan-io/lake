@@ -284,6 +284,8 @@ const ResizeHandle = ({ id, end = false, width, onResize, scrollViewRef }: Resiz
     onResizeRef.current = onResize;
   }, [width, onResize]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(scrollViewRef.current.element.style): _
+  // biome-ignore lint/correctness/useExhaustiveDependencies(scrollViewRef.current?.element): _
   useEffect(() => {
     const element = ref.current as HTMLDivElement | null;
     if (element != null) {
