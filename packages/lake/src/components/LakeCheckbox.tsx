@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { ColorVariants, colors, radii } from "../constants/design";
 import { LakeText } from "./LakeText";
@@ -109,7 +109,7 @@ export const LakeCheckbox = ({
 
 export type LabelledCheckboxProps = CheckboxProps & {
   onValueChange: (value: boolean) => void;
-  label: string;
+  label: string | ReactNode;
   disabled?: boolean;
   isError?: boolean;
 };
