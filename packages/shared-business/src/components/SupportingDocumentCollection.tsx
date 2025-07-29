@@ -360,6 +360,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                   .with("fr", () => "fr")
                   .with("de", () => "de")
                   .with("es", () => "es")
+                  .with("it", () => "it")
                   .otherwise(() => "en")}.pdf`,
               )
             }
