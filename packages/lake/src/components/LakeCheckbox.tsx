@@ -109,7 +109,7 @@ export const LakeCheckbox = ({
 
 export type LabelledCheckboxProps = CheckboxProps & {
   onValueChange: (value: boolean) => void;
-  label: string | ReactNode;
+  label: ReactNode;
   disabled?: boolean;
   isError?: boolean;
 };
