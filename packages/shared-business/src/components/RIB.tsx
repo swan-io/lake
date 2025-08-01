@@ -148,6 +148,11 @@ type RIBv1Props = {
       agency: string;
       bankNumber: string;
     }
+  | {
+      accountCountry: "BEL";
+      agency: string;
+      bankNumber: string;
+    }
 );
 
 const logoStyle: CSSProperties = {
@@ -242,6 +247,15 @@ const RIBv1 = ({
               </>
             ))
             .with({ accountCountry: "ITA" }, ({ agency, bankNumber }) => (
+              <>
+                <Item kind="small" label={t("rib.bank")} value={bank} />
+                <Space width={24} />
+                <Item kind="small" label={t("rib.agency")} value={agency} />
+                <Space width={24} />
+                <Item kind="small" label={t("rib.number")} value={bankNumber} />
+              </>
+            ))
+            .with({ accountCountry: "BEL" }, ({ agency, bankNumber }) => (
               <>
                 <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
