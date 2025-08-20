@@ -118,7 +118,8 @@ export type TransactionType =
   | "InternationalDirectDebit"
   | "InternationalCreditTransfer"
   | "SepaCreditTransfer"
-  | "SepaDirectDebit";
+  | "SepaDirectDebit"
+  | (string & {}); // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
@@ -129,7 +130,7 @@ const translateTransaction = (transaction: TransactionType) => {
     .with("InternationalCreditTransfer", "SepaCreditTransfer", () =>
       t("accountStatement.creditTransfer"),
     )
-    .exhaustive();
+    .otherwise(() => transaction);
 };
 
 type AddressInfo = {
@@ -147,14 +148,7 @@ export type Transaction = {
   id: string;
   label: string;
   date: string;
-  type:
-    | "Card"
-    | "Check"
-    | "Fees"
-    | "InternationalDirectDebit"
-    | "InternationalCreditTransfer"
-    | "SepaCreditTransfer"
-    | "SepaDirectDebit";
+  type: TransactionType;
   credit?: Amount;
   debit?: Amount;
 };
