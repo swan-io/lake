@@ -119,7 +119,7 @@ export type TransactionType =
   | "InternationalCreditTransfer"
   | "SepaCreditTransfer"
   | "SepaDirectDebit"
-  | string; // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
+  | (string & {}); // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
