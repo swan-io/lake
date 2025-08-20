@@ -426,6 +426,14 @@ const transactions: Transaction[] = [
     credit: { value: "534.40", currency: "EUR" },
     debit: undefined,
   },
+  {
+    id: "53",
+    label: "Concert",
+    date: "04/03/2025",
+    type: "Credit Transfer",
+    credit: { value: "500.40", currency: "EUR" },
+    debit: undefined,
+  },
 ];
 
 export const Default = () => {
