@@ -1,2 +1,0 @@
-const s=o=>{const e=document.createElement("span");e.textContent=o,e.style.opacity="0",e.style.position="absolute",e.style.userSelect="auto",e.style.whiteSpace="pre-wrap",document.body.appendChild(e);const t=window.getSelection();if(t==null)return!1;t.removeAllRanges();const n=document.createRange();n.selectNodeContents(e),t.addRange(n);try{document.execCommand("copy")}catch{return!1}return t.removeAllRanges(),document.body.removeChild(e),!0};export{s};
-//# sourceMappingURL=clipboard-BXAk6GqW.js.map
