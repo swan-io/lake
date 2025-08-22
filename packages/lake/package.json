@@ -34,7 +34,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-native-web": "^0.21.1",
+    "react-native-web": "^0.20.0",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.8.0",
     "uuid": "^11.1.0"
