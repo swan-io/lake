@@ -14,7 +14,7 @@ export const Variations = () => {
 
   return (
     <StoryBlock title="Variations" description="Toggle component">
-      <StoryPart title="Desktop">
+      <StoryPart title="Normal">
         <Box alignItems="start">
           <Toggle
             value={value}
@@ -26,7 +26,7 @@ export const Variations = () => {
         </Box>
       </StoryPart>
 
-      <StoryPart title="Mobile">
+      <StoryPart title="Compact">
         <Box alignItems="start">
           <Toggle
             value={value}
