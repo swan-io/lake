@@ -1,135 +1,127 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { commonStyles } from "../constants/commonStyles";
-import { colors } from "../constants/design";
-import { Box } from "./Box";
+import { StyleSheet, Text, View } from "react-native";
+import { match, P } from "ts-pattern";
+import { colors, radii, spacings, texts } from "../constants/design";
 import { Icon } from "./Icon";
-import { LakeText } from "./LakeText";
 import { Pressable } from "./Pressable";
 
-const HEIGHT = 26;
 const BORDER_WIDTH = 1;
 
 const styles = StyleSheet.create({
-  switch: {
-    userSelect: "none",
+  base: {
     flexDirection: "row",
-    borderRadius: HEIGHT / 2,
-    height: HEIGHT,
-    transform: "translateZ(0px)",
-    width: "min-content",
-    borderColor: colors.gray[100],
+    alignItems: "center",
+    borderColor: colors.gray[200],
+    borderRadius: radii[8],
     borderWidth: BORDER_WIDTH,
+    height: 28,
   },
   handle: {
     position: "absolute",
-    width: HEIGHT,
-    height: HEIGHT,
+    // Allow handle to bleed on container border
+    bottom: -BORDER_WIDTH,
+    left: -BORDER_WIDTH,
+    right: -BORDER_WIDTH,
     top: -BORDER_WIDTH,
-    borderRadius: HEIGHT / 2,
-    transitionDuration: "300ms",
-    transitionTimingFunction: "ease-in-out",
     borderWidth: BORDER_WIDTH,
+    borderRadius: radii[8],
+    transitionDuration: "300ms",
+    transitionProperty: "transform, width",
+    transitionTimingFunction: "ease-in-out",
   },
-  switchItem: {
-    paddingHorizontal: 8,
-    height: HEIGHT - BORDER_WIDTH * 2,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  item: {
+    paddingHorizontal: spacings[8],
+  },
+  text: {
+    ...texts.smallMedium,
+    color: colors.gray[700],
+    userSelect: "none",
+  },
+  hidden: {
+    visibility: "hidden",
+  },
+  textOn: {
+    color: colors.positive[500],
+  },
+  textOff: {
+    color: colors.negative[500],
   },
 });
 
+const getItemWidth = (node: unknown) =>
+  match(node)
+    .returnType<number>()
+    .with(P.instanceOf(HTMLElement), element => element.offsetWidth)
+    .otherwise(() => 0);
+
 type Props = {
+  compact?: boolean;
   value: boolean;
-  disabled?: boolean;
-  onToggle: (next: boolean) => void;
-  mode?: "desktop" | "mobile";
-  onLabel: string;
-  offLabel: string;
+  labelOff: string;
+  labelOn: string;
+  onToggle: (value: boolean) => void;
 };
 
-/**
- * @deprecated
- */
-export const Toggle = ({
-  onToggle,
-  value,
-  disabled = false,
-  mode = "desktop",
-  onLabel,
-  offLabel,
-}: Props) => {
-  const containerRef = useRef<View>(null);
-  const onItemRef = useRef<Text>(null);
-  const offItemRef = useRef<Text>(null);
-  const [handleStyle, setHandleStyle] = useState<ViewStyle>();
-  const isMobileMode = mode === "mobile";
-  const onColor = value ? colors.positive[500] : colors.gray[500];
-  const offColor = !value ? colors.negative[500] : colors.gray[500];
+export const Toggle = ({ compact = false, value, labelOff, labelOn, onToggle }: Props) => {
+  const [itemsWidth, setItemsWidth] = useState<{ on: number; off: number }>();
+  const onViewRef = useRef<Text>(null);
+  const offViewRef = useRef<Text>(null);
 
-  const reajustLayout = useCallback(() => {
-    (value ? onItemRef : offItemRef).current?.measureLayout(
-      containerRef.current as unknown as number,
-      (left, _, width) => {
-        setHandleStyle(prev => ({
-          transitionProperty: prev ? "width, transform" : "none",
-          width: width + 2 * BORDER_WIDTH,
-          transform: `translateX(${value ? -BORDER_WIDTH : left - 2 * BORDER_WIDTH}px)`,
-        }));
-      },
-      () => {},
-    );
-  }, [value]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies(compact):
+  useEffect(() => {
+    // batch measurements
+    setTimeout(() => {
+      setItemsWidth({
+        on: getItemWidth(onViewRef.current),
+        off: getItemWidth(offViewRef.current),
+      });
+    }, 0);
+  }, [compact]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(reajustLayout):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(value):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(isMobileMode):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(onLabel):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(offLabel):
-  useEffect(reajustLayout, [reajustLayout, value, isMobileMode, onLabel, offLabel]);
+  const onPress = useCallback(() => {
+    onToggle(!value);
+  }, [onToggle, value]);
 
   return (
-    <Pressable
-      style={[styles.switch, disabled && commonStyles.disabled]}
-      onPress={() => onToggle(!value)}
-      aria-disabled={disabled}
-      aria-checked={value}
-      disabled={disabled}
-      ref={containerRef}
-      role="switch"
-      onLayout={reajustLayout}
-    >
+    <Pressable role="switch" onPress={onPress} aria-checked={value} style={styles.base}>
       <View
+        role="presentation"
         style={[
           styles.handle,
-          handleStyle,
-          {
-            borderColor: value ? colors.positive[500] : colors.negative[500],
-            backgroundColor: value ? colors.positive[50] : colors.negative[50],
-          },
+          itemsWidth == null
+            ? styles.hidden
+            : {
+                backgroundColor: value ? colors.positive[50] : colors.negative[50],
+                borderColor: value ? colors.positive[500] : colors.negative[500],
+                transform: `translateX(${value ? 0 : itemsWidth.on + BORDER_WIDTH}px)`,
+                width: (value ? itemsWidth.on : itemsWidth.off) + BORDER_WIDTH,
+              },
         ]}
       />
 
-      <Box style={styles.switchItem} ref={onItemRef}>
-        {isMobileMode ? (
-          <Icon size={16} name="checkmark-circle-regular" color={onColor} />
+      <View ref={onViewRef} style={styles.item}>
+        {compact ? (
+          <Icon
+            color={value ? colors.positive[500] : colors.gray[500]}
+            size={16}
+            name="checkmark-circle-regular"
+          />
         ) : (
-          <LakeText variant="smallMedium" color={onColor}>
-            {onLabel}
-          </LakeText>
+          <Text style={[styles.text, value && styles.textOn]}>{labelOn}</Text>
         )}
-      </Box>
+      </View>
 
-      <Box style={styles.switchItem} ref={offItemRef}>
-        {isMobileMode ? (
-          <Icon size={16} name="subtract-circle-regular" color={offColor} />
+      <View ref={offViewRef} style={styles.item}>
+        {compact ? (
+          <Icon
+            color={!value ? colors.negative[500] : colors.gray[500]}
+            size={16}
+            name="subtract-circle-regular"
+          />
         ) : (
-          <LakeText variant="smallMedium" color={offColor}>
-            {offLabel}
-          </LakeText>
+          <Text style={[styles.text, !value && styles.textOff]}>{labelOff}</Text>
         )}
-      </Box>
+      </View>
     </Pressable>
   );
 };

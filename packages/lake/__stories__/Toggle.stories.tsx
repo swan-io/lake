@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
+import { Box } from "../src/components/Box";
 import { Toggle } from "../src/components/Toggle";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -13,46 +14,28 @@ export const Variations = () => {
 
   return (
     <StoryBlock title="Variations" description="Toggle component">
-      <StoryPart title="Desktop">
-        <Toggle
-          value={value}
-          onToggle={setValue}
-          mode="desktop"
-          offLabel="Canceled"
-          onLabel="Active"
-        />
+      <StoryPart title="Normal">
+        <Box alignItems="start">
+          <Toggle
+            value={value}
+            onToggle={setValue}
+            compact={false}
+            labelOff="Canceled"
+            labelOn="Active"
+          />
+        </Box>
       </StoryPart>
 
-      <StoryPart title="Desktop Disabled">
-        <Toggle
-          value={value}
-          onToggle={setValue}
-          mode="desktop"
-          disabled={true}
-          offLabel="Canceled"
-          onLabel="Active"
-        />
-      </StoryPart>
-
-      <StoryPart title="Mobile">
-        <Toggle
-          value={value}
-          onToggle={setValue}
-          mode="mobile"
-          offLabel="Canceled"
-          onLabel="Active"
-        />
-      </StoryPart>
-
-      <StoryPart title="Mobile Disabled">
-        <Toggle
-          value={value}
-          disabled={true}
-          onToggle={setValue}
-          mode="mobile"
-          offLabel="Canceled"
-          onLabel="Active"
-        />
+      <StoryPart title="Compact">
+        <Box alignItems="start">
+          <Toggle
+            value={value}
+            onToggle={setValue}
+            compact={true}
+            labelOff="Canceled"
+            labelOn="Active"
+          />
+        </Box>
       </StoryPart>
     </StoryBlock>
   );

@@ -1,7 +1,7 @@
 {
   "name": "@swan-io/lake",
   "version": "12.4.3",
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
     "node": "^22.12.0"
   },
@@ -26,28 +26,23 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@react-three/drei": "^10.1.2",
-    "@react-three/fiber": "^9.1.2",
     "@swan-io/boxed": "^3.2.0",
     "@swan-io/chicane": "^2.2.0",
     "@swan-io/use-form": "^3.1.0",
     "dayjs": "^1.11.13",
     "polished": "^4.3.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-native-web": "^0.20.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-native-web": "^0.21.1",
     "rifm": "^0.12.1",
-    "three": "^0.177.0",
-    "ts-pattern": "^5.7.1",
+    "ts-pattern": "^5.8.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.5",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "@types/react-native": "^0.72.8",
-    "@types/three": "^0.176.0",
-    "jsdom": "^26.1.0",
     "type-fest": "^4.41.0"
   }
 }
