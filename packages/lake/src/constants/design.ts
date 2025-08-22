@@ -313,11 +313,6 @@ export const primaryFontStyle = {
   letterSpacing: "var(--letter-spacing-primary)" as unknown as number,
 } satisfies TextStyle;
 
-/**
- * @deprecated use primaryFontStyle instead
- */
-export const interFontStyle = primaryFontStyle;
-
 const asTextStyle = (x: { [K in keyof TextStyle]: string | number }) => {
   return x as unknown as TextStyle;
 };

@@ -5,8 +5,8 @@ import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import {
   colors,
   fonts,
-  interFontStyle,
   invariantColors,
+  primaryFontStyle,
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
@@ -20,7 +20,7 @@ const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
 
 const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : interFontStyle),
+  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
   color: colors.gray[900],
   fontSize,
   lineHeight: fontSize * 1.25,
