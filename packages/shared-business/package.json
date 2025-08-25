@@ -40,7 +40,7 @@
     "react-atomic-state": "^2.1.0",
     "react-dom": "^19.1.1",
     "react-dropzone": "^14.3.8",
-    "react-native-web": "^0.21.1",
+    "react-native-web": "^0.20.0",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.8.0",
     "uuid": "^11.1.0"
