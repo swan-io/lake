@@ -125,101 +125,14 @@ const Title = ({
   </Text>
 );
 
-export type TransactionType =
-  | "SepaCreditTransferIn"
-  | "SepaCreditTransferOut"
-  | "SepaInstantCreditTransferIn"
-  | "SepaInstantCreditTransferOut"
-  | "InternalCreditTransferIn"
-  | "InternalCreditTransferOut"
-  | "InternationalCreditTransferIn"
-  | "InternationalCreditTransferOut"
-  | "InternalCreditTransferOutReturn"
-  | "InternalCreditTransferOutRecall"
-  | "InternalCreditTransferInReturn"
-  | "InternalCreditTransferInRecall"
-  | "SepaCreditTransferOutReturn"
-  | "SepaInstantCreditTransferOutRecall"
-  | "SepaInstantCreditTransferInRecall"
-  | "SepaCreditTransferOutRecall"
-  | "SepaCreditTransferInReturn"
-  | "SepaCreditTransferInRecall"
-  | "FeesOut"
-  | "FeesIn"
-  | "SepaDirectDebitIn"
-  | "SepaDirectDebitInReturn"
-  | "SepaDirectDebitInReversal"
-  | "SepaDirectDebitOut"
-  | "SepaDirectDebitOutReturn"
-  | "SepaDirectDebitOutReversal"
-  | "CardOutAuthorization"
-  | "CardOutDebit"
-  | "CardOutDebitReversal"
-  | "CardOutCredit"
-  | "CardOutCreditReversal"
-  | "InternalDirectDebitIn"
-  | "InternalDirectDebitInReturn"
-  | "InternalDirectDebitOut"
-  | "InternalDirectDebitOutReturn"
-  | "CheckIn"
-  | "CheckInReturn"
-  | "InternationalCreditTransferInReturn"
-  | "InternationalCreditTransferOutReturn"
-  | "CardInCredit"
-  | "CardInChargeback"
-  | "CardInChargebackReversal";
+export type TransactionType = "SepaCreditTransfer" | "Fees" | "SepaDirectDebit" | "Card";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
-    .with(
-      "CardInChargeback",
-      "CardInChargebackReversal",
-      "CardInCredit",
-      "CardOutAuthorization",
-      "CardOutCredit",
-      "CardOutCreditReversal",
-      "CardOutDebit",
-      "CardOutDebitReversal",
-      () => t("accountStatement.card"),
-    )
-    .with("CheckIn", "CheckInReturn", () => t("accountStatement.check"))
-    .with("FeesIn", "FeesOut", () => t("accountStatement.fees"))
-    .with(
-      "SepaCreditTransferIn",
-      "SepaCreditTransferOut",
-      "SepaInstantCreditTransferIn",
-      "SepaInstantCreditTransferOut",
-      "InternalCreditTransferIn",
-      "InternalCreditTransferOut",
-      "InternationalCreditTransferIn",
-      "InternationalCreditTransferOut",
-      "InternalCreditTransferOutReturn",
-      "InternalCreditTransferOutRecall",
-      "InternalCreditTransferInReturn",
-      "InternalCreditTransferInRecall",
-      "SepaCreditTransferOutReturn",
-      "SepaInstantCreditTransferOutRecall",
-      "SepaInstantCreditTransferInRecall",
-      "SepaCreditTransferOutRecall",
-      "SepaCreditTransferInReturn",
-      "SepaCreditTransferInRecall",
-      "InternationalCreditTransferInReturn",
-      "InternationalCreditTransferOutReturn",
-      () => t("accountStatement.creditTransfer"),
-    )
-    .with(
-      "SepaDirectDebitIn",
-      "SepaDirectDebitInReturn",
-      "SepaDirectDebitInReversal",
-      "SepaDirectDebitOut",
-      "SepaDirectDebitOutReturn",
-      "SepaDirectDebitOutReversal",
-      "InternalDirectDebitIn",
-      "InternalDirectDebitInReturn",
-      "InternalDirectDebitOut",
-      "InternalDirectDebitOutReturn",
-      () => t("accountStatement.directDebit"),
-    )
+    .with("Card", () => t("accountStatement.card"))
+    .with("Fees", () => t("accountStatement.fees"))
+    .with("SepaCreditTransfer", () => t("accountStatement.creditTransfer"))
+    .with("SepaDirectDebit", () => t("accountStatement.directDebit"))
     .exhaustive();
 };
 
