@@ -17,7 +17,7 @@ const transactions = [
     },
     transactionDate: "01/01/2025",
     transactionLabel: "Sport subscription",
-    transactionType: "CheckIn" as TransactionType,
+    transactionType: "Check" as TransactionType,
     transactionSide: "Credit" as const,
   },
   {
@@ -28,7 +28,7 @@ const transactions = [
     },
     transactionDate: "10/01/2025",
     transactionLabel: "Ikea",
-    transactionType: "CardOutDebit" as TransactionType,
+    transactionType: "Card" as TransactionType,
     transactionSide: "Debit" as const,
     totalsCredit: {
       value: "0.00",
@@ -51,7 +51,7 @@ const transactions = [
     },
     transactionDate: "24/02/2025",
     transactionLabel: "Loan repayment",
-    transactionType: "FeesOut" as TransactionType,
+    transactionType: "Fees" as TransactionType,
     transactionSide: "Debit" as const,
   },
   {
@@ -62,7 +62,7 @@ const transactions = [
     },
     transactionDate: "12/03/2025",
     transactionLabel: "Pet supplies",
-    transactionType: "InternationalCreditTransferOut" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
   },
   {
@@ -73,7 +73,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -96,7 +96,7 @@ const transactions = [
     },
     transactionDate: "08/01/2025",
     transactionLabel: "Medical expenses",
-    transactionType: "SepaCreditTransferInRecall" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -119,7 +119,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -142,7 +142,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -165,7 +165,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -188,7 +188,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -211,7 +211,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -234,7 +234,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -257,7 +257,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -280,7 +280,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -303,7 +303,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -326,7 +326,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -349,7 +349,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -372,7 +372,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -395,7 +395,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -418,7 +418,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -441,7 +441,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -464,7 +464,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -487,7 +487,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -510,7 +510,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "Card" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -533,7 +533,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -556,7 +556,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -579,7 +579,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -602,7 +602,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -625,7 +625,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -648,7 +648,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
@@ -671,7 +671,7 @@ const transactions = [
     },
     transactionDate: "21/03/2025",
     transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebitIn" as TransactionType,
+    transactionType: "SepaDirectDebit" as TransactionType,
     transactionSide: "Credit" as const,
     totalsCredit: {
       value: "0.00",
