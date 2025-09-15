@@ -383,7 +383,15 @@ export const SupportingDocumentCollection = <Purpose extends string>({
           <LakeButton
             grow={true}
             color="current"
-            onPress={() => window.open("/sworn-statement-template/es.pdf")}
+            onPress={() => {
+              window.open(
+                `/sworn-statement-template/${match(templateLanguage)
+                  .with("nl", () => "nl")
+                  .with("es", () => "es")
+                  .with("it", () => "it")
+                  .otherwise(() => "en")}.pdf`,
+              );
+            }}
           >
             {t("supportingDocuments.downloadTemplate")}
           </LakeButton>
