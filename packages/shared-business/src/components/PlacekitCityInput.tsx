@@ -1,4 +1,4 @@
-import { PKResult } from "@placekit/client-js/.";
+import type { PKResult } from "@placekit/client-js";
 import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { useCallback } from "react";
