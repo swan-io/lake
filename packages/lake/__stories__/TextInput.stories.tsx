@@ -2,9 +2,12 @@ import { Meta } from "@storybook/react";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
+import { Box } from "../src/components/Box";
 import { LakeCopyButton } from "../src/components/LakeCopyButton";
+import { LakeText } from "../src/components/LakeText";
 import { LakeTextInput, LakeTextInputProps } from "../src/components/LakeTextInput";
 import { Tag } from "../src/components/Tag";
+import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -67,7 +70,13 @@ export const Variations = () => {
       </StoryPart>
 
       <StoryPart title="Info">
-        <EditableInputText info={true} />
+        <EditableInputText
+          info={
+            <Box>
+              <LakeText color={colors.shakespear[500]}>This is an information</LakeText>
+            </Box>
+          }
+        />
       </StoryPart>
 
       <StoryPart title="Warning">

@@ -172,7 +172,7 @@ export type LakeTextInputProps = Except<
   onUnitChange?: (value: string) => void;
   maxCharCount?: number;
   help?: string;
-  info?: boolean;
+  info?: ReactNode | null | undefined;
   warning?: boolean;
   renderEnd?: () => ReactNode;
   containerRef?: Ref<View>;
@@ -245,6 +245,7 @@ export const LakeTextInput = ({
   const mergedRef = useMergeRefs(inputRef, ref);
   const isInteractive = !disabled && !readOnly;
   const hasError = isNotNullishOrEmpty(error);
+  const hasInfo = isNotNullish(info);
   const charCount = isNullish(value) ? 0 : value.length;
 
   return (
@@ -262,7 +263,7 @@ export const LakeTextInput = ({
               isFocused && styles.focused,
               isNotNullish(unit ?? units) && styles.inputWithUnit,
               warning && { borderColor: colors.warning[500] },
-              info && { borderColor: colors.shakespear[500] },
+              hasInfo && { borderColor: colors.shakespear[500] },
               hasError && styles.error,
               valid && styles.valid,
               stylesFromProps,
@@ -372,6 +373,11 @@ export const LakeTextInput = ({
           ) : (
             <LakeText variant="smallRegular" color={colors.gray[500]}>
               {help ?? " "}
+            </LakeText>
+          )}
+          {isNotNullish(info) && (
+            <LakeText variant="smallRegular" color={colors.shakespear[500]}>
+              {info}
             </LakeText>
           )}
 
