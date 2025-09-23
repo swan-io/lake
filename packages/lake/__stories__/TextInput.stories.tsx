@@ -66,6 +66,10 @@ export const Variations = () => {
         <EditableInputText valid={true} />
       </StoryPart>
 
+      <StoryPart title="Info">
+        <EditableInputText info={true} />
+      </StoryPart>
+
       <StoryPart title="Warning">
         <EditableInputText warning={true} />
       </StoryPart>

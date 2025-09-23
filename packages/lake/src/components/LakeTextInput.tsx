@@ -172,6 +172,7 @@ export type LakeTextInputProps = Except<
   onUnitChange?: (value: string) => void;
   maxCharCount?: number;
   help?: string;
+  info?: boolean;
   warning?: boolean;
   renderEnd?: () => ReactNode;
   containerRef?: Ref<View>;
@@ -210,6 +211,7 @@ export const LakeTextInput = ({
   maxCharCount,
   help,
   warning = false,
+  info = false,
   renderEnd,
   ...props
 }: LakeTextInputProps) => {
@@ -260,6 +262,7 @@ export const LakeTextInput = ({
               isFocused && styles.focused,
               isNotNullish(unit ?? units) && styles.inputWithUnit,
               warning && { borderColor: colors.warning[500] },
+              info && { borderColor: colors.shakespear[500] },
               hasError && styles.error,
               valid && styles.valid,
               stylesFromProps,
@@ -312,6 +315,15 @@ export const LakeTextInput = ({
                 name="warning-regular"
                 size={20}
                 color={colors.warning[500]}
+                style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
+              />
+            )}
+
+            {!validating && info && !hasError && (
+              <Icon
+                name="info-regular"
+                size={20}
+                color={colors.shakespear[500]}
                 style={[styles.endIcon, readOnly && styles.readOnlyEndIcon]}
               />
             )}
