@@ -211,7 +211,7 @@ export const LakeTextInput = ({
   maxCharCount,
   help,
   warning = false,
-  info = false,
+  info,
   renderEnd,
   ...props
 }: LakeTextInputProps) => {
