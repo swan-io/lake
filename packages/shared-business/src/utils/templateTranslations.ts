@@ -1,7 +1,7 @@
 import { match } from "ts-pattern";
 import { t } from "./i18n";
 
-export type AccountCountry = "DEU" | "ESP" | "FRA" | "NLD" | "ITA";
+export type AccountCountry = "DEU" | "ESP" | "FRA" | "NLD" | "ITA" | "BEL";
 
 export const getIndividualTaxNumberPlaceholder = (accountCountry: AccountCountry) =>
   match(accountCountry)
