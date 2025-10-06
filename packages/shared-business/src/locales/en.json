@@ -407,5 +407,6 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Instant Credit Transfer received",
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Instant Credit Transfer sent",
   "validation.birthdateCannotBeFuture": "Birthdate cannot be in the future",
-  "validation.invalidBirthDate": "Please enter a valid birth date."
+  "validation.invalidBirthDate": "Please enter a valid birth date.",
+  "validation.invalidDate": "Please enter a valid date."
 }

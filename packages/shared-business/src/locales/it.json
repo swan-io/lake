@@ -407,5 +407,6 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "Bonifico istantaneo SEPA ricevuto",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Bonifico istantaneo SEPA inviato",
   "validation.birthdateCannotBeFuture": "La data di nascita non può essere nel futuro",
-  "validation.invalidBirthDate": "Inserisci una data di nascita valida."
+  "validation.invalidBirthDate": "Inserisci una data di nascita valida.",
+  "validation.invalidDate": "Inserisci una data valida."
 }

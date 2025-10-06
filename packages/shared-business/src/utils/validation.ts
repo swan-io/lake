@@ -132,6 +132,16 @@ export const validateIban = (iban: string) => {
   }
 };
 
+export const validateDate = (value: ExtractedDate | undefined) => {
+  if (isNullish(value)) {
+    return t("validation.invalidDate");
+  }
+  const date = dayjs.utc(formatExtractedDate(value), "YYYY-MM-DD", true);
+  if (!date.isValid()) {
+    return t("validation.invalidDate");
+  }
+};
+
 export const validateBirthdate = (value: ExtractedDate | undefined) => {
   if (isNullish(value)) {
     return t("validation.invalidBirthDate");

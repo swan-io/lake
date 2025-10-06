@@ -407,5 +407,6 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Instant -tilisiirto vastaanotettu",
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Instant -tilisiirto lähetetty",
   "validation.birthdateCannotBeFuture": "Syntymäaika ei voi olla tulevaisuudessa",
-  "validation.invalidBirthDate": "Syötä syntymäaika oikeassa muodossa."
+  "validation.invalidBirthDate": "Syötä syntymäaika oikeassa muodossa.",
+  "validation.invalidDate": "Syötä kelvollinen päivämäärä."
 }
