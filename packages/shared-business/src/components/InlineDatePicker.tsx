@@ -87,6 +87,7 @@ export const InlineDatePicker = ({
   // validate will not be triggered again since the field has already
   // blurred = true
   const touched = useRef(new Set<"day" | "month" | "year">());
+  const mountWithInitialValue = useRef(value != null);
 
   const { Field, validateField } = useForm({
     date: {
@@ -114,7 +115,10 @@ export const InlineDatePicker = ({
   });
 
   const validateDate = () => {
-    if (touched.current.has("day") && touched.current.has("month") && touched.current.has("year")) {
+    if (
+      mountWithInitialValue.current ||
+      (touched.current.has("day") && touched.current.has("month") && touched.current.has("year"))
+    ) {
       validateField("date");
     }
   };
