@@ -14,6 +14,7 @@ import { match } from "ts-pattern";
 import { extractDate, ExtractedDate, formatExtractedDate } from "../utils/date";
 import { t } from "../utils/i18n";
 import { getMostLikelyUserCountry } from "../utils/localization";
+import { validateDate } from "../utils/validation";
 
 const months = [
   { value: "01", name: t("datePicker.month.january") },
@@ -75,7 +76,7 @@ export const InlineDatePicker = ({
   label,
   readOnly = false,
   onValueChange,
-  validate = () => undefined,
+  validate = validateDate,
   error: externalError,
   style,
 }: InlineDatePickerProps) => {
@@ -87,6 +88,7 @@ export const InlineDatePicker = ({
   // validate will not be triggered again since the field has already
   // blurred = true
   const touched = useRef(new Set<"day" | "month" | "year">());
+  const mountWithInitialValue = useRef(value != null);
 
   const { Field, validateField } = useForm({
     date: {
@@ -114,7 +116,10 @@ export const InlineDatePicker = ({
   });
 
   const validateDate = () => {
-    if (touched.current.has("day") && touched.current.has("month") && touched.current.has("year")) {
+    if (
+      mountWithInitialValue.current ||
+      (touched.current.has("day") && touched.current.has("month") && touched.current.has("year"))
+    ) {
       validateField("date");
     }
   };

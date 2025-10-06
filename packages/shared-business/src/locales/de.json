@@ -407,5 +407,6 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "SEPA Sofortüberweisung erhalten",
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Sofortüberweisung gesendet",
   "validation.birthdateCannotBeFuture": "Geburtsdatum darf nicht in der Zukunft liegen",
-  "validation.invalidBirthDate": "Bitte geben Sie ein gültiges Geburtsdatum ein."
+  "validation.invalidBirthDate": "Bitte geben Sie ein gültiges Geburtsdatum ein.",
+  "validation.invalidDate": "Bitte geben Sie ein gültiges Datum ein."
 }

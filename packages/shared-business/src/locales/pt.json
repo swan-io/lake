@@ -407,5 +407,6 @@
   "transactionStatement.type.SepaInstantCreditTransferIn": "Transferência de crédito instantânea SEPA recebida",
   "transactionStatement.type.SepaInstantCreditTransferOut": "Transferência de crédito instantânea SEPA enviada",
   "validation.birthdateCannotBeFuture": "A data de nascimento não pode estar no futuro",
-  "validation.invalidBirthDate": "Por favor, introduza uma data de nascimento válida."
+  "validation.invalidBirthDate": "Por favor, introduza uma data de nascimento válida.",
+  "validation.invalidDate": "Por favor, insira uma data válida."
 }
