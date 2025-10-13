@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...getTextStyle("sans", 14),
     color: colors.swan[500],
-    fontWeight: "500",
+    fontWeight: "600",
     lineHeight: 24,
   },
   totalAmount: {
@@ -174,6 +174,7 @@ type CreditStatementV1Props = {
   totalsCredit: Amount;
   totalsDebit: Amount;
   closingBalance: Amount;
+  generationDate: string;
 };
 
 const logoStyle: CSSProperties = {
@@ -197,6 +198,7 @@ export const CreditStatementV1 = ({
   totalsCredit,
   totalsDebit,
   closingBalance,
+  generationDate
 }: CreditStatementV1Props) => {
   return (
     <Box style={styles.container} direction="column" justifyContent="spaceBetween">
@@ -217,6 +219,7 @@ export const CreditStatementV1 = ({
         </Box>
         <Space height={24} />
         <Text style={styles.pageTitle}>{t("creditStatement.titleDocument")}</Text>
+        <Text style={styles.text}>{t("transactionStatement.generationDate", { date: generationDate })}</Text>
 
         <Text style={styles.text}>
           {accountHolderType === "Company"

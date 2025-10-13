@@ -734,6 +734,7 @@ export const Default = () => {
           totalsCredit={totalsCredit}
           totalsDebit={totalsDebit}
           closingBalance={closingBalance}
+          generationDate="13/10/2025"
         />
       </StoryPart>
     </StoryBlock>
