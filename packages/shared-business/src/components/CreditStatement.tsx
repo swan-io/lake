@@ -125,12 +125,11 @@ const Title = ({
   </Text>
 );
 
-export type TransactionType = "SepaCreditTransfer" | "Fees" | "SepaDirectDebit" | "Card";
+export type TransactionType = "SepaCreditTransfer" | "SepaDirectDebit" | "Card";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
     .with("Card", () => t("accountStatement.card"))
-    .with("Fees", () => t("accountStatement.fees"))
     .with("SepaCreditTransfer", () => t("accountStatement.creditTransfer"))
     .with("SepaDirectDebit", () => t("accountStatement.directDebit"))
     .exhaustive();
@@ -175,8 +174,6 @@ type CreditStatementV1Props = {
   totalsCredit: Amount;
   totalsDebit: Amount;
   closingBalance: Amount;
-  feesDebit: Amount;
-  feesCredit: Amount;
 };
 
 const logoStyle: CSSProperties = {
