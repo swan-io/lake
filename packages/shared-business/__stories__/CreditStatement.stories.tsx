@@ -51,7 +51,7 @@ const transactions = [
     },
     transactionDate: "24/02/2025",
     transactionLabel: "Loan repayment",
-    transactionType: "Fees" as TransactionType,
+    transactionType: "Card" as TransactionType,
     transactionSide: "Debit" as const,
   },
   {
@@ -701,16 +701,6 @@ export const Default = () => {
     currency: "EUR",
   };
 
-  const feesDebit = {
-    value: "4.00",
-    currency: "EUR",
-  };
-
-  const feesCredit = {
-    value: "1.00",
-    currency: "EUR",
-  };
-
   const totalsDebit = {
     value: "19.00",
     currency: "EUR",
@@ -741,8 +731,6 @@ export const Default = () => {
           closingDate="31/01/2025"
           openingBalance={openingBalance}
           transactions={transactions}
-          feesDebit={feesDebit}
-          feesCredit={feesCredit}
           totalsCredit={totalsCredit}
           totalsDebit={totalsDebit}
           closingBalance={closingBalance}
