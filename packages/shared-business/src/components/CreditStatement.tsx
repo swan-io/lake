@@ -125,12 +125,11 @@ const Title = ({
   </Text>
 );
 
-export type TransactionType = "SepaCreditTransfer" | "Fees" | "SepaDirectDebit" | "Card";
+export type TransactionType = "SepaCreditTransfer" | "SepaDirectDebit" | "Card";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
     .with("Card", () => t("accountStatement.card"))
-    .with("Fees", () => t("accountStatement.fees"))
     .with("SepaCreditTransfer", () => t("accountStatement.creditTransfer"))
     .with("SepaDirectDebit", () => t("accountStatement.directDebit"))
     .exhaustive();
@@ -175,8 +174,6 @@ type CreditStatementV1Props = {
   totalsCredit: Amount;
   totalsDebit: Amount;
   closingBalance: Amount;
-  feesDebit: Amount;
-  feesCredit: Amount;
 };
 
 const logoStyle: CSSProperties = {
@@ -197,8 +194,6 @@ export const CreditStatementV1 = ({
   closingDate,
   openingBalance,
   transactions,
-  feesDebit,
-  feesCredit,
   totalsCredit,
   totalsDebit,
   closingBalance,
@@ -325,13 +320,6 @@ export const CreditStatementV1 = ({
 
         <Space height={24} />
         <Box direction="column">
-          <Box direction="row" justifyContent="end">
-            <Text style={[styles.row]}>{t("accountStatement.column.fees")}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{feesCredit.value}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{feesDebit.value}</Text>
-          </Box>
-          <Space height={12} />
-
           <Box direction="row" justifyContent="end">
             <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
             <Text style={[styles.row, { width: "15%" }]}>{totalsCredit.value}</Text>
