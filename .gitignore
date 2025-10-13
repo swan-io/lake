@@ -9,3 +9,4 @@ dist/
 .env
 
 localazy.keys.*.json
+.idea

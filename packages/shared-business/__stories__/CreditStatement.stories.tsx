@@ -17,7 +17,7 @@ const transactions = [
     },
     transactionDate: "01/01/2025",
     transactionLabel: "Sport subscription",
-    transactionType: "Check" as TransactionType,
+    transactionType: "Card" as TransactionType,
     transactionSide: "Credit" as const,
   },
   {

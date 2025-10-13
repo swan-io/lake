@@ -197,8 +197,6 @@ export const CreditStatementV1 = ({
   closingDate,
   openingBalance,
   transactions,
-  feesDebit,
-  feesCredit,
   totalsCredit,
   totalsDebit,
   closingBalance,
@@ -325,13 +323,6 @@ export const CreditStatementV1 = ({
 
         <Space height={24} />
         <Box direction="column">
-          <Box direction="row" justifyContent="end">
-            <Text style={[styles.row]}>{t("accountStatement.column.fees")}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{feesCredit.value}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{feesDebit.value}</Text>
-          </Box>
-          <Space height={12} />
-
           <Box direction="row" justifyContent="end">
             <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
             <Text style={[styles.row, { width: "15%" }]}>{totalsCredit.value}</Text>
