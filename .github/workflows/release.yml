@@ -45,7 +45,17 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          pnpm publish -r
+          pnpm publish --recursive
+
+      - name: Publish on GitHub
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+          echo "@swan-io:registry=https://npm.pkg.github.com" >> ~/.npmrc
+          pnpm tsx scripts/release/rewriteRegistry.ts
+          pnpm publish --no-git-checks --recursive
 
       - name: Create GitHub release
         run: pnpm tsx scripts/release/createRelease.ts
