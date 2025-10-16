@@ -5,11 +5,13 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { colors, invariantColors, spacings } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import dayjs from "dayjs";
+import { printFormat } from "iban";
 import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
-import { formatNestedMessage, t } from "../utils/i18n";
+import { formatNestedMessage, locale, t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
@@ -177,7 +179,9 @@ export const CreditStatementV1 = ({
           </LakeText>
 
           <LakeText align="right" style={styles.smallText}>
-            {t("creditStatement.issueDate", { issueDate })}
+            {t("creditStatement.issueDate", {
+              issueDate: dayjs(issueDate).format(locale.dateFormat),
+            })}
           </LakeText>
         </Box>
       </Box>
@@ -207,7 +211,7 @@ export const CreditStatementV1 = ({
 
             <Space width={4} />
             <LakeText color={colors.gray[500]} style={styles.mediumText}>
-              {iban}
+              {printFormat(iban)}
             </LakeText>
           </Box>
 
@@ -251,9 +255,9 @@ export const CreditStatementV1 = ({
               {chunk}
             </LakeText>
           ),
-          openingDate,
-          closingDate,
-          repaymentDate,
+          openingDate: dayjs(openingDate).format(locale.dateFormat),
+          closingDate: dayjs(closingDate).format(locale.dateFormat),
+          repaymentDate: dayjs(repaymentDate).format(locale.dateFormat),
         })}
       </LakeText>
 
@@ -261,7 +265,10 @@ export const CreditStatementV1 = ({
       <Box direction="row" justifyContent="spaceBetween">
         <Box direction="column" justifyContent="end">
           <LakeText style={styles.subtitle} color={colors.gray[900]}>
-            {t("accountStatement.date", { openingDate, closingDate })}
+            {t("accountStatement.date", {
+              openingDate: dayjs(openingDate).format(locale.dateFormat),
+              closingDate: dayjs(closingDate).format(locale.dateFormat),
+            })}
           </LakeText>
         </Box>
       </Box>
@@ -308,7 +315,7 @@ export const CreditStatementV1 = ({
               <>
                 <Box direction="row" key={transactionId}>
                   <LakeText style={[styles.smallText, { width: "15%" }]} color={colors.gray[700]}>
-                    {transactionDate}
+                    {dayjs(transactionDate).format(locale.dateFormat)}
                   </LakeText>
                   <Box direction="column" style={{ width: "55%" }}>
                     <LakeText style={styles.smallText} color={colors.gray[700]}>

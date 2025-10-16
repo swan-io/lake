@@ -404,15 +404,15 @@ export const Default = () => {
           accountHolderType="Individual"
           accountHolderName="Sandrine Da Silva"
           accountHolderAddress={address}
-          iban={"DE63 1111 1111 8189 3774 57"}
+          iban={"DE63111111118189377457"}
           bic={"SWNBDEBB"}
-          openingDate="01/01/2025"
-          closingDate="31/01/2025"
+          openingDate="2025-09-01T14:41:50.308Z"
+          closingDate="2025-09-30T14:41:50.308Z"
           transactions={transactions}
-          generationDate="01/10/2025"
+          issueDate="2025-10-16T14:41:50.308Z"
           issuerName="Aria"
           siret="362 521 879 00034"
-          repaymentDate="02/10/2025"
+          repaymentDate="2025-10-03T14:41:50.308Z"
         />
       </StoryPart>
     </StoryBlock>
