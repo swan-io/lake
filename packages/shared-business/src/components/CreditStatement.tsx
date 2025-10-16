@@ -1,31 +1,18 @@
 import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import {
-  colors,
-  fonts,
-  invariantColors,
-  primaryFontStyle,
-  spacings,
-} from "@swan-io/lake/src/constants/design";
+import { colors, invariantColors, spacings } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
-import { formatCurrencySymbol, t } from "../utils/i18n";
+import { formatNestedMessage, t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
-
-const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
-  color: colors.gray[900],
-  fontSize,
-  lineHeight: fontSize * 1.25,
-  fontWeight: "400",
-});
 
 const styles = StyleSheet.create({
   container: {
@@ -33,63 +20,47 @@ const styles = StyleSheet.create({
     padding: 56,
     backgroundColor: invariantColors.white,
   },
-  partnershipText: {
-    ...getTextStyle("sans", 14),
-    color: colors.gray[500],
+  address: {
+    fontSize: 13,
+  },
+  smallText: {
+    fontSize: 12,
+  },
+  mediumText: {
+    fontSize: 14,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "400",
   },
   pageTitle: {
-    ...getTextStyle("sans", 20),
+    fontSize: 20,
     color: colors.swan[500],
     fontWeight: "600",
   },
   sectionTitle: {
-    ...getTextStyle("sans", 14),
+    fontSize: 18,
     color: colors.swan[500],
     fontWeight: "600",
     lineHeight: 24,
   },
-  totalAmount: {
-    ...getTextStyle("sans", 20),
-    lineHeight: 28,
-    fontWeight: "600",
-  },
   titleColumn: {
-    ...getTextStyle("sans", 15),
-    fontWeight: "500",
+    fontSize: 14,
+    fontWeight: "600",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
     lineHeight: 24,
   },
-  openingBalanceText: {
-    ...getTextStyle("sans", 14),
-    textAlign: "right",
-  },
-  textColumn: {
-    ...getTextStyle("sans", 14),
-    color: "colors.gray[700]",
-    // lineHeight: 20,
-    paddingVertical: spacings[4],
-  },
   text: {
-    ...getTextStyle("sans", 14),
-    color: colors.gray[700],
+    fontSize: 13,
     lineHeight: 24,
+    textAlign: "right",
   },
   row: {
     textAlign: "right",
     paddingVertical: spacings[4],
     fontWeight: "600",
     width: "20%",
-  },
-  closingBalanceRow: {
-    ...getTextStyle("sans", 14),
-    backgroundColor: colors.gray[50],
-    width: "50%",
-  },
-  footer: {
-    ...getTextStyle("sans", 10),
-    color: colors.gray[500],
-    fontWeight: "300",
   },
   defaultLogo: {
     height: LOGO_MAX_HEIGHT,
@@ -101,29 +72,8 @@ const styles = StyleSheet.create({
     position: "relative",
     top: 0.5,
   },
+  rightColumnContent: { width: "15%", textAlign: "right", fontWeight: "400" },
 });
-
-const Title = ({
-  text,
-  align = "left",
-  style,
-}: {
-  text: string;
-  align?: "right" | "left";
-  style?: TextProps["style"];
-}) => (
-  <Text
-    style={[
-      styles.titleColumn,
-      style,
-      {
-        textAlign: align,
-      },
-    ]}
-  >
-    {text}
-  </Text>
-);
 
 export type TransactionType = "SepaCreditTransfer" | "SepaDirectDebit" | "Card";
 
@@ -156,6 +106,8 @@ type Transaction = {
   transactionType: TransactionType;
   transactionSide: "Credit" | "Debit";
   transactionAmount: Amount;
+  counterparty: string;
+  maskedPan?: string;
 };
 
 type CreditStatementV1Props = {
@@ -169,12 +121,11 @@ type CreditStatementV1Props = {
   bic: string;
   openingDate: string;
   closingDate: string;
-  openingBalance: Amount;
   transactions: Transaction[];
-  totalsCredit: Amount;
-  totalsDebit: Amount;
-  closingBalance: Amount;
-  generationDate: string;
+  issueDate: string;
+  issuerName: string;
+  siret: string;
+  repaymentDate: string;
 };
 
 const logoStyle: CSSProperties = {
@@ -183,6 +134,7 @@ const logoStyle: CSSProperties = {
   objectFit: "contain",
   objectPosition: "left",
 };
+const formatMaskedPan = (value: string) => `••${value.slice(-4)}`;
 
 export const CreditStatementV1 = ({
   partnerLogoUrl,
@@ -193,174 +145,202 @@ export const CreditStatementV1 = ({
   bic,
   openingDate,
   closingDate,
-  openingBalance,
   transactions,
-  totalsCredit,
-  totalsDebit,
-  closingBalance,
-  generationDate
+  issueDate,
+  issuerName,
+  siret,
+  repaymentDate,
 }: CreditStatementV1Props) => {
   return (
     <Box style={styles.container} direction="column" justifyContent="spaceBetween">
-      <Box>
-        <Box direction="row" justifyContent="spaceBetween">
-          <Box direction="row" alignItems="center">
-            {isNotNullishOrEmpty(partnerLogoUrl) ? (
-              <img src={partnerLogoUrl} style={logoStyle} />
-            ) : (
-              <SwanLogo style={styles.defaultLogo} />
-            )}
-
-            <Separator horizontal={true} space={8} />
-            <Text style={styles.partnershipText}>{t("accountStatement.partnership")}</Text>
-            <Space width={4} />
-            <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
-          </Box>
-        </Box>
-        <Space height={24} />
-        <Text style={styles.pageTitle}>{t("creditStatement.titleDocument")}</Text>
-        <Text style={styles.text}>{t("transactionStatement.generationDate", { date: generationDate })}</Text>
-
-        <Text style={styles.text}>
-          {accountHolderType === "Company"
-            ? t("accountStatement.titleDocument.companyDescription")
-            : t("accountStatement.titleDocument.individualDescription")}
-        </Text>
-
-        <Space height={12} />
-        <Box direction="column">
-          <Text style={styles.sectionTitle}>{accountHolderName}</Text>
-
-          <Text style={styles.text}>{accountHolderAddress.addressLine1}</Text>
-          {isNotNullish(accountHolderAddress.addressLine2) && (
-            <Text>{accountHolderAddress.addressLine2}</Text>
+      <Box direction="row" justifyContent="spaceBetween" alignItems="start">
+        <Box direction="row" alignItems="center">
+          {isNotNullishOrEmpty(partnerLogoUrl) ? (
+            <img src={partnerLogoUrl} style={logoStyle} />
+          ) : (
+            <SwanLogo style={styles.defaultLogo} />
           )}
-          <Text
-            style={styles.text}
-          >{`${accountHolderAddress.postalCode} ${accountHolderAddress.city}, ${getCountryName(accountHolderAddress.country)}`}</Text>
+
+          <Separator horizontal={true} space={8} />
+          <LakeText style={styles.mediumText}>{t("accountStatement.partnership")}</LakeText>
+          <Space width={4} />
+          <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
+        </Box>
+
+        <Box>
+          <LakeText style={styles.pageTitle}>{t("creditStatement.titleDocument")}</LakeText>
+
+          <LakeText style={styles.text} color={colors.gray[700]}>
+            {accountHolderType === "Company"
+              ? t("accountStatement.titleDocument.companyDescription")
+              : t("accountStatement.titleDocument.individualDescription")}
+          </LakeText>
+
+          <LakeText align="right" style={styles.smallText}>
+            {t("creditStatement.issueDate", { issueDate })}
+          </LakeText>
+        </Box>
+      </Box>
+
+      <Space height={12} />
+      <Box direction="column">
+        <LakeText style={styles.sectionTitle}>{accountHolderName}</LakeText>
+
+        <Space height={16} />
+
+        <LakeText style={styles.address}>{accountHolderAddress.addressLine1}</LakeText>
+        {isNotNullish(accountHolderAddress.addressLine2) && (
+          <LakeText>{accountHolderAddress.addressLine2}</LakeText>
+        )}
+        <LakeText
+          style={styles.address}
+        >{`${accountHolderAddress.postalCode} ${accountHolderAddress.city}, ${getCountryName(accountHolderAddress.country)}`}</LakeText>
+      </Box>
+      <Space height={12} />
+
+      <Box direction="row">
+        <Box direction="column" grow={1}>
+          <Box direction="row" alignItems="center">
+            <LakeText variant="semibold" style={styles.mediumText} color={colors.gray[900]}>
+              {t("accountStatement.iban")}
+            </LakeText>
+
+            <Space width={4} />
+            <LakeText color={colors.gray[500]} style={styles.mediumText}>
+              {iban}
+            </LakeText>
+          </Box>
+
+          <Space height={4} />
+          <Box direction="row" alignItems="center">
+            <LakeText variant="semibold" style={styles.mediumText} color={colors.gray[900]}>
+              {t("accountStatement.bic")}
+            </LakeText>
+
+            <Space width={4} />
+            <LakeText color={colors.gray[500]} style={styles.mediumText}>
+              {bic}
+            </LakeText>
+          </Box>
+        </Box>
+        <Box direction="column" grow={1}>
+          <LakeText variant="semibold" style={styles.mediumText} color={colors.gray[900]}>
+            {issuerName}
+          </LakeText>
+          <Space height={4} />
+
+          <Box direction="row" alignItems="center">
+            <LakeText variant="semibold" style={styles.mediumText}>
+              {t("creditStatement.siret")}
+            </LakeText>
+
+            <Space width={4} />
+            <LakeText color={colors.gray[500]} style={styles.mediumText}>
+              {siret}
+            </LakeText>
+          </Box>
+        </Box>
+      </Box>
+
+      <Space height={24} />
+
+      <LakeText color={colors.gray[500]} style={styles.smallText}>
+        {formatNestedMessage("creditStatement.additionalDetails", {
+          bold: chunk => (
+            <LakeText color={colors.gray[900]} variant="semibold" style={{ fontSize: 12 }}>
+              {chunk}
+            </LakeText>
+          ),
+          openingDate,
+          closingDate,
+          repaymentDate,
+        })}
+      </LakeText>
+
+      <Space height={24} />
+      <Box direction="row" justifyContent="spaceBetween">
+        <Box direction="column" justifyContent="end">
+          <LakeText style={styles.subtitle} color={colors.gray[900]}>
+            {t("accountStatement.date", { openingDate, closingDate })}
+          </LakeText>
+        </Box>
+      </Box>
+      <Space height={16} />
+
+      <>
+        <Box direction="row">
+          <LakeText style={[styles.titleColumn, { width: "15%" }]} color={colors.gray[700]}>
+            {t("accountStatement.column.date")}
+          </LakeText>
+
+          <LakeText style={[styles.titleColumn, { width: "55%" }]} color={colors.gray[700]}>
+            {t("accountStatement.column.description")}
+          </LakeText>
+
+          <LakeText
+            style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
+            color={colors.gray[700]}
+          >
+            {t("creditStatement.column.debit")}
+          </LakeText>
+
+          <LakeText
+            style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
+            color={colors.gray[700]}
+          >
+            {t("creditStatement.column.credit")}
+          </LakeText>
         </Box>
         <Space height={12} />
 
-        <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-        <Text style={styles.text}>{iban}</Text>
-
-        <Space height={4} />
-        <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-        <Text style={styles.text}>{bic}</Text>
-
-        <Space height={24} />
-        <Box direction="row" justifyContent="spaceBetween">
-          <Box direction="column" justifyContent="end">
-            <Text style={styles.sectionTitle}>
-              {t("accountStatement.date", { openingDate, closingDate })}
-            </Text>
-          </Box>
-
-          <Box direction="column">
-            <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
-            <Text style={styles.totalAmount}>
-              {formatCurrencySymbol(Number(openingBalance.value), openingBalance.currency)}
-            </Text>
-          </Box>
-        </Box>
-        <Space height={24} />
-
-        <>
-          <Box direction="row">
-            <Text style={[styles.titleColumn, { width: "15%" }]}>
-              {t("accountStatement.column.date")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "22%" }]}>
-              {t("accountStatement.column.type")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "33%" }]}>
-              {t("accountStatement.column.description")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("creditStatement.column.credit")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("creditStatement.column.debit")}
-            </Text>
-          </Box>
-          <Box direction="column">
-            {transactions.map(
-              ({
-                transactionAmount,
-                transactionDate,
-                transactionLabel,
-                transactionSide,
-                transactionType,
-                transactionId,
-              }) => (
+        <Box direction="column">
+          {transactions.map(
+            ({
+              transactionAmount,
+              transactionDate,
+              transactionLabel,
+              transactionSide,
+              transactionType,
+              transactionId,
+              counterparty,
+              maskedPan,
+            }) => (
+              <>
                 <Box direction="row" key={transactionId}>
-                  <Text style={[styles.textColumn, { width: "15%" }]}>{transactionDate}</Text>
-                  <Text style={[styles.textColumn, { width: "22%" }]}>
-                    {translateTransaction(transactionType)}
-                  </Text>
-                  <Text style={[styles.textColumn, { width: "33%" }]}>{transactionLabel}</Text>
-                  <Text
-                    style={[
-                      styles.textColumn,
-                      { width: "15%", textAlign: "right", fontWeight: "600" },
-                    ]}
+                  <LakeText style={[styles.smallText, { width: "15%" }]} color={colors.gray[700]}>
+                    {transactionDate}
+                  </LakeText>
+                  <Box direction="column" style={{ width: "55%" }}>
+                    <LakeText style={styles.smallText} color={colors.gray[700]}>
+                      {`${translateTransaction(transactionType)} ${transactionLabel}`}
+                    </LakeText>
+                    <LakeText style={styles.smallText} color={colors.gray[500]}>
+                      {`${counterparty} ${maskedPan ? formatMaskedPan(maskedPan) : ""}`}
+                    </LakeText>
+                  </Box>
+
+                  <LakeText
+                    color={colors.gray[700]}
+                    style={[styles.smallText, styles.rightColumnContent]}
+                  >
+                    {transactionSide === "Debit" ? `- ${transactionAmount.value}` : ""}
+                  </LakeText>
+
+                  <LakeText
+                    color={colors.gray[700]}
+                    style={[styles.smallText, styles.rightColumnContent]}
                   >
                     {transactionSide === "Credit" ? transactionAmount.value : ""}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.textColumn,
-                      { width: "15%", textAlign: "right", fontWeight: "600" },
-                    ]}
-                  >
-                    {transactionSide === "Debit" ? transactionAmount.value : ""}
-                  </Text>
+                  </LakeText>
                 </Box>
-              ),
-            )}
-          </Box>
-        </>
-
-        <Space height={24} />
-        <Box direction="column">
-          <Box direction="row" justifyContent="end">
-            <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{totalsCredit.value}</Text>
-            <Text style={[styles.row, { width: "15%" }]}>{totalsDebit.value}</Text>
-          </Box>
+                <Space height={8} />
+              </>
+            ),
+          )}
         </Box>
-        <Space height={12} />
+      </>
 
-        <Box direction="row" justifyContent="end">
-          <Box
-            direction="row"
-            justifyContent="spaceBetween"
-            alignItems="center"
-            style={{ width: "50%" }}
-          >
-            <Title
-              align="right"
-              text={t("accountStatement.closingBalance")}
-              style={{ width: "40%" }}
-            />
-
-            <Title
-              text={formatCurrencySymbol(Number(closingBalance.value), closingBalance.currency)}
-              style={{
-                width: "60%",
-                ...getTextStyle("sans", 20),
-                fontWeight: "600",
-              }}
-              align="right"
-            />
-          </Box>
-        </Box>
-      </Box>
-
-      <Box>
-        <Separator space={24} />
-        <Text style={styles.footer}>{t("transactionStatement.footer")}</Text>
-      </Box>
+      <Space height={24} />
     </Box>
   );
 };
