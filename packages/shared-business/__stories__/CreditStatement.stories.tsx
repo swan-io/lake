@@ -18,6 +18,8 @@ const transactions = [
     transactionDate: "01/01/2025",
     transactionLabel: "Sport subscription",
     transactionType: "Card" as TransactionType,
+    counterparty: "Carrefour",
+    maskedPan: "123412XXXXXX1234",
     transactionSide: "Credit" as const,
   },
   {
@@ -29,6 +31,8 @@ const transactions = [
     transactionDate: "10/01/2025",
     transactionLabel: "Ikea",
     transactionType: "Card" as TransactionType,
+    counterparty: "Leclerc",
+    maskedPan: "123412XXXXXX1234",
     transactionSide: "Debit" as const,
     totalsCredit: {
       value: "0.00",
@@ -52,6 +56,8 @@ const transactions = [
     transactionDate: "24/02/2025",
     transactionLabel: "Loan repayment",
     transactionType: "Card" as TransactionType,
+    counterparty: "Auchan",
+    maskedPan: "123412XXXXXX1234",
     transactionSide: "Debit" as const,
   },
   {
@@ -64,6 +70,7 @@ const transactions = [
     transactionLabel: "Pet supplies",
     transactionType: "SepaCreditTransfer" as TransactionType,
     transactionSide: "Credit" as const,
+    counterparty: "Marie Dupont",
   },
   {
     transactionId: "5",
@@ -87,7 +94,9 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Marie Martin",
   },
+
   {
     transactionId: "6",
     transactionAmount: {
@@ -110,6 +119,7 @@ const transactions = [
       value: "1136.70",
       currency: "EUR",
     },
+    counterparty: "Marie Martin",
   },
   {
     transactionId: "5",
@@ -133,6 +143,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Paul Durand",
   },
   {
     transactionId: "5",
@@ -156,6 +167,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -179,6 +191,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -202,6 +215,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Lucie Bernard",
   },
   {
     transactionId: "5",
@@ -225,6 +239,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -248,6 +263,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -271,6 +287,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -294,6 +311,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Lucie Bernard",
   },
   {
     transactionId: "5",
@@ -317,6 +335,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Sophie Leroy",
   },
   {
     transactionId: "5",
@@ -340,6 +359,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
+    counterparty: "Lucie Bernard",
   },
   {
     transactionId: "5",
@@ -363,328 +383,7 @@ const transactions = [
       value: "1593.13",
       currency: "EUR",
     },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "Card" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaCreditTransfer" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
-  },
-  {
-    transactionId: "5",
-    transactionAmount: {
-      value: "490.76",
-      currency: "EUR",
-    },
-    transactionDate: "21/03/2025",
-    transactionLabel: "Hotel",
-    transactionType: "SepaDirectDebit" as TransactionType,
-    transactionSide: "Credit" as const,
-    totalsCredit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    totalsDebit: {
-      value: "0.00",
-      currency: "EUR",
-    },
-    closingBalance: {
-      value: "1593.13",
-      currency: "EUR",
-    },
+    counterparty: "Lucie Bernard",
   },
 ];
 
@@ -696,26 +395,6 @@ export const Default = () => {
     country: "FRA" as CountryCCA3,
   };
 
-  const openingBalance = {
-    value: "10000",
-    currency: "EUR",
-  };
-
-  const totalsDebit = {
-    value: "19.00",
-    currency: "EUR",
-  };
-
-  const totalsCredit = {
-    value: "2.00",
-    currency: "EUR",
-  };
-
-  const closingBalance = {
-    value: "3456.00",
-    currency: "EUR",
-  };
-
   return (
     <StoryBlock title="Credit statement">
       <StoryPart title="Default">
@@ -725,16 +404,15 @@ export const Default = () => {
           accountHolderType="Individual"
           accountHolderName="Sandrine Da Silva"
           accountHolderAddress={address}
-          iban={"DE63 1111 1111 8189 3774 57"}
+          iban={"DE63111111118189377457"}
           bic={"SWNBDEBB"}
-          openingDate="01/01/2025"
-          closingDate="31/01/2025"
-          openingBalance={openingBalance}
+          openingDate="2025-09-01T14:41:50.308Z"
+          closingDate="2025-09-30T14:41:50.308Z"
           transactions={transactions}
-          totalsCredit={totalsCredit}
-          totalsDebit={totalsDebit}
-          closingBalance={closingBalance}
-          generationDate="13/10/2025"
+          issueDate="2025-10-16T14:41:50.308Z"
+          issuerName="Aria"
+          siret="362 521 879 00034"
+          repaymentDate="2025-10-03T14:41:50.308Z"
         />
       </StoryPart>
     </StoryBlock>
