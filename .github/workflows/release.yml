@@ -10,6 +10,10 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
+
+    permissions:
+      packages: write
+
     env:
       GH_TOKEN: ${{ github.token }}
       REF_BRANCH: ${{ github.event.pull_request.head.ref }}
