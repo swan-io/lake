@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
-import { breakpoints, colors, shadows } from "../constants/design";
+import { breakpoints, colors, ColorVariants, shadows } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
+import { Tag } from "./Tag";
 
 const styles = StyleSheet.create({
   base: {
@@ -88,6 +90,7 @@ type Props = {
   title: ReactNode;
   subtitle?: string;
   style?: StyleProp<ViewStyle>;
+  tag?: string;
 };
 
 const isText = (node: ReactNode): node is string | number =>
@@ -101,10 +104,21 @@ export const LakeAlert = ({
   children,
   style,
   callToAction,
+  tag,
 }: Props) => {
   const color = alertColor[variant];
   const icon = alertIcon[variant];
   const { desktop } = useResponsive(breakpoints.medium);
+
+  const translateColorTag = () =>
+    match(variant)
+      .returnType<ColorVariants>()
+      .with("error", () => "negative")
+      .with("info", () => "shakespear")
+      .with("neutral", () => "gray")
+      .with("success", () => "positive")
+      .with("warning", () => "warning")
+      .exhaustive();
 
   return (
     <View
@@ -124,10 +138,13 @@ export const LakeAlert = ({
         ) : null}
 
         <View style={commonStyles.fill}>
-          <LakeText color={color} variant={icon != null ? "regular" : "medium"}>
-            {title}
-          </LakeText>
+          <Box direction="row" justifyContent="spaceBetween">
+            <LakeText color={color} variant={icon != null ? "regular" : "medium"}>
+              {title}
+            </LakeText>
 
+            {tag && <Tag color={translateColorTag()}>{tag}</Tag>}
+          </Box>
           {isNotNullishOrEmpty(subtitle) && <LakeText color={color}>{subtitle}</LakeText>}
         </View>
 

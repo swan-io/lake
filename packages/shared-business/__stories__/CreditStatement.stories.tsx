@@ -413,6 +413,7 @@ export const Default = () => {
           issuerName="Aria"
           siret="362 521 879 00034"
           repaymentDate="2025-10-03T14:41:50.308Z"
+          closingBalance={{ currency: "EUR", value: "150" }}
         />
       </StoryPart>
     </StoryBlock>

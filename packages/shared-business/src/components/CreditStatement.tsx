@@ -11,7 +11,7 @@ import { CSSProperties } from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
-import { formatNestedMessage, locale, t } from "../utils/i18n";
+import { formatCurrencySymbol, formatNestedMessage, locale, t } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
@@ -33,6 +33,14 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
+    fontWeight: "400",
+  },
+  closingBalanceLabel: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  closingBalanceAmount: {
+    fontSize: 15,
     fontWeight: "400",
   },
   pageTitle: {
@@ -128,6 +136,7 @@ type CreditStatementV1Props = {
   issuerName: string;
   siret: string;
   repaymentDate: string;
+  closingBalance: Amount;
 };
 
 const logoStyle: CSSProperties = {
@@ -152,6 +161,7 @@ export const CreditStatementV1 = ({
   issuerName,
   siret,
   repaymentDate,
+  closingBalance,
 }: CreditStatementV1Props) => {
   return (
     <Box style={styles.container} direction="column" justifyContent="spaceBetween">
@@ -344,6 +354,23 @@ export const CreditStatementV1 = ({
               </>
             ),
           )}
+
+          <Box direction="row" justifyContent="end">
+            <Box
+              direction="row"
+              justifyContent="spaceBetween"
+              alignItems="center"
+              style={{ width: "50%" }}
+            >
+              <LakeText style={styles.closingBalanceLabel} color={colors.gray[900]}>
+                {t("accountStatement.closingBalance")}
+              </LakeText>
+
+              <LakeText color={colors.gray[900]} style={styles.closingBalanceAmount}>
+                {formatCurrencySymbol(Number(closingBalance.value), closingBalance.currency)}
+              </LakeText>
+            </Box>
+          </Box>
         </Box>
       </>
 
