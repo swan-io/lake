@@ -7,7 +7,6 @@ import { LakeCopyButton } from "@swan-io/lake/src/components/LakeCopyButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
-import { Link } from "@swan-io/lake/src/components/Link";
 import { ReadOnlyFieldList } from "@swan-io/lake/src/components/ReadOnlyFieldList";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
@@ -15,8 +14,7 @@ import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { badStatusToError, NetworkError, Request, Response, TimeoutError } from "@swan-io/request";
 import { Fragment, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { match, P } from "ts-pattern";
-import { nullish } from "ts-pattern/dist/patterns";
+import { match } from "ts-pattern";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { isTranslationKey, locale, t } from "../utils/i18n";
@@ -67,7 +65,6 @@ type Props<Purpose extends string> = {
   readonlyDocumentPurposes?: Purpose[];
   purposeLabelOverrides?: Partial<Record<Purpose, string>>;
   purposeDescriptionLabelOverrides?: Partial<Record<Purpose, string>>;
-  docLink?: string;
 };
 
 const styles = StyleSheet.create({
@@ -115,6 +112,37 @@ const Help = (props: HelpProps) => {
     ))
     .exhaustive();
 };
+const getSupportLink = (language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt" | "fi") =>
+  match(language)
+    .with(
+      "fr",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22502977563933--Proof-of-registration-for-French-companies",
+    )
+    .with(
+      "it",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22537604831005--Proof-of-registration-for-Italian-companies",
+    )
+    .with(
+      "de",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22535023588509--Proof-of-registration-for-German-companies",
+    )
+    .with(
+      "es",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22544703221021--Proof-of-registration-for-Spanish-companies",
+    )
+    .with(
+      "nl",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22543228421277--Proof-of-registration-for-Dutch-companies",
+    )
+    .otherwise(
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
+    );
 
 export const getSupportingDocumentPurposeLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}`;
@@ -141,7 +169,6 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   readonlyDocumentPurposes = [],
   purposeLabelOverrides,
   purposeDescriptionLabelOverrides,
-  docLink,
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
@@ -257,31 +284,55 @@ export const SupportingDocumentCollection = <Purpose extends string>({
               label={purposeLabelOverrides?.[purpose] ?? getSupportingDocumentPurposeLabel(purpose)}
               description={label}
               help={
-                isNotNullish(metadata) &&
-                match({ purpose: purpose as string, docLink })
-                  .with(
-                    { purpose: "CompanyRegistration", docLink: P.not(nullish) },
-                    ({ docLink }) => {
-                      return (
-                        <Link to={docLink}>
-                          {t("supportingDocuments.help.howToSendAGoodDocument")}
-                        </Link>
-                      );
-                    },
-                  )
-                  .otherwise(() => (
+                isNotNullish(metadata) ? (
+                  purpose === "CompanyRegistration" ? (
                     <LakeButton
-                      mode="secondary"
                       size="small"
-                      color="gray"
-                      icon={"question-circle-regular"}
-                      onPress={() => setCurrentMetadata(metadata)}
-                      style={styles.button}
-                      ariaLabel={t("supportingDocuments.help.whatIsThis")}
+                      mode="tertiary"
+                      icon="question-circle-regular"
+                      onPress={() => window.open(getSupportLink(locale.language))}
+                      ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
                     >
-                      {label}
+                      {t("supportingDocuments.help.howToSendAGoodDocument")}
                     </LakeButton>
-                  ))
+                  ) : (
+                    <Help
+                      type="button"
+                      label={metadata.title}
+                      onPress={() => setCurrentMetadata(metadata)}
+                    />
+                  )
+                ) : (
+                  match(purpose as string)
+                    .with("PowerOfAttorney", () => (
+                      <Help
+                        type="button"
+                        icon="arrow-down-filled"
+                        label={t("supportingDocuments.help.downloadTemplate")}
+                        onPress={() => setShowPowerOfAttorneyModal(true)}
+                      />
+                    ))
+                    .with("SwornStatement", () => (
+                      <Help
+                        type="button"
+                        icon="arrow-down-filled"
+                        label={t("supportingDocuments.help.downloadTemplate")}
+                        onPress={() => setShowSwornStatementModal(true)}
+                      />
+                    ))
+                    .with("CompanyRegistration", () => (
+                      <LakeButton
+                        size="small"
+                        mode="tertiary"
+                        icon="question-circle-regular"
+                        onPress={() => window.open(getSupportLink(locale.language))}
+                        ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                      >
+                        {t("supportingDocuments.help.howToSendAGoodDocument")}
+                      </LakeButton>
+                    ))
+                    .otherwise(() => null)
+                )
               }
               render={() => (
                 <>

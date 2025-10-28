@@ -45,6 +45,7 @@ export const WaitingForDocument = () => {
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
+            "CompanyRegistration",
             "ProofOfIdentity",
             "SwornStatement",
             "PowerOfAttorney",
@@ -98,7 +99,6 @@ export const WaitingForDocumentShowIds = () => {
     <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
       <StoryPart title="Default">
         <SupportingDocumentCollection
-          docLink="https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration"
           status="WaitingForDocument"
           generateUpload={generateUpload}
           documents={documents}
