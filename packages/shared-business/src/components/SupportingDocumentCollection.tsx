@@ -1,4 +1,5 @@
 import { Array, Future, Option, Result } from "@swan-io/boxed";
+import { Box } from "@swan-io/lake/src/components/Box";
 import { Form } from "@swan-io/lake/src/components/Form";
 import { IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
@@ -6,14 +7,16 @@ import { LakeCopyButton } from "@swan-io/lake/src/components/LakeCopyButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
+import { Link } from "@swan-io/lake/src/components/Link";
 import { ReadOnlyFieldList } from "@swan-io/lake/src/components/ReadOnlyFieldList";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
+import { badStatusToError, NetworkError, Request, Response, TimeoutError } from "@swan-io/request";
 import { Fragment, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
+import { nullish } from "ts-pattern/dist/patterns";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { isTranslationKey, locale, t } from "../utils/i18n";
@@ -64,6 +67,7 @@ type Props<Purpose extends string> = {
   readonlyDocumentPurposes?: Purpose[];
   purposeLabelOverrides?: Partial<Record<Purpose, string>>;
   purposeDescriptionLabelOverrides?: Partial<Record<Purpose, string>>;
+  docLink?: string;
 };
 
 const styles = StyleSheet.create({
@@ -98,7 +102,7 @@ const Help = (props: HelpProps) => {
     ))
     .with({ type: "button" }, ({ label, onPress }) => (
       <LakeButton
-        mode="tertiary"
+        mode="secondary"
         size="small"
         color="gray"
         icon={props.icon ?? "question-circle-regular"}
@@ -137,6 +141,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   readonlyDocumentPurposes = [],
   purposeLabelOverrides,
   purposeDescriptionLabelOverrides,
+  docLink,
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
@@ -252,79 +257,102 @@ export const SupportingDocumentCollection = <Purpose extends string>({
               label={purposeLabelOverrides?.[purpose] ?? getSupportingDocumentPurposeLabel(purpose)}
               description={label}
               help={
-                isNotNullish(metadata) ? (
-                  <Help
-                    type="button"
-                    label={metadata.title}
-                    onPress={() => setCurrentMetadata(metadata)}
-                  />
-                ) : (
-                  match(purpose as string)
-                    .with("PowerOfAttorney", () => (
-                      <Help
-                        type="button"
-                        icon="arrow-down-filled"
-                        label={t("supportingDocuments.help.downloadTemplate")}
-                        onPress={() => setShowPowerOfAttorneyModal(true)}
-                      />
-                    ))
-                    .with("SwornStatement", () => (
-                      <Help
-                        type="button"
-                        icon="arrow-down-filled"
-                        label={t("supportingDocuments.help.downloadTemplate")}
-                        onPress={() => setShowSwornStatementModal(true)}
-                      />
-                    ))
-                    .otherwise(() => null)
-                )
+                isNotNullish(metadata) &&
+                match({ purpose: purpose as string, docLink })
+                  .with(
+                    { purpose: "CompanyRegistration", docLink: P.not(nullish) },
+                    ({ docLink }) => {
+                      return (
+                        <Link to={docLink}>
+                          {t("supportingDocuments.help.howToSendAGoodDocument")}
+                        </Link>
+                      );
+                    },
+                  )
+                  .otherwise(() => (
+                    <LakeButton
+                      mode="secondary"
+                      size="small"
+                      color="gray"
+                      icon={"question-circle-regular"}
+                      onPress={() => setCurrentMetadata(metadata)}
+                      style={styles.button}
+                      ariaLabel={t("supportingDocuments.help.whatIsThis")}
+                    >
+                      {label}
+                    </LakeButton>
+                  ))
               }
               render={() => (
-                <FilesUploader
-                  ref={ref => {
-                    filesUploaderRefByPurpose.current[purpose] = ref;
-                  }}
-                  // Only allow uploading is the Supporting Document Collection awaits for docs
-                  // and that the specific purpose isn't already fully validated
-                  canUpload={
-                    !readonlyDocumentPurposes.includes(purpose) &&
-                    !readOnly &&
-                    status === "WaitingForDocument" &&
-                    !areAllDocumentsValidated
-                  }
-                  accept={ACCEPTED_FORMATS}
-                  maxSize={20_000_000}
-                  icon="document-regular"
-                  initialFiles={files}
-                  generateUpload={generateUpload}
-                  getUploadConfig={file => ({ fileName: file.name, purpose })}
-                  uploadFile={
-                    isNotNullish(uploadFile)
-                      ? uploadFile
-                      : ({ upload, file, onProgress }) => {
-                          const body = new FormData();
-                          upload.fields.forEach(({ key, value }) => body.append(key, value));
-                          body.append("file", file);
-                          setTimeout(() => onProgress(0.8), 100);
-                          return Request.make({
-                            url: upload.url,
-                            method: "POST",
-                            body,
-                            type: "text",
-                          }).mapOkToResult(badStatusToError);
-                        }
-                  }
-                  formatAndSizeDescription={t("supportingDocuments.documentTypes", {
-                    maxSizeMB: 20_000_000 / 1_000_000,
-                  })}
-                  onRemoveFile={readOnly ? undefined : onRemoveFile}
-                  onChange={files => {
-                    if (isRequired) {
-                      filesByRequiredPurpose.current.set(purpose, files);
+                <>
+                  <Box direction="row">
+                    {match(purpose as string)
+                      .with("PowerOfAttorney", () => (
+                        <Help
+                          type="button"
+                          icon="arrow-down-filled"
+                          label={t("supportingDocuments.help.downloadTemplate")}
+                          onPress={() => setShowPowerOfAttorneyModal(true)}
+                        />
+                      ))
+                      .with("SwornStatement", () => (
+                        <Help
+                          type="button"
+                          icon="arrow-down-filled"
+                          label={t("supportingDocuments.help.downloadTemplate")}
+                          onPress={() => setShowSwornStatementModal(true)}
+                        />
+                      ))
+                      .otherwise(() => null)}
+                  </Box>
+                  <Space height={16} />
+
+                  <FilesUploader
+                    ref={ref => {
+                      filesUploaderRefByPurpose.current[purpose] = ref;
+                    }}
+                    // Only allow uploading is the Supporting Document Collection awaits for docs
+                    // and that the specific purpose isn't already fully validated
+                    canUpload={
+                      !readonlyDocumentPurposes.includes(purpose) &&
+                      !readOnly &&
+                      status === "WaitingForDocument" &&
+                      !areAllDocumentsValidated
                     }
-                  }}
-                  showIds={showIds}
-                />
+                    accept={ACCEPTED_FORMATS}
+                    maxSize={20_000_000}
+                    icon="document-regular"
+                    initialFiles={files}
+                    generateUpload={generateUpload}
+                    getUploadConfig={file => ({ fileName: file.name, purpose })}
+                    uploadFile={
+                      isNotNullish(uploadFile)
+                        ? uploadFile
+                        : ({ upload, file, onProgress }) => {
+                            const body = new FormData();
+                            upload.fields.forEach(({ key, value }) => body.append(key, value));
+                            body.append("file", file);
+                            setTimeout(() => onProgress(0.8), 100);
+                            return Request.make({
+                              url: upload.url,
+                              method: "POST",
+                              body,
+                              type: "text",
+                            }).mapOkToResult(badStatusToError);
+                          }
+                    }
+                    formatAndSizeDescription={t("supportingDocuments.documentTypes", {
+                      maxSizeMB: 20_000_000 / 1_000_000,
+                    })}
+                    onRemoveFile={readOnly ? undefined : onRemoveFile}
+                    onChange={files => {
+                      if (isRequired) {
+                        filesByRequiredPurpose.current.set(purpose, files);
+                      }
+                    }}
+                    showIds={showIds}
+                  />
+                </>
               )}
             />
 
