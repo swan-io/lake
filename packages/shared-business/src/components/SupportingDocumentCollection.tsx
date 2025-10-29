@@ -1,4 +1,5 @@
 import { Array, Future, Option, Result } from "@swan-io/boxed";
+import { Box } from "@swan-io/lake/src/components/Box";
 import { Form } from "@swan-io/lake/src/components/Form";
 import { IconName } from "@swan-io/lake/src/components/Icon";
 import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
@@ -10,7 +11,7 @@ import { ReadOnlyFieldList } from "@swan-io/lake/src/components/ReadOnlyFieldLis
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
-import { NetworkError, Request, Response, TimeoutError, badStatusToError } from "@swan-io/request";
+import { badStatusToError, NetworkError, Request, Response, TimeoutError } from "@swan-io/request";
 import { Fragment, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
@@ -98,7 +99,7 @@ const Help = (props: HelpProps) => {
     ))
     .with({ type: "button" }, ({ label, onPress }) => (
       <LakeButton
-        mode="tertiary"
+        mode="secondary"
         size="small"
         color="gray"
         icon={props.icon ?? "question-circle-regular"}
@@ -111,6 +112,37 @@ const Help = (props: HelpProps) => {
     ))
     .exhaustive();
 };
+const getSupportLink = (language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt" | "fi") =>
+  match(language)
+    .with(
+      "fr",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22502977563933--Proof-of-registration-for-French-companies",
+    )
+    .with(
+      "it",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22537604831005--Proof-of-registration-for-Italian-companies",
+    )
+    .with(
+      "de",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22535023588509--Proof-of-registration-for-German-companies",
+    )
+    .with(
+      "es",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22544703221021--Proof-of-registration-for-Spanish-companies",
+    )
+    .with(
+      "nl",
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22543228421277--Proof-of-registration-for-Dutch-companies",
+    )
+    .otherwise(
+      () =>
+        "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
+    );
 
 export const getSupportingDocumentPurposeLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}`;
@@ -253,11 +285,23 @@ export const SupportingDocumentCollection = <Purpose extends string>({
               description={label}
               help={
                 isNotNullish(metadata) ? (
-                  <Help
-                    type="button"
-                    label={metadata.title}
-                    onPress={() => setCurrentMetadata(metadata)}
-                  />
+                  purpose === "CompanyRegistration" ? (
+                    <LakeButton
+                      size="small"
+                      mode="tertiary"
+                      icon="question-circle-regular"
+                      onPress={() => window.open(getSupportLink(locale.language))}
+                      ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                    >
+                      {t("supportingDocuments.help.howToSendAGoodDocument")}
+                    </LakeButton>
+                  ) : (
+                    <Help
+                      type="button"
+                      label={metadata.title}
+                      onPress={() => setCurrentMetadata(metadata)}
+                    />
+                  )
                 ) : (
                   match(purpose as string)
                     .with("PowerOfAttorney", () => (
@@ -276,55 +320,90 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                         onPress={() => setShowSwornStatementModal(true)}
                       />
                     ))
+                    .with("CompanyRegistration", () => (
+                      <LakeButton
+                        size="small"
+                        mode="tertiary"
+                        icon="question-circle-regular"
+                        onPress={() => window.open(getSupportLink(locale.language))}
+                        ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                      >
+                        {t("supportingDocuments.help.howToSendAGoodDocument")}
+                      </LakeButton>
+                    ))
                     .otherwise(() => null)
                 )
               }
               render={() => (
-                <FilesUploader
-                  ref={ref => {
-                    filesUploaderRefByPurpose.current[purpose] = ref;
-                  }}
-                  // Only allow uploading is the Supporting Document Collection awaits for docs
-                  // and that the specific purpose isn't already fully validated
-                  canUpload={
-                    !readonlyDocumentPurposes.includes(purpose) &&
-                    !readOnly &&
-                    status === "WaitingForDocument" &&
-                    !areAllDocumentsValidated
-                  }
-                  accept={ACCEPTED_FORMATS}
-                  maxSize={20_000_000}
-                  icon="document-regular"
-                  initialFiles={files}
-                  generateUpload={generateUpload}
-                  getUploadConfig={file => ({ fileName: file.name, purpose })}
-                  uploadFile={
-                    isNotNullish(uploadFile)
-                      ? uploadFile
-                      : ({ upload, file, onProgress }) => {
-                          const body = new FormData();
-                          upload.fields.forEach(({ key, value }) => body.append(key, value));
-                          body.append("file", file);
-                          setTimeout(() => onProgress(0.8), 100);
-                          return Request.make({
-                            url: upload.url,
-                            method: "POST",
-                            body,
-                            type: "text",
-                          }).mapOkToResult(badStatusToError);
-                        }
-                  }
-                  formatAndSizeDescription={t("supportingDocuments.documentTypes", {
-                    maxSizeMB: 20_000_000 / 1_000_000,
-                  })}
-                  onRemoveFile={readOnly ? undefined : onRemoveFile}
-                  onChange={files => {
-                    if (isRequired) {
-                      filesByRequiredPurpose.current.set(purpose, files);
+                <>
+                  <Box direction="row">
+                    {match(purpose as string)
+                      .with("PowerOfAttorney", () => (
+                        <Help
+                          type="button"
+                          icon="arrow-down-filled"
+                          label={t("supportingDocuments.help.downloadTemplate")}
+                          onPress={() => setShowPowerOfAttorneyModal(true)}
+                        />
+                      ))
+                      .with("SwornStatement", () => (
+                        <Help
+                          type="button"
+                          icon="arrow-down-filled"
+                          label={t("supportingDocuments.help.downloadTemplate")}
+                          onPress={() => setShowSwornStatementModal(true)}
+                        />
+                      ))
+                      .otherwise(() => null)}
+                  </Box>
+                  <Space height={16} />
+
+                  <FilesUploader
+                    ref={ref => {
+                      filesUploaderRefByPurpose.current[purpose] = ref;
+                    }}
+                    // Only allow uploading is the Supporting Document Collection awaits for docs
+                    // and that the specific purpose isn't already fully validated
+                    canUpload={
+                      !readonlyDocumentPurposes.includes(purpose) &&
+                      !readOnly &&
+                      status === "WaitingForDocument" &&
+                      !areAllDocumentsValidated
                     }
-                  }}
-                  showIds={showIds}
-                />
+                    accept={ACCEPTED_FORMATS}
+                    maxSize={20_000_000}
+                    icon="document-regular"
+                    initialFiles={files}
+                    generateUpload={generateUpload}
+                    getUploadConfig={file => ({ fileName: file.name, purpose })}
+                    uploadFile={
+                      isNotNullish(uploadFile)
+                        ? uploadFile
+                        : ({ upload, file, onProgress }) => {
+                            const body = new FormData();
+                            upload.fields.forEach(({ key, value }) => body.append(key, value));
+                            body.append("file", file);
+                            setTimeout(() => onProgress(0.8), 100);
+                            return Request.make({
+                              url: upload.url,
+                              method: "POST",
+                              body,
+                              type: "text",
+                            }).mapOkToResult(badStatusToError);
+                          }
+                    }
+                    formatAndSizeDescription={t("supportingDocuments.documentTypes", {
+                      maxSizeMB: 20_000_000 / 1_000_000,
+                    })}
+                    onRemoveFile={readOnly ? undefined : onRemoveFile}
+                    onChange={files => {
+                      if (isRequired) {
+                        filesByRequiredPurpose.current.set(purpose, files);
+                      }
+                    }}
+                    showIds={showIds}
+                  />
+                </>
               )}
             />
 

@@ -45,6 +45,7 @@ export const WaitingForDocument = () => {
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
+            "CompanyRegistration",
             "ProofOfIdentity",
             "SwornStatement",
             "PowerOfAttorney",
@@ -93,6 +94,7 @@ export const WaitingForDocument = () => {
 
 export const WaitingForDocumentShowIds = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
+
   return (
     <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
       <StoryPart title="Default">
@@ -102,6 +104,7 @@ export const WaitingForDocumentShowIds = () => {
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
+            "CompanyRegistration",
             "ProofOfIdentity",
             "SwornStatement",
             "PowerOfAttorney",
@@ -116,6 +119,14 @@ export const WaitingForDocumentShowIds = () => {
 
 export const WaitingForDocumentWithApprovedAndRejected = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([
+    {
+      purpose: "CompanyRegistration",
+      file: {
+        id: "id",
+        name: "CompanyRegistration.pdf",
+        statusInfo: { status: "Validated" },
+      },
+    },
     {
       purpose: "ProofOfIdentity",
       file: {
@@ -151,6 +162,7 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
+            "CompanyRegistration",
             "ProofOfIdentity",
             "SwornStatement",
             "PowerOfAttorney",
