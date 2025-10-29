@@ -4,9 +4,9 @@ import { Validator } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { isValid as isValidIban } from "iban";
 import { match } from "ts-pattern";
+import { CompanyCountryCCA3, IndividualCountryCCA3 } from "../constants/countries";
 import { ExtractedDate, formatExtractedDate } from "./date";
 import { t } from "./i18n";
-import { AccountCountry } from "./templateTranslations";
 
 const EMAIL_REGEX = /^[A-Z0-9_+.-]*[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i;
 const VAT_NUMBER_REGEX =
@@ -67,13 +67,19 @@ export const validateBooleanRequired: Validator<boolean | undefined> = value => 
 };
 
 export const validateIndividualTaxNumber =
-  (accountCountry: AccountCountry): Validator<string | undefined> =>
+  (country: IndividualCountryCCA3): Validator<string | undefined> =>
   value => {
     if (value == null || !value) {
       return;
     }
 
-    return match(accountCountry)
+    return match(country)
+      .with("BEL", () => {
+        // accept 10 digits
+        if (!/^\d{10}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
       .with("DEU", () => {
         // accept 11 digits
         if (!/^\d{11}$/.test(value)) {
@@ -86,9 +92,33 @@ export const validateIndividualTaxNumber =
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
+      .with("FIN", () => {
+        // accept 11 characters
+        if (!/^[a-zA-Z0-9]{11}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("FRA", () => {
+        // accept 13 digits
+        if (!/^\d{13}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
       .with("ITA", () => {
         // accept 16 characters
         if (!/^[a-zA-Z0-9]{16}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("NLD", () => {
+        // accept 9 digits
+        if (!/^\d{9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("PRT", () => {
+        // accept 9 digits
+        if (!/^\d{9}$/.test(value)) {
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
@@ -96,13 +126,19 @@ export const validateIndividualTaxNumber =
   };
 
 export const validateCompanyTaxNumber =
-  (accountCountry: AccountCountry): Validator<string | undefined> =>
+  (country: CompanyCountryCCA3): Validator<string | undefined> =>
   value => {
     if (value == null || !value) {
       return;
     }
 
-    return match(accountCountry)
+    return match(country)
+      .with("BEL", () => {
+        // accept 10 to 12 digits
+        if (!/^\d{10,12}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
       .with("DEU", () => {
         // accept 10 to 13 digits
         if (!/^\d{10,13}$/.test(value)) {
@@ -115,9 +151,33 @@ export const validateCompanyTaxNumber =
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })
+      .with("FIN", () => {
+        // accept 8 to 9 characters
+        if (!/^[a-zA-Z0-9]{8,9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("FRA", () => {
+        // accept 9 digits
+        if (!/^\d{9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
       .with("ITA", () => {
         // accept 11 characters
         if (!/^[a-zA-Z0-9]{11}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("NLD", () => {
+        // accept 9 digits
+        if (!/^\d{9}$/.test(value)) {
+          return t("common.form.invalidTaxIdentificationNumber");
+        }
+      })
+      .with("PRT", () => {
+        // accept 9 digits
+        if (!/^\d{9}$/.test(value)) {
           return t("common.form.invalidTaxIdentificationNumber");
         }
       })

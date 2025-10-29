@@ -24,7 +24,7 @@ export const TaxIdentificationNumber = () => {
         <StoryPart title="German tax ID">
           <TaxIdentificationNumberInput
             required={true}
-            accountCountry={"DEU"}
+            country={"DEU"}
             isCompany={true}
             valid={false}
             error={undefined}
@@ -36,7 +36,7 @@ export const TaxIdentificationNumber = () => {
         <StoryPart title="Spanish tax ID">
           <TaxIdentificationNumberInput
             required={true}
-            accountCountry={"ESP"}
+            country={"ESP"}
             isCompany={true}
             valid={false}
             error={undefined}
@@ -48,7 +48,7 @@ export const TaxIdentificationNumber = () => {
         <StoryPart title="Italian tax ID">
           <TaxIdentificationNumberInput
             required={true}
-            accountCountry={"ITA"}
+            country={"ITA"}
             isCompany={false}
             valid={false}
             error={undefined}
