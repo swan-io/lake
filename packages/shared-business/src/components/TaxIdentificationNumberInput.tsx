@@ -5,9 +5,9 @@ import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { Ref } from "react";
 import { TextInput } from "react-native";
+import { CompanyCountryCCA3, IndividualCountryCCA3 } from "../constants/countries";
 import { t } from "../utils/i18n";
 import {
-  AccountCountry,
   getCompanyTaxNumberHelp,
   getCompanyTaxNumberPlaceholder,
   getIndividualTaxNumberHelp,
@@ -23,7 +23,7 @@ type Props = {
   disabled?: boolean;
   onChange: (value: string) => void;
   onBlur?: () => void;
-  accountCountry: AccountCountry;
+  country: IndividualCountryCCA3 | CompanyCountryCCA3;
   isCompany: boolean;
   required?: boolean;
   label?: string;
@@ -38,15 +38,15 @@ export const TaxIdentificationNumberInput = ({
   disabled,
   onChange,
   onBlur,
-  accountCountry,
+  country,
   isCompany,
   required,
   label = t("taxIdentificationNumber.label"),
   placeholder = isCompany
-    ? getCompanyTaxNumberPlaceholder(accountCountry)
-    : getIndividualTaxNumberPlaceholder(accountCountry),
+    ? getCompanyTaxNumberPlaceholder(country)
+    : getIndividualTaxNumberPlaceholder(country),
 }: Props) => {
-  const tooltipContents = getTaxNumberTooltip(accountCountry);
+  const tooltipContents = getTaxNumberTooltip(country);
 
   return (
     <LakeLabel
@@ -57,7 +57,7 @@ export const TaxIdentificationNumberInput = ({
           <LakeTooltip
             content={tooltipContents}
             placement="right"
-            width={accountCountry === "DEU" ? 800 : undefined}
+            width={country === "DEU" ? 800 : undefined}
           >
             <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
           </LakeTooltip>
@@ -68,11 +68,7 @@ export const TaxIdentificationNumberInput = ({
           id={id}
           ref={ref}
           placeholder={placeholder}
-          help={
-            isCompany
-              ? getCompanyTaxNumberHelp(accountCountry)
-              : getIndividualTaxNumberHelp(accountCountry)
-          }
+          help={isCompany ? getCompanyTaxNumberHelp(country) : getIndividualTaxNumberHelp(country)}
           value={value}
           error={error}
           valid={valid}
