@@ -283,60 +283,53 @@ export const SupportingDocumentCollection = <Purpose extends string>({
             <LakeLabel
               label={purposeLabelOverrides?.[purpose] ?? getSupportingDocumentPurposeLabel(purpose)}
               description={label}
-              help={
-                isNotNullish(metadata) ? (
-                  purpose === "CompanyRegistration" ? (
-                    <LakeButton
-                      size="small"
-                      mode="tertiary"
-                      icon="question-circle-regular"
-                      onPress={() => window.open(getSupportLink(locale.language))}
-                      ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
-                    >
-                      {t("supportingDocuments.help.howToSendAGoodDocument")}
-                    </LakeButton>
-                  ) : (
-                    <Help
-                      type="button"
-                      label={metadata.title}
-                      onPress={() => setCurrentMetadata(metadata)}
-                    />
-                  )
-                ) : (
-                  match(purpose as string)
-                    .with("PowerOfAttorney", () => (
-                      <Help
-                        type="button"
-                        icon="arrow-down-filled"
-                        label={t("supportingDocuments.help.downloadTemplate")}
-                        onPress={() => setShowPowerOfAttorneyModal(true)}
-                      />
-                    ))
-                    .with("SwornStatement", () => (
-                      <Help
-                        type="button"
-                        icon="arrow-down-filled"
-                        label={t("supportingDocuments.help.downloadTemplate")}
-                        onPress={() => setShowSwornStatementModal(true)}
-                      />
-                    ))
-                    .with("CompanyRegistration", () => (
-                      <LakeButton
-                        size="small"
-                        mode="tertiary"
-                        icon="question-circle-regular"
-                        onPress={() => window.open(getSupportLink(locale.language))}
-                        ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
-                      >
-                        {t("supportingDocuments.help.howToSendAGoodDocument")}
-                      </LakeButton>
-                    ))
-                    .otherwise(() => null)
-                )
-              }
               render={() => (
                 <>
                   <Box direction="row">
+                    <Box direction="row">
+                      {isNotNullish(metadata) ? (
+                        purpose === "CompanyRegistration" ? (
+                          <>
+                            <LakeButton
+                              size="small"
+                              mode="secondary"
+                              icon="question-circle-regular"
+                              onPress={() => window.open(getSupportLink(locale.language))}
+                              ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                            >
+                              {t("supportingDocuments.help.howToSendAGoodDocument")}
+                            </LakeButton>
+
+                            <Space width={8} />
+                          </>
+                        ) : (
+                          <>
+                            <Help
+                              type="button"
+                              label={metadata.title}
+                              onPress={() => setCurrentMetadata(metadata)}
+                            />
+
+                            <Space width={8} />
+                          </>
+                        )
+                      ) : (
+                        match(purpose as string)
+                          .with("CompanyRegistration", () => (
+                            <LakeButton
+                              size="small"
+                              mode="secondary"
+                              icon="question-circle-regular"
+                              onPress={() => window.open(getSupportLink(locale.language))}
+                              ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                            >
+                              {t("supportingDocuments.help.howToSendAGoodDocument")}
+                            </LakeButton>
+                          ))
+                          .otherwise(() => null)
+                      )}
+                    </Box>
+
                     {match(purpose as string)
                       .with("PowerOfAttorney", () => (
                         <Help
