@@ -1871,6 +1871,11 @@ export const companyCountries = [
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
 
+export type TaxNumberValidation = {
+  individual: Partial<Record<IndividualCountryCCA3, RegExp>>;
+  company: Partial<Record<CompanyCountryCCA3, RegExp>>;
+};
+
 // Google API accepts only 5 country codes
 export const countriesWithMultipleCCA3: Partial<Record<CountryCCA3, CountryCCA3[]>> = {
   FRA: ["FRA", "GUF", "REU", "MTQ", "GLP"], // France, French Guiana, Réunion, Martinique, Guadeloupe
