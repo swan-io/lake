@@ -1,10 +1,13 @@
-import { noop } from "@swan-io/lake/src/utils/function";
 import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { Validator } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { isValid as isValidIban } from "iban";
 import { match } from "ts-pattern";
-import { CompanyCountryCCA3, IndividualCountryCCA3 } from "../constants/countries";
+import {
+  CompanyCountryCCA3,
+  IndividualCountryCCA3,
+  TaxNumberValidation,
+} from "../constants/countries";
 import { ExtractedDate, formatExtractedDate } from "./date";
 import { t } from "./i18n";
 
@@ -40,6 +43,77 @@ const VAT_NUMBER_REGEX =
 // (SI)?[0-9]{8} |                               # Slovenia
 // (SK)?[0-9]{10}                                # Slovakia
 
+const TAX_NUMBER_REGEX: TaxNumberValidation = {
+  individual: {
+    BEL: {
+      pattern: /^\d{10}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10" }),
+    },
+    DEU: {
+      pattern: /^\d{11}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "11" }),
+    },
+    ESP: {
+      pattern: /^[a-zA-Z0-9]{9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "9" }),
+    },
+    FIN: {
+      pattern: /^[a-zA-Z0-9]{11}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "11" }),
+    },
+    FRA: {
+      pattern: /^\d{13}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "13" }),
+    },
+    ITA: {
+      pattern: /^[a-zA-Z0-9]{16}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "16" }),
+    },
+    NLD: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    PRT: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+  },
+  company: {
+    BEL: {
+      pattern: /^\d{10,12}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10-12" }),
+    },
+    DEU: {
+      pattern: /^\d{10,13}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10-13" }),
+    },
+    ESP: {
+      pattern: /^[a-zA-Z0-9]{9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "9" }),
+    },
+    FIN: {
+      pattern: /^[a-zA-Z0-9]{8,9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "8-9" }),
+    },
+    FRA: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    ITA: {
+      pattern: /^\d{11}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "11" }),
+    },
+    NLD: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    PRT: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+  },
+};
+
 export const isValidVatNumber = (maybeVat: string) => {
   return VAT_NUMBER_REGEX.test(maybeVat);
 };
@@ -73,56 +147,10 @@ export const validateIndividualTaxNumber =
       return;
     }
 
-    return match(country)
-      .with("BEL", () => {
-        // accept 10 digits
-        if (!/^\d{10}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("DEU", () => {
-        // accept 11 digits
-        if (!/^\d{11}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("ESP", () => {
-        // accept 9 characters
-        if (!/^[a-zA-Z0-9]{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("FIN", () => {
-        // accept 11 characters
-        if (!/^[a-zA-Z0-9]{11}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("FRA", () => {
-        // accept 13 digits
-        if (!/^\d{13}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("ITA", () => {
-        // accept 16 characters
-        if (!/^[a-zA-Z0-9]{16}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("NLD", () => {
-        // accept 9 digits
-        if (!/^\d{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("PRT", () => {
-        // accept 9 digits
-        if (!/^\d{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .otherwise(noop);
+    const rule = TAX_NUMBER_REGEX.individual[country];
+    if (rule && !rule.pattern.test(value)) {
+      return t("common.form.invalidTaxIdentificationNumber");
+    }
   };
 
 export const validateCompanyTaxNumber =
@@ -132,56 +160,10 @@ export const validateCompanyTaxNumber =
       return;
     }
 
-    return match(country)
-      .with("BEL", () => {
-        // accept 10 to 12 digits
-        if (!/^\d{10,12}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("DEU", () => {
-        // accept 10 to 13 digits
-        if (!/^\d{10,13}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("ESP", () => {
-        // accept 9 characters
-        if (!/^[a-zA-Z0-9]{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("FIN", () => {
-        // accept 8 to 9 characters
-        if (!/^[a-zA-Z0-9]{8,9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("FRA", () => {
-        // accept 9 digits
-        if (!/^\d{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("ITA", () => {
-        // accept 11 digits
-        if (!/^\d{11}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("NLD", () => {
-        // accept 9 digits
-        if (!/^\d{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .with("PRT", () => {
-        // accept 9 digits
-        if (!/^\d{9}$/.test(value)) {
-          return t("common.form.invalidTaxIdentificationNumber");
-        }
-      })
-      .otherwise(noop);
+    const rule = TAX_NUMBER_REGEX.company[country];
+    if (rule && !rule.pattern.test(value)) {
+      return t("common.form.invalidTaxIdentificationNumber");
+    }
   };
 
 export { printFormat as printIbanFormat } from "iban";
@@ -219,3 +201,49 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
     return t("validation.birthdateCannotBeFuture");
   }
 };
+
+/*
+ * Translation helpers for tax validation
+ */
+
+export const getIndividualTaxNumberPlaceholder = (
+  country: IndividualCountryCCA3 | CompanyCountryCCA3,
+) =>
+  match(country)
+    .with(
+      "DEU",
+      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steueridentifikationsnummer)`,
+    )
+    .with(
+      "ESP",
+      () =>
+        `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
+    )
+    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
+    .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
+
+export const getCompanyTaxNumberPlaceholder = (
+  country: IndividualCountryCCA3 | CompanyCountryCCA3,
+) =>
+  match(country)
+    .with("DEU", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steuer-Nummer)`)
+    .with(
+      "ESP",
+      () =>
+        `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
+    )
+    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
+    .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
+
+export const getTaxNumberTooltip = (country: IndividualCountryCCA3 | CompanyCountryCCA3) =>
+  match(country)
+    .with("DEU", () => t("common.form.taxIdentificationNumber.tooltip.deu"))
+    .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
+    .with("ITA", () => t("common.form.taxIdentificationNumber.tooltip.ita"))
+    .otherwise(() => undefined);
+
+export const getCompanyTaxNumberHelp = (country: CompanyCountryCCA3) =>
+  TAX_NUMBER_REGEX.company[country]?.message ?? "";
+
+export const getIndividualTaxNumberHelp = (country: IndividualCountryCCA3) =>
+  TAX_NUMBER_REGEX.individual[country]?.message ?? "";

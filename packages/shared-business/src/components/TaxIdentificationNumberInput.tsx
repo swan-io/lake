@@ -13,7 +13,7 @@ import {
   getIndividualTaxNumberHelp,
   getIndividualTaxNumberPlaceholder,
   getTaxNumberTooltip,
-} from "../utils/templateTranslations";
+} from "../utils/validation";
 
 type Props = {
   ref?: Ref<TextInput>;
