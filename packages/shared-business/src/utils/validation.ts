@@ -15,29 +15,6 @@ const EMAIL_REGEX = /^[A-Z0-9_+.-]*[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$
 const VAT_NUMBER_REGEX =
   /^((AT)?U[0-9]{8}|(BE)?0[0-9]{9}|(BG)?[0-9]{9,10}|(CY)?[0-9]{8}L|(CZ)?[0-9]{8,10}|(DE)?[0-9]{9}|(DK)?[0-9]{8}|(EE)?[0-9]{9}|(EL|GR)?[0-9]{9}|(ES)?[0-9A-Z][0-9]{7}[0-9A-Z]|(FI)?[0-9]{8}|(FR)?[0-9A-Z]{2}[0-9]{9}|(GB)?([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})|(HU)?[0-9]{8}|(IE)?[0-9]S[0-9]{5}L|(IT)?[0-9]{11}|(LT)?([0-9]{9}|[0-9]{12})|(LU)?[0-9]{8}|(LV)?[0-9]{11}|(MT)?[0-9]{8}|(NL)?[0-9]{9}B[0-9]{2}|(PL)?[0-9]{10}|(PT)?[0-9]{9}|(RO)?[0-9]{2,10}|(SE)?[0-9]{12}|(SI)?[0-9]{8}|(SK)?[0-9]{10})$/;
 
-const TAX_NUMBER_REGEX: TaxNumberValidation = {
-  individual: {
-    BEL: /^\d{10}$/, // accept 10 digits
-    DEU: /^\d{11}$/, // accept 11 digits
-    ESP: /^[a-zA-Z0-9]{9}$/, // accept 9 characters
-    FIN: /^[a-zA-Z0-9]{11}$/, // accept 11 characters
-    FRA: /^\d{13}$/, // accept 13 digits
-    ITA: /^[a-zA-Z0-9]{16}$/, // accept 16 characters
-    NLD: /^\d{9}$/, // accept 9 digits
-    PRT: /^\d{9}$/, // accept 9 digits
-  },
-  company: {
-    BEL: /^\d{10,12}$/, // accept 10 to 12 digits
-    DEU: /^\d{10,13}$/, // accept 10 to 13 digits
-    ESP: /^[a-zA-Z0-9]{9}$/, // accept 9 characters
-    FIN: /^[a-zA-Z0-9]{8,9}$/, // accept 8 to 9 characters
-    FRA: /^\d{9}$/, // accept 9 digits
-    ITA: /^\d{11}$/, // accept 11 digits
-    NLD: /^\d{9}$/, // accept 9 digits
-    PRT: /^\d{9}$/, // accept 9 digits
-  },
-};
-
 // (AT)?U[0-9]{8} |                              # Austria
 // (BE)?0[0-9]{9} |                              # Belgium
 // (BG)?[0-9]{9,10} |                            # Bulgaria
@@ -65,6 +42,77 @@ const TAX_NUMBER_REGEX: TaxNumberValidation = {
 // (SE)?[0-9]{12} |                              # Sweden
 // (SI)?[0-9]{8} |                               # Slovenia
 // (SK)?[0-9]{10}                                # Slovakia
+
+const TAX_NUMBER_REGEX: TaxNumberValidation = {
+  individual: {
+    BEL: {
+      pattern: /^\d{10}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10" }),
+    },
+    DEU: {
+      pattern: /^\d{11}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "11" }),
+    },
+    ESP: {
+      pattern: /^[a-zA-Z0-9]{9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "9" }),
+    },
+    FIN: {
+      pattern: /^[a-zA-Z0-9]{11}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "11" }),
+    },
+    FRA: {
+      pattern: /^\d{13}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "13" }),
+    },
+    ITA: {
+      pattern: /^[a-zA-Z0-9]{16}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "16" }),
+    },
+    NLD: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    PRT: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+  },
+  company: {
+    BEL: {
+      pattern: /^\d{10,12}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10-12" }),
+    },
+    DEU: {
+      pattern: /^\d{10,13}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "10-13" }),
+    },
+    ESP: {
+      pattern: /^[a-zA-Z0-9]{9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "9" }),
+    },
+    FIN: {
+      pattern: /^[a-zA-Z0-9]{8,9}$/,
+      message: t("common.form.help.nbCharacters", { nbCharacters: "8-9" }),
+    },
+    FRA: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    ITA: {
+      pattern: /^\d{11}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "11" }),
+    },
+    NLD: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+    PRT: {
+      pattern: /^\d{9}$/,
+      message: t("common.form.help.nbDigits", { nbDigits: "9" }),
+    },
+  },
+};
 
 export const isValidVatNumber = (maybeVat: string) => {
   return VAT_NUMBER_REGEX.test(maybeVat);
@@ -100,7 +148,7 @@ export const validateIndividualTaxNumber =
     }
 
     const rule = TAX_NUMBER_REGEX.individual[country];
-    if (rule && !rule.test(value)) {
+    if (rule && !rule.pattern.test(value)) {
       return t("common.form.invalidTaxIdentificationNumber");
     }
   };
@@ -113,7 +161,7 @@ export const validateCompanyTaxNumber =
     }
 
     const rule = TAX_NUMBER_REGEX.company[country];
-    if (rule && !rule.test(value)) {
+    if (rule && !rule.pattern.test(value)) {
       return t("common.form.invalidTaxIdentificationNumber");
     }
   };
@@ -194,26 +242,8 @@ export const getTaxNumberTooltip = (country: IndividualCountryCCA3 | CompanyCoun
     .with("ITA", () => t("common.form.taxIdentificationNumber.tooltip.ita"))
     .otherwise(() => undefined);
 
-export const getCompanyTaxNumberHelp = (country: IndividualCountryCCA3 | CompanyCountryCCA3) =>
-  match(country)
-    .with("BEL", () => t("common.form.help.nbDigits", { nbDigits: "10-12" }))
-    .with("DEU", () => t("common.form.help.nbDigits", { nbDigits: "10-13" }))
-    .with("FIN", () => t("common.form.help.nbCharacters", { nbCharacters: "8-9" }))
-    .with("FRA", () => t("common.form.help.nbDigits", { nbDigits: "9" }))
-    .with("ESP", () => t("common.form.help.nbCharacters", { nbCharacters: "9" }))
-    .with("ITA", () => t("common.form.help.nbDigits", { nbDigits: "11" }))
-    .with("NLD", () => t("common.form.help.nbDigits", { nbDigits: "9" }))
-    .with("PRT", () => t("common.form.help.nbDigits", { nbDigits: "9" }))
-    .otherwise(() => "");
+export const getCompanyTaxNumberHelp = (country: CompanyCountryCCA3) =>
+  TAX_NUMBER_REGEX.company[country]?.message ?? "";
 
-export const getIndividualTaxNumberHelp = (country: IndividualCountryCCA3 | CompanyCountryCCA3) =>
-  match(country)
-    .with("BEL", () => t("common.form.help.nbDigits", { nbDigits: "10" }))
-    .with("DEU", () => t("common.form.help.nbDigits", { nbDigits: "11" }))
-    .with("ESP", () => t("common.form.help.nbCharacters", { nbCharacters: "9" }))
-    .with("FIN", () => t("common.form.help.nbCharacters", { nbCharacters: "11" }))
-    .with("FRA", () => t("common.form.help.nbDigits", { nbDigits: "13" }))
-    .with("ITA", () => t("common.form.help.nbCharacters", { nbCharacters: "16" }))
-    .with("NLD", () => t("common.form.help.nbDigits", { nbDigits: "9" }))
-    .with("PRT", () => t("common.form.help.nbDigits", { nbDigits: "9" }))
-    .otherwise(() => "");
+export const getIndividualTaxNumberHelp = (country: IndividualCountryCCA3) =>
+  TAX_NUMBER_REGEX.individual[country]?.message ?? "";

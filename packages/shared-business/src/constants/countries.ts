@@ -1871,9 +1871,14 @@ export const companyCountries = [
 
 export type CompanyCountryCCA3 = (typeof companyCountries)[number];
 
+type TaxNumberValidationRule = {
+  pattern: RegExp;
+  message: string;
+};
+
 export type TaxNumberValidation = {
-  individual: Partial<Record<IndividualCountryCCA3, RegExp>>;
-  company: Partial<Record<CompanyCountryCCA3, RegExp>>;
+  individual: Partial<Record<IndividualCountryCCA3, TaxNumberValidationRule>>;
+  company: Partial<Record<CompanyCountryCCA3, TaxNumberValidationRule>>;
 };
 
 // Google API accepts only 5 country codes

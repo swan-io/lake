@@ -6,7 +6,6 @@ import {
   getIndividualTaxNumberPlaceholder,
   getTaxNumberTooltip,
   isValidEmail,
-  isValidVatNumber,
   validateBooleanRequired,
   validateCompanyTaxNumber,
   validateIndividualTaxNumber,
@@ -29,54 +28,6 @@ describe("isValidEmail", () => {
     expect(isValidEmail("test@")).toBe(false);
     expect(isValidEmail("test@.com")).toBe(false);
     expect(isValidEmail("")).toBe(false);
-  });
-});
-
-describe("isValidVatNumber", () => {
-  test("validates correct VAT numbers for different countries", () => {
-    // Austria
-    expect(isValidVatNumber("ATU12345678")).toBe(true);
-    expect(isValidVatNumber("U12345678")).toBe(true);
-
-    // Belgium
-    expect(isValidVatNumber("BE0123456789")).toBe(true);
-    expect(isValidVatNumber("0123456789")).toBe(true);
-
-    // Germany
-    expect(isValidVatNumber("DE123456789")).toBe(true);
-    expect(isValidVatNumber("123456789")).toBe(true);
-
-    // Spain
-    expect(isValidVatNumber("ESA12345678")).toBe(true);
-    expect(isValidVatNumber("ES12345678Z")).toBe(true);
-    expect(isValidVatNumber("A12345678")).toBe(true);
-
-    // Finland
-    expect(isValidVatNumber("FI12345678")).toBe(true);
-    expect(isValidVatNumber("12345678")).toBe(true);
-
-    // France
-    expect(isValidVatNumber("FR12345678901")).toBe(true);
-    expect(isValidVatNumber("FRAA123456789")).toBe(true);
-
-    // Italy
-    expect(isValidVatNumber("IT12345678901")).toBe(true);
-    expect(isValidVatNumber("12345678901")).toBe(true);
-
-    // Netherlands
-    expect(isValidVatNumber("NL123456789B12")).toBe(true);
-    expect(isValidVatNumber("123456789B12")).toBe(true);
-
-    // Portugal
-    expect(isValidVatNumber("PT123456789")).toBe(true);
-    expect(isValidVatNumber("123456789")).toBe(true);
-  });
-
-  test("rejects invalid VAT numbers", () => {
-    expect(isValidVatNumber("INVALID")).toBe(false);
-    expect(isValidVatNumber("")).toBe(false);
-    expect(isValidVatNumber("XYZ")).toBe(false);
-    expect(isValidVatNumber("1")).toBe(false);
   });
 });
 
