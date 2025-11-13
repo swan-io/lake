@@ -384,7 +384,7 @@
   "transactionStatement.debtor.bankIdentifier": "Debtor's bank identifier",
   "transactionStatement.debtor.bankName": "Debtor’s bank name",
   "transactionStatement.debtor.name": "Debtor’s name",
-  "transactionStatement.footer": "SWAN is a simplified joint-stock company (SAS) registered with the Bobigny Trade and Companies Register under number 853 827 103, with a capital of 16,999.66 Euros, VAT number FR90853827103 and whose registered office is located at 95 Avenue du Président Wilson, 93100 Montreuil, FRANCE.\nIn its capacity as an Electronic Money institution offering payment services under French law approved by the ACPR, SWAN is registered with the latter under number 17328.",
+  "transactionStatement.footer": "SWAN is a simplified joint-stock company (SAS) registered with the Bobigny Trade and Companies Register under number 853 827 103, with a capital of 16,999.66 Euros, VAT number FR90853827103 and whose registered office is located at 91 rue du Faubourg Saint-Honoré, 75008 Paris, FRANCE.\nIn its capacity as an Electronic Money institution offering payment services under French law approved by the ACPR, SWAN is registered with the latter under number 17328.",
   "transactionStatement.generationDate": "Generated on: {date}",
   "transactionStatement.generationInfos": "This document is confirmation of your transaction request. It doesn't constitute proof of transaction execution. Your transaction will be executed after passing a mandatory verification process.",
   "transactionStatement.information.amount": "Amount",

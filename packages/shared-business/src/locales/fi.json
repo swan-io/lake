@@ -384,7 +384,7 @@
   "transactionStatement.debtor.bankIdentifier": "Velallisen pankkitunnus",
   "transactionStatement.debtor.bankName": "Velallisen pankin nimi",
   "transactionStatement.debtor.name": "Velallisen nimi",
-  "transactionStatement.footer": "SWAN on ranskalainen osakeyhtiö (SAS), joka on rekisteröity Bobigny:n kaupparekisteriin numerolla 853 827 103, pääomanaan 16 999,66 euroa, ALV-numero FR90853827103 ja kotipaikkanaan 95 Avenue du Président Wilson, 93100 Montreuil, RANSKA.\nSWAN toimii elektronisen rahan liikkeellelaskijana, tarjoten maksupalveluita Ranskan lain mukaisesti, ja on hyväksytty ACPR:n toimesta rekisteröitynä numerolla 17328.",
+  "transactionStatement.footer": "SWAN on ranskalainen osakeyhtiö (SAS), joka on rekisteröity Bobigny:n kaupparekisteriin numerolla 853 827 103, pääomanaan 16 999,66 euroa, ALV-numero FR90853827103 ja kotipaikkanaan 91 rue du Faubourg Saint-Honoré, 75008 Paris, RANSKA.\nSWAN toimii elektronisen rahan liikkeellelaskijana, tarjoten maksupalveluita Ranskan lain mukaisesti, ja on hyväksytty ACPR:n toimesta rekisteröitynä numerolla 17328.",
   "transactionStatement.generationDate": "Luotu: {date}",
   "transactionStatement.generationInfos": "Tämä asiakirja on vahvistus maksupyynnöstänne. Se ei ole kuitti tehdystä maksusuorituksesta. Maksusuoritus toteutetaan pakollisen vahvistusprosessin jälkeen.",
   "transactionStatement.information.amount": "Summa",
