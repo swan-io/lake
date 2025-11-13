@@ -238,7 +238,7 @@ export const AccountStatementV1 = ({
           </Box>
           <Box direction="column" alignItems="end">
             <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
-            <Text style={styles.text}>{"support@swan.io"}</Text>
+            <Text style={styles.text}>{"support.swan.io"}</Text>
           </Box>
         </Box>
         <Space height={24} />

@@ -384,7 +384,7 @@
   "transactionStatement.debtor.bankIdentifier": "Bankleitzahl des Schuldners",
   "transactionStatement.debtor.bankName": "Name der Bank des Schuldners",
   "transactionStatement.debtor.name": "Name des Schuldners",
-  "transactionStatement.footer": "SWAN ist eine vereinfachte Aktiengesellschaft (SAS), eingetragen im Handelsregister von Bobigny unter der Nummer 853 827 103, mit einem Kapital von 16.999,66 Euro, USt-IdNr. FR90853827103 und Firmensitz in 95 Avenue du Président Wilson, 93100 Montreuil, FRANKREICH.\nAls E-Geld-Institut, das Zahlungsdienstleistungen gemäß französischem Recht anbietet und von der ACPR genehmigt wurde, ist SWAN unter der Nummer 17328 bei dieser registriert.",
+  "transactionStatement.footer": "SWAN ist eine vereinfachte Aktiengesellschaft (SAS), eingetragen im Handelsregister von Bobigny unter der Nummer 853 827 103, mit einem Kapital von 16.999,66 Euro, USt-IdNr. FR90853827103 und Firmensitz in 91 rue du Faubourg Saint-Honoré, 75008 Paris, FRANKREICH.\nAls E-Geld-Institut, das Zahlungsdienstleistungen gemäß französischem Recht anbietet und von der ACPR genehmigt wurde, ist SWAN unter der Nummer 17328 bei dieser registriert.",
   "transactionStatement.generationDate": "Generiert am: {date}",
   "transactionStatement.generationInfos": "Dieses Dokument bestätigt Ihren Transaktionsantrag. Es stellt keinen Nachweis der Transaktionsausführung dar. Ihre Transaktion wird nach Bestehen eines obligatorischen Verifizierungsprozesses ausgeführt.",
   "transactionStatement.information.amount": "Betrag",
