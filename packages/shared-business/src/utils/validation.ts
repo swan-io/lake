@@ -122,6 +122,10 @@ export const isValidEmail = (maybeEmail: string) => {
   return EMAIL_REGEX.test(maybeEmail);
 };
 
+export const sanitizeDecimal = (value: string): string => {
+  return value.replace(/ /g, "").replace(/,/g, ".");
+};
+
 export const validateNullableRequired: Validator<string | undefined> = value => {
   if (value == null || !value) {
     return t("error.requiredField");

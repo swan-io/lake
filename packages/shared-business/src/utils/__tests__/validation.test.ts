@@ -6,6 +6,7 @@ import {
   getIndividualTaxNumberPlaceholder,
   getTaxNumberTooltip,
   isValidEmail,
+  sanitizeDecimal,
   validateBooleanRequired,
   validateCompanyTaxNumber,
   validateIndividualTaxNumber,
@@ -365,5 +366,27 @@ describe("Tax number helper functions", () => {
       expect(getCompanyTaxNumberHelp("NLD")).toBeTypeOf("string");
       expect(getCompanyTaxNumberHelp("PRT")).toBeTypeOf("string");
     });
+  });
+});
+
+describe("sanitizeDecimal", () => {
+  test("removes spaces from decimal input", () => {
+    expect(sanitizeDecimal("1 000")).toBe("1000");
+  });
+
+  test("handles multiple spaces", () => {
+    expect(sanitizeDecimal("1 000 000")).toBe("1000000");
+  });
+
+  test("replaces comma with dot for decimal separator", () => {
+    expect(sanitizeDecimal("10,5")).toBe("10.5");
+  });
+
+  test("removes spaces and replaces comma with dot", () => {
+    expect(sanitizeDecimal("1 234,56")).toBe("1234.56");
+  });
+
+  test("returns unchanged string when no spaces or commas", () => {
+    expect(sanitizeDecimal("1234.56")).toBe("1234.56");
   });
 });
