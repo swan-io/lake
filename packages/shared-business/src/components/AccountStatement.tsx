@@ -335,11 +335,6 @@ export const AccountStatementV1 = ({
           </Box>
         </Box>
       </Box>
-
-      <Box>
-        <Separator space={24} />
-        <Text style={styles.footer}>{t("transactionStatement.footer")}</Text>
-      </Box>
     </Box>
   );
 };
