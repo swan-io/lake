@@ -24,7 +24,7 @@ const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
 const styles = StyleSheet.create({
   container: {
     width: 793,
-    padding: 56,
+    padding: 40,
   },
   partnershipText: {
     ...getTextStyle("sans", 14),
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   textColumn: {
-    paddingVertical: spacings[8],
-    ...getTextStyle("sans", 13),
+    paddingVertical: spacings[4],
+    ...getTextStyle("sans", 10),
   },
   text: {
     ...getTextStyle("sans", 14),
