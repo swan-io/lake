@@ -68,13 +68,13 @@ describe("validateIndividualTaxNumber", () => {
   describe("BEL (Belgium)", () => {
     const validator = validateIndividualTaxNumber("BEL");
 
-    test("accepts valid 10-digit tax numbers", () => {
-      expect(validator("1234567890")).toBeUndefined();
+    test("accepts valid 11-digit tax numbers", () => {
+      expect(validator("12345678901")).toBeUndefined();
     });
 
     test("rejects invalid formats", () => {
       expect(validator("123456789")).toBeDefined(); // 9 digits
-      expect(validator("12345678901")).toBeDefined(); // 11 digits
+      expect(validator("123456789012")).toBeDefined(); // 12 digits
       expect(validator("123456789A")).toBeDefined(); // contains letter
     });
 
