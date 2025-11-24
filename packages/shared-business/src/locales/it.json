@@ -384,7 +384,7 @@
   "transactionStatement.debtor.bankIdentifier": "Identificativo bancario del debitore",
   "transactionStatement.debtor.bankName": "Nome della banca del debitore",
   "transactionStatement.debtor.name": "Nome del debitore",
-  "transactionStatement.footer": "SWAN è una società per azioni semplificata (SAS) registrata presso il Registro delle imprese di Bobigny con il numero 853 827 103, con un capitale di 16.999,66 euro, partita IVA FR90853827103 e sede legale in 91 rue du Faubourg Saint-Honoré, 75008 Paris, FRANCIA.\nIn qualità di istituto di moneta elettronica che offre servizi di pagamento ai sensi della legge francese approvata dall'ACPR, SWAN è registrata presso quest'ultima con il numero 17328.",
+  "common.statement.footer": "SWAN è una società per azioni semplificata (SAS) registrata presso il Registro delle imprese di Bobigny con il numero 853 827 103, con un capitale di 16.999,66 euro, partita IVA FR90853827103 e sede legale in 91 rue du Faubourg Saint-Honoré, 75008 Paris, FRANCIA.\nIn qualità di istituto di moneta elettronica che offre servizi di pagamento ai sensi della legge francese approvata dall'ACPR, SWAN è registrata presso quest'ultima con il numero 17328.",
   "transactionStatement.generationDate": "Generato il: {date}",
   "transactionStatement.generationInfos": "Questo documento è la conferma della tua richiesta di transazione. Non costituisce prova dell'esecuzione della transazione. La tua transazione verrà eseguita dopo aver superato un obbligatorio processo di verifica.",
   "transactionStatement.information.amount": "Importo",

@@ -4,24 +4,17 @@ import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Stack } from "@swan-io/lake/src/components/Stack";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import { colors, fonts, primaryFontStyle } from "@swan-io/lake/src/constants/design";
+import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import IBAN from "iban";
 import { CSSProperties } from "react";
-import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { formatCurrencyIso, t } from "../utils/i18n";
+import { getTextStyle } from "../utils/style";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
-
-const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
-  color: colors.gray[900],
-  fontSize,
-  lineHeight: fontSize * 1.25,
-  fontWeight: "400",
-});
 
 const styles = StyleSheet.create({
   container: {
@@ -347,7 +340,7 @@ export const TransactionStatementV1 = ({
         .otherwise(() => null)}
 
       <Separator space={24} />
-      <Text style={styles.footer}>{t("transactionStatement.footer")}</Text>
+      <Text style={styles.footer}>{t("common.statement.footer")}</Text>
     </View>
   );
 };

@@ -5,30 +5,16 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartnerAccentColor";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
-import {
-  colors,
-  fonts,
-  invariantColors,
-  primaryFontStyle,
-  radii,
-  spacings,
-} from "@swan-io/lake/src/constants/design";
+import { colors, invariantColors, radii, spacings } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
-import { StyleSheet, Text, TextStyle, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { match } from "ts-pattern";
 import { t } from "../utils/i18n";
+import { getTextStyle } from "../utils/style";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
-
-const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
-  color: colors.gray[900],
-  fontSize,
-  lineHeight: fontSize * 1.25,
-  fontWeight: "400",
-});
 
 const styles = StyleSheet.create({
   container: {

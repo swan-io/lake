@@ -1,39 +1,19 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import { colors, fonts, primaryFontStyle, spacings } from "@swan-io/lake/src/constants/design";
-import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
-import { CSSProperties } from "react";
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle, ViewStyle } from "react-native";
+import { colors, spacings } from "@swan-io/lake/src/constants/design";
+import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
+import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
 import { formatCurrencyIso, t } from "../utils/i18n";
-
-const LOGO_MAX_HEIGHT = 24;
-const LOGO_MAX_WIDTH = 150;
-
-const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
-  color: colors.gray[900],
-  fontSize,
-  lineHeight: fontSize * 1.25,
-  fontWeight: "400",
-});
+import { getTextStyle } from "../utils/style";
+import { AccountStatementFooter } from "./AccountStatementFooter";
+import { AccountStatementHeader } from "./AccountStatementHeader";
 
 const styles = StyleSheet.create({
   container: {
     width: 793,
     padding: 40,
-  },
-  partnershipText: {
-    ...getTextStyle("sans", 14),
-    color: colors.gray[500],
-  },
-  pageTitle: {
-    ...getTextStyle("sans", 20),
-    color: colors.swan[500],
-    fontWeight: "600",
   },
   sectionTitle: {
     ...getTextStyle("sans", 14),
@@ -71,21 +51,6 @@ const styles = StyleSheet.create({
     ...getTextStyle("sans", 14),
     backgroundColor: colors.gray[50],
     width: "50%",
-  },
-  footer: {
-    ...getTextStyle("sans", 10),
-    color: colors.gray[500],
-    fontWeight: "300",
-  },
-  defaultLogo: {
-    height: LOGO_MAX_HEIGHT,
-    width: (45 / 10) * LOGO_MAX_HEIGHT,
-  },
-  swanLogo: {
-    height: 8,
-    width: (45 / 10) * 8,
-    position: "relative",
-    top: 0.5,
   },
 });
 
@@ -171,13 +136,8 @@ type AccountStatementV1Props = {
   closingBalance: Amount;
   feesDebit: Amount;
   feesCredit: Amount;
-};
-
-const logoStyle: CSSProperties = {
-  height: LOGO_MAX_HEIGHT,
-  maxWidth: LOGO_MAX_WIDTH,
-  objectFit: "contain",
-  objectPosition: "left",
+  hideHeader?: boolean;
+  hideFooter?: boolean;
 };
 
 export const AccountStatementV1 = ({
@@ -197,35 +157,19 @@ export const AccountStatementV1 = ({
   totalsCredit,
   totalsDebit,
   closingBalance,
+  hideHeader = false,
+  hideFooter = false,
 }: AccountStatementV1Props) => {
   return (
     <Box style={[styles.container, style]} direction="column" justifyContent="spaceBetween">
       <Box>
-        <Box direction="row" justifyContent="spaceBetween">
-          <Box direction="row" alignItems="center">
-            {isNotNullishOrEmpty(partnerLogoUrl) ? (
-              <img src={partnerLogoUrl} style={logoStyle} />
-            ) : (
-              <SwanLogo style={styles.defaultLogo} />
-            )}
+        {!hideHeader && (
+          <AccountStatementHeader
+            partnerLogoUrl={partnerLogoUrl}
+            accountHolderType={accountHolderType}
+          />
+        )}
 
-            <Separator horizontal={true} space={8} />
-            <Text style={styles.partnershipText}>{t("accountStatement.partnership")}</Text>
-            <Space width={4} />
-            <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
-          </Box>
-        </Box>
-        <Space height={24} />
-        <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
-        <Space height={8} />
-
-        <Text style={styles.text}>
-          {accountHolderType === "Company"
-            ? t("accountStatement.titleDocument.companyDescription")
-            : t("accountStatement.titleDocument.individualDescription")}
-        </Text>
-
-        <Space height={24} />
         <Box direction="row" justifyContent="spaceBetween">
           <Box direction="column">
             <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
@@ -334,6 +278,7 @@ export const AccountStatementV1 = ({
             />
           </Box>
         </Box>
+        {!hideFooter && <AccountStatementFooter />}
       </Box>
     </Box>
   );
