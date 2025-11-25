@@ -712,30 +712,31 @@ const main = async () => {
     headless: true,
   });
 
-  const page = await browser.newPage({
-    locale: "en",
-    bypassCSP: true,
-  });
+  try {
+    const page = await browser.newPage({
+      locale: "en",
+      bypassCSP: true,
+    });
 
-  page.addInitScript(data => {
-    window.data = data;
-  }, data);
+    page.addInitScript(data => {
+      window.data = data;
+    }, data);
 
-  await page.emulateMedia({ media: "print" });
+    await page.emulateMedia({ media: "print" });
 
-  await page.goto(`http://localhost:3000`);
+    await page.goto(`http://localhost:3000`);
 
-  await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("networkidle");
 
-  // await page.pause();
-  const fileContent = await page.pdf({
-    path: "output.pdf",
-    format: "A4",
-    margin: { top: "50px", bottom: "100px" },
-    printBackground: true,
-    displayHeaderFooter: true,
-    headerTemplate: `<div> </div>`,
-    footerTemplate: `<div style="width:100%; margin:0; padding: 24px 48px;
+    // await page.pause();
+    const fileContent = await page.pdf({
+      path: "output.pdf",
+      format: "A4",
+      margin: { top: "50px", bottom: "100px" },
+      printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate: `<div> </div>`,
+      footerTemplate: `<div style="width:100%; margin:0; padding: 24px 48px;
         font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
         -webkit-print-color-adjust: exact; color:#737276; font-size:10.5px; line-height:1.5; box-sizing:border-box;">
 
@@ -747,8 +748,8 @@ const main = async () => {
           SWAN est une société par actions simplifiée (SAS) immatriculée sous le numéro 853 827 103 0054,
           avec un capital de €951 164,50, numéro de TVA FR90853827103 et dont le siège social est situé
           au 91 rue du Faubourg Saint-Honoré, 75008 Paris, FRANCE.
-          En tant qu’établissement de monnaie électronique offrant des services de paiement en vertu du droit français
-          approuvé par l’ACPR, SWAN est inscrite auprès de ce dernier sous le numéro 17328.
+          En tant qu'établissement de monnaie électronique offrant des services de paiement en vertu du droit français
+          approuvé par l'ACPR, SWAN est inscrite auprès de ce dernier sous le numéro 17328.
         </div>
 
         <div style="text-align:right;">
@@ -762,8 +763,24 @@ const main = async () => {
         </div>
       </div>
     </div>`,
-  });
-  return fileContent;
+    });
+
+    console.log("PDF generated successfully: output.pdf");
+
+    return fileContent;
+  } finally {
+    // Cleanup: close browser and server
+    await browser.close();
+    await devServer.close();
+  }
 };
 
-main();
+main()
+  .then(() => {
+    console.log("Script completed successfully");
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error("Error generating PDF:", error);
+    process.exit(1);
+  });
