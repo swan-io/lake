@@ -6,7 +6,7 @@ import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { StyleSheet, Text } from "react-native";
-import { t } from "../utils/i18n";
+import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
 const LOGO_MAX_HEIGHT = 24;
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
 type AccountStatementHeaderProps = {
   partnerLogoUrl?: string;
   accountHolderType: "Individual" | "Company";
+  language?: SupportedLanguage;
 };
 
 const logoStyle: CSSProperties = {
@@ -52,7 +53,10 @@ const logoStyle: CSSProperties = {
 export const AccountStatementHeader = ({
   partnerLogoUrl,
   accountHolderType,
+  language,
 }: AccountStatementHeaderProps) => {
+  const t = useTranslation(language);
+
   return (
     <>
       <Box direction="row" justifyContent="spaceBetween">

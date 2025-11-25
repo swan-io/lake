@@ -1,4 +1,5 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
+import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
 import { BadStatusError } from "@swan-io/request";
 import dayjs from "dayjs";
@@ -35,7 +36,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
 const supportedLanguages = ["en", "es", "de", "fr", "it", "nl", "pt", "fi"] as const;
-type SupportedLanguage = (typeof supportedLanguages)[number];
+export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 type TranslationParams = Record<string, string | number>;
 export type TranslationKey = keyof typeof translationEN;
@@ -138,8 +139,33 @@ const intl = createIntl(
   createIntlCache(),
 );
 
+// Hook to get the default intl or a specific language intl instance
+const useIntl = (language?: SupportedLanguage) => {
+  if (isNullish(language)) {
+    return intl;
+  }
+
+  const localeData = locales[language]();
+  return createIntl(
+    {
+      defaultLocale: LANGUAGE_FALLBACK,
+      fallbackOnEmptyString: false,
+      locale: localeData.language,
+      messages: localeData.translations,
+    },
+    createIntlCache(),
+  );
+};
+
 export const t = (key: TranslationKey, params?: TranslationParams) =>
   intl.formatMessage({ id: key, defaultMessage: translationEN[key] }, params).toString();
+
+// Return translation helper for a specific language
+export const useTranslation = (language?: SupportedLanguage) => {
+  const intlInstance = useIntl(language);
+  return (key: TranslationKey, params?: TranslationParams) =>
+    intlInstance.formatMessage({ id: key, defaultMessage: translationEN[key] }, params).toString();
+};
 
 export const formatCurrencyIso = (value: number, currency: string) =>
   `${intl.formatNumber(value, { style: "decimal", minimumFractionDigits: 2 })} ${currency}`;

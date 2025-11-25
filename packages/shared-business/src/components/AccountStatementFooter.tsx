@@ -1,7 +1,7 @@
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { StyleSheet, Text } from "react-native";
-import { t } from "../utils/i18n";
+import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
 const styles = StyleSheet.create({
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export const AccountStatementFooter = () => {
+export const AccountStatementFooter = ({ language }: { language?: SupportedLanguage }) => {
+  const t = useTranslation(language);
   return (
     <>
       <Separator space={24} />
