@@ -1,29 +1,54 @@
-import { Box } from "@swan-io/lake/src/components/Box";
-import { Separator } from "@swan-io/lake/src/components/Separator";
-import { Space } from "@swan-io/lake/src/components/Space";
 import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
-import { StyleSheet, Text } from "react-native";
 import { useTranslation, type SupportedLanguage } from "../utils/i18n";
-import { getTextStyle } from "../utils/style";
 
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
 
-const styles = StyleSheet.create({
+const styles = {
+  container: {
+    width: 793,
+    padding: "40px 40px 0 40px",
+    fontFamily:
+      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
+    boxSizing: "border-box",
+    color: "#737276",
+    fontSize: "10px",
+    lineHeight: "12.5px",
+    fontWeight: "300",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  partnership: {
+    borderLeft: "1px solid #e8e7e8",
+    padding: "7px 8px",
+    marginLeft: "8px",
+  },
   partnershipText: {
-    ...getTextStyle("sans", 14),
-    color: colors.gray[500],
+    fontSize: "12px",
+    lineHeight: "24px",
+    marginBottom: "4px",
   },
   pageTitle: {
-    ...getTextStyle("sans", 20),
-    color: colors.swan[500],
+    fontSize: "20px",
+    lineHeight: "24px",
     fontWeight: "600",
+    color: "#26232F",
+    marginBottom: "4px",
+    textAlign: "right",
   },
   text: {
-    ...getTextStyle("sans", 14),
+    fontSize: "12px",
+    lineHeight: "16px",
+    color: "#454348",
+    textAlign: "right",
+  },
+  logo: {
+    display: "flex",
+    alignItems: "center",
   },
   defaultLogo: {
     height: LOGO_MAX_HEIGHT,
@@ -35,7 +60,7 @@ const styles = StyleSheet.create({
     position: "relative",
     top: 0.5,
   },
-});
+} as const;
 
 type AccountStatementHeaderProps = {
   partnerLogoUrl?: string;
@@ -58,32 +83,28 @@ export const AccountStatementHeader = ({
   const t = useTranslation(language);
 
   return (
-    <>
-      <Box direction="row" justifyContent="spaceBetween">
-        <Box direction="row" alignItems="center">
-          {isNotNullishOrEmpty(partnerLogoUrl) ? (
-            <img src={partnerLogoUrl} style={logoStyle} />
-          ) : (
-            <SwanLogo style={styles.defaultLogo} />
-          )}
+    <div style={styles.container}>
+      <div style={styles.logo}>
+        {isNotNullishOrEmpty(partnerLogoUrl) ? (
+          <img src={partnerLogoUrl} style={logoStyle} />
+        ) : (
+          <SwanLogo style={styles.defaultLogo} />
+        )}
 
-          <Separator horizontal={true} space={8} />
-          <Text style={styles.partnershipText}>{t("accountStatement.partnership")}</Text>
-          <Space width={4} />
+        <div style={styles.partnership}>
+          <div style={styles.partnershipText}>{t("accountStatement.partnership")}</div>
           <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
-        </Box>
-      </Box>
-      <Space height={24} />
-      <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
-      <Space height={8} />
+        </div>
+      </div>
 
-      <Text style={styles.text}>
-        {accountHolderType === "Company"
-          ? t("accountStatement.titleDocument.companyDescription")
-          : t("accountStatement.titleDocument.individualDescription")}
-      </Text>
-
-      <Space height={24} />
-    </>
+      <div>
+        <div style={styles.pageTitle}>{t("accountStatement.titleDocument")}</div>
+        <div style={styles.text}>
+          {accountHolderType === "Company"
+            ? t("accountStatement.titleDocument.companyDescription")
+            : t("accountStatement.titleDocument.individualDescription")}
+        </div>
+      </div>
+    </div>
   );
 };

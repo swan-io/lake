@@ -21,6 +21,7 @@
   "accountStatement.titleDocument": "Account statement",
   "accountStatement.titleDocument.companyDescription": "Business account - in euros",
   "accountStatement.titleDocument.individualDescription": "Personal account - in euros",
+  "accountStatement.page": "Page",
   "addressFormPart.addressLabel": "Type your address",
   "addressFormPart.cityLabel": "City",
   "addressFormPart.placeholder": "Start typing…",
