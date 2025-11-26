@@ -29,17 +29,13 @@ const main = async () => {
 
     await page.waitForLoadState("networkidle");
 
-    // const headerTemplate = (await page.evaluate("headerTemplate")) as string;
     const headerTemplate = (await page.evaluate(() => (window as any).headerTemplate)) as string;
     const footerTemplate = (await page.evaluate(() => (window as any).footerTemplate)) as string;
 
-    // console.log("#headerTemplate", headerTemplate);
-
-    // await page.pause();
     const fileContent = await page.pdf({
       path: __dirname + "/output.pdf",
       format: "A4",
-      margin: { top: "140px", bottom: "160px" },
+      margin: { top: "140px", bottom: "160px" }, // spacing to keep for header and footer
       printBackground: true,
       displayHeaderFooter: true,
       headerTemplate: headerTemplate,
