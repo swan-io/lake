@@ -7,6 +7,7 @@ import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 const LOGO_MAX_HEIGHT = 24;
 const LOGO_MAX_WIDTH = 150;
 
+// Used to generate inline styles without css variables for PDF generation
 const styles = {
   container: {
     width: 793,

@@ -7,8 +7,6 @@ import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
 import { formatCurrencyIso, t } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
-import { AccountStatementFooter } from "./AccountStatementFooter";
-import { AccountStatementHeader } from "./AccountStatementHeader";
 
 const styles = StyleSheet.create({
   container: {
@@ -120,9 +118,7 @@ export type Transaction = {
 
 type AccountStatementV1Props = {
   version: "v1";
-  partnerLogoUrl?: string;
   style?: StyleProp<ViewStyle>;
-  accountHolderType: "Individual" | "Company";
   accountHolderName: string;
   accountHolderAddress: AddressInfo;
   iban: string;
@@ -141,9 +137,7 @@ type AccountStatementV1Props = {
 };
 
 export const AccountStatementV1 = ({
-  partnerLogoUrl,
   style,
-  accountHolderType,
   accountHolderName,
   accountHolderAddress,
   iban,
@@ -157,17 +151,9 @@ export const AccountStatementV1 = ({
   totalsCredit,
   totalsDebit,
   closingBalance,
-  hideHeader = false,
-  hideFooter = false,
 }: AccountStatementV1Props) => {
   return (
     <Box style={style}>
-      {!hideHeader && (
-        <AccountStatementHeader
-          partnerLogoUrl={partnerLogoUrl}
-          accountHolderType={accountHolderType}
-        />
-      )}
       <Box style={styles.container} direction="column" justifyContent="spaceBetween">
         <Box>
           <Box direction="row" justifyContent="spaceBetween">
@@ -280,7 +266,6 @@ export const AccountStatementV1 = ({
           </Box>
         </Box>
       </Box>
-      {!hideFooter && <AccountStatementFooter />}
     </Box>
   );
 };

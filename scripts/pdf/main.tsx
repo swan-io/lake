@@ -1,15 +1,15 @@
-import "../../lake/src/assets/fonts/Inter.css";
-import "../../lake/src/assets/fonts/InterCard.css";
-import "../../lake/src/assets/fonts/RobotoMono.css";
-import "../../lake/src/assets/main.css";
+import "../../packages/lake/src/assets/fonts/Inter.css";
+import "../../packages/lake/src/assets/fonts/InterCard.css";
+import "../../packages/lake/src/assets/fonts/RobotoMono.css";
+import "../../packages/lake/src/assets/main.css";
 import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AccountStatement } from "../src/components/AccountStatement";
-import { AccountStatementFooter } from "../src/components/AccountStatementFooter";
-import { AccountStatementHeader } from "../src/components/AccountStatementHeader";
+import { AccountStatement } from "../../packages/shared-business/src/components/AccountStatement";
+import { AccountStatementFooter } from "../../packages/shared-business/src/components/AccountStatementFooter";
+import { AccountStatementHeader } from "../../packages/shared-business/src/components/AccountStatementHeader";
 
 declare global {
   interface Window {
@@ -22,8 +22,6 @@ const data = {
   version: "v1",
   templateDataType: "CreditStatement",
   language: "fr",
-  partnerLogoUrl: "string",
-  accountHolderType: "Individual",
   accountHolderName: "Jean Dupont",
   accountHolderAddress: {
     addressLine1: "2 rue de la Paix",
@@ -471,7 +469,7 @@ const data = {
 
 // Set data on window (accessible from browser console or other scripts)
 window.headerTemplate = renderToStaticMarkup(
-  <AccountStatementHeader partnerLogoUrl={""} accountHolderType={"Company"} language={"fr"} />,
+  <AccountStatementHeader accountHolderType={"Company"} language={"fr"} />,
 );
 
 window.footerTemplate = renderToStaticMarkup(<AccountStatementFooter language={"fr"} />);

@@ -1,5 +1,6 @@
 import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 
+// Used to generate inline styles without css variables for PDF generation
 const styles = {
   container: {
     width: 793,
