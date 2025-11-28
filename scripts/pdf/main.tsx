@@ -479,7 +479,7 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <div>
-        {/* @ts-ignore */}
+        {/* @ts-expect-error */}
         <AccountStatement {...data} version="v1" hideFooter={true} hideHeader={true} />
       </div>
     </React.StrictMode>,
