@@ -1,39 +1,17 @@
 import { Box } from "@swan-io/lake/src/components/Box";
-import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
-import { colors, fonts, primaryFontStyle, spacings } from "@swan-io/lake/src/constants/design";
-import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
-import { CSSProperties } from "react";
-import { StyleProp, StyleSheet, Text, TextProps, TextStyle, ViewStyle } from "react-native";
+import { colors, spacings } from "@swan-io/lake/src/constants/design";
+import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
+import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
 import { formatCurrencyIso, t } from "../utils/i18n";
-
-const LOGO_MAX_HEIGHT = 24;
-const LOGO_MAX_WIDTH = 150;
-
-const getTextStyle = (type: "sans" | "mono", fontSize: number): TextStyle => ({
-  ...(type === "mono" ? { fontFamily: fonts.iban } : primaryFontStyle),
-  color: colors.gray[900],
-  fontSize,
-  lineHeight: fontSize * 1.25,
-  fontWeight: "400",
-});
+import { getTextStyle } from "../utils/style";
 
 const styles = StyleSheet.create({
   container: {
     width: 793,
     padding: 40,
-  },
-  partnershipText: {
-    ...getTextStyle("sans", 14),
-    color: colors.gray[500],
-  },
-  pageTitle: {
-    ...getTextStyle("sans", 20),
-    color: colors.swan[500],
-    fontWeight: "600",
   },
   sectionTitle: {
     ...getTextStyle("sans", 14),
@@ -71,21 +49,6 @@ const styles = StyleSheet.create({
     ...getTextStyle("sans", 14),
     backgroundColor: colors.gray[50],
     width: "50%",
-  },
-  footer: {
-    ...getTextStyle("sans", 10),
-    color: colors.gray[500],
-    fontWeight: "300",
-  },
-  defaultLogo: {
-    height: LOGO_MAX_HEIGHT,
-    width: (45 / 10) * LOGO_MAX_HEIGHT,
-  },
-  swanLogo: {
-    height: 8,
-    width: (45 / 10) * 8,
-    position: "relative",
-    top: 0.5,
   },
 });
 
@@ -155,9 +118,7 @@ export type Transaction = {
 
 type AccountStatementV1Props = {
   version: "v1";
-  partnerLogoUrl?: string;
   style?: StyleProp<ViewStyle>;
-  accountHolderType: "Individual" | "Company";
   accountHolderName: string;
   accountHolderAddress: AddressInfo;
   iban: string;
@@ -171,19 +132,12 @@ type AccountStatementV1Props = {
   closingBalance: Amount;
   feesDebit: Amount;
   feesCredit: Amount;
-};
-
-const logoStyle: CSSProperties = {
-  height: LOGO_MAX_HEIGHT,
-  maxWidth: LOGO_MAX_WIDTH,
-  objectFit: "contain",
-  objectPosition: "left",
+  hideHeader?: boolean;
+  hideFooter?: boolean;
 };
 
 export const AccountStatementV1 = ({
-  partnerLogoUrl,
   style,
-  accountHolderType,
   accountHolderName,
   accountHolderAddress,
   iban,
@@ -199,139 +153,116 @@ export const AccountStatementV1 = ({
   closingBalance,
 }: AccountStatementV1Props) => {
   return (
-    <Box style={[styles.container, style]} direction="column" justifyContent="spaceBetween">
-      <Box>
-        <Box direction="row" justifyContent="spaceBetween">
-          <Box direction="row" alignItems="center">
-            {isNotNullishOrEmpty(partnerLogoUrl) ? (
-              <img src={partnerLogoUrl} style={logoStyle} />
-            ) : (
-              <SwanLogo style={styles.defaultLogo} />
-            )}
+    <Box style={style}>
+      <Box style={styles.container} direction="column" justifyContent="spaceBetween">
+        <Box>
+          <Box direction="row" justifyContent="spaceBetween">
+            <Box direction="column">
+              <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
-            <Separator horizontal={true} space={8} />
-            <Text style={styles.partnershipText}>{t("accountStatement.partnership")}</Text>
-            <Space width={4} />
-            <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
+              <Text style={styles.text}>{accountHolderAddress.street}</Text>
+              <Text style={styles.text}>{accountHolderAddress.city}</Text>
+              {isNotNullish(accountHolderAddress.country) && (
+                <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
+              )}
+            </Box>
+            <Box direction="column" alignItems="end">
+              <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
+              <Text style={styles.text}>{"support.swan.io"}</Text>
+            </Box>
           </Box>
-        </Box>
-        <Space height={24} />
-        <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
-        <Space height={8} />
+          <Space height={24} />
 
-        <Text style={styles.text}>
-          {accountHolderType === "Company"
-            ? t("accountStatement.titleDocument.companyDescription")
-            : t("accountStatement.titleDocument.individualDescription")}
-        </Text>
+          <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
+          <Text style={styles.text}>{iban}</Text>
 
-        <Space height={24} />
-        <Box direction="row" justifyContent="spaceBetween">
+          <Space height={12} />
+          <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
+          <Text style={styles.text}>{bic}</Text>
+
+          <Space height={48} />
+          <Box direction="row" justifyContent="spaceBetween">
+            <Box direction="column">
+              <Text style={styles.sectionTitle}>
+                {t("accountStatement.date", { openingDate, closingDate })}
+              </Text>
+            </Box>
+
+            <Box direction="column">
+              <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
+              <Text style={styles.totalAmount}>
+                {formatCurrencyIso(Number(openingBalance.value), openingBalance.currency)}
+              </Text>
+            </Box>
+          </Box>
+          <Space height={24} />
+
+          <>
+            <Box direction="row" style={{ backgroundColor: colors.gray[50] }}>
+              <Text style={[styles.titleColumn, { width: "15%" }]}>
+                {t("accountStatement.column.date")}
+              </Text>
+              <Text style={[styles.titleColumn, { width: "22%" }]}>
+                {t("accountStatement.column.type")}
+              </Text>
+              <Text style={[styles.titleColumn, { width: "33%" }]}>
+                {t("accountStatement.column.description")}
+              </Text>
+              <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
+                {t("accountStatement.column.credit")}
+              </Text>
+              <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
+                {t("accountStatement.column.debit")}
+              </Text>
+            </Box>
+            <Box direction="column">
+              {transactions.map(transaction => (
+                <Box direction="row" key={transaction.id}>
+                  <Text style={[styles.textColumn, { width: "15%" }]}>{transaction.date}</Text>
+                  <Text style={[styles.textColumn, { width: "22%" }]}>
+                    {translateTransaction(transaction.type)}
+                  </Text>
+                  <Text style={[styles.textColumn, { width: "33%" }]}>{transaction.label}</Text>
+                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                    {transaction.credit ? transaction.credit.value : ""}
+                  </Text>
+                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                    {transaction.debit ? transaction.debit.value : ""}
+                  </Text>
+                </Box>
+              ))}
+            </Box>
+          </>
+
           <Box direction="column">
-            <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
+            <Box direction="row" justifyContent="end">
+              <Text style={styles.row}>{t("accountStatement.column.fees")}</Text>
+              <Text style={styles.row}>{feesCredit.value}</Text>
+              <Text style={styles.row}>{feesDebit.value}</Text>
+            </Box>
 
-            <Text style={styles.text}>{accountHolderAddress.street}</Text>
-            <Text style={styles.text}>{accountHolderAddress.city}</Text>
-            {isNotNullish(accountHolderAddress.country) && (
-              <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
-            )}
-          </Box>
-          <Box direction="column" alignItems="end">
-            <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
-            <Text style={styles.text}>{"support.swan.io"}</Text>
-          </Box>
-        </Box>
-        <Space height={24} />
-
-        <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-        <Text style={styles.text}>{iban}</Text>
-
-        <Space height={12} />
-        <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-        <Text style={styles.text}>{bic}</Text>
-
-        <Space height={48} />
-        <Box direction="row" justifyContent="spaceBetween">
-          <Box direction="column">
-            <Text style={styles.sectionTitle}>
-              {t("accountStatement.date", { openingDate, closingDate })}
-            </Text>
-          </Box>
-
-          <Box direction="column">
-            <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
-            <Text style={styles.totalAmount}>
-              {formatCurrencyIso(Number(openingBalance.value), openingBalance.currency)}
-            </Text>
-          </Box>
-        </Box>
-        <Space height={24} />
-
-        <>
-          <Box direction="row" style={{ backgroundColor: colors.gray[50] }}>
-            <Text style={[styles.titleColumn, { width: "15%" }]}>
-              {t("accountStatement.column.date")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "22%" }]}>
-              {t("accountStatement.column.type")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "33%" }]}>
-              {t("accountStatement.column.description")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("accountStatement.column.credit")}
-            </Text>
-            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-              {t("accountStatement.column.debit")}
-            </Text>
-          </Box>
-          <Box direction="column">
-            {transactions.map(transaction => (
-              <Box direction="row" key={transaction.id}>
-                <Text style={[styles.textColumn, { width: "15%" }]}>{transaction.date}</Text>
-                <Text style={[styles.textColumn, { width: "22%" }]}>
-                  {translateTransaction(transaction.type)}
-                </Text>
-                <Text style={[styles.textColumn, { width: "33%" }]}>{transaction.label}</Text>
-                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                  {transaction.credit ? transaction.credit.value : ""}
-                </Text>
-                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                  {transaction.debit ? transaction.debit.value : ""}
-                </Text>
-              </Box>
-            ))}
-          </Box>
-        </>
-
-        <Box direction="column">
-          <Box direction="row" justifyContent="end">
-            <Text style={styles.row}>{t("accountStatement.column.fees")}</Text>
-            <Text style={styles.row}>{feesCredit.value}</Text>
-            <Text style={styles.row}>{feesDebit.value}</Text>
+            <Box direction="row" justifyContent="end">
+              <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
+              <Text style={styles.row}>{totalsCredit.value}</Text>
+              <Text style={styles.row}>{totalsDebit.value}</Text>
+            </Box>
           </Box>
 
           <Box direction="row" justifyContent="end">
-            <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
-            <Text style={styles.row}>{totalsCredit.value}</Text>
-            <Text style={styles.row}>{totalsDebit.value}</Text>
-          </Box>
-        </Box>
+            <Box
+              direction="row"
+              alignItems="center"
+              style={styles.closingBalanceRow}
+              justifyContent="spaceBetween"
+            >
+              <Title text={t("accountStatement.closingBalance")} />
 
-        <Box direction="row" justifyContent="end">
-          <Box
-            direction="row"
-            alignItems="center"
-            style={styles.closingBalanceRow}
-            justifyContent="spaceBetween"
-          >
-            <Title text={t("accountStatement.closingBalance")} />
-
-            <Title
-              text={formatCurrencyIso(Number(closingBalance.value), closingBalance.currency)}
-              style={styles.totalAmount}
-              align="right"
-            />
+              <Title
+                text={formatCurrencyIso(Number(closingBalance.value), closingBalance.currency)}
+                style={styles.totalAmount}
+                align="right"
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

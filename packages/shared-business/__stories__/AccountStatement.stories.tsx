@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
-import { invariantColors } from "@swan-io/lake/src/constants/design";
 import { AccountStatement, Transaction } from "../src/components/AccountStatement";
+import { AccountStatementFooter } from "../src/components/AccountStatementFooter";
+import { AccountStatementHeader } from "../src/components/AccountStatementHeader";
 import { CountryCCA3 } from "../src/constants/countries";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -476,13 +477,14 @@ export const Default = () => {
   return (
     <StoryBlock title="Account statement">
       <StoryPart title="Default">
-        <AccountStatement
-          version="v1"
+        <AccountStatementHeader
           partnerLogoUrl="https://s3.eu-west-1.amazonaws.com/data.master.oina.ws/7a90851b-40f8-479d-9e0e-86d12fb001b5/SANDBOX/logo-749a2fb5-230b-4ae6-98bd-65bdb3c987c9.png"
           accountHolderType="Individual"
+        />
+        <AccountStatement
+          version="v1"
           accountHolderName="Sandrine Da Silva"
           accountHolderAddress={address}
-          style={{ backgroundColor: invariantColors.white }}
           iban={"DE63 1111 1111 8189 3774 57"}
           bic={"SWNBDEBB"}
           openingDate="01/01/2025"
@@ -495,6 +497,7 @@ export const Default = () => {
           totalsDebit={totalsDebit}
           closingBalance={closingBalance}
         />
+        <AccountStatementFooter />
       </StoryPart>
     </StoryBlock>
   );
