@@ -50,14 +50,14 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-          pnpm publish --no-git-checks --recursive --access=public --registry=https://registry.npmjs.org
+          pnpm publish --no-git-checks --recursive --access public --registry https://registry.npmjs.org
 
       - name: Publish on GitHub
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
-          pnpm publish --no-git-checks --recursive --access=restricted --registry=https://npm.pkg.github.com
+          pnpm publish --no-git-checks --recursive --access restricted --registry https://npm.pkg.github.com
 
       - name: Create GitHub release
         run: pnpm tsx scripts/release/createRelease.ts
