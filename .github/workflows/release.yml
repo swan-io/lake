@@ -57,6 +57,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
           pnpm publish --no-git-checks --recursive --access restricted --registry https://npm.pkg.github.com
 
       - name: Create GitHub release
