@@ -13,10 +13,6 @@
     "src/**/*.d.ts",
     "README.md"
   ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
   "browserslist": [
     ">0.2%",
     "not op_mini all",
