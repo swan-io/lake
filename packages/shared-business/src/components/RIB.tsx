@@ -136,7 +136,7 @@ type RIBv1Props = {
     }
   | {
       accountCountry: "BEL";
-      agency: string;
+      bankKey: string;
       bankNumber: string;
     }
 );
@@ -241,11 +241,11 @@ const RIBv1 = ({
                 <Item kind="small" label={t("rib.number")} value={bankNumber} />
               </>
             ))
-            .with({ accountCountry: "BEL" }, ({ agency, bankNumber }) => (
+            .with({ accountCountry: "BEL" }, ({ bankKey, bankNumber }) => (
               <>
                 <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <Item kind="small" label={t("rib.agency")} value={agency} />
+                <Item kind="small" label={t("rib.key")} value={bankKey} />
                 <Space width={24} />
                 <Item kind="small" label={t("rib.number")} value={bankNumber} />
               </>
