@@ -245,9 +245,9 @@ const RIBv1 = ({
               <>
                 <Item kind="small" label={t("rib.bank")} value={bank} />
                 <Space width={24} />
-                <Item kind="small" label={t("rib.key")} value={bankKey} />
-                <Space width={24} />
                 <Item kind="small" label={t("rib.number")} value={bankNumber} />
+                <Space width={24} />
+                <Item kind="small" label={t("rib.key")} value={bankKey} />
               </>
             ))
             .exhaustive()}
