@@ -133,8 +133,8 @@ export const AccountCountries = () => {
           partnerColor="#0f6fde"
           iban="BE 68 539 0075470 34"
           bic="AARBBEB1"
-          bank="12345"
-          agency="539"
+          bank="539"
+          bankKey="34"
           bankNumber="0075470"
           bankAddress={bankAddress}
           accountHolderAddress={accountHolderAddress}
