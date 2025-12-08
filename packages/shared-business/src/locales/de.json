@@ -196,6 +196,7 @@
   "rejection.InvalidSirenNumberRejection": "Ungültige SIREN-Nummer",
   "rejection.LegalRepresentativeAccountMembershipCannotBeDisabledRejection": "Deaktivierung der Kontomitgliedschaft des gesetzlichen Vertreters nicht möglich",
   "rejection.LegalRepresentativeAccountMembershipCannotBeSuspendedRejection": "Suspendierung der Kontomitgliedschaft des gesetzlichen Vertreters nicht möglich",
+  "rejection.MaximumDailvInvitationsReachedRelection": "Sie haben die maximale Anzahl täglicher Einladungen für die Kontomitgliedschaft erreicht.",
   "rejection.MaximumDailyExportsReachedRejection": "Die maximale Anzahl der täglichen Exporte wurde erreicht",
   "rejection.MaximumSimultaneousExportsRejection": "Die maximale Anzahl gleichzeitiger Exporte wurde erreicht",
   "rejection.MerchantCardPaymentDeclinedRejection": "Die Kartenzahlung des Händlers wurde abgelehnt",
