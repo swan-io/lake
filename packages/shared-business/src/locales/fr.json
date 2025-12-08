@@ -196,6 +196,7 @@
   "rejection.InvalidSirenNumberRejection": "Numéro SIREN invalide",
   "rejection.LegalRepresentativeAccountMembershipCannotBeDisabledRejection": "Impossible de désactiver l'adhésion au compte du représentant légal",
   "rejection.LegalRepresentativeAccountMembershipCannotBeSuspendedRejection": "Impossible de suspendre l'adhésion au compte du représentant légal",
+  "rejection.MaximumDailvInvitationsReachedRelection": "Vous avez atteint le nombre maximum d'invitations quotidiennes pour l'adhésion au compte.",
   "rejection.MaximumDailyExportsReachedRejection": "Le nombre maximum d'exports quotidien a été atteint",
   "rejection.MaximumSimultaneousExportsRejection": "Le nombre maximum d'exports simultanés a été atteint",
   "rejection.MerchantCardPaymentDeclinedRejection": "Le paiement par carte du commerçant a été refusé",

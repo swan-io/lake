@@ -196,6 +196,7 @@
   "rejection.InvalidSirenNumberRejection": "Ongeldig SIREN-nummer",
   "rejection.LegalRepresentativeAccountMembershipCannotBeDisabledRejection": "Kan het accountlidmaatschap van een wettelijke vertegenwoordiger niet deactiveren",
   "rejection.LegalRepresentativeAccountMembershipCannotBeSuspendedRejection": "Kan het accountlidmaatschap van een wettelijke vertegenwoordiger niet opschorten",
+  "rejection.MaximumDailvInvitationsReachedRelection": "Je hebt het maximale aantal dagelijkse uitnodigingen voor het accountlidmaatschap bereikt.",
   "rejection.MaximumDailyExportsReachedRejection": "Het maximumaantal dagelijkse exports is bereikt",
   "rejection.MaximumSimultaneousExportsRejection": "Het maximumaantal gelijktijdige exports is bereikt",
   "rejection.MerchantCardPaymentDeclinedRejection": "De kaartbetaling van de handelaar is geweigerd",

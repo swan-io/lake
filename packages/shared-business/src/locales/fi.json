@@ -196,6 +196,7 @@
   "rejection.InvalidSirenNumberRejection": "Virheellinen SIREN-numero",
   "rejection.LegalRepresentativeAccountMembershipCannotBeDisabledRejection": "Oikeudellisen edustajan tilijäsenyyttä ei voi asettaa pois päältä",
   "rejection.LegalRepresentativeAccountMembershipCannotBeSuspendedRejection": "Oikeudellisen edustajan tilijäsenyyttä ei voi asettaa väliaikaisesti pois päältä",
+  "rejection.MaximumDailvInvitationsReachedRelection": "Olet saavuttanut päivittäisten kutsujen enimmäismäärän tilijäsenyydessä.",
   "rejection.MaximumDailyExportsReachedRejection": "Vientien päivittäinen enimmäismäärä on saavutettu",
   "rejection.MaximumSimultaneousExportsRejection": "Samanaikaisten vientien enimmäismäärä on saavutettu",
   "rejection.MerchantCardPaymentDeclinedRejection": "Kauppiaan korttimaksu hylättiin",
