@@ -1,0 +1,47 @@
+name: Download translations
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # every day at midnight
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  download-translations:
+    name: Download translations
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download shared-business translation keys
+        uses: localazy/download@v1
+        with:
+          read_key: ${{ secrets.LOCALAZY_SHARED_BUSINESS_READ_KEY }}
+          write_key: ${{ secrets.LOCALAZY_SHARED_BUSINESS_WRITE_KEY }}
+          groups: shared-business
+
+      - name: Sort locales
+        run: pnpm format-locales
+
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          title: Update translations
+          branch: update-translations
+          commit-message: update translations from localazy
+          body: Update translations
+          team-reviewers: front
