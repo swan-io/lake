@@ -13,8 +13,6 @@ jobs:
   download-translations:
     name: Download translations
     runs-on: ubuntu-latest
-    permissions:
-      contents: read # This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -44,4 +42,4 @@ jobs:
           branch: update-translations
           commit-message: update translations from localazy
           body: Update translations
-          team-reviewers: front
+          sign-commits: true
