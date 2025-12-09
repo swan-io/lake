@@ -89,9 +89,9 @@ importers:
       storybook:
         specifier: ^9.1.3
         version: 9.1.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(vite@7.1.5(@types/node@24.3.1)(tsx@4.20.5)(yaml@2.8.1))
-      tiktoken-node:
-        specifier: ^0.0.7
-        version: 0.0.7
+      tiktoken:
+        specifier: 1.0.22
+        version: 1.0.22
       ts-pattern:
         specifier: ^5.8.0
         version: 5.8.0
@@ -1947,9 +1947,8 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==, tarball: https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz}
 
-  tiktoken-node@0.0.7:
-    resolution: {integrity: sha512-eYtUh1jDLl7TXLj7HXujP+3IPkDieMl1G1HUsG52rysc91YoNw9IIeR4kNoISsc29mk+JDKQ7jEVRN07VOzaDQ==, tarball: https://registry.npmjs.org/tiktoken-node/-/tiktoken-node-0.0.7.tgz}
-    engines: {node: '>= 14'}
+  tiktoken@1.0.22:
+    resolution: {integrity: sha512-PKvy1rVF1RibfF3JlXBSP0Jrcw2uq3yXdgcEXtKTYn3QJ/cBRBHDnrJ5jHky+MENZ6DIPwNUGWpkVx+7joCpNA==, tarball: https://registry.npmjs.org/tiktoken/-/tiktoken-1.0.22.tgz}
 
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==, tarball: https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz}
@@ -3830,7 +3829,7 @@ snapshots:
 
   symbol-tree@3.2.4: {}
 
-  tiktoken-node@0.0.7: {}
+  tiktoken@1.0.22: {}
 
   tiny-invariant@1.3.3: {}
 
