@@ -55,6 +55,7 @@
   "common.form.help.nbDigits": "{nbDigits} dígitos",
   "common.form.invalidTaxIdentificationNumber": "Este campo é inválido",
   "common.form.taxIdentificationNumber.placeholder": "Número de Identificação Fiscal",
+  "common.form.taxIdentificationNumber.tooltip.deu": "",
   "common.form.taxIdentificationNumber.tooltip.ita": "NIF (Número de Identificação Fiscal)",
   "common.next": "Próximo",
   "common.noResult": "Resultado vazio",

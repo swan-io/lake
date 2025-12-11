@@ -55,7 +55,7 @@
   "common.form.help.nbDigits": "{nbDigits} chiffres",
   "common.form.invalidTaxIdentificationNumber": "Ce champ n’est pas valide",
   "common.form.taxIdentificationNumber.placeholder": "Numéro d'identification fiscale",
-  "common.form.taxIdentificationNumber.tooltip.deu": "Steuernummer des Unternehmens",
+  "common.form.taxIdentificationNumber.tooltip.deu": "",
   "common.form.taxIdentificationNumber.tooltip.ita": "Numéro d'identification fiscale (Codice fiscale)",
   "common.next": "Suivant",
   "common.noResult": "Résultat vide",
