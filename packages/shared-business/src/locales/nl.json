@@ -55,7 +55,7 @@
   "common.form.help.nbDigits": "{nbDigits} cijfers",
   "common.form.invalidTaxIdentificationNumber": "Dit veld is ongeldig",
   "common.form.taxIdentificationNumber.placeholder": "BTW-nummer",
-  "common.form.taxIdentificationNumber.tooltip.deu": "Steuernummer des Unternehmens",
+  "common.form.taxIdentificationNumber.tooltip.deu": "",
   "common.form.taxIdentificationNumber.tooltip.ita": "Btw-nummer (Codice fiscale)",
   "common.next": "Volgende",
   "common.noResult": "Leeg resultaat",
