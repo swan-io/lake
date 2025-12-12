@@ -18,17 +18,42 @@ const styles = StyleSheet.create({
 
 export type IconName = keyof typeof paths;
 
-type Props = WebAccessibilityProps & {
+type PropsWithName = WebAccessibilityProps & {
   color?: string;
   name: IconName;
+  svgPath?: never;
   size: number;
   style?: StyleProp<ViewStyle>;
 };
 
-export const Icon = memo<Props>(({ name, color = "currentColor", size, style, ...props }) => (
-  <Svg viewBox="0 0 24 24" style={[styles.inert, { height: size, width: size }, style]} {...props}>
-    <Path d={paths[name]} fill={color} />
-  </Svg>
-));
+type PropsWithPath = WebAccessibilityProps & {
+  color?: string;
+  name?: never;
+  svgPath: string;
+  size: number;
+  style?: StyleProp<ViewStyle>;
+};
+
+type Props = PropsWithName | PropsWithPath;
+
+export const Icon = memo<Props>(
+  ({ name, svgPath, color = "currentColor", size, style, ...props }) => {
+    const path = svgPath ?? (name ? paths[name] : undefined);
+
+    if (!path) {
+      throw new Error("Icon component requires either 'name' or 'svgPath' prop");
+    }
+
+    return (
+      <Svg
+        viewBox="0 0 24 24"
+        style={[styles.inert, { height: size, width: size }, style]}
+        {...props}
+      >
+        <Path d={path} fill={color} />
+      </Svg>
+    );
+  },
+);
 
 Icon.displayName = "Icon";
