@@ -21,6 +21,7 @@
     "clean-build": "tsx scripts/clean/cleanBuild.ts",
     "format": "prettier '**/*' --ignore-unknown --write",
     "format-locales": "prettier '**/locales/*.json' --write",
+    "validate-locales": "tsx scripts/locales/validateTranslations.ts packages/shared-business/src/locales",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
     "release": "tsx scripts/release/createPullRequest.ts",
