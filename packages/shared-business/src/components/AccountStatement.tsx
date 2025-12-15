@@ -5,22 +5,38 @@ import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
-import { formatCurrencyIso, t } from "../utils/i18n";
+import { t } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
 const styles = StyleSheet.create({
   container: {
     width: 793,
-    padding: 40,
+    padding: 10,
   },
   sectionTitle: {
     ...getTextStyle("sans", 14),
     color: colors.swan[500],
     fontWeight: "600",
+    textTransform: "uppercase",
+    paddingBottom: spacings[4],
+  },
+  dateTitle: {
+    ...getTextStyle("sans", 14),
+    color: colors.swan[500],
+    paddingBottom: spacings[4],
+  },
+  dateTitleSpan: {
+    fontWeight: "600",
   },
   totalAmount: {
     ...getTextStyle("sans", 20),
     fontWeight: "600",
+    textAlign: "right",
+  },
+  pageTitle: {
+    ...getTextStyle("sans", 20),
+    fontWeight: "600",
+    color: "#26232F",
   },
   titleColumn: {
     ...getTextStyle("sans", 14),
@@ -39,11 +55,16 @@ const styles = StyleSheet.create({
   text: {
     ...getTextStyle("sans", 14),
   },
+  pageSubTitle: {
+    ...getTextStyle("sans", 12),
+    color: "#454348",
+    paddingBottom: spacings[12],
+  },
   row: {
     textAlign: "right",
     paddingVertical: spacings[4],
     fontWeight: "600",
-    width: "20%",
+    width: "15%",
   },
   closingBalanceRow: {
     ...getTextStyle("sans", 14),
@@ -121,6 +142,7 @@ type AccountStatementV1Props = {
   style?: StyleProp<ViewStyle>;
   accountHolderName: string;
   accountHolderAddress: AddressInfo;
+  accountHolderType: "Individual" | "Company";
   iban: string;
   bic: string;
   openingDate: string;
@@ -140,6 +162,7 @@ export const AccountStatementV1 = ({
   style,
   accountHolderName,
   accountHolderAddress,
+  accountHolderType,
   iban,
   bic,
   openingDate,
@@ -158,6 +181,10 @@ export const AccountStatementV1 = ({
         <Box>
           <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
+              <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
+              <Text style={styles.pageSubTitle}>{accountHolderType === "Company"
+                ? t("accountStatement.titleDocument.companyDescription")
+                : t("accountStatement.titleDocument.individualDescription")}</Text>
               <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
               <Text style={styles.text}>{accountHolderAddress.street}</Text>
@@ -183,15 +210,15 @@ export const AccountStatementV1 = ({
           <Space height={48} />
           <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
-              <Text style={styles.sectionTitle}>
-                {t("accountStatement.date", { openingDate, closingDate })}
+              <Text style={styles.dateTitle}>
+              {t("accountStatement.date", { openingDate, closingDate })}
               </Text>
             </Box>
 
             <Box direction="column">
               <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
               <Text style={styles.totalAmount}>
-                {formatCurrencyIso(Number(openingBalance.value), openingBalance.currency)}
+                {openingBalance.value}
               </Text>
             </Box>
           </Box>
@@ -234,6 +261,7 @@ export const AccountStatementV1 = ({
             </Box>
           </>
 
+          <Space height={20} />
           <Box direction="column">
             <Box direction="row" justifyContent="end">
               <Text style={styles.row}>{t("accountStatement.column.fees")}</Text>
@@ -258,7 +286,7 @@ export const AccountStatementV1 = ({
               <Title text={t("accountStatement.closingBalance")} />
 
               <Title
-                text={formatCurrencyIso(Number(closingBalance.value), closingBalance.currency)}
+                text={closingBalance.value}
                 style={styles.totalAmount}
                 align="right"
               />

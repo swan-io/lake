@@ -11,7 +11,7 @@ const LOGO_MAX_WIDTH = 150;
 const styles = {
   container: {
     width: 793,
-    padding: "40px 40px 0 40px",
+    padding: "10px",
     fontFamily:
       "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
     boxSizing: "border-box",
@@ -33,14 +33,6 @@ const styles = {
     lineHeight: "24px",
     marginBottom: "4px",
   },
-  pageTitle: {
-    fontSize: "20px",
-    lineHeight: "24px",
-    fontWeight: "600",
-    color: "#26232F",
-    marginBottom: "4px",
-    textAlign: "right",
-  },
   text: {
     fontSize: "12px",
     lineHeight: "16px",
@@ -61,11 +53,17 @@ const styles = {
     position: "relative",
     top: 0.5,
   },
+  pageNumber: {
+    fontSize: "20px",
+    color: "#26232F",
+    marginTop: "20px",
+    fontWeight: "600",
+    textTransform: "uppercase",
+  },
 } as const;
 
 type AccountStatementHeaderProps = {
   partnerLogoUrl?: string;
-  accountHolderType: "Individual" | "Company";
   language?: SupportedLanguage;
 };
 
@@ -78,7 +76,6 @@ const logoStyle: CSSProperties = {
 
 export const AccountStatementHeader = ({
   partnerLogoUrl,
-  accountHolderType,
   language,
 }: AccountStatementHeaderProps) => {
   const t = useTranslation(language);
@@ -97,15 +94,10 @@ export const AccountStatementHeader = ({
           <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
         </div>
       </div>
-
-      <div>
-        <div style={styles.pageTitle}>{t("accountStatement.titleDocument")}</div>
-        <div style={styles.text}>
-          {accountHolderType === "Company"
-            ? t("accountStatement.titleDocument.companyDescription")
-            : t("accountStatement.titleDocument.individualDescription")}
-        </div>
-      </div>
+          <div style={styles.pageNumber}>
+            {t("accountStatement.page")} <span className="pageNumber" /> /{" "}
+            <span className="totalPages" />
+          </div>
     </div>
   );
 };
