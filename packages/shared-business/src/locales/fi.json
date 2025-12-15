@@ -55,7 +55,6 @@
   "common.form.help.nbDigits": "{nbDigits} numeroa",
   "common.form.invalidTaxIdentificationNumber": "Tämä kenttä ei ole kelvollinen",
   "common.form.taxIdentificationNumber.placeholder": "verotunnus",
-  "common.form.taxIdentificationNumber.tooltip.deu": "Steuernummer des Unternehmens",
   "common.form.taxIdentificationNumber.tooltip.ita": "Verotunnus (Codice fiscale)",
   "common.next": "Seuraava",
   "common.noResult": "Ei tuloksia",
