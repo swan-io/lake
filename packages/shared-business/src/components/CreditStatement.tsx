@@ -275,7 +275,7 @@ export const CreditStatementV1 = ({
       <Box direction="row" justifyContent="spaceBetween">
         <Box direction="column" justifyContent="end">
           <LakeText style={styles.subtitle} color={colors.gray[900]}>
-            {t("accountStatement.date", {
+            {t("creditStatement.date", {
               openingDate: dayjs(openingDate).format(locale.dateFormat),
               closingDate: dayjs(closingDate).format(locale.dateFormat),
             })}
