@@ -25,9 +25,6 @@ const styles = StyleSheet.create({
     color: colors.swan[500],
     paddingBottom: spacings[4],
   },
-  dateTitleSpan: {
-    fontWeight: "600",
-  },
   totalAmount: {
     ...getTextStyle("sans", 20),
     fontWeight: "600",

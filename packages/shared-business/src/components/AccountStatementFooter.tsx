@@ -28,22 +28,6 @@ const styles = {
     paddingRight: "24px",
     whiteSpace: "pre-line",
   },
-  support: {
-    textAlign: "right",
-  },
-  supportText: {
-    fontSize: "12px",
-    lineHeight: "16px",
-    fontWeight: "600",
-    color: "#26232F",
-  },
-  supportLink: {
-    fontSize: "12px",
-    lineHeight: "16px",
-    fontWeight: "400",
-    color: "#454348",
-    textDecoration: "none",
-  },
 } as const;
 
 export const AccountStatementFooter = ({ language }: { language?: SupportedLanguage }) => {

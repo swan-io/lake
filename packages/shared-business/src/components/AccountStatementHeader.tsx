@@ -33,12 +33,6 @@ const styles = {
     lineHeight: "24px",
     marginBottom: "4px",
   },
-  text: {
-    fontSize: "12px",
-    lineHeight: "16px",
-    color: "#454348",
-    textAlign: "right",
-  },
   logo: {
     display: "flex",
     alignItems: "center",
