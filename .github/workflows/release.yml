@@ -12,6 +12,7 @@ jobs:
     if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
 
     permissions:
+      id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
       packages: write
       contents: write
 
@@ -45,12 +46,9 @@ jobs:
       - name: Pack
         run: pnpm build
 
-      # - name: Publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #   run: |
-      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-      #     pnpm publish --no-git-checks --recursive --access public --registry https://registry.npmjs.org
+      - name: Publish
+        run: |
+          pnpm publish --no-git-checks --recursive --provenance --access public --registry https://registry.npmjs.org
 
       - name: Publish on GitHub
         env:
