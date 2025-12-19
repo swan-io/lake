@@ -10,19 +10,15 @@ on:
     branches:
       - "*"
 
-permissions:
-  id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
-  packages: write
-  contents: write
-
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
 
-    # permissions:
-    #   packages: write
-    #   contents: write
+    permissions:
+      id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
+      packages: write
+      contents: write
 
     env:
       GH_TOKEN: ${{ github.token }}
@@ -58,7 +54,7 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm -r exec npm publish --no-git-checks --provenance --access public --registry https://registry.npmjs.org
+          pnpm publish --no-git-checks --recursive --access public --registry https://registry.npmjs.org
 
       - name: Publish on GitHub
         env:
