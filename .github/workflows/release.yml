@@ -10,15 +10,19 @@ on:
     branches:
       - "*"
 
+permissions:
+  id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
+  packages: write
+  contents: write
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
-      packages: write
-      contents: write
+    # permissions:
+    #   packages: write
+    #   contents: write
 
     env:
       GH_TOKEN: ${{ github.token }}
