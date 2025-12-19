@@ -14,7 +14,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    # if: ${{ github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-v') }}
 
     permissions:
       id-token: write # Required for OIDC (used for npm publish with Trusted publishing)
