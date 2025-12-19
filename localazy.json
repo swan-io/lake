@@ -24,6 +24,11 @@
       },
       {
         "group": "shared-business",
+        "lang": "fi",
+        "pattern": "packages/shared-business/src/locales/fi.json"
+      },
+      {
+        "group": "shared-business",
         "lang": "fr",
         "pattern": "packages/shared-business/src/locales/fr.json"
       },
