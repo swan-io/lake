@@ -1,9 +1,13 @@
 {
   "name": "@swan-io/lake",
   "version": "13.4.5",
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
-    "node": "^22.12.0"
+    "node": "^24.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:swan-io/lake.git"
   },
   "files": [
     "LICENSE",

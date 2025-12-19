@@ -2,9 +2,9 @@
   "name": "@swan-io/lake-monorepo",
   "description": "Swan's component kit",
   "version": "13.4.5",
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
-    "node": "^22.12.0"
+    "node": "^24.12.0"
   },
   "private": true,
   "repository": {
