@@ -54,7 +54,6 @@ jobs:
 
       - name: Publish on GitHub
         env:
-          NPM_CONFIG_PROVENANCE: false
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
