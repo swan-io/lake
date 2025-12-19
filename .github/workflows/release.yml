@@ -58,7 +58,7 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
         run: |
-          pnpm publish --no-git-checks --recursive --access public --registry https://registry.npmjs.org
+          pnpm publish --no-git-checks --recursive --access public --registry https://registry.npmjs.org --loglevel verbose
 
       - name: Publish on GitHub
         env:
