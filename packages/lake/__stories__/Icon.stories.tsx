@@ -11,6 +11,7 @@ import { Space } from "../src/components/Space";
 import { colors, ColorVariants } from "../src/constants/design";
 import customIcons from "../src/icons/custom-icons.json";
 import fluentIcons from "../src/icons/fluent-icons.json";
+import fluentResizedIcons from "../src/icons/fluent-resized-icons.json";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -46,7 +47,7 @@ export const Default = () => {
 
       <StoryPart title="Fluent icons">
         <Box direction="row" alignItems="center" style={styles.container}>
-          {getKeys(fluentIcons)
+          {getKeys({ ...fluentIcons, ...fluentResizedIcons })
             .filter(name => name.includes(search))
             .map(name => (
               <Box key={name} alignItems="center" style={styles.icon}>
