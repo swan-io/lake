@@ -4,8 +4,11 @@ import { Path, Svg } from "./Svg";
 
 import customIcons from "../icons/custom-icons.json";
 import fluentIcons from "../icons/fluent-icons.json";
+// This files contains fluent icons which aren't available in 24x24 size
+import fluentResizedIcons from "../icons/fluent-resized-icons.json";
 
 const paths = {
+  ...fluentResizedIcons,
   ...fluentIcons,
   ...customIcons,
 };
