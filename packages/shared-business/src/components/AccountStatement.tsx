@@ -179,9 +179,11 @@ export const AccountStatementV1 = ({
           <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
               <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
-              <Text style={styles.pageSubTitle}>{accountHolderType === "Company"
-                ? t("accountStatement.titleDocument.companyDescription")
-                : t("accountStatement.titleDocument.individualDescription")}</Text>
+              <Text style={styles.pageSubTitle}>
+                {accountHolderType === "Company"
+                  ? t("accountStatement.titleDocument.companyDescription")
+                  : t("accountStatement.titleDocument.individualDescription")}
+              </Text>
               <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
               <Text style={styles.text}>{accountHolderAddress.street}</Text>
@@ -208,15 +210,13 @@ export const AccountStatementV1 = ({
           <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
               <Text style={styles.dateTitle}>
-              {t("accountStatement.date", { openingDate, closingDate })}
+                {t("accountStatement.date", { openingDate, closingDate })}
               </Text>
             </Box>
 
             <Box direction="column">
               <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
-              <Text style={styles.totalAmount}>
-                {openingBalance.value}
-              </Text>
+              <Text style={styles.totalAmount}>{openingBalance.value}</Text>
             </Box>
           </Box>
           <Space height={24} />
@@ -282,11 +282,7 @@ export const AccountStatementV1 = ({
             >
               <Title text={t("accountStatement.closingBalance")} />
 
-              <Title
-                text={closingBalance.value}
-                style={styles.totalAmount}
-                align="right"
-              />
+              <Title text={closingBalance.value} style={styles.totalAmount} align="right" />
             </Box>
           </Box>
         </Box>
