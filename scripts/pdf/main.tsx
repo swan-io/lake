@@ -468,9 +468,7 @@ const data = {
 };
 
 // Set data on window (accessible from browser console or other scripts)
-window.headerTemplate = renderToStaticMarkup(
-  <AccountStatementHeader language={"fr"} />,
-);
+window.headerTemplate = renderToStaticMarkup(<AccountStatementHeader language={"fr"} />);
 
 window.footerTemplate = renderToStaticMarkup(<AccountStatementFooter language={"fr"} />);
 

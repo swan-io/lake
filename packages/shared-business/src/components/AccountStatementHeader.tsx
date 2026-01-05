@@ -88,10 +88,10 @@ export const AccountStatementHeader = ({
           <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
         </div>
       </div>
-          <div style={styles.pageNumber}>
-            {t("accountStatement.page")} <span className="pageNumber" /> /{" "}
-            <span className="totalPages" />
-          </div>
+      <div style={styles.pageNumber}>
+        {t("accountStatement.page")} <span className="pageNumber" /> /{" "}
+        <span className="totalPages" />
+      </div>
     </div>
   );
 };
