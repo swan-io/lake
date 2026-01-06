@@ -12,6 +12,7 @@ const styles = {
     color: "#26232F",
     lineHeight: "12.5px",
     fontWeight: "300",
+    marginLeft: "15px",
   },
   wrapper: {
     display: "flex",

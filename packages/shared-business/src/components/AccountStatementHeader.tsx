@@ -4,8 +4,8 @@ import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 
-const LOGO_MAX_HEIGHT = 24;
-const LOGO_MAX_WIDTH = 150;
+const LOGO_MAX_HEIGHT = 50;
+const LOGO_MAX_WIDTH = 300;
 
 // Used to generate inline styles without css variables for PDF generation
 const styles = {
@@ -30,8 +30,7 @@ const styles = {
   },
   partnershipText: {
     fontSize: "12px",
-    lineHeight: "24px",
-    marginBottom: "4px",
+    lineHeight: "24px"
   },
   logo: {
     display: "flex",
@@ -48,7 +47,7 @@ const styles = {
     top: 0.5,
   },
   pageNumber: {
-    fontSize: "18px",
+    fontSize: "12px",
     color: "#26232F",
     fontWeight: "600",
     textTransform: "uppercase",
@@ -88,8 +87,7 @@ export const AccountStatementHeader = ({
         </div>
       </div>
       <div style={styles.pageNumber}>
-        {t("accountStatement.page")} <span className="pageNumber" /> /{" "}
-        <span className="totalPages" />
+        {t("accountStatement.page")} <span className="pageNumber" />/{" "}<span className="totalPages" />
       </div>
     </div>
   );
