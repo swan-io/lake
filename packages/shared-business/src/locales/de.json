@@ -8,6 +8,7 @@
   "accountStatement.column.debit": "Lastschrift (€)",
   "accountStatement.column.description": "Beschreibung",
   "accountStatement.column.fees": "Gebühren",
+  "accountStatement.column.total": "Summe",
   "accountStatement.column.totals": "Summen",
   "accountStatement.column.type": "Typ",
   "accountStatement.contactSupport": "Kontaktiere Swan",

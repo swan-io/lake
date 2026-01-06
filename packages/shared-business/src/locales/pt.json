@@ -8,6 +8,7 @@
   "accountStatement.column.debit": "Débito (€)",
   "accountStatement.column.description": "Descrição",
   "accountStatement.column.fees": "Taxas",
+  "accountStatement.column.total": "Total",
   "accountStatement.column.totals": "Totais",
   "accountStatement.column.type": "Tipo",
   "accountStatement.contactSupport": "Contacte a Swan",

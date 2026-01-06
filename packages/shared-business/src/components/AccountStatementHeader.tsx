@@ -48,9 +48,8 @@ const styles = {
     top: 0.5,
   },
   pageNumber: {
-    fontSize: "20px",
+    fontSize: "18px",
     color: "#26232F",
-    marginTop: "20px",
     fontWeight: "600",
     textTransform: "uppercase",
   },

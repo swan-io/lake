@@ -8,6 +8,7 @@
   "accountStatement.column.debit": "Veloitus (€)",
   "accountStatement.column.description": "Kuvaus",
   "accountStatement.column.fees": "Maksut",
+  "accountStatement.column.total": "Yhteensä",
   "accountStatement.column.totals": "Yhteensä",
   "accountStatement.column.type": "Tyyppi",
   "accountStatement.contactSupport": "Ota yhteyttä Swaniin",

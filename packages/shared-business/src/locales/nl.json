@@ -8,6 +8,7 @@
   "accountStatement.column.debit": "Debet (€)",
   "accountStatement.column.description": "Omschrijving",
   "accountStatement.column.fees": "Kosten",
+  "accountStatement.column.total": "Totaal",
   "accountStatement.column.totals": "Totalen",
   "accountStatement.column.type": "Type",
   "accountStatement.contactSupport": "Neem contact op met Swan",

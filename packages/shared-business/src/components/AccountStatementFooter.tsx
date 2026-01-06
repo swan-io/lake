@@ -10,7 +10,6 @@ const styles = {
     boxSizing: "border-box",
     letterSpacing: "-0.011em",
     color: "#26232F",
-    fontSize: "10px",
     lineHeight: "12.5px",
     fontWeight: "300",
   },
@@ -27,6 +26,7 @@ const styles = {
     textAlign: "center",
     paddingRight: "24px",
     whiteSpace: "pre-line",
+    fontSize: "8px",
   },
 } as const;
 

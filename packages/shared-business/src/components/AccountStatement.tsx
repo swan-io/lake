@@ -13,6 +13,14 @@ const styles = StyleSheet.create({
     width: 793,
     padding: 10,
   },
+  firstSectionTitle: {
+    ...getTextStyle("sans", 14),
+    color: colors.swan[500],
+    fontWeight: "600",
+    textTransform: "uppercase",
+    paddingBottom: spacings[4],
+    marginTop: "30%",
+  },
   sectionTitle: {
     ...getTextStyle("sans", 14),
     color: colors.swan[500],
@@ -26,17 +34,17 @@ const styles = StyleSheet.create({
     paddingBottom: spacings[4],
   },
   totalAmount: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 18),
     fontWeight: "600",
     textAlign: "right",
   },
   pageTitle: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 18),
     fontWeight: "600",
     color: "#26232F",
   },
   titleColumn: {
-    ...getTextStyle("sans", 14),
+    ...getTextStyle("sans", 12),
     fontWeight: "600",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
@@ -50,7 +58,7 @@ const styles = StyleSheet.create({
     ...getTextStyle("sans", 10),
   },
   text: {
-    ...getTextStyle("sans", 14),
+    ...getTextStyle("sans", 12),
   },
   pageSubTitle: {
     ...getTextStyle("sans", 12),
@@ -64,9 +72,12 @@ const styles = StyleSheet.create({
     width: "15%",
   },
   closingBalanceRow: {
-    ...getTextStyle("sans", 14),
+    ...getTextStyle("sans", 12),
     backgroundColor: colors.gray[50],
     width: "50%",
+  },
+  closingBalanceRowText: {
+    paddingLeft: "10%"
   },
 });
 
@@ -177,8 +188,10 @@ export const AccountStatementV1 = ({
       <Box style={styles.container} direction="column" justifyContent="spaceBetween">
         <Box>
           <Box direction="row" justifyContent="spaceBetween">
+            <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
+          </Box>
+          <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
-              <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
               <Text style={styles.pageSubTitle}>
                 {accountHolderType === "Company"
                   ? t("accountStatement.titleDocument.companyDescription")
@@ -193,7 +206,7 @@ export const AccountStatementV1 = ({
               )}
             </Box>
             <Box direction="column" alignItems="end">
-              <Text style={styles.sectionTitle}>{t("accountStatement.contactSupport")}</Text>
+              <Text style={styles.firstSectionTitle}>{t("accountStatement.contactSupport")}</Text>
               <Text style={styles.text}>{"support.swan.io"}</Text>
             </Box>
           </Box>
@@ -267,7 +280,7 @@ export const AccountStatementV1 = ({
             </Box>
 
             <Box direction="row" justifyContent="end">
-              <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
+              <Text style={styles.row}>{t("accountStatement.column.total")}</Text>
               <Text style={styles.row}>{totalsCredit.value}</Text>
               <Text style={styles.row}>{totalsDebit.value}</Text>
             </Box>
@@ -280,7 +293,7 @@ export const AccountStatementV1 = ({
               style={styles.closingBalanceRow}
               justifyContent="spaceBetween"
             >
-              <Title text={t("accountStatement.closingBalance")} />
+              <Title style={styles.closingBalanceRowText} text={t("accountStatement.closingBalance")} />
 
               <Title text={closingBalance.value} style={styles.totalAmount} align="right" />
             </Box>
