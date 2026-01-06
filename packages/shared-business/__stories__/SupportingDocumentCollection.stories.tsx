@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Option, Result } from "@swan-io/boxed";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
+import { NetworkError, Response, TimeoutError } from "@swan-io/request";
 import { useRef, useState } from "react";
 import {
   Document,
@@ -8,7 +9,8 @@ import {
   SupportingDocumentCollectionRef,
   UploadOutput,
 } from "../src/components/SupportingDocumentCollection";
-import { UploadOutputWithId } from "../src/hooks/useFilesUploader";
+import { UploadFileInput, UploadOutputWithId } from "../src/hooks/useFilesUploader";
+import { SwanFile } from "../src/utils/SwanFile";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
@@ -31,6 +33,23 @@ const generateUpload = () =>
     }, 500);
   });
 
+const uploadFile = (_config: UploadFileInput<UploadOutput>) =>
+  Future.make<Result<Response<string>, NetworkError | TimeoutError>>(resolve => {
+    setTimeout(() => {
+      resolve(
+        Result.Ok({
+          headers: new Headers(),
+          status: 200,
+          ok: true,
+          url: "",
+          response: Option.None(),
+        }),
+      );
+    }, 500);
+  });
+
+const onRemoveFile = (_file: SwanFile) => Future.value(Result.Ok(undefined));
+
 export const WaitingForDocument = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
   const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
@@ -42,8 +61,10 @@ export const WaitingForDocument = () => {
           ref={ref}
           status="WaitingForDocument"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
+          onRemoveFile={onRemoveFile}
           requiredDocumentPurposes={[
             "CompanyRegistration",
             "ProofOfIdentity",
@@ -101,6 +122,7 @@ export const WaitingForDocumentShowIds = () => {
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
@@ -159,6 +181,7 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[
@@ -188,6 +211,7 @@ export const Pending = () => {
         <SupportingDocumentCollection
           status="PendingReview"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={[
             {
               purpose: "ProofOfIdentity",
@@ -213,6 +237,7 @@ export const Approved = () => {
         <SupportingDocumentCollection
           status="Approved"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={[
             {
               purpose: "ProofOfIdentity",
@@ -238,6 +263,7 @@ export const ApprovedWithoutDownload = () => {
         <SupportingDocumentCollection
           status="Approved"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={[
             {
               purpose: "ProofOfIdentity",
@@ -262,6 +288,7 @@ export const Rejected = () => {
         <SupportingDocumentCollection
           status="Rejected"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={[
             {
               purpose: "ProofOfIdentity",
@@ -288,6 +315,7 @@ export const ReadOnlyEmpty = () => {
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
           requiredDocumentPurposes={[]}
@@ -306,6 +334,7 @@ export const ReadOnlyWithDocs = () => {
         <SupportingDocumentCollection
           status="WaitingForDocument"
           generateUpload={generateUpload}
+          uploadFile={uploadFile}
           documents={[
             {
               purpose: "ProofOfIdentity",
