@@ -13,6 +13,14 @@ const styles = StyleSheet.create({
     width: 793,
     padding: 10,
   },
+  firstSectionTitle: {
+    ...getTextStyle("sans", 14),
+    color: colors.swan[500],
+    fontWeight: "600",
+    textTransform: "uppercase",
+    paddingBottom: spacings[4],
+    marginTop: "30%",
+  },
   sectionTitle: {
     ...getTextStyle("sans", 14),
     color: colors.swan[500],
@@ -67,6 +75,9 @@ const styles = StyleSheet.create({
     ...getTextStyle("sans", 12),
     backgroundColor: colors.gray[50],
     width: "50%",
+  },
+  closingBalanceRowText: {
+    paddingLeft: "10%"
   },
 });
 
@@ -195,7 +206,7 @@ export const AccountStatementV1 = ({
               )}
             </Box>
             <Box direction="column" alignItems="end">
-              <Text style={[styles.sectionTitle, { marginTop: "30%" }]}>{t("accountStatement.contactSupport")}</Text>
+              <Text style={styles.firstSectionTitle}>{t("accountStatement.contactSupport")}</Text>
               <Text style={styles.text}>{"support.swan.io"}</Text>
             </Box>
           </Box>
@@ -282,7 +293,7 @@ export const AccountStatementV1 = ({
               style={styles.closingBalanceRow}
               justifyContent="spaceBetween"
             >
-              <Title style={[{paddingLeft: "10%"}]} text={t("accountStatement.closingBalance")} />
+              <Title style={styles.closingBalanceRowText} text={t("accountStatement.closingBalance")} />
 
               <Title text={closingBalance.value} style={styles.totalAmount} align="right" />
             </Box>
