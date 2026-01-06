@@ -162,6 +162,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   requiredDocumentPurposes,
   templateLanguage = locale.language,
   status,
+  onChange,
   onRemoveFile,
   showIds = false,
   readOnly = false,
@@ -392,6 +393,14 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                     onChange={files => {
                       if (isRequired) {
                         filesByRequiredPurpose.current.set(purpose, files);
+                        const documents: Document<Purpose>[] = filesByRequiredPurpose.current
+                          .entries()
+                          .reduce<Document<Purpose>[]>((acc, [purpose, files]) => {
+                            const purposeDocuments = files.map(file => ({ purpose, file }));
+                            acc.push(...purposeDocuments);
+                            return acc;
+                          }, []);
+                        onChange?.(documents);
                       }
                     }}
                     showIds={showIds}

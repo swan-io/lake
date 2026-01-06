@@ -10,6 +10,7 @@ import {
   UploadOutput,
 } from "../src/components/SupportingDocumentCollection";
 import { UploadFileInput, UploadOutputWithId } from "../src/hooks/useFilesUploader";
+import { SwanFile } from "../src/utils/SwanFile";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
@@ -47,6 +48,8 @@ const uploadFile = (_config: UploadFileInput<UploadOutput>) =>
     }, 500);
   });
 
+const onRemoveFile = (_file: SwanFile) => Future.value(Result.Ok(undefined));
+
 export const WaitingForDocument = () => {
   const [documents, setDocuments] = useState<Document<string>[]>([]);
   const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
@@ -61,6 +64,7 @@ export const WaitingForDocument = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
+          onRemoveFile={onRemoveFile}
           requiredDocumentPurposes={[
             "CompanyRegistration",
             "ProofOfIdentity",
