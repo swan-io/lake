@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   firstSectionTitle: {
     ...getTextStyle("sans", 12),
     color: colors.swan[500],
-    fontWeight: "400",
+    fontWeight: "500",
     textTransform: "uppercase",
     paddingBottom: spacings[4],
     marginTop: "30%",
@@ -24,38 +24,38 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...getTextStyle("sans", 12),
     color: colors.swan[500],
-    fontWeight: "400",
+    fontWeight: "500",
     textTransform: "uppercase",
     paddingBottom: spacings[4],
   },
   dateTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 10),
     color: colors.swan[500],
     paddingBottom: spacings[4],
   },
   totalAmount: {
     ...getTextStyle("sans", 16),
-    fontWeight: "400",
+    fontWeight: "500",
     textAlign: "right",
   },
   pageTitle: {
     ...getTextStyle("sans", 16),
-    fontWeight: "400",
+    fontWeight: "500",
     color: "#26232F",
   },
   titleColumn: {
     ...getTextStyle("sans", 10),
-    fontWeight: "400",
+    fontWeight: "500",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
   },
   openingBalanceText: {
-    ...getTextStyle("sans", 13),
+    ...getTextStyle("sans", 10),
     textAlign: "right",
   },
   textColumn: {
     paddingVertical: spacings[4],
-    ...getTextStyle("sans", 8),
+    ...getTextStyle("sans", 10),
   },
   text: {
     ...getTextStyle("sans", 10),
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   row: {
     textAlign: "right",
     paddingVertical: spacings[4],
-    fontWeight: "400",
+    fontWeight: "500",
     width: "15%",
   },
   closingBalanceRow: {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   closingBalanceRowText: {
-    paddingLeft: "10%"
+    paddingLeft: "20%"
   },
 });
 
@@ -200,10 +200,8 @@ export const AccountStatementV1 = ({
               <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
 
               <Text style={styles.text}>{accountHolderAddress.street}</Text>
-              <Text style={styles.text}>{accountHolderAddress.city}</Text>
-              {isNotNullish(accountHolderAddress.country) && (
-                <Text style={styles.text}>{getCountryName(accountHolderAddress.country)}</Text>
-              )}
+              <Text style={styles.text}>{accountHolderAddress.city}, {isNotNullish(accountHolderAddress.country) && (accountHolderAddress.country)}
+              </Text>
             </Box>
             <Box direction="column" alignItems="end">
               <Text style={styles.firstSectionTitle}>{t("accountStatement.contactSupport")}</Text>
@@ -211,14 +209,19 @@ export const AccountStatementV1 = ({
             </Box>
           </Box>
           <Space height={24} />
-
-          <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-          <Text style={styles.text}>{iban}</Text>
-
+          {isNotNullish(iban) && (
+            <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
+          )}
+          {isNotNullish(iban) && (
+            <Text style={styles.text}>{iban}</Text>
+          )}
           <Space height={12} />
-          <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-          <Text style={styles.text}>{bic}</Text>
-
+          {isNotNullish(bic) && (
+            <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
+          )}
+          {isNotNullish(bic) && (
+            <Text style={styles.text}>{bic}</Text>
+          )}
           <Space height={48} />
           <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">

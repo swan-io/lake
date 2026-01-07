@@ -4,14 +4,14 @@ import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
 import { useTranslation, type SupportedLanguage } from "../utils/i18n";
 
-const LOGO_MAX_HEIGHT = 50;
-const LOGO_MAX_WIDTH = 300;
+const LOGO_MAX_HEIGHT = 45;
+const LOGO_MAX_WIDTH = 275;
 
 // Used to generate inline styles without css variables for PDF generation
 const styles = {
   container: {
     width: 793,
-    padding: "10px",
+    padding: 10,
     fontFamily:
       "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
     boxSizing: "border-box",
@@ -25,11 +25,11 @@ const styles = {
   },
   partnership: {
     borderLeft: "1px solid #e8e7e8",
-    padding: "7px 8px",
+    padding: "7px 10px",
     marginLeft: "8px",
   },
   partnershipText: {
-    fontSize: "12px",
+    fontSize: "13px",
     lineHeight: "24px"
   },
   logo: {
@@ -47,9 +47,9 @@ const styles = {
     top: 0.5,
   },
   pageNumber: {
-    fontSize: "12px",
+    fontSize: "13px",
     color: "#26232F",
-    fontWeight: "600",
+    fontWeight: "500",
     textTransform: "uppercase",
   },
 } as const;
@@ -87,7 +87,7 @@ export const AccountStatementHeader = ({
         </div>
       </div>
       <div style={styles.pageNumber}>
-        {t("accountStatement.page")} <span className="pageNumber" />/{" "}<span className="totalPages" />
+        {t("accountStatement.page")} <span className="pageNumber" />/<span className="totalPages" />
       </div>
     </div>
   );
