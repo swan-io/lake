@@ -210,17 +210,17 @@ export const AccountStatementV1 = ({
           </Box>
           <Space height={24} />
           {isNotNullish(iban) && (
-            <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-          )}
-          {isNotNullish(iban) && (
-            <Text style={styles.text}>{iban}</Text>
+            <>
+              <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
+              <Text style={styles.text}>{iban}</Text>
+            </>
           )}
           <Space height={12} />
           {isNotNullish(bic) && (
-            <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-          )}
-          {isNotNullish(bic) && (
-            <Text style={styles.text}>{bic}</Text>
+            <>
+              <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
+              <Text style={styles.text}>{bic}</Text>
+            </>
           )}
           <Space height={48} />
           <Box direction="row" justifyContent="spaceBetween">
