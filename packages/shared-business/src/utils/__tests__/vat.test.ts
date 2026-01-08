@@ -7,6 +7,9 @@ describe("isValidVatNumber", () => {
       expect(isValidVatNumber("U12345678")).toBe(true);
       expect(isValidVatNumber("ATU12345678")).toBe(true);
     });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("AT12345678")).toBe(false); // U missing
+    });
   });
 
   describe("BE (Belgium)", () => {
@@ -14,6 +17,9 @@ describe("isValidVatNumber", () => {
       expect(isValidVatNumber("0123456789")).toBe(true);
       expect(isValidVatNumber("1123456789")).toBe(true);
       expect(isValidVatNumber("BE0123456789")).toBe(true);
+    });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("BE2123456789")).toBe(false); // not starting with 1
     });
   });
 
@@ -29,6 +35,9 @@ describe("isValidVatNumber", () => {
     test("accepts valid VAT numbers", () => {
       expect(isValidVatNumber("12345678L")).toBe(true);
       expect(isValidVatNumber("CY12345678L")).toBe(true);
+    });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("CY12345678")).toBe(false); // not finishing with L
     });
   });
 
@@ -99,6 +108,9 @@ describe("isValidVatNumber", () => {
       expect(isValidVatNumber("AB123")).toBe(true);
       expect(isValidVatNumber("GB123456789")).toBe(true);
     });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("GBB123")).toBe(false); // Must be 2 letter after GB
+    });
   });
 
   describe("HU (Hungary)", () => {
@@ -112,6 +124,10 @@ describe("isValidVatNumber", () => {
     test("accepts valid VAT numbers", () => {
       expect(isValidVatNumber("1S23456L")).toBe(true);
       expect(isValidVatNumber("IE1S23456L")).toBe(true);
+    });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("IE1S23456")).toBe(false); // Must have L at the end
+      expect(isValidVatNumber("IE123456L")).toBe(false); // Must have S
     });
   });
 
@@ -156,6 +172,9 @@ describe("isValidVatNumber", () => {
       expect(isValidVatNumber("123456789B12")).toBe(true);
       expect(isValidVatNumber("NL123456789B12")).toBe(true);
     });
+    test("rejects invalid VAT numbers", () => {
+      expect(isValidVatNumber("NL12345678912")).toBe(false); // Must have B
+    });
   });
 
   describe("PL (Poland)", () => {
@@ -198,6 +217,13 @@ describe("isValidVatNumber", () => {
     test("accepts valid VAT numbers", () => {
       expect(isValidVatNumber("1234567890")).toBe(true);
       expect(isValidVatNumber("SK1234567890")).toBe(true);
+    });
+  });
+
+  describe("Unsuported", () => {
+    test("refuse unvalid VAT numbers", () => {
+      expect(isValidVatNumber("123450972374924")).toBe(false); // too long
+      expect(isValidVatNumber("RU1234567890")).toBe(false); // country not supported
     });
   });
 });
