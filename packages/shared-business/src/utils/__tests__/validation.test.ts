@@ -7,9 +7,13 @@ import {
   getTaxNumberTooltip,
   isValidEmail,
   sanitizeDecimal,
+  validateArrayRequired,
   validateBooleanRequired,
+  validateBooleanTypeRequired,
   validateCompanyTaxNumber,
+  validateDate,
   validateIndividualTaxNumber,
+  validateName,
   validateNullableRequired,
   validateRequired,
 } from "../validation";
@@ -61,6 +65,66 @@ describe("validateBooleanRequired", () => {
 
   test("returns undefined for true", () => {
     expect(validateBooleanRequired(true)).toBeUndefined();
+  });
+});
+
+describe("validateBooleanTypeRequired", () => {
+  test("returns error for undefined", () => {
+    expect(validateBooleanTypeRequired(undefined)).toBeDefined();
+  });
+
+  test("returns undefined for true or false", () => {
+    expect(validateBooleanTypeRequired(true)).toBeUndefined();
+    expect(validateBooleanTypeRequired(false)).toBeUndefined();
+  });
+});
+
+describe("validateArrayRequired", () => {
+  test("returns error for undefined", () => {
+    expect(validateArrayRequired(undefined)).toBeDefined();
+  });
+
+  test("returns error for empty arrays", () => {
+    expect(validateArrayRequired([])).toBeDefined();
+  });
+
+  test("returns undefined for arrays with at least one element", () => {
+    expect(validateArrayRequired(["value"])).toBeUndefined();
+    expect(validateArrayRequired(["value1", "value2"])).toBeUndefined();
+  });
+});
+
+describe("validateName", () => {
+  test("returns error for empty or falsy values", () => {
+    expect(validateName("")).toBeDefined();
+  });
+
+  test("returns error for names longer than 100 characters", () => {
+    const longName = "A".repeat(101);
+    expect(validateName(longName)).toBeDefined();
+  });
+
+  test("accepts names with exactly 100 characters", () => {
+    const name100 = "A".repeat(100);
+    expect(validateName(name100)).toBeUndefined();
+  });
+
+  test("accepts valid names with basic ASCII letters", () => {
+    expect(validateName("José")).toBeUndefined();
+    expect(validateName("Mary Jane")).toBeUndefined();
+    expect(validateName("O'Brien")).toBeUndefined();
+    expect(validateName("Jean-Pierre")).toBeUndefined();
+    expect(validateName("Smith, Jr.")).toBeUndefined();
+  });
+
+  test("rejects names with invalid characters", () => {
+    expect(validateName("John123")).toBeDefined(); // contains numbers
+    expect(validateName("John@Doe")).toBeDefined(); // contains @
+    expect(validateName("John#Doe")).toBeDefined(); // contains #
+    expect(validateName("John$Doe")).toBeDefined(); // contains $
+    expect(validateName("John_Doe")).toBeDefined(); // contains underscore
+    expect(validateName("John!Doe")).toBeDefined(); // contains !
+    expect(validateName("John?Doe")).toBeDefined(); // contains ?
   });
 });
 
@@ -366,6 +430,26 @@ describe("Tax number helper functions", () => {
       expect(getCompanyTaxNumberHelp("NLD")).toBeTypeOf("string");
       expect(getCompanyTaxNumberHelp("PRT")).toBeTypeOf("string");
     });
+  });
+});
+
+describe("validateDate", () => {
+  test("returns error for undefined or null", () => {
+    expect(validateDate(undefined)).toBeDefined();
+  });
+
+  test("returns undefined for valid ExtractedDate", () => {
+    expect(validateDate({ day: "5", month: "03", year: "2024" })).toBeUndefined();
+  });
+
+  test("handles padded and unpadded values", () => {
+    expect(validateDate({ day: "05", month: " 3", year: "2024" })).toBeUndefined();
+  });
+
+  test("returns error for invalid ExtractedDate", () => {
+    expect(validateDate({ day: "32", month: "01", year: "2024" })).toBeDefined(); // Invalid day
+    expect(validateDate({ day: "15", month: "13", year: "2024" })).toBeDefined(); // Invalid month
+    expect(validateDate({ day: "31", month: "04", year: "2024" })).toBeDefined(); // April has 30 days
   });
 });
 

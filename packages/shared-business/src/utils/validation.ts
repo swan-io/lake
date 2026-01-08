@@ -138,9 +138,61 @@ export const validateRequired: Validator<string> = value => {
   }
 };
 
+// False or undefined will return an error message
 export const validateBooleanRequired: Validator<boolean | undefined> = value => {
   if (value == null || !value) {
     return t("error.requiredField");
+  }
+};
+
+export const validateBooleanTypeRequired: Validator<boolean | undefined> = value => {
+  if (typeof value !== "boolean") {
+    return t("error.requiredField");
+  }
+};
+
+export const validateArrayRequired: Validator<string[] | undefined> = value => {
+  if (value == null || value.length < 1) {
+    return t("error.requiredField");
+  }
+};
+
+export const validateVatNumber: Validator<string> = value => {
+  const cleaned = value.replace(/[^A-Z0-9]/gi, "");
+  if (cleaned.length === 0) {
+    return;
+  }
+
+  if (!isValidVatNumber(cleaned)) {
+    return t("error.invalidVatNumber");
+  }
+};
+
+export const validateEmail: Validator<string> = value => {
+  if (!isValidEmail(value)) {
+    return t("error.invalidEmail");
+  }
+};
+
+// This regex was copied from the backend to ensure that the validation is the same
+// Matches all unicode letters, spaces, dashes, apostrophes, commas, and single quotes
+const VALID_NAME_RE =
+  /^(?:[A-Za-zÀ-ÖÙ-öù-ƿǄ-ʯʹ-ʽΈ-ΊΎ-ΡΣ-ҁҊ-Ֆա-ևႠ-Ⴥა-ჺᄀ-፜፩-ᎏᵫ-ᶚḀ-῾ⴀ-ⴥ⺀-⿕ぁ-ゖゝ-ㇿ㋿-鿯鿿-ꒌꙀ-ꙮꚀ-ꚙꜦ-ꞇꞍ-ꞿꥠ-ꥼＡ-Ｚａ-ｚ.]| |'|-|Ά|Ό|,)*$/;
+
+export const validateName: Validator<string> = value => {
+  if (!value) {
+    return t("error.requiredField");
+  }
+
+  // Rule copied from the backend
+  if (value.length > 100) {
+    return t("error.invalidName");
+  }
+
+  const isValid = VALID_NAME_RE.test(value);
+
+  if (!isValid) {
+    return t("error.invalidName");
   }
 };
 
