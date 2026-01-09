@@ -6,7 +6,7 @@
   "accountStatement.column.credit": "Crédit (€)",
   "accountStatement.column.date": "Date",
   "accountStatement.column.debit": "Débit (€)",
-  "accountStatement.column.description": "Descriptif",
+  "accountStatement.column.description": "Description",
   "accountStatement.column.fees": "Frais",
   "accountStatement.column.total": "Total",
   "accountStatement.column.totals": "Totaux",
