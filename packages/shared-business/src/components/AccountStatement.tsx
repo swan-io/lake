@@ -1,7 +1,7 @@
 import { Box } from "@swan-io/lake/src/components/Box";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors, spacings } from "@swan-io/lake/src/constants/design";
-import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
+import { isNotEmpty, isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
@@ -209,14 +209,14 @@ export const AccountStatementV1 = ({
             </Box>
           </Box>
           <Space height={24} />
-          {iban !== "" && (
+          {isNotEmpty(iban) && (
             <>
               <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
               <Text style={styles.text}>{iban}</Text>
             </>
           )}
           <Space height={12} />
-          {bic !== "" && (
+          {isNotEmpty(bic) && (
             <>
               <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
               <Text style={styles.text}>{bic}</Text>
