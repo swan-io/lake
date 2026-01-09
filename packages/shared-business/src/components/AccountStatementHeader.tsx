@@ -35,6 +35,7 @@ const styles = {
   logo: {
     display: "flex",
     alignItems: "center",
+    marginLeft: 10,
   },
   defaultLogo: {
     height: LOGO_MAX_HEIGHT,
@@ -47,7 +48,7 @@ const styles = {
     top: 0.5,
   },
   pageNumber: {
-    fontSize: "13px",
+    fontSize: "14px",
     color: "#26232F",
     fontWeight: "500",
     textTransform: "uppercase",

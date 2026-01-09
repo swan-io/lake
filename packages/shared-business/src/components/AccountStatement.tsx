@@ -209,14 +209,14 @@ export const AccountStatementV1 = ({
             </Box>
           </Box>
           <Space height={24} />
-          {isNotNullish(iban) && (
+          {iban !== "" && (
             <>
               <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
               <Text style={styles.text}>{iban}</Text>
             </>
           )}
           <Space height={12} />
-          {isNotNullish(bic) && (
+          {bic !== "" && (
             <>
               <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
               <Text style={styles.text}>{bic}</Text>
