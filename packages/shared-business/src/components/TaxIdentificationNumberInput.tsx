@@ -54,11 +54,7 @@ export const TaxIdentificationNumberInput = ({
       optionalLabel={required === true ? undefined : t("common.optional")}
       help={
         tooltipContents != null ? (
-          <LakeTooltip
-            content={tooltipContents}
-            placement="right"
-            width={country === "DEU" ? 800 : undefined}
-          >
+          <LakeTooltip content={tooltipContents} placement="right">
             <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
           </LakeTooltip>
         ) : null
