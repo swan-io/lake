@@ -293,7 +293,7 @@ export const getCompanyTaxNumberPlaceholder = (
 
 export const getTaxNumberTooltip = (country: IndividualCountryCCA3 | CompanyCountryCCA3) =>
   match(country)
-    .with("DEU", () => "Steuernummer des Unternehmens")
+    .with("DEU", () => "Persönliche Steueridentifikationsnummer des wirtschaftlich Berechtigten")
     .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
     .with("ITA", () => t("common.form.taxIdentificationNumber.tooltip.ita"))
     .otherwise(() => undefined);
