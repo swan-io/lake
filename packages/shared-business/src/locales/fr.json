@@ -366,7 +366,7 @@
   "supportingDocuments.rejectionReason.IbanMismatch": "L'IBAN du bénéficiaire sur le document soumis ne correspond pas à la demande de transaction.",
   "supportingDocuments.rejectionReason.InvalidAddress": "L'adresse dans le document soumis ne correspond pas à nos dossiers.",
   "supportingDocuments.rejectionReason.InvalidDocument": "Le document n'est pas valide.",
-  "supportingDocuments.rejectionReason.InvalidOrMissingData": "Le nom de l'actionnaire dans le document soumis est invalide ou manquant.",
+  "supportingDocuments.rejectionReason.InvalidOrMissingData": "Le document soumis est invalide ou il manque une information.",
   "supportingDocuments.rejectionReason.InvalidTransaction": "Les informations dans le document soumis ne correspondent pas à cette transaction spécifique.",
   "supportingDocuments.rejectionReason.MissingAccommodationProviderId": "Un document d'identité pour le fournisseur d'hébergement est requis.",
   "supportingDocuments.rejectionReason.MissingAccommodationProviderIdLetter": "L'identifiant du fournisseur d'hébergement et une preuve d'hébergement sont requis.",

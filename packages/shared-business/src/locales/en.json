@@ -366,7 +366,7 @@
   "supportingDocuments.rejectionReason.IbanMismatch": "The beneficiary IBAN on the document submitted doesn't match the transaction request.",
   "supportingDocuments.rejectionReason.InvalidAddress": "The address in the document submitted doesn't match our records.",
   "supportingDocuments.rejectionReason.InvalidDocument": "The document is not valid.",
-  "supportingDocuments.rejectionReason.InvalidOrMissingData": "The shareholder's name in the document submitted is invalid or missing.",
+  "supportingDocuments.rejectionReason.InvalidOrMissingData": "The document submitted is invalid, or some information is missing.",
   "supportingDocuments.rejectionReason.InvalidTransaction": "The information in the document submitted doesn't match this specific transaction.",
   "supportingDocuments.rejectionReason.MissingAccommodationProviderId": "An identity document for the accommodation provider is required.",
   "supportingDocuments.rejectionReason.MissingAccommodationProviderIdLetter": "The accommodation provider’s ID and proof of accommodation are required.",
