@@ -111,6 +111,7 @@ export type TransactionType =
   | "InternationalCreditTransfer"
   | "SepaCreditTransfer"
   | "SepaDirectDebit"
+  | "Seizure"
   | (string & {}); // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
 
 const translateTransaction = (transaction: TransactionType) => {
@@ -119,8 +120,11 @@ const translateTransaction = (transaction: TransactionType) => {
     .with("Check", () => t("accountStatement.check"))
     .with("Fees", () => t("accountStatement.fees"))
     .with("InternationalDirectDebit", "SepaDirectDebit", () => t("accountStatement.directDebit"))
-    .with("InternationalCreditTransfer", "SepaCreditTransfer", () =>
+    .with("SepaCreditTransfer", "Seizure", () =>
       t("accountStatement.creditTransfer"),
+    )
+    .with("InternationalCreditTransfer", () =>
+      t("accountStatement.internationalCreditTransfer"),
     )
     .otherwise(() => transaction);
 };
@@ -283,7 +287,7 @@ export const AccountStatementV1 = ({
             </Box>
 
             <Box direction="row" justifyContent="end">
-              <Text style={styles.row}>{t("accountStatement.column.total")}</Text>
+              <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
               <Text style={styles.row}>{totalsCredit.value}</Text>
               <Text style={styles.row}>{totalsDebit.value}</Text>
             </Box>

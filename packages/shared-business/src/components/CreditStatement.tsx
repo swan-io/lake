@@ -89,9 +89,9 @@ export type TransactionType = "SepaCreditTransfer" | "SepaDirectDebit" | "Card";
 
 const translateTransaction = (transaction: TransactionType) => {
   return match(transaction)
-    .with("Card", () => t("accountStatement.card"))
-    .with("SepaCreditTransfer", () => t("accountStatement.creditTransfer"))
-    .with("SepaDirectDebit", () => t("accountStatement.directDebit"))
+    .with("Card", () => t("creditStatement.card"))
+    .with("SepaCreditTransfer", () => t("creditStatement.creditTransfer"))
+    .with("SepaDirectDebit", () => t("creditStatement.directDebit"))
     .exhaustive();
 };
 
