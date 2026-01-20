@@ -360,7 +360,7 @@
   "supportingDocuments.rejectionReason.BadDocumentQuality": "The quality of the document is really low",
   "supportingDocuments.rejectionReason.CompanyNameMismatch": "The company name in the document submitted doesn't match our records.",
   "supportingDocuments.rejectionReason.DeclaredAmountMismatch": "The declared amount in the document submitted doesn't match our records.",
-  "supportingDocuments.rejectionReason.ExpiredDocument": "The expiry date in the document submitted must be within the past 3 months.",
+  "supportingDocuments.rejectionReason.ExpiredDocument": "The document is too old, please provide the latest version available.",
   "supportingDocuments.rejectionReason.FullDocumentRequired": "Full document required",
   "supportingDocuments.rejectionReason.HandwrittenOrCertifiedElectronicSignatureRequired": "The signature is not handwritten or electronically certified.",
   "supportingDocuments.rejectionReason.IbanMismatch": "The beneficiary IBAN on the document submitted doesn't match the transaction request.",
