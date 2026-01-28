@@ -26,11 +26,11 @@ const styles = {
   partnership: {
     borderLeft: "1px solid #e8e7e8",
     padding: "7px 10px",
-    marginLeft: "8px",
+    marginLeft: "11px",
   },
   partnershipText: {
     fontSize: "13px",
-    lineHeight: "24px"
+    lineHeight: "24px",
   },
   logo: {
     display: "flex",
