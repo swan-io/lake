@@ -4,7 +4,7 @@ import { colors, spacings } from "@swan-io/lake/src/constants/design";
 import { isNotEmpty, isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
-import { CountryCCA3, getCountryName } from "../constants/countries";
+import { CountryCCA3 } from "../constants/countries";
 import { t } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
@@ -14,56 +14,62 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   firstSectionTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 20),
     color: colors.swan[500],
     fontWeight: "500",
     textTransform: "uppercase",
-    paddingBottom: spacings[4],
-    marginTop: "30%",
+    marginTop: "37px",
   },
   sectionTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 20),
     color: colors.swan[500],
     fontWeight: "500",
     textTransform: "uppercase",
-    paddingBottom: spacings[4],
   },
   dateTitle: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 12),
     color: colors.swan[500],
-    paddingBottom: spacings[4],
   },
   totalAmount: {
-    ...getTextStyle("sans", 16),
+    ...getTextStyle("sans", 20),
     fontWeight: "500",
     textAlign: "right",
   },
   pageTitle: {
-    ...getTextStyle("sans", 16),
+    ...getTextStyle("sans", 20),
     fontWeight: "500",
     color: "#26232F",
   },
   titleColumn: {
-    ...getTextStyle("sans", 10),
-    fontWeight: "500",
+    ...getTextStyle("sans", 12),
+    fontWeight: "600",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
   },
   openingBalanceText: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 12),
     textAlign: "right",
+  },
+  thead: {
+    marginBottom: 12,
+    backgroundColor: colors.gray[50],
   },
   textColumn: {
     paddingVertical: spacings[4],
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 11),
+    lineHeight: 16,
   },
   text: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 12),
+    color: colors.swan[300],
+  },
+  textBold: {
+    ...getTextStyle("sans", 12),
+    fontWeight: "500",
   },
   pageSubTitle: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 12),
     color: "#454348",
-    paddingBottom: spacings[12],
   },
   row: {
     textAlign: "right",
@@ -72,12 +78,12 @@ const styles = StyleSheet.create({
     width: "15%",
   },
   closingBalanceRow: {
-    ...getTextStyle("sans", 10),
+    ...getTextStyle("sans", 12),
     backgroundColor: colors.gray[50],
     width: "50%",
   },
   closingBalanceRowText: {
-    paddingLeft: "20%"
+    paddingLeft: "20%",
   },
 });
 
@@ -120,12 +126,8 @@ const translateTransaction = (transaction: TransactionType) => {
     .with("Check", () => t("accountStatement.check"))
     .with("Fees", () => t("accountStatement.fees"))
     .with("InternationalDirectDebit", "SepaDirectDebit", () => t("accountStatement.directDebit"))
-    .with("SepaCreditTransfer", "Seizure", () =>
-      t("accountStatement.creditTransfer"),
-    )
-    .with("InternationalCreditTransfer", () =>
-      t("accountStatement.internationalCreditTransfer"),
-    )
+    .with("SepaCreditTransfer", "Seizure", () => t("accountStatement.creditTransfer"))
+    .with("InternationalCreditTransfer", () => t("accountStatement.internationalCreditTransfer"))
     .otherwise(() => transaction);
 };
 
@@ -192,42 +194,44 @@ export const AccountStatementV1 = ({
       <Box style={styles.container} direction="column" justifyContent="spaceBetween">
         <Box>
           <Box direction="row" justifyContent="spaceBetween">
-            <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
-          </Box>
-          <Box direction="row" justifyContent="spaceBetween">
             <Box direction="column">
+              <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
+              <Text style={styles.text}>{accountHolderAddress.street}</Text>
+              <Text style={styles.text}>
+                {accountHolderAddress.city},{" "}
+                {isNotNullish(accountHolderAddress.country) && accountHolderAddress.country}
+              </Text>
+
+              <Space height={24} />
+              {isNotEmpty(iban) && (
+                <Text style={styles.textBold}>
+                  {t("accountStatement.iban")} <Text style={styles.text}>{iban}</Text>
+                </Text>
+              )}
+              <Space height={4} />
+              {isNotEmpty(bic) && (
+                <Text style={styles.textBold}>
+                  {t("accountStatement.bic")}
+                  <Text style={styles.text}>{bic}</Text>
+                </Text>
+              )}
+            </Box>
+            <Box direction="column" alignItems="end">
+              <Text style={styles.pageTitle}>{t("accountStatement.titleDocument")}</Text>
               <Text style={styles.pageSubTitle}>
                 {accountHolderType === "Company"
                   ? t("accountStatement.titleDocument.companyDescription")
                   : t("accountStatement.titleDocument.individualDescription")}
               </Text>
-              <Text style={styles.sectionTitle}>{accountHolderName.toUpperCase()}</Text>
+              <Space height={24} />
 
-              <Text style={styles.text}>{accountHolderAddress.street}</Text>
-              <Text style={styles.text}>{accountHolderAddress.city}, {isNotNullish(accountHolderAddress.country) && (accountHolderAddress.country)}
-              </Text>
-            </Box>
-            <Box direction="column" alignItems="end">
-              <Text style={styles.firstSectionTitle}>{t("accountStatement.contactSupport")}</Text>
+              <Text style={styles.textBold}>{t("accountStatement.contactSupport")}</Text>
               <Text style={styles.text}>{"support.swan.io"}</Text>
             </Box>
           </Box>
-          <Space height={24} />
-          {isNotEmpty(iban) && (
-            <>
-              <Text style={styles.sectionTitle}>{t("accountStatement.iban")}</Text>
-              <Text style={styles.text}>{iban}</Text>
-            </>
-          )}
-          <Space height={12} />
-          {isNotEmpty(bic) && (
-            <>
-              <Text style={styles.sectionTitle}>{t("accountStatement.bic")}</Text>
-              <Text style={styles.text}>{bic}</Text>
-            </>
-          )}
+
           <Space height={48} />
-          <Box direction="row" justifyContent="spaceBetween">
+          <Box direction="row" justifyContent="spaceBetween" alignItems="center">
             <Box direction="column">
               <Text style={styles.dateTitle}>
                 {t("accountStatement.date", { openingDate, closingDate })}
@@ -242,14 +246,14 @@ export const AccountStatementV1 = ({
           <Space height={24} />
 
           <>
-            <Box direction="row" style={{ backgroundColor: colors.gray[50] }}>
-              <Text style={[styles.titleColumn, { width: "15%" }]}>
+            <Box direction="row" style={styles.thead}>
+              <Text style={[styles.titleColumn, { width: "13%" }]}>
                 {t("accountStatement.column.date")}
               </Text>
-              <Text style={[styles.titleColumn, { width: "22%" }]}>
+              <Text style={[styles.titleColumn, { width: "17%" }]}>
                 {t("accountStatement.column.type")}
               </Text>
-              <Text style={[styles.titleColumn, { width: "33%" }]}>
+              <Text style={[styles.titleColumn, { width: "40%" }]}>
                 {t("accountStatement.column.description")}
               </Text>
               <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
@@ -262,11 +266,11 @@ export const AccountStatementV1 = ({
             <Box direction="column">
               {transactions.map(transaction => (
                 <Box direction="row" key={transaction.id}>
-                  <Text style={[styles.textColumn, { width: "15%" }]}>{transaction.date}</Text>
-                  <Text style={[styles.textColumn, { width: "22%" }]}>
+                  <Text style={[styles.textColumn, { width: "13%" }]}>{transaction.date}</Text>
+                  <Text style={[styles.textColumn, { width: "17%" }]}>
                     {translateTransaction(transaction.type)}
                   </Text>
-                  <Text style={[styles.textColumn, { width: "33%" }]}>{transaction.label}</Text>
+                  <Text style={[styles.textColumn, { width: "40%" }]}>{transaction.label}</Text>
                   <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
                     {transaction.credit ? transaction.credit.value : ""}
                   </Text>
@@ -278,20 +282,23 @@ export const AccountStatementV1 = ({
             </Box>
           </>
 
-          <Space height={20} />
+          <Space height={12} />
           <Box direction="column">
             <Box direction="row" justifyContent="end">
-              <Text style={styles.row}>{t("accountStatement.column.fees")}</Text>
-              <Text style={styles.row}>{feesCredit.value}</Text>
-              <Text style={styles.row}>{feesDebit.value}</Text>
+              <Text style={[styles.row, styles.textBold]}>{t("accountStatement.column.fees")}</Text>
+              <Text style={[styles.row, styles.textBold]}>{feesCredit.value}</Text>
+              <Text style={[styles.row, styles.textBold]}>{feesDebit.value}</Text>
             </Box>
 
             <Box direction="row" justifyContent="end">
-              <Text style={styles.row}>{t("accountStatement.column.totals")}</Text>
-              <Text style={styles.row}>{totalsCredit.value}</Text>
-              <Text style={styles.row}>{totalsDebit.value}</Text>
+              <Text style={[styles.row, styles.textBold]}>
+                {t("accountStatement.column.totals")}
+              </Text>
+              <Text style={[styles.row, styles.textBold]}>{totalsCredit.value}</Text>
+              <Text style={[styles.row, styles.textBold]}>{totalsDebit.value}</Text>
             </Box>
           </Box>
+          <Space height={12} />
 
           <Box direction="row" justifyContent="end">
             <Box
@@ -300,7 +307,10 @@ export const AccountStatementV1 = ({
               style={styles.closingBalanceRow}
               justifyContent="spaceBetween"
             >
-              <Title style={styles.closingBalanceRowText} text={t("accountStatement.closingBalance")} />
+              <Title
+                style={styles.closingBalanceRowText}
+                text={t("accountStatement.closingBalance")}
+              />
 
               <Title text={closingBalance.value} style={styles.totalAmount} align="right" />
             </Box>
