@@ -1006,22 +1006,25 @@ packages:
         optional: true
 
   '@swan-io/boxed@3.2.1':
-    resolution: {integrity: sha512-+FKLC+otoXrbcf+wTGM8kBp57buuIlaSw8VEkRd4WpTlB7P8nMYbe8uADf85VfSb9wP9wgI9pkj2VIzUWWI0Kg==, tarball: https://npm.pkg.github.com/download/@swan-io/boxed/3.2.1/c4ebe8d3a53e07fb69e7ee20cdfafcdcb089c6fc}
+    resolution: {integrity: sha512-MQqSpe09PdjDjTR4HCPpUxO9XsacNguCkce1C2wm1eIb6ycWXQoV+biYvLEuI/LiMqB31KySdgY2YFwrVucLCw==, tarball: https://registry.npmjs.org/@swan-io/boxed/-/boxed-3.2.1.tgz}
     peerDependencies:
       typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@swan-io/chicane@3.0.0':
-    resolution: {integrity: sha512-A/k8e0MXeLBTT71P8i52/Fn0+3CftQiVPDyCK6vfrS/cEDsBfWz+IvwhuhC1EFfAYm9O4ystvpOgEP5fraFfVA==, tarball: https://npm.pkg.github.com/download/@swan-io/chicane/3.0.0/714dc7f0b20b77e4c831babbf48d4efdcb8974f4}
+    resolution: {integrity: sha512-ELguiTjrK2+wYqiUfguusOXaAXUBdizGJjXM6pg5Jvye0Yefp18coVmSCpGJLdJY4hCaWXis/ct4i/DyV2FIuw==, tarball: https://registry.npmjs.org/@swan-io/chicane/-/chicane-3.0.0.tgz}
     peerDependencies:
       react: '>=19.0.0'
 
   '@swan-io/request@3.1.0':
-    resolution: {integrity: sha512-Lg5K8BVwY5k/YyjXHMclmvjPmuVa8jKP/K065PyLsu869+hZu3ENe7DBiNIimrzdwyHSNuGIZaQiDfzEnD32kQ==, tarball: https://npm.pkg.github.com/download/@swan-io/request/3.1.0/b4aef0cb88159d9731ae4a5edef13037026f987b}
+    resolution: {integrity: sha512-3NDXdNuew5+aEURpWg8aNIqPlYVNU6BZCD1rWptNemfNw9frTUBj8DmV+idOp9M5/4tVxncX7bxV7jBNtS6Cbg==, tarball: https://registry.npmjs.org/@swan-io/request/-/request-3.1.0.tgz}
     peerDependencies:
       '@swan-io/boxed': '>=2.2.1'
 
   '@swan-io/use-form@3.1.0':
-    resolution: {integrity: sha512-m4LR7acxQy3sVRy5JFULKB6nKZB6DPmqNP4XsKvnL6W8u6ou+iaSi86bRfE4wUnl/I74mKLij30b7bSMr1C6tQ==, tarball: https://npm.pkg.github.com/download/@swan-io/use-form/3.1.0/f242dbf8d9fe0a163cfd69ae94061757d79d93d5}
+    resolution: {integrity: sha512-X6NpZ7LCeo7eS9RVCZrtpX+3GXZFUfUZpIwtVa2GNmqTLgyDbLhN8N6zBv+dmHL9KAQ+Zng2fTCCQpCZvmDu5A==, tarball: https://registry.npmjs.org/@swan-io/use-form/-/use-form-3.1.0.tgz}
     peerDependencies:
       react: '>=18.0.0'
 
@@ -3064,7 +3067,7 @@ snapshots:
       typescript: 5.9.3
 
   '@swan-io/boxed@3.2.1(typescript@5.9.3)':
-    dependencies:
+    optionalDependencies:
       typescript: 5.9.3
 
   '@swan-io/chicane@3.0.0(react@19.2.4)':
