@@ -1,4 +1,6 @@
 import fs from "node:fs";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import path from "pathe";
 import pc from "picocolors";
 import prompts from "prompts";
@@ -13,6 +15,9 @@ import {
   quote,
   updateGhPagerConfig,
 } from "./helpers";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const rootDir = path.resolve(__dirname, "../..");
 const pkgPath = path.join(rootDir, "package.json");

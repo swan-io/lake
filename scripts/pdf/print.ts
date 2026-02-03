@@ -1,6 +1,11 @@
 import react from "@vitejs/plugin-react-swc";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const main = async () => {
   const devServer = await createServer({
