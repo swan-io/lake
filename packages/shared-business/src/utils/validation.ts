@@ -243,7 +243,7 @@ export const validateUsaTaxNumber: Validator<string | undefined> = value => {
     return;
   }
 
-  if (isValidUsaTaxNumber(value)) {
+  if (!isValidUsaTaxNumber(value)) {
     return t("common.form.invalidTaxIdentificationNumber");
   }
 };
