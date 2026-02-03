@@ -6,6 +6,7 @@ import {
   getIndividualTaxNumberPlaceholder,
   getTaxNumberTooltip,
   isValidEmail,
+  isValidUsaTaxNumber,
   sanitizeDecimal,
   validateArrayRequired,
   validateBooleanRequired,
@@ -364,6 +365,36 @@ describe("validateCompanyTaxNumber", () => {
       expect(validator("12345678")).toBeDefined(); // 8 digits
       expect(validator("1234567890")).toBeDefined(); // 10 digits
     });
+  });
+});
+
+describe("isValidUsaTaxNumber", () => {
+  test("accepts valid SSN format", () => {
+    expect(isValidUsaTaxNumber("123456789")).toBe(true);
+    expect(isValidUsaTaxNumber("123-45-6789")).toBe(true);
+    expect(isValidUsaTaxNumber("123 45 6789")).toBe(true);
+  });
+
+  test("accepts valid ITIN format (starts with 9, middle in 50-65, 70-88, 90-92, 94-99)", () => {
+    expect(isValidUsaTaxNumber("951501234")).toBe(true);
+    expect(isValidUsaTaxNumber("952-70-3456")).toBe(true);
+  });
+
+  test("strips non-digits before validating", () => {
+    expect(isValidUsaTaxNumber("123-45-6789")).toBe(true);
+    expect(isValidUsaTaxNumber("  123 45 6789  ")).toBe(true);
+  });
+
+  test("rejects invalid length", () => {
+    expect(isValidUsaTaxNumber("12345678")).toBe(false);
+    expect(isValidUsaTaxNumber("1234567890")).toBe(false);
+    expect(isValidUsaTaxNumber("")).toBe(false);
+  });
+
+  test("rejects invalid SSN patterns (000, 666, 9xx area)", () => {
+    expect(isValidUsaTaxNumber("000456789")).toBe(false);
+    expect(isValidUsaTaxNumber("666456789")).toBe(false);
+    expect(isValidUsaTaxNumber("900456789")).toBe(false);
   });
 });
 

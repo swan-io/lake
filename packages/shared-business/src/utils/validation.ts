@@ -222,6 +222,32 @@ export const validateCompanyTaxNumber =
     }
   };
 
+// Validates U.S. Tax IDs (SSN or ITIN)
+export const isValidUsaTaxNumber = (maybeTaxId: string) => {
+  const cleanId = maybeTaxId.replace(/\D/g, "");
+  if (cleanId.length !== 9) {
+    return false;
+  }
+
+  // SSN: No 000/666/900+ starts, no 00 middle, no 0000 end
+  const ssnPattern = /^(?!000|666|9\d{2})\d{3}(?!00)\d{2}(?!0000)\d{4}$/;
+
+  // ITIN: Starts with 9, middle digits generally between 50-65, 70-88, 90-92, 94-99
+  const itinPattern = /^9\d{2}(5\d|6[0-5]|7\d|8[0-8]|9[0-2]|9[4-9])\d{4}$/;
+
+  return ssnPattern.test(cleanId) || itinPattern.test(cleanId);
+};
+
+export const validateUsaTaxNumber: Validator<string | undefined> = value => {
+  if (value == null || !value) {
+    return;
+  }
+
+  if (isValidUsaTaxNumber(value)) {
+    return t("common.form.invalidTaxIdentificationNumber");
+  }
+};
+
 export { printFormat as printIbanFormat } from "iban";
 
 export const validateIban = (iban: string) => {
