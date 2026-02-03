@@ -35,7 +35,7 @@ const config = {
       // always be invalidated due to credentials being sent (i.e. Cookies)
       modulePreload: { polyfill: true },
       sourcemap: true,
-      assetsDir: `./assets/${packageJson.version}`,
+      assetsDir: `assets/${packageJson.version}`,
 
       rollupOptions: {
         ...config.build.rollupOptions,
