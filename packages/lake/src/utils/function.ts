@@ -1,12 +1,20 @@
 import { Dict } from "@swan-io/boxed";
 import { P } from "ts-pattern";
+import type { GuardP } from "ts-pattern/types";
 
 export const identity = <T>(value: T): T => value;
 export const noop = () => {};
 export const stubFalse = (): false => false;
 export const stubTrue = (): true => true;
 
-export const deriveUnion = <T extends PropertyKey>(object: Record<T, true>) => {
+export const deriveUnion = <T extends PropertyKey>(
+  object: Record<T, true>,
+): {
+  array: T[];
+  set: Set<T>;
+  is: (value: unknown) => value is T;
+  P: GuardP<unknown, T>;
+} => {
   const array = Dict.keys(object);
   const set = new Set(array);
   const is = (value: unknown): value is T => set.has(value as T);

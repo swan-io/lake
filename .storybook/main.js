@@ -1,7 +1,7 @@
-const { version } = require("../package.json");
+import packageJson from "../package.json" with { type: "json" };
 
 /** @type {import('@storybook/react-vite').StorybookConfig} */
-module.exports = {
+const config = {
   stories: ["../packages/*/__stories__/**/*.stories.@(ts|tsx)"],
   docs: {
     autodocs: false,
@@ -35,7 +35,7 @@ module.exports = {
       // always be invalidated due to credentials being sent (i.e. Cookies)
       modulePreload: { polyfill: true },
       sourcemap: true,
-      assetsDir: `assets/${version}`,
+      assetsDir: `assets/${packageJson.version}`,
 
       rollupOptions: {
         ...config.build.rollupOptions,
@@ -50,7 +50,9 @@ module.exports = {
 
     return {
       ...config,
-      base: "/lake",
+      base: "/lake", // Set for GitHub pages, comment to disable for testing build outputs locally
     };
   },
 };
+
+export default config;
