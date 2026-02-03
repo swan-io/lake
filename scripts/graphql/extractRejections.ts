@@ -1,9 +1,14 @@
 import { ASTVisitor, Kind, parse, visit } from "graphql";
 import fs from "node:fs";
 import os from "node:os";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import path from "pathe";
 import { string, validate } from "valienv";
 import { getIntrospection } from "./downloadSchemas";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const env = validate({
   env: process.env,

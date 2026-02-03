@@ -1,8 +1,13 @@
 import { Result } from "@swan-io/boxed";
 import glob from "fast-glob";
 import { readFileSync, writeFileSync } from "fs";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import path from "pathe";
 import { match } from "ts-pattern";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const packages = ["shared-business"] as const;
 

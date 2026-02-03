@@ -114,8 +114,7 @@ function validateTranslations(localesDir: string): void {
   }
 }
 
-// Main execution
-if (require.main === module) {
+function main() {
   const rawPath = process.argv[2];
 
   if (!rawPath) {
@@ -140,4 +139,4 @@ if (require.main === module) {
   }
 }
 
-export { validateTranslations };
+main();
