@@ -134,15 +134,15 @@ export type Item<V> = {
   icon?: ReactNode;
 };
 
-export type SelectProps<V> = {
+export type SelectProps<V, T extends Item<V> = Item<V>> = {
   ref?: Ref<View>;
   placeholder?: string;
-  items: Item<V>[];
+  items: T[];
   matchReferenceWidth?: boolean;
   mode?: "normal" | "borderless";
   title?: string;
   valueStyle?: StyleProp<TextStyle>;
-  PopoverFooter?: ReactElement;
+  PopoverFooter?: ReactElement | ((helpers: { close: () => void }) => ReactElement);
   size?: "small" | "large";
   icon?: IconName;
   color?: ColorVariants;
@@ -150,6 +150,7 @@ export type SelectProps<V> = {
   value?: V;
   onValueChange: (value: V) => void;
   disabledItems?: { value: V; message?: string }[];
+  renderItem?: (item: T, isSelected: boolean) => ReactElement;
   hideErrors?: boolean;
   id?: string;
   error?: string;
@@ -157,7 +158,7 @@ export type SelectProps<V> = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const LakeSelect = <V,>({
+export const LakeSelect = <V, T extends Item<V> = Item<V>>({
   ref,
   title,
   items,
@@ -176,9 +177,10 @@ export const LakeSelect = <V,>({
   icon,
   onValueChange,
   disabledItems = [],
+  renderItem,
   PopoverFooter,
   style,
-}: SelectProps<V>) => {
+}: SelectProps<V, T>) => {
   const inputRef = useRef<View>(null);
   const listRef = useRef<FlatListRef>(null);
   const typingTimeoutRef = useRef<number>(undefined);
@@ -376,6 +378,28 @@ export const LakeSelect = <V,>({
           renderItem={({ item, index }) => {
             const isSelected = value === item.value;
             const disablement = disabledItems.find(({ value }) => value === item.value);
+            const content =
+              renderItem != null ? (
+                renderItem(item, isSelected)
+              ) : (
+                <>
+                  {isNotNullish(item.icon) && (
+                    <>
+                      {item.icon}
+
+                      <Space width={12} />
+                    </>
+                  )}
+
+                  <LakeText
+                    color={colors.gray[900]}
+                    numberOfLines={1}
+                    style={[styles.itemText, isSelected && styles.selected]}
+                  >
+                    {item.name}
+                  </LakeText>
+                </>
+              );
 
             return (
               <LakeTooltip
@@ -402,21 +426,7 @@ export const LakeSelect = <V,>({
                     close();
                   }}
                 >
-                  {isNotNullish(item.icon) && (
-                    <>
-                      {item.icon}
-
-                      <Space width={12} />
-                    </>
-                  )}
-
-                  <LakeText
-                    color={colors.gray[900]}
-                    numberOfLines={1}
-                    style={[styles.itemText, isSelected && styles.selected]}
-                  >
-                    {item.name}
-                  </LakeText>
+                  {content}
 
                   <Fill minWidth={12} />
 
@@ -429,7 +439,7 @@ export const LakeSelect = <V,>({
           }}
         />
 
-        {PopoverFooter}
+        {typeof PopoverFooter === "function" ? PopoverFooter({ close }) : PopoverFooter}
       </Popover>
     </View>
   );
