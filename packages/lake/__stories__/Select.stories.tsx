@@ -1,8 +1,9 @@
 import { Meta, StoryFn } from "@storybook/react";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
-import { LakeSelect, SelectProps } from "../src/components/LakeSelect";
+import { Box } from "../src/components/Box";
+import { Item, LakeSelect, SelectProps } from "../src/components/LakeSelect";
 import { LakeText } from "../src/components/LakeText";
 import { ColorVariants, colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -15,6 +16,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 8,
     backgroundColor: colors.gray[0],
+  },
+  separator: {
+    height: 1,
+    width: "100%",
+    flexShrink: 1,
+    backgroundColor: colors.gray[100],
+  },
+  separatorContainer: {
+    gap: 24,
+    paddingHorizontal: 24,
   },
 });
 
@@ -111,7 +122,7 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
 
       <StoryPart title="With footer">
         <EditableSelect
-          PopoverFooter={<LakeText style={styles.footer}>List of random people</LakeText>}
+          PopoverFooter={() => <LakeText style={styles.footer}>List of random people</LakeText>}
         />
       </StoryPart>
 
@@ -125,6 +136,72 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
 
       <StoryPart title="Disabled with value">
         <EditableSelect disabled={true} initialValue={2} />
+      </StoryPart>
+    </StoryBlock>
+  );
+};
+
+type CountryItem = Item<string> & {
+  isoCode: string;
+  region: "EU" | "NA";
+};
+
+const countryItems: CountryItem[] = [
+  { name: "France", value: "fr", isoCode: "FR", region: "EU" },
+  { name: "Germany", value: "de", isoCode: "DE", region: "EU" },
+  { name: "Canada", value: "ca", isoCode: "CA", region: "NA" },
+];
+
+export const CustomItems = () => {
+  const [value, setValue] = useState<string | undefined>(undefined);
+  const selectedItem = countryItems.find(item => item.value === value);
+
+  return (
+    <StoryBlock title="Select with custom item data">
+      <StoryPart title="Country items">
+        <LakeSelect
+          placeholder="Select a country..."
+          value={value}
+          onValueChange={setValue}
+          items={countryItems}
+          renderItem={item => (
+            <Box direction="column">
+              <LakeText color={colors.gray[900]}>{item.name}</LakeText>
+              <LakeText variant="smallRegular" color={colors.gray[600]}>
+                {item.region}
+              </LakeText>
+            </Box>
+          )}
+          style={styles.select}
+          PopoverFooter={({ close }) => (
+            <View>
+              <Box
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                style={styles.separatorContainer}
+              >
+                <View style={styles.separator} />
+                <LakeText variant="smallRegular">Or</LakeText>
+                <View style={styles.separator} />
+              </Box>
+              <LakeText
+                style={styles.footer}
+                onPress={() => {
+                  setValue(undefined);
+                  close();
+                }}
+              >
+                I don't see my country
+              </LakeText>
+            </View>
+          )}
+        />
+        <LakeText>
+          {selectedItem != null
+            ? `Selected: ${selectedItem.name} (${selectedItem.isoCode})`
+            : "No country selected"}
+        </LakeText>
       </StoryPart>
     </StoryBlock>
   );
