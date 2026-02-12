@@ -150,7 +150,7 @@ export type SelectProps<V, T extends Item<V> = Item<V>> = {
   value?: V;
   onValueChange: (value: V) => void;
   disabledItems?: { value: V; message?: string }[];
-  renderItem?: (item: T, isSelected: boolean) => ReactNode;
+  renderItem?: (item: T, isSelected: boolean) => ReactElement;
   hideErrors?: boolean;
   id?: string;
   error?: string;
