@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
   container: {
     width: 793,
     padding: 10,
+    fontFamily:
+      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
   },
   firstSectionTitle: {
     ...getTextStyle("sans", 20),
