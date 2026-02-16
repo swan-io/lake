@@ -216,8 +216,7 @@ export const AccountStatementV1 = ({
               <Space height={4} />
               {isNotEmpty(bic) && (
                 <Text style={styles.textBold}>
-                  {t("accountStatement.bic")}
-                  <Text style={styles.text}>{bic}</Text>
+                  {t("accountStatement.bic")} <Text style={styles.text}>{bic}</Text>
                 </Text>
               )}
             </Box>
