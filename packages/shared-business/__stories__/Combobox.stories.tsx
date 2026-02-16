@@ -4,7 +4,7 @@ import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "@swan-io/lake/src/components/LakeCombobox";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { Except } from "type-fest";
 import { PlacekitAddressSearchInput } from "../src/components/PlacekitAddressSearchInput";
 import { PlacekitCityInput } from "../src/components/PlacekitCityInput";
@@ -140,6 +140,24 @@ export const Variations = () => {
             <Box direction="row" justifyContent="end" style={styles.footer}>
               <LakeText>With footer component</LakeText>
             </Box>
+          }
+        />
+      </StoryPart>
+
+      <StoryPart title="With custom empty result">
+        <EditableCombobox
+          emptyResult={
+            <LakeText>
+              Company not listed?{" "}
+              <Pressable
+                onPress={() => console.log("On Press")}
+                style={({ hovered }) => ({
+                  opacity: hovered ? 0.5 : 1,
+                })}
+              >
+                Add your organization details
+              </Pressable>
+            </LakeText>
           }
         />
       </StoryPart>

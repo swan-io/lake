@@ -1,10 +1,18 @@
 import { AsyncData, Result } from "@swan-io/boxed";
-import { ReactNode, Ref, useCallback, useId, useImperativeHandle, useRef, useState } from "react";
+import {
+  ReactElement,
+  ReactNode,
+  Ref,
+  useCallback,
+  useId,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TextInputKeyPressEventData,
   View,
@@ -107,6 +115,7 @@ export type LakeComboboxProps<I> = {
   placeholder?: string;
   disabled?: boolean;
   emptyResultText: string;
+  emptyResult?: ReactElement;
   error?: string;
   hideErrors?: boolean;
   id?: string;
@@ -130,6 +139,7 @@ export const LakeCombobox = <I,>({
   placeholder,
   disabled = false,
   emptyResultText,
+  emptyResult,
   readOnly,
   id,
   error,
@@ -276,16 +286,20 @@ export const LakeCombobox = <I,>({
                 Ok: items => (
                   <View ref={listContainerRef} style={styles.listContainer}>
                     {items.length === 0 ? (
-                      <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
-                        <Icon
-                          name="clipboard-search-regular"
-                          size={24}
-                          color={colors.gray.primary}
-                        />
+                      emptyResult != null ? (
+                        emptyResult
+                      ) : (
+                        <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
+                          <Icon
+                            name="clipboard-search-regular"
+                            size={24}
+                            color={colors.gray.primary}
+                          />
 
-                        <Space height={8} />
-                        <Text style={styles.emptyListText}>{emptyResultText}</Text>
-                      </Box>
+                          <Space height={8} />
+                          <LakeText style={styles.emptyListText}>{emptyResultText}</LakeText>
+                        </Box>
+                      )
                     ) : (
                       <FlatList
                         keyExtractor={keyExtractor}
