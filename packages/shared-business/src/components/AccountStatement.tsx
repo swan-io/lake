@@ -8,48 +8,49 @@ import { CountryCCA3 } from "../constants/countries";
 import { SupportedLanguage, useTranslation } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
+const CUSTOM_FONT_FAMILY =
+  "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif";
+
 const styles = StyleSheet.create({
   container: {
     width: 793,
     padding: 10,
-    fontFamily:
-      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
   },
   firstSectionTitle: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 20, CUSTOM_FONT_FAMILY),
     color: colors.swan[500],
     fontWeight: "500",
     textTransform: "uppercase",
     marginTop: "37px",
   },
   sectionTitle: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 20, CUSTOM_FONT_FAMILY),
     color: colors.swan[500],
     fontWeight: "500",
     textTransform: "uppercase",
   },
   dateTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     color: colors.swan[500],
   },
   totalAmount: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 20, CUSTOM_FONT_FAMILY),
     fontWeight: "500",
     textAlign: "right",
   },
   pageTitle: {
-    ...getTextStyle("sans", 20),
+    ...getTextStyle("sans", 20, CUSTOM_FONT_FAMILY),
     fontWeight: "500",
     color: "#26232F",
   },
   titleColumn: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     fontWeight: "600",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
   },
   openingBalanceText: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     textAlign: "right",
   },
   thead: {
@@ -58,29 +59,30 @@ const styles = StyleSheet.create({
   },
   textColumn: {
     paddingVertical: spacings[4],
-    ...getTextStyle("sans", 11),
+    ...getTextStyle("sans", 11, CUSTOM_FONT_FAMILY),
     lineHeight: 16,
   },
   text: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     color: colors.swan[300],
   },
   textBold: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     fontWeight: "500",
   },
   pageSubTitle: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     color: "#454348",
   },
   row: {
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     textAlign: "right",
     paddingVertical: spacings[4],
     fontWeight: "500",
     width: "15%",
   },
   closingBalanceRow: {
-    ...getTextStyle("sans", 12),
+    ...getTextStyle("sans", 12, CUSTOM_FONT_FAMILY),
     backgroundColor: colors.gray[50],
     width: "50%",
   },
