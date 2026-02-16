@@ -5,7 +5,7 @@ import { isNotEmpty, isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { StyleProp, StyleSheet, Text, TextProps, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3 } from "../constants/countries";
-import { t } from "../utils/i18n";
+import { SupportedLanguage, useTranslation } from "../utils/i18n";
 import { getTextStyle } from "../utils/style";
 
 const styles = StyleSheet.create({
@@ -120,7 +120,7 @@ export type TransactionType =
   | "Seizure"
   | (string & {}); // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
 
-const translateTransaction = (transaction: TransactionType) => {
+const translateTransaction = (transaction: TransactionType, t: ReturnType<typeof useTranslation>) => {
   return match(transaction)
     .with("Card", () => t("accountStatement.card"))
     .with("Check", () => t("accountStatement.check"))
@@ -170,6 +170,7 @@ type AccountStatementV1Props = {
   feesCredit: Amount;
   hideHeader?: boolean;
   hideFooter?: boolean;
+  language?: SupportedLanguage;
 };
 
 export const AccountStatementV1 = ({
@@ -188,7 +189,9 @@ export const AccountStatementV1 = ({
   totalsCredit,
   totalsDebit,
   closingBalance,
+  language,
 }: AccountStatementV1Props) => {
+  const t = useTranslation(language);
   return (
     <Box style={style}>
       <Box style={styles.container} direction="column" justifyContent="spaceBetween">
@@ -268,7 +271,7 @@ export const AccountStatementV1 = ({
                 <Box direction="row" key={transaction.id}>
                   <Text style={[styles.textColumn, { width: "13%" }]}>{transaction.date}</Text>
                   <Text style={[styles.textColumn, { width: "17%" }]}>
-                    {translateTransaction(transaction.type)}
+                    {translateTransaction(transaction.type, t)}
                   </Text>
                   <Text style={[styles.textColumn, { width: "40%" }]}>{transaction.label}</Text>
                   <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
