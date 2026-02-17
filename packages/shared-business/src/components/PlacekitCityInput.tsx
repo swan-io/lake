@@ -93,7 +93,7 @@ export const PlacekitCityInput = ({
       id={id}
       placeholder={placeholder}
       error={error}
-      emptyResultText={t("common.noResult")}
+      emptyResult={t("common.noResult")}
       loadSuggestions={placekit != null ? loadSuggestions : undefined}
       onSuggestion={onSuggestionSelected}
       onLoadError={onLoadError}

@@ -248,7 +248,7 @@ export const TimePicker = ({
           disabled={disabled}
           error={error}
           hideErrors={hideErrors}
-          emptyResultText={noSuggestionLabel}
+          emptyResult={noSuggestionLabel}
           onChange={onChange}
           onValueChange={noop}
           onSelectItem={item => onChangeText(stringifyTime(item))}

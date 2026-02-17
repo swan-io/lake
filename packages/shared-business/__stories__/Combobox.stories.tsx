@@ -4,7 +4,7 @@ import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "@swan-io/lake/src/components/LakeCombobox";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { Except } from "type-fest";
 import { PlacekitAddressSearchInput } from "../src/components/PlacekitAddressSearchInput";
 import { PlacekitCityInput } from "../src/components/PlacekitCityInput";
@@ -58,8 +58,9 @@ type EditableComboboxProps = Except<
   | "onSelectItem"
   | "renderItem"
   | "keyExtractor"
-  | "emptyResultText"
->;
+  | "emptyResult"
+> &
+  Partial<Pick<LakeComboboxProps<ApiProduct>, "emptyResult">>;
 
 const EditableCombobox = (props: EditableComboboxProps) => {
   const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
@@ -98,7 +99,7 @@ const EditableCombobox = (props: EditableComboboxProps) => {
       }}
       keyExtractor={product => product.id.toString()}
       renderItem={product => <LakeText>{product.title}</LakeText>}
-      emptyResultText={"No result"}
+      emptyResult={"No result"}
       {...props}
     />
   );
@@ -144,6 +145,24 @@ export const Variations = () => {
         />
       </StoryPart>
 
+      <StoryPart title="With custom empty result">
+        <EditableCombobox
+          emptyResult={
+            <LakeText>
+              Company not listed?{" "}
+              <Pressable
+                onPress={() => console.log("On Press")}
+                style={({ hovered }) => ({
+                  opacity: hovered ? 0.5 : 1,
+                })}
+              >
+                Add your organization details
+              </Pressable>
+            </LakeText>
+          }
+        />
+      </StoryPart>
+
       <StoryPart title="CityInput">
         <PlacekitCityInput
           apiKey={PLACEKIT_API_KEY}
@@ -171,7 +190,7 @@ export const Variations = () => {
           }}
           language="fr"
           placeholder=""
-          emptyResultText="Nothing"
+          emptyResult="Nothing"
         />
       </StoryPart>
     </StoryBlock>

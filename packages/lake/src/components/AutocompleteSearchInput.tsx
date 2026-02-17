@@ -27,7 +27,7 @@ type Props<T> = {
   id?: string;
   placeholder?: string;
   error?: string;
-  emptyResultText: string;
+  emptyResult: string;
   ListFooterComponent?: ReactNode;
   shouldDisplaySuggestions?: boolean;
   loadSuggestions?: (value: string) => Future<Result<Suggestion<T>[], unknown>>;
@@ -45,7 +45,7 @@ export const AutocompleteSearchInput = <T,>({
   id,
   placeholder,
   error,
-  emptyResultText,
+  emptyResult,
   ListFooterComponent,
   shouldDisplaySuggestions = true,
   loadSuggestions,
@@ -104,7 +104,7 @@ export const AutocompleteSearchInput = <T,>({
         }
       }}
       keyExtractor={item => `${item.title} ${item.subtitle}`}
-      emptyResultText={emptyResultText}
+      emptyResult={emptyResult}
       renderItem={item => (
         <>
           <LakeText numberOfLines={1} style={styles.unselectable} color={colors.gray[900]}>
