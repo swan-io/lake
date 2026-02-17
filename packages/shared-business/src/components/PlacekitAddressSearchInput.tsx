@@ -34,7 +34,7 @@ type Props = {
   language: "en" | "es" | "de" | "fi" | "fr" | "it" | "nl" | "pt";
   placeholder: string;
   shouldDisplaySuggestions?: boolean;
-  emptyResultText: string;
+  emptyResult: string;
   apiKey?: string;
 };
 
@@ -51,7 +51,7 @@ export const PlacekitAddressSearchInput = ({
   language,
   placeholder,
   shouldDisplaySuggestions = true,
-  emptyResultText,
+  emptyResult,
   apiKey,
 }: Props) => {
   const placekit = usePlacekit({ apiKey });
@@ -112,7 +112,7 @@ export const PlacekitAddressSearchInput = ({
       id={id}
       placeholder={placeholder}
       error={error}
-      emptyResultText={emptyResultText}
+      emptyResult={emptyResult}
       shouldDisplaySuggestions={shouldDisplaySuggestions}
       loadSuggestions={placekit != null ? loadSuggestions : undefined}
       onSuggestion={onSuggestionSelected}

@@ -17,6 +17,7 @@ import {
   TextInputKeyPressEventData,
   View,
 } from "react-native";
+import { match, P } from "ts-pattern";
 import { backgroundColor, colors, spacings } from "../constants/design";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
@@ -114,8 +115,7 @@ export type LakeComboboxProps<I> = {
   icon?: IconName;
   placeholder?: string;
   disabled?: boolean;
-  emptyResultText: string;
-  emptyResult?: ReactElement;
+  emptyResult: string | ReactElement;
   error?: string;
   hideErrors?: boolean;
   id?: string;
@@ -138,7 +138,6 @@ export const LakeCombobox = <I,>({
   icon,
   placeholder,
   disabled = false,
-  emptyResultText,
   emptyResult,
   readOnly,
   id,
@@ -286,20 +285,25 @@ export const LakeCombobox = <I,>({
                 Ok: items => (
                   <View ref={listContainerRef} style={styles.listContainer}>
                     {items.length === 0 ? (
-                      emptyResult != null ? (
-                        emptyResult
-                      ) : (
-                        <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
-                          <Icon
-                            name="clipboard-search-regular"
-                            size={24}
-                            color={colors.gray.primary}
-                          />
+                      match(emptyResult)
+                        .with(P.string, text => (
+                          <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
+                            <Icon
+                              name="clipboard-search-regular"
+                              size={24}
+                              color={colors.gray.primary}
+                            />
 
-                          <Space height={8} />
-                          <LakeText style={styles.emptyListText}>{emptyResultText}</LakeText>
-                        </Box>
-                      )
+                            <Space height={8} />
+                            <LakeText style={styles.emptyListText}>{text}</LakeText>
+                          </Box>
+                        ))
+                        .when(
+                          (value): value is ReactElement =>
+                            typeof value === "object" && value != null,
+                          element => element,
+                        )
+                        .exhaustive()
                     ) : (
                       <FlatList
                         keyExtractor={keyExtractor}

@@ -58,8 +58,9 @@ type EditableComboboxProps = Except<
   | "onSelectItem"
   | "renderItem"
   | "keyExtractor"
-  | "emptyResultText"
->;
+  | "emptyResult"
+> &
+  Partial<Pick<LakeComboboxProps<ApiProduct>, "emptyResult">>;
 
 const EditableCombobox = (props: EditableComboboxProps) => {
   const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
@@ -98,7 +99,7 @@ const EditableCombobox = (props: EditableComboboxProps) => {
       }}
       keyExtractor={product => product.id.toString()}
       renderItem={product => <LakeText>{product.title}</LakeText>}
-      emptyResultText={"No result"}
+      emptyResult={"No result"}
       {...props}
     />
   );
@@ -189,7 +190,7 @@ export const Variations = () => {
           }}
           language="fr"
           placeholder=""
-          emptyResultText="Nothing"
+          emptyResult="Nothing"
         />
       </StoryPart>
     </StoryBlock>
