@@ -65,3 +65,29 @@ export const monthlyPaymentVolumes: { text: string; value: MonthlyPaymentVolume 
   { text: t("monthlyPaymentVolume.between50000And100000"), value: "Between50000And100000" },
   { text: t("monthlyPaymentVolume.moreThan100000"), value: "MoreThan100000" },
 ];
+
+export type ForecastYearlyIncome =
+  | "From0To500000"
+  | "From500001To1000000"
+  | "From1000001To5000000"
+  | "MoreThan5000000";
+
+export const forecastYearlyIncome: { text: string; value: ForecastYearlyIncome }[] = [
+  { text: t("forecastYearlyIncome.from0To500000"), value: "From0To500000" },
+  { text: t("forecastYearlyIncome.from500001To1000000"), value: "From500001To1000000" },
+  { text: t("forecastYearlyIncome.from1000001To5000000"), value: "From1000001To5000000" },
+  { text: t("forecastYearlyIncome.moreThan5000000"), value: "MoreThan5000000" },
+];
+
+export type CompanyHeadcount =
+  | "Between1And10"
+  | "Between11And50"
+  | "Between51And250"
+  | "MoreThan250";
+
+export const companyHeadcount: { text: string; value: CompanyHeadcount }[] = [
+  { text: "1-10", value: "Between1And10" },
+  { text: "11-50", value: "Between11And50" },
+  { text: "51-250", value: "Between51And250" },
+  { text: "+250", value: "MoreThan250" },
+];
