@@ -91,3 +91,94 @@ export const companyHeadcount: { text: string; value: CompanyHeadcount }[] = [
   { text: "51-250", value: "Between51And250" },
   { text: "+250", value: "MoreThan250" },
 ];
+
+export type BusinessActivityCategory =
+  | "AccommodationAndFoodService"
+  | "AdministrativeAndSupportServiceActivities"
+  | "AgricultureForestryAndFishing"
+  | "ArtsSportsAndRecreation"
+  | "Construction"
+  | "Education"
+  | "ElectricityGasSteamAndAirConditioningSupply"
+  | "ExtraterritorialOrganisationsAndBodies"
+  | "FinancialAndInsuranceActivities"
+  | "HouseholdEmployerAndOwnUseActivities"
+  | "HumanHealthAndSocialWork"
+  | "Manufacturing"
+  | "MiningAndQuarrying"
+  | "OtherServiceActivities"
+  | "ProfessionalScientificAndTechnicalActivities"
+  | "PublicAdministrationAndDefenceSocialSecurity"
+  | "PublishingBroadcastingAndContentProductionAndDistribution"
+  | "RealEstateActivities"
+  | "TelecommunicationItAndInformationServices"
+  | "TransportationAndStorage"
+  | "WaterSupplySewerageWasteManagementAndRemediation"
+  | "WholesaleAndRetailTrade";
+
+export const businessActivityCategories: { text: string; value: BusinessActivityCategory }[] = [
+  {
+    text: t("businessActivityCategory.accommodationAndFoodService"),
+    value: "AccommodationAndFoodService",
+  },
+  {
+    text: t("businessActivityCategory.administrativeAndSupportServiceActivities"),
+    value: "AdministrativeAndSupportServiceActivities",
+  },
+  {
+    text: t("businessActivityCategory.agricultureForestryAndFishing"),
+    value: "AgricultureForestryAndFishing",
+  },
+  { text: t("businessActivityCategory.artsSportsAndRecreation"), value: "ArtsSportsAndRecreation" },
+  { text: t("businessActivityCategory.construction"), value: "Construction" },
+  { text: t("businessActivityCategory.education"), value: "Education" },
+  {
+    text: t("businessActivityCategory.electricityGasSteamAndAirConditioningSupply"),
+    value: "ElectricityGasSteamAndAirConditioningSupply",
+  },
+  {
+    text: t("businessActivityCategory.extraterritorialOrganisationsAndBodies"),
+    value: "ExtraterritorialOrganisationsAndBodies",
+  },
+  {
+    text: t("businessActivityCategory.financialAndInsuranceActivities"),
+    value: "FinancialAndInsuranceActivities",
+  },
+  {
+    text: t("businessActivityCategory.householdEmployerAndOwnUseActivities"),
+    value: "HouseholdEmployerAndOwnUseActivities",
+  },
+  {
+    text: t("businessActivityCategory.humanHealthAndSocialWork"),
+    value: "HumanHealthAndSocialWork",
+  },
+  { text: t("businessActivityCategory.manufacturing"), value: "Manufacturing" },
+  { text: t("businessActivityCategory.miningAndQuarrying"), value: "MiningAndQuarrying" },
+  {
+    text: t("businessActivityCategory.professionalScientificAndTechnicalActivities"),
+    value: "ProfessionalScientificAndTechnicalActivities",
+  },
+  {
+    text: t("businessActivityCategory.publicAdministrationAndDefenceSocialSecurity"),
+    value: "PublicAdministrationAndDefenceSocialSecurity",
+  },
+  {
+    text: t("businessActivityCategory.publishingBroadcastingAndContentProductionAndDistribution"),
+    value: "PublishingBroadcastingAndContentProductionAndDistribution",
+  },
+  { text: t("businessActivityCategory.realEstateActivities"), value: "RealEstateActivities" },
+  {
+    text: t("businessActivityCategory.telecommunicationItAndInformationServices"),
+    value: "TelecommunicationItAndInformationServices",
+  },
+  {
+    text: t("businessActivityCategory.transportationAndStorage"),
+    value: "TransportationAndStorage",
+  },
+  {
+    text: t("businessActivityCategory.waterSupplySewerageWasteManagementAndRemediation"),
+    value: "WaterSupplySewerageWasteManagementAndRemediation",
+  },
+  { text: t("businessActivityCategory.wholesaleAndRetailTrade"), value: "WholesaleAndRetailTrade" },
+  { text: t("businessActivityCategory.otherServiceActivities"), value: "OtherServiceActivities" },
+];
