@@ -57,7 +57,7 @@ const items = [
 const EditableSelect = ({
   initialValue,
   ...props
-}: Except<SelectProps<number>, "value" | "onValueChange" | "items"> & {
+}: Except<SelectProps<number | undefined>, "value" | "onValueChange" | "items"> & {
   initialValue?: number;
 }) => {
   const [value, setValue] = useState(initialValue);
