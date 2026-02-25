@@ -38,8 +38,8 @@ const styles = {
     marginLeft: 10,
   },
   defaultLogo: {
-    height: LOGO_MAX_HEIGHT,
-    width: (45 / 10) * LOGO_MAX_HEIGHT,
+    height: 20,
+    width: (45 / 10) * 20,
   },
   swanLogo: {
     height: 8,
@@ -61,7 +61,7 @@ type AccountStatementHeaderProps = {
 };
 
 const logoStyle: CSSProperties = {
-  height: LOGO_MAX_HEIGHT,
+  maxHeight: LOGO_MAX_HEIGHT,
   maxWidth: LOGO_MAX_WIDTH,
   objectFit: "contain",
   objectPosition: "left",
@@ -77,15 +77,16 @@ export const AccountStatementHeader = ({
     <div style={styles.container}>
       <div style={styles.logo}>
         {isNotNullishOrEmpty(partnerLogoUrl) ? (
-          <img src={partnerLogoUrl} style={logoStyle} />
+          <>
+            <img src={partnerLogoUrl} style={logoStyle} />
+            <div style={styles.partnership}>
+              <div style={styles.partnershipText}>{t("accountStatement.partnership")}</div>
+              <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
+            </div>
+          </>
         ) : (
           <SwanLogo style={styles.defaultLogo} />
         )}
-
-        <div style={styles.partnership}>
-          <div style={styles.partnershipText}>{t("accountStatement.partnership")}</div>
-          <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />
-        </div>
       </div>
       <div style={styles.pageNumber}>
         {t("accountStatement.page")} <span className="pageNumber" />/<span className="totalPages" />
