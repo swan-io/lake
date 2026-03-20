@@ -61,6 +61,7 @@ export type InlineDatePickerProps = {
   onValueChange?: (value: string | undefined) => void;
   style?: StyleProp<ViewStyle>;
   readOnly?: boolean;
+  responsive?: boolean;
   validate?: (value: ExtractedDate | undefined) => string | undefined;
 };
 
@@ -75,12 +76,14 @@ export const InlineDatePicker = ({
   value,
   label,
   readOnly = false,
+  responsive = true,
   onValueChange,
   validate = validateDate,
   error: externalError,
   style,
 }: InlineDatePickerProps) => {
-  const { desktop } = useResponsive(breakpoints.small);
+  const { desktop: isDesktopViewport } = useResponsive(breakpoints.small);
+  const desktop = responsive && isDesktopViewport;
 
   // We can't rely on blurred, since 3 inputs / select are mapped on
   // 1 field. The first onBlur update the field internal state from
