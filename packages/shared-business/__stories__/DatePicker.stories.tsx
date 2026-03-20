@@ -233,6 +233,19 @@ export const Inline = () => {
             />
           </View>
         </StoryPart>
+
+        <StoryPart title="Without responsive">
+          <View style={styles.container}>
+            {isNotNullish(birthdate) && <LakeText>Selected date: {birthdate}</LakeText>}
+
+            <BirthdatePicker
+              label={"Birthdate"}
+              value={initialValue}
+              onValueChange={setBirthdate}
+              responsive={false}
+            />
+          </View>
+        </StoryPart>
       </StoryBlock>
     </WithPartnerAccentColor>
   );

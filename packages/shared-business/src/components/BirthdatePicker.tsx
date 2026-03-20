@@ -9,6 +9,7 @@ export type BirthdatePickerProps = {
   onValueChange?: (value: string | undefined) => void;
   style?: StyleProp<ViewStyle>;
   readOnly?: boolean;
+  responsive?: boolean;
 };
 
 export const BirthdatePicker = ({
@@ -18,6 +19,7 @@ export const BirthdatePicker = ({
   onValueChange,
   error: externalError,
   style,
+  responsive = true,
 }: BirthdatePickerProps) => {
   return (
     <InlineDatePicker
@@ -28,6 +30,7 @@ export const BirthdatePicker = ({
       error={externalError}
       style={style}
       validate={validateBirthdate}
+      responsive={responsive}
     />
   );
 };
