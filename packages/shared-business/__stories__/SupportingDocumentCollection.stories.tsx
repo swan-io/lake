@@ -70,6 +70,8 @@ export const WaitingForDocument = () => {
             "ProofOfIdentity",
             "SwornStatement",
             "PowerOfAttorney",
+            "ProofOfBusinessActivity",
+            "CompanyFormationRegistration",
             "UnknownDocumentType",
           ]}
           getPurposeMetadata={purpose => ({
