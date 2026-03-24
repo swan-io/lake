@@ -46,7 +46,7 @@ export const TaxIdentificationNumberInput = ({
     ? getCompanyTaxNumberPlaceholder(country)
     : getIndividualTaxNumberPlaceholder(country),
 }: Props) => {
-  const tooltipContents = getTaxNumberTooltip(country);
+  const tooltipContents = getTaxNumberTooltip(country, isCompany);
 
   return (
     <LakeLabel
