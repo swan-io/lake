@@ -21,11 +21,23 @@ export const TaxIdentificationNumber = () => {
   return (
     <StoryBlock title="Variations">
       <View style={styles.input}>
-        <StoryPart title="German tax ID">
+        <StoryPart title="German company tax ID">
           <TaxIdentificationNumberInput
             required={true}
             country={"DEU"}
             isCompany={true}
+            valid={false}
+            error={undefined}
+            value={value}
+            onChange={event => setValue(event)}
+          />
+        </StoryPart>
+
+        <StoryPart title="German individual tax ID">
+          <TaxIdentificationNumberInput
+            required={true}
+            country={"DEU"}
+            isCompany={false}
             valid={false}
             error={undefined}
             value={value}

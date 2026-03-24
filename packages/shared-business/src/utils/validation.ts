@@ -317,9 +317,16 @@ export const getCompanyTaxNumberPlaceholder = (
     .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
     .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
 
-export const getTaxNumberTooltip = (country: IndividualCountryCCA3 | CompanyCountryCCA3) =>
+export const getTaxNumberTooltip = (
+  country: IndividualCountryCCA3 | CompanyCountryCCA3,
+  isCompany = false,
+) =>
   match(country)
-    .with("DEU", () => "Persönliche Steueridentifikationsnummer des wirtschaftlich Berechtigten")
+    .with(
+      "DEU",
+      () =>
+        `Persönliche ${isCompany ? "Steuernummer" : "Steueridentifikationsnummer"} des wirtschaftlich Berechtigten`,
+    )
     .with("ESP", () => "Número de Identificación Fiscal") // no need to translate
     .with("ITA", () => t("common.form.taxIdentificationNumber.tooltip.ita"))
     .otherwise(() => undefined);
