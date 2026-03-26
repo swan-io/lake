@@ -13,7 +13,7 @@ const styles = {
     width: 793,
     padding: 10,
     fontFamily:
-      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
+      "Arial, sans-serif",
     boxSizing: "border-box",
     color: "#737276",
     fontSize: "10px",
