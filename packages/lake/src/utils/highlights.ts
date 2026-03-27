@@ -2,12 +2,16 @@ import { isNullishOrEmpty } from "./nullish";
 
 const highlightName = "lake-highlight";
 
-export const setHighlightApi = (text: string, element: HTMLElement | null | undefined) => {
+export const setHighlightApi = (
+  text: string,
+  element: HTMLElement | null | undefined,
+  minLength = 2,
+) => {
   if (!("highlights" in CSS)) {
     return;
   }
 
-  if (element == null || isNullishOrEmpty(text)) {
+  if (element == null || isNullishOrEmpty(text) || text.length < minLength) {
     CSS.highlights.delete(highlightName);
     return;
   }
