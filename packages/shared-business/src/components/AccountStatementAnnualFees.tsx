@@ -34,8 +34,6 @@ const styles = StyleSheet.create({
   feeStatementTitle: {
     ...getTextStyle("sans", 20),
     color: colors.swan[500],
-    fontFamily:
-      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
     fontWeight: "500",
     letterSpacing: 0,
     lineHeight: 24,
@@ -47,9 +45,6 @@ const styles = StyleSheet.create({
   dateText: {
     ...getTextStyle("sans", 12),
     color: colors.swan[500],
-    fontFamily:
-      "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
-    fontWeight: "400",
     letterSpacing: 0,
     lineHeight: 16,
   },
