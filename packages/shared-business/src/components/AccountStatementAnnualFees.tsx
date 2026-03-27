@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     color: colors.swan[500],
     fontFamily:
       "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
-    fontSize: 20,
     fontWeight: "500",
     letterSpacing: 0,
     lineHeight: 24,
@@ -50,7 +49,6 @@ const styles = StyleSheet.create({
     color: colors.swan[500],
     fontFamily:
       "Inter, -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif",
-    fontSize: 12,
     fontWeight: "400",
     letterSpacing: 0,
     lineHeight: 16,
