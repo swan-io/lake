@@ -471,3 +471,7 @@ input[type="range"]::-webkit-slider-thumb {
   transform: scale(0.98);
   filter: blur(4px);
 }
+
+::highlight(lake-highlight) {
+  background-color: #fff4cc;
+}
