@@ -108,6 +108,10 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
         />
       </StoryPart>
 
+      <StoryPart title="With search">
+        <EditableSelect hasSearch={true} />
+      </StoryPart>
+
       <StoryPart title="Small">
         <EditableSelect size="small" />
       </StoryPart>

@@ -1,8 +1,18 @@
-import { KeyboardEvent, ReactElement, ReactNode, Ref, useCallback, useRef } from "react";
+import {
+  KeyboardEvent,
+  ReactElement,
+  ReactNode,
+  Ref,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
+  TextInput,
   TextStyle,
   View,
   ViewStyle,
@@ -10,6 +20,7 @@ import {
 import { commonStyles } from "../constants/commonStyles";
 import {
   ColorVariants,
+  backgroundColor,
   colors,
   invariantColors,
   radii,
@@ -17,6 +28,7 @@ import {
   spacings,
   texts,
 } from "../constants/design";
+import { useBoolean } from "../hooks/useBoolean";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
@@ -126,6 +138,32 @@ const styles = StyleSheet.create({
   errorContainer: {
     borderColor: colors.negative[500],
   },
+  filterContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    margin: 16,
+  },
+  filterInput: {
+    ...texts.regular,
+    backgroundColor: backgroundColor.accented,
+    borderColor: colors.gray[100],
+    borderRadius: 4,
+    borderWidth: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    height: 40,
+    outlineStyle: "none",
+    paddingHorizontal: 12,
+    paddingLeft: 40,
+    placeholderTextColor: colors.gray[300],
+  },
+  filterFocused: {
+    borderColor: colors.gray[200],
+  },
+  searchIcon: {
+    position: "absolute",
+    left: 14,
+  },
 });
 
 export type Item<V> = {
@@ -156,6 +194,8 @@ export type SelectProps<V, T extends Item<V> = Item<V>> = {
   error?: string;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
+  hasSearch?: boolean;
+  searchPlaceholder?: string;
 };
 
 export const LakeSelect = <V, T extends Item<V> = Item<V>>({
@@ -180,7 +220,12 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
   renderItem,
   PopoverFooter,
   style,
+  hasSearch = false,
+  searchPlaceholder,
 }: SelectProps<V, T>) => {
+  const [filter, setFilter] = useState<string>("");
+  const [filterFocused, setFilterFocused] = useBoolean(false);
+
   const inputRef = useRef<View>(null);
   const listRef = useRef<FlatListRef>(null);
   const typingTimeoutRef = useRef<number>(undefined);
@@ -236,6 +281,41 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
   );
 
   const name = itemValue?.name ?? (value as unknown as string);
+
+  const filteredItems = useMemo(() => {
+    if (isNullishOrEmpty(filter)) {
+      return items;
+    }
+    const lowerFilter = filter.toLowerCase();
+    return items.filter(item => item.name.toLowerCase().includes(lowerFilter));
+  }, [items, filter]);
+
+  const ListHeaderComponent = useMemo(
+    () => (
+      <Box direction="row" alignItems="center" style={styles.filterContainer}>
+        <TextInput
+          autoComplete="off"
+          inputMode="search"
+          multiline={false}
+          rows={1}
+          onChangeText={filterValue => setFilter(filterValue)}
+          placeholder={searchPlaceholder}
+          value={filter}
+          onFocus={setFilterFocused.on}
+          onBlur={setFilterFocused.off}
+          style={[styles.filterInput, filterFocused && styles.filterFocused]}
+        />
+
+        <Icon
+          name="search-filled"
+          color={colors[color].primary}
+          size={20}
+          style={styles.searchIcon}
+        />
+      </Box>
+    ),
+    [filter, filterFocused, setFilterFocused, searchPlaceholder, color],
+  );
 
   return (
     <View style={commonStyles.fill}>
@@ -353,7 +433,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
 
         <FlatList
           role="list"
-          data={items}
+          data={filteredItems}
           ref={listRef}
           contentContainerStyle={styles.listContent}
           onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
@@ -375,6 +455,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
             }
           }}
           keyExtractor={(_, index) => `select-item-${index}`}
+          ListHeaderComponent={hasSearch ? ListHeaderComponent : undefined}
           renderItem={({ item, index }) => {
             const isSelected = value === item.value;
             const disablement = disabledItems.find(({ value }) => value === item.value);
