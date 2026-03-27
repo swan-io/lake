@@ -4,6 +4,7 @@ import {
   ReactNode,
   Ref,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -32,6 +33,7 @@ import { useBoolean } from "../hooks/useBoolean";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
+import { setHighlightApi } from "../utils/highlights";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
 import { Fill } from "./Fill";
@@ -289,6 +291,19 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
     const lowerFilter = filter.toLowerCase();
     return items.filter(item => item.name.toLowerCase().includes(lowerFilter));
   }, [items, filter]);
+
+  useEffect(() => {
+    if (!visible) {
+      setFilter("");
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    if (!hasSearch) {
+      return;
+    }
+    setHighlightApi(filter, listRef.current?.element);
+  }, [filter, hasSearch]);
 
   const ListHeaderComponent = useMemo(
     () => (
