@@ -436,5 +436,11 @@
   "transactionStatement.type.SepaInstantCreditTransferOut": "Bonifico istantaneo SEPA inviato",
   "validation.birthdateCannotBeFuture": "La data di nascita non può essere nel futuro",
   "validation.invalidBirthDate": "Inserisci una data di nascita valida.",
-  "validation.invalidDate": "Inserire una data valida."
+  "validation.invalidDate": "Inserire una data valida.",
+  "accountStatement.feeStatement": "Rendiconto annuale delle commissioni",
+  "accountStatement.feeType": "Tipo di commissione",
+  "accountStatement.from": "Da",
+  "accountStatement.to": "a",
+  "accountStatement.total": "Totali",
+  "accountStatement.operationCount": "# operazioni"
 }

@@ -436,5 +436,11 @@
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Instant-overschrijving verzonden",
   "validation.birthdateCannotBeFuture": "Geboortedatum kan niet in de toekomst liggen",
   "validation.invalidBirthDate": "Voer een geldige geboortedatum in.",
-  "validation.invalidDate": "Voer een geldige datum in."
+  "validation.invalidDate": "Voer een geldige datum in.",
+  "accountStatement.feeStatement": "Jaarlijkse kostenverklaring",
+  "accountStatement.feeType": "Soort kosten",
+  "accountStatement.from": "Van",
+  "accountStatement.to": "naar",
+  "accountStatement.total": "Totalen",
+  "accountStatement.operationCount": "# handeling"
 }
