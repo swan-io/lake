@@ -23,7 +23,7 @@
   "accountStatement.partnership": "In partnership with",
   "accountStatement.titleDocument": "Account statement",
   "accountStatement.titleDocument.companyDescription": "Business account - in euros",
-  "accountStatement.titleDocument.individualDescription": "Personal account - in euros",
+  "accountStatement.titleDocument.individualDescription": "Individual account - in euros",
   "addressFormPart.addressLabel": "Type your address",
   "addressFormPart.cityLabel": "City",
   "addressFormPart.placeholder": "Start typing…",
