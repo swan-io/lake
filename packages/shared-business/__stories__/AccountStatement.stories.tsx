@@ -4,6 +4,7 @@ import { AccountStatementFooter } from "../src/components/AccountStatementFooter
 import { AccountStatementHeader } from "../src/components/AccountStatementHeader";
 import { CountryCCA3 } from "../src/constants/countries";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
+import { AccountStatementAnnualFees } from "../src/components/AccountStatementAnnualFees";
 
 export default {
   title: "Informations/AccountStatement",
@@ -474,6 +475,35 @@ export const Default = () => {
     currency: "EUR",
   };
 
+  const annualFeeStatement = {
+    openingDate: "01/01/2025",
+    closingDate: "31/12/2025",
+    feeOperations: [
+      {
+        label: "Card payment fees",
+        count: 45,
+        total: { value: "45.00", currency: "EUR" },
+      },
+      {
+        label: "International transfer fees",
+        count: 12,
+        total: { value: "60.00", currency: "EUR" },
+      },
+      {
+        label: "Account maintenance fees",
+        count: 12,
+        total: { value: "120.00", currency: "EUR" },
+      },
+      {
+        label: "ATM withdrawal fees",
+        count: 8,
+        total: { value: "16.00", currency: "EUR" },
+      },
+    ],
+    operationCount: 77,
+    total: { value: "241.00", currency: "EUR" },
+  };
+
   return (
     <StoryBlock title="Account statement">
       <StoryPart title="Default">
@@ -495,6 +525,7 @@ export const Default = () => {
           totalsDebit={totalsDebit}
           closingBalance={closingBalance}
         />
+        <AccountStatementAnnualFees annualFeeStatement={annualFeeStatement} />
         <AccountStatementFooter />
       </StoryPart>
     </StoryBlock>

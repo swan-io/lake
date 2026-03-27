@@ -87,6 +87,19 @@ const styles = StyleSheet.create({
   closingBalanceRowText: {
     paddingLeft: "20%",
   },
+  dateContainer: {
+    alignItems: "flex-start",
+    flexDirection: "column",
+  },
+  dateText: {
+    ...getTextStyle("sans", 12),
+    color: colors.swan[500],
+    letterSpacing: 0,
+    lineHeight: 16,
+  },
+  dateBold: {
+    fontWeight: "600",
+  },
 });
 
 const Title = ({
@@ -236,11 +249,14 @@ export const AccountStatementV1 = ({
 
           <Space height={48} />
           <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-            <Box direction="column">
-              <Text style={styles.dateTitle}>
-                {t("accountStatement.date", { openingDate, closingDate })}
-              </Text>
-            </Box>
+                  <Box style={styles.dateContainer}>
+                    <Text style={styles.dateText}>
+                      {t("accountStatement.from")}{" "}
+                      <Text style={styles.dateBold}>{openingDate}</Text>{" "}
+                      {t("accountStatement.to")}{" "}
+                      <Text style={styles.dateBold}>{closingDate}</Text>
+                    </Text>
+                  </Box>
 
             <Box direction="column">
               <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>

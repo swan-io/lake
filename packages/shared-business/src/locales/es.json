@@ -436,5 +436,11 @@
   "transactionStatement.type.SepaInstantCreditTransferOut": "Transferencia SEPA instantánea enviada",
   "validation.birthdateCannotBeFuture": "La fecha de nacimiento no puede estar en el futuro",
   "validation.invalidBirthDate": "Por favor, introduce una fecha de nacimiento válida.",
-  "validation.invalidDate": "Introduce una fecha válida."
+  "validation.invalidDate": "Introduce una fecha válida.",
+  "accountStatement.feeStatement": "Informe anual de comisiones",
+  "accountStatement.feeType": "Tipo de comisión",
+  "accountStatement.from": "De",
+  "accountStatement.to": "a",
+  "accountStatement.total": "Total",
+  "accountStatement.operationCount": "# operación"
 }

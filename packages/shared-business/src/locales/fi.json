@@ -436,5 +436,11 @@
   "transactionStatement.type.SepaInstantCreditTransferOut": "SEPA Instant -tilisiirto lähetetty",
   "validation.birthdateCannotBeFuture": "Syntymäaika ei voi olla tulevaisuudessa",
   "validation.invalidBirthDate": "Syötä syntymäaika oikeassa muodossa.",
-  "validation.invalidDate": "Anna kelvollinen päivämäärä."
+  "validation.invalidDate": "Anna kelvollinen päivämäärä.",
+  "accountStatement.feeStatement": "Vuosittainen maksuerittely",
+  "accountStatement.feeType": "Maksun tyyppi",
+  "accountStatement.from": "Alkaen",
+  "accountStatement.to": "–",
+  "accountStatement.total": "Loppusummat",
+  "accountStatement.operationCount": "# toimenpide"
 }
