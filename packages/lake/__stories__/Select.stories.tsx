@@ -35,7 +35,7 @@ export default {
 } as Meta<typeof LakeSelect>;
 
 const items = [
-  { name: "Camille", value: 1 },
+  { name: "Camille", value: 1, searchTerms: ["Coco"] },
   { name: "Charlotte", value: 2 },
   { name: "Francis", value: 3 },
   { name: "Émilie", value: 4 },
@@ -44,7 +44,7 @@ const items = [
   { name: "Laura", value: 6 },
   { name: "Marie-Anne", value: 7 },
   { name: "Natasha", value: 8 },
-  { name: "Nicolas", value: 9 },
+  { name: "Nicolas", value: 9, searchTerms: ["NW65UA", "Coco"] },
   { name: "Pierre", value: 10 },
   { name: "Thomas", value: 11 },
   { name: "Valérie", value: 12 },

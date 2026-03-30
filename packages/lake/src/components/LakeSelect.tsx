@@ -172,6 +172,7 @@ export type Item<V> = {
   name: string;
   value: V;
   icon?: ReactNode;
+  searchTerms?: string[];
 };
 
 export type SelectProps<V, T extends Item<V> = Item<V>> = {
@@ -289,7 +290,11 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
       return items;
     }
     const lowerFilter = filter.toLowerCase();
-    return items.filter(item => item.name.toLowerCase().includes(lowerFilter));
+    return items.filter(
+      item =>
+        item.name.toLowerCase().includes(lowerFilter) ||
+        item.searchTerms?.some(term => term.toLowerCase() === lowerFilter),
+    );
   }, [items, filter]);
 
   useEffect(() => {
