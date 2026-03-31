@@ -34,7 +34,7 @@ export default {
   component: LakeSelect,
 } as Meta<typeof LakeSelect>;
 
-const items = [
+const data = [
   { name: "Camille", value: 1, searchTerms: ["Coco"] },
   { name: "Charlotte", value: 2 },
   { name: "Francis", value: 3 },
@@ -56,9 +56,11 @@ const items = [
 
 const EditableSelect = ({
   initialValue,
+  items = data,
   ...props
 }: Except<SelectProps<number>, "value" | "onValueChange" | "items"> & {
   initialValue?: number;
+  items?: SelectProps<number>["items"];
 }) => {
   const [value, setValue] = useState(initialValue);
 
@@ -219,6 +221,38 @@ export const Colors = () => {
           <EditableSelect icon="building-bank-filled" color={color as ColorVariants} />
         </StoryPart>
       ))}
+    </StoryBlock>
+  );
+};
+
+export const VariableWidth = () => {
+  const items = [
+    { name: "1", value: 1 },
+    { name: "2", value: 2 },
+    { name: "3", value: 3 },
+  ];
+
+  const itemsVeryLong = [
+    { name: "Camille", value: 1 },
+    { name: "Charlotte", value: 2 },
+    { name: "Francis", value: 3 },
+    {
+      name: "Société de Participations Financières de Profession Libérale Société à responsabilité limitée (SPFPL SARL) - SPFPL SARL",
+      value: 17,
+    },
+  ];
+
+  return (
+    <StoryBlock title="short width" description="">
+      <StoryPart title="Default">
+        <EditableSelect items={items} />
+      </StoryPart>
+      <StoryPart title="With matchReferenceWidth false">
+        <EditableSelect items={items} matchReferenceWidth={false} />
+      </StoryPart>
+      <StoryPart title="With very long items">
+        <EditableSelect items={itemsVeryLong} />
+      </StoryPart>
     </StoryBlock>
   );
 };
