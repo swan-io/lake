@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     paddingVertical: spacings[4],
     minWidth: spacings[96],
+    paddingRight: 10,
   },
   openingBalanceText: {
     ...getTextStyle("sans", 12),
@@ -58,6 +59,7 @@ const styles = StyleSheet.create({
   },
   textColumn: {
     paddingVertical: spacings[4],
+    paddingRight: 10,
     ...getTextStyle("sans", 11),
     lineHeight: 16,
   },
@@ -270,10 +272,10 @@ export const AccountStatementV1 = ({
               <Text style={[styles.titleColumn, { width: "13%" }]}>
                 {t("accountStatement.column.date")}
               </Text>
-              <Text style={[styles.titleColumn, { width: "17%" }]}>
+              <Text style={[styles.titleColumn, { width: "21%" }]}>
                 {t("accountStatement.column.type")}
               </Text>
-              <Text style={[styles.titleColumn, { width: "40%" }]}>
+              <Text style={[styles.titleColumn, { width: "42%" }]}>
                 {t("accountStatement.column.description")}
               </Text>
               <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
@@ -287,7 +289,7 @@ export const AccountStatementV1 = ({
               {transactions.map(transaction => (
                 <Box direction="row" key={transaction.id}>
                   <Text style={[styles.textColumn, { width: "13%" }]}>{transaction.date}</Text>
-                  <Text style={[styles.textColumn, { width: "17%" }]}>
+                  <Text style={[styles.textColumn, { width: "20%" }]}>
                     {translateTransaction(transaction.type, t)}
                   </Text>
                   <Text style={[styles.textColumn, { width: "40%" }]}>{transaction.label}</Text>
