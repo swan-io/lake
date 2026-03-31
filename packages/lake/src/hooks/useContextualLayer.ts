@@ -42,6 +42,8 @@ type ContextualLayerConfig = {
 
 const MAX_OFFSET_FOR_CENTER_PLACEMENT = 100;
 
+const HORIZONTAL_SAFETY_MARGIN = 16;
+
 export const useContextualLayer = ({
   placement,
   visible,
@@ -114,10 +116,22 @@ export const useContextualLayer = ({
       pointerEvents: "none",
     };
 
+    const maxWidth = match(inferedPlacement)
+      .with("left", () => viewportWidth - rect.left - HORIZONTAL_SAFETY_MARGIN)
+      .with("right", () => rect.right - HORIZONTAL_SAFETY_MARGIN)
+      .with("center", () =>
+        Math.min(
+          availableSpaceBefore + width / 2,
+          availableSpaceAfter + width / 2,
+        ) * 2 - HORIZONTAL_SAFETY_MARGIN,
+      )
+      .exhaustive();
+
     const style: ViewStyle = {
       ...verticalPosition,
       ...horizontalPosition,
       maxHeight,
+      maxWidth,
       ...(matchReferenceWidth === true ? { width } : undefined),
       ...(matchReferenceMinWidth === true ? { minWidth: width } : undefined),
       pointerEvents: "auto",
