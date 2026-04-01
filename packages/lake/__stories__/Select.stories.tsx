@@ -253,8 +253,8 @@ export const VariableWidth = () => {
       <StoryPart title="Default With very long items">
         <EditableSelect items={itemsVeryLong} />
       </StoryPart>
-      <StoryPart title="With very long items and matchReferenceMaxWidth true">
-        <EditableSelect items={itemsVeryLong} matchReferenceMaxWidth={true} />
+      <StoryPart title="With very long items and matchReferenceWidth true">
+        <EditableSelect items={itemsVeryLong} matchReferenceWidth={true} />
       </StoryPart>
     </StoryBlock>
   );
