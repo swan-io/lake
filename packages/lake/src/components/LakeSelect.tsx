@@ -143,7 +143,9 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexGrow: 1,
     flexShrink: 1,
-    margin: 16,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    marginTop: 4,
   },
   filterInput: {
     ...texts.regular,

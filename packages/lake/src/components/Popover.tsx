@@ -65,12 +65,12 @@ const styles = StyleSheet.create({
   popoverContainer: {
     position: "absolute",
     display: "flex",
+    backgroundColor: backgroundColor.accented,
   },
   popover: {
     pointerEvents: "auto",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: backgroundColor.accented,
     borderRadius: radii[8],
     marginVertical: spacings[8],
     overflow: "hidden",
