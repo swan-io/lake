@@ -179,6 +179,7 @@ export type SelectProps<V, T extends Item<V> = Item<V>> = {
   ref?: Ref<View>;
   placeholder?: string;
   items: T[];
+  matchReferenceMinWidth?: boolean;
   matchReferenceWidth?: boolean;
   mode?: "normal" | "borderless";
   title?: string;
@@ -213,7 +214,8 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
   placeholder,
   readOnly = false,
   id,
-  matchReferenceWidth = true,
+  matchReferenceMinWidth = true,
+  matchReferenceWidth = false,
   value,
   error,
   hideErrors = false,
@@ -435,7 +437,8 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
 
       <Popover
         role="listbox"
-        matchReferenceMinWidth={matchReferenceWidth}
+        matchReferenceWidth={matchReferenceWidth}
+        matchReferenceMinWidth={matchReferenceMinWidth}
         onDismiss={close}
         referenceRef={inputRef}
         returnFocus={true}
