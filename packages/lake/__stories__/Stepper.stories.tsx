@@ -3,7 +3,7 @@ import { useState } from "react";
 import { match, P } from "ts-pattern";
 import { Box } from "../src/components/Box";
 import { LakeButton } from "../src/components/LakeButton";
-import { LakeStepper, TopLevelStep } from "../src/components/LakeStepper";
+import { LakeStepper, MobileStepper, TopLevelStep } from "../src/components/LakeStepper";
 import { Space } from "../src/components/Space";
 import { WithCurrentColor } from "../src/components/WithCurrentColor";
 import { isNullish } from "../src/utils/nullish";
@@ -118,6 +118,10 @@ export const Interactive = () => {
             ariaLabel="Next"
           />
         </Box>
+      </StoryBlock>
+
+      <StoryBlock title="Mobile Stepper">
+        <MobileStepper steps={steps} activeStepId={activeStepId} />
       </StoryBlock>
     </WithCurrentColor>
   );

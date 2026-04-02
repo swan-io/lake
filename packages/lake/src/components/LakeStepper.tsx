@@ -66,6 +66,21 @@ const styles = StyleSheet.create({
   },
 });
 
+const stylesMobile = StyleSheet.create({
+  progress: {
+    borderRadius: 10,
+    marginTop: 10,
+    height: 3,
+    backgroundColor: colors.gray[100],
+  },
+  progressBar: {
+    borderRadius: 10,
+    height: "100%",
+    backgroundColor: colors.current[500],
+    transitionDuration: "300ms",
+  },
+});
+
 type StepLinkProps = {
   to: string;
   disabled: boolean;
@@ -191,6 +206,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
   );
 };
 
+/** @deprecated Use <MobileStepper> instead */
 export const MobileStepTitle = ({ steps, activeStepId }: Props) => {
   const currentStep = Option.fromNullable(
     steps
@@ -244,6 +260,54 @@ export const MobileStepTitle = ({ steps, activeStepId }: Props) => {
         </LakeHeading>
       </Box>
     ),
+    None: () => null,
+  });
+};
+
+export const MobileStepper = ({ steps, activeStepId }: Props) => {
+  const total = steps.length;
+
+  const currentStep = Option.fromNullable(
+    steps
+      .flatMap((step, index) =>
+        match(step)
+          .with({ id: P.string }, step => ({ ...step, number: `${index + 1}` }))
+          .with({ children: P.array(P.any) }, ({ children }) =>
+            children.map((child, subIndex) => ({
+              ...child,
+              number: `${index + 1}.${subIndex + 1}`,
+            })),
+          )
+          .exhaustive(),
+      )
+      .find(({ id }) => id === activeStepId),
+  ).map(({ label, hasErrors, number }) => ({
+    number,
+    label,
+    isErrorState: hasErrors === true,
+  }));
+
+  return currentStep.match({
+    Some: ({ number, label, isErrorState }) => {
+      const progress = `${(Number.parseFloat(number) / total) * 100}%`;
+
+      return (
+        <View>
+          <LakeText
+            variant="smallMedium"
+            color={isErrorState ? colors.negative[500] : colors.current[500]}
+          >
+            {label}
+          </LakeText>
+          <LakeText variant="smallRegular" color={colors.gray[300]}>
+            {number} of {total}
+          </LakeText>
+          <View style={stylesMobile.progress}>
+            <View style={[stylesMobile.progressBar, { width: progress }]} />
+          </View>
+        </View>
+      );
+    },
     None: () => null,
   });
 };
