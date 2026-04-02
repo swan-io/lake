@@ -14,7 +14,7 @@
   "accountStatement.contactSupport": "Contactez Swan",
   "accountStatement.creditTransfer": "Virement",
   "accountStatement.date": "Du {openingDate} au {closingDate}",
-  "accountStatement.directDebit": "Prélèvement",
+  "accountStatement.directDebit": "Prélèvement automatique",
   "accountStatement.feeStatement": "Relevé annuel des frais",
   "accountStatement.feeType": "Type de frais",
   "accountStatement.fees": "Frais",
