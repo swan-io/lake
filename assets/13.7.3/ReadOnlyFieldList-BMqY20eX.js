@@ -1,2 +1,0 @@
-import{j as e,f as i,V as o}from"./ScrollView-Rbrat8fW.js";import{r as a}from"./iframe-10DXKf24.js";import{S as p}from"./Separator-DZOcSMDC.js";const d=({children:s})=>e.jsx(e.Fragment,{children:a.Children.toArray(s).filter(i).map((t,r)=>e.jsxs(o,{children:[r!==0&&e.jsx(p,{horizontal:!1,space:8}),t]},r))});d.__docgenInfo={description:"",methods:[],displayName:"ReadOnlyFieldList",props:{children:{required:!0,tsType:{name:"ReactNode"},description:""}}};export{d as R};
-//# sourceMappingURL=ReadOnlyFieldList-BMqY20eX.js.map
