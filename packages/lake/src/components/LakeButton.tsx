@@ -163,6 +163,7 @@ export type ButtonProps = {
   hrefAttrs?: HrefAttrs;
   pill?: boolean;
   disabledUntil?: string;
+  [key: `data-${string}`]: string | undefined;
 } & (
   | {
       ariaLabel: string;
@@ -198,6 +199,7 @@ export const LakeButton = memo(
     hrefAttrs,
     pill = false,
     disabledUntil,
+    ...dataAttributes
   }: ButtonProps) => {
     const [progressAnimation, setProgressAnimation] = useState<
       Option<{
@@ -256,6 +258,7 @@ export const LakeButton = memo(
 
     return (
       <Pressable
+        {...dataAttributes}
         href={href}
         hrefAttrs={hrefAttrs}
         role={href != null ? "link" : "button"}

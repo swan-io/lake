@@ -4,7 +4,6 @@ import { ComponentType, FC, memo, ReactNode, Ref, useCallback, useMemo, useRef }
 import {
   HrefAttrs,
   NativeSyntheticEvent,
-  PressableProps,
   PressableStateCallbackType,
   StyleSheet,
   Text,
@@ -52,6 +51,7 @@ type Props<BaseProps extends TextProps | TextInputProps> = Merge<
     onPressMove?: PressResponderConfig["onPressMove"];
     onPressOut?: PressResponderConfig["onPressEnd"];
     style?: BaseProps["style"] | ((state: PressableStateCallbackType) => BaseProps["style"]);
+    [key: `data-${string}`]: string | undefined;
     /**
      * Used only for documentation or testing (e.g. snapshot testing).
      */
@@ -92,6 +92,13 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       testOnly_pressed,
       ...rest
     } = props;
+
+    const dataSet = Object.fromEntries(
+      Object.entries(props)
+        .filter(([key]) => key.startsWith("data-"))
+        // remove the "data-" prefix from the keys to match React Native's dataSet prop format
+        .map(([key, value]) => [key.slice(5), value]),
+    );
 
     const [hovered, setHovered] = useForceableState(testOnly_hovered === true);
     const [focused, setFocused] = useForceableState(false);
@@ -192,6 +199,7 @@ const getPressable = <P extends Props<TextProps | TextInputProps>>(
       <Component
         {...rest}
         {...pressEventHandlers}
+        dataSet={dataSet}
         aria-disabled={disabled}
         onBlur={blurHandler}
         onContextmenu={contextMenuHandler}
@@ -218,15 +226,15 @@ type ExtraProps = {
   hrefAttrs?: HrefAttrs;
 };
 
-export type PressableViewProps = Except<Props<ViewProps>, "children">;
+export type PressableViewProps = Props<ViewProps>;
 export type PressableTextProps = Props<TextProps>;
 
 export const Pressable = memo(
   getPressable<PressableViewProps>(View, { applyPressStyle: true }),
-) as FC<PressableProps & ExtraProps & { ref?: Ref<View> }>;
+) as FC<Except<PressableViewProps, "ref"> & ExtraProps & { ref?: Ref<View> }>;
 
 export const PressableText = memo(
   getPressable<PressableTextProps>(Text, { applyPressStyle: true }),
-) as FC<PressableTextProps & { ref?: Ref<Text> }>;
+) as FC<Except<PressableTextProps, "ref"> & { ref?: Ref<Text> }>;
 
 PressableText.displayName = "PressableText";
