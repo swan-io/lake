@@ -13,7 +13,7 @@ import {
   ViewProps,
 } from "react-native";
 import { match } from "ts-pattern";
-import { Merge } from "type-fest";
+import { Except, Merge } from "type-fest";
 import { useForceableState } from "../hooks/useForceableState";
 import { useHover } from "../hooks/useHover";
 import { useMergeRefs } from "../hooks/useMergeRefs";
@@ -231,10 +231,10 @@ export type PressableTextProps = Props<TextProps>;
 
 export const Pressable = memo(
   getPressable<PressableViewProps>(View, { applyPressStyle: true }),
-) as FC<PressableViewProps & ExtraProps & { ref?: Ref<View> }>;
+) as FC<Except<PressableViewProps, "ref"> & ExtraProps & { ref?: Ref<View> }>;
 
 export const PressableText = memo(
   getPressable<PressableTextProps>(Text, { applyPressStyle: true }),
-) as FC<PressableTextProps & { ref?: Ref<Text> }>;
+) as FC<Except<PressableTextProps, "ref"> & { ref?: Ref<Text> }>;
 
 PressableText.displayName = "PressableText";
