@@ -294,7 +294,7 @@ export const MobileStepper = ({ steps, activeStepId }: Props) => {
       return (
         <View>
           <LakeText
-            variant="smallMedium"
+            variant="medium"
             color={isErrorState ? colors.negative[500] : colors.current[500]}
           >
             {label}
