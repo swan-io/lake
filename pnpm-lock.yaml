@@ -19,10 +19,10 @@ importers:
         version: 1.7.16
       '@storybook/react':
         specifier: ^10.2.4
-        version: 10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)
+        version: 10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@6.0.2)
       '@storybook/react-vite':
         specifier: ^10.2.4
-        version: 10.2.4(esbuild@0.27.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rollup@4.57.1)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))
+        version: 10.2.4(esbuild@0.27.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rollup@4.57.1)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@6.0.2)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.1
@@ -73,7 +73,7 @@ importers:
         version: 3.8.1
       prettier-plugin-organize-imports:
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.8.1)(typescript@5.9.3)
+        version: 4.3.0(prettier@3.8.1)(typescript@6.0.2)
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
@@ -102,8 +102,8 @@ importers:
         specifier: ^5.4.3
         version: 5.4.3
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^6.0.2
+        version: 6.0.2
       valienv:
         specifier: ^1.1.0
         version: 1.1.0
@@ -118,13 +118,13 @@ importers:
     dependencies:
       '@swan-io/boxed':
         specifier: ^3.2.1
-        version: 3.2.1(typescript@5.9.3)
+        version: 3.2.1(typescript@6.0.2)
       '@swan-io/chicane':
         specifier: ^3.0.0
         version: 3.0.0(react@19.2.4)
       '@swan-io/use-form':
         specifier: ^3.1.0
-        version: 3.1.0(react@19.2.4)(typescript@5.9.3)
+        version: 3.1.0(react@19.2.4)(typescript@6.0.2)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -170,19 +170,19 @@ importers:
     dependencies:
       '@formatjs/intl':
         specifier: ^4.1.2
-        version: 4.1.2(typescript@5.9.3)
+        version: 4.1.2(typescript@6.0.2)
       '@placekit/client-js':
         specifier: ^2.3.0
         version: 2.3.0
       '@swan-io/boxed':
         specifier: ^3.2.1
-        version: 3.2.1(typescript@5.9.3)
+        version: 3.2.1(typescript@6.0.2)
       '@swan-io/request':
         specifier: ^3.1.0
-        version: 3.1.0(@swan-io/boxed@3.2.1(typescript@5.9.3))
+        version: 3.1.0(@swan-io/boxed@3.2.1(typescript@6.0.2))
       '@swan-io/use-form':
         specifier: ^3.1.0
-        version: 3.1.0(react@19.2.4)(typescript@5.9.3)
+        version: 3.1.0(react@19.2.4)(typescript@6.0.2)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -882,9 +882,6 @@ packages:
     resolution: {integrity: sha512-MQqSpe09PdjDjTR4HCPpUxO9XsacNguCkce1C2wm1eIb6ycWXQoV+biYvLEuI/LiMqB31KySdgY2YFwrVucLCw==, tarball: https://registry.npmjs.org/@swan-io/boxed/-/boxed-3.2.1.tgz}
     peerDependencies:
       typescript: '>=5.0.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
 
   '@swan-io/chicane@3.0.0':
     resolution: {integrity: sha512-ELguiTjrK2+wYqiUfguusOXaAXUBdizGJjXM6pg5Jvye0Yefp18coVmSCpGJLdJY4hCaWXis/ct4i/DyV2FIuw==, tarball: https://registry.npmjs.org/@swan-io/chicane/-/chicane-3.0.0.tgz}
@@ -1449,6 +1446,7 @@ packages:
   glob@11.1.0:
     resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==, tarball: https://registry.npmjs.org/glob/-/glob-11.1.0.tgz}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   graphql@16.12.0:
@@ -2097,8 +2095,8 @@ packages:
     resolution: {integrity: sha512-AXSAQJu79WGc79/3e9/CR77I/KQgeY1AhNvcShIH4PTcGYyC4xv6H4R4AUOwkPS5799KlVDAu8zExeCrkGquiA==, tarball: https://registry.npmjs.org/type-fest/-/type-fest-5.4.3.tgz}
     engines: {node: '>=20'}
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==, tarball: https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz}
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==, tarball: https://registry.npmjs.org/typescript/-/typescript-6.0.2.tgz}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -2606,7 +2604,7 @@ snapshots:
       '@formatjs/fast-memoize': 3.1.0
       tslib: 2.8.1
 
-  '@formatjs/intl@4.1.2(typescript@5.9.3)':
+  '@formatjs/intl@4.1.2(typescript@6.0.2)':
     dependencies:
       '@formatjs/ecma402-abstract': 3.1.1
       '@formatjs/fast-memoize': 3.1.0
@@ -2614,7 +2612,7 @@ snapshots:
       intl-messageformat: 11.1.2
       tslib: 2.8.1
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   '@isaacs/balanced-match@4.0.1': {}
 
@@ -2631,13 +2629,13 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@joshwooding/vite-plugin-react-docgen-typescript@0.6.3(typescript@5.9.3)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@joshwooding/vite-plugin-react-docgen-typescript@0.6.3(typescript@6.0.2)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       glob: 11.1.0
-      react-docgen-typescript: 2.4.0(typescript@5.9.3)
+      react-docgen-typescript: 2.4.0(typescript@6.0.2)
       vite: 7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -2812,12 +2810,12 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       storybook: 10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
-  '@storybook/react-vite@10.2.4(esbuild@0.27.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rollup@4.57.1)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))':
+  '@storybook/react-vite@10.2.4(esbuild@0.27.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(rollup@4.57.1)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@6.0.2)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.6.3(typescript@5.9.3)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.6.3(typescript@6.0.2)(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))
       '@rollup/pluginutils': 5.3.0(rollup@4.57.1)
       '@storybook/builder-vite': 10.2.4(esbuild@0.27.2)(rollup@4.57.1)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.3.1)(tsx@4.21.0)(yaml@2.8.2))
-      '@storybook/react': 10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)
+      '@storybook/react': 10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@6.0.2)
       empathic: 2.0.0
       magic-string: 0.30.21
       react: 19.2.4
@@ -2834,7 +2832,7 @@ snapshots:
       - typescript
       - webpack
 
-  '@storybook/react@10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@5.9.3)':
+  '@storybook/react@10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(typescript@6.0.2)':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/react-dom-shim': 10.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(storybook@10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
@@ -2843,13 +2841,13 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       storybook: 10.2.4(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
-  '@swan-io/boxed@3.2.1(typescript@5.9.3)':
-    optionalDependencies:
-      typescript: 5.9.3
+  '@swan-io/boxed@3.2.1(typescript@6.0.2)':
+    dependencies:
+      typescript: 6.0.2
 
   '@swan-io/chicane@3.0.0(react@19.2.4)':
     dependencies:
@@ -2857,13 +2855,13 @@ snapshots:
       react: 19.2.4
       use-sync-external-store: 1.6.0(react@19.2.4)
 
-  '@swan-io/request@3.1.0(@swan-io/boxed@3.2.1(typescript@5.9.3))':
+  '@swan-io/request@3.1.0(@swan-io/boxed@3.2.1(typescript@6.0.2))':
     dependencies:
-      '@swan-io/boxed': 3.2.1(typescript@5.9.3)
+      '@swan-io/boxed': 3.2.1(typescript@6.0.2)
 
-  '@swan-io/use-form@3.1.0(react@19.2.4)(typescript@5.9.3)':
+  '@swan-io/use-form@3.1.0(react@19.2.4)(typescript@6.0.2)':
     dependencies:
-      '@swan-io/boxed': 3.2.1(typescript@5.9.3)
+      '@swan-io/boxed': 3.2.1(typescript@6.0.2)
       react: 19.2.4
     transitivePeerDependencies:
       - typescript
@@ -3690,10 +3688,10 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prettier-plugin-organize-imports@4.3.0(prettier@3.8.1)(typescript@5.9.3):
+  prettier-plugin-organize-imports@4.3.0(prettier@3.8.1)(typescript@6.0.2):
     dependencies:
       prettier: 3.8.1
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   prettier@3.8.1: {}
 
@@ -3733,9 +3731,9 @@ snapshots:
       react: 19.2.4
       use-sync-external-store: 1.6.0(react@19.2.4)
 
-  react-docgen-typescript@2.4.0(typescript@5.9.3):
+  react-docgen-typescript@2.4.0(typescript@6.0.2):
     dependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   react-docgen@8.0.2:
     dependencies:
@@ -4031,7 +4029,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  typescript@5.9.3: {}
+  typescript@6.0.2: {}
 
   ua-parser-js@1.0.41: {}
 
