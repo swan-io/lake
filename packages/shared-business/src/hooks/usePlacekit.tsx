@@ -2,7 +2,7 @@ import type { PKClient } from "@placekit/client-js/lite";
 import { useEffect, useMemo, useState } from "react";
 
 const debounce = <A extends unknown[], R>(fn: (...args: A) => Promise<R>, ms: number) => {
-  let timer: NodeJS.Timeout | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
 
   return (...args: A) => {
     clearTimeout(timer);

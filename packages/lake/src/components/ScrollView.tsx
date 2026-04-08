@@ -110,7 +110,7 @@ export const ScrollView = ({
 }: ScrollViewProps) => {
   const innerRef = useRef<HTMLElement>(null);
   const stateRef = useRef<State>({ lastTick: 0, scrolling: false });
-  const timeoutRef = useRef<NodeJS.Timeout>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   const handleOnScroll = useCallback(
     (event: SyntheticEvent<UIEvent>) => {

@@ -1,5 +1,5 @@
 {
-  "include": ["packages", "scripts"],
+  "include": ["packages", "scripts", "types"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "compilerOptions": {
@@ -21,8 +21,6 @@
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "forceConsistentCasingInFileNames": false,
-
-    "typeRoots": ["types", "node_modules/@types"]
+    "forceConsistentCasingInFileNames": false
   }
 }
