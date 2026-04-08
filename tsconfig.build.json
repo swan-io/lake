@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["packages"],
+  "include": ["packages", "types"],
   "exclude": ["node_modules", "packages/*/__stories__", "scripts"]
 }
