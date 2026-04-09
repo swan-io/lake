@@ -65,15 +65,41 @@ export const WaitingForDocument = () => {
           documents={documents}
           onChange={setDocuments}
           onRemoveFile={onRemoveFile}
-          requiredDocumentPurposes={[
-            "CompanyRegistration",
-            "ProofOfIdentity",
-            "SwornStatement",
-            "PowerOfAttorney",
-            "ProofOfBusinessActivity",
-            "CompanyFormationRegistration",
-            "UnknownDocumentType",
-          ]}
+          requiredDocumentPurposes={{
+            CompanyRegistration: {
+              label: "Company registration document",
+              description:
+                "A document proving the registration of the company (e.g. Kbis in France)",
+              purposeDetails: "Other details about company registration",
+            },
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+            SwornStatement: {
+              label: "Sworn statement",
+              description:
+                "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+            },
+            PowerOfAttorney: {
+              label: "Power of attorney",
+              description: "A power of attorney signed by the legal representative of the company",
+            },
+            ProofOfBusinessActivity: {
+              label: "Proof of business activity",
+              description:
+                "A document proving the business activity of the company (e.g. invoice, contract)",
+            },
+            CompanyFormationRegistration: {
+              label: "Company formation registration",
+              description:
+                "A document proving the formation registration of the company (e.g. articles of association)",
+            },
+            UnknownDocumentType: {
+              label: "Unknown document type",
+              description: "This is an unknown document type used for testing purposes",
+            },
+          }}
           getPurposeMetadata={purpose => ({
             title: "Show metadata",
             values: [
@@ -127,13 +153,30 @@ export const WaitingForDocumentShowIds = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={[
-            "CompanyRegistration",
-            "ProofOfIdentity",
-            "SwornStatement",
-            "PowerOfAttorney",
-            "UnknownDocumentType",
-          ]}
+          requiredDocumentPurposes={{
+            CompanyRegistration: {
+              label: "Company registration document",
+              description:
+                "A document proving the registration of the company (e.g. Kbis in France)",
+            },
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+            SwornStatement: {
+              label: "Sworn statement",
+              description:
+                "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+            },
+            PowerOfAttorney: {
+              label: "Power of attorney",
+              description: "A power of attorney signed by the legal representative of the company",
+            },
+            UnknownDocumentType: {
+              label: "Unknown document type",
+              description: "This is an unknown document type used for testing purposes",
+            },
+          }}
           showIds={true}
         />
       </StoryPart>
@@ -186,13 +229,30 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={[
-            "CompanyRegistration",
-            "ProofOfIdentity",
-            "SwornStatement",
-            "PowerOfAttorney",
-            "UnknownDocumentType",
-          ]}
+          requiredDocumentPurposes={{
+            CompanyRegistration: {
+              label: "Company registration document",
+              description:
+                "A document proving the registration of the company (e.g. Kbis in France)",
+            },
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+            SwornStatement: {
+              label: "Sworn statement",
+              description:
+                "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+            },
+            PowerOfAttorney: {
+              label: "Power of attorney",
+              description: "A power of attorney signed by the legal representative of the company",
+            },
+            UnknownDocumentType: {
+              label: "Unknown document type",
+              description: "This is an unknown document type used for testing purposes",
+            },
+          }}
           onRemoveFile={() =>
             Future.make(resolve => {
               setTimeout(() => {
@@ -225,7 +285,12 @@ export const Pending = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={["ProofOfIdentity"]}
+          requiredDocumentPurposes={{
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+          }}
         />
       </StoryPart>
     </StoryBlock>
@@ -251,7 +316,12 @@ export const Approved = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={["ProofOfIdentity"]}
+          requiredDocumentPurposes={{
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+          }}
         />
       </StoryPart>
     </StoryBlock>
@@ -276,7 +346,12 @@ export const ApprovedWithoutDownload = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={["ProofOfIdentity"]}
+          requiredDocumentPurposes={{
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+          }}
         />
       </StoryPart>
     </StoryBlock>
@@ -302,7 +377,12 @@ export const Rejected = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={["ProofOfIdentity"]}
+          requiredDocumentPurposes={{
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+          }}
         />
       </StoryPart>
     </StoryBlock>
@@ -320,7 +400,7 @@ export const ReadOnlyEmpty = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={[]}
+          requiredDocumentPurposes={{}}
           showIds={true}
           readOnly={true}
         />
@@ -353,7 +433,12 @@ export const ReadOnlyWithDocs = () => {
             },
           ]}
           onChange={() => {}}
-          requiredDocumentPurposes={[]}
+          requiredDocumentPurposes={{
+            ProofOfIdentity: {
+              label: "Proof of identity",
+              description: "A document proving the identity of a person (e.g. ID card, passport)",
+            },
+          }}
           showIds={true}
           readOnly={true}
         />
