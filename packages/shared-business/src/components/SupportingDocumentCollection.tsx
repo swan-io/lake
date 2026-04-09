@@ -17,7 +17,7 @@ import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
-import { isTranslationKey, locale, t } from "../utils/i18n";
+import { locale, t } from "../utils/i18n";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 
@@ -52,7 +52,10 @@ type Props<Purpose extends string> = {
     input: UploadInput<Purpose>,
   ) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>;
   documents: Document<Purpose>[];
-  requiredDocumentPurposes: Purpose[];
+  requiredDocumentPurposes: Record<
+    Purpose,
+    { label: string; description: string; purposeDetails?: string }
+  >;
   uploadFile?: (
     config: UploadFileInput<UploadOutput>,
   ) => Future<Result<Response<string>, NetworkError | TimeoutError>>;
@@ -61,10 +64,8 @@ type Props<Purpose extends string> = {
   templateLanguage?: string;
   showIds?: boolean;
   readOnly?: boolean;
-  getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
+  getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined; // TODO: to delete later
   readonlyDocumentPurposes?: Purpose[];
-  purposeLabelOverrides?: Partial<Record<Purpose, string>>;
-  purposeDescriptionLabelOverrides?: Partial<Record<Purpose, string>>;
 };
 
 const styles = StyleSheet.create({
@@ -144,16 +145,6 @@ const getSupportLink = (language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt"
         "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
     );
 
-export const getSupportingDocumentPurposeLabel = (purpose: string) => {
-  const key = `supportingDocuments.purpose.${purpose}`;
-  return isTranslationKey(key) ? t(key) : purpose;
-};
-
-export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
-  const key = `supportingDocuments.purpose.${purpose}.description`;
-  return isTranslationKey(key) ? t(key) : "";
-};
-
 export const SupportingDocumentCollection = <Purpose extends string>({
   ref,
   documents,
@@ -168,8 +159,6 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   readOnly = false,
   getPurposeMetadata,
   readonlyDocumentPurposes = [],
-  purposeLabelOverrides,
-  purposeDescriptionLabelOverrides,
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
   const [showSwornStatementModal, setShowSwornStatementModal] = useState(false);
@@ -179,7 +168,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
 
   const orderedDocumentPurposes = useMemo(() => {
     // Get all purposes to display: the required ones and the ones that have at least a document
-    const allPurposes = new Set(requiredDocumentPurposes);
+    const allPurposes = new Set(Object.keys(requiredDocumentPurposes) as Purpose[]);
     const allDocuments = [...addedDocuments, ...documents];
     allDocuments.forEach(document => allPurposes.add(document.purpose));
 
@@ -192,7 +181,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
 
     // Map purposes to their priorities (lower priority comes first)
     // We precompute it to avoid running on each `sort` callback call
-    const allRequiredPurposes = new Set(requiredDocumentPurposes);
+    const allRequiredPurposes = new Set(Object.keys(requiredDocumentPurposes) as Purpose[]);
     // Indices:
     // -> 0: documents aren't empty and all validated
     // -> 1: purpose is required
@@ -275,15 +264,14 @@ export const SupportingDocumentCollection = <Purpose extends string>({
       {showableDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
         const metadata = getPurposeMetadata?.(purpose);
 
-        const label =
-          purposeDescriptionLabelOverrides?.[purpose] ??
-          getSupportingDocumentPurposeDescriptionLabel(purpose);
-
         return (
           <Fragment key={purpose}>
             <LakeLabel
-              label={purposeLabelOverrides?.[purpose] ?? getSupportingDocumentPurposeLabel(purpose)}
-              description={label}
+              label={requiredDocumentPurposes[purpose].label}
+              description={
+                requiredDocumentPurposes[purpose].purposeDetails ??
+                requiredDocumentPurposes[purpose].description
+              }
               render={() => (
                 <>
                   <Box direction="row">
