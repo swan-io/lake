@@ -64,7 +64,7 @@ type Props<Purpose extends string> = {
   templateLanguage?: string;
   showIds?: boolean;
   readOnly?: boolean;
-  getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined; // TODO: to delete later
+  getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
   readonlyDocumentPurposes?: Purpose[];
 };
 
