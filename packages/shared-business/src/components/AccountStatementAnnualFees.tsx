@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   closingBalanceRow: {
     ...getTextStyle("sans", 12),
     backgroundColor: colors.gray[50],
-    width: "50%",
+    width: "55%",
   },
   flexGrow: {
     flexGrow: 1,
@@ -138,7 +138,7 @@ export const AccountStatementAnnualFees = ({
       <Box>
         <Box direction="row" justifyContent="end">
           <Box direction="row" alignItems="center" justifyContent="spaceBetween" style={styles.closingBalanceRow}>
-            <Text style={[styles.row, {width: "22%"}]}>{t("accountStatement.total")}</Text>
+            <Text style={[styles.row, {width: "30%"}]}>{t("accountStatement.total")}</Text>
             <Text style={styles.totalAmount}>{annualFeeStatement.operationCount}</Text>
             <Box style={styles.row} />
             <Text style={styles.totalAmount}>{annualFeeStatement.total.value}</Text>
