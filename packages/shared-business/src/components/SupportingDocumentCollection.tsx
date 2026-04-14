@@ -17,7 +17,7 @@ import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
-import { locale, t } from "../utils/i18n";
+import { isTranslationKey, locale, t } from "../utils/i18n";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 
@@ -54,7 +54,7 @@ type Props<Purpose extends string> = {
   documents: Document<Purpose>[];
   requiredDocumentPurposes: Record<
     Purpose,
-    { label: string; description: string; purposeDetails?: string }
+    { label: string; description: string; purposeDetails?: string } | undefined
   >;
   uploadFile?: (
     config: UploadFileInput<UploadOutput>,
@@ -144,6 +144,16 @@ const getSupportLink = (language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt"
       () =>
         "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
     );
+
+export const getSupportingDocumentPurposeLabel = (purpose: string) => {
+  const key = `supportingDocuments.purpose.${purpose}`;
+  return isTranslationKey(key) ? t(key) : purpose;
+};
+
+export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
+  const key = `supportingDocuments.purpose.${purpose}.description`;
+  return isTranslationKey(key) ? t(key) : "";
+};
 
 export const SupportingDocumentCollection = <Purpose extends string>({
   ref,
@@ -267,10 +277,14 @@ export const SupportingDocumentCollection = <Purpose extends string>({
         return (
           <Fragment key={purpose}>
             <LakeLabel
-              label={requiredDocumentPurposes[purpose].label}
+              label={
+                requiredDocumentPurposes[purpose]?.label ??
+                getSupportingDocumentPurposeLabel(purpose)
+              }
               description={
-                requiredDocumentPurposes[purpose].purposeDetails ??
-                requiredDocumentPurposes[purpose].description
+                requiredDocumentPurposes[purpose]?.purposeDetails ??
+                requiredDocumentPurposes[purpose]?.description ??
+                getSupportingDocumentPurposeDescriptionLabel(purpose)
               }
               render={() => (
                 <>
