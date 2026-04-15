@@ -30,6 +30,7 @@ type Props = {
   id?: string;
   label?: string;
   placement?: "left" | "right" | "center";
+  verticalPosition?: "above" | "below";
   role?: "listbox" | "combobox" | "dialog";
   describedBy?: string;
   matchReferenceWidth?: boolean;
@@ -99,6 +100,7 @@ export const Popover = memo<Props>(
     id,
     label,
     placement,
+    verticalPosition,
     role = "dialog",
     describedBy,
     matchReferenceWidth = false,
@@ -118,6 +120,7 @@ export const Popover = memo<Props>(
 
     const { position } = useContextualLayer({
       placement,
+      verticalPosition,
       referenceRef,
       visible,
       matchReferenceWidth,

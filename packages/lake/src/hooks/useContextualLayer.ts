@@ -22,6 +22,7 @@ type Placement = "left" | "center" | "right";
 
 type Config = {
   placement?: Placement;
+  verticalPosition?: "above" | "below";
   visible: boolean;
   matchReferenceWidth?: boolean;
   matchReferenceMinWidth?: boolean;
@@ -46,6 +47,7 @@ const HORIZONTAL_SAFETY_MARGIN = 16;
 
 export const useContextualLayer = ({
   placement,
+  verticalPosition: forcedVerticalPosition,
   visible,
   matchReferenceWidth = false,
   matchReferenceMinWidth = false,
@@ -85,16 +87,22 @@ export const useContextualLayer = ({
           ? ("right" as const)
           : ("left" as const));
 
-    const verticalPosition =
-      availableSpaceAbove > availableSpaceBelow
-        ? {
-            maxHeight: availableSpaceAbove,
-            bottom: viewportHeight - rect.top,
-          }
-        : {
-            maxHeight: availableSpaceBelow,
-            top: rect.top + height,
-          };
+    const openAbove =
+      forcedVerticalPosition === "above"
+        ? true
+        : forcedVerticalPosition === "below"
+          ? false
+          : availableSpaceAbove > availableSpaceBelow;
+
+    const verticalPosition = openAbove
+      ? {
+          maxHeight: availableSpaceAbove,
+          bottom: viewportHeight - rect.top,
+        }
+      : {
+          maxHeight: availableSpaceBelow,
+          top: rect.top + height,
+        };
 
     const horizontalPosition = match(inferedPlacement)
       .with("left", () => ({ left: rect.left }))
@@ -102,10 +110,7 @@ export const useContextualLayer = ({
       .with("center", () => ({ left: rect.left + width / 2, transform: "translateX(-50%)" }))
       .exhaustive();
 
-    const maxHeight =
-      availableSpaceAbove <= availableSpaceBelow
-        ? window.innerHeight - rect.top - height
-        : availableSpaceAbove;
+    const maxHeight = openAbove ? availableSpaceAbove : window.innerHeight - rect.top - height;
 
     const rootStyle: ViewStyle = {
       position: "absolute",
@@ -119,11 +124,11 @@ export const useContextualLayer = ({
     const maxWidth = match(inferedPlacement)
       .with("left", () => viewportWidth - rect.left - HORIZONTAL_SAFETY_MARGIN)
       .with("right", () => rect.right - HORIZONTAL_SAFETY_MARGIN)
-      .with("center", () =>
-        Math.min(
-          availableSpaceBefore + width / 2,
-          availableSpaceAfter + width / 2,
-        ) * 2 - HORIZONTAL_SAFETY_MARGIN,
+      .with(
+        "center",
+        () =>
+          Math.min(availableSpaceBefore + width / 2, availableSpaceAfter + width / 2) * 2 -
+          HORIZONTAL_SAFETY_MARGIN,
       )
       .exhaustive();
 
@@ -140,11 +145,10 @@ export const useContextualLayer = ({
     return Option.Some({
       rootStyle,
       horizontalPosition: inferedPlacement,
-      verticalPosition:
-        availableSpaceAbove > availableSpaceBelow ? ("top" as const) : ("bottom" as const),
+      verticalPosition: openAbove ? ("top" as const) : ("bottom" as const),
       style,
     });
-  }, [placement, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
+  }, [placement, forcedVerticalPosition, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
 
   useEffect(() => {
     if (visible) {
