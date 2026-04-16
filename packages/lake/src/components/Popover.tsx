@@ -16,7 +16,7 @@ import {
   shadows,
   spacings,
 } from "../constants/design";
-import { useContextualLayer } from "../hooks/useContextualLayer";
+import { Placement, useContextualLayer, VerticalPlacement } from "../hooks/useContextualLayer";
 import { useResponsive } from "../hooks/useResponsive";
 import { noop } from "../utils/function";
 import { BottomPanel } from "./BottomPanel";
@@ -29,7 +29,8 @@ type Props = {
   children: ReactNode | ((state: { mode: "dropdown" | "panel" }) => ReactNode);
   id?: string;
   label?: string;
-  placement?: "left" | "right" | "center";
+  placement?: Placement;
+  verticalPlacement?: VerticalPlacement;
   role?: "listbox" | "combobox" | "dialog";
   describedBy?: string;
   matchReferenceWidth?: boolean;
@@ -99,6 +100,7 @@ export const Popover = memo<Props>(
     id,
     label,
     placement,
+    verticalPlacement,
     role = "dialog",
     describedBy,
     matchReferenceWidth = false,
@@ -118,6 +120,7 @@ export const Popover = memo<Props>(
 
     const { position } = useContextualLayer({
       placement,
+      verticalPlacement,
       referenceRef,
       visible,
       matchReferenceWidth,
