@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { ContextMenu, ContextMenuItem } from "../src/components/ContextMenu";
+import { Separator } from "../src/components/Separator";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
@@ -13,6 +14,7 @@ export const Default = () => {
       <StoryPart title="Default">
         <ContextMenu ariaLabel="Actions">
           <ContextMenuItem onPress={() => console.log("Edit")}>Edit</ContextMenuItem>
+          <Separator />
           <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
         </ContextMenu>
       </StoryPart>
@@ -22,6 +24,7 @@ export const Default = () => {
           <ContextMenuItem withPill={true} onPress={() => console.log("Edit")}>
             Edit
           </ContextMenuItem>
+          <Separator />
           <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
         </ContextMenu>
       </StoryPart>

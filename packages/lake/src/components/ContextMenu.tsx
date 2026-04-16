@@ -1,4 +1,4 @@
-import { createContext, Fragment, ReactNode, useContext, useRef } from "react";
+import { createContext, ReactNode, useContext, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { colors, spacings } from "../constants/design";
 import { VerticalPlacement } from "../hooks/useContextualLayer";
@@ -8,7 +8,6 @@ import { LakeButton } from "./LakeButton";
 import { LakeText } from "./LakeText";
 import { Popover } from "./Popover";
 import { Pressable } from "./Pressable";
-import { Separator } from "./Separator";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
@@ -47,8 +46,6 @@ export const ContextMenu = ({
   const [isOpen, { open, close }] = useDisclosure(false);
   const triggerRef = useRef<View>(null);
 
-  const items = Array.isArray(children) ? children : [children];
-
   return (
     <ContextMenuContext.Provider value={{ close }}>
       <LakeButton
@@ -68,14 +65,7 @@ export const ContextMenu = ({
         onDismiss={close}
         verticalPlacement={verticalPlacement}
       >
-        <View style={styles.container}>
-          {items.map((child, index) => (
-            <Fragment key={index}>
-              {index > 0 ? <Separator /> : null}
-              {child}
-            </Fragment>
-          ))}
-        </View>
+        <View style={styles.container}>{children}</View>
       </Popover>
     </ContextMenuContext.Provider>
   );
