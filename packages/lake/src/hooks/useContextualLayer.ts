@@ -18,11 +18,12 @@ export type ElementPosition = {
   height: number;
 };
 
-type Placement = "left" | "center" | "right";
+export type Placement = "left" | "center" | "right";
+export type VerticalPlacement = "above" | "below";
 
 type Config = {
   placement?: Placement;
-  verticalPosition?: "above" | "below";
+  verticalPlacement?: VerticalPlacement;
   visible: boolean;
   matchReferenceWidth?: boolean;
   matchReferenceMinWidth?: boolean;
@@ -47,7 +48,7 @@ const HORIZONTAL_SAFETY_MARGIN = 16;
 
 export const useContextualLayer = ({
   placement,
-  verticalPosition: forcedVerticalPosition,
+  verticalPlacement,
   visible,
   matchReferenceWidth = false,
   matchReferenceMinWidth = false,
@@ -88,9 +89,9 @@ export const useContextualLayer = ({
           : ("left" as const));
 
     const openAbove =
-      forcedVerticalPosition === "above"
+      verticalPlacement === "above"
         ? true
-        : forcedVerticalPosition === "below"
+        : verticalPlacement === "below"
           ? false
           : availableSpaceAbove > availableSpaceBelow;
 
@@ -148,7 +149,7 @@ export const useContextualLayer = ({
       verticalPosition: openAbove ? ("top" as const) : ("bottom" as const),
       style,
     });
-  }, [placement, forcedVerticalPosition, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
+  }, [placement, verticalPlacement, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
 
   useEffect(() => {
     if (visible) {
