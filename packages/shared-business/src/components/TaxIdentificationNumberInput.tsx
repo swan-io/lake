@@ -1,8 +1,5 @@
-import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
-import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
-import { colors } from "@swan-io/lake/src/constants/design";
 import { Ref } from "react";
 import { TextInput } from "react-native";
 import { CompanyCountryCCA3, IndividualCountryCCA3 } from "../constants/countries";
@@ -12,7 +9,6 @@ import {
   getCompanyTaxNumberPlaceholder,
   getIndividualTaxNumberHelp,
   getIndividualTaxNumberPlaceholder,
-  getTaxNumberTooltip,
 } from "../utils/validation";
 
 type Props = {
@@ -46,19 +42,10 @@ export const TaxIdentificationNumberInput = ({
     ? getCompanyTaxNumberPlaceholder(country)
     : getIndividualTaxNumberPlaceholder(country),
 }: Props) => {
-  const tooltipContents = getTaxNumberTooltip(country, isCompany);
-
   return (
     <LakeLabel
       label={label}
       optionalLabel={required === true ? undefined : t("common.optional")}
-      help={
-        tooltipContents != null ? (
-          <LakeTooltip content={tooltipContents} placement="right">
-            <Icon name="question-circle-regular" size={16} color={colors.gray[600]} />
-          </LakeTooltip>
-        ) : null
-      }
       render={id => (
         <LakeTextInput
           id={id}
