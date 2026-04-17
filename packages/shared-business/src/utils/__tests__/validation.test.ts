@@ -4,7 +4,6 @@ import {
   getCompanyTaxNumberPlaceholder,
   getIndividualTaxNumberHelp,
   getIndividualTaxNumberPlaceholder,
-  getTaxNumberTooltip,
   isValidEmail,
   isValidUsaTaxNumber,
   sanitizeDecimal,
@@ -422,18 +421,6 @@ describe("Tax number helper functions", () => {
     test("returns generic placeholder for other countries", () => {
       const placeholder = getCompanyTaxNumberPlaceholder("FRA");
       expect(placeholder).toBeTypeOf("string");
-    });
-  });
-
-  describe("getTaxNumberTooltip", () => {
-    test("returns tooltips for specific countries", () => {
-      expect(getTaxNumberTooltip("DEU")).toBeTypeOf("string");
-      expect(getTaxNumberTooltip("ESP")).toBe("Número de Identificación Fiscal");
-      expect(getTaxNumberTooltip("ITA")).toBeTypeOf("string");
-    });
-
-    test("returns undefined for countries without specific tooltips", () => {
-      expect(getTaxNumberTooltip("FRA")).toBeUndefined();
     });
   });
 
