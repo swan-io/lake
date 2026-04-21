@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { colors, ColorVariants, spacings } from "../constants/design";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 });
 
 export type RadioGroupItem<V> = {
-  name: string;
+  name: ReactNode;
   value: V;
   disabled?: boolean;
 };
