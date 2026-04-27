@@ -3,9 +3,17 @@ import { LakeRadio } from "@swan-io/lake/src/components/LakeRadio";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { ScrollView, ScrollViewRef } from "@swan-io/lake/src/components/ScrollView";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { Tile } from "@swan-io/lake/src/components/Tile";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
-import { breakpoints, negativeSpacings, spacings } from "@swan-io/lake/src/constants/design";
+import {
+  breakpoints,
+  colors,
+  ColorVariants,
+  invariantColors,
+  negativeSpacings,
+  radii,
+  shadows,
+  spacings,
+} from "@swan-io/lake/src/constants/design";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { clampValue } from "@swan-io/lake/src/utils/math";
 import { detectScrollAnimationEnd } from "@swan-io/lake/src/utils/viewport";
@@ -42,7 +50,6 @@ const styles = StyleSheet.create({
   item: {
     flexGrow: 0,
     flexBasis: "33.333%",
-    maxWidth: 300,
     padding: spacings[12],
   },
   itemAnimation: {
@@ -63,20 +70,29 @@ const styles = StyleSheet.create({
   },
   itemLarge: {
     flexBasis: "50%",
-    maxWidth: "none",
   },
   itemSmallViewport: {
     width: "100%",
     flexBasis: "auto",
-    maxWidth: "none",
     scrollSnapAlign: "center",
   },
-  tileContents: {
+  tile: {
+    paddingVertical: spacings[32],
+    paddingHorizontal: spacings[32],
+    borderRadius: radii[8],
+    borderWidth: 1,
+    borderColor: colors.gray[100],
+    flexGrow: 1,
+  },
+  tileHover: {
+    boxShadow: shadows.tileHover,
+  },
+  content: {
     alignItems: "center",
     alignSelf: "stretch",
     flexGrow: 1,
   },
-  tileRenderedContents: {
+  renderedContents: {
     alignItems: "center",
     alignSelf: "stretch",
     flexGrow: 1,
@@ -111,13 +127,13 @@ type Props<T> = {
   getId?: (item: T) => unknown;
   onChange: (value: T) => void;
   disabled?: boolean;
-  tile?: boolean;
+  tileColor?: ColorVariants;
 };
 
 const identity = <T,>(x: T) => x;
 
 export const ChoicePicker = <T,>({
-  tile = true,
+  tileColor,
   items,
   getId = identity,
   large = false,
@@ -257,26 +273,33 @@ export const ChoicePicker = <T,>({
               onPress={() => onChange(item)}
             >
               {({ hovered }) => {
-                const tileContent = (
-                  <View style={styles.tileContents}>
-                    <View style={styles.tileRenderedContents}>{renderItem(item)}</View>
+                const selected = value != null && getId(item) === getId(value);
 
-                    {desktop && (
+                const tileContent = (
+                  <View style={styles.content}>
+                    <View style={styles.renderedContents}>{renderItem(item)}</View>
+
+                    {tileColor == null && desktop && (
                       <>
                         <Space height={24} />
-                        <LakeRadio value={value != null && getId(item) === getId(value)} />
+                        <LakeRadio value={selected} />
                       </>
                     )}
                   </View>
                 );
-                return tile ? (
-                  <Tile
-                    hovered={hovered}
-                    selected={value != null && getId(item) === getId(value)}
-                    flexGrow={1}
+                return tileColor != null ? (
+                  <View
+                    style={[
+                      styles.tile,
+                      hovered && styles.tileHover,
+                      selected && {
+                        backgroundColor: invariantColors.white,
+                        borderColor: colors[tileColor][500],
+                      },
+                    ]}
                   >
                     {tileContent}
-                  </Tile>
+                  </View>
                 ) : (
                   tileContent
                 );
