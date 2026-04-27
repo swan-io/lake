@@ -26,11 +26,13 @@ export const Default = () => {
   ];
   const [value, setValue] = useState<(typeof items)[number]>();
   const [largeValue, setLargeValue] = useState<(typeof items)[number]>();
+  const [withoutTileValue, setWithoutTileValue] = useState<(typeof items)[number]>();
 
   return (
     <StoryBlock title="Choice Picker">
       <StoryPart title="Default" style={styles.part}>
         <ChoicePicker
+          tileColor="current"
           items={items}
           value={value}
           onChange={setValue}
@@ -58,6 +60,7 @@ export const Default = () => {
 
       <StoryPart title="Large" style={styles.part}>
         <ChoicePicker
+          tileColor="current"
           items={items}
           value={largeValue}
           large={true}
@@ -86,10 +89,9 @@ export const Default = () => {
 
       <StoryPart title="Without tile" style={styles.part}>
         <ChoicePicker
-          tile={false}
           items={items}
-          value={largeValue}
-          onChange={setLargeValue}
+          value={withoutTileValue}
+          onChange={setWithoutTileValue}
           renderItem={item =>
             match(item)
               .with("Virtual", () => (
