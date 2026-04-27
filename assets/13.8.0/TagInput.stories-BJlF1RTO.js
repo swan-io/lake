@@ -1,0 +1,32 @@
+import{u as K,M as X,z as R,o as $,l as E,j as e,V,B as J,h as Q,L as C,c as s,s as N,e as l,d as w,q as U,r as Y}from"./ScrollView-CbF53ISe.js";import{r as a}from"./iframe-CNlGepHT.js";import{u as Z,P as ee}from"./Pressable-BVzeJew0.js";import{T as re}from"./Tag-CnktV3-O.js";import{T as te}from"./FlatList-tUp1wNqm.js";import{L as oe}from"./LakeTextInput-CgnJdDkq.js";import{i as ae}from"./validation-ByskT6a8.js";import{S as se,a as u}from"./_StoriesComponents-qSiRrIz2.js";import"./index-d_Ww4Ha5.js";import"./preload-helper-D1IIBeq1.js";import"./index-CTgEvwai.js";import"./extends-CF3RwP-h.js";import"./commonStyles-BBEkV6IC.js";import"./Fill-CocYjMDk.js";import"./LakeSelect-Dn9yXpAd.js";import"./useBoolean-CPeE4Ugg.js";import"./useDisclosure-Cna7s7YI.js";import"./FocusTrap-DBHfYdtC.js";import"./array-BfAlyugE.js";import"./Popover-CYMK3aAr.js";import"./useResponsive-B-bpoyzO.js";import"./function-rZVVLUqO.js";import"./BottomPanel-BavXc7BK.js";import"./useBodyClassName-DHi5oWm1.js";import"./Suspendable-Bf3g_oX_.js";import"./index-BtDOF9dV.js";import"./TransitionView-C05_FfxO.js";import"./Separator-CJEAyuhl.js";import"./iban-Do8Qju1x.js";import"./i18n-BQ5R6Nq-.js";import"./rifm-BsGlmvbx.js";const ne="transparent",o=N.create({container:{flexGrow:1,flexShrink:1,flexDirection:"row",alignItems:"stretch"},root:{flexDirection:"row",display:"flex",alignItems:"center",flexWrap:"wrap",borderRadius:Y[6],backgroundColor:U.accented,borderColor:s.gray[100],borderWidth:1,paddingHorizontal:l[4],paddingTop:l[4],outlineStyle:"none",cursor:"text"},focused:{borderColor:s.gray[500],boxShadow:w.tile},hovered:{boxShadow:w.tile},disabled:{backgroundColor:s.gray[50],borderColor:s.gray[50],color:s.gray[900],cursor:"not-allowed"},readOnly:{backgroundColor:s.gray[50],borderColor:s.gray[50],color:s.gray[900]},readOnlyError:{borderColor:ne,paddingRight:l[32]},error:{borderColor:s.negative[400]},valid:{borderColor:s.positive[500]},input:{height:28,marginBottom:l[4],marginLeft:l[4],outlineStyle:"none",flexGrow:1},tag:{marginRight:l[4],marginBottom:l[4],maxWidth:350},errorContainer:{paddingTop:l[4]}}),ie=/,| /,H=({ref:y,validator:T=()=>!0,onFocus:x,onBlur:I,validateOnBlur:b=!0,values:n,onValuesChanged:f,readOnly:c=!1,disabled:p=!1,valid:L=!1,hideErrors:_=!1,placeholder:q,help:B,error:S})=>{const m=a.useRef(null),j=a.useRef(null),[F,v]=a.useState(!1),[D,P]=a.useState(!1),M=Z(m,y);K(j,{onHoverStart:()=>P(!0),onHoverEnd:()=>P(!1)});const i=a.useCallback(r=>{f([...n,...r.filter(t=>!n.includes(t))]),m.current?.clear()},[n,f]),W=a.useCallback(r=>{const t=[...new Set(r.split(ie).filter(g=>g.length>0))];(t.length>1||t[0]!==r)&&i(t)},[i]),A=a.useCallback(({nativeEvent:r})=>{p||c||X({key:r.key,input:m.current}).with({key:"Backspace",input:R.instanceOf(HTMLInputElement)},({input:t})=>{$(t.value)&&f(n.filter(g=>g!==n[n.length-1]))}).with({key:"Enter",input:R.instanceOf(HTMLInputElement)},({input:t})=>{E(t.value)&&i([t.value])})},[f,i,n,p,c]),O=a.useCallback(()=>{m.current?.focus()},[]),G=a.useCallback(r=>{v(!0),x?.(r)},[x]),z=a.useCallback(r=>{const t=m.current;t instanceof HTMLInputElement&&E(t.value)&&b&&i([t.value]),v(!1),I?.(r)},[i,I,b]);a.useImperativeHandle(y,()=>({pushPendingValue:()=>{const r=m.current;r instanceof HTMLInputElement&&E(r.value)&&b&&i([r.value])}}),[i,b]);const k=E(S);return e.jsxs(V,{children:[e.jsxs(ee,{style:[o.root,c&&k&&o.readOnlyError,p&&o.disabled,c&&o.readOnly,F&&o.focused,k&&o.error,L&&o.valid,D&&o.hovered],"aria-errormessage":S,onPress:O,ref:j,children:[n.map((r,t)=>e.jsx(re,{onPressRemove:!c&&!p?()=>f(n.filter(g=>g!==r)):void 0,style:o.tag,color:T(r)?"gray":"negative",children:r},t)),e.jsx(te,{ref:M,style:[o.input,p&&o.disabled],onFocus:G,onBlur:z,"aria-disabled":p,onChangeText:W,onKeyPress:A,readOnly:c,placeholder:q})]}),!_&&e.jsx(J,{direction:"row",style:o.errorContainer,children:Q(S)?e.jsx(C,{variant:"smallRegular",color:s.negative[500],children:S}):e.jsx(C,{variant:"smallRegular",color:s.gray[500],children:B??" "})})]})};H.__docgenInfo={description:"",methods:[{name:"pushPendingValue",docblock:null,modifiers:[],params:[],returns:null}],displayName:"LakeTagInput",props:{validator:{defaultValue:{value:"() => true",computed:!1},required:!1},validateOnBlur:{defaultValue:{value:"true",computed:!1},required:!1},readOnly:{defaultValue:{value:"false",computed:!1},required:!1},disabled:{defaultValue:{value:"false",computed:!1},required:!1},valid:{defaultValue:{value:"false",computed:!1},required:!1},hideErrors:{defaultValue:{value:"false",computed:!1},required:!1}}};const le=N.create({input:{maxWidth:400}}),Me={title:"Forms/TagInput",component:oe},d=y=>{const[T,x]=a.useState(["toto","dfghj@iouy.fr"]);return e.jsx(V,{style:le.input,children:e.jsx(H,{validator:ae,onValuesChanged:x,values:T,...y})})},h=()=>e.jsxs(se,{title:"Input variations",children:[e.jsx(u,{title:"Default",children:e.jsx(d,{})}),e.jsx(u,{title:"Disabled",children:e.jsx(d,{disabled:!0})}),e.jsx(u,{title:"Error",children:e.jsx(d,{error:"Nop"})}),e.jsx(u,{title:"Hidden errors",children:e.jsx(d,{error:"Nop",hideErrors:!0})}),e.jsx(u,{title:"Valid",children:e.jsx(d,{valid:!0})}),e.jsx(u,{title:"With help",children:e.jsx(d,{help:"Fill me"})}),e.jsx(u,{title:"Read only",children:e.jsx(d,{readOnly:!0})})]});h.__docgenInfo={description:"",methods:[],displayName:"Variations"};h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="Input variations">
+      <StoryPart title="Default">
+        <EditableTagInput />
+      </StoryPart>
+
+      <StoryPart title="Disabled">
+        <EditableTagInput disabled={true} />
+      </StoryPart>
+
+      <StoryPart title="Error">
+        <EditableTagInput error="Nop" />
+      </StoryPart>
+
+      <StoryPart title="Hidden errors">
+        <EditableTagInput error="Nop" hideErrors={true} />
+      </StoryPart>
+
+      <StoryPart title="Valid">
+        <EditableTagInput valid={true} />
+      </StoryPart>
+
+      <StoryPart title="With help">
+        <EditableTagInput help="Fill me" />
+      </StoryPart>
+
+      <StoryPart title="Read only">
+        <EditableTagInput readOnly={true} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...h.parameters?.docs?.source}}};const We=["Variations"];export{h as Variations,We as __namedExportsOrder,Me as default};
+//# sourceMappingURL=TagInput.stories-BJlF1RTO.js.map
