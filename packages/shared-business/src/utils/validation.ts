@@ -2,14 +2,14 @@ import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import { Validator } from "@swan-io/use-form";
 import dayjs from "dayjs";
 import { isValid as isValidIban } from "iban";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import {
   CompanyCountryCCA3,
   IndividualCountryCCA3,
   TaxNumberValidation,
 } from "../constants/countries";
 import { ExtractedDate, formatExtractedDate } from "./date";
-import { t } from "./i18n";
+import { locale, t } from "./i18n";
 
 const EMAIL_REGEX = /^[A-Z0-9_+.-]*[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i;
 const VAT_NUMBER_REGEX =
@@ -291,30 +291,39 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
 export const getIndividualTaxNumberPlaceholder = (
   country: IndividualCountryCCA3 | CompanyCountryCCA3,
 ) =>
-  match(country)
+  match({ country, lang: locale.language })
     .with(
-      "DEU",
+      { country: "DEU", lang: P.not("de") },
       () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steueridentifikationsnummer)`,
     )
     .with(
-      "ESP",
+      { country: "ESP", lang: P.not("es") },
       () =>
         `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
     )
-    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
+    .with(
+      { country: "ITA", lang: P.not("it") },
+      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`,
+    )
     .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
 
 export const getCompanyTaxNumberPlaceholder = (
   country: IndividualCountryCCA3 | CompanyCountryCCA3,
 ) =>
-  match(country)
-    .with("DEU", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steuer-Nummer)`)
+  match({ country, lang: locale.language })
     .with(
-      "ESP",
+      { country: "DEU", lang: P.not("de") },
+      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steuer-Nummer)`,
+    )
+    .with(
+      { country: "ESP", lang: P.not("es") },
       () =>
         `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
     )
-    .with("ITA", () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`)
+    .with(
+      { country: "ITA", lang: P.not("it") },
+      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`,
+    )
     .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
 
 export const getCompanyTaxNumberHelp = (country: CompanyCountryCCA3) =>

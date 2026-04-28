@@ -9,6 +9,7 @@ import {
   SupportingDocumentCollectionRef,
   UploadOutput,
 } from "../src/components/SupportingDocumentCollection";
+import { CountryCCA3 } from "../src/constants/countries";
 import { UploadFileInput, UploadOutputWithId } from "../src/hooks/useFilesUploader";
 import { SwanFile } from "../src/utils/SwanFile";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -443,6 +444,39 @@ export const ReadOnlyWithDocs = () => {
           readOnly={true}
         />
       </StoryPart>
+    </StoryBlock>
+  );
+};
+
+export const WaitingForDocumentI18nSupport = () => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
+  const countries = ["BEL", "DEU", "FRA", "ITA", "NLD", "ESP", "PRT"] satisfies CountryCCA3[];
+
+  return (
+    <StoryBlock title="SupportingDocumentI18nSupport" description="Supporting document collection">
+      {countries.map(country => (
+        <StoryPart key={country} title={country}>
+          <SupportingDocumentCollection
+            ref={ref}
+            status="WaitingForDocument"
+            generateUpload={generateUpload}
+            uploadFile={uploadFile}
+            documents={documents}
+            onChange={setDocuments}
+            onRemoveFile={onRemoveFile}
+            companyCountry={country}
+            requiredDocumentPurposes={{
+              CompanyRegistration: {
+                label: "Company registration document",
+                description:
+                  "A document proving the registration of the company (e.g. Kbis in France)",
+                purposeDetails: "Other details about company registration",
+              },
+            }}
+          />
+        </StoryPart>
+      ))}
     </StoryBlock>
   );
 };
