@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   popoverContainer: {
     position: "absolute",
     display: "flex",
-    backgroundColor: backgroundColor.accented,
   },
   popover: {
     pointerEvents: "auto",
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     boxShadow: shadows.modal,
     flexGrow: 1,
     alignSelf: "stretch",
+    backgroundColor: backgroundColor.accented,
   },
   popoverContents: {
     alignItems: "stretch",
