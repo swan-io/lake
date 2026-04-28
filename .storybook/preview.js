@@ -27,3 +27,36 @@ export const parameters = {
     },
   },
 };
+
+export const globalTypes = {
+  locale: {
+    name: "Locale",
+    description: "i18n locale",
+    toolbar: {
+      icon: "globe",
+      items: [
+        { value: "en", right: "🇬🇧", title: "English" },
+        { value: "fr", right: "🇫🇷", title: "Français" },
+        { value: "de", right: "🇩🇪", title: "Deutsch" },
+        { value: "es", right: "🇪🇸", title: "Español" },
+        { value: "it", right: "🇮🇹", title: "Italiano" },
+        { value: "nl", right: "🇳🇱", title: "Nederlands" },
+        { value: "pt", right: "🇵🇹", title: "Português" },
+        { value: "fi", right: "🇫🇮", title: "Suomi" },
+      ],
+      showName: true,
+    },
+  },
+};
+
+export const decorators = [
+  (Story, context) => {
+    const url = new URL(window.location.href);
+    const next = context.globals.locale;
+    if (next && url.searchParams.get("lang") !== next) {
+      url.searchParams.set("lang", next);
+      window.location.replace(url.toString());
+    }
+    return Story();
+  },
+];

@@ -14,7 +14,8 @@ import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { badStatusToError, NetworkError, Request, Response, TimeoutError } from "@swan-io/request";
 import { Fragment, Ref, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
+import { CountryCCA3 } from "../constants/countries";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
 import { isTranslationKey, locale, t } from "../utils/i18n";
@@ -62,6 +63,7 @@ type Props<Purpose extends string> = {
   onChange?: (documents: Document<Purpose>[]) => void;
   onRemoveFile?: (file: SwanFile) => Future<Result<unknown, unknown>>;
   templateLanguage?: string;
+  companyCountry?: CountryCCA3;
   showIds?: boolean;
   readOnly?: boolean;
   getPurposeMetadata?: (purose: Purpose) => PurposeMetadata | undefined;
@@ -113,32 +115,34 @@ const Help = (props: HelpProps) => {
     ))
     .exhaustive();
 };
-const getSupportLink = (language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt" | "fi") =>
-  match(language)
+const getSupportLink = (
+  language: "en" | "es" | "de" | "fr" | "it" | "nl" | "pt" | "fi",
+  country?: CountryCCA3,
+) =>
+  match({ language, country })
     .with(
-      "fr",
-      () =>
-        "https://support.swan.io/hc/en-150/articles/22502977563933--Proof-of-registration-for-French-companies",
+      P.union({ country: "FRA" }, { country: P.nullish, language: "fr" }),
+      () => `https://support.swan.io/hc/${language}/articles/22502977563933`,
     )
     .with(
-      "it",
-      () =>
-        "https://support.swan.io/hc/en-150/articles/22537604831005--Proof-of-registration-for-Italian-companies",
+      P.union({ country: "ITA" }, { country: P.nullish, language: "it" }),
+      () => `https://support.swan.io/hc/${language}/articles/22537604831005`,
     )
     .with(
-      "de",
-      () =>
-        "https://support.swan.io/hc/en-150/articles/22535023588509--Proof-of-registration-for-German-companies",
+      P.union({ country: "DEU" }, { country: P.nullish, language: "de" }),
+      () => `https://support.swan.io/hc/${language}/articles/22535023588509`,
     )
     .with(
-      "es",
-      () =>
-        "https://support.swan.io/hc/en-150/articles/22544703221021--Proof-of-registration-for-Spanish-companies",
+      P.union({ country: "ESP" }, { country: P.nullish, language: "es" }),
+      () => `https://support.swan.io/hc/${language}/articles/22544703221021`,
     )
     .with(
-      "nl",
-      () =>
-        "https://support.swan.io/hc/en-150/articles/22543228421277--Proof-of-registration-for-Dutch-companies",
+      P.union({ country: "NLD" }, { country: P.nullish, language: "nl" }),
+      () => `https://support.swan.io/hc/${language}/articles/22543228421277`,
+    )
+    .with(
+      P.union({ country: "BEL" }),
+      () => `https://support.swan.io/hc/${language}/articles/31233251462173`,
     )
     .otherwise(
       () =>
@@ -168,6 +172,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   showIds = false,
   readOnly = false,
   getPurposeMetadata,
+  companyCountry,
   readonlyDocumentPurposes = [],
 }: Props<Purpose>) => {
   const [showPowerOfAttorneyModal, setShowPowerOfAttorneyModal] = useState(false);
@@ -297,7 +302,9 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                               size="small"
                               mode="secondary"
                               icon="question-circle-regular"
-                              onPress={() => window.open(getSupportLink(locale.language))}
+                              onPress={() =>
+                                window.open(getSupportLink(locale.language, companyCountry))
+                              }
                               ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
                             >
                               {t("supportingDocuments.help.howToSendAGoodDocument")}
@@ -323,7 +330,9 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                               size="small"
                               mode="secondary"
                               icon="question-circle-regular"
-                              onPress={() => window.open(getSupportLink(locale.language))}
+                              onPress={() =>
+                                window.open(getSupportLink(locale.language, companyCountry))
+                              }
                               ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
                             >
                               {t("supportingDocuments.help.howToSendAGoodDocument")}
