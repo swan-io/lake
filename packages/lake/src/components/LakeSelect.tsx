@@ -46,6 +46,9 @@ import { Pressable } from "./Pressable";
 import { Separator } from "./Separator";
 import { Space } from "./Space";
 
+const ITEM_ELEMENT_HEIGHT = 40;
+const NB_SUGGESTION_DISPLAYED = 10.5;
+
 const styles = StyleSheet.create({
   normal: {
     backgroundColor: colors.gray.contrast,
@@ -167,6 +170,9 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: "absolute",
     left: 14,
+  },
+  list: {
+    maxHeight: ITEM_ELEMENT_HEIGHT * NB_SUGGESTION_DISPLAYED,
   },
 });
 
@@ -446,106 +452,108 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
         returnFocus={true}
         visible={visible}
       >
-        {isNotNullish(title) && (
-          <>
-            <LakeText variant="semibold" color={colors.gray[900]} style={styles.selectListTitle}>
-              {title}
-            </LakeText>
+        <View style={styles.list}>
+          {isNotNullish(title) && (
+            <>
+              <LakeText variant="semibold" color={colors.gray[900]} style={styles.selectListTitle}>
+                {title}
+              </LakeText>
 
-            <Separator />
-          </>
-        )}
+              <Separator />
+            </>
+          )}
 
-        <FlatList
-          role="list"
-          data={filteredItems}
-          ref={listRef}
-          contentContainerStyle={styles.listContent}
-          onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
-            const { key } = event.nativeEvent;
+          <FlatList
+            role="list"
+            data={filteredItems}
+            ref={listRef}
+            contentContainerStyle={styles.listContent}
+            onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
+              const { key } = event.nativeEvent;
 
-            if (key === "ArrowDown" || key === "ArrowUp") {
-              event.preventDefault();
+              if (key === "ArrowDown" || key === "ArrowUp") {
+                event.preventDefault();
 
-              if (isNotNullish(event.currentTarget)) {
-                const focusableElements = getFocusableElements(
-                  event.currentTarget as unknown as HTMLDivElement,
+                if (isNotNullish(event.currentTarget)) {
+                  const focusableElements = getFocusableElements(
+                    event.currentTarget as unknown as HTMLDivElement,
+                  );
+
+                  const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
+                  const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
+
+                  focusableElements[nextIndex]?.focus();
+                }
+              }
+            }}
+            keyExtractor={(_, index) => `select-item-${index}`}
+            ListHeaderComponent={hasSearch ? ListHeaderComponent : undefined}
+            renderItem={({ item, index }) => {
+              const isSelected = value === item.value;
+              const disablement = disabledItems.find(({ value }) => value === item.value);
+              const content =
+                renderItem != null ? (
+                  renderItem(item, isSelected)
+                ) : (
+                  <>
+                    {isNotNullish(item.icon) && (
+                      <>
+                        {item.icon}
+
+                        <Space width={12} />
+                      </>
+                    )}
+
+                    <LakeText
+                      color={colors.gray[900]}
+                      numberOfLines={1}
+                      style={[styles.itemText, isSelected && styles.selected]}
+                    >
+                      {item.name}
+                    </LakeText>
+                  </>
                 );
 
-                const current = focusableElements.indexOf(event.target as unknown as HTMLElement);
-                const nextIndex = key === "ArrowDown" ? current + 1 : current - 1;
-
-                focusableElements[nextIndex]?.focus();
-              }
-            }
-          }}
-          keyExtractor={(_, index) => `select-item-${index}`}
-          ListHeaderComponent={hasSearch ? ListHeaderComponent : undefined}
-          renderItem={({ item, index }) => {
-            const isSelected = value === item.value;
-            const disablement = disabledItems.find(({ value }) => value === item.value);
-            const content =
-              renderItem != null ? (
-                renderItem(item, isSelected)
-              ) : (
-                <>
-                  {isNotNullish(item.icon) && (
-                    <>
-                      {item.icon}
-
-                      <Space width={12} />
-                    </>
-                  )}
-
-                  <LakeText
-                    color={colors.gray[900]}
-                    numberOfLines={1}
-                    style={[styles.itemText, isSelected && styles.selected]}
-                  >
-                    {item.name}
-                  </LakeText>
-                </>
-              );
-
-            return (
-              <LakeTooltip
-                placement="right"
-                content={disablement?.message}
-                disabled={isNullishOrEmpty(disablement?.message)}
-              >
-                <Pressable
-                  ref={element => {
-                    listItemRefs.current[index] = element as unknown as HTMLElement;
-                  }}
-                  onKeyDown={onKeyDown}
-                  disabled={isNotNullish(disablement)}
-                  style={({ hovered, focused }) => [
-                    styles.item,
-                    (hovered || isSelected) && styles.itemHighlighted,
-                    focused && styles.itemFocused,
-                    isNotNullish(disablement) && styles.itemDisabled,
-                  ]}
-                  role="option"
-                  aria-selected={true}
-                  onPress={() => {
-                    onValueChange(item.value);
-                    close();
-                  }}
+              return (
+                <LakeTooltip
+                  placement="right"
+                  content={disablement?.message}
+                  disabled={isNullishOrEmpty(disablement?.message)}
                 >
-                  {content}
+                  <Pressable
+                    ref={element => {
+                      listItemRefs.current[index] = element as unknown as HTMLElement;
+                    }}
+                    onKeyDown={onKeyDown}
+                    disabled={isNotNullish(disablement)}
+                    style={({ hovered, focused }) => [
+                      styles.item,
+                      (hovered || isSelected) && styles.itemHighlighted,
+                      focused && styles.itemFocused,
+                      isNotNullish(disablement) && styles.itemDisabled,
+                    ]}
+                    role="option"
+                    aria-selected={true}
+                    onPress={() => {
+                      onValueChange(item.value);
+                      close();
+                    }}
+                  >
+                    {content}
 
-                  <Fill minWidth={12} />
+                    <Fill minWidth={12} />
 
-                  {isSelected && (
-                    <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
-                  )}
-                </Pressable>
-              </LakeTooltip>
-            );
-          }}
-        />
+                    {isSelected && (
+                      <Icon color={colors.positive[500]} name="checkmark-filled" size={14} />
+                    )}
+                  </Pressable>
+                </LakeTooltip>
+              );
+            }}
+          />
 
-        {typeof PopoverFooter === "function" ? PopoverFooter({ close }) : PopoverFooter}
+          {typeof PopoverFooter === "function" ? PopoverFooter({ close }) : PopoverFooter}
+        </View>
       </Popover>
     </View>
   );
