@@ -1,45 +1,31 @@
 import { ReactNode, Ref, useEffect, useImperativeHandle, useRef } from "react";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
-import { colors, radii, spacings } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
+import { StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native";
+import { colors } from "../constants/design";
 import { isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
-import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { LakeTextInput } from "./LakeTextInput";
-import { Popover } from "./Popover";
 import { Space } from "./Space";
 
 const styles = StyleSheet.create({
-  idd: {
-    alignItems: "center",
-    backgroundColor: colors.gray[50],
-    borderColor: colors.gray[100],
-    borderTopLeftRadius: radii[4],
-    borderBottomLeftRadius: radii[4],
-    borderWidth: 1,
-    borderRightWidth: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    paddingLeft: spacings[16],
-    paddingRight: spacings[12],
-    transitionDuration: "150ms",
-    transitionProperty: "background-color",
+  pickerWrapper: {
+    flexGrow: 0,
+    flexShrink: 0,
   },
-  iddPressed: { backgroundColor: colors.gray[100] },
-  iddErrored: { borderColor: colors.negative[500] },
-  iddDisabled: {
-    borderColor: colors.gray[50],
+  picker: {
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    borderRightWidth: 0,
+  },
+  pickerDisabled: {
     borderRightWidth: 1,
     borderRightColor: colors.gray[100],
   },
-  input: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+  input: {
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
 });
-
-export type PhoneCountry = {
-  cca2: string;
-  idd: string;
-};
 
 export type InputPhoneNumberRef = {
   focus: () => void;
@@ -49,16 +35,14 @@ export type InputPhoneNumberRef = {
 type Props = {
   ref?: Ref<InputPhoneNumberRef>;
   id?: string;
-  country: PhoneCountry;
+  phoneCountryPicker: (style: StyleProp<ViewStyle>) => ReactNode;
   value: string;
   error?: string;
+  help?: string;
   valid?: boolean;
   autofocus?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
-  flag?: ReactNode;
-  countryList: (close: () => void) => ReactNode;
-  countryButtonAriaLabel?: string;
   onChangeText?: (text: string) => void;
   onSubmitEditing?: () => void;
   onBlur?: () => void;
@@ -67,24 +51,19 @@ type Props = {
 export const InputPhoneNumber = ({
   ref,
   id,
-  country,
+  phoneCountryPicker,
   value,
   error,
+  help,
   valid = false,
   autofocus = false,
   disabled = false,
   readOnly = false,
-  flag,
-  countryList,
-  countryButtonAriaLabel = "Select country",
   onChangeText,
   onSubmitEditing,
   onBlur,
 }: Props) => {
-  const referenceRef = useRef<View>(null);
   const inputRef = useRef<TextInput>(null);
-
-  const [visible, { open, close }] = useDisclosure(false);
 
   const handleChangeText = (text: string) => {
     const clean = text.replace(/[^ +0-9-()]/g, "");
@@ -101,50 +80,19 @@ export const InputPhoneNumber = ({
 
   useImperativeHandle(
     ref,
-    () => ({ focus: () => inputRef.current?.focus(), blur: () => inputRef.current?.blur() }),
+    () => ({
+      focus: () => inputRef.current?.focus(),
+      blur: () => inputRef.current?.blur(),
+    }),
     [],
   );
 
+  const pickerStyle = [styles.picker, (disabled || readOnly) && styles.pickerDisabled];
+
   return (
     <>
-      <Popover
-        referenceRef={referenceRef}
-        visible={visible}
-        matchReferenceWidth={true}
-        onDismiss={close}
-      >
-        {countryList(close)}
-      </Popover>
-
-      <Box ref={referenceRef} direction="row">
-        <Pressable
-          role="button"
-          disabled={visible || disabled || readOnly}
-          onPress={open}
-          aria-label={countryButtonAriaLabel}
-          style={({ pressed }) => [
-            styles.idd,
-            !visible && pressed && styles.iddPressed,
-            (disabled || readOnly) && styles.iddDisabled,
-            isNotNullishOrEmpty(error) && styles.iddErrored,
-          ]}
-        >
-          {flag}
-
-          {flag != null && <Space width={8} />}
-
-          <LakeText
-            color={colors.gray[600]}
-            numberOfLines={1}
-            userSelect="none"
-            variant="smallSemibold"
-          >
-            +{country.idd}
-          </LakeText>
-
-          <Space width={8} />
-          <Icon name="chevron-down-filled" color={colors.gray[600]} size={16} />
-        </Pressable>
+      <Box direction="row">
+        <View style={styles.pickerWrapper}>{phoneCountryPicker(pickerStyle)}</View>
 
         <LakeTextInput
           id={id}
@@ -164,6 +112,15 @@ export const InputPhoneNumber = ({
           style={styles.input}
         />
       </Box>
+
+      <Space height={4} />
+
+      <LakeText
+        variant="smallRegular"
+        color={isNotNullishOrEmpty(error) ? colors.negative[500] : colors.gray[500]}
+      >
+        {error ?? help ?? " "}
+      </LakeText>
     </>
   );
 };

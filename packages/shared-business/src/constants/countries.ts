@@ -1799,6 +1799,9 @@ export type CompanyWithUboCountryCCA3 = (typeof companyWithUboCountries)[number]
 export const allCountries = countries.map(country => country.cca3);
 export const france = countriesByCCA3["FRA"];
 
+const blockedPhoneCountries: CountryCCA3[] = ["CUB", "SYR", "IRN", "PRK", "RUS"];
+export const phoneCountries = allCountries.filter(cca3 => !blockedPhoneCountries.includes(cca3));
+
 export const individualCountries = [
   "AUT",
   "BEL",
