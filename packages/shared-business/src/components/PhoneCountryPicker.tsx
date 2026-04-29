@@ -89,7 +89,10 @@ export const PhoneCountryPicker = ({
   const [visible, { open, close }] = useDisclosure(false);
 
   const allowedCountries = useMemo(
-    () => countries.map(cca3 => getCountryByCCA3(cca3)),
+    () =>
+      countries
+        .filter((cca3, index, array) => array.indexOf(cca3) === index)
+        .map(cca3 => getCountryByCCA3(cca3)),
     [countries],
   );
 

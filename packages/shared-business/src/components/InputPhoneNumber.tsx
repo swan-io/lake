@@ -1,17 +1,15 @@
-import { ReactNode, Ref, useEffect, useImperativeHandle, useRef } from "react";
-import { StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native";
-import { colors } from "../constants/design";
-import { isNotNullishOrEmpty } from "../utils/nullish";
-import { Box } from "./Box";
-import { LakeText } from "./LakeText";
-import { LakeTextInput } from "./LakeTextInput";
-import { Space } from "./Space";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
+import { Space } from "@swan-io/lake/src/components/Space";
+import { colors } from "@swan-io/lake/src/constants/design";
+import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
+import { Ref, useEffect, useImperativeHandle, useRef } from "react";
+import { StyleSheet, TextInput } from "react-native";
+import { Country, CountryCCA3, phoneCountries } from "../constants/countries";
+import { PhoneCountryPicker } from "./PhoneCountryPicker";
 
 const styles = StyleSheet.create({
-  pickerWrapper: {
-    flexGrow: 0,
-    flexShrink: 0,
-  },
   picker: {
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
@@ -35,14 +33,18 @@ export type InputPhoneNumberRef = {
 type Props = {
   ref?: Ref<InputPhoneNumberRef>;
   id?: string;
-  phoneCountryPicker: (style: StyleProp<ViewStyle>) => ReactNode;
+  country: Country;
   value: string;
+  countries?: CountryCCA3[];
   error?: string;
   help?: string;
   valid?: boolean;
   autofocus?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
+  countryAriaLabel?: string;
+  hideErrors?: boolean;
+  onCountryChange: (country: Country) => void;
   onChangeText?: (text: string) => void;
   onSubmitEditing?: () => void;
   onBlur?: () => void;
@@ -51,14 +53,18 @@ type Props = {
 export const InputPhoneNumber = ({
   ref,
   id,
-  phoneCountryPicker,
+  country,
   value,
+  countries,
   error,
   help,
   valid = false,
   autofocus = false,
   disabled = false,
   readOnly = false,
+  countryAriaLabel,
+  hideErrors = false,
+  onCountryChange,
   onChangeText,
   onSubmitEditing,
   onBlur,
@@ -92,7 +98,16 @@ export const InputPhoneNumber = ({
   return (
     <>
       <Box direction="row">
-        <View style={styles.pickerWrapper}>{phoneCountryPicker(pickerStyle)}</View>
+        <PhoneCountryPicker
+          value={country}
+          countries={countries ?? phoneCountries}
+          onValueChange={onCountryChange}
+          disabled={disabled}
+          readOnly={readOnly}
+          error={error}
+          ariaLabel={countryAriaLabel}
+          style={pickerStyle}
+        />
 
         <LakeTextInput
           id={id}
@@ -113,14 +128,18 @@ export const InputPhoneNumber = ({
         />
       </Box>
 
-      <Space height={4} />
+      {!hideErrors && (
+        <>
+          <Space height={4} />
 
-      <LakeText
-        variant="smallRegular"
-        color={isNotNullishOrEmpty(error) ? colors.negative[500] : colors.gray[500]}
-      >
-        {error ?? help ?? " "}
-      </LakeText>
+          <LakeText
+            variant="smallRegular"
+            color={isNotNullishOrEmpty(error) ? colors.negative[500] : colors.gray[500]}
+          >
+            {error ?? help ?? " "}
+          </LakeText>
+        </>
+      )}
     </>
   );
 };
