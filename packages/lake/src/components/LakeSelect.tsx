@@ -147,8 +147,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     marginHorizontal: 16,
-    marginBottom: 12,
-    marginTop: 4,
+    marginTop: 16,
   },
   filterInput: {
     ...texts.regular,
@@ -452,6 +451,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
         returnFocus={true}
         visible={visible}
       >
+        {hasSearch ? ListHeaderComponent : undefined}
         <View style={styles.list}>
           {isNotNullish(title) && (
             <>
@@ -487,7 +487,6 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
               }
             }}
             keyExtractor={(_, index) => `select-item-${index}`}
-            ListHeaderComponent={hasSearch ? ListHeaderComponent : undefined}
             renderItem={({ item, index }) => {
               const isSelected = value === item.value;
               const disablement = disabledItems.find(({ value }) => value === item.value);
