@@ -23,6 +23,15 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
     languages.find(isSupportedLanguage) ?? LANGUAGE_FALLBACK;
 
   const getPreferredLanguage = (): string | undefined => {
+    // @deprecated temporary keeping localStorage and migrating to cookie
+    const language = localStorage.getItem(PREFERRED_LANGUAGE_KEY);
+    if (language) {
+      localStorage.removeItem(PREFERRED_LANGUAGE_KEY);
+      const domain = "." + window.location.hostname.split(".").slice(-2).join(".");
+      document.cookie = `${PREFERRED_LANGUAGE_KEY}=${language}; path=/; max-age=31536000; SameSite=Lax; Secure; domain=${domain}`;
+      return language;
+    }
+
     try {
       const match = document.cookie
         .split("; ")
