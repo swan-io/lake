@@ -45,7 +45,7 @@ type Props = {
   countryAriaLabel?: string;
   hideErrors?: boolean;
   onCountryChange: (country: Country) => void;
-  onChangeText?: (text: string) => void;
+  onChangeText: (text: string) => void;
   onSubmitEditing?: () => void;
   onBlur?: () => void;
 };
@@ -74,7 +74,7 @@ export const InputPhoneNumber = ({
   const handleChangeText = (text: string) => {
     const clean = text.replace(/[^ +0-9-()]/g, "");
     if (text === clean) {
-      onChangeText?.(text);
+      onChangeText(text);
     }
   };
 
