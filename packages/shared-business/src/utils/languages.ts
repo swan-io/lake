@@ -24,7 +24,10 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
 
   const getPreferredLanguage = (): string | undefined => {
     try {
-      return localStorage.getItem(PREFERRED_LANGUAGE_KEY) ?? undefined;
+      const match = document.cookie
+        .split("; ")
+        .find(row => row.startsWith(PREFERRED_LANGUAGE_KEY + "="));
+      return match?.split("=")[1];
     } catch {
       return;
     }
@@ -35,7 +38,8 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
 
     setPreferredLanguage: (language: SupportedLanguage) => {
       try {
-        localStorage.setItem(PREFERRED_LANGUAGE_KEY, language);
+        const domain = "." + window.location.hostname.split(".").slice(-2).join(".");
+        document.cookie = `${PREFERRED_LANGUAGE_KEY}=${language}; path=/; max-age=31536000; SameSite=Lax; Secure; domain=${domain}`;
         const url = new URL(window.location.href);
         url.searchParams.delete("lang");
         window.location.replace(url.toString());
