@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   container: {
     padding: spacings[4],
     backgroundColor: colors.gray[50],
-    borderRadius: radii[8],
+    borderRadius: 40,
   },
   selectedItemIndicator: {
     position: "absolute",
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
     transitionDuration: "250ms",
     transitionTimingFunction: "ease",
     padding: spacings[4],
-    borderRadius: radii[4],
+    borderRadius: 30,
     backgroundColor: backgroundColor.accented,
   },
   itemMobile: {
     backgroundColor: backgroundColor.accented,
-    borderRadius: radii[4],
+    borderRadius: 30,
     padding: spacings[16],
     flexDirection: "row",
     height: 60,
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   button: {
+    borderRadius: 30,
     width: 60,
     height: 60,
   },
@@ -215,36 +216,40 @@ export const SegmentedControl = <T extends string>({
               ]}
             />
 
-            {items.map(item => (
-              <Pressable
-                key={item.id}
-                style={styles.itemDesktop}
-                onPress={() => {
-                  onValueChange(item.id);
-                }}
-              >
-                <>
-                  {isNotNullish(item.icon) &&
-                    match(item)
-                      .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
-                        selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
-                      )
-                      .with({ icon: P.nonNullable }, () => item.icon)
-                      .otherwise(() => null)}
+            {items.map(item => {
+              const isSelected = selectedItem?.id === item.id;
 
-                  <Space height={8} width={12} />
-                </>
-
-                <LakeText
-                  color={colors.gray[900]}
-                  numberOfLines={1}
-                  variant="regular"
-                  style={styles.itemText}
+              return (
+                <Pressable
+                  key={item.id}
+                  style={styles.itemDesktop}
+                  onPress={() => {
+                    onValueChange(item.id);
+                  }}
                 >
-                  {item.name}
-                </LakeText>
-              </Pressable>
-            ))}
+                  <>
+                    {isNotNullish(item.icon) &&
+                      match(item)
+                        .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
+                          isSelected ? selectedItem.activeIcon : item.icon,
+                        )
+                        .with({ icon: P.nonNullable }, () => item.icon)
+                        .otherwise(() => null)}
+
+                    <Space height={8} width={12} />
+                  </>
+
+                  <LakeText
+                    color={isSelected ? colors.current[500] : colors.gray[500]}
+                    numberOfLines={1}
+                    variant="regular"
+                    style={styles.itemText}
+                  >
+                    {item.name}
+                  </LakeText>
+                </Pressable>
+              );
+            })}
           </Box>
         )
       }

@@ -4,7 +4,7 @@ import { Icon } from "../src/components/Icon";
 import { SegmentedControl } from "../src/components/SegmentedControl";
 import { Path, Svg } from "../src/components/Svg";
 import { TabView } from "../src/components/TabView";
-import { StoryBlock } from "./_StoriesComponents";
+import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
   title: "Interactivity/SegmentedControl",
@@ -42,13 +42,24 @@ type ItemId = (typeof items)[number]["id"];
 
 export const Default = () => {
   const [selected, setSelected] = useState<ItemId>(items[0].id);
+  const [noIconSelected, setNoIconSelected] = useState<ItemId>(items[0].id);
 
   return (
     <StoryBlock
       title="Segmented control"
       description="You can reduce window's width to see behavior when there isn't enough space to display all controls"
     >
-      <SegmentedControl selected={selected} items={items} onValueChange={setSelected} />
+      <StoryPart title="Default">
+        <SegmentedControl selected={selected} items={items} onValueChange={setSelected} />
+      </StoryPart>
+
+      <StoryPart title="Without icons">
+        <SegmentedControl
+          selected={noIconSelected}
+          items={items.map(item => ({ ...item, icon: undefined, activeIcon: undefined }))}
+          onValueChange={setNoIconSelected}
+        />
+      </StoryPart>
     </StoryBlock>
   );
 };
