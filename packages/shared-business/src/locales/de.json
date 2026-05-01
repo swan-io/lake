@@ -1,7 +1,7 @@
 {
   "accountStatement.bic": "BIC",
   "accountStatement.card": "Karte",
-  "accountStatement.check": "Überprüfen",
+  "accountStatement.check": "Scheck",
   "accountStatement.closingBalance": "Schlusssaldo",
   "accountStatement.column.credit": "Guthaben (€)",
   "accountStatement.column.date": "Datum",
