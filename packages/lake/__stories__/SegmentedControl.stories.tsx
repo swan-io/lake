@@ -1,6 +1,5 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
-import { View } from "react-native";
 import { Icon } from "../src/components/Icon";
 import { SegmentedControl } from "../src/components/SegmentedControl";
 import { SegmentedControl2 } from "../src/components/SegmentedControl2";
@@ -66,24 +65,20 @@ export const Default = () => {
       </StoryPart>
 
       <StoryPart title="With default width">
-        <View style={{ flexDirection: "row" }}>
-          <SegmentedControl2
-            selected={flexWidthSelected}
-            items={items}
-            onValueChange={setFlexWidthSelected}
-          />
-        </View>
+        <SegmentedControl2
+          selected={flexWidthSelected}
+          items={items}
+          onValueChange={setFlexWidthSelected}
+        />
       </StoryPart>
 
       <StoryPart title="With full width">
-        <View style={{ flexDirection: "row" }}>
-          <SegmentedControl2
-            selected={fixedWidthSelected}
-            fullWidth={true}
-            items={items}
-            onValueChange={setFixedWidthSelected}
-          />
-        </View>
+        <SegmentedControl2
+          selected={fixedWidthSelected}
+          fullWidth={true}
+          items={items}
+          onValueChange={setFixedWidthSelected}
+        />
       </StoryPart>
     </StoryBlock>
   );
