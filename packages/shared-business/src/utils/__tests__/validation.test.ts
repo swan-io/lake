@@ -405,9 +405,9 @@ describe("Tax number helper functions", () => {
       expect(getIndividualTaxNumberPlaceholder("ITA")).toContain("Codice fiscale");
     });
 
-    test("returns generic placeholder for other countries", () => {
+    test("returns empty placeholder for other countries", () => {
       const placeholder = getIndividualTaxNumberPlaceholder("FRA");
-      expect(placeholder).toBeTypeOf("string");
+      expect(placeholder).toBeNull;
     });
   });
 
@@ -418,9 +418,9 @@ describe("Tax number helper functions", () => {
       expect(getCompanyTaxNumberPlaceholder("ITA")).toContain("Codice fiscale");
     });
 
-    test("returns generic placeholder for other countries", () => {
+    test("returns empty placeholder for other countries", () => {
       const placeholder = getCompanyTaxNumberPlaceholder("FRA");
-      expect(placeholder).toBeTypeOf("string");
+      expect(placeholder).toBeNull;
     });
   });
 
