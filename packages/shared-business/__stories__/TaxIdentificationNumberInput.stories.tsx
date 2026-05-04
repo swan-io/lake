@@ -61,7 +61,19 @@ export const TaxIdentificationNumber = () => {
           <TaxIdentificationNumberInput
             required={true}
             country={"ITA"}
-            isCompany={false}
+            isCompany={true}
+            valid={false}
+            error={undefined}
+            value={value}
+            onChange={event => setValue(event)}
+          />
+        </StoryPart>
+
+        <StoryPart title="French company tax ID">
+          <TaxIdentificationNumberInput
+            required={true}
+            country={"FRA"}
+            isCompany={true}
             valid={false}
             error={undefined}
             value={value}
