@@ -1,45 +1,64 @@
-import { ReactNode, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { P, match } from "ts-pattern";
-import { backgroundColor, colors, radii, spacings, texts } from "../constants/design";
-import { isNotNullish } from "../utils/nullish";
+import { ReactNode, useEffect, useState } from "react";
+import { LayoutChangeEvent, Pressable, StyleSheet, View } from "react-native";
+import {
+  backgroundColor,
+  breakpoints,
+  colors,
+  invariantColors,
+  radii,
+  spacings,
+} from "../constants/design";
 import { BottomPanel } from "./BottomPanel";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
 import { LakeButton } from "./LakeButton";
 import { LakeText } from "./LakeText";
-import { Pressable } from "./Pressable";
 import { ResponsiveContainer } from "./ResponsiveContainer";
 import { Space } from "./Space";
 
+const HORIZONTAL_PADDING = 4;
+
 const styles = StyleSheet.create({
-  container: {
-    padding: spacings[4],
-    backgroundColor: colors.gray[50],
-    borderRadius: 40,
-  },
-  selectedItemIndicator: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    flexGrow: 1,
-    flexShrink: 1,
-    transitionProperty: "transform",
-    transitionDuration: "250ms",
-    transitionTimingFunction: "ease",
-    padding: spacings[4],
-    borderRadius: 30,
-    backgroundColor: backgroundColor.accented,
-  },
-  itemMobile: {
-    backgroundColor: backgroundColor.accented,
-    borderRadius: 30,
-    padding: spacings[16],
+  responsiveContainer: {
     flexDirection: "row",
-    height: 60,
-    alignItems: "center",
     justifyContent: "center",
-    flexGrow: 1,
+  },
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.gray[50],
+    borderRadius: 30,
+    paddingVertical: 4,
+    paddingHorizontal: HORIZONTAL_PADDING,
+  },
+  containerFullWidth: {
+    width: "100%",
+  },
+  selectedIndicator: {
+    position: "absolute",
+    top: 4,
+    bottom: 4,
+    backgroundColor: invariantColors.white,
+    borderRadius: 30,
+    transitionProperty: "transform, width",
+    transitionTimingFunction: "ease",
+  },
+  fill: {
+    flex: 1,
+  },
+  item: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 30,
+  },
+  itemSelected: {
+    backgroundColor: invariantColors.white,
+  },
+  button: {
+    borderRadius: 30,
   },
   dropdownItem: {
     backgroundColor: backgroundColor.accented,
@@ -48,37 +67,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 60,
     alignItems: "center",
-    flexGrow: 1,
+    flex: 1,
   },
   dropdownItemSelected: {
     backgroundColor: colors.gray[50],
-    borderRadius: radii[4],
-    padding: spacings[16],
-    flexDirection: "row",
-    height: 60,
-    alignItems: "center",
-    flexGrow: 1,
   },
-  button: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-  },
-  itemDesktop: {
-    flexBasis: "0%",
-    flexGrow: 1,
-    flexShrink: 1,
+  dropdownCheckIconContainer: {
     alignItems: "center",
-    padding: spacings[16],
-    flexDirection: "row",
     justifyContent: "center",
-  },
-  itemText: {
-    userSelect: "none",
-    lineHeight: texts.regular.fontSize,
-  },
-  selectedItemDesktop: {
-    bottom: 0,
+    paddingHorizontal: spacings[24],
+    backgroundColor: colors.gray[50],
   },
 });
 
@@ -92,167 +90,166 @@ export type Item<T extends string> = {
 type Props<T extends string> = {
   selected: T;
   items: ReadonlyArray<Item<T>>;
+  fullWidth?: boolean;
+  mobileBreakpoint?: number;
   onValueChange: (value: T) => void;
-  minItemWidth?: number;
 };
 
-export const SegmentedControl = <T extends string>({
-  selected,
-  items,
-  onValueChange,
-  minItemWidth = 250,
-}: Props<T>) => {
-  const selectedItemIndex = items.findIndex(item => item.id === selected);
-
-  const selectedItem = items[selectedItemIndex];
-
-  const [pressed, setPressed] = useState<boolean>(false);
+export const SegmentedControl = <T extends string>(props: Props<T>) => {
+  const { mobileBreakpoint = breakpoints.small } = props;
 
   return (
-    <ResponsiveContainer breakpoint={items.length * minItemWidth} style={styles.container}>
+    <ResponsiveContainer breakpoint={mobileBreakpoint} style={styles.responsiveContainer}>
       {({ small }) =>
-        small ? (
-          <Box direction="row" alignItems="center" justifyContent="spaceBetween">
-            <Pressable
-              style={styles.itemMobile}
-              onPress={() => {
-                setPressed(true);
-              }}
-            >
-              {isNotNullish(selectedItem?.icon) &&
-                match(selectedItem)
-                  .with(
-                    { icon: P.nonNullable, activeIcon: P.nonNullable },
-                    () => selectedItem.activeIcon,
-                  )
-                  .with({ icon: P.nonNullable }, () => selectedItem.icon)
-                  .otherwise(() => null)}
-
-              <Space height={8} width={12} />
-
-              <LakeText
-                color={colors.gray[900]}
-                numberOfLines={1}
-                variant="regular"
-                style={styles.itemText}
-              >
-                {selectedItem?.name}
-              </LakeText>
-            </Pressable>
-
-            <BottomPanel
-              visible={pressed === true}
-              onPressClose={() => {
-                setPressed(false);
-              }}
-            >
-              {items.map(item => (
-                <Box direction="row" key={item.id}>
-                  <Pressable
-                    style={
-                      selectedItem?.id === item.id
-                        ? styles.dropdownItemSelected
-                        : styles.dropdownItem
-                    }
-                    onPress={() => {
-                      onValueChange(item.id);
-                      setPressed(false);
-                    }}
-                  >
-                    {isNotNullish(item.icon) &&
-                      match(item)
-                        .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
-                          selectedItem?.id === item.id ? selectedItem.activeIcon : item.icon,
-                        )
-                        .with({ icon: P.nonNullable }, () => item.icon)
-                        .otherwise(() => null)}
-
-                    <Space height={8} width={12} />
-
-                    <LakeText
-                      color={colors.gray[900]}
-                      numberOfLines={1}
-                      variant="regular"
-                      style={styles.itemText}
-                    >
-                      {item.name}
-                    </LakeText>
-                  </Pressable>
-
-                  {selectedItem?.id === item.id && (
-                    <Box
-                      justifyContent="center"
-                      style={{ paddingHorizontal: spacings[24], backgroundColor: colors.gray[50] }}
-                    >
-                      <Icon size={16} name="lake-check" color={colors.positive[500]} />
-                    </Box>
-                  )}
-                </Box>
-              ))}
-            </BottomPanel>
-
-            <Space width={4} />
-
-            <LakeButton
-              mode="tertiary"
-              style={styles.button}
-              size="small"
-              icon="more-horizontal-filled"
-              onPress={() => setPressed(true)}
-              ariaLabel="Previous"
-            />
-          </Box>
-        ) : (
-          <Box direction="row">
-            <View
-              role="none"
-              style={[
-                styles.selectedItemIndicator,
-                styles.selectedItemDesktop,
-                {
-                  width: `${(1 / items.length) * 100}%`,
-                  transform: `translateX(${selectedItemIndex * 100}%)`,
-                },
-              ]}
-            />
-
-            {items.map(item => {
-              const isSelected = selectedItem?.id === item.id;
-
-              return (
-                <Pressable
-                  key={item.id}
-                  style={styles.itemDesktop}
-                  onPress={() => {
-                    onValueChange(item.id);
-                  }}
-                >
-                  <>
-                    {isNotNullish(item.icon) &&
-                      match(item)
-                        .with({ icon: P.nonNullable, activeIcon: P.nonNullable }, () =>
-                          isSelected ? selectedItem.activeIcon : item.icon,
-                        )
-                        .with({ icon: P.nonNullable }, () => item.icon)
-                        .otherwise(() => null)}
-
-                    <Space height={8} width={12} />
-                  </>
-
-                  <LakeText
-                    color={isSelected ? colors.current[500] : colors.gray[500]}
-                    numberOfLines={1}
-                    variant="regular"
-                    style={styles.itemText}
-                  >
-                    {item.name}
-                  </LakeText>
-                </Pressable>
-              );
-            })}
-          </Box>
-        )
+        small ? <SegmentedControlMobile {...props} /> : <SegmentedControlDesktop {...props} />
       }
     </ResponsiveContainer>
+  );
+};
+
+const SegmentedControlDesktop = <T extends string>({
+  selected,
+  items,
+  fullWidth = false,
+  onValueChange,
+}: Props<T>) => {
+  const selectedItemIndex = items.findIndex(item => item.id === selected);
+  const [itemSizes, setItemSizes] = useState<{ left: number; width: number }[]>([]);
+  const indicatorPosition = itemSizes[selectedItemIndex] ?? { left: 0, width: 0 };
+  const [indicatorRendered, setIndicatorRendered] = useState(false); // use to prevent animation on first render
+
+  const updateItemSize = (event: LayoutChangeEvent) => {
+    // @ts-expect-error target exists in react-native-web
+    const target: HTMLDivElement = event.nativeEvent.target;
+    const sizes = Array.from(target.children)
+      .slice(1) // first child is the selected indicator
+      .map(child => ({
+        left: (child as HTMLElement).offsetLeft - HORIZONTAL_PADDING,
+        width: (child as HTMLElement).offsetWidth,
+      }));
+    setItemSizes(sizes);
+  };
+
+  useEffect(() => {
+    if (indicatorPosition.width > 0) {
+      setIndicatorRendered(true);
+    }
+  }, [indicatorPosition]);
+
+  return (
+    <View
+      style={[styles.container, fullWidth && styles.containerFullWidth]}
+      onLayout={updateItemSize}
+    >
+      <View
+        role="none"
+        style={[
+          styles.selectedIndicator,
+          indicatorPosition
+            ? {
+                transitionDuration: indicatorRendered ? "250ms" : "0ms",
+                transform: `translateX(${indicatorPosition.left}px)`,
+                width: indicatorPosition.width,
+              }
+            : null,
+        ]}
+      />
+      {items.map(item => {
+        const isSelected = item.id === selected;
+        return (
+          <Pressable
+            key={item.id}
+            style={[styles.item, fullWidth && styles.fill]}
+            onPress={() => onValueChange(item.id)}
+          >
+            {item.icon != null && (
+              <>
+                {isSelected && item.activeIcon != null ? item.activeIcon : item.icon}
+                <Space width={12} />
+              </>
+            )}
+            <LakeText color={isSelected ? colors.current[500] : colors.gray[500]}>
+              {item.name}
+            </LakeText>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+};
+
+const SegmentedControlMobile = <T extends string>({ selected, items, onValueChange }: Props<T>) => {
+  // biome-ignore lint/style/noNonNullAssertion: we're sure to have at least 2 items
+  const selectedItem = items.find(item => item.id === selected) ?? items[0]!;
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <View style={[styles.container, styles.containerFullWidth]}>
+      <Pressable
+        style={[styles.item, styles.itemSelected, styles.fill]}
+        onPress={() => setMenuOpen(true)}
+      >
+        {selectedItem.icon != null && (
+          <>
+            {selectedItem.activeIcon != null ? selectedItem.activeIcon : selectedItem.icon}
+            <Space width={12} />
+          </>
+        )}
+        <LakeText color={colors.current[500]}>{selectedItem.name}</LakeText>
+      </Pressable>
+
+      <Space width={4} />
+
+      <LakeButton
+        mode="tertiary"
+        size="small"
+        icon="more-horizontal-filled"
+        style={styles.button}
+        onPress={() => setMenuOpen(true)}
+        ariaLabel="Open options"
+      />
+
+      <BottomPanel
+        visible={menuOpen === true}
+        onPressClose={() => {
+          setMenuOpen(false);
+        }}
+      >
+        {items.map(item => {
+          const isSelected = item.id === selected;
+
+          return (
+            <Box direction="row" key={item.id}>
+              <Pressable
+                style={[styles.dropdownItem, isSelected && styles.dropdownItemSelected]}
+                onPress={() => {
+                  onValueChange(item.id);
+                  setMenuOpen(false);
+                }}
+              >
+                {item.icon != null && (
+                  <>
+                    {isSelected && item.activeIcon != null ? item.activeIcon : item.icon}
+                    <Space width={12} />
+                  </>
+                )}
+
+                <Space height={8} width={12} />
+
+                <LakeText color={colors.gray[900]} numberOfLines={1} variant="regular">
+                  {item.name}
+                </LakeText>
+              </Pressable>
+
+              {isSelected && (
+                <View style={styles.dropdownCheckIconContainer}>
+                  <Icon size={16} name="lake-check" color={colors.positive[500]} />
+                </View>
+              )}
+            </Box>
+          );
+        })}
+      </BottomPanel>
+    </View>
   );
 };
