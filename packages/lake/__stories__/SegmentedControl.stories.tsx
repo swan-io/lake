@@ -1,7 +1,9 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
+import { View } from "react-native";
 import { Icon } from "../src/components/Icon";
 import { SegmentedControl } from "../src/components/SegmentedControl";
+import { SegmentedControl2 } from "../src/components/SegmentedControl2";
 import { Path, Svg } from "../src/components/Svg";
 import { TabView } from "../src/components/TabView";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
@@ -43,6 +45,8 @@ type ItemId = (typeof items)[number]["id"];
 export const Default = () => {
   const [selected, setSelected] = useState<ItemId>(items[0].id);
   const [noIconSelected, setNoIconSelected] = useState<ItemId>(items[0].id);
+  const [fixedWidthSelected, setFixedWidthSelected] = useState<ItemId>(items[0].id);
+  const [flexWidthSelected, setFlexWidthSelected] = useState<ItemId>(items[0].id);
 
   return (
     <StoryBlock
@@ -59,6 +63,27 @@ export const Default = () => {
           items={items.map(item => ({ ...item, icon: undefined, activeIcon: undefined }))}
           onValueChange={setNoIconSelected}
         />
+      </StoryPart>
+
+      <StoryPart title="With default width">
+        <View style={{ flexDirection: "row" }}>
+          <SegmentedControl2
+            selected={flexWidthSelected}
+            items={items}
+            onValueChange={setFlexWidthSelected}
+          />
+        </View>
+      </StoryPart>
+
+      <StoryPart title="With full width">
+        <View style={{ flexDirection: "row" }}>
+          <SegmentedControl2
+            selected={fixedWidthSelected}
+            fullWidth={true}
+            items={items}
+            onValueChange={setFixedWidthSelected}
+          />
+        </View>
       </StoryPart>
     </StoryBlock>
   );
