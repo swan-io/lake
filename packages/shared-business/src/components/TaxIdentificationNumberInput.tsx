@@ -9,6 +9,7 @@ import {
   getCompanyTaxNumberPlaceholder,
   getIndividualTaxNumberHelp,
   getIndividualTaxNumberPlaceholder,
+  getTaxNumberLabel,
 } from "../utils/validation";
 
 type Props = {
@@ -37,7 +38,7 @@ export const TaxIdentificationNumberInput = ({
   country,
   isCompany,
   required,
-  label = t("taxIdentificationNumber.label"),
+  label = getTaxNumberLabel(isCompany),
   placeholder = isCompany
     ? getCompanyTaxNumberPlaceholder(country)
     : getIndividualTaxNumberPlaceholder(country),

@@ -288,43 +288,28 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
  * Translation helpers for tax validation
  */
 
+export const getTaxNumberLabel = (isCompany: boolean) =>
+  match({ isCompany, lang: locale.language })
+    .with({ isCompany: true, lang: "de" }, () => "Steuer-Nummer")
+    .otherwise(() => t("taxIdentificationNumber.label"));
+
 export const getIndividualTaxNumberPlaceholder = (
   country: IndividualCountryCCA3 | CompanyCountryCCA3,
 ) =>
   match({ country, lang: locale.language })
-    .with(
-      { country: "DEU", lang: P.not("de") },
-      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steueridentifikationsnummer)`,
-    )
-    .with(
-      { country: "ESP", lang: P.not("es") },
-      () =>
-        `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
-    )
-    .with(
-      { country: "ITA", lang: P.not("it") },
-      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`,
-    )
-    .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
+    .with({ country: "DEU", lang: P.not("de") }, () => "Steueridentifikationsnummer")
+    .with({ country: "ESP", lang: P.not("es") }, () => "Número de Identificación Fiscal")
+    .with({ country: "ITA", lang: P.not("it") }, () => "Codice fiscale")
+    .otherwise(() => undefined);
 
 export const getCompanyTaxNumberPlaceholder = (
   country: IndividualCountryCCA3 | CompanyCountryCCA3,
 ) =>
   match({ country, lang: locale.language })
-    .with(
-      { country: "DEU", lang: P.not("de") },
-      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Steuer-Nummer)`,
-    )
-    .with(
-      { country: "ESP", lang: P.not("es") },
-      () =>
-        `${t("common.form.taxIdentificationNumber.placeholder")} (Número de Identificación Fiscal)`,
-    )
-    .with(
-      { country: "ITA", lang: P.not("it") },
-      () => `${t("common.form.taxIdentificationNumber.placeholder")} (Codice fiscale)`,
-    )
-    .otherwise(() => t("common.form.taxIdentificationNumber.placeholder"));
+    .with({ country: "DEU", lang: P.not("de") }, () => "Steuer-Nummer")
+    .with({ country: "ESP", lang: P.not("es") }, () => "Número de Identificación Fiscal")
+    .with({ country: "ITA", lang: P.not("it") }, () => "Codice fiscale")
+    .otherwise(() => undefined);
 
 export const getCompanyTaxNumberHelp = (country: CompanyCountryCCA3) =>
   TAX_NUMBER_REGEX.company[country]?.message ?? "";
