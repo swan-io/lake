@@ -23,6 +23,7 @@ type FormProps = {
   help?: string;
   disabled?: boolean;
   readOnly?: boolean;
+  autofocus?: boolean;
 };
 
 const PhoneNumberForm = ({
@@ -31,6 +32,7 @@ const PhoneNumberForm = ({
   help,
   disabled,
   readOnly,
+  autofocus,
 }: FormProps) => {
   const { Field, submitForm } = useForm({
     phoneNumber: {
@@ -60,6 +62,7 @@ const PhoneNumberForm = ({
               <InputPhoneNumber
                 id={id}
                 ref={ref}
+                autofocus={autofocus}
                 country={value.country}
                 value={value.nationalNumber}
                 valid={valid}
@@ -115,6 +118,10 @@ export const Variations = () => (
 
     <StoryPart title="Readonly">
       <PhoneNumberForm initialValue="06 12 34 56 78" readOnly={true} />
+    </StoryPart>
+
+    <StoryPart title="Autofocus (refocuses on country change)">
+      <PhoneNumberForm autofocus={true} />
     </StoryPart>
   </StoryBlock>
 );
