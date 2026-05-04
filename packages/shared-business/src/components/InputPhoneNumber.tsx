@@ -78,11 +78,12 @@ export const InputPhoneNumber = ({
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(country): refocus input when the country changes
   useEffect(() => {
     if (autofocus && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 250);
     }
-  }, [autofocus]);
+  }, [autofocus, country]);
 
   useImperativeHandle(
     ref,
