@@ -13,11 +13,13 @@ import {
   NativeSyntheticEvent,
   StyleProp,
   StyleSheet,
+  Text,
   TextInput,
   TextStyle,
   View,
   ViewStyle,
 } from "react-native";
+import { t } from "../../../shared-business/src/utils/i18n";
 import { commonStyles } from "../constants/commonStyles";
 import {
   ColorVariants,
@@ -172,6 +174,12 @@ const styles = StyleSheet.create({
   },
   list: {
     maxHeight: ITEM_ELEMENT_HEIGHT * NB_SUGGESTION_DISPLAYED,
+  },
+  emptyList: {
+    height: 136,
+  },
+  emptyListText: {
+    color: colors.gray.primary,
   },
 });
 
@@ -346,6 +354,14 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
     [filter, filterFocused, setFilterFocused, searchPlaceholder, color],
   );
 
+  const ListEmptyComponent = (
+    <Box justifyContent="center" alignItems="center" style={styles.emptyList}>
+      <Icon name="clipboard-search-regular" size={24} color={colors.gray.primary} />
+      <Space height={8} />
+      <Text style={styles.emptyListText}>{t("common.noResult")}</Text>
+    </Box>
+  );
+
   return (
     <View style={commonStyles.fill}>
       <Pressable
@@ -468,6 +484,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
             data={filteredItems}
             ref={listRef}
             contentContainerStyle={styles.listContent}
+            ListEmptyComponent={ListEmptyComponent}
             onKeyDown={(event: NativeSyntheticEvent<KeyboardEvent<HTMLDivElement>>) => {
               const { key } = event.nativeEvent;
 
