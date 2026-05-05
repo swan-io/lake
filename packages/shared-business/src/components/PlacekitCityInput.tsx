@@ -61,11 +61,18 @@ export const PlacekitCityInput = ({
           }),
         ).mapOk(
           ({ results }) =>
-            results.map(result => ({
-              title: result.name,
-              subtitle: result.city,
-              value: result,
-            })),
+            results
+              .filter(
+                (result, index, self) =>
+                  self.findIndex(
+                    r => r.name === result.name && r.zipcode[0] === result.zipcode[0],
+                  ) === index,
+              )
+              .map(result => ({
+                title: result.name,
+                subtitle: result.zipcode[0] ?? "",
+                value: result,
+              })),
           true,
         );
       }
