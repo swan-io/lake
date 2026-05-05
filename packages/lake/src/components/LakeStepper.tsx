@@ -1,5 +1,5 @@
 import { Option } from "@swan-io/boxed";
-import { Link } from "@swan-io/chicane";
+import { Link } from "@zoontek/chicane";
 import { CSSProperties, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { P, match } from "ts-pattern";

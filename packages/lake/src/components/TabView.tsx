@@ -1,4 +1,4 @@
-import { useLocation } from "@swan-io/chicane";
+import { useLocation } from "@zoontek/chicane";
 import {
   Fragment,
   ReactNode,
