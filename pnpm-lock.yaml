@@ -119,12 +119,12 @@ importers:
       '@swan-io/boxed':
         specifier: ^3.2.1
         version: 3.2.1(typescript@6.0.2)
-      '@swan-io/chicane':
-        specifier: ^3.0.0
-        version: 3.0.0(react@19.2.4)
       '@swan-io/use-form':
         specifier: ^3.1.0
         version: 3.1.0(react@19.2.4)(typescript@6.0.2)
+      '@zoontek/chicane':
+        specifier: ^3.0.0
+        version: 3.0.0(react@19.2.4)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -880,16 +880,16 @@ packages:
 
   '@swan-io/boxed@3.2.1':
     resolution: {integrity: sha512-MQqSpe09PdjDjTR4HCPpUxO9XsacNguCkce1C2wm1eIb6ycWXQoV+biYvLEuI/LiMqB31KySdgY2YFwrVucLCw==, tarball: https://registry.npmjs.org/@swan-io/boxed/-/boxed-3.2.1.tgz}
+    deprecated: This package has been transferred to @bloodyowl/boxed
     peerDependencies:
       typescript: '>=5.0.0'
-
-  '@swan-io/chicane@3.0.0':
-    resolution: {integrity: sha512-ELguiTjrK2+wYqiUfguusOXaAXUBdizGJjXM6pg5Jvye0Yefp18coVmSCpGJLdJY4hCaWXis/ct4i/DyV2FIuw==, tarball: https://registry.npmjs.org/@swan-io/chicane/-/chicane-3.0.0.tgz}
-    peerDependencies:
-      react: '>=19.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@swan-io/request@3.1.0':
     resolution: {integrity: sha512-3NDXdNuew5+aEURpWg8aNIqPlYVNU6BZCD1rWptNemfNw9frTUBj8DmV+idOp9M5/4tVxncX7bxV7jBNtS6Cbg==, tarball: https://registry.npmjs.org/@swan-io/request/-/request-3.1.0.tgz}
+    deprecated: This package has been transferred to @bloodyowl/request
     peerDependencies:
       '@swan-io/boxed': '>=2.2.1'
 
@@ -1104,6 +1104,11 @@ packages:
 
   '@vitest/utils@4.0.18':
     resolution: {integrity: sha512-msMRKLMVLWygpK3u2Hybgi4MNjcYJvwTb0Ru09+fOyCXIgT5raYP041DRRdiJiI3k/2U6SEbAETB3YtBrUkCFA==, tarball: https://registry.npmjs.org/@vitest/utils/-/utils-4.0.18.tgz}
+
+  '@zoontek/chicane@3.0.0':
+    resolution: {integrity: sha512-tOyjQRPvmX/FNaZ4WxyGvNhnUxNSmlqUroqypFtMXI1JnX1KcTnRc2YmWgUiQtfMIYkkzU7Un+GBobLv6+K34w==, tarball: https://registry.npmjs.org/@zoontek/chicane/-/chicane-3.0.0.tgz}
+    peerDependencies:
+      react: '>=19.0.0'
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==, tarball: https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz}
@@ -2846,14 +2851,8 @@ snapshots:
       - supports-color
 
   '@swan-io/boxed@3.2.1(typescript@6.0.2)':
-    dependencies:
+    optionalDependencies:
       typescript: 6.0.2
-
-  '@swan-io/chicane@3.0.0(react@19.2.4)':
-    dependencies:
-      '@emotion/hash': 0.9.2
-      react: 19.2.4
-      use-sync-external-store: 1.6.0(react@19.2.4)
 
   '@swan-io/request@3.1.0(@swan-io/boxed@3.2.1(typescript@6.0.2))':
     dependencies:
@@ -3086,6 +3085,12 @@ snapshots:
     dependencies:
       '@vitest/pretty-format': 4.0.18
       tinyrainbow: 3.0.3
+
+  '@zoontek/chicane@3.0.0(react@19.2.4)':
+    dependencies:
+      '@emotion/hash': 0.9.2
+      react: 19.2.4
+      use-sync-external-store: 1.6.0(react@19.2.4)
 
   abort-controller@3.0.0:
     dependencies:
