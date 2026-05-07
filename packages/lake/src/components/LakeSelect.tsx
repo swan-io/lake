@@ -454,14 +454,18 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
         )}
       </Pressable>
 
-      {!hideErrors && isNotNullish(error) ? (
-        <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.additionalText}>
-          {error}
-        </LakeText>
-      ) : (
-        <LakeText variant="smallRegular" color={colors.gray[500]} style={styles.additionalText}>
-          {help ?? " "}
-        </LakeText>
+      {!hideErrors && (
+        <Box direction="row" style={styles.additionalText}>
+          {isNotNullish(error) ? (
+            <LakeText variant="smallRegular" color={colors.negative[500]}>
+              {error}
+            </LakeText>
+          ) : (
+            <LakeText variant="smallRegular" color={colors.gray[500]}>
+              {help ?? " "}
+            </LakeText>
+          )}
+        </Box>
       )}
 
       <Popover
