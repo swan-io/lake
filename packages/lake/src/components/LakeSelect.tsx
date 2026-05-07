@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-  errorText: {
+  additionalText: {
     paddingTop: spacings[4],
   },
   focusedInput: {
@@ -211,6 +211,7 @@ export type SelectProps<V, T extends Item<V> = Item<V>> = {
   hideErrors?: boolean;
   id?: string;
   error?: string;
+  help?: string;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
   hasSearch?: boolean;
@@ -234,6 +235,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
   value,
   error,
   hideErrors = false,
+  help,
   icon,
   onValueChange,
   disabledItems = [],
@@ -452,9 +454,13 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
         )}
       </Pressable>
 
-      {!hideErrors && (
-        <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.errorText}>
-          {error ?? " "}
+      {!hideErrors && isNotNullish(error) ? (
+        <LakeText variant="smallRegular" color={colors.negative[500]} style={styles.additionalText}>
+          {error}
+        </LakeText>
+      ) : (
+        <LakeText variant="smallRegular" color={colors.gray[500]} style={styles.additionalText}>
+          {help ?? " "}
         </LakeText>
       )}
 

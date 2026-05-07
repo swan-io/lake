@@ -136,6 +136,10 @@ export const Variations: StoryFn<typeof LakeSelect> = () => {
         <EditableSelect error="Required field" />
       </StoryPart>
 
+      <StoryPart title="With help">
+        <EditableSelect help="Additional information" />
+      </StoryPart>
+
       <StoryPart title="Disabled">
         <EditableSelect disabled={true} />
       </StoryPart>
