@@ -212,12 +212,25 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
       },
     },
     {
+      purpose: "ProofOfBusinessActivity",
+      file: {
+        id: "power",
+        name: "power.pdf",
+        url: "https://swan.io",
+        statusInfo: { status: "Refused", reasonCode: "Invalid document" },
+      },
+    },
+    {
       purpose: "PowerOfAttorney",
       file: {
         id: "power",
         name: "power.pdf",
         url: "https://swan.io",
-        statusInfo: { status: "Refused", reason: "Invalid document" },
+        statusInfo: {
+          status: "Refused",
+          reasonCode: "Invalid document",
+          reason: "The document is blurry",
+        },
       },
     },
   ]);
@@ -374,7 +387,7 @@ export const Rejected = () => {
                 id: "id",
                 name: "IdCard.pdf",
                 url: "https://swan.io",
-                statusInfo: { status: "Refused", reason: "Invalid document" },
+                statusInfo: { status: "Refused", reasonCode: "Invalid document" },
               },
             },
           ]}
