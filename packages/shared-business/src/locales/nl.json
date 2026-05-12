@@ -127,7 +127,6 @@
   "fileTile.deleteModal.title": "Weet u zeker dat u dit document wilt verwijderen?",
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "In afwachting van verificatie",
-  "fileTile.status.Refused": "Geweigerd",
   "fileTile.status.Validated": "Gevalideerd",
   "fileTile.uploading": "Bezig met uploaden…",
   "forecastYearlyIncome.from0To500000": "Minder dan € 500.000",

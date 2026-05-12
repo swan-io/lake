@@ -5,8 +5,8 @@ export type SwanFileStatusInfo =
   | { status: "Validated" }
   | {
       status: "Refused";
-      reason: string;
-      reasonCode?: string;
+      reason?: string;
+      reasonCode: string;
     };
 
 export type SwanFile = {

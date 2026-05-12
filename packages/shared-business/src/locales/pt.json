@@ -127,7 +127,6 @@
   "fileTile.deleteModal.title": "Tem a certeza que deseja eliminar este documento?",
   "fileTile.id": "ID: {id}",
   "fileTile.status.Pending": "Verificação pendente",
-  "fileTile.status.Refused": "Recusado",
   "fileTile.status.Validated": "Validado",
   "fileTile.uploading": "Carregando…",
   "forecastYearlyIncome.from0To500000": "Mais de €500.000",

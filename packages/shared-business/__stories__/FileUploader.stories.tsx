@@ -33,7 +33,16 @@ const documents: SwanFile[] = [
   {
     id: crypto.randomUUID(),
     name: "third-document.jpg",
-    statusInfo: { status: "Refused", reason: "Quality of the document was too low" },
+    statusInfo: { status: "Refused", reasonCode: "Invalid document" },
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "third-document.jpg",
+    statusInfo: {
+      status: "Refused",
+      reasonCode: "Invalid document",
+      reason: "Quality of the document was too low",
+    },
   },
   {
     id: crypto.randomUUID(),

@@ -127,7 +127,6 @@
   "fileTile.deleteModal.title": "Haluatko varmasti poistaa tämän asiakirjan?",
   "fileTile.id": "Tunnus: {id}",
   "fileTile.status.Pending": "Vahvistusta odotetaan",
-  "fileTile.status.Refused": "Hylätty",
   "fileTile.status.Validated": "Vahvistettu",
   "fileTile.uploading": "Ladataan...",
   "forecastYearlyIncome.from0To500000": "Alle 500 000 euroa",
