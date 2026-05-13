@@ -6,7 +6,7 @@ import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { Ref, useEffect, useImperativeHandle, useRef } from "react";
 import { StyleSheet, TextInput } from "react-native";
-import { Country, CountryCCA3, phoneCountries } from "../constants/countries";
+import { countries, Country, CountryCCA3, phoneCountries } from "../constants/countries";
 import { PhoneCountryPicker } from "./PhoneCountryPicker";
 
 const styles = StyleSheet.create({
@@ -48,6 +48,17 @@ type Props = {
   onChangeText: (text: string) => void;
   onSubmitEditing?: () => void;
   onBlur?: () => void;
+};
+
+export const getInitialPhoneCountry = (
+  phoneNumber: string | undefined,
+  defaultCountry: Country,
+) => {
+  if (phoneNumber == null) {
+    return defaultCountry;
+  }
+
+  return countries.find(country => phoneNumber.startsWith(`+${country.idd}`)) ?? defaultCountry;
 };
 
 export const InputPhoneNumber = ({
