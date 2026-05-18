@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useReducer,
   useRef,
@@ -218,7 +219,7 @@ const useBreadcrumbs = () => {
 
 export const useCrumb = (crumb?: Crumb) => {
   const [, , setValue, currentIndex] = useContext(BreadcrumbsContext);
-  const [id] = useState(() => uuid());
+  const id = useId();
   const initialCrumb = useRef(crumb);
 
   const [index] = useState(() => ++currentIndex.current);
