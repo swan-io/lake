@@ -29,12 +29,12 @@
     "@swan-io/lake": "workspace:*"
   },
   "dependencies": {
-    "@formatjs/intl": "^4.1.2",
+    "@formatjs/intl": "^4.1.11",
     "@placekit/client-js": "^2.3.0",
     "@swan-io/boxed": "^3.2.1",
     "@swan-io/request": "^3.1.0",
     "@swan-io/use-form": "^3.1.0",
-    "dayjs": "^1.11.19",
+    "dayjs": "^1.11.20",
     "iban": "^0.0.14",
     "react": "^19.2.6",
     "react-atomic-state": "^2.1.0",
@@ -43,7 +43,7 @@
     "react-native-web": "^0.21.2",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.9.0",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@swan-io/lake": "workspace:*",
