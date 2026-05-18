@@ -199,8 +199,8 @@ importers:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
       react-dropzone:
-        specifier: ^14.4.0
-        version: 14.4.0(react@19.2.6)
+        specifier: ^15.0.0
+        version: 15.0.0(react@19.2.6)
       react-native-web:
         specifier: ^0.21.2
         version: 0.21.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -2217,8 +2217,8 @@ packages:
     peerDependencies:
       react: ^19.2.6
 
-  react-dropzone@14.4.0:
-    resolution: {integrity: sha512-8VvsHqg9WGAr+wAnP0oVErK5HOwAoTOzRsxLPzbBXrtXtFfukkxMyuvdI/lJ+5OxtsrzmvWE5Eoo3Y4hMsaxpA==, tarball: https://registry.npmjs.org/react-dropzone/-/react-dropzone-14.4.0.tgz}
+  react-dropzone@15.0.0:
+    resolution: {integrity: sha512-lGjYV/EoqEjEWPnmiSvH4v5IoIAwQM2W4Z1C0Q/Pw2xD0eVzKPS359BQTUMum+1fa0kH2nrKjuavmTPOGhpLPg==, tarball: https://registry.npmjs.org/react-dropzone/-/react-dropzone-15.0.0.tgz}
     engines: {node: '>= 10.13'}
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
@@ -4391,7 +4391,7 @@ snapshots:
       react: 19.2.6
       scheduler: 0.27.0
 
-  react-dropzone@14.4.0(react@19.2.6):
+  react-dropzone@15.0.0(react@19.2.6):
     dependencies:
       attr-accept: 2.2.5
       file-selector: 2.1.2

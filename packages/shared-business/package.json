@@ -39,7 +39,7 @@
     "react": "^19.2.6",
     "react-atomic-state": "^2.1.0",
     "react-dom": "^19.2.6",
-    "react-dropzone": "^14.4.0",
+    "react-dropzone": "^15.0.0",
     "react-native-web": "^0.21.2",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.9.0",
