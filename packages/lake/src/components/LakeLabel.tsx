@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { ReactNode, useCallback, useId, useRef } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -8,7 +8,6 @@ import {
   unstable_createElement,
 } from "react-native";
 import { match } from "ts-pattern";
-import { v4 as uuid } from "uuid";
 import { commonStyles } from "../constants/commonStyles";
 import { ColorVariants, colors, fonts, spacings, texts } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
@@ -70,7 +69,7 @@ export const LakeLabel = ({
   actions,
   style,
 }: Props) => {
-  const [id] = useState(() => uuid());
+  const id = useId();
   const containerRef = useRef<View>(null);
 
   const onClick = useCallback(
