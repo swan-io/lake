@@ -1,0 +1,399 @@
+import{c as e,i as t}from"./preload-helper-BnfVW-Vi.js";import{o as n}from"./iframe-OEE-UdGg.js";import{A as r,C as i,D as a,E as o,F as ee,L as s,M as c,N as te,O as l,P as u,St as ne,U as d,g as re,h as ie,ht as f,i as ae,it as oe,l as p,o as m,r as h,s as g,st as se,u as _,xt as v}from"./ScrollView-Ck6m83EM.js";import{n as y,t as b}from"./commonStyles-Cc8New32.js";import{n as ce,r as x,t as S}from"./LakeButton-B20rUphI.js";import{a as C,d as le,i as w,l as T,o as E,s as D,u as ue}from"./i18n-CNO3F1xV.js";import{n as O,t as de}from"./LakeLabel-BMIOLI5N.js";import{n as fe,t as pe}from"./LakeCopyButton-B5YAWrLK.js";import{n as me,t as he}from"./ReadOnlyFieldList-ChDa3sw8.js";import{n as k,r as ge,t as A}from"./_StoriesComponents-KWOYiXUs.js";import{n as _e,t as j}from"./LakeModal-B9qwoohH.js";import{n as ve,t as ye}from"./FilesUploader-C5I3HQ7p.js";var be,M,xe=t((()=>{be=e(n()),f(),y(),M=(0,be.memo)(({ref:e,style:t,onReset:n,onSubmit:r,...i})=>v(`form`,{...i,ref:e,onReset:e=>{e.preventDefault(),n?.(e)},onSubmit:e=>{e.preventDefault(),r?.(e)},style:[b.view,t]})),M.displayName=`Form`})),N,P,Se,F,I,L,Ce,we,R,Te=t((()=>{o(),re(),xe(),x(),fe(),O(),g(),_(),me(),ae(),se(),ee(),T(),N=e(n()),f(),te(),w(),ve(),_e(),P=d(),Se=[`application/pdf`,`image/png`,`image/jpeg`,`image/heic`],F=ne.create({button:{opacity:1},buttonWithDefaultCursor:{opacity:1,cursor:`default`}}),I=e=>c(e).with({type:`tooltip`},({text:t,width:n})=>(0,P.jsx)(p,{content:t,width:n,togglableOnFocus:!0,placement:`right`,maxWidth:400,children:(0,P.jsx)(S,{mode:`tertiary`,size:`small`,color:`gray`,icon:e.icon??`question-circle-regular`,disabled:!0,style:[F.button,F.buttonWithDefaultCursor],ariaLabel:D(`supportingDocuments.help.whatIsThis`)})})).with({type:`button`},({label:t,onPress:n})=>(0,P.jsx)(S,{mode:`secondary`,size:`small`,color:`gray`,icon:e.icon??`question-circle-regular`,onPress:n,style:F.button,ariaLabel:D(`supportingDocuments.help.whatIsThis`),children:t})).exhaustive(),L=(e,t)=>c({language:e,country:t}).with(u.union({country:`FRA`},{country:u.nullish,language:`fr`}),()=>`https://support.swan.io/hc/${e}/articles/22502977563933`).with(u.union({country:`ITA`},{country:u.nullish,language:`it`}),()=>`https://support.swan.io/hc/${e}/articles/22537604831005`).with(u.union({country:`DEU`},{country:u.nullish,language:`de`}),()=>`https://support.swan.io/hc/${e}/articles/22535023588509`).with(u.union({country:`ESP`},{country:u.nullish,language:`es`}),()=>`https://support.swan.io/hc/${e}/articles/22544703221021`).with(u.union({country:`NLD`},{country:u.nullish,language:`nl`}),()=>`https://support.swan.io/hc/${e}/articles/22543228421277`).with(u.union({country:`BEL`}),()=>`https://support.swan.io/hc/${e}/articles/31233251462173`).otherwise(()=>`https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration`),Ce=e=>{let t=`supportingDocuments.purpose.${e}`;return C(t)?D(t):e},we=e=>{let t=`supportingDocuments.purpose.${e}.description`;return C(t)?D(t):``},R=({ref:e,documents:t,generateUpload:n,uploadFile:i,requiredDocumentPurposes:a,templateLanguage:o=E.language,status:ee,onChange:te,onRemoveFile:u,showIds:ne=!1,readOnly:d=!1,getPurposeMetadata:re,companyCountry:f,readonlyDocumentPurposes:ae=[]})=>{let[p,g]=(0,N.useState)(!1),[se,_]=(0,N.useState)(!1),[v,y]=(0,N.useState)(void 0),[b,x]=(0,N.useState)([]),C=(0,N.useMemo)(()=>{let e=new Set(Object.keys(a)),n=[...b,...t];n.forEach(t=>e.add(t.purpose));let r=new Map([...e].map(e=>[e,n.filter(t=>t.purpose===e)])),i=new Set(Object.keys(a)),o=new Map([...e].map(e=>{let t=r.get(e)??[];return[e,t.length>0&&t.every(e=>e.file.statusInfo.status===`Validated`)?0:i.has(e)?1:2]}));return[...e].sort((e,t)=>{let n=o.get(e)??2;return(o.get(t)??2)>n?-1:1}).map(e=>({purpose:e,files:(r.get(e)??[]).map(e=>e.file),isRequired:i.has(e),areAllDocumentsValidated:o.get(e)===0}))},[a,t,b]),w=(0,N.useRef)(new Map(r.filterMap(C,({isRequired:e,purpose:t,files:n})=>e?l.Some([t,n]):l.None()))),T=(0,N.useRef)({});(0,N.useImperativeHandle)(e,()=>({areAllRequiredDocumentsFilled:()=>[...w.current.values()].every(e=>e.length>0),addDocument:e=>{x(t=>[...t,e])}})),(0,N.useEffect)(()=>{let e=b[b.length-1];e!=null&&T.current[e?.purpose]?.add(e.file)},[b]);let O=C.filter(({files:e})=>!(d&&e.length===0));return(0,P.jsxs)(M,{children:[O.map(({purpose:e,files:t,areAllDocumentsValidated:r,isRequired:o})=>{let l=re?.(e);return(0,P.jsxs)(N.Fragment,{children:[(0,P.jsx)(de,{label:a[e]?.label??Ce(e),description:a[e]?.purposeDetails??a[e]?.description??we(e),render:()=>(0,P.jsxs)(P.Fragment,{children:[(0,P.jsxs)(ie,{direction:`row`,children:[(0,P.jsx)(ie,{direction:`row`,children:s(l)?e===`CompanyRegistration`?(0,P.jsxs)(P.Fragment,{children:[(0,P.jsx)(S,{size:`small`,mode:`secondary`,icon:`question-circle-regular`,onPress:()=>window.open(L(E.language,f)),ariaLabel:D(`supportingDocuments.help.howToSendAGoodDocument`),children:D(`supportingDocuments.help.howToSendAGoodDocument`)}),(0,P.jsx)(h,{width:8})]}):(0,P.jsxs)(P.Fragment,{children:[(0,P.jsx)(I,{type:`button`,label:l.title,onPress:()=>y(l)}),(0,P.jsx)(h,{width:8})]}):c(e).with(`CompanyRegistration`,()=>(0,P.jsx)(S,{size:`small`,mode:`secondary`,icon:`question-circle-regular`,onPress:()=>window.open(L(E.language,f)),ariaLabel:D(`supportingDocuments.help.howToSendAGoodDocument`),children:D(`supportingDocuments.help.howToSendAGoodDocument`)})).otherwise(()=>null)}),c(e).with(`PowerOfAttorney`,()=>(0,P.jsx)(I,{type:`button`,icon:`arrow-down-filled`,label:D(`supportingDocuments.help.downloadTemplate`),onPress:()=>g(!0)})).with(`SwornStatement`,()=>(0,P.jsx)(I,{type:`button`,icon:`arrow-down-filled`,label:D(`supportingDocuments.help.downloadTemplate`),onPress:()=>_(!0)})).otherwise(()=>null)]}),(0,P.jsx)(h,{height:16}),(0,P.jsx)(ye,{ref:t=>{T.current[e]=t},canUpload:!ae.includes(e)&&!d&&ee===`WaitingForDocument`&&!r,accept:Se,maxSize:2e7,icon:`document-regular`,initialFiles:t,generateUpload:n,getUploadConfig:t=>({fileName:t.name,purpose:e}),uploadFile:s(i)?i:({upload:e,file:t,onProgress:n})=>{let r=new FormData;return e.fields.forEach(({key:e,value:t})=>r.append(e,t)),r.append(`file`,t),setTimeout(()=>n(.8),100),ue.make({url:e.url,method:`POST`,body:r,type:`text`}).mapOkToResult(le)},formatAndSizeDescription:D(`supportingDocuments.documentTypes`,{maxSizeMB:2e7/1e6}),onRemoveFile:d?void 0:u,onChange:t=>{if(o){w.current.set(e,t);let n=w.current.entries().reduce((e,[t,n])=>{let r=n.map(e=>({purpose:t,file:e}));return e.push(...r),e},[]);te?.(n)}},showIds:ne})]})}),(0,P.jsx)(h,{height:24})]},e)}),O.length===0?(0,P.jsxs)(P.Fragment,{children:[(0,P.jsx)(h,{height:24}),(0,P.jsx)(m,{align:`center`,children:D(`supportingDocuments.noDocuments`)}),(0,P.jsx)(h,{height:24})]}):null,(0,P.jsxs)(j,{visible:p,title:D(`supportingDocuments.powerOfAttorneyModal.title`),icon:`document-regular`,onPressClose:()=>g(!1),children:[(0,P.jsx)(m,{children:D(`supportingDocuments.powerOfAttorneyModal.description`)}),(0,P.jsx)(h,{height:16}),(0,P.jsx)(ce,{paddingBottom:0,children:(0,P.jsx)(S,{grow:!0,color:`current`,onPress:()=>window.open(`/power-of-attorney-template/${c(o).with(`fr`,()=>`fr`).with(`de`,()=>`de`).with(`es`,()=>`es`).with(`it`,()=>`it`).otherwise(()=>`en`)}.pdf`),children:D(`supportingDocuments.downloadTemplate`)})})]}),(0,P.jsxs)(j,{visible:se,title:D(`supportingDocuments.purpose.SwornStatement`),icon:`document-regular`,onPressClose:()=>_(!1),children:[(0,P.jsx)(m,{children:D(`supportingDocuments.purpose.SwornStatement.description`)}),(0,P.jsx)(h,{height:16}),(0,P.jsx)(ce,{paddingBottom:0,children:(0,P.jsx)(S,{grow:!0,color:`current`,onPress:()=>{window.open(`/sworn-statement-template/${c(o).with(`nl`,()=>`nl`).with(`es`,()=>`es`).with(`it`,()=>`it`).otherwise(()=>`en`)}.pdf`)},children:D(`supportingDocuments.downloadTemplate`)})})]}),(0,P.jsx)(j,{visible:s(v),title:D(`supportingDocuments.informations`),icon:`document-regular`,onPressClose:()=>y(void 0),children:(0,P.jsx)(he,{children:v?.values.map(({title:e,value:t,type:n},r)=>(0,P.jsx)(de,{type:`viewSmall`,label:e,actions:n===`copy`&&(0,P.jsx)(pe,{valueToCopy:t,copiedText:D(`copyButton.copiedTooltip`),copyText:D(`copyButton.copyTooltip`)}),render:()=>(0,P.jsx)(m,{variant:`regular`,color:oe.gray[900],children:t})},`metadata-${r}`))})})]})},R.__docgenInfo={description:``,methods:[{name:`areAllRequiredDocumentsFilled`,docblock:null,modifiers:[],params:[],returns:null},{name:`addDocument`,docblock:null,modifiers:[],params:[{name:`document`,optional:!1,type:null}],returns:null}],displayName:`SupportingDocumentCollection`,props:{ref:{required:!1,tsType:{name:`Ref`,elements:[{name:`signature`,type:`object`,raw:`{
+  areAllRequiredDocumentsFilled: () => boolean;
+  addDocument: (document: Document<Purpose>) => void;
+}`,signature:{properties:[{key:`areAllRequiredDocumentsFilled`,value:{name:`signature`,type:`function`,raw:`() => boolean`,signature:{arguments:[],return:{name:`boolean`}},required:!0}},{key:`addDocument`,value:{name:`signature`,type:`function`,raw:`(document: Document<Purpose>) => void`,signature:{arguments:[{type:{name:`signature`,type:`object`,raw:`{ purpose: Purpose; file: SwanFile }`,signature:{properties:[{key:`purpose`,value:{name:`Purpose`,required:!0}},{key:`file`,value:{name:`signature`,type:`object`,raw:`{
+  id: string;
+  statusInfo: SwanFileStatusInfo;
+  name: string;
+  url?: string;
+}`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`statusInfo`,value:{name:`union`,raw:`| { status: "Uploading"; progress: number }
+| { status: "Uploaded" }
+| { status: "Pending" }
+| { status: "Validated" }
+| {
+    status: "Refused";
+    reason?: string;
+    reasonCode: string;
+  }`,elements:[{name:`signature`,type:`object`,raw:`{ status: "Uploading"; progress: number }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploading"`,required:!0}},{key:`progress`,value:{name:`number`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Uploaded" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploaded"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Pending" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Pending"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Validated" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Validated"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{
+  status: "Refused";
+  reason?: string;
+  reasonCode: string;
+}`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Refused"`,required:!0}},{key:`reason`,value:{name:`string`,required:!1}},{key:`reasonCode`,value:{name:`string`,required:!0}}]}}],required:!0}},{key:`name`,value:{name:`string`,required:!0}},{key:`url`,value:{name:`string`,required:!1}}]},required:!0}}]}},name:`document`}],return:{name:`void`}},required:!0}}]}}],raw:`Ref<SupportingDocumentCollectionRef<Purpose>>`},description:``},status:{required:!0,tsType:{name:`union`,raw:`| "WaitingForDocument"
+| "PendingReview"
+| "Approved"
+| "Canceled"
+| "Rejected"`,elements:[{name:`literal`,value:`"WaitingForDocument"`},{name:`literal`,value:`"PendingReview"`},{name:`literal`,value:`"Approved"`},{name:`literal`,value:`"Canceled"`},{name:`literal`,value:`"Rejected"`}]},description:``},generateUpload:{required:!0,tsType:{name:`signature`,type:`function`,raw:`(
+  input: UploadInput<Purpose>,
+) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>`,signature:{arguments:[{type:{name:`signature`,type:`object`,raw:`{ fileName: string; purpose: Purpose }`,signature:{properties:[{key:`fileName`,value:{name:`string`,required:!0}},{key:`purpose`,value:{name:`Purpose`,required:!0}}]}},name:`input`}],return:{name:`Future`,elements:[{name:`Result`,elements:[{name:`signature`,type:`object`,raw:`{ id: string; upload: UploadOutput }`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`upload`,value:{name:`signature`,type:`object`,raw:`{ url: string; fields: { key: string; value: string }[] }`,signature:{properties:[{key:`url`,value:{name:`string`,required:!0}},{key:`fields`,value:{name:`Array`,elements:[{name:`signature`,type:`object`,raw:`{ key: string; value: string }`,signature:{properties:[{key:`key`,value:{name:`string`,required:!0}},{key:`value`,value:{name:`string`,required:!0}}]}}],raw:`{ key: string; value: string }[]`,required:!0}}]},required:!0}}]}},{name:`unknown`}],raw:`Result<UploadOutputWithId<UploadOutput>, unknown>`}],raw:`Future<Result<UploadOutputWithId<UploadOutput>, unknown>>`}}},description:``},documents:{required:!0,tsType:{name:`Array`,elements:[{name:`signature`,type:`object`,raw:`{ purpose: Purpose; file: SwanFile }`,signature:{properties:[{key:`purpose`,value:{name:`Purpose`,required:!0}},{key:`file`,value:{name:`signature`,type:`object`,raw:`{
+  id: string;
+  statusInfo: SwanFileStatusInfo;
+  name: string;
+  url?: string;
+}`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`statusInfo`,value:{name:`union`,raw:`| { status: "Uploading"; progress: number }
+| { status: "Uploaded" }
+| { status: "Pending" }
+| { status: "Validated" }
+| {
+    status: "Refused";
+    reason?: string;
+    reasonCode: string;
+  }`,elements:[{name:`signature`,type:`object`,raw:`{ status: "Uploading"; progress: number }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploading"`,required:!0}},{key:`progress`,value:{name:`number`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Uploaded" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploaded"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Pending" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Pending"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Validated" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Validated"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{
+  status: "Refused";
+  reason?: string;
+  reasonCode: string;
+}`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Refused"`,required:!0}},{key:`reason`,value:{name:`string`,required:!1}},{key:`reasonCode`,value:{name:`string`,required:!0}}]}}],required:!0}},{key:`name`,value:{name:`string`,required:!0}},{key:`url`,value:{name:`string`,required:!1}}]},required:!0}}]}}],raw:`Document<Purpose>[]`},description:``},requiredDocumentPurposes:{required:!0,tsType:{name:`Record`,elements:[{name:`Purpose`},{name:`union`,raw:`{ label: string; description: string; purposeDetails?: string } | undefined`,elements:[{name:`signature`,type:`object`,raw:`{ label: string; description: string; purposeDetails?: string }`,signature:{properties:[{key:`label`,value:{name:`string`,required:!0}},{key:`description`,value:{name:`string`,required:!0}},{key:`purposeDetails`,value:{name:`string`,required:!1}}]}},{name:`undefined`}]}],raw:`Record<
+  Purpose,
+  { label: string; description: string; purposeDetails?: string } | undefined
+>`},description:``},uploadFile:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(
+  config: UploadFileInput<UploadOutput>,
+) => Future<Result<Response<string>, NetworkError | TimeoutError>>`,signature:{arguments:[{type:{name:`signature`,type:`object`,raw:`{
+  id: string;
+  upload: UploadOutput;
+  file: File;
+  onProgress: (progress: number) => void;
+}`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`upload`,value:{name:`signature`,type:`object`,raw:`{ url: string; fields: { key: string; value: string }[] }`,signature:{properties:[{key:`url`,value:{name:`string`,required:!0}},{key:`fields`,value:{name:`Array`,elements:[{name:`signature`,type:`object`,raw:`{ key: string; value: string }`,signature:{properties:[{key:`key`,value:{name:`string`,required:!0}},{key:`value`,value:{name:`string`,required:!0}}]}}],raw:`{ key: string; value: string }[]`,required:!0}}]},required:!0}},{key:`file`,value:{name:`File`,required:!0}},{key:`onProgress`,value:{name:`signature`,type:`function`,raw:`(progress: number) => void`,signature:{arguments:[{type:{name:`number`},name:`progress`}],return:{name:`void`}},required:!0}}]}},name:`config`}],return:{name:`Future`,elements:[{name:`Result`,elements:[{name:`Response`,elements:[{name:`string`}],raw:`Response<string>`},{name:`union`,raw:`NetworkError | TimeoutError`,elements:[{name:`NetworkError`},{name:`TimeoutError`}]}],raw:`Result<Response<string>, NetworkError | TimeoutError>`}],raw:`Future<Result<Response<string>, NetworkError | TimeoutError>>`}}},description:``},onChange:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(documents: Document<Purpose>[]) => void`,signature:{arguments:[{type:{name:`Array`,elements:[{name:`signature`,type:`object`,raw:`{ purpose: Purpose; file: SwanFile }`,signature:{properties:[{key:`purpose`,value:{name:`Purpose`,required:!0}},{key:`file`,value:{name:`signature`,type:`object`,raw:`{
+  id: string;
+  statusInfo: SwanFileStatusInfo;
+  name: string;
+  url?: string;
+}`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`statusInfo`,value:{name:`union`,raw:`| { status: "Uploading"; progress: number }
+| { status: "Uploaded" }
+| { status: "Pending" }
+| { status: "Validated" }
+| {
+    status: "Refused";
+    reason?: string;
+    reasonCode: string;
+  }`,elements:[{name:`signature`,type:`object`,raw:`{ status: "Uploading"; progress: number }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploading"`,required:!0}},{key:`progress`,value:{name:`number`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Uploaded" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploaded"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Pending" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Pending"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Validated" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Validated"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{
+  status: "Refused";
+  reason?: string;
+  reasonCode: string;
+}`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Refused"`,required:!0}},{key:`reason`,value:{name:`string`,required:!1}},{key:`reasonCode`,value:{name:`string`,required:!0}}]}}],required:!0}},{key:`name`,value:{name:`string`,required:!0}},{key:`url`,value:{name:`string`,required:!1}}]},required:!0}}]}}],raw:`Document<Purpose>[]`},name:`documents`}],return:{name:`void`}}},description:``},onRemoveFile:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(file: SwanFile) => Future<Result<unknown, unknown>>`,signature:{arguments:[{type:{name:`signature`,type:`object`,raw:`{
+  id: string;
+  statusInfo: SwanFileStatusInfo;
+  name: string;
+  url?: string;
+}`,signature:{properties:[{key:`id`,value:{name:`string`,required:!0}},{key:`statusInfo`,value:{name:`union`,raw:`| { status: "Uploading"; progress: number }
+| { status: "Uploaded" }
+| { status: "Pending" }
+| { status: "Validated" }
+| {
+    status: "Refused";
+    reason?: string;
+    reasonCode: string;
+  }`,elements:[{name:`signature`,type:`object`,raw:`{ status: "Uploading"; progress: number }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploading"`,required:!0}},{key:`progress`,value:{name:`number`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Uploaded" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Uploaded"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Pending" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Pending"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{ status: "Validated" }`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Validated"`,required:!0}}]}},{name:`signature`,type:`object`,raw:`{
+  status: "Refused";
+  reason?: string;
+  reasonCode: string;
+}`,signature:{properties:[{key:`status`,value:{name:`literal`,value:`"Refused"`,required:!0}},{key:`reason`,value:{name:`string`,required:!1}},{key:`reasonCode`,value:{name:`string`,required:!0}}]}}],required:!0}},{key:`name`,value:{name:`string`,required:!0}},{key:`url`,value:{name:`string`,required:!1}}]}},name:`file`}],return:{name:`Future`,elements:[{name:`Result`,elements:[{name:`unknown`},{name:`unknown`}],raw:`Result<unknown, unknown>`}],raw:`Future<Result<unknown, unknown>>`}}},description:``},templateLanguage:{required:!1,tsType:{name:`string`},description:``,defaultValue:{value:`locale.language`,computed:!0}},companyCountry:{required:!1,tsType:{name:`Simplify["cca3"]`,raw:`Country["cca3"]`},description:``},showIds:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},readOnly:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},getPurposeMetadata:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(purose: Purpose) => PurposeMetadata | undefined`,signature:{arguments:[{type:{name:`Purpose`},name:`purose`}],return:{name:`union`,raw:`PurposeMetadata | undefined`,elements:[{name:`signature`,type:`object`,raw:`{
+  title: string;
+  values: { type?: "text" | "copy"; title: string; value: string }[];
+}`,signature:{properties:[{key:`title`,value:{name:`string`,required:!0}},{key:`values`,value:{name:`Array`,elements:[{name:`signature`,type:`object`,raw:`{ type?: "text" | "copy"; title: string; value: string }`,signature:{properties:[{key:`type`,value:{name:`union`,raw:`"text" | "copy"`,elements:[{name:`literal`,value:`"text"`},{name:`literal`,value:`"copy"`}],required:!1}},{key:`title`,value:{name:`string`,required:!0}},{key:`value`,value:{name:`string`,required:!0}}]}}],raw:`{ type?: "text" | "copy"; title: string; value: string }[]`,required:!0}}]}},{name:`undefined`}]}}},description:``},readonlyDocumentPurposes:{required:!1,tsType:{name:`Array`,elements:[{name:`Purpose`}],raw:`Purpose[]`},description:``,defaultValue:{value:`[]`,computed:!1}}}}})),z,B,Ee,V,H,U,W,G,K,q,J,Y,X,Z,Q,$,De;t((()=>{o(),x(),z=e(n()),Te(),ge(),B=d(),Ee={title:`Onboarding/SupportingDocumentCollection`,component:R},V=()=>i.make(e=>{setTimeout(()=>{e(a.Ok({id:crypto.randomUUID(),upload:{url:window.location.href,fields:[]}}))},500)}),H=e=>i.make(e=>{setTimeout(()=>{e(a.Ok({headers:new Headers,status:200,ok:!0,url:``,response:l.None()}))},500)}),U=e=>i.value(a.Ok(void 0)),W=()=>{let[e,t]=(0,z.useState)([]),n=(0,z.useRef)(null);return(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsxs)(k,{title:`Default`,children:[(0,B.jsx)(R,{ref:n,status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:e,onChange:t,onRemoveFile:U,requiredDocumentPurposes:{CompanyRegistration:{label:`Company registration document`,description:`A document proving the registration of the company (e.g. Kbis in France)`,purposeDetails:`Other details about company registration`},ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`},SwornStatement:{label:`Sworn statement`,description:`A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate`},PowerOfAttorney:{label:`Power of attorney`,description:`A power of attorney signed by the legal representative of the company`},ProofOfBusinessActivity:{label:`Proof of business activity`,description:`A document proving the business activity of the company (e.g. invoice, contract)`},CompanyFormationRegistration:{label:`Company formation registration`,description:`A document proving the formation registration of the company (e.g. articles of association)`},UnknownDocumentType:{label:`Unknown document type`,description:`This is an unknown document type used for testing purposes`}},getPurposeMetadata:e=>({title:`Show metadata`,values:[{title:`Purpose`,value:e},{title:`ID`,value:`666`,type:`copy`},{title:`Lorem ipsum`,value:`dolor sit amet`}]})}),(0,B.jsx)(S,{onPress:()=>{n.current!=null&&n.current.addDocument({purpose:`UltimateBeneficialOwnerProofOfAddress`,file:{id:crypto.randomUUID(),name:`toto.jpg`,statusInfo:{status:`Uploaded`}}})},children:`Add other document from outside`})]})})},G=()=>{let[e,t]=(0,z.useState)([]);return(0,B.jsx)(A,{title:`WaitingForDocumentShowIds`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:e,onChange:t,requiredDocumentPurposes:{CompanyRegistration:{label:`Company registration document`,description:`A document proving the registration of the company (e.g. Kbis in France)`},ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`},SwornStatement:{label:`Sworn statement`,description:`A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate`},PowerOfAttorney:{label:`Power of attorney`,description:`A power of attorney signed by the legal representative of the company`},UnknownDocumentType:{label:`Unknown document type`,description:`This is an unknown document type used for testing purposes`}},showIds:!0})})})},K=()=>{let[e,t]=(0,z.useState)([{purpose:`CompanyRegistration`,file:{id:`id`,name:`CompanyRegistration.pdf`,statusInfo:{status:`Validated`}}},{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,statusInfo:{status:`Validated`}}},{purpose:`SwornStatement`,file:{id:`sworn`,name:`SwornStatement.pdf`,statusInfo:{status:`Uploaded`}}},{purpose:`ProofOfBusinessActivity`,file:{id:`power`,name:`power.pdf`,url:`https://swan.io`,statusInfo:{status:`Refused`,reasonCode:`Invalid document`}}},{purpose:`PowerOfAttorney`,file:{id:`power`,name:`power.pdf`,url:`https://swan.io`,statusInfo:{status:`Refused`,reasonCode:`Invalid document`,reason:`The document is blurry`}}}]);return(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:e,onChange:t,requiredDocumentPurposes:{CompanyRegistration:{label:`Company registration document`,description:`A document proving the registration of the company (e.g. Kbis in France)`},ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`},SwornStatement:{label:`Sworn statement`,description:`A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate`},PowerOfAttorney:{label:`Power of attorney`,description:`A power of attorney signed by the legal representative of the company`},UnknownDocumentType:{label:`Unknown document type`,description:`This is an unknown document type used for testing purposes`}},onRemoveFile:()=>i.make(e=>{setTimeout(()=>{e(a.Ok(void 0))},1e3)})})})})},q=()=>(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`PendingReview`,generateUpload:V,uploadFile:H,documents:[{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,url:`https://swan.io`,statusInfo:{status:`Pending`}}}],requiredDocumentPurposes:{ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`}}})})}),J=()=>(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`Approved`,generateUpload:V,uploadFile:H,documents:[{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,url:`https://swan.io`,statusInfo:{status:`Validated`}}}],requiredDocumentPurposes:{ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`}}})})}),Y=()=>(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`Approved`,generateUpload:V,uploadFile:H,documents:[{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,statusInfo:{status:`Validated`}}}],requiredDocumentPurposes:{ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`}}})})}),X=()=>(0,B.jsx)(A,{title:`SupportingDocument`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`Rejected`,generateUpload:V,uploadFile:H,documents:[{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,url:`https://swan.io`,statusInfo:{status:`Refused`,reasonCode:`Invalid document`}}}],requiredDocumentPurposes:{ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`}}})})}),Z=()=>{let[e,t]=(0,z.useState)([]);return(0,B.jsx)(A,{title:`WaitingForDocumentShowIds`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:e,onChange:t,requiredDocumentPurposes:{},showIds:!0,readOnly:!0})})})},Q=()=>(0,B.jsx)(A,{title:`WaitingForDocumentShowIds`,description:`Supporting document collection`,children:(0,B.jsx)(k,{title:`Default`,children:(0,B.jsx)(R,{status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:[{purpose:`ProofOfIdentity`,file:{id:`id`,name:`IdCard.pdf`,url:`https://swan.io`,statusInfo:{status:`Refused`,reason:`Invalid document`,reasonCode:`InvalidDocument`}}}],onChange:()=>{},requiredDocumentPurposes:{ProofOfIdentity:{label:`Proof of identity`,description:`A document proving the identity of a person (e.g. ID card, passport)`}},showIds:!0,readOnly:!0})})}),$=()=>{let[e,t]=(0,z.useState)([]),n=(0,z.useRef)(null);return(0,B.jsx)(A,{title:`SupportingDocumentI18nSupport`,description:`Supporting document collection`,children:[`BEL`,`DEU`,`FRA`,`ITA`,`NLD`,`ESP`,`PRT`].map(r=>(0,B.jsx)(k,{title:r,children:(0,B.jsx)(R,{ref:n,status:`WaitingForDocument`,generateUpload:V,uploadFile:H,documents:e,onChange:t,onRemoveFile:U,companyCountry:r,requiredDocumentPurposes:{CompanyRegistration:{label:`Company registration document`,description:`A document proving the registration of the company (e.g. Kbis in France)`,purposeDetails:`Other details about company registration`}}})},r))})},W.__docgenInfo={description:``,methods:[],displayName:`WaitingForDocument`},G.__docgenInfo={description:``,methods:[],displayName:`WaitingForDocumentShowIds`},K.__docgenInfo={description:``,methods:[],displayName:`WaitingForDocumentWithApprovedAndRejected`},q.__docgenInfo={description:``,methods:[],displayName:`Pending`},J.__docgenInfo={description:``,methods:[],displayName:`Approved`},Y.__docgenInfo={description:``,methods:[],displayName:`ApprovedWithoutDownload`},X.__docgenInfo={description:``,methods:[],displayName:`Rejected`},Z.__docgenInfo={description:``,methods:[],displayName:`ReadOnlyEmpty`},Q.__docgenInfo={description:``,methods:[],displayName:`ReadOnlyWithDocs`},$.__docgenInfo={description:``,methods:[],displayName:`WaitingForDocumentI18nSupport`},W.parameters={...W.parameters,docs:{...W.parameters?.docs,source:{originalSource:`() => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection ref={ref} status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={documents} onChange={setDocuments} onRemoveFile={onRemoveFile} requiredDocumentPurposes={{
+        CompanyRegistration: {
+          label: "Company registration document",
+          description: "A document proving the registration of the company (e.g. Kbis in France)",
+          purposeDetails: "Other details about company registration"
+        },
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        },
+        SwornStatement: {
+          label: "Sworn statement",
+          description: "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate"
+        },
+        PowerOfAttorney: {
+          label: "Power of attorney",
+          description: "A power of attorney signed by the legal representative of the company"
+        },
+        ProofOfBusinessActivity: {
+          label: "Proof of business activity",
+          description: "A document proving the business activity of the company (e.g. invoice, contract)"
+        },
+        CompanyFormationRegistration: {
+          label: "Company formation registration",
+          description: "A document proving the formation registration of the company (e.g. articles of association)"
+        },
+        UnknownDocumentType: {
+          label: "Unknown document type",
+          description: "This is an unknown document type used for testing purposes"
+        }
+      }} getPurposeMetadata={purpose => ({
+        title: "Show metadata",
+        values: [{
+          title: "Purpose",
+          value: purpose
+        }, {
+          title: "ID",
+          value: "666",
+          type: "copy"
+        }, {
+          title: "Lorem ipsum",
+          value: "dolor sit amet"
+        }]
+      })} />
+
+        <LakeButton onPress={() => {
+        if (ref.current != null) {
+          ref.current.addDocument({
+            purpose: "UltimateBeneficialOwnerProofOfAddress",
+            file: {
+              id: crypto.randomUUID(),
+              name: "toto.jpg",
+              statusInfo: {
+                status: "Uploaded"
+              }
+            }
+          });
+        }
+      }}>
+          Add other document from outside
+        </LakeButton>
+      </StoryPart>
+    </StoryBlock>;
+}`,...W.parameters?.docs?.source}}},G.parameters={...G.parameters,docs:{...G.parameters?.docs,source:{originalSource:`() => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  return <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={documents} onChange={setDocuments} requiredDocumentPurposes={{
+        CompanyRegistration: {
+          label: "Company registration document",
+          description: "A document proving the registration of the company (e.g. Kbis in France)"
+        },
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        },
+        SwornStatement: {
+          label: "Sworn statement",
+          description: "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate"
+        },
+        PowerOfAttorney: {
+          label: "Power of attorney",
+          description: "A power of attorney signed by the legal representative of the company"
+        },
+        UnknownDocumentType: {
+          label: "Unknown document type",
+          description: "This is an unknown document type used for testing purposes"
+        }
+      }} showIds={true} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...G.parameters?.docs?.source}}},K.parameters={...K.parameters,docs:{...K.parameters?.docs,source:{originalSource:`() => {
+  const [documents, setDocuments] = useState<Document<string>[]>([{
+    purpose: "CompanyRegistration",
+    file: {
+      id: "id",
+      name: "CompanyRegistration.pdf",
+      statusInfo: {
+        status: "Validated"
+      }
+    }
+  }, {
+    purpose: "ProofOfIdentity",
+    file: {
+      id: "id",
+      name: "IdCard.pdf",
+      statusInfo: {
+        status: "Validated"
+      }
+    }
+  }, {
+    purpose: "SwornStatement",
+    file: {
+      id: "sworn",
+      name: "SwornStatement.pdf",
+      statusInfo: {
+        status: "Uploaded"
+      }
+    }
+  }, {
+    purpose: "ProofOfBusinessActivity",
+    file: {
+      id: "power",
+      name: "power.pdf",
+      url: "https://swan.io",
+      statusInfo: {
+        status: "Refused",
+        reasonCode: "Invalid document"
+      }
+    }
+  }, {
+    purpose: "PowerOfAttorney",
+    file: {
+      id: "power",
+      name: "power.pdf",
+      url: "https://swan.io",
+      statusInfo: {
+        status: "Refused",
+        reasonCode: "Invalid document",
+        reason: "The document is blurry"
+      }
+    }
+  }]);
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={documents} onChange={setDocuments} requiredDocumentPurposes={{
+        CompanyRegistration: {
+          label: "Company registration document",
+          description: "A document proving the registration of the company (e.g. Kbis in France)"
+        },
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        },
+        SwornStatement: {
+          label: "Sworn statement",
+          description: "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate"
+        },
+        PowerOfAttorney: {
+          label: "Power of attorney",
+          description: "A power of attorney signed by the legal representative of the company"
+        },
+        UnknownDocumentType: {
+          label: "Unknown document type",
+          description: "This is an unknown document type used for testing purposes"
+        }
+      }} onRemoveFile={() => Future.make(resolve => {
+        setTimeout(() => {
+          resolve(Result.Ok(undefined));
+        }, 1_000);
+      })} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...K.parameters?.docs?.source}}},q.parameters={...q.parameters,docs:{...q.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="PendingReview" generateUpload={generateUpload} uploadFile={uploadFile} documents={[{
+        purpose: "ProofOfIdentity",
+        file: {
+          id: "id",
+          name: "IdCard.pdf",
+          url: "https://swan.io",
+          statusInfo: {
+            status: "Pending"
+          }
+        }
+      }]} requiredDocumentPurposes={{
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        }
+      }} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...q.parameters?.docs?.source}}},J.parameters={...J.parameters,docs:{...J.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="Approved" generateUpload={generateUpload} uploadFile={uploadFile} documents={[{
+        purpose: "ProofOfIdentity",
+        file: {
+          id: "id",
+          name: "IdCard.pdf",
+          url: "https://swan.io",
+          statusInfo: {
+            status: "Validated"
+          }
+        }
+      }]} requiredDocumentPurposes={{
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        }
+      }} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...J.parameters?.docs?.source}}},Y.parameters={...Y.parameters,docs:{...Y.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="Approved" generateUpload={generateUpload} uploadFile={uploadFile} documents={[{
+        purpose: "ProofOfIdentity",
+        file: {
+          id: "id",
+          name: "IdCard.pdf",
+          statusInfo: {
+            status: "Validated"
+          }
+        }
+      }]} requiredDocumentPurposes={{
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        }
+      }} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...Y.parameters?.docs?.source}}},X.parameters={...X.parameters,docs:{...X.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="SupportingDocument" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="Rejected" generateUpload={generateUpload} uploadFile={uploadFile} documents={[{
+        purpose: "ProofOfIdentity",
+        file: {
+          id: "id",
+          name: "IdCard.pdf",
+          url: "https://swan.io",
+          statusInfo: {
+            status: "Refused",
+            reasonCode: "Invalid document"
+          }
+        }
+      }]} requiredDocumentPurposes={{
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        }
+      }} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...X.parameters?.docs?.source}}},Z.parameters={...Z.parameters,docs:{...Z.parameters?.docs,source:{originalSource:`() => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  return <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={documents} onChange={setDocuments} requiredDocumentPurposes={{}} showIds={true} readOnly={true} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...Z.parameters?.docs?.source}}},Q.parameters={...Q.parameters,docs:{...Q.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="WaitingForDocumentShowIds" description="Supporting document collection">
+      <StoryPart title="Default">
+        <SupportingDocumentCollection status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={[{
+        purpose: "ProofOfIdentity",
+        file: {
+          id: "id",
+          name: "IdCard.pdf",
+          url: "https://swan.io",
+          statusInfo: {
+            status: "Refused",
+            reason: "Invalid document",
+            reasonCode: "InvalidDocument"
+          }
+        }
+      }]} onChange={() => {}} requiredDocumentPurposes={{
+        ProofOfIdentity: {
+          label: "Proof of identity",
+          description: "A document proving the identity of a person (e.g. ID card, passport)"
+        }
+      }} showIds={true} readOnly={true} />
+      </StoryPart>
+    </StoryBlock>;
+}`,...Q.parameters?.docs?.source}}},$.parameters={...$.parameters,docs:{...$.parameters?.docs,source:{originalSource:`() => {
+  const [documents, setDocuments] = useState<Document<string>[]>([]);
+  const ref = useRef<SupportingDocumentCollectionRef<string>>(null);
+  const countries = ["BEL", "DEU", "FRA", "ITA", "NLD", "ESP", "PRT"] satisfies CountryCCA3[];
+  return <StoryBlock title="SupportingDocumentI18nSupport" description="Supporting document collection">
+      {countries.map(country => <StoryPart key={country} title={country}>
+          <SupportingDocumentCollection ref={ref} status="WaitingForDocument" generateUpload={generateUpload} uploadFile={uploadFile} documents={documents} onChange={setDocuments} onRemoveFile={onRemoveFile} companyCountry={country} requiredDocumentPurposes={{
+        CompanyRegistration: {
+          label: "Company registration document",
+          description: "A document proving the registration of the company (e.g. Kbis in France)",
+          purposeDetails: "Other details about company registration"
+        }
+      }} />
+        </StoryPart>)}
+    </StoryBlock>;
+}`,...$.parameters?.docs?.source}}},De=[`WaitingForDocument`,`WaitingForDocumentShowIds`,`WaitingForDocumentWithApprovedAndRejected`,`Pending`,`Approved`,`ApprovedWithoutDownload`,`Rejected`,`ReadOnlyEmpty`,`ReadOnlyWithDocs`,`WaitingForDocumentI18nSupport`]}))();export{J as Approved,Y as ApprovedWithoutDownload,q as Pending,Z as ReadOnlyEmpty,Q as ReadOnlyWithDocs,X as Rejected,W as WaitingForDocument,$ as WaitingForDocumentI18nSupport,G as WaitingForDocumentShowIds,K as WaitingForDocumentWithApprovedAndRejected,De as __namedExportsOrder,Ee as default};
+//# sourceMappingURL=SupportingDocumentCollection.stories-rHLejDGn.js.map
