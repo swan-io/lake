@@ -26,6 +26,51 @@ const ACCEPTED_FORMATS = ["application/pdf", "image/png", "image/jpeg", "image/h
 
 export type Document<Purpose extends string> = { purpose: Purpose; file: SwanFile };
 
+export type DocumentPurposeInfo = {
+  label: string;
+  description: string;
+  purposeDetails?: string;
+  required: boolean;
+};
+
+type SupportingDocumentPurposeInput<Purpose extends string> = {
+  name: Purpose;
+  label: string;
+  description: string;
+  purposeDetails?: string | null;
+};
+
+export const toDocumentPurposes = <Purpose extends string>(
+  requiredPurposes: SupportingDocumentPurposeInput<Purpose>[],
+  documents: ({ purpose: SupportingDocumentPurposeInput<Purpose> } | null | undefined)[],
+): Record<Purpose, DocumentPurposeInfo> => {
+  const entries = new Map<Purpose, DocumentPurposeInfo>();
+
+  requiredPurposes.forEach(({ name, label, description, purposeDetails }) => {
+    entries.set(name, {
+      label,
+      description,
+      purposeDetails: purposeDetails ?? undefined,
+      required: true,
+    });
+  });
+
+  documents.forEach(document => {
+    if (document == null || entries.has(document.purpose.name)) {
+      return;
+    }
+    const { name, label, description, purposeDetails } = document.purpose;
+    entries.set(name, {
+      label,
+      description,
+      purposeDetails: purposeDetails ?? undefined,
+      required: false,
+    });
+  });
+
+  return Object.fromEntries(entries) as Record<Purpose, DocumentPurposeInfo>;
+};
+
 type UploadInput<Purpose extends string> = { fileName: string; purpose: Purpose };
 export type UploadOutput = { url: string; fields: { key: string; value: string }[] };
 
@@ -53,10 +98,7 @@ type Props<Purpose extends string> = {
     input: UploadInput<Purpose>,
   ) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>;
   documents: Document<Purpose>[];
-  requiredDocumentPurposes: Record<
-    Purpose,
-    { label: string; description: string; purposeDetails?: string } | undefined
-  >;
+  documentPurposes: Record<Purpose, DocumentPurposeInfo | undefined>;
   uploadFile?: (
     config: UploadFileInput<UploadOutput>,
   ) => Future<Result<Response<string>, NetworkError | TimeoutError>>;
@@ -149,12 +191,14 @@ const getSupportLink = (
         "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
     );
 
-export const getSupportingDocumentPurposeLabel = (purpose: string) => {
+// Fallback helpers kept temporarily as a safety net
+// Remove after ~1 month if backend reliably returns translated label/description for every purpose.
+const getSupportingDocumentPurposeLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}`;
   return isTranslationKey(key) ? t(key) : purpose;
 };
 
-export const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
+const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
   const key = `supportingDocuments.purpose.${purpose}.description`;
   return isTranslationKey(key) ? t(key) : "";
 };
@@ -164,7 +208,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   documents,
   generateUpload,
   uploadFile,
-  requiredDocumentPurposes,
+  documentPurposes,
   templateLanguage = locale.language,
   status,
   onChange,
@@ -182,59 +226,39 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   const [addedDocuments, setAddedDocuments] = useState<Document<Purpose>[]>([]);
 
   const orderedDocumentPurposes = useMemo(() => {
-    // Get all purposes to display: the required ones and the ones that have at least a document
-    const allPurposes = new Set(Object.keys(requiredDocumentPurposes) as Purpose[]);
+    // Get all purposes to display: the ones present in documentPurposes and the ones that have at least a document
+    const allPurposes = new Set(Object.keys(documentPurposes) as Purpose[]);
     const allDocuments = [...addedDocuments, ...documents];
     allDocuments.forEach(document => allPurposes.add(document.purpose));
 
-    const documentsByPurpose = new Map(
-      [...allPurposes].map(purpose => {
-        const purposeDocuments = allDocuments.filter(document => document.purpose === purpose);
-        return [purpose, purposeDocuments];
-      }),
-    );
+    // Compute, for each purpose, everything needed for rendering and sorting in one pass.
+    // Priority drives the display order (lower comes first):
+    //   0 = has documents and all are validated
+    //   1 = purpose is required
+    //   2 = otherwise
+    const entries = [...allPurposes].map(purpose => {
+      const purposeDocuments = allDocuments.filter(document => document.purpose === purpose);
+      const areAllDocumentsValidated =
+        purposeDocuments.length > 0 &&
+        purposeDocuments.every(document => document.file.statusInfo.status === "Validated");
+      const info = documentPurposes[purpose];
+      const isRequired = info?.required === true;
+      const priority = areAllDocumentsValidated ? 0 : isRequired ? 1 : 2;
 
-    // Map purposes to their priorities (lower priority comes first)
-    // We precompute it to avoid running on each `sort` callback call
-    const allRequiredPurposes = new Set(Object.keys(requiredDocumentPurposes) as Purpose[]);
-    // Indices:
-    // -> 0: documents aren't empty and all validated
-    // -> 1: purpose is required
-    // -> 2: purpose isn't required
-    const priorityByPurpose = new Map(
-      [...allPurposes].map(purpose => {
-        const purposeDocuments = documentsByPurpose.get(purpose) ?? [];
-        const areAllPurposeDocumentsValidated =
-          purposeDocuments.length > 0 &&
-          purposeDocuments.every(document => document.file.statusInfo.status === "Validated");
+      return {
+        purpose,
+        files: purposeDocuments.map(item => item.file),
+        isRequired,
+        areAllDocumentsValidated,
+        priority,
+        label: info?.label ?? getSupportingDocumentPurposeLabel(purpose),
+        description: info?.description ?? getSupportingDocumentPurposeDescriptionLabel(purpose),
+        purposeDetails: info?.purposeDetails,
+      };
+    });
 
-        const priority = areAllPurposeDocumentsValidated
-          ? 0
-          : allRequiredPurposes.has(purpose)
-            ? 1
-            : 2;
-
-        return [purpose, priority];
-      }),
-    );
-
-    return [...allPurposes]
-      .sort((purposeA, purposeB) => {
-        const purposeAPriority = priorityByPurpose.get(purposeA) ?? 2;
-        const purposeBPriority = priorityByPurpose.get(purposeB) ?? 2;
-
-        return purposeBPriority > purposeAPriority ? -1 : 1;
-      })
-      .map(purpose => {
-        const documents = documentsByPurpose.get(purpose) ?? [];
-        return {
-          purpose,
-          files: documents.map(item => item.file),
-          isRequired: allRequiredPurposes.has(purpose),
-          areAllDocumentsValidated: priorityByPurpose.get(purpose) === 0,
-        };
-      });
-  }, [requiredDocumentPurposes, documents, addedDocuments]);
+    return entries.sort((a, b) => (b.priority > a.priority ? -1 : 1));
+  }, [documentPurposes, documents, addedDocuments]);
 
   const filesByRequiredPurpose = useRef(
     new Map(
@@ -276,154 +300,157 @@ export const SupportingDocumentCollection = <Purpose extends string>({
 
   return (
     <Form>
-      {showableDocumentPurposes.map(({ purpose, files, areAllDocumentsValidated, isRequired }) => {
-        const metadata = getPurposeMetadata?.(purpose);
+      {showableDocumentPurposes.map(
+        ({
+          purpose,
+          files,
+          areAllDocumentsValidated,
+          isRequired,
+          label,
+          description,
+          purposeDetails,
+        }) => {
+          const metadata = getPurposeMetadata?.(purpose);
 
-        return (
-          <Fragment key={purpose}>
-            <LakeLabel
-              label={
-                requiredDocumentPurposes[purpose]?.label ??
-                getSupportingDocumentPurposeLabel(purpose)
-              }
-              description={
-                requiredDocumentPurposes[purpose]?.purposeDetails ??
-                requiredDocumentPurposes[purpose]?.description ??
-                getSupportingDocumentPurposeDescriptionLabel(purpose)
-              }
-              render={() => (
-                <>
-                  <Box direction="row">
+          return (
+            <Fragment key={purpose}>
+              <LakeLabel
+                label={label}
+                description={purposeDetails ?? description}
+                render={() => (
+                  <>
                     <Box direction="row">
-                      {isNotNullish(metadata) ? (
-                        purpose === "CompanyRegistration" ? (
-                          <>
-                            <LakeButton
-                              size="small"
-                              mode="secondary"
-                              icon="question-circle-regular"
-                              onPress={() =>
-                                window.open(getSupportLink(locale.language, companyCountry))
-                              }
-                              ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
-                            >
-                              {t("supportingDocuments.help.howToSendAGoodDocument")}
-                            </LakeButton>
+                      <Box direction="row">
+                        {isNotNullish(metadata) ? (
+                          purpose === "CompanyRegistration" ? (
+                            <>
+                              <LakeButton
+                                size="small"
+                                mode="secondary"
+                                icon="question-circle-regular"
+                                onPress={() =>
+                                  window.open(getSupportLink(locale.language, companyCountry))
+                                }
+                                ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                              >
+                                {t("supportingDocuments.help.howToSendAGoodDocument")}
+                              </LakeButton>
 
-                            <Space width={8} />
-                          </>
+                              <Space width={8} />
+                            </>
+                          ) : (
+                            <>
+                              <Help
+                                type="button"
+                                label={metadata.title}
+                                onPress={() => setCurrentMetadata(metadata)}
+                              />
+
+                              <Space width={8} />
+                            </>
+                          )
                         ) : (
-                          <>
-                            <Help
-                              type="button"
-                              label={metadata.title}
-                              onPress={() => setCurrentMetadata(metadata)}
-                            />
+                          match(purpose as string)
+                            .with("CompanyRegistration", () => (
+                              <LakeButton
+                                size="small"
+                                mode="secondary"
+                                icon="question-circle-regular"
+                                onPress={() =>
+                                  window.open(getSupportLink(locale.language, companyCountry))
+                                }
+                                ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
+                              >
+                                {t("supportingDocuments.help.howToSendAGoodDocument")}
+                              </LakeButton>
+                            ))
+                            .otherwise(() => null)
+                        )}
+                      </Box>
 
-                            <Space width={8} />
-                          </>
-                        )
-                      ) : (
-                        match(purpose as string)
-                          .with("CompanyRegistration", () => (
-                            <LakeButton
-                              size="small"
-                              mode="secondary"
-                              icon="question-circle-regular"
-                              onPress={() =>
-                                window.open(getSupportLink(locale.language, companyCountry))
-                              }
-                              ariaLabel={t("supportingDocuments.help.howToSendAGoodDocument")}
-                            >
-                              {t("supportingDocuments.help.howToSendAGoodDocument")}
-                            </LakeButton>
-                          ))
-                          .otherwise(() => null)
-                      )}
+                      {match(purpose as string)
+                        .with("PowerOfAttorney", () => (
+                          <Help
+                            type="button"
+                            icon="arrow-down-filled"
+                            label={t("supportingDocuments.help.downloadTemplate")}
+                            onPress={() => setShowPowerOfAttorneyModal(true)}
+                          />
+                        ))
+                        .with("SwornStatement", () => (
+                          <Help
+                            type="button"
+                            icon="arrow-down-filled"
+                            label={t("supportingDocuments.help.downloadTemplate")}
+                            onPress={() => setShowSwornStatementModal(true)}
+                          />
+                        ))
+                        .otherwise(() => null)}
                     </Box>
+                    <Space height={16} />
 
-                    {match(purpose as string)
-                      .with("PowerOfAttorney", () => (
-                        <Help
-                          type="button"
-                          icon="arrow-down-filled"
-                          label={t("supportingDocuments.help.downloadTemplate")}
-                          onPress={() => setShowPowerOfAttorneyModal(true)}
-                        />
-                      ))
-                      .with("SwornStatement", () => (
-                        <Help
-                          type="button"
-                          icon="arrow-down-filled"
-                          label={t("supportingDocuments.help.downloadTemplate")}
-                          onPress={() => setShowSwornStatementModal(true)}
-                        />
-                      ))
-                      .otherwise(() => null)}
-                  </Box>
-                  <Space height={16} />
-
-                  <FilesUploader
-                    ref={ref => {
-                      filesUploaderRefByPurpose.current[purpose] = ref;
-                    }}
-                    // Only allow uploading is the Supporting Document Collection awaits for docs
-                    // and that the specific purpose isn't already fully validated
-                    canUpload={
-                      !readonlyDocumentPurposes.includes(purpose) &&
-                      !readOnly &&
-                      status === "WaitingForDocument" &&
-                      !areAllDocumentsValidated
-                    }
-                    accept={ACCEPTED_FORMATS}
-                    maxSize={20_000_000}
-                    icon="document-regular"
-                    initialFiles={files}
-                    generateUpload={generateUpload}
-                    getUploadConfig={file => ({ fileName: file.name, purpose })}
-                    uploadFile={
-                      isNotNullish(uploadFile)
-                        ? uploadFile
-                        : ({ upload, file, onProgress }) => {
-                            const body = new FormData();
-                            upload.fields.forEach(({ key, value }) => body.append(key, value));
-                            body.append("file", file);
-                            setTimeout(() => onProgress(0.8), 100);
-                            return Request.make({
-                              url: upload.url,
-                              method: "POST",
-                              body,
-                              type: "text",
-                            }).mapOkToResult(badStatusToError);
-                          }
-                    }
-                    formatAndSizeDescription={t("supportingDocuments.documentTypes", {
-                      maxSizeMB: 20_000_000 / 1_000_000,
-                    })}
-                    onRemoveFile={readOnly ? undefined : onRemoveFile}
-                    onChange={files => {
-                      if (isRequired) {
-                        filesByRequiredPurpose.current.set(purpose, files);
-                        const documents: Document<Purpose>[] = filesByRequiredPurpose.current
-                          .entries()
-                          .reduce<Document<Purpose>[]>((acc, [purpose, files]) => {
-                            const purposeDocuments = files.map(file => ({ purpose, file }));
-                            acc.push(...purposeDocuments);
-                            return acc;
-                          }, []);
-                        onChange?.(documents);
+                    <FilesUploader
+                      ref={ref => {
+                        filesUploaderRefByPurpose.current[purpose] = ref;
+                      }}
+                      // Only allow uploading is the Supporting Document Collection awaits for docs
+                      // and that the specific purpose isn't already fully validated
+                      canUpload={
+                        !readonlyDocumentPurposes.includes(purpose) &&
+                        !readOnly &&
+                        status === "WaitingForDocument" &&
+                        !areAllDocumentsValidated
                       }
-                    }}
-                    showIds={showIds}
-                  />
-                </>
-              )}
-            />
+                      accept={ACCEPTED_FORMATS}
+                      maxSize={20_000_000}
+                      icon="document-regular"
+                      initialFiles={files}
+                      generateUpload={generateUpload}
+                      getUploadConfig={file => ({ fileName: file.name, purpose })}
+                      uploadFile={
+                        isNotNullish(uploadFile)
+                          ? uploadFile
+                          : ({ upload, file, onProgress }) => {
+                              const body = new FormData();
+                              upload.fields.forEach(({ key, value }) => body.append(key, value));
+                              body.append("file", file);
+                              setTimeout(() => onProgress(0.8), 100);
+                              return Request.make({
+                                url: upload.url,
+                                method: "POST",
+                                body,
+                                type: "text",
+                              }).mapOkToResult(badStatusToError);
+                            }
+                      }
+                      formatAndSizeDescription={t("supportingDocuments.documentTypes", {
+                        maxSizeMB: 20_000_000 / 1_000_000,
+                      })}
+                      onRemoveFile={readOnly ? undefined : onRemoveFile}
+                      onChange={files => {
+                        if (isRequired) {
+                          filesByRequiredPurpose.current.set(purpose, files);
+                          const documents: Document<Purpose>[] = filesByRequiredPurpose.current
+                            .entries()
+                            .reduce<Document<Purpose>[]>((acc, [purpose, files]) => {
+                              const purposeDocuments = files.map(file => ({ purpose, file }));
+                              acc.push(...purposeDocuments);
+                              return acc;
+                            }, []);
+                          onChange?.(documents);
+                        }
+                      }}
+                      showIds={showIds}
+                    />
+                  </>
+                )}
+              />
 
-            <Space height={24} />
-          </Fragment>
-        );
-      })}
+              <Space height={24} />
+            </Fragment>
+          );
+        },
+      )}
 
       {showableDocumentPurposes.length === 0 ? (
         <>
@@ -519,6 +546,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
             />
           ))}
         </ReadOnlyFieldList>
+        UploadInput
       </LakeModal>
     </Form>
   );
