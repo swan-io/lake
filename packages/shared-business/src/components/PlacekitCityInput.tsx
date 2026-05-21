@@ -56,7 +56,7 @@ export const PlacekitCityInput = ({
 
         return Future.fromPromise(
           placekit.search(value, {
-            types: ["city"],
+            types: ["city", "county"],
             countries: countries.toUndefined(),
           }),
         ).mapOk(
@@ -85,7 +85,7 @@ export const PlacekitCityInput = ({
   const onSuggestionSelected = useCallback(
     (suggestion: Suggestion) => {
       onSuggestion?.({
-        city: suggestion.value.city,
+        city: suggestion.value.city !== "" ? suggestion.value.city : suggestion.value.county, // adding this for cases such as Papeete where city is empty and county is filled with the city name
         postalCode: suggestion.value.zipcode[0],
       });
     },
