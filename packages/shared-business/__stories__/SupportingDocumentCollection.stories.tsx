@@ -66,39 +66,46 @@ export const WaitingForDocument = () => {
           documents={documents}
           onChange={setDocuments}
           onRemoveFile={onRemoveFile}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             CompanyRegistration: {
               label: "Company registration document",
               description:
                 "A document proving the registration of the company (e.g. Kbis in France)",
               purposeDetails: "Other details about company registration",
+              required: true,
             },
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
             SwornStatement: {
               label: "Sworn statement",
               description:
                 "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+              required: true,
             },
             PowerOfAttorney: {
               label: "Power of attorney",
               description: "A power of attorney signed by the legal representative of the company",
+              required: true,
             },
             ProofOfBusinessActivity: {
               label: "Proof of business activity",
               description:
                 "A document proving the business activity of the company (e.g. invoice, contract)",
+              required: true,
             },
             CompanyFormationRegistration: {
               label: "Company formation registration",
               description:
                 "A document proving the formation registration of the company (e.g. articles of association)",
+              required: true,
             },
             UnknownDocumentType: {
               label: "Unknown document type",
               description: "This is an unknown document type used for testing purposes",
+              required: true,
             },
           }}
           getPurposeMetadata={purpose => ({
@@ -154,28 +161,33 @@ export const WaitingForDocumentShowIds = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             CompanyRegistration: {
               label: "Company registration document",
               description:
                 "A document proving the registration of the company (e.g. Kbis in France)",
+              required: true,
             },
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
             SwornStatement: {
               label: "Sworn statement",
               description:
                 "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+              required: true,
             },
             PowerOfAttorney: {
               label: "Power of attorney",
               description: "A power of attorney signed by the legal representative of the company",
+              required: true,
             },
             UnknownDocumentType: {
               label: "Unknown document type",
               description: "This is an unknown document type used for testing purposes",
+              required: true,
             },
           }}
           showIds={true}
@@ -243,28 +255,33 @@ export const WaitingForDocumentWithApprovedAndRejected = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             CompanyRegistration: {
               label: "Company registration document",
               description:
                 "A document proving the registration of the company (e.g. Kbis in France)",
+              required: true,
             },
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
             SwornStatement: {
               label: "Sworn statement",
               description:
                 "A sworn statement signed by the legal representative of the company, attesting that the information provided is accurate",
+              required: true,
             },
             PowerOfAttorney: {
               label: "Power of attorney",
               description: "A power of attorney signed by the legal representative of the company",
+              required: true,
             },
             UnknownDocumentType: {
               label: "Unknown document type",
               description: "This is an unknown document type used for testing purposes",
+              required: true,
             },
           }}
           onRemoveFile={() =>
@@ -299,10 +316,11 @@ export const Pending = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
           }}
         />
@@ -330,10 +348,11 @@ export const Approved = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
           }}
         />
@@ -360,10 +379,11 @@ export const ApprovedWithoutDownload = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
           }}
         />
@@ -391,10 +411,11 @@ export const Rejected = () => {
               },
             },
           ]}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
           }}
         />
@@ -414,7 +435,7 @@ export const ReadOnlyEmpty = () => {
           uploadFile={uploadFile}
           documents={documents}
           onChange={setDocuments}
-          requiredDocumentPurposes={{}}
+          documentPurposes={{}}
           showIds={true}
           readOnly={true}
         />
@@ -447,10 +468,11 @@ export const ReadOnlyWithDocs = () => {
             },
           ]}
           onChange={() => {}}
-          requiredDocumentPurposes={{
+          documentPurposes={{
             ProofOfIdentity: {
               label: "Proof of identity",
               description: "A document proving the identity of a person (e.g. ID card, passport)",
+              required: true,
             },
           }}
           showIds={true}
@@ -479,12 +501,13 @@ export const WaitingForDocumentI18nSupport = () => {
             onChange={setDocuments}
             onRemoveFile={onRemoveFile}
             companyCountry={country}
-            requiredDocumentPurposes={{
+            documentPurposes={{
               CompanyRegistration: {
                 label: "Company registration document",
                 description:
                   "A document proving the registration of the company (e.g. Kbis in France)",
                 purposeDetails: "Other details about company registration",
+                required: true,
               },
             }}
           />
