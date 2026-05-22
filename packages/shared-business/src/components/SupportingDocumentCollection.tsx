@@ -42,7 +42,7 @@ type SupportingDocumentPurposeInput<Purpose extends string> = {
 
 export const toDocumentPurposes = <Purpose extends string>(
   requiredPurposes: SupportingDocumentPurposeInput<Purpose>[],
-  documents: ({ purpose: SupportingDocumentPurposeInput<Purpose> } | null | undefined)[],
+  documents: { purpose: SupportingDocumentPurposeInput<Purpose> }[],
 ): Record<Purpose, DocumentPurposeInfo> => {
   const entries = new Map<Purpose, DocumentPurposeInfo>();
 
@@ -55,15 +55,14 @@ export const toDocumentPurposes = <Purpose extends string>(
     });
   });
 
-  documents.forEach(document => {
-    if (document == null || entries.has(document.purpose.name)) {
+  documents.forEach(({ purpose }) => {
+    if (entries.has(purpose.name)) {
       return;
     }
-    const { name, label, description, purposeDetails } = document.purpose;
-    entries.set(name, {
-      label,
-      description,
-      purposeDetails: purposeDetails ?? undefined,
+    entries.set(purpose.name, {
+      label: purpose.label,
+      description: purpose.description,
+      purposeDetails: purpose.purposeDetails ?? undefined,
       required: false,
     });
   });
@@ -71,7 +70,6 @@ export const toDocumentPurposes = <Purpose extends string>(
   return Object.fromEntries(entries) as Record<Purpose, DocumentPurposeInfo>;
 };
 
-type UploadInput<Purpose extends string> = { fileName: string; purpose: Purpose };
 export type UploadOutput = { url: string; fields: { key: string; value: string }[] };
 
 type SupportingDocumentCollectionStatus =
@@ -94,9 +92,10 @@ export type SupportingDocumentCollectionRef<Purpose extends string> = {
 type Props<Purpose extends string> = {
   ref?: Ref<SupportingDocumentCollectionRef<Purpose>>;
   status: SupportingDocumentCollectionStatus;
-  generateUpload: (
-    input: UploadInput<Purpose>,
-  ) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>;
+  generateUpload: (input: {
+    fileName: string;
+    purpose: Purpose;
+  }) => Future<Result<UploadOutputWithId<UploadOutput>, unknown>>;
   documents: Document<Purpose>[];
   documentPurposes: Record<Purpose, DocumentPurposeInfo | undefined>;
   uploadFile?: (
@@ -546,7 +545,6 @@ export const SupportingDocumentCollection = <Purpose extends string>({
             />
           ))}
         </ReadOnlyFieldList>
-        UploadInput
       </LakeModal>
     </Form>
   );
