@@ -134,15 +134,6 @@ importers:
       prism-react-renderer:
         specifier: ^2.4.1
         version: 2.4.1(react@19.2.6)
-      react:
-        specifier: ^19.2.6
-        version: 19.2.6
-      react-dom:
-        specifier: ^19.2.6
-        version: 19.2.6(react@19.2.6)
-      react-native-web:
-        specifier: ^0.21.2
-        version: 0.21.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       rifm:
         specifier: ^0.12.1
         version: 0.12.1(react@19.2.6)
@@ -162,6 +153,15 @@ importers:
       '@types/react-native':
         specifier: ^0.72.8
         version: 0.72.8
+      react:
+        specifier: ^19.2.6
+        version: 19.2.6
+      react-dom:
+        specifier: ^19.2.6
+        version: 19.2.6(react@19.2.6)
+      react-native-web:
+        specifier: ^0.21.2
+        version: 0.21.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       type-fest:
         specifier: ^5.6.0
         version: 5.6.0
