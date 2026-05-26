@@ -62,11 +62,13 @@ Business-domain components that depend on `@swan-io/lake`. Source in `src/`:
 
 **Icons**: Fluent UI icons are generated from `icons.json` — add icons there and run `pnpm icons` rather than creating icon files manually.
 
-## Testing
+## Unit test
 
-Tests live in `__tests__/` directories adjacent to source files, named `<FileName>.test.ts[x]`. Storybook stories live in `__stories__/` directories with `*.stories.tsx` naming.
+Tests live in `__tests__/` directories adjacent to source files, named `<FileName>.test.ts[x]`.
 
 Test setup is in `scripts/tests/testSetup.ts` (dayjs plugins, matchMedia polyfill).
+
+Unit test should focus on pure business logic (formatters, validators, parsers, utils) like files in /utils folders, and explicitly skips React components.
 
 ## Linting & Formatting
 
