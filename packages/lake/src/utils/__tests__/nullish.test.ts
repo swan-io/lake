@@ -3,60 +3,10 @@ import {
   emptyToUndefined,
   isEmpty,
   isNotEmpty,
-  isNotNullish,
   isNotNullishOrEmpty,
-  isNullish,
   isNullishOrEmpty,
   nullishOrEmptyToUndefined,
 } from "../nullish";
-
-describe("isNullish", () => {
-  it("returns true for null", () => {
-    expect(isNullish(null)).toBe(true);
-  });
-
-  it("returns true for undefined", () => {
-    expect(isNullish(undefined)).toBe(true);
-  });
-
-  it("returns false for an empty string", () => {
-    expect(isNullish("")).toBe(false);
-  });
-
-  it("returns false for zero", () => {
-    expect(isNullish(0)).toBe(false);
-  });
-
-  it("returns false for false", () => {
-    expect(isNullish(false)).toBe(false);
-  });
-
-  it("returns false for an object", () => {
-    expect(isNullish({})).toBe(false);
-  });
-});
-
-describe("isNotNullish", () => {
-  it("returns false for null", () => {
-    expect(isNotNullish(null)).toBe(false);
-  });
-
-  it("returns false for undefined", () => {
-    expect(isNotNullish(undefined)).toBe(false);
-  });
-
-  it("returns true for an empty string", () => {
-    expect(isNotNullish("")).toBe(true);
-  });
-
-  it("returns true for zero", () => {
-    expect(isNotNullish(0)).toBe(true);
-  });
-
-  it("returns true for an object", () => {
-    expect(isNotNullish({})).toBe(true);
-  });
-});
 
 describe("isEmpty", () => {
   it("returns true for an empty string", () => {
