@@ -10,3 +10,5 @@ dist/
 
 localazy.keys.*.json
 .idea
+
+coverage/*
