@@ -1,0 +1,2 @@
+import{i as e}from"./preload-helper-LFDnojF3.js";var t,n=e((()=>{t=e=>{let t=document.createElement(`span`);t.textContent=e,t.style.opacity=`0`,t.style.position=`absolute`,t.style.userSelect=`auto`,t.style.whiteSpace=`pre-wrap`,document.body.appendChild(t);let n=window.getSelection();if(n==null)return!1;n.removeAllRanges();let r=document.createRange();r.selectNodeContents(t),n.addRange(r);try{document.execCommand(`copy`)}catch{return!1}return n.removeAllRanges(),document.body.removeChild(t),!0}}));export{t as n,n as t};
+//# sourceMappingURL=clipboard-DRFfFkLl.js.map
