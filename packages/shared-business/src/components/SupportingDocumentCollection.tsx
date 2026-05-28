@@ -42,7 +42,6 @@ type SupportingDocumentPurposeInput<Purpose extends string> = {
 
 export const toDocumentPurposes = <Purpose extends string>(
   requiredPurposes: SupportingDocumentPurposeInput<Purpose>[],
-  documents: { purpose: SupportingDocumentPurposeInput<Purpose> }[],
 ): Record<Purpose, DocumentPurposeInfo> => {
   const entries = new Map<Purpose, DocumentPurposeInfo>();
 
@@ -52,18 +51,6 @@ export const toDocumentPurposes = <Purpose extends string>(
       description,
       purposeDetails: purposeDetails ?? undefined,
       required: true,
-    });
-  });
-
-  documents.forEach(({ purpose }) => {
-    if (entries.has(purpose.name)) {
-      return;
-    }
-    entries.set(purpose.name, {
-      label: purpose.label,
-      description: purpose.description,
-      purposeDetails: purpose.purposeDetails ?? undefined,
-      required: false,
     });
   });
 
@@ -225,10 +212,8 @@ export const SupportingDocumentCollection = <Purpose extends string>({
   const [addedDocuments, setAddedDocuments] = useState<Document<Purpose>[]>([]);
 
   const orderedDocumentPurposes = useMemo(() => {
-    // Get all purposes to display: the ones present in documentPurposes and the ones that have at least a document
     const allPurposes = new Set(Object.keys(documentPurposes) as Purpose[]);
     const allDocuments = [...addedDocuments, ...documents];
-    allDocuments.forEach(document => allPurposes.add(document.purpose));
 
     // Compute, for each purpose, everything needed for rendering and sorting in one pass.
     // Priority drives the display order (lower comes first):
