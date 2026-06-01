@@ -12,3 +12,4 @@ localazy.keys.*.json
 .idea
 
 coverage/*
+html/*
