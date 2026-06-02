@@ -20,6 +20,7 @@ export default defineConfig({
       {
         extends: true,
         test: {
+          name: "unit",
           setupFiles: ["scripts/tests/testSetup.ts"],
           environment: "jsdom",
         },
@@ -34,7 +35,7 @@ export default defineConfig({
           }),
         ],
         test: {
-          name: "storybook",
+          name: "a11y",
           browser: {
             enabled: true,
             headless: true,

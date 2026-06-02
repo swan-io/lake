@@ -65,9 +65,8 @@ export default {
   parameters: {
     a11y: {
       context: {
-        exclude: ["[aria-hidden='true']"],
+        exclude: ["[data-a11y='false']"],
       },
-
       config: {
         rules: [
           {

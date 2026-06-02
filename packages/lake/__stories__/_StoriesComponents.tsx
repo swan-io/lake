@@ -33,7 +33,7 @@ type StoryIntroductionProps = {
 export const StoryBlock = ({ title, description, children }: StoryIntroductionProps) => {
   return (
     <ScrollView>
-      <LakeText aria-hidden={true} style={styles.storyTitle}>
+      <LakeText dataSet={{ a11y: false }} style={styles.storyTitle}>
         {title}
       </LakeText>
       <Space height={8} />
@@ -66,7 +66,7 @@ type StoryPartProps = {
 export const StoryPart = ({ title, children, style }: StoryPartProps) => {
   return (
     <Box>
-      <LakeText aria-hidden={true} style={styles.partTitle}>
+      <LakeText dataSet={{ a11y: false }} style={styles.partTitle}>
         {title}
       </LakeText>
       <Space height={24} />
