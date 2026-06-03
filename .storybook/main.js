@@ -10,6 +10,7 @@ const config = {
     name: "@storybook/react-vite",
     options: {},
   },
+  addons: ["@storybook/addon-a11y", "@storybook/addon-vitest"],
   async viteFinal(config, { configType }) {
     // customize the Vite config here
     const resolve = config.resolve || null;
@@ -37,8 +38,8 @@ const config = {
       sourcemap: true,
       assetsDir: `assets/${packageJson.version}`,
 
-      rollupOptions: {
-        ...config.build.rollupOptions,
+      rolldownOptions: {
+        ...config.build?.rolldownOptions,
         onwarn: (warning, warn) => {
           // Silent "use client" directive warnings
           if (warning.code !== "MODULE_LEVEL_DIRECTIVE") {
@@ -50,7 +51,7 @@ const config = {
 
     return {
       ...config,
-      base: "/lake", // Set for GitHub pages, comment to disable for testing build outputs locally
+      ...(configType === "PRODUCTION" ? { base: "/lake" } : {}),
     };
   },
 };

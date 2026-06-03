@@ -28,6 +28,7 @@ type Props = TextProps & {
   align?: TextAlign;
   children: ReactNode;
   color?: string;
+  dataSet?: Record<string, unknown>;
   userSelect?: TextStyle["userSelect"];
   variant?: TextVariant;
   tooltip?: Omit<ComponentProps<typeof LakeTooltip>, "children">;
