@@ -70,6 +70,7 @@
     "@vitest/browser-playwright": "4.1.6",
     "@vitest/coverage-v8": "4.0.18",
     "@vitest/ui": "4.1.6",
+    "chromatic": "^17.2.0",
     "dotenv": "^17.4.2",
     "fast-glob": "^3.3.3",
     "graphql": "^16.14.0",
