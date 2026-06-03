@@ -51,7 +51,7 @@ const config = {
 
     return {
       ...config,
-      ...(configType === "PRODUCTION" ? { base: "/lake" } : {}),
+      ...(configType === "PRODUCTION" ? { base: "./" } : {}),
     };
   },
 };
