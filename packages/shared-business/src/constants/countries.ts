@@ -2001,6 +2001,7 @@ export type Country = Simplify<
     idd: string;
     uid: string;
     flag: string;
+    isNationality: boolean;
   }
 >;
 
@@ -2029,6 +2030,12 @@ export const countries: Country[] = readonlyCountries
 
     return country;
   })
+  .sort((countryA, countryB) => {
+    return countryA.name.localeCompare(countryB.name);
+  });
+
+export const nationalities: Country[] = countries
+  .filter(country => country.isNationality)
   .sort((countryA, countryB) => {
     return countryA.name.localeCompare(countryB.name);
   });
