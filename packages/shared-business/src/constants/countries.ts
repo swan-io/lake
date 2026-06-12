@@ -10,6 +10,7 @@ const readonlyCountries = [
     cca3: "ALA",
     idd: "358",
     flag: "🇦🇽",
+    isNationality: false,
   },
   {
     name: "American Samoa",
@@ -17,6 +18,7 @@ const readonlyCountries = [
     cca3: "ASM",
     idd: "1684",
     flag: "🇦🇸",
+    isNationality: false,
   },
   {
     name: "Andorra",
@@ -24,6 +26,7 @@ const readonlyCountries = [
     cca3: "AND",
     idd: "376",
     flag: "🇦🇩",
+    isNationality: true,
   },
   {
     name: "Angola",
@@ -31,6 +34,7 @@ const readonlyCountries = [
     cca3: "AGO",
     idd: "244",
     flag: "🇦🇴",
+    isNationality: true,
   },
   {
     name: "Anguilla",
@@ -38,6 +42,7 @@ const readonlyCountries = [
     cca3: "AIA",
     idd: "1264",
     flag: "🇦🇮",
+    isNationality: false,
   },
   {
     name: "Antarctica",
@@ -45,6 +50,7 @@ const readonlyCountries = [
     cca3: "ATA",
     idd: "672",
     flag: "🇦🇶",
+    isNationality: true,
   },
   {
     name: "Antigua and Barbuda",
@@ -52,6 +58,7 @@ const readonlyCountries = [
     cca3: "ATG",
     idd: "1268",
     flag: "🇦🇬",
+    isNationality: true,
   },
   {
     name: "Argentina",
@@ -59,6 +66,7 @@ const readonlyCountries = [
     cca3: "ARG",
     idd: "54",
     flag: "🇦🇷",
+    isNationality: true,
   },
   {
     name: "Aruba",
@@ -66,6 +74,7 @@ const readonlyCountries = [
     cca3: "ABW",
     idd: "297",
     flag: "🇦🇼",
+    isNationality: false,
   },
   {
     name: "Australia",
@@ -73,6 +82,7 @@ const readonlyCountries = [
     cca3: "AUS",
     idd: "61",
     flag: "🇦🇺",
+    isNationality: true,
   },
   {
     name: "Azərbaycan",
@@ -80,6 +90,7 @@ const readonlyCountries = [
     cca3: "AZE",
     idd: "994",
     flag: "🇦🇿",
+    isNationality: true,
   },
   {
     name: "Bahamas",
@@ -87,6 +98,7 @@ const readonlyCountries = [
     cca3: "BHS",
     idd: "1242",
     flag: "🇧🇸",
+    isNationality: true,
   },
   {
     name: "Bangladesh",
@@ -94,6 +106,7 @@ const readonlyCountries = [
     cca3: "BGD",
     idd: "880",
     flag: "🇧🇩",
+    isNationality: true,
   },
   {
     name: "Barbados",
@@ -101,6 +114,7 @@ const readonlyCountries = [
     cca3: "BRB",
     idd: "1246",
     flag: "🇧🇧",
+    isNationality: true,
   },
   {
     name: "België",
@@ -108,6 +122,7 @@ const readonlyCountries = [
     cca3: "BEL",
     idd: "32",
     flag: "🇧🇪",
+    isNationality: true,
   },
   {
     name: "Belize",
@@ -115,6 +130,7 @@ const readonlyCountries = [
     cca3: "BLZ",
     idd: "501",
     flag: "🇧🇿",
+    isNationality: true,
   },
   {
     name: "Bénin",
@@ -122,6 +138,7 @@ const readonlyCountries = [
     cca3: "BEN",
     idd: "229",
     flag: "🇧🇯",
+    isNationality: true,
   },
   {
     name: "Bermuda",
@@ -129,6 +146,7 @@ const readonlyCountries = [
     cca3: "BMU",
     idd: "1441",
     flag: "🇧🇲",
+    isNationality: false,
   },
   {
     name: "Bolivia",
@@ -136,6 +154,7 @@ const readonlyCountries = [
     cca3: "BOL",
     idd: "591",
     flag: "🇧🇴",
+    isNationality: true,
   },
   {
     name: "Bonaire",
@@ -143,6 +162,7 @@ const readonlyCountries = [
     cca3: "BES",
     idd: "5997",
     flag: "🇧🇶",
+    isNationality: false,
   },
   {
     name: "Bosna i Hercegovina",
@@ -150,6 +170,7 @@ const readonlyCountries = [
     cca3: "BIH",
     idd: "387",
     flag: "🇧🇦",
+    isNationality: true,
   },
   {
     name: "Botswana",
@@ -157,6 +178,7 @@ const readonlyCountries = [
     cca3: "BWA",
     idd: "267",
     flag: "🇧🇼",
+    isNationality: true,
   },
   {
     name: "Bouvetøya",
@@ -164,6 +186,7 @@ const readonlyCountries = [
     cca3: "BVT",
     idd: "47",
     flag: "🇧🇻",
+    isNationality: false,
   },
   {
     name: "Brasil",
@@ -171,6 +194,7 @@ const readonlyCountries = [
     cca3: "BRA",
     idd: "55",
     flag: "🇧🇷",
+    isNationality: true,
   },
   {
     name: "British Virgin Islands",
@@ -178,6 +202,7 @@ const readonlyCountries = [
     cca3: "VGB",
     idd: "1284",
     flag: "🇻🇬",
+    isNationality: false,
   },
   {
     name: "Burkina Faso",
@@ -185,6 +210,7 @@ const readonlyCountries = [
     cca3: "BFA",
     idd: "226",
     flag: "🇧🇫",
+    isNationality: true,
   },
   {
     name: "Burundi",
@@ -192,6 +218,7 @@ const readonlyCountries = [
     cca3: "BDI",
     idd: "257",
     flag: "🇧🇮",
+    isNationality: true,
   },
   {
     name: "Cabo Verde",
@@ -199,6 +226,7 @@ const readonlyCountries = [
     cca3: "CPV",
     idd: "238",
     flag: "🇨🇻",
+    isNationality: true,
   },
   {
     name: "Cameroon",
@@ -206,6 +234,7 @@ const readonlyCountries = [
     cca3: "CMR",
     idd: "237",
     flag: "🇨🇲",
+    isNationality: true,
   },
   {
     name: "Canada",
@@ -213,6 +242,7 @@ const readonlyCountries = [
     cca3: "CAN",
     idd: "1",
     flag: "🇨🇦",
+    isNationality: true,
   },
   {
     name: "Cayman Islands",
@@ -220,6 +250,7 @@ const readonlyCountries = [
     cca3: "CYM",
     idd: "1345",
     flag: "🇰🇾",
+    isNationality: false,
   },
   {
     name: "Česká republika",
@@ -227,6 +258,7 @@ const readonlyCountries = [
     cca3: "CZE",
     idd: "420",
     flag: "🇨🇿",
+    isNationality: true,
   },
   {
     name: "Chile",
@@ -234,6 +266,7 @@ const readonlyCountries = [
     cca3: "CHL",
     idd: "56",
     flag: "🇨🇱",
+    isNationality: true,
   },
   {
     name: "Christmas Island",
@@ -241,6 +274,7 @@ const readonlyCountries = [
     cca3: "CXR",
     idd: "61",
     flag: "🇨🇽",
+    isNationality: false,
   },
   {
     name: "Cocos (Keeling) Islands",
@@ -248,6 +282,7 @@ const readonlyCountries = [
     cca3: "CCK",
     idd: "61",
     flag: "🇨🇨",
+    isNationality: false,
   },
   {
     name: "Colombia",
@@ -255,6 +290,7 @@ const readonlyCountries = [
     cca3: "COL",
     idd: "57",
     flag: "🇨🇴",
+    isNationality: true,
   },
   {
     name: "Cook Islands",
@@ -262,6 +298,7 @@ const readonlyCountries = [
     cca3: "COK",
     idd: "682",
     flag: "🇨🇰",
+    isNationality: false,
   },
   {
     name: "Costa Rica",
@@ -269,6 +306,7 @@ const readonlyCountries = [
     cca3: "CRI",
     idd: "506",
     flag: "🇨🇷",
+    isNationality: true,
   },
   {
     name: "Côte d'Ivoire",
@@ -276,6 +314,7 @@ const readonlyCountries = [
     cca3: "CIV",
     idd: "225",
     flag: "🇨🇮",
+    isNationality: true,
   },
   {
     name: "Cuba",
@@ -283,6 +322,7 @@ const readonlyCountries = [
     cca3: "CUB",
     idd: "53",
     flag: "🇨🇺",
+    isNationality: true,
   },
   {
     name: "Curaçao",
@@ -290,6 +330,7 @@ const readonlyCountries = [
     cca3: "CUW",
     idd: "5999",
     flag: "🇨🇼",
+    isNationality: false,
   },
   {
     name: "Danmark",
@@ -297,6 +338,7 @@ const readonlyCountries = [
     cca3: "DNK",
     idd: "45",
     flag: "🇩🇰",
+    isNationality: true,
   },
   {
     name: "Deutschland",
@@ -304,6 +346,7 @@ const readonlyCountries = [
     cca3: "DEU",
     idd: "49",
     flag: "🇩🇪",
+    isNationality: true,
   },
   {
     name: "Djibouti",
@@ -311,6 +354,7 @@ const readonlyCountries = [
     cca3: "DJI",
     idd: "253",
     flag: "🇩🇯",
+    isNationality: true,
   },
   {
     name: "Dominica",
@@ -318,6 +362,7 @@ const readonlyCountries = [
     cca3: "DMA",
     idd: "1767",
     flag: "🇩🇲",
+    isNationality: true,
   },
   {
     name: "Ecuador",
@@ -325,6 +370,7 @@ const readonlyCountries = [
     cca3: "ECU",
     idd: "593",
     flag: "🇪🇨",
+    isNationality: true,
   },
   {
     name: "Eesti",
@@ -332,6 +378,7 @@ const readonlyCountries = [
     cca3: "EST",
     idd: "372",
     flag: "🇪🇪",
+    isNationality: true,
   },
   {
     name: "Éire",
@@ -339,6 +386,7 @@ const readonlyCountries = [
     cca3: "IRL",
     idd: "353",
     flag: "🇮🇪",
+    isNationality: true,
   },
   {
     name: "El Salvador",
@@ -346,6 +394,7 @@ const readonlyCountries = [
     cca3: "SLV",
     idd: "503",
     flag: "🇸🇻",
+    isNationality: true,
   },
   {
     name: "España",
@@ -353,6 +402,7 @@ const readonlyCountries = [
     cca3: "ESP",
     idd: "34",
     flag: "🇪🇸",
+    isNationality: true,
   },
   {
     name: "Falkland Islands",
@@ -360,6 +410,7 @@ const readonlyCountries = [
     cca3: "FLK",
     idd: "500",
     flag: "🇫🇰",
+    isNationality: false,
   },
   {
     name: "Fiji",
@@ -367,6 +418,7 @@ const readonlyCountries = [
     cca3: "FJI",
     idd: "679",
     flag: "🇫🇯",
+    isNationality: true,
   },
   {
     name: "Føroyar",
@@ -374,6 +426,7 @@ const readonlyCountries = [
     cca3: "FRO",
     idd: "298",
     flag: "🇫🇴",
+    isNationality: false,
   },
   {
     name: "France",
@@ -381,6 +434,7 @@ const readonlyCountries = [
     cca3: "FRA",
     idd: "33",
     flag: "🇫🇷",
+    isNationality: true,
   },
   {
     name: "Gabon",
@@ -388,6 +442,7 @@ const readonlyCountries = [
     cca3: "GAB",
     idd: "241",
     flag: "🇬🇦",
+    isNationality: true,
   },
   {
     name: "Gambia",
@@ -395,6 +450,7 @@ const readonlyCountries = [
     cca3: "GMB",
     idd: "220",
     flag: "🇬🇲",
+    isNationality: true,
   },
   {
     name: "Ghana",
@@ -402,6 +458,7 @@ const readonlyCountries = [
     cca3: "GHA",
     idd: "233",
     flag: "🇬🇭",
+    isNationality: true,
   },
   {
     name: "Gibraltar",
@@ -409,6 +466,7 @@ const readonlyCountries = [
     cca3: "GIB",
     idd: "350",
     flag: "🇬🇮",
+    isNationality: false,
   },
   {
     name: "Grenada",
@@ -416,6 +474,7 @@ const readonlyCountries = [
     cca3: "GRD",
     idd: "1473",
     flag: "🇬🇩",
+    isNationality: true,
   },
   {
     name: "Guadeloupe",
@@ -423,6 +482,7 @@ const readonlyCountries = [
     cca3: "GLP",
     idd: "590",
     flag: "🇬🇵",
+    isNationality: false,
   },
   {
     name: "Guam",
@@ -430,6 +490,7 @@ const readonlyCountries = [
     cca3: "GUM",
     idd: "1671",
     flag: "🇬🇺",
+    isNationality: false,
   },
   {
     name: "Guatemala",
@@ -437,6 +498,7 @@ const readonlyCountries = [
     cca3: "GTM",
     idd: "502",
     flag: "🇬🇹",
+    isNationality: true,
   },
   {
     name: "Guernsey",
@@ -444,6 +506,7 @@ const readonlyCountries = [
     cca3: "GGY",
     idd: "44",
     flag: "🇬🇬",
+    isNationality: false,
   },
   {
     name: "Guiné-Bissau",
@@ -451,6 +514,7 @@ const readonlyCountries = [
     cca3: "GNB",
     idd: "245",
     flag: "🇬🇼",
+    isNationality: true,
   },
   {
     name: "Guinea Ecuatorial",
@@ -458,6 +522,7 @@ const readonlyCountries = [
     cca3: "GNQ",
     idd: "240",
     flag: "🇬🇶",
+    isNationality: true,
   },
   {
     name: "Guinée",
@@ -465,6 +530,7 @@ const readonlyCountries = [
     cca3: "GIN",
     idd: "224",
     flag: "🇬🇳",
+    isNationality: true,
   },
   {
     name: "Guyana",
@@ -472,6 +538,7 @@ const readonlyCountries = [
     cca3: "GUY",
     idd: "592",
     flag: "🇬🇾",
+    isNationality: true,
   },
   {
     name: "Guyane française",
@@ -479,6 +546,7 @@ const readonlyCountries = [
     cca3: "GUF",
     idd: "594",
     flag: "🇬🇫",
+    isNationality: false,
   },
   {
     name: "Haïti",
@@ -486,6 +554,7 @@ const readonlyCountries = [
     cca3: "HTI",
     idd: "509",
     flag: "🇭🇹",
+    isNationality: true,
   },
   {
     name: "Heard Island and McDonald Islands",
@@ -493,6 +562,7 @@ const readonlyCountries = [
     cca3: "HMD",
     idd: "61",
     flag: "🇭🇲",
+    isNationality: false,
   },
   {
     name: "Honduras",
@@ -500,6 +570,7 @@ const readonlyCountries = [
     cca3: "HND",
     idd: "504",
     flag: "🇭🇳",
+    isNationality: true,
   },
   {
     name: "Hrvatska",
@@ -507,6 +578,7 @@ const readonlyCountries = [
     cca3: "HRV",
     idd: "385",
     flag: "🇭🇷",
+    isNationality: true,
   },
   {
     name: "Indonesia",
@@ -514,6 +586,7 @@ const readonlyCountries = [
     cca3: "IDN",
     idd: "62",
     flag: "🇮🇩",
+    isNationality: true,
   },
   {
     name: "Ísland",
@@ -521,6 +594,7 @@ const readonlyCountries = [
     cca3: "ISL",
     idd: "354",
     flag: "🇮🇸",
+    isNationality: true,
   },
   {
     name: "Isle of Man",
@@ -528,6 +602,7 @@ const readonlyCountries = [
     cca3: "IMN",
     idd: "44",
     flag: "🇮🇲",
+    isNationality: false,
   },
   {
     name: "Italia",
@@ -535,6 +610,7 @@ const readonlyCountries = [
     cca3: "ITA",
     idd: "39",
     flag: "🇮🇹",
+    isNationality: true,
   },
   {
     name: "Jamaica",
@@ -542,6 +618,7 @@ const readonlyCountries = [
     cca3: "JAM",
     idd: "1876",
     flag: "🇯🇲",
+    isNationality: true,
   },
   {
     name: "Jersey",
@@ -549,6 +626,7 @@ const readonlyCountries = [
     cca3: "JEY",
     idd: "44",
     flag: "🇯🇪",
+    isNationality: false,
   },
   {
     name: "Kalaallit Nunaat",
@@ -556,6 +634,7 @@ const readonlyCountries = [
     cca3: "GRL",
     idd: "299",
     flag: "🇬🇱",
+    isNationality: false,
   },
   {
     name: "Kâmpŭchéa",
@@ -563,6 +642,7 @@ const readonlyCountries = [
     cca3: "KHM",
     idd: "855",
     flag: "🇰🇭",
+    isNationality: true,
   },
   {
     name: "Kazakhstan",
@@ -570,6 +650,7 @@ const readonlyCountries = [
     cca3: "KAZ",
     idd: "7",
     flag: "🇰🇿",
+    isNationality: true,
   },
   {
     name: "Kenya",
@@ -577,6 +658,7 @@ const readonlyCountries = [
     cca3: "KEN",
     idd: "254",
     flag: "🇰🇪",
+    isNationality: true,
   },
   {
     name: "Kiribati",
@@ -584,6 +666,7 @@ const readonlyCountries = [
     cca3: "KIR",
     idd: "686",
     flag: "🇰🇮",
+    isNationality: true,
   },
   {
     name: "Ködörösêse tî Bêafrîka",
@@ -591,6 +674,7 @@ const readonlyCountries = [
     cca3: "CAF",
     idd: "236",
     flag: "🇨🇫",
+    isNationality: true,
   },
   {
     name: "Komori",
@@ -598,6 +682,7 @@ const readonlyCountries = [
     cca3: "COM",
     idd: "269",
     flag: "🇰🇲",
+    isNationality: true,
   },
   {
     name: "La Réunion",
@@ -605,6 +690,7 @@ const readonlyCountries = [
     cca3: "REU",
     idd: "262",
     flag: "🇷🇪",
+    isNationality: false,
   },
   {
     name: "Latvija",
@@ -612,6 +698,7 @@ const readonlyCountries = [
     cca3: "LVA",
     idd: "371",
     flag: "🇱🇻",
+    isNationality: true,
   },
   {
     name: "Lesotho",
@@ -619,6 +706,7 @@ const readonlyCountries = [
     cca3: "LSO",
     idd: "266",
     flag: "🇱🇸",
+    isNationality: true,
   },
   {
     name: "Liberia",
@@ -626,6 +714,7 @@ const readonlyCountries = [
     cca3: "LBR",
     idd: "231",
     flag: "🇱🇷",
+    isNationality: true,
   },
   {
     name: "Liechtenstein",
@@ -633,6 +722,7 @@ const readonlyCountries = [
     cca3: "LIE",
     idd: "423",
     flag: "🇱🇮",
+    isNationality: true,
   },
   {
     name: "Lietuva",
@@ -640,6 +730,7 @@ const readonlyCountries = [
     cca3: "LTU",
     idd: "370",
     flag: "🇱🇹",
+    isNationality: true,
   },
   {
     name: "Luxembourg",
@@ -647,6 +738,7 @@ const readonlyCountries = [
     cca3: "LUX",
     idd: "352",
     flag: "🇱🇺",
+    isNationality: true,
   },
   {
     name: "Madagasikara",
@@ -654,6 +746,7 @@ const readonlyCountries = [
     cca3: "MDG",
     idd: "261",
     flag: "🇲🇬",
+    isNationality: true,
   },
   {
     name: "Magyarország",
@@ -661,6 +754,7 @@ const readonlyCountries = [
     cca3: "HUN",
     idd: "36",
     flag: "🇭🇺",
+    isNationality: true,
   },
   {
     name: "M̧ajeļ",
@@ -668,6 +762,7 @@ const readonlyCountries = [
     cca3: "MHL",
     idd: "692",
     flag: "🇲🇭",
+    isNationality: true,
   },
   {
     name: "Malawi",
@@ -675,6 +770,7 @@ const readonlyCountries = [
     cca3: "MWI",
     idd: "265",
     flag: "🇲🇼",
+    isNationality: true,
   },
   {
     name: "Malaysia",
@@ -682,6 +778,7 @@ const readonlyCountries = [
     cca3: "MYS",
     idd: "60",
     flag: "🇲🇾",
+    isNationality: true,
   },
   {
     name: "Maldives",
@@ -689,6 +786,7 @@ const readonlyCountries = [
     cca3: "MDV",
     idd: "960",
     flag: "🇲🇻",
+    isNationality: true,
   },
   {
     name: "Mali",
@@ -696,6 +794,7 @@ const readonlyCountries = [
     cca3: "MLI",
     idd: "223",
     flag: "🇲🇱",
+    isNationality: true,
   },
   {
     name: "Malta",
@@ -703,6 +802,7 @@ const readonlyCountries = [
     cca3: "MLT",
     idd: "356",
     flag: "🇲🇹",
+    isNationality: true,
   },
   {
     name: "Martinique",
@@ -710,6 +810,7 @@ const readonlyCountries = [
     cca3: "MTQ",
     idd: "596",
     flag: "🇲🇶",
+    isNationality: false,
   },
   {
     name: "Maurice",
@@ -717,6 +818,7 @@ const readonlyCountries = [
     cca3: "MUS",
     idd: "230",
     flag: "🇲🇺",
+    isNationality: true,
   },
   {
     name: "Mayotte",
@@ -724,6 +826,7 @@ const readonlyCountries = [
     cca3: "MYT",
     idd: "262",
     flag: "🇾🇹",
+    isNationality: false,
   },
   {
     name: "México",
@@ -731,6 +834,7 @@ const readonlyCountries = [
     cca3: "MEX",
     idd: "52",
     flag: "🇲🇽",
+    isNationality: true,
   },
   {
     name: "Micronesia",
@@ -738,6 +842,7 @@ const readonlyCountries = [
     cca3: "FSM",
     idd: "691",
     flag: "🇫🇲",
+    isNationality: true,
   },
   {
     name: "Moçambique",
@@ -745,6 +850,7 @@ const readonlyCountries = [
     cca3: "MOZ",
     idd: "258",
     flag: "🇲🇿",
+    isNationality: true,
   },
   {
     name: "Moldova",
@@ -752,6 +858,7 @@ const readonlyCountries = [
     cca3: "MDA",
     idd: "373",
     flag: "🇲🇩",
+    isNationality: true,
   },
   {
     name: "Monaco",
@@ -759,6 +866,7 @@ const readonlyCountries = [
     cca3: "MCO",
     idd: "377",
     flag: "🇲🇨",
+    isNationality: true,
   },
   {
     name: "Montserrat",
@@ -766,6 +874,7 @@ const readonlyCountries = [
     cca3: "MSR",
     idd: "1664",
     flag: "🇲🇸",
+    isNationality: false,
   },
   {
     name: "Namibia",
@@ -773,6 +882,7 @@ const readonlyCountries = [
     cca3: "NAM",
     idd: "264",
     flag: "🇳🇦",
+    isNationality: true,
   },
   {
     name: "Nederland",
@@ -780,6 +890,7 @@ const readonlyCountries = [
     cca3: "NLD",
     idd: "31",
     flag: "🇳🇱",
+    isNationality: true,
   },
   {
     name: "Negara Brunei Darussalam",
@@ -787,6 +898,7 @@ const readonlyCountries = [
     cca3: "BRN",
     idd: "673",
     flag: "🇧🇳",
+    isNationality: true,
   },
   {
     name: "New Zealand",
@@ -794,6 +906,7 @@ const readonlyCountries = [
     cca3: "NZL",
     idd: "64",
     flag: "🇳🇿",
+    isNationality: true,
   },
   {
     name: "Nicaragua",
@@ -801,6 +914,7 @@ const readonlyCountries = [
     cca3: "NIC",
     idd: "505",
     flag: "🇳🇮",
+    isNationality: true,
   },
   {
     name: "Niger",
@@ -808,6 +922,7 @@ const readonlyCountries = [
     cca3: "NER",
     idd: "227",
     flag: "🇳🇪",
+    isNationality: true,
   },
   {
     name: "Nigeria",
@@ -815,6 +930,7 @@ const readonlyCountries = [
     cca3: "NGA",
     idd: "234",
     flag: "🇳🇬",
+    isNationality: true,
   },
   {
     name: "Niuē",
@@ -822,6 +938,7 @@ const readonlyCountries = [
     cca3: "NIU",
     idd: "683",
     flag: "🇳🇺",
+    isNationality: false,
   },
   {
     name: "Norfolk Island",
@@ -829,6 +946,7 @@ const readonlyCountries = [
     cca3: "NFK",
     idd: "672",
     flag: "🇳🇫",
+    isNationality: false,
   },
   {
     name: "Norge",
@@ -836,6 +954,7 @@ const readonlyCountries = [
     cca3: "NOR",
     idd: "47",
     flag: "🇳🇴",
+    isNationality: true,
   },
   {
     name: "Northern Mariana Islands",
@@ -843,6 +962,7 @@ const readonlyCountries = [
     cca3: "MNP",
     idd: "1670",
     flag: "🇲🇵",
+    isNationality: false,
   },
   {
     name: "Nouvelle-Calédonie",
@@ -850,6 +970,7 @@ const readonlyCountries = [
     cca3: "NCL",
     idd: "687",
     flag: "🇳🇨",
+    isNationality: false,
   },
   {
     name: "Österreich",
@@ -857,6 +978,7 @@ const readonlyCountries = [
     cca3: "AUT",
     idd: "43",
     flag: "🇦🇹",
+    isNationality: true,
   },
   {
     name: "O‘zbekiston",
@@ -864,6 +986,7 @@ const readonlyCountries = [
     cca3: "UZB",
     idd: "998",
     flag: "🇺🇿",
+    isNationality: true,
   },
   {
     name: "Pakistan",
@@ -871,6 +994,7 @@ const readonlyCountries = [
     cca3: "PAK",
     idd: "92",
     flag: "🇵🇰",
+    isNationality: true,
   },
   {
     name: "Palau",
@@ -878,6 +1002,7 @@ const readonlyCountries = [
     cca3: "PLW",
     idd: "680",
     flag: "🇵🇼",
+    isNationality: true,
   },
   {
     name: "Panamá",
@@ -885,6 +1010,7 @@ const readonlyCountries = [
     cca3: "PAN",
     idd: "507",
     flag: "🇵🇦",
+    isNationality: true,
   },
   {
     name: "Papua Niugini",
@@ -892,6 +1018,7 @@ const readonlyCountries = [
     cca3: "PNG",
     idd: "675",
     flag: "🇵🇬",
+    isNationality: true,
   },
   {
     name: "Paraguay",
@@ -899,6 +1026,7 @@ const readonlyCountries = [
     cca3: "PRY",
     idd: "595",
     flag: "🇵🇾",
+    isNationality: true,
   },
   {
     name: "Perú",
@@ -906,6 +1034,7 @@ const readonlyCountries = [
     cca3: "PER",
     idd: "51",
     flag: "🇵🇪",
+    isNationality: true,
   },
   {
     name: "Pilipinas",
@@ -913,6 +1042,7 @@ const readonlyCountries = [
     cca3: "PHL",
     idd: "63",
     flag: "🇵🇭",
+    isNationality: true,
   },
   {
     name: "Pitcairn Islands",
@@ -920,6 +1050,7 @@ const readonlyCountries = [
     cca3: "PCN",
     idd: "64",
     flag: "🇵🇳",
+    isNationality: false,
   },
   {
     name: "Polska",
@@ -927,6 +1058,7 @@ const readonlyCountries = [
     cca3: "POL",
     idd: "48",
     flag: "🇵🇱",
+    isNationality: true,
   },
   {
     name: "Polynésie française",
@@ -934,6 +1066,7 @@ const readonlyCountries = [
     cca3: "PYF",
     idd: "689",
     flag: "🇵🇫",
+    isNationality: false,
   },
   {
     name: "Portugal",
@@ -941,6 +1074,7 @@ const readonlyCountries = [
     cca3: "PRT",
     idd: "351",
     flag: "🇵🇹",
+    isNationality: true,
   },
   {
     name: "Puerto Rico",
@@ -948,6 +1082,7 @@ const readonlyCountries = [
     cca3: "PRI",
     idd: "1787",
     flag: "🇵🇷",
+    isNationality: false,
   },
   {
     name: "República Dominicana",
@@ -955,6 +1090,7 @@ const readonlyCountries = [
     cca3: "DOM",
     idd: "1829",
     flag: "🇩🇴",
+    isNationality: true,
   },
   {
     name: "República Dominicana",
@@ -962,6 +1098,7 @@ const readonlyCountries = [
     cca3: "DOM",
     idd: "1849",
     flag: "🇩🇴",
+    isNationality: true,
   },
   {
     name: "República Dominicana",
@@ -969,6 +1106,7 @@ const readonlyCountries = [
     cca3: "DOM",
     idd: "1809",
     flag: "🇩🇴",
+    isNationality: true,
   },
   {
     name: "Republika e Kosovës",
@@ -976,6 +1114,7 @@ const readonlyCountries = [
     cca3: "XKX",
     idd: "383",
     flag: "🇽🇰",
+    isNationality: true,
   },
   {
     name: "République démocratique du Congo",
@@ -983,6 +1122,7 @@ const readonlyCountries = [
     cca3: "COD",
     idd: "243",
     flag: "🇨🇩",
+    isNationality: true,
   },
   {
     name: "République du Congo",
@@ -990,6 +1130,7 @@ const readonlyCountries = [
     cca3: "COG",
     idd: "242",
     flag: "🇨🇬",
+    isNationality: true,
   },
   {
     name: "România",
@@ -997,6 +1138,7 @@ const readonlyCountries = [
     cca3: "ROU",
     idd: "40",
     flag: "🇷🇴",
+    isNationality: true,
   },
   {
     name: "Rwanda",
@@ -1004,6 +1146,7 @@ const readonlyCountries = [
     cca3: "RWA",
     idd: "250",
     flag: "🇷🇼",
+    isNationality: true,
   },
   {
     name: "Saint Kitts and Nevis",
@@ -1011,6 +1154,7 @@ const readonlyCountries = [
     cca3: "KNA",
     idd: "1869",
     flag: "🇰🇳",
+    isNationality: true,
   },
   {
     name: "Saint Lucia",
@@ -1018,6 +1162,7 @@ const readonlyCountries = [
     cca3: "LCA",
     idd: "1758",
     flag: "🇱🇨",
+    isNationality: true,
   },
   {
     name: "Saint Vincent and the Grenadines",
@@ -1025,6 +1170,7 @@ const readonlyCountries = [
     cca3: "VCT",
     idd: "1784",
     flag: "🇻🇨",
+    isNationality: true,
   },
   {
     name: "Saint-Barthélemy",
@@ -1032,6 +1178,7 @@ const readonlyCountries = [
     cca3: "BLM",
     idd: "590",
     flag: "🇧🇱",
+    isNationality: false,
   },
   {
     name: "Saint-Martin",
@@ -1039,6 +1186,7 @@ const readonlyCountries = [
     cca3: "MAF",
     idd: "590",
     flag: "🇲🇫",
+    isNationality: false,
   },
   {
     name: "Saint-Pierre-et-Miquelon",
@@ -1046,6 +1194,7 @@ const readonlyCountries = [
     cca3: "SPM",
     idd: "508",
     flag: "🇵🇲",
+    isNationality: false,
   },
   {
     name: "Samoa",
@@ -1053,6 +1202,7 @@ const readonlyCountries = [
     cca3: "WSM",
     idd: "685",
     flag: "🇼🇸",
+    isNationality: true,
   },
   {
     name: "San Marino",
@@ -1060,6 +1210,7 @@ const readonlyCountries = [
     cca3: "SMR",
     idd: "378",
     flag: "🇸🇲",
+    isNationality: true,
   },
   {
     name: "São Tomé e Príncipe",
@@ -1067,6 +1218,7 @@ const readonlyCountries = [
     cca3: "STP",
     idd: "239",
     flag: "🇸🇹",
+    isNationality: true,
   },
   {
     name: "Schweiz",
@@ -1074,6 +1226,7 @@ const readonlyCountries = [
     cca3: "CHE",
     idd: "41",
     flag: "🇨🇭",
+    isNationality: true,
   },
   {
     name: "Sénégal",
@@ -1081,6 +1234,7 @@ const readonlyCountries = [
     cca3: "SEN",
     idd: "221",
     flag: "🇸🇳",
+    isNationality: true,
   },
   {
     name: "Seychelles",
@@ -1088,6 +1242,7 @@ const readonlyCountries = [
     cca3: "SYC",
     idd: "248",
     flag: "🇸🇨",
+    isNationality: true,
   },
   {
     name: "Shqipëria",
@@ -1095,6 +1250,7 @@ const readonlyCountries = [
     cca3: "ALB",
     idd: "355",
     flag: "🇦🇱",
+    isNationality: true,
   },
   {
     name: "Sierra Leone",
@@ -1102,6 +1258,7 @@ const readonlyCountries = [
     cca3: "SLE",
     idd: "232",
     flag: "🇸🇱",
+    isNationality: true,
   },
   {
     name: "Singapore",
@@ -1109,6 +1266,7 @@ const readonlyCountries = [
     cca3: "SGP",
     idd: "65",
     flag: "🇸🇬",
+    isNationality: true,
   },
   {
     name: "Slovenija",
@@ -1116,6 +1274,7 @@ const readonlyCountries = [
     cca3: "SVN",
     idd: "386",
     flag: "🇸🇮",
+    isNationality: true,
   },
   {
     name: "Slovensko",
@@ -1123,6 +1282,7 @@ const readonlyCountries = [
     cca3: "SVK",
     idd: "421",
     flag: "🇸🇰",
+    isNationality: true,
   },
   {
     name: "Solomon Islands",
@@ -1130,6 +1290,7 @@ const readonlyCountries = [
     cca3: "SLB",
     idd: "677",
     flag: "🇸🇧",
+    isNationality: true,
   },
   {
     name: "Soomaaliya",
@@ -1137,6 +1298,7 @@ const readonlyCountries = [
     cca3: "SOM",
     idd: "252",
     flag: "🇸🇴",
+    isNationality: true,
   },
   {
     name: "South Africa",
@@ -1144,6 +1306,7 @@ const readonlyCountries = [
     cca3: "ZAF",
     idd: "27",
     flag: "🇿🇦",
+    isNationality: true,
   },
   {
     name: "South Georgia",
@@ -1151,6 +1314,7 @@ const readonlyCountries = [
     cca3: "SGS",
     idd: "500",
     flag: "🇬🇸",
+    isNationality: false,
   },
   {
     name: "South Sudan",
@@ -1158,6 +1322,7 @@ const readonlyCountries = [
     cca3: "SSD",
     idd: "211",
     flag: "🇸🇸",
+    isNationality: true,
   },
   {
     name: "śrī laṃkāva",
@@ -1165,6 +1330,7 @@ const readonlyCountries = [
     cca3: "LKA",
     idd: "94",
     flag: "🇱🇰",
+    isNationality: true,
   },
   {
     name: "Suomi",
@@ -1172,6 +1338,7 @@ const readonlyCountries = [
     cca3: "FIN",
     idd: "358",
     flag: "🇫🇮",
+    isNationality: true,
   },
   {
     name: "Suriname",
@@ -1179,6 +1346,7 @@ const readonlyCountries = [
     cca3: "SUR",
     idd: "597",
     flag: "🇸🇷",
+    isNationality: true,
   },
   {
     name: "Sverige",
@@ -1186,6 +1354,7 @@ const readonlyCountries = [
     cca3: "SWE",
     idd: "46",
     flag: "🇸🇪",
+    isNationality: true,
   },
   {
     name: "Swaziland",
@@ -1193,6 +1362,7 @@ const readonlyCountries = [
     cca3: "SWZ",
     idd: "268",
     flag: "🇸🇿",
+    isNationality: true,
   },
   {
     name: "Tanzania",
@@ -1200,6 +1370,7 @@ const readonlyCountries = [
     cca3: "TZA",
     idd: "255",
     flag: "🇹🇿",
+    isNationality: true,
   },
   {
     name: "Tchad",
@@ -1207,6 +1378,7 @@ const readonlyCountries = [
     cca3: "TCD",
     idd: "235",
     flag: "🇹🇩",
+    isNationality: true,
   },
   {
     name: "Terres antarctiques françaises",
@@ -1214,6 +1386,7 @@ const readonlyCountries = [
     cca3: "ATF",
     idd: "262",
     flag: "🇹🇫",
+    isNationality: false,
   },
   {
     name: "Timor-Leste",
@@ -1221,6 +1394,7 @@ const readonlyCountries = [
     cca3: "TLS",
     idd: "670",
     flag: "🇹🇱",
+    isNationality: true,
   },
   {
     name: "Togo",
@@ -1228,6 +1402,7 @@ const readonlyCountries = [
     cca3: "TGO",
     idd: "228",
     flag: "🇹🇬",
+    isNationality: true,
   },
   {
     name: "Tonga",
@@ -1235,6 +1410,7 @@ const readonlyCountries = [
     cca3: "TON",
     idd: "676",
     flag: "🇹🇴",
+    isNationality: true,
   },
   {
     name: "Trinidad and Tobago",
@@ -1242,6 +1418,7 @@ const readonlyCountries = [
     cca3: "TTO",
     idd: "1868",
     flag: "🇹🇹",
+    isNationality: true,
   },
   {
     name: "Türkiye",
@@ -1249,6 +1426,7 @@ const readonlyCountries = [
     cca3: "TUR",
     idd: "90",
     flag: "🇹🇷",
+    isNationality: true,
   },
   {
     name: "Türkmenistan",
@@ -1256,6 +1434,7 @@ const readonlyCountries = [
     cca3: "TKM",
     idd: "993",
     flag: "🇹🇲",
+    isNationality: true,
   },
   {
     name: "Turks and Caicos Islands",
@@ -1263,6 +1442,7 @@ const readonlyCountries = [
     cca3: "TCA",
     idd: "1649",
     flag: "🇹🇨",
+    isNationality: false,
   },
   {
     name: "Tuvalu",
@@ -1270,6 +1450,7 @@ const readonlyCountries = [
     cca3: "TUV",
     idd: "688",
     flag: "🇹🇻",
+    isNationality: true,
   },
   {
     name: "Uganda",
@@ -1277,6 +1458,7 @@ const readonlyCountries = [
     cca3: "UGA",
     idd: "256",
     flag: "🇺🇬",
+    isNationality: true,
   },
   {
     name: "United Kingdom",
@@ -1284,6 +1466,7 @@ const readonlyCountries = [
     cca3: "GBR",
     idd: "44",
     flag: "🇬🇧",
+    isNationality: true,
   },
   {
     name: "United States",
@@ -1291,6 +1474,7 @@ const readonlyCountries = [
     cca3: "USA",
     idd: "1",
     flag: "🇺🇸",
+    isNationality: true,
   },
   {
     name: "United States Minor Outlying Islands",
@@ -1298,6 +1482,7 @@ const readonlyCountries = [
     cca3: "UMI",
     idd: "1",
     flag: "🇺🇲",
+    isNationality: false,
   },
   {
     name: "United States Virgin Islands",
@@ -1305,6 +1490,7 @@ const readonlyCountries = [
     cca3: "VIR",
     idd: "1340",
     flag: "🇻🇮",
+    isNationality: false,
   },
   {
     name: "Uruguay",
@@ -1312,6 +1498,7 @@ const readonlyCountries = [
     cca3: "URY",
     idd: "598",
     flag: "🇺🇾",
+    isNationality: true,
   },
   {
     name: "Vanuatu",
@@ -1319,6 +1506,7 @@ const readonlyCountries = [
     cca3: "VUT",
     idd: "678",
     flag: "🇻🇺",
+    isNationality: true,
   },
   {
     name: "Vaticano",
@@ -1326,6 +1514,7 @@ const readonlyCountries = [
     cca3: "VAT",
     idd: "379",
     flag: "🇻🇦",
+    isNationality: true,
   },
   {
     name: "Venezuela",
@@ -1333,6 +1522,7 @@ const readonlyCountries = [
     cca3: "VEN",
     idd: "58",
     flag: "🇻🇪",
+    isNationality: true,
   },
   {
     name: "Việt Nam",
@@ -1340,6 +1530,7 @@ const readonlyCountries = [
     cca3: "VNM",
     idd: "84",
     flag: "🇻🇳",
+    isNationality: true,
   },
   {
     name: "Wallis et Futuna",
@@ -1347,6 +1538,7 @@ const readonlyCountries = [
     cca3: "WLF",
     idd: "681",
     flag: "🇼🇫",
+    isNationality: false,
   },
   {
     name: "Zambia",
@@ -1354,6 +1546,7 @@ const readonlyCountries = [
     cca3: "ZMB",
     idd: "260",
     flag: "🇿🇲",
+    isNationality: true,
   },
   {
     name: "Zimbabwe",
@@ -1361,6 +1554,7 @@ const readonlyCountries = [
     cca3: "ZWE",
     idd: "263",
     flag: "🇿🇼",
+    isNationality: true,
   },
   {
     name: "ʼbrug-yul",
@@ -1368,6 +1562,7 @@ const readonlyCountries = [
     cca3: "BTN",
     idd: "975",
     flag: "🇧🇹",
+    isNationality: true,
   },
   {
     name: "Ελλάδα",
@@ -1375,6 +1570,7 @@ const readonlyCountries = [
     cca3: "GRC",
     idd: "30",
     flag: "🇬🇷",
+    isNationality: true,
   },
   {
     name: "Κύπρος",
@@ -1382,6 +1578,7 @@ const readonlyCountries = [
     cca3: "CYP",
     idd: "357",
     flag: "🇨🇾",
+    isNationality: true,
   },
   {
     name: "Белару́сь",
@@ -1389,6 +1586,7 @@ const readonlyCountries = [
     cca3: "BLR",
     idd: "375",
     flag: "🇧🇾",
+    isNationality: true,
   },
   {
     name: "България",
@@ -1396,6 +1594,7 @@ const readonlyCountries = [
     cca3: "BGR",
     idd: "359",
     flag: "🇧🇬",
+    isNationality: true,
   },
   {
     name: "Кыргызстан",
@@ -1403,6 +1602,7 @@ const readonlyCountries = [
     cca3: "KGZ",
     idd: "996",
     flag: "🇰🇬",
+    isNationality: true,
   },
   {
     name: "Македонија",
@@ -1410,6 +1610,7 @@ const readonlyCountries = [
     cca3: "MKD",
     idd: "389",
     flag: "🇲🇰",
+    isNationality: true,
   },
   {
     name: "Монгол улс",
@@ -1417,6 +1618,7 @@ const readonlyCountries = [
     cca3: "MNG",
     idd: "976",
     flag: "🇲🇳",
+    isNationality: true,
   },
   {
     name: "Россия",
@@ -1424,6 +1626,7 @@ const readonlyCountries = [
     cca3: "RUS",
     idd: "7",
     flag: "🇷🇺",
+    isNationality: true,
   },
   {
     name: "Србија",
@@ -1431,6 +1634,7 @@ const readonlyCountries = [
     cca3: "SRB",
     idd: "381",
     flag: "🇷🇸",
+    isNationality: true,
   },
   {
     name: "Тоҷикистон",
@@ -1438,6 +1642,7 @@ const readonlyCountries = [
     cca3: "TJK",
     idd: "992",
     flag: "🇹🇯",
+    isNationality: true,
   },
   {
     name: "Україна",
@@ -1445,6 +1650,7 @@ const readonlyCountries = [
     cca3: "UKR",
     idd: "380",
     flag: "🇺🇦",
+    isNationality: true,
   },
   {
     name: "Црна Гора",
@@ -1452,6 +1658,7 @@ const readonlyCountries = [
     cca3: "MNE",
     idd: "382",
     flag: "🇲🇪",
+    isNationality: true,
   },
   {
     name: "Հայաստան",
@@ -1459,6 +1666,7 @@ const readonlyCountries = [
     cca3: "ARM",
     idd: "374",
     flag: "🇦🇲",
+    isNationality: true,
   },
   {
     name: "יִשְׂרָאֵל",
@@ -1466,6 +1674,7 @@ const readonlyCountries = [
     cca3: "ISR",
     idd: "972",
     flag: "🇮🇱",
+    isNationality: true,
   },
   {
     name: "افغانستان",
@@ -1473,6 +1682,7 @@ const readonlyCountries = [
     cca3: "AFG",
     idd: "93",
     flag: "🇦🇫",
+    isNationality: true,
   },
   {
     name: "الأردن",
@@ -1480,6 +1690,7 @@ const readonlyCountries = [
     cca3: "JOR",
     idd: "962",
     flag: "🇯🇴",
+    isNationality: true,
   },
   {
     name: "الجزائر",
@@ -1487,6 +1698,7 @@ const readonlyCountries = [
     cca3: "DZA",
     idd: "213",
     flag: "🇩🇿",
+    isNationality: true,
   },
   {
     name: "السودان",
@@ -1494,6 +1706,7 @@ const readonlyCountries = [
     cca3: "SDN",
     idd: "249",
     flag: "🇸🇩",
+    isNationality: true,
   },
   {
     name: "الصحراء الغربية",
@@ -1501,6 +1714,7 @@ const readonlyCountries = [
     cca3: "ESH",
     idd: "212",
     flag: "🇪🇭",
+    isNationality: false,
   },
   {
     name: "العراق",
@@ -1508,6 +1722,7 @@ const readonlyCountries = [
     cca3: "IRQ",
     idd: "964",
     flag: "🇮🇶",
+    isNationality: true,
   },
   {
     name: "العربية السعودية",
@@ -1515,6 +1730,7 @@ const readonlyCountries = [
     cca3: "SAU",
     idd: "966",
     flag: "🇸🇦",
+    isNationality: true,
   },
   {
     name: "الكويت",
@@ -1522,6 +1738,7 @@ const readonlyCountries = [
     cca3: "KWT",
     idd: "965",
     flag: "🇰🇼",
+    isNationality: true,
   },
   {
     name: "المغرب",
@@ -1529,6 +1746,7 @@ const readonlyCountries = [
     cca3: "MAR",
     idd: "212",
     flag: "🇲🇦",
+    isNationality: true,
   },
   {
     name: "اليَمَن",
@@ -1536,6 +1754,7 @@ const readonlyCountries = [
     cca3: "YEM",
     idd: "967",
     flag: "🇾🇪",
+    isNationality: true,
   },
   {
     name: "ایران",
@@ -1543,6 +1762,7 @@ const readonlyCountries = [
     cca3: "IRN",
     idd: "98",
     flag: "🇮🇷",
+    isNationality: true,
   },
   {
     name: "تونس",
@@ -1550,6 +1770,7 @@ const readonlyCountries = [
     cca3: "TUN",
     idd: "216",
     flag: "🇹🇳",
+    isNationality: true,
   },
   {
     name: "دولة الإمارات العربية المتحدة",
@@ -1557,6 +1778,7 @@ const readonlyCountries = [
     cca3: "ARE",
     idd: "971",
     flag: "🇦🇪",
+    isNationality: true,
   },
   {
     name: "سوريا",
@@ -1564,6 +1786,7 @@ const readonlyCountries = [
     cca3: "SYR",
     idd: "963",
     flag: "🇸🇾",
+    isNationality: true,
   },
   {
     name: "عمان",
@@ -1571,6 +1794,7 @@ const readonlyCountries = [
     cca3: "OMN",
     idd: "968",
     flag: "🇴🇲",
+    isNationality: true,
   },
   {
     name: "فلسطين",
@@ -1578,6 +1802,7 @@ const readonlyCountries = [
     cca3: "PSE",
     idd: "970",
     flag: "🇵🇸",
+    isNationality: true,
   },
   {
     name: "قطر",
@@ -1585,6 +1810,7 @@ const readonlyCountries = [
     cca3: "QAT",
     idd: "974",
     flag: "🇶🇦",
+    isNationality: true,
   },
   {
     name: "لبنان",
@@ -1592,6 +1818,7 @@ const readonlyCountries = [
     cca3: "LBN",
     idd: "961",
     flag: "🇱🇧",
+    isNationality: true,
   },
   {
     name: "مصر‎",
@@ -1599,6 +1826,7 @@ const readonlyCountries = [
     cca3: "EGY",
     idd: "20",
     flag: "🇪🇬",
+    isNationality: true,
   },
   {
     name: "موريتانيا",
@@ -1606,6 +1834,7 @@ const readonlyCountries = [
     cca3: "MRT",
     idd: "222",
     flag: "🇲🇷",
+    isNationality: true,
   },
   {
     name: "नपल",
@@ -1613,6 +1842,7 @@ const readonlyCountries = [
     cca3: "NPL",
     idd: "977",
     flag: "🇳🇵",
+    isNationality: true,
   },
   {
     name: "भारत",
@@ -1620,6 +1850,7 @@ const readonlyCountries = [
     cca3: "IND",
     idd: "91",
     flag: "🇮🇳",
+    isNationality: true,
   },
   {
     name: "ประเทศไทย",
@@ -1627,6 +1858,7 @@ const readonlyCountries = [
     cca3: "THA",
     idd: "66",
     flag: "🇹🇭",
+    isNationality: true,
   },
   {
     name: "ສປປລາວ",
@@ -1634,6 +1866,7 @@ const readonlyCountries = [
     cca3: "LAO",
     idd: "856",
     flag: "🇱🇦",
+    isNationality: true,
   },
   {
     name: "မြန်မာ",
@@ -1641,6 +1874,7 @@ const readonlyCountries = [
     cca3: "MMR",
     idd: "95",
     flag: "🇲🇲",
+    isNationality: true,
   },
   {
     name: "საქართველო",
@@ -1648,6 +1882,7 @@ const readonlyCountries = [
     cca3: "GEO",
     idd: "995",
     flag: "🇬🇪",
+    isNationality: true,
   },
   {
     name: "ኢትዮጵያ",
@@ -1655,6 +1890,7 @@ const readonlyCountries = [
     cca3: "ETH",
     idd: "251",
     flag: "🇪🇹",
+    isNationality: true,
   },
   {
     name: "ኤርትራ",
@@ -1662,6 +1898,7 @@ const readonlyCountries = [
     cca3: "ERI",
     idd: "291",
     flag: "🇪🇷",
+    isNationality: true,
   },
   {
     name: "‏البحرين",
@@ -1669,6 +1906,7 @@ const readonlyCountries = [
     cca3: "BHR",
     idd: "973",
     flag: "🇧🇭",
+    isNationality: true,
   },
   {
     name: "‏ليبيا",
@@ -1676,6 +1914,7 @@ const readonlyCountries = [
     cca3: "LBY",
     idd: "218",
     flag: "🇱🇾",
+    isNationality: true,
   },
   {
     name: "中国",
@@ -1683,6 +1922,7 @@ const readonlyCountries = [
     cca3: "CHN",
     idd: "86",
     flag: "🇨🇳",
+    isNationality: true,
   },
   {
     name: "日本",
@@ -1690,6 +1930,7 @@ const readonlyCountries = [
     cca3: "JPN",
     idd: "81",
     flag: "🇯🇵",
+    isNationality: true,
   },
   {
     name: "澳門",
@@ -1697,6 +1938,7 @@ const readonlyCountries = [
     cca3: "MAC",
     idd: "853",
     flag: "🇲🇴",
+    isNationality: true,
   },
   {
     name: "臺灣",
@@ -1704,6 +1946,7 @@ const readonlyCountries = [
     cca3: "TWN",
     idd: "886",
     flag: "🇹🇼",
+    isNationality: true,
   },
   {
     name: "香港",
@@ -1711,6 +1954,7 @@ const readonlyCountries = [
     cca3: "HKG",
     idd: "852",
     flag: "🇭🇰",
+    isNationality: true,
   },
   {
     name: "대한민국",
@@ -1718,6 +1962,7 @@ const readonlyCountries = [
     cca3: "KOR",
     idd: "82",
     flag: "🇰🇷",
+    isNationality: true,
   },
   {
     name: "북한",
@@ -1725,6 +1970,7 @@ const readonlyCountries = [
     cca3: "PRK",
     idd: "850",
     flag: "🇰🇵",
+    isNationality: true,
   },
 ] as const;
 
