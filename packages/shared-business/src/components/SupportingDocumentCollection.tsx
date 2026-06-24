@@ -467,7 +467,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
 
       <LakeModal
         visible={showSwornStatementModal}
-        title={swornStatementPurpose?.label ?? ""}
+        title={swornStatementPurpose?.label ?? "Sworn Statement"}
         icon="document-regular"
         onPressClose={() => setShowSwornStatementModal(false)}
       >
