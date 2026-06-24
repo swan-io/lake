@@ -18,7 +18,7 @@ import { match, P } from "ts-pattern";
 import { CountryCCA3 } from "../constants/countries";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
 import { SwanFile } from "../utils/SwanFile";
-import { isTranslationKey, locale, t } from "../utils/i18n";
+import { locale, t } from "../utils/i18n";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 
@@ -177,18 +177,6 @@ const getSupportLink = (
         "https://support.swan.io/hc/en-150/articles/22620756787869-Proof-of-company-registration",
     );
 
-// Fallback helpers kept temporarily as a safety net
-// Remove after ~1 month if backend reliably returns translated label/description for every purpose.
-const getSupportingDocumentPurposeLabel = (purpose: string) => {
-  const key = `supportingDocuments.purpose.${purpose}`;
-  return isTranslationKey(key) ? t(key) : purpose;
-};
-
-const getSupportingDocumentPurposeDescriptionLabel = (purpose: string) => {
-  const key = `supportingDocuments.purpose.${purpose}.description`;
-  return isTranslationKey(key) ? t(key) : "";
-};
-
 export const SupportingDocumentCollection = <Purpose extends string>({
   ref,
   documents,
@@ -235,8 +223,8 @@ export const SupportingDocumentCollection = <Purpose extends string>({
         isRequired,
         areAllDocumentsValidated,
         priority,
-        label: info?.label ?? getSupportingDocumentPurposeLabel(purpose),
-        description: info?.description ?? getSupportingDocumentPurposeDescriptionLabel(purpose),
+        label: info?.label ?? purpose,
+        description: info?.description,
         purposeDetails: info?.purposeDetails,
       };
     });
@@ -281,6 +269,10 @@ export const SupportingDocumentCollection = <Purpose extends string>({
     }
     return true;
   });
+
+  const swornStatementPurpose = orderedDocumentPurposes.find(
+    ({ purpose }) => (purpose as string) === "SwornStatement",
+  );
 
   return (
     <Form>
@@ -475,11 +467,11 @@ export const SupportingDocumentCollection = <Purpose extends string>({
 
       <LakeModal
         visible={showSwornStatementModal}
-        title={t("supportingDocuments.purpose.SwornStatement")}
+        title={swornStatementPurpose?.label ?? ""}
         icon="document-regular"
         onPressClose={() => setShowSwornStatementModal(false)}
       >
-        <LakeText>{t("supportingDocuments.purpose.SwornStatement.description")}</LakeText>
+        <LakeText>{swornStatementPurpose?.description ?? ""}</LakeText>
         <Space height={16} />
 
         <LakeButtonGroup paddingBottom={0}>
