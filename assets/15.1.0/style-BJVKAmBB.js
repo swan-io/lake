@@ -1,2 +1,0 @@
-import{i as e}from"./preload-helper-CxZGalNS.js";import{at as t,it as n,st as r,ut as i}from"./ScrollView-DfTIZO05.js";var a,o=e((()=>{r(),a=(e,r)=>({...e===`mono`?{fontFamily:t.iban}:i,color:n.gray[900],fontSize:r,lineHeight:r*1.25,fontWeight:`400`})}));export{o as n,a as t};
-//# sourceMappingURL=style-BJVKAmBB.js.map
