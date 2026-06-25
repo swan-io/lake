@@ -1,0 +1,2 @@
+import{c as e,i as t}from"./preload-helper-B5ZmtDuU.js";import{o as n}from"./iframe-Cd4aDr17.js";var r,i,a=t((()=>{r=e(n()),i=e=>{let[t,n]=(0,r.useState)(e);return[t,(0,r.useMemo)(()=>({on:()=>n(!0),off:()=>n(!1),toggle:()=>n(e=>!e)}),[])]}}));export{i as n,a as t};
+//# sourceMappingURL=useBoolean-pVVs2G-h.js.map
