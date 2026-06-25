@@ -1,0 +1,14 @@
+import{c as e,i as t}from"./preload-helper-DetvrYqq.js";import{o as n}from"./iframe-C9KkVKmz.js";import{St as r,U as i,bt as a,g as o,h as s,ht as c,i as l,o as u,r as d,s as f}from"./ScrollView-BHICJ1Y2.js";import{n as p,t as m}from"./commonStyles-BUpdvJ1w.js";import{n as h,r as g,t as _}from"./_StoriesComponents-DnrdVQQY.js";var v,y,b,x,S=t((()=>{v=e(n()),c(),p(),y=i(),b=r.create({container:{paddingHorizontal:10,zIndex:1}}),x=({min:e,max:t,value:n,step:r,disabled:i=!1,style:o,onChange:s})=>(0,y.jsx)(a,{style:[b.container,o],children:(0,y.jsx)(`input`,{type:`range`,min:e,max:t,value:n,step:r,disabled:i,onChange:(0,v.useCallback)(e=>s(Number(e.target.value)),[s]),style:{backgroundSize:`${(n-e)/(t-e)*100}% 100%`,...i?m.disabled:{}}})}),x.__docgenInfo={description:``,methods:[],displayName:`LakeSlider`,props:{min:{required:!0,tsType:{name:`number`},description:``},max:{required:!0,tsType:{name:`number`},description:``},value:{required:!0,tsType:{name:`number`},description:``},step:{required:!0,tsType:{name:`number`},description:``},disabled:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},style:{required:!1,tsType:{name:`ViewProps["style"]`,raw:`ViewProps["style"]`},description:``},onChange:{required:!0,tsType:{name:`signature`,type:`function`,raw:`(value: number) => void`,signature:{arguments:[{type:{name:`number`},name:`value`}],return:{name:`void`}}},description:``}}}})),C,w,T,E,D,O,k;t((()=>{C=e(n()),c(),o(),S(),f(),l(),p(),g(),w=i(),T=r.create({slider:{...m.fill,maxWidth:800}}),E={title:`Forms/Slider`,component:x},D=e=>{let[t,n]=(0,C.useState)(0);return(0,w.jsxs)(s,{direction:`row`,alignItems:`center`,children:[(0,w.jsx)(x,{...e,value:t,onChange:n,style:T.slider}),(0,w.jsx)(d,{width:8}),(0,w.jsx)(u,{children:t})]})},O=()=>(0,w.jsxs)(_,{title:`Ranges`,children:[(0,w.jsx)(h,{title:`from 0 to 100`,children:(0,w.jsx)(D,{min:0,max:100,step:1})}),(0,w.jsx)(h,{title:`from -20 to 50`,children:(0,w.jsx)(D,{min:-20,max:50,step:1})}),(0,w.jsx)(h,{title:`with steps 10 by 10`,children:(0,w.jsx)(D,{min:0,max:100,step:10})})]}),O.__docgenInfo={description:``,methods:[],displayName:`Ranges`},O.parameters={...O.parameters,docs:{...O.parameters?.docs,source:{originalSource:`() => <StoryBlock title="Ranges">
+    <StoryPart title="from 0 to 100">
+      <EditableSlider min={0} max={100} step={1} />
+    </StoryPart>
+
+    <StoryPart title="from -20 to 50">
+      <EditableSlider min={-20} max={50} step={1} />
+    </StoryPart>
+
+    <StoryPart title="with steps 10 by 10">
+      <EditableSlider min={0} max={100} step={10} />
+    </StoryPart>
+  </StoryBlock>`,...O.parameters?.docs?.source}}},k=[`Ranges`]}))();export{O as Ranges,k as __namedExportsOrder,E as default};
+//# sourceMappingURL=Slider.stories-BkpeYjCD.js.map
