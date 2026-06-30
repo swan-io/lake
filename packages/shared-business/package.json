@@ -41,6 +41,7 @@
     "iban": "^0.0.14",
     "react-atomic-state": "^2.1.0",
     "react-dropzone": "^15.0.0",
+    "prism-react-renderer": "^2.4.1",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.9.0",
     "uuid": "^14.0.0"
