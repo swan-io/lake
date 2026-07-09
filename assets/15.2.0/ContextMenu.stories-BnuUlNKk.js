@@ -1,0 +1,22 @@
+import{c as e,i as t}from"./preload-helper-B45gAKPr.js";import{o as n}from"./iframe-lhskn-nq.js";import{U as r,ht as i,i as a,it as o,kt as s,o as c,pt as l,r as u,s as d,st as f,wt as p}from"./ScrollView-CDZwE4p9.js";import{n as m,t as h}from"./useDisclosure-3Fhkx2w5.js";import{r as g,t as _}from"./Pressable-ChA-7ARC.js";import{r as v,t as y}from"./LakeButton-CiAHUeEm.js";import{n as b,t as x}from"./Separator-DXyAhIWU.js";import{n as S,r as C,t as w}from"./_StoriesComponents-DcLheBv-.js";import{n as T,t as E}from"./function-BJypOE8H.js";import{n as D,t as O}from"./Popover-IR8A38oO.js";var k,A,j,M,N,P,F=t((()=>{k=e(n()),i(),f(),h(),E(),v(),d(),D(),g(),a(),A=r(),j=s.create({container:{minWidth:120},menuItem:{flexDirection:`row`,alignItems:`center`,paddingHorizontal:l[24],paddingVertical:l[12]},dot:{width:8,height:8,borderRadius:4,backgroundColor:o.negative[500]}}),M=(0,k.createContext)({close:T}),N=({children:e,ariaLabel:t,withPill:n=!1,verticalPlacement:r})=>{let[i,{open:a,close:o}]=m(!1),s=(0,k.useRef)(null);return(0,A.jsxs)(M.Provider,{value:{close:o},children:[(0,A.jsx)(y,{ref:s,mode:`tertiary`,size:`small`,icon:`more-horizontal-filled`,color:`gray`,onPress:a,ariaLabel:t,pill:n}),(0,A.jsx)(O,{referenceRef:s,visible:i,onDismiss:o,verticalPlacement:r,children:(0,A.jsx)(p,{style:j.container,children:e})})]})},P=({children:e,withPill:t=!1,onPress:n})=>{let{close:r}=(0,k.useContext)(M);return(0,A.jsxs)(_,{style:j.menuItem,onPress:()=>{r(),n()},children:[(0,A.jsx)(c,{variant:`regular`,color:o.gray[700],children:e}),t?(0,A.jsxs)(A.Fragment,{children:[(0,A.jsx)(u,{width:8}),(0,A.jsx)(p,{style:j.dot})]}):null]})},N.__docgenInfo={description:``,methods:[],displayName:`ContextMenu`,props:{children:{required:!0,tsType:{name:`ReactNode`},description:``},ariaLabel:{required:!0,tsType:{name:`string`},description:``},withPill:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},verticalPlacement:{required:!1,tsType:{name:`union`,raw:`"above" | "below"`,elements:[{name:`literal`,value:`"above"`},{name:`literal`,value:`"below"`}]},description:``}}},P.__docgenInfo={description:``,methods:[],displayName:`ContextMenuItem`,props:{children:{required:!0,tsType:{name:`string`},description:``},withPill:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},onPress:{required:!0,tsType:{name:`signature`,type:`function`,raw:`() => void`,signature:{arguments:[],return:{name:`void`}}},description:``}}}})),I,L,R,z;t((()=>{F(),b(),C(),I=r(),L={title:`Interactivity/ContextMenu`,component:N},R=()=>(0,I.jsxs)(w,{title:`ContextMenu`,children:[(0,I.jsx)(S,{title:`Default`,children:(0,I.jsxs)(N,{ariaLabel:`Actions`,children:[(0,I.jsx)(P,{onPress:()=>console.log(`Edit`),children:`Edit`}),(0,I.jsx)(x,{}),(0,I.jsx)(P,{onPress:()=>console.log(`Remove`),children:`Remove`})]})}),(0,I.jsx)(S,{title:`With missing info`,children:(0,I.jsxs)(N,{ariaLabel:`Actions`,withPill:!0,children:[(0,I.jsx)(P,{withPill:!0,onPress:()=>console.log(`Edit`),children:`Edit`}),(0,I.jsx)(x,{}),(0,I.jsx)(P,{onPress:()=>console.log(`Remove`),children:`Remove`})]})})]}),R.__docgenInfo={description:``,methods:[],displayName:`Default`},R.parameters={...R.parameters,docs:{...R.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="ContextMenu">
+      <StoryPart title="Default">
+        <ContextMenu ariaLabel="Actions">
+          <ContextMenuItem onPress={() => console.log("Edit")}>Edit</ContextMenuItem>
+          <Separator />
+          <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
+        </ContextMenu>
+      </StoryPart>
+
+      <StoryPart title="With missing info">
+        <ContextMenu ariaLabel="Actions" withPill={true}>
+          <ContextMenuItem withPill={true} onPress={() => console.log("Edit")}>
+            Edit
+          </ContextMenuItem>
+          <Separator />
+          <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
+        </ContextMenu>
+      </StoryPart>
+    </StoryBlock>;
+}`,...R.parameters?.docs?.source}}},z=[`Default`]}))();export{R as Default,z as __namedExportsOrder,L as default};
+//# sourceMappingURL=ContextMenu.stories-BnuUlNKk.js.map
