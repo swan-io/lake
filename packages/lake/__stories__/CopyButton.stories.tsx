@@ -105,8 +105,9 @@ export const Variations = () => {
       >
         <LakeLabel
           label="Paste here"
-          render={() => (
+          render={id => (
             <LakeTextInput
+              id={id}
               value={pastedValue}
               onChange={event => setPastedValue(event.currentTarget.value)}
             />

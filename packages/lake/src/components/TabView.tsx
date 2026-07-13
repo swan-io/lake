@@ -700,7 +700,7 @@ export const TabView = ({
     <Box
       alignItems="center"
       direction="row"
-      role="tablist"
+      role="navigation"
       ref={containerRef}
       style={[styles.container, sticky && styles.sticky, { paddingHorizontal: padding }]}
     >

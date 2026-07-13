@@ -54,6 +54,7 @@ export const Accordion = ({ children, trigger, style, contentContainerStyle }: P
     <View>
       <Pressable
         aria-controls={id}
+        role="button"
         aria-expanded={isOpen}
         onPress={toggle}
         style={[styles.trigger, style]}

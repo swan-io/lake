@@ -187,6 +187,7 @@ const Row = <T, ExtraInfo>({
   return (
     <View
       ref={containerRef}
+      role="row"
       style={[
         styles.segment,
         large && styles.segmentLarge,
@@ -331,6 +332,7 @@ export const PlainListView = <T, ExtraInfo>({
 
   return (
     <ResponsiveContainer
+      role="table"
       style={withoutScroll ? (isEmpty ? commonStyles.fill : undefined) : styles.root}
       breakpoint={breakpoint}
     >
@@ -343,6 +345,7 @@ export const PlainListView = <T, ExtraInfo>({
                 <>
                   {!isEmpty && large ? (
                     <View
+                      role="row"
                       style={[
                         styles.segment,
                         styles.segmentLarge,
@@ -390,7 +393,7 @@ export const PlainListView = <T, ExtraInfo>({
                                 },
                               ]}
                             >
-                              <LakeHeading level={3} variant="h3">
+                              <LakeHeading level="none" variant="h3">
                                 {groupName}
                               </LakeHeading>
                             </View>
