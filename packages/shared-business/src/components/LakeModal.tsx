@@ -21,7 +21,7 @@ import {
   spacings,
 } from "@swan-io/lake/src/constants/design";
 import { useBodyClassName } from "@swan-io/lake/src/hooks/useBodyClassName";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useId, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { t } from "../utils/i18n";
 
@@ -151,6 +151,7 @@ export const LakeModal = ({
 
   onPressClose,
 }: LakeModalProps) => {
+  const titleId = useId();
   const [rootElement, setRootElement] = useState<Element | undefined>(() => undefined);
 
   useEffect(() => {
@@ -171,7 +172,14 @@ export const LakeModal = ({
 
   return (
     <Portal container={rootElement}>
-      <View aria-modal={true} style={[styles.container, !visible && styles.inert]}>
+      <View
+        role="dialog"
+        aria-modal={true}
+        aria-hidden={!visible}
+        // Use aria-labelledby only when content is rendered to associate the modal with its title for screen readers.
+        aria-labelledby={visible && title != null ? titleId : undefined}
+        style={[styles.container, !visible && styles.inert]}
+      >
         <TransitionView style={styles.fill} enter={styles.overlayEnter} leave={styles.overlayLeave}>
           {visible ? <View style={styles.overlay} /> : null}
         </TransitionView>
@@ -212,7 +220,7 @@ export const LakeModal = ({
 
                             {title != null ? (
                               <>
-                                <LakeHeading level={2} variant="h3">
+                                <LakeHeading id={titleId} level={2} variant="h3">
                                   {title}
                                 </LakeHeading>
 

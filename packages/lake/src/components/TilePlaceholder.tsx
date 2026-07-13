@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import { colors, radii } from "../constants/design";
+import { Space } from "./Space";
 import { Tile, TileGrid } from "./Tile";
 
 const styles = StyleSheet.create({
@@ -44,7 +45,9 @@ const styles = StyleSheet.create({
 
 export const TilePlaceholder = () => {
   return (
-    <Tile title={<View style={styles.placeholderTitle} />}>
+    <Tile>
+      <View style={styles.placeholderTitle} />
+      <Space height={24} />
       <View style={styles.content}>
         <View style={styles.placeholderText} />
         <View style={styles.placeholderText} />

@@ -565,7 +565,7 @@ export const VirtualizedList = <T, ExtraInfo>({
 
   const header = useMemo(() => {
     return (
-      <View style={[styles.headerRow, { height: headerHeight }]}>
+      <View role="row" style={[styles.headerRow, { height: headerHeight }]}>
         {Option.fromNullable(stickedToStartColumns)
           .map(columns => (
             <View
@@ -744,6 +744,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   return (
     <ScrollView
       ref={scrollViewRef}
+      role="table"
       both={true}
       style={[styles.container, { marginHorizontal }]}
       onScroll={onScroll}
@@ -890,6 +891,7 @@ const RawVirtualizedRow = <T, ExtraInfo>({
 
   return cloneElement(rootElement, {
     ref: elementRef,
+    role: "row",
     style: [
       styles.row,
       {

@@ -847,6 +847,7 @@ export const DatePicker = ({
               size="small"
               onPress={open}
               ariaLabel={t("common.open")}
+              ariaExpanded={isOpened}
             />
           }
           render={id => (
@@ -859,7 +860,6 @@ export const DatePicker = ({
                   value={value}
                   error={error}
                   onChange={onChange}
-                  ariaExpanded={isOpened}
                 />
               )}
             </Rifm>
@@ -1276,7 +1276,6 @@ export const DateRangePicker = ({
                   onChange={onChange}
                   error={error}
                   hideErrors={true}
-                  ariaExpanded={isOpened}
                 />
               )}
             </Rifm>
@@ -1304,7 +1303,6 @@ export const DateRangePicker = ({
                   onChange={onChange}
                   error={error}
                   hideErrors={true}
-                  ariaExpanded={isOpened}
                 />
               )}
             </Rifm>
@@ -1319,6 +1317,7 @@ export const DateRangePicker = ({
           size="small"
           onPress={open}
           ariaLabel={t("common.open")}
+          ariaExpanded={isOpened}
         />
       </Box>
 

@@ -40,8 +40,8 @@ export const Default = () => {
     <StoryBlock title="Icon">
       <LakeLabel
         label="Search"
-        render={() => (
-          <LakeTextInput icon="search-filled" value={search} onChangeText={setSearch} />
+        render={id => (
+          <LakeTextInput id={id} icon="search-filled" value={search} onChangeText={setSearch} />
         )}
       />
 
@@ -96,8 +96,8 @@ export const Bordered = ({ color }: BorderedArgs) => {
     >
       <LakeLabel
         label="Search"
-        render={() => (
-          <LakeTextInput icon="search-filled" value={search} onChangeText={setSearch} />
+        render={id => (
+          <LakeTextInput id={id} icon="search-filled" value={search} onChangeText={setSearch} />
         )}
       />
 

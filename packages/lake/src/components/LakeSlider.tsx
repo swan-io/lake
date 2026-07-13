@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  id?: string;
   min: number;
   max: number;
   value: number;
@@ -19,9 +20,19 @@ type Props = {
   onChange: (value: number) => void;
 };
 
-export const LakeSlider = ({ min, max, value, step, disabled = false, style, onChange }: Props) => (
+export const LakeSlider = ({
+  id,
+  min,
+  max,
+  value,
+  step,
+  disabled = false,
+  style,
+  onChange,
+}: Props) => (
   <View style={[styles.container, style]}>
     <input
+      id={id}
       type="range"
       min={min}
       max={max}

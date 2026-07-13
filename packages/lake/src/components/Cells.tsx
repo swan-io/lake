@@ -121,7 +121,7 @@ export const Cell = ({
   style,
   contentContainerStyle,
 }: CellProps) => (
-  <View style={[styles.cell, style]}>
+  <View role="cell" style={[styles.cell, style]}>
     <View
       style={[
         styles.cellContentContainer,

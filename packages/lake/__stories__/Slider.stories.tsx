@@ -3,6 +3,7 @@ import { ComponentProps, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Except } from "type-fest";
 import { Box } from "../src/components/Box";
+import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeSlider } from "../src/components/LakeSlider";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
@@ -36,15 +37,24 @@ const EditableSlider = (props: Except<ComponentProps<typeof LakeSlider>, "value"
 export const Ranges = () => (
   <StoryBlock title="Ranges">
     <StoryPart title="from 0 to 100">
-      <EditableSlider min={0} max={100} step={1} />
+      <LakeLabel
+        label="Label"
+        render={id => <EditableSlider id={id} min={0} max={100} step={1} />}
+      />
     </StoryPart>
 
     <StoryPart title="from -20 to 50">
-      <EditableSlider min={-20} max={50} step={1} />
+      <LakeLabel
+        label="Label"
+        render={id => <EditableSlider id={id} min={-20} max={50} step={1} />}
+      />
     </StoryPart>
 
     <StoryPart title="with steps 10 by 10">
-      <EditableSlider min={0} max={100} step={10} />
+      <LakeLabel
+        label="Label"
+        render={id => <EditableSlider id={id} min={0} max={100} step={10} />}
+      />
     </StoryPart>
   </StoryBlock>
 );
