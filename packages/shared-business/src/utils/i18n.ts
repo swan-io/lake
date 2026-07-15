@@ -216,3 +216,8 @@ export const translateError = (error: unknown) => {
 
   return t(isTranslationKey(key) ? key : "error.generic");
 };
+
+export const getRejectionReasonLabel = (reasonCode: string) => {
+  const key = `common.rejectionReason.${reasonCode}`;
+  return t(isTranslationKey(key) ? key : "common.rejectionReason.Other");
+};
