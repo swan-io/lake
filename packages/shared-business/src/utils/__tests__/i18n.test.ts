@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatCurrencyIso,
   formatCurrencySymbol,
+  getRejectionReasonLabel,
   isTranslationKey,
   translateError,
 } from "../i18n";
@@ -63,6 +64,24 @@ describe("translateError maps an arbitrary error value to a translated message",
 
   it("falls back to the generic error message for an Error with an unmapped message", () => {
     expect(translateError(new Error("boom"))).toBe("An error occurred");
+  });
+});
+
+describe("getRejectionReasonLabel maps a document rejection reason code to a translated label", () => {
+  it("translates a known reason code", () => {
+    expect(getRejectionReasonLabel("BadDocumentQuality")).toBe(
+      "The document quality is too low to read. Upload a higher-resolution scan or photo.",
+    );
+  });
+
+  it("falls back to the generic 'Other' label for an unknown or future reason code", () => {
+    expect(getRejectionReasonLabel("SomeFutureReasonCodeNotYetSupported")).toBe(
+      "See the reason and explanation provided by Swan.",
+    );
+  });
+
+  it("falls back to the generic 'Other' label for an empty string", () => {
+    expect(getRejectionReasonLabel("")).toBe("See the reason and explanation provided by Swan.");
   });
 });
 
