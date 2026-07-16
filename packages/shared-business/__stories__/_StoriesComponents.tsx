@@ -43,7 +43,7 @@ export const StoryBlock = ({ title, description, children }: StoryIntroductionPr
         .with(P.array(P.string), description =>
           description.map((description, index) => (
             <View key={index}>
-              <LakeText>{description}</LakeText>
+              <LakeText dataSet={{ a11y: false }}>{description}</LakeText>
             </View>
           )),
         )
