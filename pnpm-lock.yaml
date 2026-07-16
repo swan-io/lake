@@ -152,9 +152,6 @@ importers:
       polished:
         specifier: ^4.3.1
         version: 4.3.1
-      prism-react-renderer:
-        specifier: ^2.4.1
-        version: 2.4.1(react@19.2.7)
       rifm:
         specifier: ^0.12.1
         version: 0.12.1(react@19.2.7)
@@ -210,9 +207,6 @@ importers:
       iban:
         specifier: ^0.0.14
         version: 0.0.14
-      prism-react-renderer:
-        specifier: ^2.4.1
-        version: 2.4.1(react@19.2.7)
       react-atomic-state:
         specifier: ^2.1.0
         version: 2.1.0(react@19.2.7)
@@ -1327,9 +1321,6 @@ packages:
   '@types/node@26.0.1':
     resolution: {integrity: sha512-fc3KiUoBt6kie0N9bIW3E47vZsuaMf0PM2AaUpLCLT0s/LvX1nxAim6Fc049cNxODPpGm6qRAuUOB86SkRuPQw==, tarball: https://registry.npmjs.org/@types/node/-/node-26.0.1.tgz}
 
-  '@types/prismjs@1.26.5':
-    resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==, tarball: https://registry.npmjs.org/@types/prismjs/-/prismjs-1.26.5.tgz}
-
   '@types/prompts@2.4.9':
     resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==, tarball: https://registry.npmjs.org/@types/prompts/-/prompts-2.4.9.tgz}
 
@@ -1580,10 +1571,6 @@ packages:
   cli-truncate@5.2.0:
     resolution: {integrity: sha512-xRwvIOMGrfOAnM1JYtqQImuaNtDEv9v6oIYAs4LIHwTiKee8uwvIi363igssOC0O5U04i4AlENs79LQLu9tEMw==, tarball: https://registry.npmjs.org/cli-truncate/-/cli-truncate-5.2.0.tgz}
     engines: {node: '>=20'}
-
-  clsx@2.1.1:
-    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==, tarball: https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz}
-    engines: {node: '>=6'}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==, tarball: https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz}
@@ -2201,11 +2188,6 @@ packages:
   pretty-format@27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==, tarball: https://registry.npmjs.org/pretty-format/-/pretty-format-27.5.1.tgz}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-
-  prism-react-renderer@2.4.1:
-    resolution: {integrity: sha512-ey8Ls/+Di31eqzUxC46h8MksNuGx/n0AAC8uKpwFau4RPDYLuE3EXTp8N8G2vX2N7UC/+IXeNUnlWBGGcAG+Ig==, tarball: https://registry.npmjs.org/prism-react-renderer/-/prism-react-renderer-2.4.1.tgz}
-    peerDependencies:
-      react: '>=16.0.0'
 
   promise@7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==, tarball: https://registry.npmjs.org/promise/-/promise-7.3.1.tgz}
@@ -3569,8 +3551,6 @@ snapshots:
     dependencies:
       undici-types: 8.3.0
 
-  '@types/prismjs@1.26.5': {}
-
   '@types/prompts@2.4.9':
     dependencies:
       '@types/node': 26.0.1
@@ -3848,8 +3828,6 @@ snapshots:
     dependencies:
       slice-ansi: 8.0.0
       string-width: 8.2.1
-
-  clsx@2.1.1: {}
 
   convert-source-map@2.0.0: {}
 
@@ -4427,12 +4405,6 @@ snapshots:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
-
-  prism-react-renderer@2.4.1(react@19.2.7):
-    dependencies:
-      '@types/prismjs': 1.26.5
-      clsx: 2.1.1
-      react: 19.2.7
 
   promise@7.3.1:
     dependencies:
