@@ -36,7 +36,6 @@
     "@swan-io/use-form": "^3.1.0",
     "dayjs": "^1.11.20",
     "polished": "^4.3.1",
-    "prism-react-renderer": "^2.4.1",
     "rifm": "^0.12.1",
     "ts-pattern": "^5.9.0",
     "uuid": "^14.0.0"
