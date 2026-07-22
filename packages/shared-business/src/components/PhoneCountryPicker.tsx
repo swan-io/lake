@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   triggerErrored: { borderColor: colors.negative[500] },
   triggerDisabled: { borderColor: colors.gray[50] },
   list: { height: 230 },
+  listDropdown: { width: 360 },
   searchIcon: { position: "absolute", left: 16 },
   searchInput: {
     ...texts.regular,
@@ -170,77 +171,79 @@ export const PhoneCountryPicker = ({
         onDismiss={close}
         matchReferenceWidth={false}
       >
-        <View style={styles.list}>
-          <Box direction="row" alignItems="center">
-            <Icon
-              name="search-filled"
-              color={colors.gray[300]}
-              size={18}
-              style={styles.searchIcon}
-            />
+        {({ mode }) => (
+          <View style={[styles.list, mode === "dropdown" && styles.listDropdown]}>
+            <Box direction="row" alignItems="center">
+              <Icon
+                name="search-filled"
+                color={colors.gray[300]}
+                size={18}
+                style={styles.searchIcon}
+              />
 
-            <TextInput
-              ref={inputRef}
-              inputMode="search"
-              style={styles.searchInput}
-              onChangeText={handleOnChangeText}
-              onSubmitEditing={() => {
-                if (isNotNullish(filteredCountries[0])) {
-                  onValueChange(filteredCountries[0]);
-                  close();
-                }
-              }}
-            />
-          </Box>
-
-          <Separator />
-
-          <FlatList
-            data={filteredCountries}
-            ItemSeparatorComponent={<Separator />}
-            keyExtractor={item => item.uid}
-            renderItem={({ item }) => (
-              <Pressable
-                role="button"
-                aria-label={item.name}
-                style={({ hovered, pressed }) => [
-                  styles.row,
-                  hovered && styles.rowHovered,
-                  pressed && styles.rowPressed,
-                ]}
-                onPress={() => {
-                  onValueChange(item);
-                  close();
+              <TextInput
+                ref={inputRef}
+                inputMode="search"
+                style={styles.searchInput}
+                onChangeText={handleOnChangeText}
+                onSubmitEditing={() => {
+                  if (isNotNullish(filteredCountries[0])) {
+                    onValueChange(filteredCountries[0]);
+                    close();
+                  }
                 }}
-              >
-                <Flag code={item.cca2} width={16} />
-                <Space width={12} />
+              />
+            </Box>
 
-                <LakeText
-                  numberOfLines={1}
-                  style={styles.rowName}
-                  userSelect="none"
-                  variant="smallRegular"
+            <Separator />
+
+            <FlatList
+              data={filteredCountries}
+              ItemSeparatorComponent={<Separator />}
+              keyExtractor={item => item.uid}
+              renderItem={({ item }) => (
+                <Pressable
+                  role="button"
+                  aria-label={item.name}
+                  style={({ hovered, pressed }) => [
+                    styles.row,
+                    hovered && styles.rowHovered,
+                    pressed && styles.rowPressed,
+                  ]}
+                  onPress={() => {
+                    onValueChange(item);
+                    close();
+                  }}
                 >
-                  {item.name}
-                </LakeText>
+                  <Flag code={item.cca2} width={16} />
+                  <Space width={12} />
 
-                {item.uid === value.uid && (
-                  <>
-                    <Space width={12} />
-                    <Icon name="checkmark-filled" color={colors.positive[500]} size={16} />
-                  </>
-                )}
+                  <LakeText
+                    numberOfLines={1}
+                    style={styles.rowName}
+                    userSelect="none"
+                    variant="smallRegular"
+                  >
+                    {item.name}
+                  </LakeText>
 
-                <Space width={12} />
+                  {item.uid === value.uid && (
+                    <>
+                      <Space width={12} />
+                      <Icon name="checkmark-filled" color={colors.positive[500]} size={16} />
+                    </>
+                  )}
 
-                <LakeText userSelect="none" variant="smallRegular">
-                  +{item.idd}
-                </LakeText>
-              </Pressable>
-            )}
-          />
-        </View>
+                  <Space width={12} />
+
+                  <LakeText userSelect="none" variant="smallRegular">
+                    +{item.idd}
+                  </LakeText>
+                </Pressable>
+              )}
+            />
+          </View>
+        )}
       </Popover>
     </>
   );
