@@ -14,6 +14,10 @@ export const Default = () => {
         <TilePlaceholder />
       </StoryPart>
 
+      <StoryPart title="Collapsed placeholder">
+        <TilePlaceholder collapsed={true} />
+      </StoryPart>
+
       <StoryPart title="Grid placeholder">
         <TileGridPlaceholder withTabs={false} />
       </StoryPart>

@@ -43,17 +43,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export const TilePlaceholder = () => {
+export const TilePlaceholder = ({ collapsed = false }: { collapsed?: boolean }) => {
   return (
     <Tile>
       <View style={styles.placeholderTitle} />
-      <Space height={24} />
-      <View style={styles.content}>
-        <View style={styles.placeholderText} />
-        <View style={styles.placeholderText} />
-        <View style={styles.placeholderText} />
-        <View style={styles.placeholderText} />
-      </View>
+
+      {!collapsed && (
+        <>
+          <Space height={24} />
+          <View style={styles.content}>
+            <View style={styles.placeholderText} />
+            <View style={styles.placeholderText} />
+            <View style={styles.placeholderText} />
+            <View style={styles.placeholderText} />
+          </View>
+        </>
+      )}
     </Tile>
   );
 };
