@@ -5,9 +5,18 @@ import {
   ReactElement,
   ReactNode,
   useCallback,
+  useId,
   useState,
 } from "react";
-import { LayoutChangeEvent, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import {
+  LayoutChangeEvent,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import {
   backgroundColor,
   colors,
@@ -18,8 +27,10 @@ import {
   spacings,
   texts,
 } from "../constants/design";
+import { useDisclosure } from "../hooks/useDisclosure";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
+import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { ResponsiveContainer } from "./ResponsiveContainer";
 import { Space } from "./Space";
@@ -92,6 +103,25 @@ const styles = StyleSheet.create({
     marginHorizontal: negativeSpacings[32],
     alignSelf: "stretch",
   },
+  chevron: {
+    transitionProperty: "transform",
+    transitionDuration: "200ms",
+  },
+  chevronOpen: {
+    transform: "rotate(180deg)",
+  },
+  collapsibleContent: {
+    display: "grid",
+    gridTemplateRows: "0fr",
+    transitionProperty: "grid-template-rows",
+    transitionDuration: "300ms",
+  },
+  collapsibleContentOpen: {
+    gridTemplateRows: "1fr",
+  },
+  collapsibleInner: {
+    overflow: "hidden",
+  },
 });
 
 type Props = {
@@ -110,6 +140,8 @@ type Props = {
   hovered?: boolean;
   disabled?: boolean;
   selected?: boolean;
+  collapsible?: boolean;
+  defaultExpanded?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -129,8 +161,75 @@ export const Tile = ({
   flexShrink = 0,
   disabled = false,
   selected,
+  collapsible = false,
+  defaultExpanded = true,
   style,
 }: Props) => {
+  const contentId = useId();
+  const [expanded, { toggle }] = useDisclosure(defaultExpanded);
+
+  const hasHeader =
+    isNotNullish(title) || isNotNullish(headerEnd) || isNotNullish(description) || collapsible;
+
+  const header = (
+    <>
+      <View style={styles.header}>
+        <View style={styles.headerTitleIcon}>
+          {isNotNullish(icon) && (
+            <>
+              {icon}
+
+              <Space height={12} />
+            </>
+          )}
+
+          {isNotNullish(title) && (
+            <Text style={styles.title} role="heading" aria-level={3}>
+              {title}
+            </Text>
+          )}
+        </View>
+
+        {collapsible ? (
+          <Icon
+            name="chevron-down-filled"
+            size={16}
+            color={colors.gray[500]}
+            style={[styles.chevron, expanded && styles.chevronOpen]}
+          />
+        ) : isNotNullish(headerEnd) ? (
+          <View>{headerEnd}</View>
+        ) : null}
+      </View>
+
+      {isNotNullish(description) && (
+        <>
+          {isNotNullish(title) && <Space height={12} />}
+
+          <View style={styles.descriptionContainer}>
+            <LakeText numberOfLines={numberOfLines} style={styles.description}>
+              {description}
+            </LakeText>
+          </View>
+        </>
+      )}
+    </>
+  );
+
+  const content = (
+    <>
+      {children}
+
+      {isNotNullish(footer) && (
+        <View
+          style={[styles.footer, { marginTop: paddingVertical, marginBottom: -paddingVertical }]}
+        >
+          {footer}
+        </View>
+      )}
+    </>
+  );
+
   return (
     <View
       role="region"
@@ -150,52 +249,45 @@ export const Tile = ({
         style,
       ]}
     >
-      {(isNotNullish(title) || isNotNullish(headerEnd) || isNotNullish(description)) && (
-        <View style={styles.headerContainer}>
-          <View style={styles.header}>
-            <View style={styles.headerTitleIcon}>
-              {isNotNullish(icon) && (
-                <>
-                  {icon}
-
-                  <Space height={12} />
-                </>
-              )}
-
-              {isNotNullish(title) && (
-                <Text style={styles.title} role="heading" aria-level={3}>
-                  {title}
-                </Text>
-              )}
-            </View>
-
-            {isNotNullish(headerEnd) ? <View>{headerEnd}</View> : null}
-          </View>
-
-          {isNotNullish(description) && (
-            <>
-              {isNotNullish(title) && <Space height={12} />}
-
-              <View style={styles.descriptionContainer}>
-                <LakeText numberOfLines={numberOfLines} style={styles.description}>
-                  {description}
-                </LakeText>
-              </View>
-            </>
+      {collapsible ? (
+        <>
+          {hasHeader && (
+            <Pressable
+              role="button"
+              aria-expanded={expanded}
+              aria-controls={contentId}
+              onPress={toggle}
+              style={styles.headerContainer}
+            >
+              {header}
+            </Pressable>
           )}
 
-          {isNotNullish(children) && <Space height={24} />}
-        </View>
-      )}
+          <View
+            role="region"
+            nativeID={contentId}
+            aria-hidden={!expanded}
+            style={[styles.collapsibleContent, expanded && styles.collapsibleContentOpen]}
+          >
+            <View style={styles.collapsibleInner}>
+              {isNotNullish(children) && hasHeader && <Space height={24} />}
 
-      {children}
+              {content}
+            </View>
+          </View>
+        </>
+      ) : (
+        <>
+          {hasHeader && (
+            <View style={styles.headerContainer}>
+              {header}
 
-      {isNotNullish(footer) && (
-        <View
-          style={[styles.footer, { marginTop: paddingVertical, marginBottom: -paddingVertical }]}
-        >
-          {footer}
-        </View>
+              {isNotNullish(children) && <Space height={24} />}
+            </View>
+          )}
+
+          {content}
+        </>
       )}
     </View>
   );

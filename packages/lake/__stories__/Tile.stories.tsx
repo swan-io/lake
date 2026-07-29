@@ -68,6 +68,18 @@ export const Default = () => {
         />
       </StoryPart>
 
+      <StoryPart title="Collapsible (expanded by default)" style={styles.part}>
+        <Tile collapsible={true} title="Tile title">
+          <LakeText>Collapsible content — toggle with the header.</LakeText>
+        </Tile>
+      </StoryPart>
+
+      <StoryPart title="Collapsible (collapsed by default)" style={styles.part}>
+        <Tile collapsible={true} defaultExpanded={false} title="Tile title">
+          <LakeText>Collapsible content — hidden until expanded.</LakeText>
+        </Tile>
+      </StoryPart>
+
       <StoryPart title="Hovered" style={styles.part}>
         <Tile hovered={true} />
       </StoryPart>
