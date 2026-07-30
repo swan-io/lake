@@ -55,6 +55,7 @@ const LoadingButton = (props: Except<ButtonProps, "loading" | "onPress">) => {
       color="live"
       {...props}
       loading={loading}
+      ariaLabel="Aria Label"
       onPress={() => {
         setLoading(true);
         setTimeout(() => setLoading(false), 2000);

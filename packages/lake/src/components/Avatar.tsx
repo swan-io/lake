@@ -54,6 +54,7 @@ export const Avatar = memo<Props>(({ user, size }) => {
   return (
     <View
       role="img"
+      aria-label={initials !== "" ? initials : "avatar"}
       style={[
         commonStyles.center,
         styles.container,
