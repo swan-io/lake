@@ -157,6 +157,7 @@ export const Tag = ({
         {onPressRemove != null ? (
           <Pressable
             role="button"
+            aria-label="dismiss"
             onPress={onPressRemove}
             style={({ hovered, pressed }) => [
               styles.dismiss,
