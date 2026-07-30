@@ -128,7 +128,6 @@ type Props = {
   icon?: ReactNode;
   title?: ReactNode;
   description?: ReactNode;
-  headerEnd?: ReactNode;
   paddingVertical?: Spacings;
   paddingHorizontal?: Spacings;
   children?: ReactNode;
@@ -140,10 +139,11 @@ type Props = {
   hovered?: boolean;
   disabled?: boolean;
   selected?: boolean;
-  collapsible?: boolean;
-  defaultExpanded?: boolean;
   style?: StyleProp<ViewStyle>;
-};
+} & (
+  | { collapsible: true; defaultExpanded?: boolean; headerEnd?: never }
+  | { collapsible?: false; defaultExpanded?: never; headerEnd?: ReactNode }
+);
 
 export const Tile = ({
   icon,
@@ -264,8 +264,7 @@ export const Tile = ({
           )}
 
           <View
-            role="region"
-            nativeID={contentId}
+            id={contentId}
             aria-hidden={!expanded}
             style={[styles.collapsibleContent, expanded && styles.collapsibleContentOpen]}
           >
