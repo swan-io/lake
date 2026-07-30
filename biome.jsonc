@@ -66,7 +66,8 @@
       "packages/*/__stories__/**/*.ts",
       "packages/*/__stories__/**/*.tsx",
       "packages/*/src/**/*.ts",
-      "packages/*/src/**/*.tsx"
+      "packages/*/src/**/*.tsx",
+      "packages/*/src/**/*.json"
     ]
   }
 }
