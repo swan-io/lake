@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/react";
 import { AccountStatement, Transaction } from "../src/components/AccountStatement";
+import { AccountStatementAnnualFees } from "../src/components/AccountStatementAnnualFees";
 import { AccountStatementFooter } from "../src/components/AccountStatementFooter";
 import { AccountStatementHeader } from "../src/components/AccountStatementHeader";
 import { CountryCCA3 } from "../src/constants/countries";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
-import { AccountStatementAnnualFees } from "../src/components/AccountStatementAnnualFees";
 
 export default {
   title: "Informations/AccountStatement",

@@ -13,8 +13,8 @@ import { Except } from "type-fest";
 import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
-  colors,
   ColorVariants,
+  colors,
   radii,
   shadows,
   spacings,

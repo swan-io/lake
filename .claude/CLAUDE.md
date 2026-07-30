@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm typecheck          # TypeScript type checking (tsc --noEmit)
 pnpm lint               # Biome linter
 pnpm test               # Run Vitest tests
-pnpm format             # Prettier formatting
+pnpm format             # Biome formatting
 
 # Build
 pnpm build              # Build TypeScript output for both packages
@@ -72,12 +72,11 @@ Unit test should focus on pure business logic (formatters, validators, parsers, 
 
 ## Linting & Formatting
 
-Two separate tools:
-
-- **Biome** handles linting only (`biome.json` — formatter/imports disabled)
-- **Prettier** (with `@trivago/prettier-plugin-sort-imports`) handles formatting and import sorting
+- **Biome** handles linting and format config is defined in `biome.jsonc`
 
 Pre-commit hooks run lint-staged on `packages/*/src/**/*.{ts,tsx}`.
+
+> **Prettier** is installed only for `crawlLicenses.ts` script for formatting markdown file
 
 ## Localization
 

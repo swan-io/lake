@@ -1,6 +1,6 @@
 import { Fragment, ReactNode } from "react";
 import { StyleSheet } from "react-native";
-import { colors, ColorVariants, spacings } from "../constants/design";
+import { ColorVariants, colors, spacings } from "../constants/design";
 import { isNotNullishOrEmpty, isNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeRadio } from "./LakeRadio";

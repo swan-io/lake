@@ -19,8 +19,8 @@ export const getSvgSize = (svg: SVGElement): Result<Size, string> => {
   const widthAttr = svg.getAttribute("width");
   const heightAttr = svg.getAttribute("height");
 
-  const width = isNotNullish(widthAttr) ? Number.parseInt(widthAttr) : Number.NaN;
-  const height = isNotNullish(heightAttr) ? Number.parseInt(heightAttr) : Number.NaN;
+  const width = isNotNullish(widthAttr) ? Number.parseInt(widthAttr, 10) : Number.NaN;
+  const height = isNotNullish(heightAttr) ? Number.parseInt(heightAttr, 10) : Number.NaN;
 
   if (!Number.isNaN(width) || !Number.isNaN(height)) {
     return Result.Ok({ width, height });
@@ -30,8 +30,8 @@ export const getSvgSize = (svg: SVGElement): Result<Size, string> => {
   const viewBox = svg.getAttribute("viewBox");
   const [, , boxWidthAttr, boxHeightAttr] = viewBox?.split(" ") ?? [];
 
-  const boxWidth = isNotNullish(boxWidthAttr) ? Number.parseInt(boxWidthAttr) : Number.NaN;
-  const boxHeight = isNotNullish(boxHeightAttr) ? Number.parseInt(boxHeightAttr) : Number.NaN;
+  const boxWidth = isNotNullish(boxWidthAttr) ? Number.parseInt(boxWidthAttr, 10) : Number.NaN;
+  const boxHeight = isNotNullish(boxHeightAttr) ? Number.parseInt(boxHeightAttr, 10) : Number.NaN;
 
   if (Number.isNaN(boxWidth) || Number.isNaN(boxHeight)) {
     return Result.Error("VIEWBOX_MISSING");
@@ -87,7 +87,7 @@ const getMatrixColor = (color: "white" | "black"): string => {
   const blue = colorIntensity;
   const alpha = 1;
 
-  // prettier-ignore
+  // biome-ignore format: keep matrix format for readability
   const matrix = [
     red,   red,   red,   red,   red,   // R
     green, green, green, green, green, // G

@@ -14,8 +14,8 @@ import { match, P } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import {
   backgroundColor,
-  colors,
   ColorVariants,
+  colors,
   invariantColors,
   radii,
   Spacings,

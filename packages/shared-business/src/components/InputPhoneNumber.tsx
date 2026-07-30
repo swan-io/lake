@@ -6,7 +6,7 @@ import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { Ref, useEffect, useImperativeHandle, useRef } from "react";
 import { StyleSheet, TextInput } from "react-native";
-import { countries, Country, CountryCCA3, phoneCountries } from "../constants/countries";
+import { Country, CountryCCA3, countries, phoneCountries } from "../constants/countries";
 import { PhoneCountryPicker } from "./PhoneCountryPicker";
 
 const styles = StyleSheet.create({

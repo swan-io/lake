@@ -64,7 +64,6 @@ export const createFlagsProvider = <
     FlagsProvider: ({ children, loader = null }: { children: ReactNode; loader?: ReactNode }) => {
       const [flags, setFlags] = useState<Flags | null>(null);
 
-      // biome-ignore lint/correctness/useExhaustiveDependencies: we need to run this effect only once, when the component is mounted
       useEffect(() => {
         const listener = (flags: Flags) => {
           setFlags(flags);

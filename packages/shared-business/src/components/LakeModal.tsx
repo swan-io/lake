@@ -12,9 +12,9 @@ import { Suspendable } from "@swan-io/lake/src/components/Suspendable";
 import { TransitionView } from "@swan-io/lake/src/components/TransitionView";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
-  ColorVariants,
   backgroundColor,
   breakpoints,
+  ColorVariants,
   colors,
   negativeSpacings,
   shadows,

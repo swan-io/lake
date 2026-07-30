@@ -8,7 +8,7 @@ import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
-import { colors, ColorVariants } from "../src/constants/design";
+import { ColorVariants, colors } from "../src/constants/design";
 import customIcons from "../src/icons/custom-icons.json";
 import fluentIcons from "../src/icons/fluent-icons.json";
 import fluentResizedIcons from "../src/icons/fluent-resized-icons.json";

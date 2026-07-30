@@ -18,7 +18,7 @@ import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { useMemo } from "react";
 import { Accept, useDropzone } from "react-dropzone";
 import { StyleSheet, Text, View } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { formatNestedMessage, t } from "../utils/i18n";
 
 const styles = StyleSheet.create({
@@ -167,6 +167,7 @@ export const FileInput = ({
 
   return (
     <View style={commonStyles.fill}>
+      {/** biome-ignore lint/a11y/noStaticElementInteractions: use interation for dropzone */}
       <div {...getRootProps()} onMouseEnter={setIsHovered.on} onMouseLeave={setIsHovered.off}>
         <View
           aria-errormessage={

@@ -1,7 +1,7 @@
 import { AsyncData, Future, Result } from "@swan-io/boxed";
 import { ReactNode, Ref, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { colors } from "../constants/design";
 import { LakeCombobox } from "./LakeCombobox";
 import { LakeText } from "./LakeText";

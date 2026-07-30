@@ -1,4 +1,4 @@
-import { ReactNode, isValidElement } from "react";
+import { isValidElement, ReactNode } from "react";
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { ColorVariants, colors, radii, spacings } from "../constants/design";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";

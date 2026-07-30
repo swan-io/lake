@@ -3,9 +3,9 @@ import {
   StyleProp,
   StyleSheet,
   TextProps,
+  unstable_createElement,
   View,
   ViewStyle,
-  unstable_createElement,
 } from "react-native";
 import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";

@@ -54,7 +54,7 @@ export const LakeCheckbox = ({
   const isFirstRender = useRef(true);
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(value):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(value): rerun effect only when value changes
   useEffect(() => {
     if (!isFirstRender.current) {
       setShouldAnimate(true);

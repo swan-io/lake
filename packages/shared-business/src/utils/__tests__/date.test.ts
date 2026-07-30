@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  decodeBirthDate,
-  encodeBirthDate,
-  extractDate,
-  formatExtractedDate,
-} from "../date";
+import { decodeBirthDate, encodeBirthDate, extractDate, formatExtractedDate } from "../date";
 
 describe("decodeBirthDate converts a YYYY-MM-DD ISO date to a DD/MM/YYYY display string", () => {
   it("formats a valid ISO date", () => {

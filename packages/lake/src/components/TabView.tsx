@@ -21,7 +21,7 @@ import {
   View,
   WebRole,
 } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import {
   animations,
   backgroundColor,
@@ -543,8 +543,8 @@ export const TabView = ({
   const { path } = location;
   const currentLocationURL = location.toString();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(kept):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(collapsed):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(kept): we need to recalculate the underline position when the kept tabs change
+  // biome-ignore lint/correctness/useExhaustiveDependencies(collapsed): we need to recalculate the underline position when the collapsed tabs change
   useEffect(() => {
     if (isNotNullish(linksRefs.current)) {
       const values = Object.entries(linksRefs.current);

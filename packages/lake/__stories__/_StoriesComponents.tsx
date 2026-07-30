@@ -1,6 +1,6 @@
-import { CSSProperties, ReactNode, memo, useMemo } from "react";
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
 import { ScrollView } from "../src/components/ScrollView";

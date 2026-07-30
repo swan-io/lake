@@ -22,8 +22,8 @@ import {
 import { t } from "../../../shared-business/src/utils/i18n";
 import { commonStyles } from "../constants/commonStyles";
 import {
-  ColorVariants,
   backgroundColor,
+  ColorVariants,
   colors,
   invariantColors,
   radii,

@@ -17,8 +17,8 @@ import { StyleSheet } from "react-native";
 import { match, P } from "ts-pattern";
 import { CountryCCA3 } from "../constants/countries";
 import { UploadFileInput, UploadOutputWithId } from "../hooks/useFilesUploader";
-import { SwanFile } from "../utils/SwanFile";
 import { locale, t } from "../utils/i18n";
+import { SwanFile } from "../utils/SwanFile";
 import { FilesUploader, FilesUploaderRef } from "./FilesUploader";
 import { LakeModal } from "./LakeModal";
 

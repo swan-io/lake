@@ -15,9 +15,9 @@ import { getIconNameFromFilename } from "@swan-io/lake/src/utils/file";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { P, match } from "ts-pattern";
-import { SwanFile } from "../utils/SwanFile";
+import { match, P } from "ts-pattern";
 import { getRejectionReasonLabel, t } from "../utils/i18n";
+import { SwanFile } from "../utils/SwanFile";
 import { LakeModal } from "./LakeModal";
 
 const styles = StyleSheet.create({

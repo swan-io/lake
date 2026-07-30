@@ -15,14 +15,14 @@
   "scripts": {
     "start": "storybook dev --port 6006",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check",
+    "lint": "biome check --fix",
     "build-storybook": "storybook build --output-dir dist",
     "test": "vitest run --project=unit --coverage",
     "test-a11y": "vitest --project=a11y --reporter=html --reporter=default",
     "build": "tsc -p tsconfig.build.json",
     "clean-build": "tsx scripts/clean/cleanBuild.ts",
-    "format": "prettier '**/*' --ignore-unknown --write",
-    "format-locales": "prettier '**/locales/*.json' --write",
+    "format": "biome format . --write",
+    "format-locales": "biome format packages/shared-business/src/locales --write",
     "validate-locales": "tsx scripts/locales/validateTranslations.ts packages/shared-business/src/locales",
     "license-report": "tsx scripts/license-crawler/crawlLicenses.ts --check --report",
     "license-check": "tsx scripts/license-crawler/crawlLicenses.ts --check",
@@ -37,8 +37,8 @@
     "configure-hooks": "git config --local core.hooksPath .hooks"
   },
   "lint-staged": {
-    "*": "prettier --ignore-unknown --write",
-    "packages/*/src/**/*.{ts,tsx}": "biome check",
+    "*": "biome format --no-errors-on-unmatched --write",
+    "packages/*/src/**/*.{ts,tsx}": "biome check --fix",
     "packages/*/src/locales/*.json": "pnpm sort-locales"
   },
   "pnpm": {
@@ -57,7 +57,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.5.6",
     "@fluentui/svg-icons": "^1.1.333",
     "@localazy/cli": "^2.0.11",
     "@storybook/addon-a11y": "^10.5.0",
@@ -83,8 +83,7 @@
     "pathe": "^2.0.3",
     "picocolors": "^1.1.1",
     "playwright": "^1.61.1",
-    "prettier": "^3.9.5",
-    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier": "^3.9.6",
     "prompts": "^2.4.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

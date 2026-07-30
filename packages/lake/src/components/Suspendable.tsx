@@ -1,4 +1,4 @@
-import { Suspense, SuspenseProps, createContext, useContext } from "react";
+import { createContext, Suspense, SuspenseProps, useContext } from "react";
 
 const SuspendableContext = createContext(false);
 

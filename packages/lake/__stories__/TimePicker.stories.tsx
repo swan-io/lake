@@ -3,11 +3,11 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Except } from "type-fest";
 import {
+  parseTimeRange,
   TimePicker,
   TimePickerProps,
   TimeRangePicker,
   TimeRangePickerProps,
-  parseTimeRange,
   validateTimeRange,
 } from "../src/components/TimePicker";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";

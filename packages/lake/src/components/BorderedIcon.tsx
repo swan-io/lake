@@ -1,5 +1,5 @@
 import { StyleSheet, ViewProps } from "react-native";
-import { ColorVariants, Radii, colors, radii } from "../constants/design";
+import { ColorVariants, colors, Radii, radii } from "../constants/design";
 import { Box } from "./Box";
 import { Icon, IconName } from "./Icon";
 import { SpacingValue } from "./Space";
