@@ -30,7 +30,7 @@ export const Placements = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip content="Tooltip content" placement="left">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
-              <LakeText>Hover to display tooltip at top</LakeText>
+              <LakeText>Hover to display tooltip on the left</LakeText>
             </Box>
           </LakeTooltip>
         </Box>
@@ -40,7 +40,7 @@ export const Placements = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip content="Tooltip content" placement="center">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
-              <LakeText>Hover to display tooltip at bottom</LakeText>
+              <LakeText>Hover to display tooltip in the middle</LakeText>
             </Box>
           </LakeTooltip>
         </Box>
@@ -50,7 +50,7 @@ export const Placements = () => {
         <Box direction="row" justifyContent="center">
           <LakeTooltip content="Tooltip content" placement="right">
             <Box style={styles.target} direction="row" justifyContent="center" alignItems="center">
-              <LakeText>Hover to display tooltip at left</LakeText>
+              <LakeText>Hover to display tooltip on the right</LakeText>
             </Box>
           </LakeTooltip>
         </Box>
