@@ -1,7 +1,7 @@
 // https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
 // https://github.com/getsentry/sentry-javascript/blob/7.56.0/packages/react/src/errorboundary.tsx
 
-import { Component, ErrorInfo, ReactElement, ReactNode, isValidElement } from "react";
+import { Component, ErrorInfo, isValidElement, ReactElement, ReactNode } from "react";
 import { isNotNullish } from "../utils/nullish";
 
 const isError = (value: unknown): value is Error => {

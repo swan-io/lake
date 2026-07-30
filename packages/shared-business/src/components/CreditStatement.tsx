@@ -284,95 +284,93 @@ export const CreditStatementV1 = ({
       </Box>
       <Space height={16} />
 
-      <>
-        <Box direction="row">
-          <LakeText style={[styles.titleColumn, { width: "15%" }]} color={colors.gray[700]}>
-            {t("accountStatement.column.date")}
-          </LakeText>
+      <Box direction="row">
+        <LakeText style={[styles.titleColumn, { width: "15%" }]} color={colors.gray[700]}>
+          {t("accountStatement.column.date")}
+        </LakeText>
 
-          <LakeText style={[styles.titleColumn, { width: "55%" }]} color={colors.gray[700]}>
-            {t("accountStatement.column.description")}
-          </LakeText>
+        <LakeText style={[styles.titleColumn, { width: "55%" }]} color={colors.gray[700]}>
+          {t("accountStatement.column.description")}
+        </LakeText>
 
-          <LakeText
-            style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
-            color={colors.gray[700]}
-          >
-            {t("creditStatement.column.debit")}
-          </LakeText>
+        <LakeText
+          style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
+          color={colors.gray[700]}
+        >
+          {t("creditStatement.column.debit")}
+        </LakeText>
 
-          <LakeText
-            style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
-            color={colors.gray[700]}
-          >
-            {t("creditStatement.column.credit")}
-          </LakeText>
-        </Box>
-        <Space height={12} />
+        <LakeText
+          style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}
+          color={colors.gray[700]}
+        >
+          {t("creditStatement.column.credit")}
+        </LakeText>
+      </Box>
+      <Space height={12} />
 
-        <Box direction="column">
-          {transactions.map(
-            ({
-              transactionAmount,
-              transactionDate,
-              transactionLabel,
-              transactionSide,
-              transactionType,
-              transactionId,
-              counterparty,
-              maskedPan,
-            }) => (
-              <>
-                <Box direction="row" key={transactionId}>
-                  <LakeText style={[styles.smallText, { width: "15%" }]} color={colors.gray[700]}>
-                    {dayjs(transactionDate).format(locale.dateFormat)}
+      <Box direction="column">
+        {transactions.map(
+          ({
+            transactionAmount,
+            transactionDate,
+            transactionLabel,
+            transactionSide,
+            transactionType,
+            transactionId,
+            counterparty,
+            maskedPan,
+          }) => (
+            <>
+              <Box direction="row" key={transactionId}>
+                <LakeText style={[styles.smallText, { width: "15%" }]} color={colors.gray[700]}>
+                  {dayjs(transactionDate).format(locale.dateFormat)}
+                </LakeText>
+                <Box direction="column" style={{ width: "55%" }}>
+                  <LakeText style={styles.smallText} color={colors.gray[700]}>
+                    {`${translateTransaction(transactionType)} ${transactionLabel}`}
                   </LakeText>
-                  <Box direction="column" style={{ width: "55%" }}>
-                    <LakeText style={styles.smallText} color={colors.gray[700]}>
-                      {`${translateTransaction(transactionType)} ${transactionLabel}`}
-                    </LakeText>
-                    <LakeText style={styles.smallText} color={colors.gray[500]}>
-                      {`${counterparty} ${maskedPan ? formatMaskedPan(maskedPan) : ""}`}
-                    </LakeText>
-                  </Box>
-
-                  <LakeText
-                    color={colors.gray[700]}
-                    style={[styles.smallText, styles.rightColumnContent]}
-                  >
-                    {transactionSide === "Debit" ? `- ${transactionAmount.value}` : ""}
-                  </LakeText>
-
-                  <LakeText
-                    color={colors.gray[700]}
-                    style={[styles.smallText, styles.rightColumnContent]}
-                  >
-                    {transactionSide === "Credit" ? transactionAmount.value : ""}
+                  <LakeText style={styles.smallText} color={colors.gray[500]}>
+                    {`${counterparty} ${maskedPan ? formatMaskedPan(maskedPan) : ""}`}
                   </LakeText>
                 </Box>
-                <Space height={8} />
-              </>
-            ),
-          )}
 
-          <Box direction="row" justifyContent="end">
-            <Box
-              direction="row"
-              justifyContent="spaceBetween"
-              alignItems="center"
-              style={{ width: "50%" }}
-            >
-              <LakeText style={styles.closingBalanceLabel} color={colors.gray[900]}>
-                {t("accountStatement.closingBalance")}
-              </LakeText>
+                <LakeText
+                  color={colors.gray[700]}
+                  style={[styles.smallText, styles.rightColumnContent]}
+                >
+                  {transactionSide === "Debit" ? `- ${transactionAmount.value}` : ""}
+                </LakeText>
 
-              <LakeText color={colors.gray[900]} style={styles.closingBalanceAmount}>
-                {formatCurrencySymbol(Number(closingBalance.value), closingBalance.currency)}
-              </LakeText>
-            </Box>
+                <LakeText
+                  color={colors.gray[700]}
+                  style={[styles.smallText, styles.rightColumnContent]}
+                >
+                  {transactionSide === "Credit" ? transactionAmount.value : ""}
+                </LakeText>
+              </Box>
+              <Space height={8} />
+            </>
+          ),
+        )}
+
+        <Box direction="row" justifyContent="end">
+          <Box
+            direction="row"
+            justifyContent="spaceBetween"
+            alignItems="center"
+            style={{ width: "50%" }}
+          >
+            <LakeText style={styles.closingBalanceLabel} color={colors.gray[900]}>
+              {t("accountStatement.closingBalance")}
+            </LakeText>
+
+            <LakeText color={colors.gray[900]} style={styles.closingBalanceAmount}>
+              {formatCurrencySymbol(Number(closingBalance.value), closingBalance.currency)}
+            </LakeText>
           </Box>
         </Box>
-      </>
+      </Box>
 
       <Space height={24} />
     </Box>

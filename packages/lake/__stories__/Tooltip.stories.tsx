@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { StyleSheet } from "react-native";
 import { Fragment } from "react/jsx-runtime";
+import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
 import { LakeText } from "../src/components/LakeText";
 import { InformationTooltip, LakeTooltip } from "../src/components/LakeTooltip";

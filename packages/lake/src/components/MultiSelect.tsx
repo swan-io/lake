@@ -10,7 +10,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { ColorVariants, backgroundColor, colors, radii, shadows, texts } from "../constants/design";
+import { backgroundColor, ColorVariants, colors, radii, shadows, texts } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
 import { useDisclosure } from "../hooks/useDisclosure";
 import { groupBy } from "../utils/array";
@@ -203,7 +203,7 @@ export const MultiSelect = <Value,>({
     }
   }, [visible]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(values):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(values): rerun effect only when values change
   useEffect(() => {
     if (shouldScrollToBottomRef.current) {
       const top = selectedTagListRef.current?.scrollHeight;

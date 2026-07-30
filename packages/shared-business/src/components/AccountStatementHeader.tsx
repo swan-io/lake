@@ -2,7 +2,7 @@ import { SwanLogo } from "@swan-io/lake/src/components/SwanLogo";
 import { colors } from "@swan-io/lake/src/constants/design";
 import { isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { CSSProperties } from "react";
-import { useTranslation, type SupportedLanguage } from "../utils/i18n";
+import { type SupportedLanguage, useTranslation } from "../utils/i18n";
 
 const LOGO_MAX_HEIGHT = 45;
 const LOGO_MAX_WIDTH = 275;
@@ -12,8 +12,7 @@ const styles = {
   container: {
     width: 793,
     padding: 10,
-    fontFamily:
-      "Arial, sans-serif",
+    fontFamily: "Arial, sans-serif",
     boxSizing: "border-box",
     color: "#737276",
     fontSize: "10px",

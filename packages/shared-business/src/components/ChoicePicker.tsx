@@ -6,8 +6,8 @@ import { Space } from "@swan-io/lake/src/components/Space";
 import { commonStyles } from "@swan-io/lake/src/constants/commonStyles";
 import {
   breakpoints,
-  colors,
   ColorVariants,
+  colors,
   invariantColors,
   negativeSpacings,
   radii,
@@ -146,7 +146,7 @@ export const ChoicePicker = <T,>({
   const { desktop } = useResponsive(breakpoints.medium);
   const [mobilePosition, setMobilePosition] = useState<"start" | "middle" | "end">("start");
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rerun effect only when screen size change from desktop to mobile
   useEffect(() => {
     if (desktop) {
       return;
@@ -157,7 +157,7 @@ export const ChoicePicker = <T,>({
     if (container == null) {
       return;
     }
-    const index = items.findIndex(item => value === item);
+    const index = value != null ? items.indexOf(value) : -1;
 
     if (index !== -1 && container.element != null) {
       const width = container.element.offsetWidth;

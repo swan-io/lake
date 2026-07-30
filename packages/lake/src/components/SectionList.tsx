@@ -69,8 +69,8 @@ export const SectionList = <T,>({
     ? { top: 0, width: onEndReachedThresholdPx }
     : { left: 0, height: onEndReachedThresholdPx };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(sections.length):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(onEndReached): re-create an observer only on list length change
+  // biome-ignore lint/correctness/useExhaustiveDependencies(sections.length): re-create an observer only on list length change
   useEffect(() => {
     const element = scrollTrackerRef.current as unknown as HTMLElement;
 

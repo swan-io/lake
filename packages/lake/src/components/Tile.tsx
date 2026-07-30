@@ -22,8 +22,8 @@ import {
   colors,
   negativeSpacings,
   radii,
-  shadows,
   Spacings,
+  shadows,
   spacings,
   texts,
 } from "../constants/design";

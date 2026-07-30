@@ -1,6 +1,6 @@
 import { createContext, ReactNode, RefObject, useLayoutEffect, useRef } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
-import { colors, ColorVariants } from "../constants/design";
+import { ColorVariants, colors } from "../constants/design";
 import { isNotNullish } from "../utils/nullish";
 
 type Props = {

@@ -15,7 +15,7 @@
   "scripts": {
     "start": "storybook dev --port 6006",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check",
+    "lint": "biome check --fix",
     "build-storybook": "storybook build --output-dir dist",
     "test": "vitest run --project=unit --coverage",
     "test-a11y": "vitest --project=a11y --reporter=html --reporter=default",
@@ -37,7 +37,8 @@
     "configure-hooks": "git config --local core.hooksPath .hooks"
   },
   "lint-staged": {
-    "packages/*/src/**/*.{ts,tsx}": "biome check",
+    "*": "biome format --write",
+    "packages/*/src/**/*.{ts,tsx}": "biome check --fix",
     "packages/*/src/locales/*.json": "pnpm sort-locales"
   },
   "pnpm": {

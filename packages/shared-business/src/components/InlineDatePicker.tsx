@@ -11,7 +11,7 @@ import { useForm } from "@swan-io/use-form";
 import { useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
-import { extractDate, ExtractedDate, formatExtractedDate } from "../utils/date";
+import { ExtractedDate, extractDate, formatExtractedDate } from "../utils/date";
 import { t } from "../utils/i18n";
 import { getMostLikelyUserCountry } from "../utils/localization";
 import { validateDate } from "../utils/validation";

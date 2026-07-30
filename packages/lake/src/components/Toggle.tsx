@@ -67,7 +67,7 @@ export const Toggle = ({ compact = false, value, labelOff, labelOn, onToggle }: 
   const onViewRef = useRef<Text>(null);
   const offViewRef = useRef<Text>(null);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(compact):
+  // biome-ignore lint/correctness/useExhaustiveDependencies(compact): rerun effect only when compact changes
   useEffect(() => {
     // batch measurements
     setTimeout(() => {

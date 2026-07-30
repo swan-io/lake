@@ -1,7 +1,7 @@
 import { Array, Option } from "@swan-io/boxed";
 import { Children, ReactNode, useMemo, useReducer, useRef } from "react";
 import { AnimationStyles, StyleProp, View, ViewStyle } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { usePreviousValue } from "../hooks/usePreviousValue";
 import { TransitionView } from "./TransitionView";
 

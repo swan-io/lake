@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { ColorVariants, backgroundColor, colors } from "../constants/design";
+import { backgroundColor, ColorVariants, colors } from "../constants/design";
 
 const OUTER_CIRCLE_SIZE = 16;
 const INNER_CIRCLE_SIZE = 8;

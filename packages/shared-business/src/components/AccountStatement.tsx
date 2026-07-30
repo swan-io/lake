@@ -137,7 +137,10 @@ export type TransactionType =
   | "Seizure"
   | (string & {}); // every other string for already-translated type (happens when we copy the transactions from a generated CSV)
 
-const translateTransaction = (transaction: TransactionType, t: ReturnType<typeof useTranslation>) => {
+const translateTransaction = (
+  transaction: TransactionType,
+  t: ReturnType<typeof useTranslation>,
+) => {
   return match(transaction)
     .with("Card", () => t("accountStatement.card"))
     .with("Check", () => t("accountStatement.check"))
@@ -251,14 +254,12 @@ export const AccountStatementV1 = ({
 
           <Space height={48} />
           <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-                  <Box style={styles.dateContainer}>
-                    <Text style={styles.dateText}>
-                      {t("accountStatement.from")}{" "}
-                      <Text style={styles.dateBold}>{openingDate}</Text>{" "}
-                      {t("accountStatement.to")}{" "}
-                      <Text style={styles.dateBold}>{closingDate}</Text>
-                    </Text>
-                  </Box>
+            <Box style={styles.dateContainer}>
+              <Text style={styles.dateText}>
+                {t("accountStatement.from")} <Text style={styles.dateBold}>{openingDate}</Text>{" "}
+                {t("accountStatement.to")} <Text style={styles.dateBold}>{closingDate}</Text>
+              </Text>
+            </Box>
 
             <Box direction="column">
               <Text style={styles.openingBalanceText}>{t("accountStatement.openingBalance")}</Text>
@@ -267,42 +268,40 @@ export const AccountStatementV1 = ({
           </Box>
           <Space height={24} />
 
-          <>
-            <Box direction="row" style={styles.thead}>
-              <Text style={[styles.titleColumn, { width: "13%" }]}>
-                {t("accountStatement.column.date")}
-              </Text>
-              <Text style={[styles.titleColumn, { width: "21%" }]}>
-                {t("accountStatement.column.type")}
-              </Text>
-              <Text style={[styles.titleColumn, { width: "42%" }]}>
-                {t("accountStatement.column.description")}
-              </Text>
-              <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-                {t("accountStatement.column.credit")}
-              </Text>
-              <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
-                {t("accountStatement.column.debit")}
-              </Text>
-            </Box>
-            <Box direction="column">
-              {transactions.map(transaction => (
-                <Box direction="row" key={transaction.id}>
-                  <Text style={[styles.textColumn, { width: "13%" }]}>{transaction.date}</Text>
-                  <Text style={[styles.textColumn, { width: "20%" }]}>
-                    {translateTransaction(transaction.type, t)}
-                  </Text>
-                  <Text style={[styles.textColumn, { width: "40%" }]}>{transaction.label}</Text>
-                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                    {transaction.credit ? transaction.credit.value : ""}
-                  </Text>
-                  <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
-                    {transaction.debit ? transaction.debit.value : ""}
-                  </Text>
-                </Box>
-              ))}
-            </Box>
-          </>
+          <Box direction="row" style={styles.thead}>
+            <Text style={[styles.titleColumn, { width: "13%" }]}>
+              {t("accountStatement.column.date")}
+            </Text>
+            <Text style={[styles.titleColumn, { width: "21%" }]}>
+              {t("accountStatement.column.type")}
+            </Text>
+            <Text style={[styles.titleColumn, { width: "42%" }]}>
+              {t("accountStatement.column.description")}
+            </Text>
+            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
+              {t("accountStatement.column.credit")}
+            </Text>
+            <Text style={[styles.titleColumn, { width: "15%", textAlign: "right" }]}>
+              {t("accountStatement.column.debit")}
+            </Text>
+          </Box>
+          <Box direction="column">
+            {transactions.map(transaction => (
+              <Box direction="row" key={transaction.id}>
+                <Text style={[styles.textColumn, { width: "13%" }]}>{transaction.date}</Text>
+                <Text style={[styles.textColumn, { width: "20%" }]}>
+                  {translateTransaction(transaction.type, t)}
+                </Text>
+                <Text style={[styles.textColumn, { width: "40%" }]}>{transaction.label}</Text>
+                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                  {transaction.credit ? transaction.credit.value : ""}
+                </Text>
+                <Text style={[styles.textColumn, { width: "15%", textAlign: "right" }]}>
+                  {transaction.debit ? transaction.debit.value : ""}
+                </Text>
+              </Box>
+            ))}
+          </Box>
 
           <Space height={12} />
           <Box direction="column">

@@ -1,6 +1,6 @@
 import { createIntl, createIntlCache } from "@formatjs/intl";
 import { isNullish } from "@swan-io/lake/src/utils/nullish";
-import { RifmProps, getRifmProps } from "@swan-io/lake/src/utils/rifm";
+import { getRifmProps, RifmProps } from "@swan-io/lake/src/utils/rifm";
 import { BadStatusError } from "@swan-io/request";
 import dayjs from "dayjs";
 import dayjsLocaleDE from "dayjs/locale/de";
@@ -15,8 +15,8 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utc from "dayjs/plugin/utc";
-import { ReactElement, ReactNode, cloneElement, isValidElement } from "react";
-import { P, match } from "ts-pattern";
+import { cloneElement, isValidElement, ReactElement, ReactNode } from "react";
+import { match, P } from "ts-pattern";
 import translationDE from "../locales/de.json";
 import translationEN from "../locales/en.json";
 import translationES from "../locales/es.json";
@@ -25,7 +25,7 @@ import translationFR from "../locales/fr.json";
 import translationIT from "../locales/it.json";
 import translationNL from "../locales/nl.json";
 import translationPT from "../locales/pt.json";
-import { LANGUAGE_FALLBACK, getLanguagesHelpers } from "./languages";
+import { getLanguagesHelpers, LANGUAGE_FALLBACK } from "./languages";
 
 export type DateFormat = "DD/MM/YYYY" | "MM/DD/YYYY";
 

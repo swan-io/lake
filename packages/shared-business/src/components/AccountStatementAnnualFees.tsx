@@ -137,8 +137,13 @@ export const AccountStatementAnnualFees = ({
 
       <Box>
         <Box direction="row" justifyContent="end">
-          <Box direction="row" alignItems="center" justifyContent="spaceBetween" style={styles.closingBalanceRow}>
-            <Text style={[styles.row, {width: "30%"}]}>{t("accountStatement.total")}</Text>
+          <Box
+            direction="row"
+            alignItems="center"
+            justifyContent="spaceBetween"
+            style={styles.closingBalanceRow}
+          >
+            <Text style={[styles.row, { width: "30%" }]}>{t("accountStatement.total")}</Text>
             <Text style={styles.totalAmount}>{annualFeeStatement.operationCount}</Text>
             <Box style={styles.row} />
             <Text style={styles.totalAmount}>{annualFeeStatement.total.value}</Text>

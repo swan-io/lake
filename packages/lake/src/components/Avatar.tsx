@@ -2,7 +2,7 @@ import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import { match, P } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
-import { colors, ColorVariants } from "../constants/design";
+import { ColorVariants, colors } from "../constants/design";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 

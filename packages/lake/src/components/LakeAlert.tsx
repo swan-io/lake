@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
-import { breakpoints, colors, ColorVariants, shadows } from "../constants/design";
+import { breakpoints, ColorVariants, colors, shadows } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";

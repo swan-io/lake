@@ -4,9 +4,9 @@ import { ScrollView } from "@swan-io/lake/src/components/ScrollView";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors, radii, texts } from "@swan-io/lake/src/constants/design";
-import { CSSProperties, ReactNode, memo, useMemo } from "react";
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 
 const styles = StyleSheet.create({
   storyTitle: {

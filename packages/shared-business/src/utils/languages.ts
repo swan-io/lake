@@ -4,7 +4,7 @@ import { isNotNullish, isNullish } from "@swan-io/lake/src/utils/nullish";
 export const LANGUAGE_FALLBACK = "en";
 const PREFERRED_LANGUAGE_KEY = "swan__PreferredLanguage";
 
-let supportedLanguages: readonly string[] | undefined = undefined;
+let supportedLanguages: readonly string[] | undefined;
 
 export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]>(
   languages: SupportedLanguages,
@@ -39,6 +39,7 @@ export const getLanguagesHelpers = <SupportedLanguages extends readonly string[]
     setPreferredLanguage: (language: SupportedLanguage) => {
       try {
         const domain = "." + window.location.hostname.split(".").slice(-2).join(".");
+        // biome-ignore lint/suspicious/noDocumentCookie: keep this exception for setting the preferred language cookie
         document.cookie = `${PREFERRED_LANGUAGE_KEY}=${language}; path=/; max-age=31536000; SameSite=Lax; Secure; domain=${domain}`;
         const url = new URL(window.location.href);
         url.searchParams.delete("lang");

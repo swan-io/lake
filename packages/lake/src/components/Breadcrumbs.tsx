@@ -1,9 +1,9 @@
 import {
+  createContext,
   Dispatch,
   ReactNode,
   RefObject,
   SetStateAction,
-  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -21,7 +21,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { SetRequired } from "type-fest";
 import { v4 as uuid } from "uuid";
 import {
@@ -202,11 +202,9 @@ export const BreadcrumbsRoot = ({ rootLevelCrumbs = emptyCrumbArray, children }:
     [crumbs],
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies(setCrumbs):
-  // biome-ignore lint/correctness/useExhaustiveDependencies(currentIndexRef):
   const value = useMemo(
     () => [rootCrumbs, orderedCrumbs, setCrumbs, currentIndexRef] as const,
-    [rootCrumbs, orderedCrumbs, setCrumbs, currentIndexRef],
+    [rootCrumbs, orderedCrumbs],
   );
 
   return <BreadcrumbsContext.Provider value={value}>{children}</BreadcrumbsContext.Provider>;
