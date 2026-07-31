@@ -21,8 +21,6 @@ const styles = StyleSheet.create({
     boxShadow: shadows.tile,
   },
   anchored: {
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
     borderLeftWidth: 0.5,
     marginHorizontal: -1,
     marginBottom: -1,
@@ -124,7 +122,10 @@ export const LakeAlert = ({
     <View
       style={[
         styles.base,
-        { backgroundColor: alertBackground[variant], borderColor: alertBorder[variant] },
+        {
+          backgroundColor: alertBackground[variant],
+          borderColor: alertBorder[variant],
+        },
         anchored ? styles.anchored : { borderLeftColor: alertLeftBorder[variant] },
         style,
       ]}
@@ -139,7 +140,7 @@ export const LakeAlert = ({
 
         <View style={commonStyles.fill}>
           <Box direction="row" justifyContent="spaceBetween">
-            <LakeText color={color} variant={icon != null ? "regular" : "medium"}>
+            <LakeText color={color} variant={"medium"}>
               {title}
             </LakeText>
 
