@@ -155,7 +155,7 @@ export const LakeAlert = ({
         <View style={desktop && icon != null && styles.content}>
           <Space height={12} />
 
-          {isText(children) ? <LakeText>{children}</LakeText> : children}
+          {isText(children) ? <LakeText color={color}>{children}</LakeText> : children}
         </View>
       )}
     </View>

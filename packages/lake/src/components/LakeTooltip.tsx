@@ -260,7 +260,7 @@ export const InformationTooltip = ({
   <LakeTooltip
     ref={ref}
     describedBy="copy"
-    placement="right"
+    placement="center"
     togglableOnFocus={true}
     width={300}
     content={text}
