@@ -55,7 +55,7 @@ const run = async () => {
     }),
   );
 
-  rejectionKeys.sort(); // sort in place
+  const sortedRejectionKeys = rejectionKeys.toSorted();
 
   fs.readdirSync(localesPath).map(file => {
     const filePath = path.join(localesPath, file);
@@ -70,14 +70,13 @@ const run = async () => {
 
     const filteredRejectionKeys =
       file === "en.json"
-        ? rejectionKeys
-        : rejectionKeys.filter(key => {
+        ? sortedRejectionKeys
+        : sortedRejectionKeys.filter(key => {
             const value = currentJson[key];
             return value != null && value.trim() !== "";
           });
 
-    const keys = [...nonRejectionKeys, ...filteredRejectionKeys];
-    keys.sort(); // sort in place
+    const keys = [...nonRejectionKeys, ...filteredRejectionKeys].toSorted();
 
     const nextJson = Object.fromEntries(keys.map(key => [key, currentJson[key] ?? ""]));
     const nextText = JSON.stringify(nextJson, null, 2) + os.EOL;

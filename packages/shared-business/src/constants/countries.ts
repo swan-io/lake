@@ -2030,13 +2030,13 @@ export const countries: Country[] = readonlyCountries
 
     return country;
   })
-  .sort((countryA, countryB) => {
+  .toSorted((countryA, countryB) => {
     return countryA.name.localeCompare(countryB.name);
   });
 
 export const nationalities: Country[] = countries
   .filter(country => country.isNationality)
-  .sort((countryA, countryB) => {
+  .toSorted((countryA, countryB) => {
     return countryA.name.localeCompare(countryB.name);
   });
 

@@ -2,7 +2,7 @@ export const sortBy = <K extends string, T extends Record<K, unknown>>(
   array: T[],
   keys: K[],
 ): T[] => {
-  return [...array].sort((a, b) => {
+  return array.toSorted((a, b) => {
     let index = -1;
     while (++index < keys.length) {
       const key = keys[index];

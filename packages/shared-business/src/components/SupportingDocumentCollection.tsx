@@ -229,7 +229,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
       };
     });
 
-    return entries.sort((a, b) => (b.priority > a.priority ? -1 : 1));
+    return entries.toSorted((a, b) => (b.priority > a.priority ? -1 : 1));
   }, [documentPurposes, documents, addedDocuments]);
 
   const filesByRequiredPurpose = useRef(
