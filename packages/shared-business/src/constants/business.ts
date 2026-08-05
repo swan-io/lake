@@ -49,7 +49,7 @@ const unsortedBusinessActivities: BusinessActivityEntry[] = [
 ];
 
 export const businessActivities: BusinessActivityEntry[] = [
-  ...unsortedBusinessActivities.sort((a, b) => a.text.localeCompare(b.text)),
+  ...unsortedBusinessActivities.toSorted((a, b) => a.text.localeCompare(b.text)),
   { text: t("businessActivity.other"), value: "Other" },
 ];
 

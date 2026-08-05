@@ -41,7 +41,7 @@ export const CountryPicker = <T extends CountryCCA3>({
           value: cca3,
         };
       })
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .toSorted((a, b) => a.name.localeCompare(b.name));
   }, [countries]);
 
   return (

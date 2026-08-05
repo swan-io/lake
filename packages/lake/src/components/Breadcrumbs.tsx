@@ -198,7 +198,7 @@ export const BreadcrumbsRoot = ({ rootLevelCrumbs = emptyCrumbArray, children }:
   }, [rootLevelCrumbs]);
 
   const orderedCrumbs = useMemo(
-    () => [...crumbs].sort((a, b) => ((b.index ?? -1) > (a.index ?? -1) ? -1 : 1)),
+    () => crumbs.toSorted((a, b) => ((b.index ?? -1) > (a.index ?? -1) ? -1 : 1)),
     [crumbs],
   );
 
