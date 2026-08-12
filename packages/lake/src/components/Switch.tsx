@@ -66,15 +66,17 @@ const styles = StyleSheet.create({
 type Props = {
   ref?: Ref<View>;
   value: boolean;
+  labelledBy?: string;
   onValueChange?: (value: boolean) => void;
   disabled?: boolean;
 };
 
-export const Switch = memo(({ ref, value, disabled = false, onValueChange }: Props) => (
+export const Switch = memo(({ ref, value, labelledBy, disabled = false, onValueChange }: Props) => (
   <Pressable
     ref={ref}
     role="switch"
     aria-checked={value}
+    aria-labelledby={labelledBy}
     disabled={disabled}
     onPress={() => onValueChange?.(!value)}
   >
