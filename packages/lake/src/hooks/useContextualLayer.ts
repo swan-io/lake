@@ -39,15 +39,14 @@ export type ContextualLayerPosition = {
 
 type ContextualLayerConfig = {
   referenceRef: RefObject<View | Text | null>;
+  contentRef: RefObject<View | Text | null>;
   position: Option<ContextualLayerPosition>;
 };
-
-const MAX_OFFSET_FOR_CENTER_PLACEMENT = 100;
 
 const HORIZONTAL_SAFETY_MARGIN = 16;
 
 export const useContextualLayer = ({
-  placement,
+  placement = "left",
   verticalPlacement,
   visible,
   matchReferenceWidth = false,
@@ -55,6 +54,7 @@ export const useContextualLayer = ({
   referenceRef: externalReferenceRef,
 }: Config): ContextualLayerConfig => {
   const referenceRef = useRef<View | Text>(null);
+  const contentRef = useRef<View | Text>(null);
 
   const usedRef = externalReferenceRef ?? referenceRef;
 
@@ -78,15 +78,22 @@ export const useContextualLayer = ({
     const height = rect.bottom - rect.top;
     const width = rect.right - rect.left;
 
+    const contentElement = contentRef.current as unknown as HTMLElement | undefined;
+    // if contentRef isn't used in the component, we don't infer the placement depending on content size
+    const contentRect =
+      contentElement != null ? contentElement.getBoundingClientRect() : { width: 0, height: 0 };
+    const contentWidth = contentRect.width;
+    const contentMidWidth = contentWidth / 2;
+
     const isCenteredEnough =
-      Math.abs(availableSpaceBefore - availableSpaceAfter) < MAX_OFFSET_FOR_CENTER_PLACEMENT;
-    const inferedPlacement =
-      placement ??
-      (isCenteredEnough
-        ? ("center" as const)
-        : availableSpaceBefore > availableSpaceAfter
-          ? ("right" as const)
-          : ("left" as const));
+      availableSpaceBefore > contentMidWidth && availableSpaceAfter > contentMidWidth;
+    const bestPlacement = availableSpaceBefore > availableSpaceAfter ? "right" : "left";
+    const inferedPlacement = match(placement)
+      .returnType<Placement>()
+      .with("center", () => (isCenteredEnough ? "center" : bestPlacement))
+      .with("left", () => (availableSpaceBefore > contentWidth ? "left" : bestPlacement))
+      .with("right", () => (availableSpaceAfter > contentWidth ? "right" : bestPlacement))
+      .exhaustive();
 
     const openAbove =
       verticalPlacement === "above"
@@ -167,6 +174,7 @@ export const useContextualLayer = ({
 
   return {
     referenceRef: usedRef,
+    contentRef,
     position,
   };
 };

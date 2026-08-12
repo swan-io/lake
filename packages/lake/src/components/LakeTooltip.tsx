@@ -100,7 +100,7 @@ const Tooltip = memo(
     const timeoutRef = useRef(0);
     const [visible, setVisible] = useState(false);
 
-    const { referenceRef, position } = useContextualLayer({
+    const { referenceRef, contentRef, position } = useContextualLayer({
       placement,
       visible,
       matchReferenceWidth,
@@ -186,6 +186,7 @@ const Tooltip = memo(
           <Portal container={rootElement}>
             <View style={[position.get().rootStyle, styles.root]}>
               <View
+                ref={contentRef}
                 role="tooltip"
                 aria-describedby={describedBy}
                 style={[styles.base, position.get().style]}
@@ -249,18 +250,20 @@ const Tooltip = memo(
 export const InformationTooltip = ({
   ref,
   text,
+  placement = "center",
   icon = "info-regular",
   iconSize = 24,
 }: {
   ref?: Ref<TooltipRef>;
   text: string;
+  placement?: Props["placement"];
   icon?: IconName;
   iconSize?: number;
 }) => (
   <LakeTooltip
     ref={ref}
     describedBy="copy"
-    placement="center"
+    placement={placement}
     togglableOnFocus={true}
     width={300}
     content={text}
