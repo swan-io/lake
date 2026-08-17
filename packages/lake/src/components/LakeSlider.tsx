@@ -17,6 +17,7 @@ type Props = {
   step: number;
   disabled?: boolean;
   style?: ViewProps["style"];
+  labelledBy?: string;
   onChange: (value: number) => void;
 };
 
@@ -28,11 +29,13 @@ export const LakeSlider = ({
   step,
   disabled = false,
   style,
+  labelledBy,
   onChange,
 }: Props) => (
   <View style={[styles.container, style]}>
     <input
       id={id}
+      aria-labelledby={labelledBy}
       type="range"
       min={min}
       max={max}
