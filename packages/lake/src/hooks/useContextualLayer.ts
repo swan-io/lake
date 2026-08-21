@@ -1,7 +1,7 @@
 import { Option } from "@swan-io/boxed";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 
 export type ElementPosition = {
   availableSpaceAbove: number;
@@ -43,10 +43,12 @@ type ContextualLayerConfig = {
   position: Option<ContextualLayerPosition>;
 };
 
+const MAX_OFFSET_FOR_CENTER_PLACEMENT = 100;
+
 const HORIZONTAL_SAFETY_MARGIN = 16;
 
 export const useContextualLayer = ({
-  placement = "left",
+  placement,
   verticalPlacement,
   visible,
   matchReferenceWidth = false,
@@ -83,16 +85,16 @@ export const useContextualLayer = ({
     const contentRect =
       contentElement != null ? contentElement.getBoundingClientRect() : { width: 0, height: 0 };
     const contentWidth = contentRect.width;
-    const contentMidWidth = contentWidth / 2;
 
     const isCenteredEnough =
-      availableSpaceBefore > contentMidWidth && availableSpaceAfter > contentMidWidth;
+      Math.abs(availableSpaceBefore - availableSpaceAfter) < MAX_OFFSET_FOR_CENTER_PLACEMENT;
+
     const bestPlacement = availableSpaceBefore > availableSpaceAfter ? "right" : "left";
     const inferedPlacement = match(placement)
       .returnType<Placement>()
-      .with("center", () => (isCenteredEnough ? "center" : bestPlacement))
-      .with("left", () => (availableSpaceBefore > contentWidth ? "left" : bestPlacement))
-      .with("right", () => (availableSpaceAfter > contentWidth ? "right" : bestPlacement))
+      .with("center", P.nullish, () => (isCenteredEnough ? "center" : bestPlacement))
+      .with("left", () => (availableSpaceAfter > contentWidth ? "left" : bestPlacement))
+      .with("right", () => (availableSpaceBefore > contentWidth ? "right" : bestPlacement))
       .exhaustive();
 
     const openAbove =
