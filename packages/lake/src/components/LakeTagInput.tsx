@@ -113,6 +113,7 @@ const SEPARATORS_REGEX = /,| /;
 
 export const LakeTagInput = ({
   ref,
+  id,
   validator = () => true,
   onFocus: originalOnFocus,
   onBlur: originalOnBlur,
@@ -256,6 +257,7 @@ export const LakeTagInput = ({
 
         <TextInput
           ref={mergedRef}
+          id={id}
           style={[styles.input, disabled && styles.disabled]}
           onFocus={onFocus}
           onBlur={onBlur}
