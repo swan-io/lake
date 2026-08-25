@@ -1,6 +1,6 @@
 import { memo, ReactNode, Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { colors, shadows, spacings } from "../constants/design";
 import { useContextualLayer } from "../hooks/useContextualLayer";
 import { useHover } from "../hooks/useHover";
@@ -104,6 +104,7 @@ const Tooltip = memo(
       placement,
       visible,
       matchReferenceWidth,
+      withArrow: !hideArrow,
     });
     const rootElement = getRootElement(referenceRef.current as Element | null);
 
@@ -192,22 +193,11 @@ const Tooltip = memo(
                 style={[styles.base, position.get().style]}
               >
                 {position.get().verticalPosition === "bottom" ? (
-                  <Box
-                    direction="row"
-                    justifyContent={match(position.get().horizontalPosition)
-                      .with("left", () => "start" as const)
-                      .with("center", () => "center" as const)
-                      .with("right", () => "end" as const)
-                      .exhaustive()}
-                    style={[styles.arrowBar, styles.arrowBarTop]}
-                  >
-                    <Svg width={16} height={8} viewBox="0 0 16 8">
-                      <Polygon
-                        points="8 0 16 8 0 8"
-                        fill={hideArrow ? "transparent" : colors.gray[900]}
-                      />
-                    </Svg>
-                  </Box>
+                  <TooltipArrow
+                    verticalPosition="bottom"
+                    position={position.get().arrowPosition}
+                    hideArrow={hideArrow}
+                  />
                 ) : null}
 
                 <View style={[styles.content, { width, maxWidth }]}>
@@ -221,22 +211,11 @@ const Tooltip = memo(
                 </View>
 
                 {position.get().verticalPosition === "top" ? (
-                  <Box
-                    direction="row"
-                    justifyContent={match(position.get().horizontalPosition)
-                      .with("left", () => "start" as const)
-                      .with("center", () => "center" as const)
-                      .with("right", () => "end" as const)
-                      .exhaustive()}
-                    style={[styles.arrowBar, styles.arrowBarBottom]}
-                  >
-                    <Svg width={16} height={8} viewBox="0 0 16 8">
-                      <Polygon
-                        points="8 8 16 0 0 0"
-                        fill={hideArrow ? "transparent" : colors.gray[900]}
-                      />
-                    </Svg>
-                  </Box>
+                  <TooltipArrow
+                    verticalPosition="top"
+                    position={position.get().arrowPosition}
+                    hideArrow={hideArrow}
+                  />
                 ) : null}
               </View>
             </View>
@@ -246,6 +225,37 @@ const Tooltip = memo(
     );
   },
 );
+
+type TooltipArrowProps = {
+  verticalPosition: "top" | "bottom";
+  position: "left" | "right" | number;
+  hideArrow: boolean;
+};
+
+const TooltipArrow = ({ verticalPosition, position, hideArrow }: TooltipArrowProps) => {
+  const { polygonPoints, top, bottom } =
+    verticalPosition === "top"
+      ? { polygonPoints: "8 8 16 0 0 0", top: undefined, bottom: 1 }
+      : { polygonPoints: "8 0 16 8 0 8", top: 1, bottom: undefined };
+
+  const { justifyContent, left } = match(position)
+    .with("left", () => ({ justifyContent: "start" as const, left: undefined }))
+    .with("right", () => ({ justifyContent: "end" as const, left: undefined }))
+    .with(P.number, value => ({ justifyContent: "center" as const, left: value }))
+    .exhaustive();
+
+  return (
+    <Box
+      direction="row"
+      justifyContent={justifyContent}
+      style={[styles.arrowBar, styles.arrowBarBottom, { top, bottom, left }]}
+    >
+      <Svg width={16} height={8} viewBox="0 0 16 8">
+        <Polygon points={polygonPoints} fill={hideArrow ? "transparent" : colors.gray[900]} />
+      </Svg>
+    </Box>
+  );
+};
 
 export const InformationTooltip = ({
   ref,
