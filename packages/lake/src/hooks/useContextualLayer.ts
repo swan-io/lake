@@ -28,6 +28,7 @@ type Config = {
   matchReferenceWidth?: boolean;
   matchReferenceMinWidth?: boolean;
   referenceRef?: RefObject<View | Text | null>;
+  withArrow?: boolean;
 };
 
 export type ContextualLayerPosition = {
@@ -35,6 +36,8 @@ export type ContextualLayerPosition = {
   style: ViewStyle;
   verticalPosition: "top" | "bottom";
   horizontalPosition: "left" | "center" | "right";
+  // left | right when tooltip is less wide than the reference element, number when tooltip is wider than the reference element to center the arrow on the reference element
+  arrowPosition: "left" | "right" | number;
 };
 
 type ContextualLayerConfig = {
@@ -47,12 +50,33 @@ const MAX_OFFSET_FOR_CENTER_PLACEMENT = 100;
 
 const HORIZONTAL_SAFETY_MARGIN = 16;
 
+const getArrowPosition = (
+  placement: Placement,
+  referenceWidth: number,
+  contentWidth: number,
+): "left" | "right" | number => {
+  if (placement === "center") {
+    return 0;
+  }
+
+  if (contentWidth <= referenceWidth) {
+    return placement;
+  }
+
+  const maxOffset = contentWidth / 2 - 12; // avoid arrow to be too close to the edge of the tooltip
+  const offset = (contentWidth - referenceWidth) / 2;
+  const arrowOffset = Math.min(offset, maxOffset);
+
+  return placement === "left" ? -arrowOffset : arrowOffset;
+};
+
 export const useContextualLayer = ({
   placement,
   verticalPlacement,
   visible,
   matchReferenceWidth = false,
   matchReferenceMinWidth = false,
+  withArrow = false,
   referenceRef: externalReferenceRef,
 }: Config): ContextualLayerConfig => {
   const referenceRef = useRef<View | Text>(null);
@@ -120,6 +144,8 @@ export const useContextualLayer = ({
       .with("center", () => ({ left: rect.left + width / 2, transform: "translateX(-50%)" }))
       .exhaustive();
 
+    const arrowPosition = withArrow ? getArrowPosition(inferedPlacement, width, contentWidth) : 0;
+
     const maxHeight = openAbove ? availableSpaceAbove : window.innerHeight - rect.top - height;
 
     const rootStyle: ViewStyle = {
@@ -155,10 +181,18 @@ export const useContextualLayer = ({
     return Option.Some({
       rootStyle,
       horizontalPosition: inferedPlacement,
+      arrowPosition,
       verticalPosition: openAbove ? ("top" as const) : ("bottom" as const),
       style,
     });
-  }, [placement, verticalPlacement, matchReferenceWidth, matchReferenceMinWidth, usedRef]);
+  }, [
+    placement,
+    verticalPlacement,
+    matchReferenceWidth,
+    matchReferenceMinWidth,
+    usedRef,
+    withArrow,
+  ]);
 
   useEffect(() => {
     if (visible) {
