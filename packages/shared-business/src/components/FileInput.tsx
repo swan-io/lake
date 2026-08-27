@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
 type DistFile = { url: string; name?: string };
 
 type Props = {
+  id?: string;
   accept: string[];
   value?: DistFile | File;
   disabled?: boolean;
@@ -118,6 +119,7 @@ type Props = {
 };
 
 export const FileInput = ({
+  id,
   icon = "document-regular",
   accept,
   value,
@@ -182,7 +184,7 @@ export const FileInput = ({
             (error != null || fileRejections.length > 0) && styles.errorContainer,
           ]}
         >
-          <input {...getInputProps()} />
+          <input {...getInputProps({ id })} />
 
           {match({ file, isImageOnly })
             .with({ file: Option.Some(P.select()), isImageOnly: true }, ({ url }) => (
