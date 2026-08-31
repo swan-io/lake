@@ -1,7 +1,7 @@
 import { ReactNode, useId } from "react";
 import { Pressable, StyleSheet, View, ViewProps } from "react-native";
 import { backgroundColor, colors, spacings } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
+import { useBoolean } from "../hooks/useBoolean";
 import { Icon } from "./Icon";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
@@ -48,7 +48,7 @@ type Props = {
 
 export const Accordion = ({ children, trigger, style, contentContainerStyle }: Props) => {
   const id = useId();
-  const [isOpen, { toggle }] = useDisclosure(false);
+  const [isOpen, { toggle }] = useBoolean(false);
 
   return (
     <View>
