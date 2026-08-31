@@ -32,7 +32,6 @@ import {
   texts,
 } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
-import { useDisclosure } from "../hooks/useDisclosure";
 import { useMergeRefs } from "../hooks/useMergeRefs";
 import { getFocusableElements } from "../utils/a11y";
 import { setHighlightApi } from "../utils/highlights";
@@ -256,7 +255,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
 
   const mergedRef = useMergeRefs(inputRef, ref);
 
-  const [visible, { close, open }] = useDisclosure(false);
+  const [visible, { on: open, off: close }] = useBoolean(false);
 
   const hasValue = isNotNullish(value);
   const isSmall = size === "small";

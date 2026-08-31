@@ -13,7 +13,7 @@ import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors, spacings } from "@swan-io/lake/src/constants/design";
-import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
+import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { noop } from "@swan-io/lake/src/utils/function";
@@ -831,7 +831,7 @@ export const DatePicker = ({
 }: DatePickerProps) => {
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
   const ref = useRef<TextInput>(null);
-  const [isOpened, { open, close }] = useDisclosure(false);
+  const [isOpened, { on: open, off: close }] = useBoolean(false);
   const popoverId = useId();
 
   return (
@@ -1243,7 +1243,7 @@ export const DateRangePicker = ({
   const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
   const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
   const ref = useRef<TextInput>(null);
-  const [isOpened, { open, close }] = useDisclosure(false);
+  const [isOpened, { on: open, off: close }] = useBoolean(false);
 
   const handleStartChange = useCallback(
     (start: string) => {

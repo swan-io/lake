@@ -27,7 +27,7 @@ import {
   spacings,
   texts,
 } from "../constants/design";
-import { useDisclosure } from "../hooks/useDisclosure";
+import { useBoolean } from "../hooks/useBoolean";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { Icon } from "./Icon";
@@ -166,7 +166,7 @@ export const Tile = ({
   style,
 }: Props) => {
   const contentId = useId();
-  const [expanded, { toggle }] = useDisclosure(defaultExpanded);
+  const [expanded, { toggle }] = useBoolean(defaultExpanded);
 
   const hasHeader =
     isNotNullish(title) || isNotNullish(headerEnd) || isNotNullish(description) || collapsible;

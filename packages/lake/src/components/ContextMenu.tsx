@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { colors, spacings } from "../constants/design";
+import { useBoolean } from "../hooks/useBoolean";
 import { VerticalPlacement } from "../hooks/useContextualLayer";
-import { useDisclosure } from "../hooks/useDisclosure";
 import { noop } from "../utils/function";
 import { LakeButton } from "./LakeButton";
 import { LakeText } from "./LakeText";
@@ -43,7 +43,7 @@ export const ContextMenu = ({
   withPill = false,
   verticalPlacement,
 }: ContextMenuProps) => {
-  const [isOpen, { open, close }] = useDisclosure(false);
+  const [isOpen, { on: open, off: close }] = useBoolean(false);
   const triggerRef = useRef<View>(null);
 
   return (

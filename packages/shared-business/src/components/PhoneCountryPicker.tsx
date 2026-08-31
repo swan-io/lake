@@ -7,8 +7,8 @@ import { Pressable } from "@swan-io/lake/src/components/Pressable";
 import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors, radii, spacings, texts } from "@swan-io/lake/src/constants/design";
+import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
 import { useDebounce } from "@swan-io/lake/src/hooks/useDebounce";
-import { useDisclosure } from "@swan-io/lake/src/hooks/useDisclosure";
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { deburr } from "@swan-io/lake/src/utils/string";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -87,7 +87,7 @@ export const PhoneCountryPicker = ({
 }: Props) => {
   const referenceRef = useRef<View>(null);
   const inputRef = useRef<TextInput>(null);
-  const [visible, { open, close }] = useDisclosure(false);
+  const [visible, { on: open, off: close }] = useBoolean(false);
 
   const allowedCountries = useMemo(
     () =>

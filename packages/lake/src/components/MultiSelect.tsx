@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { backgroundColor, ColorVariants, colors, radii, shadows, texts } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
-import { useDisclosure } from "../hooks/useDisclosure";
 import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { safeSplitAround } from "../utils/string";
@@ -192,7 +191,7 @@ export const MultiSelect = <Value,>({
   const shouldScrollToBottomRef = useRef(false);
   const selectedTagListRef = useRef<View & Element>(null);
   const inputRef = useRef<View>(null);
-  const [visible, { open, close }] = useDisclosure(false);
+  const [visible, { on: open, off: close }] = useBoolean(false);
 
   const tint50 = colors[color][50];
   const tint100 = colors[color][100];
