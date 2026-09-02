@@ -1,0 +1,2 @@
+import{c as e,i as t}from"./preload-helper-CCSz8wUY.js";import{o as n}from"./iframe-IEBDhxj1.js";var r,i,a,o=t((()=>{r=e(n()),i={},a=(e,{enabled:t=!0}={})=>{(0,r.useEffect)(()=>{if(!t)return;let n=i[e]??0;return i[e]=n+1,document.body.classList.add(e),()=>{let t=i[e]??0;i[e]=t-1,i[e]<=0&&document.body.classList.remove(e)}},[e,t])}}));export{a as n,o as t};
+//# sourceMappingURL=useBodyClassName-COmB7tBK.js.map
