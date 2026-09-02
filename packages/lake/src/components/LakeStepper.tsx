@@ -4,9 +4,7 @@ import { CSSProperties, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match, P } from "ts-pattern";
 import { colors } from "../constants/design";
-import { Box } from "./Box";
 import { Grid } from "./Grid";
-import { LakeHeading } from "./LakeHeading";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
 
@@ -45,24 +43,6 @@ const styles = StyleSheet.create({
   },
   progressBarError: {
     backgroundColor: colors.negative[500],
-  },
-
-  mobileContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.gray[100],
-    paddingBottom: 10,
-  },
-  mobileNumber: {
-    minWidth: 28,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.current[100],
-    backgroundColor: colors.current[50],
-  },
-  mobileNumberError: {
-    borderColor: colors.negative[100],
-    backgroundColor: colors.negative[50],
   },
 });
 
@@ -204,64 +184,6 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
       })}
     </Grid>
   );
-};
-
-/** @deprecated Use <MobileStepper> instead */
-export const MobileStepTitle = ({ steps, activeStepId }: Props) => {
-  const currentStep = Option.fromNullable(
-    steps
-      .flatMap((step, index) =>
-        match(step)
-          .with({ id: P.string }, step => ({ ...step, number: `${index + 1}` }))
-          .with({ children: P.array(P.any) }, ({ children }) =>
-            children.map((child, subIndex) => ({
-              ...child,
-              number: `${index + 1}.${subIndex + 1}`,
-            })),
-          )
-          .exhaustive(),
-      )
-      .find(({ id }) => id === activeStepId),
-  ).map(({ label, hasErrors, number }) => ({
-    number,
-    label,
-    isErrorState: hasErrors === true,
-  }));
-
-  return currentStep.match({
-    Some: ({ number, label, isErrorState }) => (
-      <Box
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        style={styles.mobileContainer}
-      >
-        <Box
-          alignItems="center"
-          justifyContent="center"
-          style={[styles.mobileNumber, isErrorState && styles.mobileNumberError]}
-        >
-          <LakeText
-            variant="smallMedium"
-            color={isErrorState ? colors.negative[500] : colors.current[500]}
-          >
-            {number}
-          </LakeText>
-        </Box>
-
-        <Space width={8} />
-
-        <LakeHeading
-          level={4}
-          variant="h4"
-          color={isErrorState ? colors.negative[500] : colors.current[500]}
-        >
-          {label}
-        </LakeHeading>
-      </Box>
-    ),
-    None: () => null,
-  });
 };
 
 export const MobileStepper = ({ steps, activeStepId }: Props) => {
