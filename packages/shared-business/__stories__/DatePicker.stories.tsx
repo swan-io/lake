@@ -12,12 +12,7 @@ import {
   DatePicker,
   DatePickerModal,
   DatePickerProps,
-  DateRangePicker,
-  DateRangePickerModal,
-  DateRangePickerProps,
   isDateInRange,
-  isTodayOrFutureDate,
-  validateDateRangeOrder,
 } from "../src/components/DatePicker";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -47,22 +42,6 @@ const InteractiveDatePicker = ({ ...props }: Except<DatePickerProps, "value" | "
   return <DatePicker {...props} value={value} onChange={setValue} />;
 };
 
-const InteractiveDateRangePicker = ({
-  ...props
-}: Except<DateRangePickerProps, "value" | "onChange">) => {
-  const [value, setValue] = useState({ start: "", end: "" });
-  const isRangeValid = validateDateRangeOrder(value, props.format);
-
-  return (
-    <DateRangePicker
-      {...props}
-      value={value}
-      error={isRangeValid ? undefined : "End date can't be before start date"}
-      onChange={setValue}
-    />
-  );
-};
-
 export const Default = () => {
   return (
     <WithPartnerAccentColor color="#0F6FDE">
@@ -83,17 +62,6 @@ export const Default = () => {
               label="Select a date"
               firstWeekDay="sunday"
               format="DD/MM/YYYY"
-            />
-          </View>
-        </StoryPart>
-
-        <StoryPart title="Selectable only in the future">
-          <View style={styles.container}>
-            <InteractiveDatePicker
-              label="Select a date"
-              firstWeekDay="sunday"
-              format="DD/MM/YYYY"
-              isSelectable={isTodayOrFutureDate}
             />
           </View>
         </StoryPart>
@@ -135,61 +103,6 @@ export const ButtonWithModal = () => {
             firstWeekDay="monday"
             format="DD/MM/YYYY"
             label="Select a date"
-            confirmLabel="Select"
-            cancelLabel="Cancel"
-            onChange={setValue}
-            onDismiss={() => setIsOpened(false)}
-          />
-        </StoryPart>
-      </StoryBlock>
-    </WithPartnerAccentColor>
-  );
-};
-
-export const Range = () => {
-  return (
-    <WithPartnerAccentColor color="#0F6FDE">
-      <StoryBlock title="DateRangePicker">
-        <StoryPart title="Default">
-          <View style={styles.container}>
-            <InteractiveDateRangePicker
-              startLabel="Start date"
-              endLabel="End date"
-              firstWeekDay="monday"
-              format="DD/MM/YYYY"
-            />
-          </View>
-        </StoryPart>
-      </StoryBlock>
-    </WithPartnerAccentColor>
-  );
-};
-
-export const ButtonWithRangePopover = () => {
-  const [value, setValue] = useState({ start: "", end: "" });
-  const [isOpened, setIsOpened] = useState(false);
-
-  return (
-    <WithPartnerAccentColor color="#0F6FDE">
-      <StoryBlock title="DatePicker Popover">
-        <StoryPart title="Default">
-          <LakeText>
-            Selected date: {value.start} - {value.end}
-          </LakeText>
-
-          <Space height={20} />
-
-          <LakeButton style={styles.button} onPress={() => setIsOpened(true)}>
-            Open date range picker
-          </LakeButton>
-
-          <DateRangePickerModal
-            visible={isOpened}
-            value={value}
-            firstWeekDay="monday"
-            format="DD/MM/YYYY"
-            startLabel="Start date"
-            endLabel="End date"
             confirmLabel="Select"
             cancelLabel="Cancel"
             onChange={setValue}
