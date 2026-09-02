@@ -2,7 +2,6 @@ import { Option } from "@swan-io/boxed";
 import { BottomPanel } from "@swan-io/lake/src/components/BottomPanel";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { Fill } from "@swan-io/lake/src/components/Fill";
-import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { Item, LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
@@ -10,11 +9,9 @@ import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { Popover } from "@swan-io/lake/src/components/Popover";
 import { Pressable } from "@swan-io/lake/src/components/Pressable";
-import { Separator } from "@swan-io/lake/src/components/Separator";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { colors, spacings } from "@swan-io/lake/src/constants/design";
 import { useBoolean } from "@swan-io/lake/src/hooks/useBoolean";
-import { useFirstMountState } from "@swan-io/lake/src/hooks/useFirstMountState";
 import { useResponsive } from "@swan-io/lake/src/hooks/useResponsive";
 import { noop } from "@swan-io/lake/src/utils/function";
 import {
@@ -38,17 +35,11 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
   },
-  arrowContainer: {
-    height: 40, // input height
-  },
   popover: {
     padding: spacings[12],
   },
   popoverDesktop: {
     padding: spacings[24],
-  },
-  rangeCalendarSide: {
-    flex: 1,
   },
   button: {
     flex: 1,
@@ -116,7 +107,6 @@ const styles = StyleSheet.create({
 
 const MODALE_MOBILE_THRESHOLD = 600;
 const DATE_PICKER_MOBILE_THRESHOLD = 400;
-const DATE_RANGE_PICKER_THRESHOLD = 800;
 
 const NB_DAYS_IN_WEEK = 7;
 
@@ -200,33 +190,9 @@ const parseDate = (value: string, format: DateFormat): Option<DatePickerDate> =>
     : Option.None();
 };
 
-const parseRange = (value: { start: string; end: string }, format: DateFormat): DatePickerRange => {
-  return {
-    start: parseDate(value.start, format),
-    end: parseDate(value.end, format),
-  };
-};
-
 const stringifyDate = (value: DatePickerDate, format: DateFormat): string => {
   const date = dayjs.utc().year(value.year).month(value.month).date(value.day);
   return date.format(format);
-};
-
-export const validateDateRangeOrder = (
-  value: { start: string; end: string },
-  format: DateFormat,
-) => {
-  const range = parseRange(value, format);
-
-  if (range.start.isNone() || range.end.isNone()) {
-    return true;
-  }
-
-  if (isDateAfter(range.start.value, range.end.value)) {
-    return false;
-  }
-
-  return true;
 };
 
 const range = (start: number, end: number): number[] => {
@@ -250,19 +216,6 @@ const groupEvery = <T,>(input: T[], groupSize: number): T[][] => {
 const padEnd = <T,>(input: T[], length: number, value: T): T[] => {
   const itemsToAppend = new Array(length - input.length).fill(value) as T[];
   return [...input, ...itemsToAppend];
-};
-
-export const isTodayOrFutureDate = (date: DatePickerDate): boolean => {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  const yesterdayDate: DatePickerDate = {
-    day: yesterday.getDate(),
-    month: yesterday.getMonth(),
-    year: yesterday.getFullYear(),
-  };
-
-  return isDateAfter(date, yesterdayDate);
 };
 
 export const isDateInRange =
@@ -439,50 +392,6 @@ const getRangeIndicatorType = (
   return "none";
 };
 
-const computeDateDistanceInDays = (date1: DatePickerDate, date2: DatePickerDate): number => {
-  const date1Date = new Date(date1.year, date1.month, date1.day);
-  const date2Date = new Date(date2.year, date2.month, date2.day);
-
-  const diffInMs = Math.abs(date2Date.getTime() - date1Date.getTime());
-  return Math.round(diffInMs / (1000 * 3600 * 24));
-};
-
-const getNewDateRange = (
-  currentRange: DatePickerRange,
-  selectedDate: DatePickerDate,
-): DatePickerRange => {
-  const { start, end } = currentRange;
-
-  // Handle initial selection
-  if (start.isNone()) {
-    return { start: Option.Some(selectedDate), end: Option.None() };
-  }
-  if (end.isNone()) {
-    if (isDateAfter(selectedDate, start.value)) {
-      return { start, end: Option.Some(selectedDate) };
-    }
-
-    return { start: Option.Some(selectedDate), end: currentRange.start };
-  }
-
-  // Handle selection outside of the current range
-  if (isDateBefore(selectedDate, start.value)) {
-    return { start: Option.Some(selectedDate), end: currentRange.end };
-  }
-  if (isDateAfter(selectedDate, end.value)) {
-    return { start: currentRange.start, end: Option.Some(selectedDate) };
-  }
-
-  // We change the closest date to the new date
-  const startDistance = computeDateDistanceInDays(start.value, selectedDate);
-  const endDistance = computeDateDistanceInDays(end.value, selectedDate);
-
-  if (startDistance < endDistance) {
-    return { start: Option.Some(selectedDate), end: currentRange.end };
-  }
-  return { start: currentRange.start, end: Option.Some(selectedDate) };
-};
-
 const getTodayYearMonth = (): YearMonth => ({
   month: new Date().getMonth(),
   year: new Date().getFullYear(),
@@ -493,22 +402,6 @@ const getYearMonth = (value: string | undefined, format: DateFormat): Option<Yea
     return Option.None();
   }
   return parseDate(value, format);
-};
-
-const isYearMonthBefore = (date1: YearMonth, date2: YearMonth): boolean => {
-  return date1.year < date2.year || (date1.year === date2.year && date1.month < date2.month);
-};
-
-const isYearMonthEquals = (date1: YearMonth, date2: YearMonth): boolean => {
-  return date1.year === date2.year && date1.month === date2.month;
-};
-
-const minYearMonth = (date1: YearMonth, date2: YearMonth): YearMonth => {
-  return isYearMonthBefore(date1, date2) ? date1 : date2;
-};
-
-const maxYearMonth = (date1: YearMonth, date2: YearMonth): YearMonth => {
-  return isYearMonthBefore(date1, date2) ? date2 : date1;
 };
 
 const incrementYearMonth = ({ month, year }: YearMonth): YearMonth => {
@@ -1023,453 +916,5 @@ const DateModal = ({
     <BottomPanel visible={visible} onPressClose={onPressClose}>
       <View style={styles.popover}>{children}</View>
     </BottomPanel>
-  );
-};
-
-export type DateRangePickerProps = {
-  value: { start: string; end: string };
-  error?: string;
-  format: DateFormat;
-  startLabel: string;
-  endLabel: string;
-  firstWeekDay: keyof typeof weekDayIndex;
-  isSelectable?: (date: DatePickerDate) => boolean;
-  onChange: (date: { start: string; end: string }) => void;
-};
-
-type DateRangePickerModalContentProps = Except<
-  DateRangePickerProps,
-  "startLabel" | "endLabel" | "error"
-> & {
-  desktop: boolean;
-  displayTwoCalendar: boolean;
-};
-
-const DateRangePickerModalContent = ({
-  value,
-  format,
-  firstWeekDay,
-  desktop,
-  displayTwoCalendar,
-  isSelectable,
-  onChange,
-}: DateRangePickerModalContentProps) => {
-  const isFirstMount = useFirstMountState();
-  const [periods, setPeriods] = useState(() => {
-    const startYearMonth = getYearMonth(value.start, format).getOr(getTodayYearMonth());
-    const endYearMonth = getYearMonth(value.end, format).getOr(incrementYearMonth(startYearMonth));
-    return {
-      start: startYearMonth,
-      end: isYearMonthEquals(startYearMonth, endYearMonth)
-        ? incrementYearMonth(startYearMonth)
-        : endYearMonth,
-    };
-  });
-
-  // Automatically change displayed year and month when start date changes
-  useEffect(() => {
-    if (isFirstMount) {
-      return;
-    }
-
-    const startYearMonth = getYearMonth(value.start, format);
-
-    if (startYearMonth.isSome()) {
-      setPeriods(periods => {
-        const isStartAndEndSameMonth = isYearMonthEquals(startYearMonth.value, periods.end);
-        if (isStartAndEndSameMonth) {
-          return {
-            start: decrementYearMonth(periods.end),
-            end: periods.end,
-          };
-        }
-
-        // change end period if it becomes before start period
-        const endPeriod = maxYearMonth(periods.end, incrementYearMonth(startYearMonth.value));
-
-        return {
-          start: startYearMonth.value,
-          end: endPeriod,
-        };
-      });
-    }
-  }, [isFirstMount, value.start, format]);
-
-  // Automatically change displayed year and month when end date changes
-  useEffect(() => {
-    if (isFirstMount) {
-      return;
-    }
-
-    const endYearMonth = getYearMonth(value.end, format);
-
-    if (endYearMonth.isSome()) {
-      setPeriods(periods => {
-        const isStartAndEndSameMonth = isYearMonthEquals(periods.start, endYearMonth.value);
-        if (isStartAndEndSameMonth) {
-          return {
-            start: periods.start,
-            end: incrementYearMonth(periods.start),
-          };
-        }
-
-        // change start period if it becomes after end period
-        const startPeriod = minYearMonth(periods.start, decrementYearMonth(endYearMonth.value));
-
-        return {
-          start: startPeriod,
-          end: endYearMonth.value,
-        };
-      });
-    }
-  }, [isFirstMount, value.end, format]);
-
-  const setStartPeriod = useCallback((yearMonth: YearMonth) => {
-    setPeriods(periods => ({
-      start: yearMonth,
-      end: maxYearMonth(periods.end, incrementYearMonth(yearMonth)),
-    }));
-  }, []);
-
-  const setEndPeriod = useCallback((yearMonth: YearMonth) => {
-    setPeriods(periods => ({
-      start: minYearMonth(periods.start, decrementYearMonth(yearMonth)),
-      end: yearMonth,
-    }));
-  }, []);
-
-  const dateRange = useMemo(() => parseRange(value, format), [value, format]);
-
-  const handleSelectDate = (date: DatePickerDate) => {
-    const newRange = getNewDateRange(dateRange, date);
-    const newValue = {
-      start: newRange.start.match({
-        Some: date => stringifyDate(date, format),
-        None: () => value.start,
-      }),
-      end: newRange.end.match({
-        Some: date => stringifyDate(date, format),
-        None: () => value.end,
-      }),
-    };
-    onChange(newValue);
-  };
-
-  if (!displayTwoCalendar) {
-    return (
-      <>
-        <YearMonthSelect
-          monthNames={monthNames}
-          value={periods.start}
-          hideArrows={!desktop}
-          onChange={setStartPeriod}
-        />
-
-        <Space height={24} />
-
-        <MonthCalendar
-          month={periods.start.month}
-          year={periods.start.year}
-          value={dateRange}
-          firstWeekDay={firstWeekDay}
-          isSelectable={isSelectable}
-          onChange={handleSelectDate}
-        />
-      </>
-    );
-  }
-
-  return (
-    <View>
-      <Box direction="row" alignItems="start">
-        <View style={styles.rangeCalendarSide}>
-          <YearMonthSelect
-            monthNames={monthNames}
-            value={periods.start}
-            maxValue={decrementYearMonth(periods.end)}
-            arrowsPosition="around"
-            onChange={setStartPeriod}
-          />
-
-          <Space height={24} />
-
-          <MonthCalendar
-            month={periods.start.month}
-            year={periods.start.year}
-            value={dateRange}
-            firstWeekDay={firstWeekDay}
-            isSelectable={isSelectable}
-            onChange={handleSelectDate}
-          />
-        </View>
-
-        <Separator space={24} horizontal={true} />
-
-        <View style={styles.rangeCalendarSide}>
-          <YearMonthSelect
-            monthNames={monthNames}
-            value={periods.end}
-            minValue={incrementYearMonth(periods.start)}
-            arrowsPosition="around"
-            onChange={setEndPeriod}
-          />
-
-          <Space height={24} />
-
-          <MonthCalendar
-            month={periods.end.month}
-            year={periods.end.year}
-            value={dateRange}
-            firstWeekDay={firstWeekDay}
-            isSelectable={isSelectable}
-            onChange={handleSelectDate}
-          />
-        </View>
-      </Box>
-    </View>
-  );
-};
-
-export const DateRangePicker = ({
-  value,
-  error,
-  format,
-  startLabel,
-  endLabel,
-  firstWeekDay,
-  isSelectable,
-  onChange,
-}: DateRangePickerProps) => {
-  const { desktop } = useResponsive(DATE_PICKER_MOBILE_THRESHOLD);
-  const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
-  const ref = useRef<TextInput>(null);
-  const [isOpened, { on: open, off: close }] = useBoolean(false);
-
-  const handleStartChange = useCallback(
-    (start: string) => {
-      onChange({ start, end: value.end });
-    },
-    [value, onChange],
-  );
-
-  const handleEndChange = useCallback(
-    (end: string) => {
-      onChange({ start: value.start, end });
-    },
-    [value, onChange],
-  );
-
-  return (
-    <View>
-      <Box direction="row" alignItems="end">
-        <LakeLabel
-          label={startLabel}
-          style={styles.label}
-          render={id => (
-            <Rifm value={value.start} onChange={handleStartChange} {...rifmDateProps}>
-              {({ value, onChange }) => (
-                <LakeTextInput
-                  ref={ref}
-                  id={id}
-                  placeholder={format}
-                  value={value}
-                  onChange={onChange}
-                  error={error}
-                  hideErrors={true}
-                />
-              )}
-            </Rifm>
-          )}
-        />
-
-        <Space width={12} />
-
-        <Box style={styles.arrowContainer} justifyContent="center">
-          <Icon name="arrow-right-filled" size={20} />
-        </Box>
-
-        <Space width={12} />
-
-        <LakeLabel
-          label={endLabel}
-          style={styles.label}
-          render={id => (
-            <Rifm value={value.end} onChange={handleEndChange} {...rifmDateProps}>
-              {({ value, onChange }) => (
-                <LakeTextInput
-                  id={id}
-                  placeholder={format}
-                  value={value}
-                  onChange={onChange}
-                  error={error}
-                  hideErrors={true}
-                />
-              )}
-            </Rifm>
-          )}
-        />
-
-        <Space width={12} />
-
-        <LakeButton
-          mode="secondary"
-          icon="calendar-ltr-regular"
-          size="small"
-          onPress={open}
-          ariaLabel={t("common.open")}
-          ariaExpanded={isOpened}
-        />
-      </Box>
-
-      <Space height={4} />
-
-      <LakeText variant="smallRegular" color={colors.negative[500]}>
-        {error ?? " "}
-      </LakeText>
-
-      <DateModal visible={isOpened} maxWidth={900} withCloseButton={true} onPressClose={close}>
-        <DateRangePickerModalContent
-          value={value}
-          format={format}
-          firstWeekDay={firstWeekDay}
-          desktop={desktop}
-          displayTwoCalendar={displayTwoCalendar}
-          isSelectable={isSelectable}
-          onChange={onChange}
-        />
-      </DateModal>
-    </View>
-  );
-};
-
-type DateRangePickerModalProps = DateRangePickerProps & {
-  visible: boolean;
-  cancelLabel: string;
-  confirmLabel: string;
-  onDismiss: () => void;
-};
-
-export const DateRangePickerModal = ({
-  value,
-  error,
-  format,
-  firstWeekDay,
-  isSelectable,
-  onChange,
-  visible,
-  startLabel,
-  endLabel,
-  cancelLabel,
-  confirmLabel,
-  onDismiss,
-}: DateRangePickerModalProps) => {
-  const { desktop } = useResponsive(MODALE_MOBILE_THRESHOLD);
-  const { desktop: displayTwoCalendar } = useResponsive(DATE_RANGE_PICKER_THRESHOLD);
-  const [localeValue, setLocaleValue] = useState(value);
-
-  useEffect(() => {
-    setLocaleValue(value);
-  }, [value]);
-
-  const handleStartChange = (start: string) => {
-    setLocaleValue({ start, end: localeValue.end });
-  };
-
-  const handleEndChange = (end: string) => {
-    setLocaleValue({ start: localeValue.start, end });
-  };
-
-  const handleCancel = () => {
-    setLocaleValue(value);
-    onDismiss();
-  };
-
-  const handleConfirm = () => {
-    onChange(localeValue);
-    onDismiss();
-  };
-
-  return (
-    <DateModal visible={visible} maxWidth={900} onPressClose={handleCancel}>
-      <View>
-        <Box direction="row" alignItems="end">
-          <LakeLabel
-            label={startLabel}
-            style={styles.label}
-            render={id => (
-              <Rifm value={localeValue.start} onChange={handleStartChange} {...rifmDateProps}>
-                {({ value, onChange }) => (
-                  <LakeTextInput
-                    id={id}
-                    placeholder={format}
-                    value={value}
-                    onChange={onChange}
-                    error={error}
-                    hideErrors={true}
-                  />
-                )}
-              </Rifm>
-            )}
-          />
-
-          <Space width={12} />
-
-          <Box style={styles.arrowContainer} justifyContent="center">
-            <Icon name="arrow-right-filled" size={20} />
-          </Box>
-
-          <Space width={12} />
-
-          <LakeLabel
-            label={endLabel}
-            style={styles.label}
-            render={id => (
-              <Rifm value={localeValue.end} onChange={handleEndChange} {...rifmDateProps}>
-                {({ value, onChange }) => (
-                  <LakeTextInput
-                    id={id}
-                    placeholder={format}
-                    value={value}
-                    onChange={onChange}
-                    error={error}
-                    hideErrors={true}
-                  />
-                )}
-              </Rifm>
-            )}
-          />
-        </Box>
-
-        <Space height={4} />
-
-        <LakeText variant="smallRegular" color={colors.negative[500]}>
-          {error ?? " "}
-        </LakeText>
-      </View>
-
-      <DateRangePickerModalContent
-        value={localeValue}
-        format={format}
-        firstWeekDay={firstWeekDay}
-        desktop={desktop}
-        displayTwoCalendar={displayTwoCalendar}
-        isSelectable={isSelectable}
-        onChange={setLocaleValue}
-      />
-
-      <Space height={24} />
-
-      <Box direction="row" alignItems="center">
-        <LakeButton mode="secondary" size="small" onPress={handleCancel} style={styles.button}>
-          {cancelLabel}
-        </LakeButton>
-
-        <Space width={24} />
-
-        <LakeButton color="current" size="small" onPress={handleConfirm} style={styles.button}>
-          {confirmLabel}
-        </LakeButton>
-      </Box>
-    </DateModal>
   );
 };
