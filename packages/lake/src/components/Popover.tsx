@@ -92,7 +92,7 @@ const animation: Animation = {
   ] as unknown as AnimationStyles,
 };
 
-export const VIEWPORT_WIDTH_THRESHOLD = 600;
+const VIEWPORT_WIDTH_THRESHOLD = 600;
 
 export const Popover = memo<Props>(
   ({
