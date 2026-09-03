@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
-import { breakpoints, ColorVariants, colors, shadows } from "../constants/design";
+import { breakpoints, ColorVariants, colors, radii, shadows } from "../constants/design";
 import { useResponsive } from "../hooks/useResponsive";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   base: {
     paddingVertical: 20,
     paddingHorizontal: 24,
-    borderRadius: 4,
+    borderRadius: radii[4],
     borderWidth: 0.5,
     borderLeftWidth: 4,
     boxShadow: shadows.tile,
@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     marginHorizontal: -1,
     marginBottom: -1,
     boxShadow: "none",
+  },
+  inPopover: {
+    borderRadius: radii[8],
   },
   content: {
     marginLeft: 40,
@@ -82,6 +85,7 @@ const alertLeftBorder: Record<AlertVariant, string> = {
 
 type Props = {
   anchored?: boolean;
+  inPopover?: boolean;
   variant: AlertVariant;
   children?: ReactNode;
   callToAction?: ReactNode;
@@ -96,6 +100,7 @@ const isText = (node: ReactNode): node is string | number =>
 
 export const LakeAlert = ({
   anchored = false,
+  inPopover = false,
   variant,
   title,
   subtitle,
@@ -127,6 +132,7 @@ export const LakeAlert = ({
           borderColor: alertBorder[variant],
         },
         anchored ? styles.anchored : { borderLeftColor: alertLeftBorder[variant] },
+        inPopover && styles.inPopover,
         style,
       ]}
     >
