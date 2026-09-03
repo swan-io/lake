@@ -2,7 +2,7 @@ import { Meta } from "@storybook/react";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Box } from "../src/components/Box";
-import { copyButtondefaultSize, LakeCopyButton } from "../src/components/LakeCopyButton";
+import { LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
@@ -45,7 +45,7 @@ export const Variations = () => {
       <StoryPart title="Sizes">
         <Box direction="row" alignItems="start">
           <LakeLabel
-            label={`Default size (${copyButtondefaultSize})`}
+            label="Default size (21)"
             render={() => (
               <LakeCopyButton
                 copyText="Copy"

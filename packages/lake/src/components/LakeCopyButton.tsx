@@ -12,7 +12,7 @@ type Props = {
   valueToCopy: string;
 };
 
-export const copyButtondefaultSize = 21;
+const copyButtondefaultSize = 21;
 
 export const LakeCopyButton = ({
   color,
