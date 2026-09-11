@@ -1,4 +1,4 @@
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@bloodyowl/boxed";
 import { useCallback, useState } from "react";
 import { SwanFile } from "../utils/SwanFile";
 

@@ -1,4 +1,4 @@
-import { Result } from "@swan-io/boxed";
+import { Result } from "@bloodyowl/boxed";
 import { deburr } from "@swan-io/lake/src/utils/string";
 import { Simplify } from "type-fest";
 import { locale } from "../utils/i18n";

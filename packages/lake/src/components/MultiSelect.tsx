@@ -1,4 +1,4 @@
-import { Array, Dict, Option } from "@swan-io/boxed";
+import { Array, Dict, Option } from "@bloodyowl/boxed";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Pressable,

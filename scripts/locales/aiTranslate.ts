@@ -1,4 +1,4 @@
-import { Option, Result } from "@swan-io/boxed";
+import { Option, Result } from "@bloodyowl/boxed";
 import cliSpinners from "cli-spinners";
 import fs from "fs/promises";
 import OpenAI from "openai";

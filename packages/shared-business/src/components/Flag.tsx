@@ -1,4 +1,4 @@
-import { Lazy } from "@swan-io/boxed";
+import { Lazy } from "@bloodyowl/boxed";
 import { Svg, Use } from "@swan-io/lake/src/components/Svg";
 import { getFlagGlyphName } from "@swan-io/lake/src/utils/string";
 import { useEffect, useMemo, useState } from "react";

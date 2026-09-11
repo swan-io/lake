@@ -1,4 +1,4 @@
-import { Array, Deferred, Dict, Option } from "@swan-io/boxed";
+import { Array, Deferred, Dict, Option } from "@bloodyowl/boxed";
 import { ReactNode, useCallback, useEffect } from "react";
 
 const keys = {

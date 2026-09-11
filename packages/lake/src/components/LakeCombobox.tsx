@@ -1,4 +1,4 @@
-import { AsyncData, Result } from "@swan-io/boxed";
+import { AsyncData, Result } from "@bloodyowl/boxed";
 import {
   ReactElement,
   ReactNode,

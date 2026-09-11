@@ -1,4 +1,4 @@
-import { AsyncData, Deferred } from "@swan-io/boxed";
+import { AsyncData, Deferred } from "@bloodyowl/boxed";
 import { useEffect, useMemo, useRef } from "react";
 
 export const useAsyncDataSuspense = <T extends AsyncData<unknown>>(asyncData: T) => {
