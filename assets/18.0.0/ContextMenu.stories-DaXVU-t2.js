@@ -1,0 +1,22 @@
+import{c as e,i as t}from"./preload-helper-CCSz8wUY.js";import{o as n}from"./iframe-Dfd2BKQF.js";import{$ as r,Ct as i,Pt as a,Tt as o,_t as s,i as c,mt as l,o as u,r as d,s as f,zt as p}from"./ScrollView-B6KTtxSY.js";import{n as m,t as h}from"./useBoolean-DRVGR0m_.js";import{r as g,t as _}from"./Pressable-aIPkf_vu.js";import{r as v,t as y}from"./LakeButton-Cvz4WPwM.js";import{n as b,t as x}from"./Separator-D06Ok562.js";import{n as S,r as C,t as w}from"./_StoriesComponents-CoRU051E.js";import{n as T,t as E}from"./function-DVRTxjFf.js";import{n as D,t as O}from"./Popover-Bp_xs-LE.js";var k,A,j,M,N,P,F=t((()=>{k=e(n()),o(),s(),h(),E(),v(),f(),D(),g(),c(),A=r(),j=p.create({container:{minWidth:120},menuItem:{flexDirection:`row`,alignItems:`center`,paddingHorizontal:i[24],paddingVertical:i[12]},dot:{width:8,height:8,borderRadius:4,backgroundColor:l.negative[500]}}),M=(0,k.createContext)({close:T}),N=({children:e,ariaLabel:t,withPill:n=!1,verticalPlacement:r})=>{let[i,{on:o,off:s}]=m(!1),c=(0,k.useRef)(null);return(0,A.jsxs)(M.Provider,{value:{close:s},children:[(0,A.jsx)(y,{ref:c,mode:`tertiary`,size:`small`,icon:`more-horizontal-filled`,color:`gray`,onPress:o,ariaLabel:t,pill:n}),(0,A.jsx)(O,{referenceRef:c,visible:i,onDismiss:s,verticalPlacement:r,children:(0,A.jsx)(a,{style:j.container,children:e})})]})},P=({children:e,withPill:t=!1,onPress:n})=>{let{close:r}=(0,k.useContext)(M);return(0,A.jsxs)(_,{style:j.menuItem,onPress:()=>{r(),n()},children:[(0,A.jsx)(u,{variant:`regular`,color:l.gray[700],children:e}),t?(0,A.jsxs)(A.Fragment,{children:[(0,A.jsx)(d,{width:8}),(0,A.jsx)(a,{style:j.dot})]}):null]})},N.__docgenInfo={description:``,methods:[],displayName:`ContextMenu`,props:{children:{required:!0,tsType:{name:`ReactNode`},description:``},ariaLabel:{required:!0,tsType:{name:`string`},description:``},withPill:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},verticalPlacement:{required:!1,tsType:{name:`union`,raw:`"above" | "below"`,elements:[{name:`literal`,value:`"above"`},{name:`literal`,value:`"below"`}]},description:``}}},P.__docgenInfo={description:``,methods:[],displayName:`ContextMenuItem`,props:{children:{required:!0,tsType:{name:`string`},description:``},withPill:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},onPress:{required:!0,tsType:{name:`signature`,type:`function`,raw:`() => void`,signature:{arguments:[],return:{name:`void`}}},description:``}}}})),I,L,R,z;t((()=>{F(),b(),C(),I=r(),L={title:`Interactivity/ContextMenu`,component:N},R=()=>(0,I.jsxs)(w,{title:`ContextMenu`,children:[(0,I.jsx)(S,{title:`Default`,children:(0,I.jsxs)(N,{ariaLabel:`Actions`,children:[(0,I.jsx)(P,{onPress:()=>console.log(`Edit`),children:`Edit`}),(0,I.jsx)(x,{}),(0,I.jsx)(P,{onPress:()=>console.log(`Remove`),children:`Remove`})]})}),(0,I.jsx)(S,{title:`With missing info`,children:(0,I.jsxs)(N,{ariaLabel:`Actions`,withPill:!0,children:[(0,I.jsx)(P,{withPill:!0,onPress:()=>console.log(`Edit`),children:`Edit`}),(0,I.jsx)(x,{}),(0,I.jsx)(P,{onPress:()=>console.log(`Remove`),children:`Remove`})]})})]}),R.__docgenInfo={description:``,methods:[],displayName:`Default`},R.parameters={...R.parameters,docs:{...R.parameters?.docs,source:{originalSource:`() => {
+  return <StoryBlock title="ContextMenu">
+      <StoryPart title="Default">
+        <ContextMenu ariaLabel="Actions">
+          <ContextMenuItem onPress={() => console.log("Edit")}>Edit</ContextMenuItem>
+          <Separator />
+          <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
+        </ContextMenu>
+      </StoryPart>
+
+      <StoryPart title="With missing info">
+        <ContextMenu ariaLabel="Actions" withPill={true}>
+          <ContextMenuItem withPill={true} onPress={() => console.log("Edit")}>
+            Edit
+          </ContextMenuItem>
+          <Separator />
+          <ContextMenuItem onPress={() => console.log("Remove")}>Remove</ContextMenuItem>
+        </ContextMenu>
+      </StoryPart>
+    </StoryBlock>;
+}`,...R.parameters?.docs?.source}}},z=[`Default`]}))();export{R as Default,z as __namedExportsOrder,L as default};
+//# sourceMappingURL=ContextMenu.stories-DaXVU-t2.js.map
