@@ -1,4 +1,4 @@
-import { useLinkProps } from "@swan-io/chicane";
+import { useLinkProps } from "@zoontek/chicane";
 import { memo, Ref } from "react";
 import { HrefAttrs, PressableStateCallbackType, Text, TextProps } from "react-native";
 import { Except } from "type-fest";
