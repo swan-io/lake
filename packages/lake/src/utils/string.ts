@@ -1,4 +1,4 @@
-import { Option } from "@swan-io/boxed";
+import { Option } from "@bloodyowl/boxed";
 
 export const safeSplitAround = (string: string, expression: string) => {
   let index = 0;

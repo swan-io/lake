@@ -134,12 +134,12 @@ importers:
 
   packages/lake:
     dependencies:
-      '@swan-io/boxed':
-        specifier: ^3.2.1
-        version: 3.2.1(typescript@7.0.2)
+      '@bloodyowl/boxed':
+        specifier: ^3.4.0
+        version: 3.4.0(typescript@7.0.2)
       '@swan-io/use-form':
-        specifier: ^3.1.0
-        version: 3.1.0(react@19.2.7)(typescript@7.0.2)
+        specifier: ^4.0.0
+        version: 4.0.0(react@19.2.7)(typescript@7.0.2)
       '@zoontek/chicane':
         specifier: ^3.0.0
         version: 3.0.0(react@19.2.7)
@@ -183,18 +183,18 @@ importers:
 
   packages/shared-business:
     dependencies:
+      '@bloodyowl/boxed':
+        specifier: ^3.4.0
+        version: 3.4.0(typescript@7.0.2)
+      '@bloodyowl/request':
+        specifier: ^3.3.0
+        version: 3.3.0(@bloodyowl/boxed@3.4.0(typescript@7.0.2))
       '@formatjs/intl':
         specifier: ^4.1.16
         version: 4.1.16
       '@placekit/client-js':
         specifier: ^2.3.0
         version: 2.3.0
-      '@swan-io/boxed':
-        specifier: ^3.2.1
-        version: 3.2.1(typescript@7.0.2)
-      '@swan-io/request':
-        specifier: ^3.1.0
-        version: 3.1.0(@swan-io/boxed@3.2.1(typescript@7.0.2))
       '@swan-io/use-form':
         specifier: ^3.1.0
         version: 3.1.0(react@19.2.7)(typescript@7.0.2)
@@ -406,6 +406,19 @@ packages:
 
   '@blazediff/core@1.9.1':
     resolution: {integrity: sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA==, tarball: https://registry.npmjs.org/@blazediff/core/-/core-1.9.1.tgz}
+
+  '@bloodyowl/boxed@3.4.0':
+    resolution: {integrity: sha512-SjA78UNak5c3wjOI4Aeul++sYK/gG0lIp91K+DRzwTgVzTJ/yy5wUoznRNMexvock3iiy7lfdXbz2n/zSa5iBQ==, tarball: https://registry.npmjs.org/@bloodyowl/boxed/-/boxed-3.4.0.tgz}
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@bloodyowl/request@3.3.0':
+    resolution: {integrity: sha512-mL516nN9BrLo/tEyHWDWK+6Om+fGeGDt1jXzmMKjylkiRo8wuI0XOOCxEajKRlKAbTRR2JQ6NcP5jz90WFyTIw==, tarball: https://registry.npmjs.org/@bloodyowl/request/-/request-3.3.0.tgz}
+    peerDependencies:
+      '@bloodyowl/boxed': '>=3.3.1'
 
   '@bramus/specificity@2.4.2':
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==, tarball: https://registry.npmjs.org/@bramus/specificity/-/specificity-2.4.2.tgz}
@@ -1153,16 +1166,15 @@ packages:
       typescript:
         optional: true
 
-  '@swan-io/request@3.1.0':
-    resolution: {integrity: sha512-3NDXdNuew5+aEURpWg8aNIqPlYVNU6BZCD1rWptNemfNw9frTUBj8DmV+idOp9M5/4tVxncX7bxV7jBNtS6Cbg==, tarball: https://registry.npmjs.org/@swan-io/request/-/request-3.1.0.tgz}
-    deprecated: This package has been transferred to @bloodyowl/request
-    peerDependencies:
-      '@swan-io/boxed': '>=2.2.1'
-
   '@swan-io/use-form@3.1.0':
     resolution: {integrity: sha512-X6NpZ7LCeo7eS9RVCZrtpX+3GXZFUfUZpIwtVa2GNmqTLgyDbLhN8N6zBv+dmHL9KAQ+Zng2fTCCQpCZvmDu5A==, tarball: https://registry.npmjs.org/@swan-io/use-form/-/use-form-3.1.0.tgz}
     peerDependencies:
       react: '>=18.0.0'
+
+  '@swan-io/use-form@4.0.0':
+    resolution: {integrity: sha512-8ZrqjhNPDtMqGoTJ1VPzZcaJfvCGva6rHQm5TmCdGRUJyx18GQO08v4wgfro4SrY+UY/A0wnoGFZqlmRC4kknQ==, tarball: https://registry.npmjs.org/@swan-io/use-form/-/use-form-4.0.0.tgz}
+    peerDependencies:
+      react: '>=19.0.0'
 
   '@swc/core-darwin-arm64@1.15.43':
     resolution: {integrity: sha512-v1aVuvXdo/BHxJzco9V2xpHrvwWmhfS8t6gziY5wJxd+Z2h8AeJRnAwPD8itCDaGXVBwJ/CaKfxEzTkG0Va0OA==, tarball: https://registry.npmjs.org/@swc/core-darwin-arm64/-/core-darwin-arm64-1.15.43.tgz}
@@ -2943,6 +2955,14 @@ snapshots:
 
   '@blazediff/core@1.9.1': {}
 
+  '@bloodyowl/boxed@3.4.0(typescript@7.0.2)':
+    optionalDependencies:
+      typescript: 7.0.2
+
+  '@bloodyowl/request@3.3.0(@bloodyowl/boxed@3.4.0(typescript@7.0.2))':
+    dependencies:
+      '@bloodyowl/boxed': 3.4.0(typescript@7.0.2)
+
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
@@ -3479,13 +3499,16 @@ snapshots:
     optionalDependencies:
       typescript: 7.0.2
 
-  '@swan-io/request@3.1.0(@swan-io/boxed@3.2.1(typescript@7.0.2))':
-    dependencies:
-      '@swan-io/boxed': 3.2.1(typescript@7.0.2)
-
   '@swan-io/use-form@3.1.0(react@19.2.7)(typescript@7.0.2)':
     dependencies:
       '@swan-io/boxed': 3.2.1(typescript@7.0.2)
+      react: 19.2.7
+    transitivePeerDependencies:
+      - typescript
+
+  '@swan-io/use-form@4.0.0(react@19.2.7)(typescript@7.0.2)':
+    dependencies:
+      '@bloodyowl/boxed': 3.4.0(typescript@7.0.2)
       react: 19.2.7
     transitivePeerDependencies:
       - typescript

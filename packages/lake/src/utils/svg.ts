@@ -1,4 +1,4 @@
-import { Result } from "@swan-io/boxed";
+import { Result } from "@bloodyowl/boxed";
 import { match } from "ts-pattern";
 import { encodeBase64 } from "./base64";
 import { isNotNullish, isNotNullishOrEmpty } from "./nullish";

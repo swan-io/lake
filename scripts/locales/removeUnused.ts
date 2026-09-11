@@ -1,4 +1,4 @@
-import { Result } from "@swan-io/boxed";
+import { Result } from "@bloodyowl/boxed";
 import glob from "fast-glob";
 import { readFileSync, writeFileSync } from "fs";
 import { dirname } from "node:path";

@@ -1,4 +1,4 @@
-import { Option, Result } from "@swan-io/boxed";
+import { Option, Result } from "@bloodyowl/boxed";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const getItem = (key: string) => Result.fromExecution(() => localStorage.getItem(key)).getOr(null);

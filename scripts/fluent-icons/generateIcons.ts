@@ -1,4 +1,4 @@
-import { Array, Option } from "@swan-io/boxed";
+import { Array, Option } from "@bloodyowl/boxed";
 import fs from "node:fs";
 import { EOL } from "node:os";
 import path from "pathe";

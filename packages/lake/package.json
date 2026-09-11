@@ -31,9 +31,9 @@
     "react-native-web": ">=0.21.2"
   },
   "dependencies": {
-    "@swan-io/boxed": "^3.2.1",
+    "@bloodyowl/boxed": "^3.4.0",
     "@zoontek/chicane": "^3.0.0",
-    "@swan-io/use-form": "^3.1.0",
+    "@swan-io/use-form": "^4.0.0",
     "dayjs": "^1.11.21",
     "polished": "^4.3.1",
     "rifm": "^0.12.1",

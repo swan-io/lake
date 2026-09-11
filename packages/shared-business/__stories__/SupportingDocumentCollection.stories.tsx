@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
-import { Future, Option, Result } from "@swan-io/boxed";
+import { Future, Option, Result } from "@bloodyowl/boxed";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
-import { NetworkError, Response, TimeoutError } from "@swan-io/request";
+import { NetworkError, Response, TimeoutError } from "@bloodyowl/request";
 import { useRef, useState } from "react";
 import {
   Document,

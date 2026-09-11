@@ -1,4 +1,4 @@
-import { BadStatusError } from "@swan-io/request";
+import { BadStatusError } from "@bloodyowl/request";
 import { describe, expect, it } from "vitest";
 import {
   formatCurrencyIso,

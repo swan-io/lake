@@ -1,4 +1,4 @@
-import { Option } from "@swan-io/boxed";
+import { Option } from "@bloodyowl/boxed";
 import { Link } from "@zoontek/chicane";
 import { CSSProperties, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";

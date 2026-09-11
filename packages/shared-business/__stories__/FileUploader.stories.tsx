@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@bloodyowl/boxed";
 import { StyleSheet } from "react-native";
 import { FilesUploader } from "../src/components/FilesUploader";
 import { SwanFile } from "../src/utils/SwanFile";

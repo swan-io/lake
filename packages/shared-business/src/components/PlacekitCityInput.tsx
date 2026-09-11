@@ -1,5 +1,5 @@
+import { Array, Future, Option, Result } from "@bloodyowl/boxed";
 import type { PKResult } from "@placekit/client-js";
-import { Array, Future, Option, Result } from "@swan-io/boxed";
 import { AutocompleteSearchInput } from "@swan-io/lake/src/components/AutocompleteSearchInput";
 import { useCallback } from "react";
 import { CountryCCA3, countriesWithMultipleCCA3, getCCA2forCCA3 } from "../constants/countries";

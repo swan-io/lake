@@ -1,5 +1,5 @@
-import { Future, Result } from "@swan-io/boxed";
-import { Request } from "@swan-io/request";
+import { Future, Result } from "@bloodyowl/boxed";
+import { Request } from "@bloodyowl/request";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 export class FlagClient<

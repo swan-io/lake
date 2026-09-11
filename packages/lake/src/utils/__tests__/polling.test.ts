@@ -1,4 +1,4 @@
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@bloodyowl/boxed";
 import { describe, expect, it } from "vitest";
 import { pollUntilOk } from "../polling";
 

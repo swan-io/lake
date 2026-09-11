@@ -1,4 +1,4 @@
-import { Future } from "@swan-io/boxed";
+import { Future } from "@bloodyowl/boxed";
 
 // When using `node.scroll()` with smooth behavior, there isn't any event to detect when the scroll animation is finished
 // We need this also with `ScrollView.scrollTo` (which just call the native node.scroll function)

@@ -1,4 +1,4 @@
-import { Dict } from "@swan-io/boxed";
+import { Dict } from "@bloodyowl/boxed";
 import { P } from "ts-pattern";
 import type { GuardP } from "ts-pattern/types";
 

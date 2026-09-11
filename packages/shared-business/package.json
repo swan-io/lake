@@ -34,8 +34,8 @@
   "dependencies": {
     "@formatjs/intl": "^4.1.16",
     "@placekit/client-js": "^2.3.0",
-    "@swan-io/boxed": "^3.2.1",
-    "@swan-io/request": "^3.1.0",
+    "@bloodyowl/boxed": "^3.4.0",
+    "@bloodyowl/request": "^3.3.0",
     "@swan-io/use-form": "^3.1.0",
     "dayjs": "^1.11.21",
     "iban": "^0.0.14",

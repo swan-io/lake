@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { AsyncData } from "@swan-io/boxed";
+import { AsyncData } from "@bloodyowl/boxed";
 import { Suspense, useState } from "react";
 import { LakeButton, LakeButtonGroup } from "../src/components/LakeButton";
 import { SwanLogo } from "../src/components/SwanLogo";

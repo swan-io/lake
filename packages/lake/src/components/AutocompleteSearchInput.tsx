@@ -1,4 +1,4 @@
-import { AsyncData, Future, Result } from "@swan-io/boxed";
+import { AsyncData, Future, Result } from "@bloodyowl/boxed";
 import { ReactNode, Ref, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { match, P } from "ts-pattern";

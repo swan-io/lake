@@ -1,4 +1,4 @@
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@bloodyowl/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { IconName } from "@swan-io/lake/src/components/Icon";
 import { Space } from "@swan-io/lake/src/components/Space";

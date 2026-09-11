@@ -1,4 +1,4 @@
-import { Future, Result } from "@swan-io/boxed";
+import { Future, Result } from "@bloodyowl/boxed";
 
 type Options = {
   maxAttempts: number;
