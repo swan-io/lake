@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
 
 export type InlineDatePickerProps = {
   label: string;
+  optionalLabel?: string;
   value: string | undefined;
   error?: string;
   onValueChange?: (value: string | undefined) => void;
@@ -75,6 +76,7 @@ const order = match(getMostLikelyUserCountry().cca2)
 export const InlineDatePicker = ({
   value,
   label,
+  optionalLabel,
   readOnly = false,
   responsive = true,
   onValueChange,
@@ -133,6 +135,7 @@ export const InlineDatePicker = ({
         {({ error, onChange, value }) => (
           <LakeLabel
             label={label}
+            optionalLabel={optionalLabel}
             render={id => {
               const day = (
                 <View style={desktop ? styles.day : styles.dayMobile}>
