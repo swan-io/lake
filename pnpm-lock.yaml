@@ -196,8 +196,8 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       '@swan-io/use-form':
-        specifier: ^3.1.0
-        version: 3.1.0(react@19.2.7)(typescript@7.0.2)
+        specifier: ^4.0.0
+        version: 4.0.0(react@19.2.7)(typescript@7.0.2)
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
@@ -1156,20 +1156,6 @@ packages:
         optional: true
       typescript:
         optional: true
-
-  '@swan-io/boxed@3.2.1':
-    resolution: {integrity: sha512-MQqSpe09PdjDjTR4HCPpUxO9XsacNguCkce1C2wm1eIb6ycWXQoV+biYvLEuI/LiMqB31KySdgY2YFwrVucLCw==, tarball: https://registry.npmjs.org/@swan-io/boxed/-/boxed-3.2.1.tgz}
-    deprecated: This package has been transferred to @bloodyowl/boxed
-    peerDependencies:
-      typescript: '>=5.0.0'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  '@swan-io/use-form@3.1.0':
-    resolution: {integrity: sha512-X6NpZ7LCeo7eS9RVCZrtpX+3GXZFUfUZpIwtVa2GNmqTLgyDbLhN8N6zBv+dmHL9KAQ+Zng2fTCCQpCZvmDu5A==, tarball: https://registry.npmjs.org/@swan-io/use-form/-/use-form-3.1.0.tgz}
-    peerDependencies:
-      react: '>=18.0.0'
 
   '@swan-io/use-form@4.0.0':
     resolution: {integrity: sha512-8ZrqjhNPDtMqGoTJ1VPzZcaJfvCGva6rHQm5TmCdGRUJyx18GQO08v4wgfro4SrY+UY/A0wnoGFZqlmRC4kknQ==, tarball: https://registry.npmjs.org/@swan-io/use-form/-/use-form-4.0.0.tgz}
@@ -3494,17 +3480,6 @@ snapshots:
       typescript: 7.0.2
     transitivePeerDependencies:
       - supports-color
-
-  '@swan-io/boxed@3.2.1(typescript@7.0.2)':
-    optionalDependencies:
-      typescript: 7.0.2
-
-  '@swan-io/use-form@3.1.0(react@19.2.7)(typescript@7.0.2)':
-    dependencies:
-      '@swan-io/boxed': 3.2.1(typescript@7.0.2)
-      react: 19.2.7
-    transitivePeerDependencies:
-      - typescript
 
   '@swan-io/use-form@4.0.0(react@19.2.7)(typescript@7.0.2)':
     dependencies:
