@@ -288,9 +288,10 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
  * Translation helpers for tax validation
  */
 
-export const getTaxNumberLabel = (isCompany: boolean) =>
-  match({ isCompany, lang: locale.language })
+export const getTaxNumberLabel = (isCompany: boolean, country: CompanyCountryCCA3) =>
+  match({ isCompany, lang: locale.language, country })
     .with({ isCompany: true, lang: "de" }, () => "Steuer-Nummer")
+    .with({ country: "NLD" }, () => "RSIN")
     .otherwise(() => t("taxIdentificationNumber.label"));
 
 export const getIndividualTaxNumberPlaceholder = (
