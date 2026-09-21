@@ -38,7 +38,7 @@ export const TaxIdentificationNumberInput = ({
   country,
   isCompany,
   required,
-  label = getTaxNumberLabel(isCompany),
+  label = getTaxNumberLabel(isCompany, country),
   placeholder = isCompany
     ? getCompanyTaxNumberPlaceholder(country)
     : getIndividualTaxNumberPlaceholder(country),
