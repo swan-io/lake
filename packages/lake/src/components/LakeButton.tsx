@@ -388,6 +388,7 @@ export const LakeButton = memo(
               {loading && (
                 <View style={styles.loaderContainer}>
                   <ActivityIndicator
+                    aria-hidden={true}
                     color={isPrimary ? colors[color].contrast : colors[color].primary}
                     size={iconSize}
                   />

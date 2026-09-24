@@ -28,6 +28,7 @@ type Props = {
   color?: string;
   delay?: number;
   style?: StyleProp<ViewStyle>;
+  ariaLabel?: string;
 };
 
 const isDev = process.env.NODE_ENV === "development";
@@ -37,9 +38,12 @@ export const LoadingView = ({
   color = colors.gray[400],
   delay = isDev ? 0 : 1000,
   style,
+  ariaLabel,
 }: Props) => (
   <View ref={ref} style={[styles.base, style]}>
     <ActivityIndicator
+      aria-label={ariaLabel}
+      aria-hidden={true}
       size="small"
       color={color}
       style={[styles.indicator, delay > 0 && { animationDelay: delay.toString() + "ms" }]}

@@ -277,6 +277,7 @@ export const LakeTextInput = ({
             <TextInput
               aria-expanded={ariaExpanded}
               aria-controls={ariaControls}
+              aria-busy={validating}
               inputMode={inputMode}
               {...props}
               defaultValue={defaultValue}
@@ -299,7 +300,12 @@ export const LakeTextInput = ({
             {isNotNullish(renderEnd) && <View style={styles.endComponents}>{renderEnd()}</View>}
 
             {validating && (
-              <ActivityIndicator size="small" style={styles.endIcon} color={colors.current[500]} />
+              <ActivityIndicator
+                aria-hidden={true}
+                size="small"
+                style={styles.endIcon}
+                color={colors.current[500]}
+              />
             )}
 
             {!validating && hasError && (
