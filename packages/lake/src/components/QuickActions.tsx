@@ -71,6 +71,7 @@ export const QuickActions = ({ actions }: Props) => {
             onPress={action.onPress}
             style={[styles.action, action.disabled === true && styles.disabled]}
             disabled={action.isLoading === true || action.disabled === true}
+            aria-busy={action.isLoading === true}
           >
             <View
               style={[
@@ -81,7 +82,11 @@ export const QuickActions = ({ actions }: Props) => {
               ]}
             >
               {action.isLoading === true ? (
-                <ActivityIndicator color={action.color ?? colors.gray[300]} size={16} />
+                <ActivityIndicator
+                  aria-hidden={true}
+                  color={action.color ?? colors.gray[300]}
+                  size={16}
+                />
               ) : (
                 <Icon name={action.icon} size={16} color={action.color ?? colors.gray[300]} />
               )}
