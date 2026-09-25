@@ -143,7 +143,12 @@ export const BottomPanel = ({ visible, onPressClose, children, returnFocus = tru
                   <View style={styles.modal}>{children}</View>
 
                   {onPressClose != null ? (
-                    <Pressable onPress={onPressClose} style={styles.pressableOverlay} />
+                    <Pressable
+                      onPress={onPressClose}
+                      style={styles.pressableOverlay}
+                      tabIndex={-1}
+                      aria-hidden={true}
+                    />
                   ) : null}
                 </FocusTrap>
               </ScrollView>
