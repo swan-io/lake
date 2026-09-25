@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useId, useRef } from "react";
+import { ReactNode, useCallback, useId } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -70,16 +70,12 @@ export const LakeLabel = ({
   style,
 }: Props) => {
   const id = useId();
-  const containerRef = useRef<View>(null);
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
-      if (containerRef.current != null) {
-        const container = containerRef.current as unknown as HTMLElement;
-        const target = container.querySelector(`[id="${id}"]`) as HTMLElement;
-        target?.focus();
-      }
+      const target = document.getElementById(id);
+      target?.focus();
     },
     [id],
   );
@@ -91,7 +87,7 @@ export const LakeLabel = ({
       alignItems="center"
       justifyContent="spaceBetween"
     >
-      <View style={commonStyles.fill} ref={containerRef}>
+      <View style={commonStyles.fill}>
         <Box direction="row" justifyContent="spaceBetween" alignItems="center">
           <Box direction="row" alignItems="center" shrink={1}>
             {type === "form" || type === "formSmall" || type === "radioGroup" ? (
@@ -118,7 +114,7 @@ export const LakeLabel = ({
                 )}
               </Box>
             ) : (
-              <LakeText variant="medium" color={readOnlyColor} id={id}>
+              <LakeText variant="medium" color={readOnlyColor}>
                 {label}
 
                 {optionalLabel != null && (
@@ -150,9 +146,7 @@ export const LakeLabel = ({
             .exhaustive()}
         />
 
-        <View aria-labelledby={type === "view" || type === "viewSmall" ? id : undefined}>
-          {render(id)}
-        </View>
+        <View>{render(id)}</View>
       </View>
 
       {isNotNullish(actions) && (
