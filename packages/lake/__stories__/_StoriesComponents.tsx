@@ -31,7 +31,7 @@ type StoryIntroductionProps = {
 
 export const StoryBlock = ({ title, description, children }: StoryIntroductionProps) => {
   return (
-    <ScrollView>
+    <ScrollView tabIndex={0} role="group" aria-label={title}>
       <LakeText dataSet={{ a11y: false }} style={styles.storyTitle}>
         {title}
       </LakeText>
