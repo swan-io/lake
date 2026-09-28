@@ -107,6 +107,7 @@ type RIBv1Props = {
   iban: string;
   partnerColor: string;
   partnerLogoUrl?: string;
+  partnerLogoAlt?: string;
 } & (
   | {
       accountCountry: "FRA";
@@ -154,6 +155,7 @@ const RIBv1 = ({
   iban,
   partnerColor,
   partnerLogoUrl,
+  partnerLogoAlt,
   ...props
 }: RIBv1Props) => (
   <WithPartnerAccentColor color={partnerColor}>
@@ -163,6 +165,7 @@ const RIBv1 = ({
           {isNotNullishOrEmpty(partnerLogoUrl) ? (
             <img
               src={partnerLogoUrl}
+              alt={partnerLogoAlt}
               style={{ ...logoStyle, height: LOGO_MAX_HEIGHT, maxWidth: LOGO_MAX_WIDTH }}
             />
           ) : (
