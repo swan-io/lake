@@ -195,7 +195,8 @@ export const Popover = memo<Props>(
             ref={underlayRef}
             style={styles.underlay}
             onPress={onPressUnderlay}
-            aria-label="Close"
+            tabIndex={-1}
+            aria-hidden={true}
           />
         ) : null}
 
