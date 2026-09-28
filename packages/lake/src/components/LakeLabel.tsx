@@ -28,6 +28,15 @@ const styles = StyleSheet.create({
   optionalLabel: {
     fontStyle: "italic",
   },
+  content: {
+    alignSelf: "stretch",
+    justifyContent: "flex-end",
+  },
+  topActions: {
+    // matches LakeTextInput height, so actions are centered on the input, not on its error line
+    minHeight: 40,
+    justifyContent: "center",
+  },
 });
 
 type LabelType = "form" | "formSmall" | "view" | "viewSmall" | "radioGroup";
@@ -42,6 +51,7 @@ type Props = {
   help?: ReactNode;
   render: (id: string) => ReactNode;
   actions?: ReactNode;
+  actionsAlign?: "content" | "labelAndContent";
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
   description?: string;
@@ -67,9 +77,11 @@ export const LakeLabel = ({
   help,
   render,
   actions,
+  actionsAlign = "labelAndContent",
   style,
 }: Props) => {
   const id = useId();
+  const isFormLabel = type === "form" || type === "formSmall" || type === "radioGroup";
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
@@ -80,17 +92,25 @@ export const LakeLabel = ({
     [id],
   );
 
+  const renderActions = () =>
+    isNotNullish(actions) && (
+      <>
+        <Space width={16} />
+
+        {actionsAlign === "content" && isFormLabel ? (
+          <View style={styles.topActions}>{actions}</View>
+        ) : (
+          actions
+        )}
+      </>
+    );
+
   return (
-    <Box
-      style={[styles.container, style]}
-      direction="row"
-      alignItems="center"
-      justifyContent="spaceBetween"
-    >
+    <Box style={[styles.container, style]} direction="row" alignItems="center">
       <View style={commonStyles.fill}>
         <Box direction="row" justifyContent="spaceBetween" alignItems="center">
           <Box direction="row" alignItems="center" shrink={1}>
-            {type === "form" || type === "formSmall" || type === "radioGroup" ? (
+            {isFormLabel ? (
               <Box shrink={1}>
                 <Label
                   onClick={onClick}
@@ -146,16 +166,14 @@ export const LakeLabel = ({
             .exhaustive()}
         />
 
-        <View>{render(id)}</View>
+        <Box direction="row" alignItems={isFormLabel ? "start" : "center"}>
+          <View style={[commonStyles.fill, styles.content]}>{render(id)}</View>
+
+          {actionsAlign === "content" && renderActions()}
+        </Box>
       </View>
 
-      {isNotNullish(actions) && (
-        <>
-          <Space width={16} />
-
-          {actions}
-        </>
-      )}
+      {actionsAlign === "labelAndContent" && renderActions()}
     </Box>
   );
 };

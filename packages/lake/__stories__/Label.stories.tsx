@@ -1,10 +1,11 @@
 import { Meta } from "@storybook/react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { Grid } from "../src/components/Grid";
 import { LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
+import { Tag } from "../src/components/Tag";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 export default {
@@ -195,11 +196,45 @@ export const Variations = () => {
 
       <Space height={20} />
 
-      <StoryPart title="With actions">
+      <StoryPart title="With actions and input">
         <LakeLabel
           label={label}
           render={id => <LakeTextInput id={id} disabled={true} />}
           actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+        />
+      </StoryPart>
+
+      <StoryPart title="With actions centered with content">
+        <LakeLabel
+          label={label}
+          render={id => <LakeTextInput id={id} disabled={true} />}
+          actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
+        />
+      </StoryPart>
+
+      <StoryPart title="With actions and tag">
+        <LakeLabel
+          label={label}
+          type="view"
+          render={() => <Tag color="warning">In progress</Tag>}
+          actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
+        />
+      </StoryPart>
+
+      <StoryPart title="With actions and multi line tags">
+        <LakeLabel
+          label={label}
+          type="view"
+          render={() => (
+            <View style={{ gap: 8 }}>
+              <Tag color="warning">In progress</Tag>
+              <Tag color="warning">In progress</Tag>
+            </View>
+          )}
+          actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
         />
       </StoryPart>
     </StoryBlock>
