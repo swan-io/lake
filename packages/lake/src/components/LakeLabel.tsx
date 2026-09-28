@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
   optionalLabel: {
     fontStyle: "italic",
   },
+  content: {
+    alignSelf: "stretch",
+    justifyContent: "flex-end",
+  },
 });
 
 type LabelType = "form" | "formSmall" | "view" | "viewSmall" | "radioGroup";
@@ -81,40 +85,16 @@ export const LakeLabel = ({
   );
 
   return (
-    <Box
-      style={[styles.container, style]}
-      direction="row"
-      alignItems="center"
-      justifyContent="spaceBetween"
-    >
-      <View style={commonStyles.fill}>
-        <Box direction="row" justifyContent="spaceBetween" alignItems="center">
-          <Box direction="row" alignItems="center" shrink={1}>
-            {type === "form" || type === "formSmall" || type === "radioGroup" ? (
-              <Box shrink={1}>
-                <Label
-                  onClick={onClick}
-                  htmlFor={id}
-                  style={[styles.label, readOnly && { color: readOnlyColor }]}
-                >
-                  {label}
-
-                  {optionalLabel != null && (
-                    <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
-                      {` - ${optionalLabel}`}
-                    </LakeText>
-                  )}
-                </Label>
-
-                {description != null && (
-                  <>
-                    <LakeText variant="smallRegular">{description}</LakeText>
-                    <Space height={8} />
-                  </>
-                )}
-              </Box>
-            ) : (
-              <LakeText variant="medium" color={readOnlyColor}>
+    <View style={[styles.container, style]}>
+      <Box direction="row" justifyContent="spaceBetween" alignItems="center">
+        <Box direction="row" alignItems="center" shrink={1}>
+          {type === "form" || type === "formSmall" || type === "radioGroup" ? (
+            <Box shrink={1}>
+              <Label
+                onClick={onClick}
+                htmlFor={id}
+                style={[styles.label, readOnly && { color: readOnlyColor }]}
+              >
                 {label}
 
                 {optionalLabel != null && (
@@ -122,40 +102,59 @@ export const LakeLabel = ({
                     {` - ${optionalLabel}`}
                   </LakeText>
                 )}
-              </LakeText>
-            )}
+              </Label>
 
-            {isNotNullish(extra) && extra()}
-          </Box>
+              {description != null && (
+                <>
+                  <LakeText variant="smallRegular">{description}</LakeText>
+                  <Space height={8} />
+                </>
+              )}
+            </Box>
+          ) : (
+            <LakeText variant="medium" color={readOnlyColor}>
+              {label}
 
-          {isNotNullish(help) && (
-            <>
-              <Space width={16} />
-
-              {help}
-            </>
+              {optionalLabel != null && (
+                <LakeText color={colors.gray[400]} style={styles.optionalLabel}>
+                  {` - ${optionalLabel}`}
+                </LakeText>
+              )}
+            </LakeText>
           )}
+
+          {isNotNullish(extra) && extra()}
         </Box>
 
-        <Space
-          height={match(type)
-            .returnType<SpacingValue>()
-            .with("formSmall", "viewSmall", () => 4)
-            .with("form", "view", () => 8)
-            .with("radioGroup", () => 12)
-            .exhaustive()}
-        />
+        {isNotNullish(help) && (
+          <>
+            <Space width={16} />
 
-        <View>{render(id)}</View>
-      </View>
+            {help}
+          </>
+        )}
+      </Box>
 
-      {isNotNullish(actions) && (
-        <>
-          <Space width={16} />
+      <Space
+        height={match(type)
+          .returnType<SpacingValue>()
+          .with("formSmall", "viewSmall", () => 4)
+          .with("form", "view", () => 8)
+          .with("radioGroup", () => 12)
+          .exhaustive()}
+      />
 
-          {actions}
-        </>
-      )}
-    </Box>
+      <Box direction="row" alignItems="center">
+        <View style={[commonStyles.fill, styles.content]}>{render(id)}</View>
+
+        {isNotNullish(actions) && (
+          <>
+            <Space width={16} />
+
+            {actions}
+          </>
+        )}
+      </Box>
+    </View>
   );
 };
