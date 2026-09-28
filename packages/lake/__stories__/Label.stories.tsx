@@ -204,12 +204,22 @@ export const Variations = () => {
         />
       </StoryPart>
 
+      <StoryPart title="With actions centered with content">
+        <LakeLabel
+          label={label}
+          render={id => <LakeTextInput id={id} disabled={true} />}
+          actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
+        />
+      </StoryPart>
+
       <StoryPart title="With actions and tag">
         <LakeLabel
           label={label}
           type="view"
           render={() => <Tag color="warning">In progress</Tag>}
           actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
         />
       </StoryPart>
 
@@ -224,6 +234,7 @@ export const Variations = () => {
             </View>
           )}
           actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
+          actionsAlign="content"
         />
       </StoryPart>
     </StoryBlock>
