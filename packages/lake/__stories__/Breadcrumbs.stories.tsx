@@ -25,7 +25,7 @@ export const Variations = () => {
             },
           ]}
         >
-          <Breadcrumbs />
+          <Breadcrumbs ariaLabel="Breadcrumb with 1 element" />
         </BreadcrumbsRoot>
       </StoryPart>
 
@@ -42,7 +42,7 @@ export const Variations = () => {
             },
           ]}
         >
-          <Breadcrumbs />
+          <Breadcrumbs ariaLabel="Breadcrumb with 2 elements" />
         </BreadcrumbsRoot>
       </StoryPart>
 
@@ -91,7 +91,7 @@ export const Variations = () => {
             },
           ]}
         >
-          <Breadcrumbs />
+          <Breadcrumbs ariaLabel="Breadcrumb with siblings" />
         </BreadcrumbsRoot>
       </StoryPart>
     </StoryBlock>
