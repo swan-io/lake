@@ -56,7 +56,6 @@ const styles = {
 
 type AccountStatementHeaderProps = {
   partnerLogoUrl?: string;
-  // Partner name, used as the logo alt text
   partnerLogoAlt?: string;
   language?: SupportedLanguage;
 };

@@ -123,7 +123,6 @@ type Transaction = {
 type CreditStatementV1Props = {
   version: "v1";
   partnerLogoUrl?: string;
-  // Partner name, used as the logo alt text
   partnerLogoAlt?: string;
   style?: StyleProp<ViewStyle>;
   accountHolderType: "Individual" | "Company";

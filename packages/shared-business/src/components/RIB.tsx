@@ -107,7 +107,6 @@ type RIBv1Props = {
   iban: string;
   partnerColor: string;
   partnerLogoUrl?: string;
-  // Partner name, used as the logo alt text
   partnerLogoAlt?: string;
 } & (
   | {

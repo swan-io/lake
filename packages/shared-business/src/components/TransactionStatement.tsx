@@ -98,7 +98,6 @@ type TransactionStatementV1Props = {
   version: "v1";
 
   partnerLogoUrl?: string;
-  // Partner name, used as the logo alt text
   partnerLogoAlt?: string;
   generationDate: string;
 
