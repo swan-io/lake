@@ -207,6 +207,7 @@ export const Variations = () => {
       <StoryPart title="With actions and tag">
         <LakeLabel
           label={label}
+          type="view"
           render={() => <Tag color="warning">In progress</Tag>}
           actions={<LakeCopyButton valueToCopy={""} copyText={"Copy"} copiedText={"Copied"} />}
         />
@@ -215,6 +216,7 @@ export const Variations = () => {
       <StoryPart title="With actions and multi line tags">
         <LakeLabel
           label={label}
+          type="view"
           render={() => (
             <View style={{ gap: 8 }}>
               <Tag color="warning">In progress</Tag>

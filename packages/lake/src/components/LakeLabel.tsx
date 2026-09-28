@@ -32,6 +32,11 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "flex-end",
   },
+  topActions: {
+    // matches LakeTextInput height, so actions are centered on the input, not on its error line
+    minHeight: 40,
+    justifyContent: "center",
+  },
 });
 
 type LabelType = "form" | "formSmall" | "view" | "viewSmall" | "radioGroup";
@@ -74,6 +79,7 @@ export const LakeLabel = ({
   style,
 }: Props) => {
   const id = useId();
+  const isFormLabel = type === "form" || type === "formSmall" || type === "radioGroup";
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
@@ -88,7 +94,7 @@ export const LakeLabel = ({
     <View style={[styles.container, style]}>
       <Box direction="row" justifyContent="spaceBetween" alignItems="center">
         <Box direction="row" alignItems="center" shrink={1}>
-          {type === "form" || type === "formSmall" || type === "radioGroup" ? (
+          {isFormLabel ? (
             <Box shrink={1}>
               <Label
                 onClick={onClick}
@@ -144,14 +150,14 @@ export const LakeLabel = ({
           .exhaustive()}
       />
 
-      <Box direction="row" alignItems="center">
+      <Box direction="row" alignItems={isFormLabel ? "start" : "center"}>
         <View style={[commonStyles.fill, styles.content]}>{render(id)}</View>
 
         {isNotNullish(actions) && (
           <>
             <Space width={16} />
 
-            {actions}
+            {isFormLabel ? <View style={styles.topActions}>{actions}</View> : actions}
           </>
         )}
       </Box>
