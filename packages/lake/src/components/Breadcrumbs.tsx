@@ -664,7 +664,11 @@ const arrangeArray = <T,>(array: T[]): { start: T[]; collapsed: T[]; end: T[] } 
   };
 };
 
-export const Breadcrumbs = () => {
+type BreadcrumbsProps = {
+  ariaLabel?: string;
+};
+
+export const Breadcrumbs = ({ ariaLabel = "Breadcrumb" }: BreadcrumbsProps) => {
   const crumbs = useBreadcrumbs();
 
   const cleanCrumbs = useMemo(() => {
@@ -695,7 +699,7 @@ export const Breadcrumbs = () => {
   }, [cleanCrumbs]);
 
   return (
-    <View role="navigation" style={styles.container}>
+    <View role="navigation" aria-label={ariaLabel} style={styles.container}>
       {start.map(({ id, crumb, isFirst, isLast, isRootCrumb }) => (
         <BreadcrumbsItem
           key={id}
