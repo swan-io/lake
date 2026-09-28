@@ -98,6 +98,8 @@ type TransactionStatementV1Props = {
   version: "v1";
 
   partnerLogoUrl?: string;
+  // Partner name, used as the logo alt text
+  partnerLogoAlt?: string;
   generationDate: string;
 
   executionDate: string;
@@ -133,6 +135,7 @@ const logoStyle: CSSProperties = {
 
 export const TransactionStatementV1 = ({
   partnerLogoUrl,
+  partnerLogoAlt,
   generationDate,
 
   executionDate,
@@ -162,7 +165,7 @@ export const TransactionStatementV1 = ({
     <View style={[styles.container, style]}>
       <Box direction="row" alignItems="center">
         {isNotNullishOrEmpty(partnerLogoUrl) ? (
-          <img src={partnerLogoUrl} style={logoStyle} />
+          <img src={partnerLogoUrl} alt={partnerLogoAlt} style={logoStyle} />
         ) : (
           <SwanLogo style={styles.defaultLogo} />
         )}

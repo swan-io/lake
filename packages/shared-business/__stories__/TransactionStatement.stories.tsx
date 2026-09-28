@@ -15,6 +15,7 @@ export const Default = () => {
         <TransactionStatement
           version="v1"
           partnerLogoUrl="https://s3.eu-west-1.amazonaws.com/data.master.oina.ws/7a90851b-40f8-479d-9e0e-86d12fb001b5/SANDBOX/logo-749a2fb5-230b-4ae6-98bd-65bdb3c987c9.png"
+          partnerLogoAlt="Acme Bank"
           generationDate="08/12/2024"
           executionDate="03/28/2024"
           type="InternalCreditTransferOut"
@@ -43,6 +44,7 @@ export const Default = () => {
         <TransactionStatement
           version="v1"
           partnerLogoUrl="https://s3.eu-west-1.amazonaws.com/data.master.oina.ws/7a90851b-40f8-479d-9e0e-86d12fb001b5/SANDBOX/logo-749a2fb5-230b-4ae6-98bd-65bdb3c987c9.png"
+          partnerLogoAlt="Acme Bank"
           generationDate="08/12/2024"
           executionDate="03/28/2024"
           type="SepaCreditTransferOut"

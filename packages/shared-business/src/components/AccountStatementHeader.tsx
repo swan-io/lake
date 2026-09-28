@@ -56,6 +56,8 @@ const styles = {
 
 type AccountStatementHeaderProps = {
   partnerLogoUrl?: string;
+  // Partner name, used as the logo alt text
+  partnerLogoAlt?: string;
   language?: SupportedLanguage;
 };
 
@@ -68,6 +70,7 @@ const logoStyle: CSSProperties = {
 
 export const AccountStatementHeader = ({
   partnerLogoUrl,
+  partnerLogoAlt,
   language,
 }: AccountStatementHeaderProps) => {
   const t = useTranslation(language);
@@ -77,7 +80,7 @@ export const AccountStatementHeader = ({
       <div style={styles.logo}>
         {isNotNullishOrEmpty(partnerLogoUrl) ? (
           <>
-            <img src={partnerLogoUrl} style={logoStyle} />
+            <img src={partnerLogoUrl} alt={partnerLogoAlt} style={logoStyle} />
             <div style={styles.partnership}>
               <div style={styles.partnershipText}>{t("accountStatement.partnership")}</div>
               <SwanLogo color={colors.gray[900]} style={styles.swanLogo} />

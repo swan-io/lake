@@ -123,6 +123,8 @@ type Transaction = {
 type CreditStatementV1Props = {
   version: "v1";
   partnerLogoUrl?: string;
+  // Partner name, used as the logo alt text
+  partnerLogoAlt?: string;
   style?: StyleProp<ViewStyle>;
   accountHolderType: "Individual" | "Company";
   accountHolderName: string;
@@ -149,6 +151,7 @@ const formatMaskedPan = (value: string) => `••${value.slice(-4)}`;
 
 export const CreditStatementV1 = ({
   partnerLogoUrl,
+  partnerLogoAlt,
   accountHolderType,
   accountHolderName,
   accountHolderAddress,
@@ -168,7 +171,7 @@ export const CreditStatementV1 = ({
       <Box direction="row" justifyContent="spaceBetween" alignItems="start">
         <Box direction="row" alignItems="center">
           {isNotNullishOrEmpty(partnerLogoUrl) ? (
-            <img src={partnerLogoUrl} style={logoStyle} />
+            <img src={partnerLogoUrl} alt={partnerLogoAlt} style={logoStyle} />
           ) : (
             <SwanLogo style={styles.defaultLogo} />
           )}
