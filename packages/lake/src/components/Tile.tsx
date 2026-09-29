@@ -232,7 +232,6 @@ export const Tile = ({
 
   return (
     <View
-      role="region"
       style={[
         styles.container,
         selected === false && styles.unselectedContainer,
