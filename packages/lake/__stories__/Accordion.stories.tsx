@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { Accordion } from "../src/components/Accordion";
 import { BorderedIcon } from "../src/components/BorderedIcon";
 import { Box } from "../src/components/Box";
-import { Fill } from "../src/components/Fill";
 import { IconName } from "../src/components/Icon";
 import { LakeButton } from "../src/components/LakeButton";
 import { LakeText } from "../src/components/LakeText";
@@ -37,21 +36,21 @@ const PaymentMethodContent = ({ name, icon }: PaymentMethodContentProps) => {
       <LakeText variant="smallMedium" color={colors.gray[900]}>
         {name}
       </LakeText>
-
-      <Fill minWidth={12} />
-
-      <LakeButton
-        size="small"
-        color="sandbox"
-        onPress={() => {
-          console.log("Press on payment method", name);
-        }}
-      >
-        Activate
-      </LakeButton>
     </Box>
   );
 };
+
+const ActivateButton = ({ name }: { name: string }) => (
+  <LakeButton
+    size="small"
+    color="sandbox"
+    onPress={() => {
+      console.log("Press on payment method", name);
+    }}
+  >
+    Activate
+  </LakeButton>
+);
 
 export const Default = () => {
   return (
@@ -99,7 +98,10 @@ export const Default = () => {
 
       <StoryPart title="Trigger with content">
         <View style={styles.accordionContainer}>
-          <Accordion trigger={<PaymentMethodContent icon="lake-card" name="Card" />}>
+          <Accordion
+            trigger={<PaymentMethodContent icon="lake-card" name="Card" />}
+            triggerEnd={<ActivateButton name="Card" />}
+          >
             <LakeText>
               This feature allows users to manage their debit or credit cards within the app. Users
               can view their card details, track their spending, set spending limits, and freeze or
@@ -109,6 +111,7 @@ export const Default = () => {
 
           <Accordion
             trigger={<PaymentMethodContent icon="lake-transfer" name="SEPA Direct Debit" />}
+            triggerEnd={<ActivateButton name="SEPA Direct Debit" />}
           >
             <LakeText>
               This feature enables users to authorize regular payments to be made from their bank
@@ -117,7 +120,10 @@ export const Default = () => {
             </LakeText>
           </Accordion>
 
-          <Accordion trigger={<PaymentMethodContent icon="lake-card" name="Check" />}>
+          <Accordion
+            trigger={<PaymentMethodContent icon="lake-card" name="Check" />}
+            triggerEnd={<ActivateButton name="Check" />}
+          >
             <LakeText>
               This feature allows users to deposit checks into their account by taking a photo of
               the check with their phone. Users can see the status of their check deposit and
@@ -127,6 +133,7 @@ export const Default = () => {
 
           <Accordion
             trigger={<PaymentMethodContent icon="lake-transfer" name="Internal Direct Debit" />}
+            triggerEnd={<ActivateButton name="Internal Direct Debit" />}
           >
             <LakeText>
               This feature allows users to set up automatic payments between their own accounts
