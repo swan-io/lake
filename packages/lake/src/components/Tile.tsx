@@ -113,11 +113,13 @@ const styles = StyleSheet.create({
   collapsibleContent: {
     display: "grid",
     gridTemplateRows: "0fr",
-    transitionProperty: "grid-template-rows",
+    transitionProperty: "grid-template-rows, visibility",
     transitionDuration: "300ms",
+    visibility: "hidden",
   },
   collapsibleContentOpen: {
     gridTemplateRows: "1fr",
+    visibility: "visible",
   },
   collapsibleInner: {
     overflow: "hidden",
@@ -264,7 +266,6 @@ export const Tile = ({
 
           <View
             id={contentId}
-            aria-hidden={!expanded}
             style={[styles.collapsibleContent, expanded && styles.collapsibleContentOpen]}
           >
             <View style={styles.collapsibleInner}>
