@@ -299,7 +299,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
               <LakeLabel
                 label={label}
                 description={purposeDetails ?? description}
-                render={() => (
+                render={id => (
                   <>
                     <Box direction="row">
                       <Box direction="row">
@@ -372,6 +372,7 @@ export const SupportingDocumentCollection = <Purpose extends string>({
                     <Space height={16} />
 
                     <FilesUploader
+                      id={id}
                       ref={ref => {
                         filesUploaderRefByPurpose.current[purpose] = ref;
                       }}

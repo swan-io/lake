@@ -28,6 +28,7 @@ const EditableInputText = (props: Except<LakeTextInputProps, "value" | "onChange
   return (
     <View style={styles.input}>
       <LakeTextInput
+        aria-label="Text input"
         {...props}
         value={value}
         onChange={event => setValue(event.currentTarget.value)}
@@ -44,6 +45,7 @@ const EditableInputTextWithUnitChooser = (
   return (
     <View style={styles.input}>
       <LakeTextInput
+        aria-label="Text input"
         {...props}
         unit={unit}
         value={value}

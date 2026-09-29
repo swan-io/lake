@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { Grid } from "../src/components/Grid";
 import { LakeCopyButton } from "../src/components/LakeCopyButton";
 import { LakeLabel } from "../src/components/LakeLabel";
+import { LakeText } from "../src/components/LakeText";
 import { LakeTextInput } from "../src/components/LakeTextInput";
 import { Space } from "../src/components/Space";
 import { Tag } from "../src/components/Tag";
@@ -133,21 +134,13 @@ export const Types = () => {
       </StoryPart>
 
       <StoryPart title="View">
-        <LakeLabel
-          label={label}
-          render={id => <LakeTextInput id={id} disabled={true} />}
-          type="view"
-        />
+        <LakeLabel label={label} render={() => <LakeText>Value</LakeText>} type="view" />
 
         <Space height={20} />
       </StoryPart>
 
       <StoryPart title="View Small">
-        <LakeLabel
-          label={label}
-          render={id => <LakeTextInput id={id} disabled={true} />}
-          type="viewSmall"
-        />
+        <LakeLabel label={label} render={() => <LakeText>Value</LakeText>} type="viewSmall" />
       </StoryPart>
     </StoryBlock>
   );

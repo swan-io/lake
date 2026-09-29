@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { Future, Result } from "@bloodyowl/boxed";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { StyleSheet } from "react-native";
 import { FilesUploader } from "../src/components/FilesUploader";
 import { SwanFile } from "../src/utils/SwanFile";
@@ -60,25 +61,33 @@ export const WithSeveralDocuments = () => {
   return (
     <StoryBlock title="UploadArea with several documents">
       <StoryPart title="" style={styles.storyPart}>
-        <FilesUploader
-          maxSize={20_000_000}
-          icon="document-regular"
-          accept={ACCEPTED_FORMATS}
-          initialFiles={documents}
-          getUploadConfig={() => {}}
-          generateUpload={() => Future.value(Result.Ok({ id: crypto.randomUUID(), upload: {} }))}
-          onRemoveFile={() =>
-            Future.make<Result<unknown, unknown>>(resolve => {
-              setTimeout(() => resolve(Result.Ok(undefined)), 1_000);
-            })
-          }
-          uploadFile={({ onProgress }) => {
-            return Future.wait(1)
-              .tap(() => onProgress(0.8))
-              .flatMap(() => Future.wait(1200))
-              .map(Result.Ok);
-          }}
-          formatAndSizeDescription={"20MB max"}
+        <LakeLabel
+          label="Documents"
+          render={id => (
+            <FilesUploader
+              id={id}
+              maxSize={20_000_000}
+              icon="document-regular"
+              accept={ACCEPTED_FORMATS}
+              initialFiles={documents}
+              getUploadConfig={() => {}}
+              generateUpload={() =>
+                Future.value(Result.Ok({ id: crypto.randomUUID(), upload: {} }))
+              }
+              onRemoveFile={() =>
+                Future.make<Result<unknown, unknown>>(resolve => {
+                  setTimeout(() => resolve(Result.Ok(undefined)), 1_000);
+                })
+              }
+              uploadFile={({ onProgress }) => {
+                return Future.wait(1)
+                  .tap(() => onProgress(0.8))
+                  .flatMap(() => Future.wait(1200))
+                  .map(Result.Ok);
+              }}
+              formatAndSizeDescription={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
     </StoryBlock>
