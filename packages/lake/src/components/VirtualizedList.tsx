@@ -344,7 +344,8 @@ const ResizeHandle = ({ id, end = false, width, onResize, scrollViewRef }: Resiz
   return (
     <Pressable
       ref={ref}
-      role="none"
+      aria-hidden={true}
+      tabIndex={-1}
       style={[
         styles.resizeHandleZone,
         end ? styles.resizeHandleZoneEnd : styles.resizeHandleZoneStart,
@@ -376,7 +377,7 @@ export const VirtualizedList = <T, ExtraInfo>({
   onColumnResize,
   getRowLink,
 }: VirtualizedListProps<T, ExtraInfo>) => {
-  // Used for unique IDs generation (usefull for header IDs and cells aria-describedBy pointing to them)
+  // Used for unique IDs generation (usefull for header IDs)
   const viewId = useId();
   const scrollViewRef = useRef<ScrollViewRef>(null);
   const scrollTrackerRef = useRef<View>(null);
@@ -745,6 +746,10 @@ export const VirtualizedList = <T, ExtraInfo>({
     <ScrollView
       ref={scrollViewRef}
       role="table"
+      aria-busy={Option.fromNullable(loading)
+        .map(({ isLoading }) => isLoading)
+        .getOr(false)}
+      tabIndex={getRowLink == null ? 0 : undefined}
       both={true}
       style={[styles.container, { marginHorizontal }]}
       onScroll={onScroll}
@@ -790,7 +795,6 @@ export const VirtualizedList = <T, ExtraInfo>({
               .flatMap(({ isLoading, count }) => (isLoading ? Option.Some(count) : Option.None()))
               .map(count => (
                 <View
-                  aria-busy={true}
                   style={[
                     styles.loadingPlaceholder,
                     {
@@ -932,7 +936,6 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                   <View
                     style={[styles.cell, { width: width + paddingLeft, paddingLeft }]}
                     key={columnId}
-                    aria-describedby={columnId}
                   >
                     {renderCell({
                       columnId,
@@ -974,7 +977,6 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                   { width: width + paddingLeft + paddingRight, paddingLeft, paddingRight },
                 ]}
                 key={columnId}
-                aria-describedby={columnId}
               >
                 {renderCell({
                   columnId,
@@ -1013,7 +1015,6 @@ const RawVirtualizedRow = <T, ExtraInfo>({
                   <View
                     style={[styles.cell, { width: width + paddingRight, paddingRight }]}
                     key={columnId}
-                    aria-describedby={columnId}
                   >
                     {renderCell({
                       columnId,

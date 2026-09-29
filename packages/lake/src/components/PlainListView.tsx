@@ -315,9 +315,12 @@ export const PlainListView = <T, ExtraInfo>({
   const listWrapper = useMemo(
     () =>
       withoutScroll ? (
-        <View style={styles.contentContainer} />
+        <View role="table" aria-busy={isLoading} style={styles.contentContainer} />
       ) : (
         <ScrollView
+          role="table"
+          aria-busy={isLoading}
+          tabIndex={isNullish(getRowLink) ? 0 : undefined}
           scrollEventThrottle={32}
           contentContainerStyle={[
             styles.contentContainer,
@@ -327,12 +330,11 @@ export const PlainListView = <T, ExtraInfo>({
           ]}
         />
       ),
-    [isLoading, loading?.count, rowHeight, totalHeight, withoutScroll],
+    [isLoading, loading?.count, rowHeight, totalHeight, withoutScroll, getRowLink],
   );
 
   return (
     <ResponsiveContainer
-      role="table"
       style={withoutScroll ? (isEmpty ? commonStyles.fill : undefined) : styles.root}
       breakpoint={breakpoint}
     >
@@ -438,7 +440,7 @@ export const PlainListView = <T, ExtraInfo>({
                   </View>
 
                   <View>
-                    <View aria-busy={isLoading} style={styles.loadingPlaceholder}>
+                    <View style={styles.loadingPlaceholder}>
                       {isLoading ? (
                         <PlainListViewPlaceholder count={loading.count} rowHeight={rowHeight} />
                       ) : null}
