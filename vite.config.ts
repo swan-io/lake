@@ -41,6 +41,7 @@ export default defineConfig({
         ],
         test: {
           name: "a11y",
+          setupFiles: ["scripts/tests/a11ySetup.ts"],
           browser: {
             enabled: true,
             headless: true,
