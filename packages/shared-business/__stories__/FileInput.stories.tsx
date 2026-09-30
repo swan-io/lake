@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { FileInput } from "../src/components/FileInput";
@@ -28,39 +29,67 @@ export const Variations = ({ layout }: StoryArgs) => {
       description="You check design with vertical and horizontal layout, you can edit it in 'Controls' panel. (Press A to open it)"
     >
       <StoryPart title="Default" style={styles.storyPart}>
-        <FileInput icon="document-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput id={id} icon="document-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+          )}
+        />
       </StoryPart>
 
       <StoryPart title="With custom icon" style={styles.storyPart}>
-        <FileInput icon="image-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput id={id} icon="image-regular" layout={layout} accept={ACCEPTED_FORMATS} />
+          )}
+        />
       </StoryPart>
 
       <StoryPart title="With description" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          description="Supported documents: .pdf, .png, .jpg"
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              description="Supported documents: .pdf, .png, .jpg"
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="With error" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          description="Supported documents: .pdf, .png, .jpg"
-          error="This document is required"
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              description="Supported documents: .pdf, .png, .jpg"
+              error="This document is required"
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="Disabled" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          description="Supported documents: .pdf, .png, .jpg"
-          disabled={true}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              description="Supported documents: .pdf, .png, .jpg"
+              disabled={true}
+            />
+          )}
         />
       </StoryPart>
     </StoryBlock>
@@ -89,95 +118,143 @@ export const WithOneFile = ({ layout }: StoryArgs) => {
       description="Here is different file icons depending on file extension"
     >
       <StoryPart title="Interactive" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={file}
-          onFiles={files => void setFile(files[0])}
-          onPressRemove={() => setFile(undefined)}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              value={file}
+              onFiles={files => void setFile(files[0])}
+              onPressRemove={() => setFile(undefined)}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="Interactive (image only)" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS.filter(item => item.startsWith("image/"))}
-          value={file}
-          onFiles={files => void setFile(files[0])}
-          onPressRemove={() => setFile(undefined)}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS.filter(item => item.startsWith("image/"))}
+              value={file}
+              onFiles={files => void setFile(files[0])}
+              onPressRemove={() => setFile(undefined)}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="PDF" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={PDF_FILE}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              value={PDF_FILE}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="SVG" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={["image/svg+xml"]}
-          value={SWAN_LOGO_SVG}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={["image/svg+xml"]}
+              value={SWAN_LOGO_SVG}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="Controlled" style={styles.storyPart}>
-        <FileInput
-          icon="image-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={file}
-          onFiles={files => setFile(files[0])}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="image-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              value={file}
+              onFiles={files => setFile(files[0])}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="XLS" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={XLS_FILE}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              value={XLS_FILE}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="Unknown" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={ACCEPTED_FORMATS}
-          value={UNKNOWN_FILE}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={ACCEPTED_FORMATS}
+              value={UNKNOWN_FILE}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="Dist file" style={styles.storyPart}>
-        <FileInput
-          icon="document-regular"
-          layout={layout}
-          accept={["image/png"]}
-          value={{ url: "https://fakeimg.pl/500x300/?retina=true" }}
-          maxSize={20_000_000}
-          description={"20MB max"}
+        <LakeLabel
+          label="Document"
+          render={id => (
+            <FileInput
+              id={id}
+              icon="document-regular"
+              layout={layout}
+              accept={["image/png"]}
+              value={{ url: "https://fakeimg.pl/500x300/?retina=true" }}
+              maxSize={20_000_000}
+              description={"20MB max"}
+            />
+          )}
         />
       </StoryPart>
     </StoryBlock>

@@ -15,6 +15,7 @@ type Props<UploadInput, UploadOutput, GenerateUploadError, UploadFileError> = Co
   UploadFileError
 > & {
   ref?: Ref<FilesUploaderRef>;
+  id?: string;
   getUploadConfig: (file: File) => UploadInput;
   accept: string[];
   maxSize: number;
@@ -32,6 +33,7 @@ export type FilesUploaderRef = {
 
 export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, UploadFileError>({
   ref,
+  id,
   maxSize,
   accept,
   icon,
@@ -72,6 +74,7 @@ export const FilesUploader = <UploadInput, UploadOutput, GenerateUploadError, Up
       {canUpload ? (
         <>
           <FileInput
+            id={id}
             layout="horizontal"
             onFiles={files => {
               files.forEach(file => {

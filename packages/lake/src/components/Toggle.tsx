@@ -60,9 +60,17 @@ type Props = {
   labelOff: string;
   labelOn: string;
   onToggle: (value: boolean) => void;
+  ariaLabel?: string;
 };
 
-export const Toggle = ({ compact = false, value, labelOff, labelOn, onToggle }: Props) => {
+export const Toggle = ({
+  compact = false,
+  value,
+  labelOff,
+  labelOn,
+  onToggle,
+  ariaLabel,
+}: Props) => {
   const [itemsWidth, setItemsWidth] = useState<{ on: number; off: number }>();
   const onViewRef = useRef<Text>(null);
   const offViewRef = useRef<Text>(null);
@@ -83,7 +91,13 @@ export const Toggle = ({ compact = false, value, labelOff, labelOn, onToggle }: 
   }, [onToggle, value]);
 
   return (
-    <Pressable role="switch" onPress={onPress} aria-checked={value} style={styles.base}>
+    <Pressable
+      role="switch"
+      onPress={onPress}
+      aria-checked={value}
+      aria-label={ariaLabel}
+      style={styles.base}
+    >
       <View
         role="presentation"
         style={[

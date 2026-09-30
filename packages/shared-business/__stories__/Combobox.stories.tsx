@@ -2,6 +2,7 @@ import { Meta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@bloodyowl/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "@swan-io/lake/src/components/LakeCombobox";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
@@ -86,21 +87,27 @@ const EditableCombobox = (props: EditableComboboxProps) => {
   }, [search]);
 
   return (
-    <LakeCombobox
-      value={displayedValue}
-      items={data}
-      onValueChange={value => {
-        setSelectedProduct(null);
-        setSearch(value);
-      }}
-      onSelectItem={product => {
-        setData(AsyncData.NotAsked());
-        setSelectedProduct(product);
-      }}
-      keyExtractor={product => product.id.toString()}
-      renderItem={product => <LakeText>{product.title}</LakeText>}
-      emptyResult={"No result"}
-      {...props}
+    <LakeLabel
+      label="Product"
+      render={id => (
+        <LakeCombobox
+          id={id}
+          value={displayedValue}
+          items={data}
+          onValueChange={value => {
+            setSelectedProduct(null);
+            setSearch(value);
+          }}
+          onSelectItem={product => {
+            setData(AsyncData.NotAsked());
+            setSelectedProduct(product);
+          }}
+          keyExtractor={product => product.id.toString()}
+          renderItem={product => <LakeText>{product.title}</LakeText>}
+          emptyResult={"No result"}
+          {...props}
+        />
+      )}
     />
   );
 };
@@ -164,33 +171,45 @@ export const Variations = () => {
       </StoryPart>
 
       <StoryPart title="CityInput">
-        <PlacekitCityInput
-          apiKey={PLACEKIT_API_KEY}
-          country="FRA"
-          value={city}
-          onValueChange={setCity}
-          onSuggestion={place => {
-            console.log(place.city);
-            console.log(place.postalCode);
-          }}
-          onLoadError={() => {}}
+        <LakeLabel
+          label="City"
+          render={id => (
+            <PlacekitCityInput
+              id={id}
+              apiKey={PLACEKIT_API_KEY}
+              country="FRA"
+              value={city}
+              onValueChange={setCity}
+              onSuggestion={place => {
+                console.log(place.city);
+                console.log(place.postalCode);
+              }}
+              onLoadError={() => {}}
+            />
+          )}
         />
       </StoryPart>
 
       <StoryPart title="AddressInput">
-        <PlacekitAddressSearchInput
-          apiKey={PLACEKIT_API_KEY}
-          country="FRA"
-          value={search}
-          onValueChange={setSearch}
-          onSuggestion={place => {
-            console.log(place.completeAddress);
-            console.log(place.city);
-            console.log(place.postalCode);
-          }}
-          language="fr"
-          placeholder=""
-          emptyResult="Nothing"
+        <LakeLabel
+          label="Address"
+          render={id => (
+            <PlacekitAddressSearchInput
+              id={id}
+              apiKey={PLACEKIT_API_KEY}
+              country="FRA"
+              value={search}
+              onValueChange={setSearch}
+              onSuggestion={place => {
+                console.log(place.completeAddress);
+                console.log(place.city);
+                console.log(place.postalCode);
+              }}
+              language="fr"
+              placeholder=""
+              emptyResult="Nothing"
+            />
+          )}
         />
       </StoryPart>
     </StoryBlock>

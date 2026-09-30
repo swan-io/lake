@@ -22,6 +22,7 @@ export const Variations = () => {
             compact={false}
             labelOff="Canceled"
             labelOn="Active"
+            ariaLabel="Status"
           />
         </Box>
       </StoryPart>
@@ -34,6 +35,7 @@ export const Variations = () => {
             compact={true}
             labelOff="Canceled"
             labelOn="Active"
+            ariaLabel="Status"
           />
         </Box>
       </StoryPart>

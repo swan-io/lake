@@ -1,8 +1,7 @@
 import { Meta } from "@storybook/react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
-import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
 import { ResponsiveContainer } from "../src/components/ResponsiveContainer";
 import { Space } from "../src/components/Space";
@@ -16,9 +15,6 @@ const styles = StyleSheet.create({
   },
   containerMobile: {
     maxWidth: 400,
-  },
-  switchContainer: {
-    alignSelf: "flex-start",
   },
   block: {
     width: 120,
@@ -35,6 +31,7 @@ export default {
 
 export const Default = () => {
   const [forceMobileWidth, setForceMobileWidth] = useState(false);
+  const switchLabelId = useId();
 
   return (
     <StoryBlock
@@ -44,14 +41,17 @@ export const Default = () => {
         'You can try it by toggling the "Mobile mode" switch',
       ]}
     >
-      <LakeLabel
-        label="Mobile mode"
-        render={() => (
-          <View style={styles.switchContainer}>
-            <Switch value={forceMobileWidth} onValueChange={setForceMobileWidth} />
-          </View>
-        )}
-      />
+      <Box direction="row" alignItems="center">
+        <Switch
+          value={forceMobileWidth}
+          onValueChange={setForceMobileWidth}
+          labelledBy={switchLabelId}
+        />
+        <Space width={12} />
+        <LakeText id={switchLabelId} color={colors.gray[700]}>
+          Mobile mode
+        </LakeText>
+      </Box>
 
       <Space height={16} />
 

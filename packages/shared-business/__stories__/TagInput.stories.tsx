@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeTagInput, LakeTagInputProps } from "@swan-io/lake/src/components/LakeTagInput";
 import { LakeTextInput } from "@swan-io/lake/src/components/LakeTextInput";
 import { useState } from "react";
@@ -23,11 +24,17 @@ const EditableTagInput = (props: Except<LakeTagInputProps, "onValuesChanged" | "
 
   return (
     <View style={styles.input}>
-      <LakeTagInput
-        validator={isValidEmail}
-        onValuesChanged={setValues}
-        values={values}
-        {...props}
+      <LakeLabel
+        label="Emails"
+        render={id => (
+          <LakeTagInput
+            id={id}
+            validator={isValidEmail}
+            onValuesChanged={setValues}
+            values={values}
+            {...props}
+          />
+        )}
       />
     </View>
   );

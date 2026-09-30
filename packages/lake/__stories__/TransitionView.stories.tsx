@@ -1,8 +1,7 @@
 import { Meta } from "@storybook/react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Box } from "../src/components/Box";
-import { LakeLabel } from "../src/components/LakeLabel";
 import { LakeText } from "../src/components/LakeText";
 import { Space } from "../src/components/Space";
 import { Switch } from "../src/components/Switch";
@@ -11,9 +10,6 @@ import { colors } from "../src/constants/design";
 import { StoryBlock } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
-  switchContainer: {
-    alignSelf: "flex-start",
-  },
   container: {
     position: "relative",
     maxWidth: 400,
@@ -48,6 +44,7 @@ export default {
 
 export const Default = () => {
   const [showBlock, setShowBlock] = useState(false);
+  const switchLabelId = useId();
 
   return (
     <StoryBlock
@@ -57,14 +54,13 @@ export const Default = () => {
         "You can try it by toggling the switch",
       ]}
     >
-      <LakeLabel
-        label="Switch displayed content"
-        render={() => (
-          <View style={styles.switchContainer}>
-            <Switch value={showBlock} onValueChange={setShowBlock} />
-          </View>
-        )}
-      />
+      <Box direction="row" alignItems="center">
+        <Switch value={showBlock} onValueChange={setShowBlock} labelledBy={switchLabelId} />
+        <Space width={12} />
+        <LakeText id={switchLabelId} color={colors.gray[700]}>
+          Switch displayed content
+        </LakeText>
+      </Box>
 
       <Space height={16} />
 
