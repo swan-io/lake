@@ -29,6 +29,8 @@
     "release": "tsx scripts/release/createPullRequest.ts",
     "icons": "tsx scripts/fluent-icons/generateIcons.ts",
     "ai-translate": "tsx -r dotenv/config scripts/locales/aiTranslate.ts",
+    "missing-translations": "tsx scripts/locales/missingTranslations.ts packages/shared-business/src/locales",
+    "merge-translations": "tsx scripts/locales/mergeTranslations.ts",
     "sort-locales": "tsx scripts/locales/sort.ts",
     "pull-shared-business-locales": "localazy download shared-business -k localazy.keys.shared-business.json",
     "pull-locales": "pnpm pull-shared-business-locales && pnpm sort-locales && pnpm format-locales",
@@ -59,6 +61,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.6",
     "@fluentui/svg-icons": "^1.1.333",
+    "@formatjs/icu-messageformat-parser": "^3.5.14",
     "@localazy/cli": "^2.0.11",
     "@storybook/addon-a11y": "^10.5.0",
     "@storybook/addon-vitest": "^10.5.0",
