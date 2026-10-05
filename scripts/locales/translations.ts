@@ -8,6 +8,7 @@ import {
   parse,
 } from "@formatjs/icu-messageformat-parser";
 import { createHash } from "node:crypto";
+import path from "pathe";
 import { P, match } from "ts-pattern";
 
 /**
@@ -57,6 +58,24 @@ export const sortRecord = <T>(record: Record<string, T>): Record<string, T> =>
   Object.keys(record)
     .toSorted()
     .reduce<Record<string, T>>((acc, key) => ({ ...acc, [key]: record[key] as T }), {});
+
+/**
+ * Locale codes as used in locale file names: `fr`, `pt-BR`, `zh-Hant`…
+ * Checked before using a locale in a file path, so it can't point outside its directory
+ */
+export const isLocaleCode = (value: string): boolean => /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(value);
+
+/**
+ * Resolve a path from a root directory, and make sure it stays inside it (no `../` escape)
+ */
+export const resolveInside = (root: string, ...segments: string[]): Result<string, Error> => {
+  const resolvedRoot = path.resolve(root);
+  const resolvedPath = path.resolve(resolvedRoot, ...segments);
+
+  return resolvedPath === resolvedRoot || resolvedPath.startsWith(`${resolvedRoot}/`)
+    ? Result.Ok(resolvedPath)
+    : Result.Error(new Error(`Path ${resolvedPath} is outside ${resolvedRoot}`));
+};
 
 export const hashTranslationSource = (value: string): string =>
   createHash("sha256").update(value).digest("hex").slice(0, 12);

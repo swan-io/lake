@@ -1,12 +1,14 @@
-import { Option } from "@bloodyowl/boxed";
+import { Option, Result } from "@bloodyowl/boxed";
 import { describe, expect, test } from "vitest";
 import {
   checkTranslation,
   getMessagesToTranslate,
   getNextLocaleLock,
   hashTranslationSource,
+  isLocaleCode,
   isRecordOfString,
   isTranslationsLock,
+  resolveInside,
   sortRecord,
 } from "../translations";
 
@@ -36,6 +38,30 @@ describe("isTranslationsLock", () => {
     expect(isTranslationsLock([])).toBe(false);
     expect(isTranslationsLock({ fr: "be3702e3f1af" })).toBe(false);
     expect(isTranslationsLock({ fr: { "a.title": 1 } })).toBe(false);
+  });
+});
+
+describe("isLocaleCode", () => {
+  test("accepts locale codes", () => {
+    expect(["en", "fr", "fil", "pt-BR", "zh-Hant", "es-419"].every(isLocaleCode)).toBe(true);
+  });
+
+  test("rejects anything which could point outside a directory, or isn't a locale", () => {
+    expect(["", "../fr", "fr/../../x", "/etc/passwd", "fr.json", "FR", "translations.lock", "notes"].some(isLocaleCode)).toBe(false);
+  });
+});
+
+describe("resolveInside", () => {
+  test("resolves a path inside the root", () => {
+    expect(resolveInside("/repo/locales", "fr.json")).toEqual(Result.Ok("/repo/locales/fr.json"));
+    expect(resolveInside("/repo", "clients/app/src/locales")).toEqual(Result.Ok("/repo/clients/app/src/locales"));
+    expect(resolveInside("/repo", ".")).toEqual(Result.Ok("/repo"));
+  });
+
+  test("rejects a path escaping the root", () => {
+    expect(resolveInside("/repo/locales", "../secret.json").isError()).toBe(true);
+    expect(resolveInside("/repo/locales", "/etc/passwd").isError()).toBe(true);
+    expect(resolveInside("/repo", "../repo-other/locales").isError()).toBe(true);
   });
 });
 

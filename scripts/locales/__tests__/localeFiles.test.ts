@@ -4,6 +4,7 @@ import os from "os";
 import path from "pathe";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import {
+  getLocalePath,
   getTargetLocales,
   readLocaleFile,
   readLockFile,
@@ -25,13 +26,13 @@ afterEach(async () => {
 
 const writeFile = (name: string, content: unknown) =>
   fs.writeFile(
-    path.join(localesDir, name),
+    path.resolve(localesDir, name),
     typeof content === "string" ? content : JSON.stringify(content),
     "utf-8",
   );
 
 const readJson = async (name: string): Promise<unknown> =>
-  JSON.parse(await fs.readFile(path.join(localesDir, name), "utf-8"));
+  JSON.parse(await fs.readFile(path.resolve(localesDir, name), "utf-8"));
 
 describe("readMessagesFile", () => {
   test("reads a flat JSON object of strings", async () => {
@@ -66,12 +67,29 @@ describe("readMessagesFile", () => {
   });
 });
 
+describe("getLocalePath", () => {
+  test("returns <localesDir>/<locale>.json", () => {
+    const result = getLocalePath(localesDir, "pt-BR");
+    expect(result.isOk() && result.value).toBe(path.resolve(localesDir, "pt-BR.json"));
+  });
+
+  test("rejects a locale which could point outside the directory", () => {
+    expect(getLocalePath(localesDir, "../../secret").isError()).toBe(true);
+    expect(getLocalePath(localesDir, "/etc/passwd").isError()).toBe(true);
+  });
+});
+
 describe("readLocaleFile", () => {
   test("reads <localesDir>/<locale>.json", async () => {
     await writeFile("de.json", { "a.title": "Titel" });
 
     const result = await readLocaleFile(localesDir, "de");
     expect(result.isOk() && result.value).toEqual({ "a.title": "Titel" });
+  });
+
+  test("rejects an invalid locale without reading anything", async () => {
+    const result = await readLocaleFile(localesDir, "../fr");
+    expect(result.isError() && result.getError().message).toBe('Invalid locale "../fr"');
   });
 });
 
@@ -100,7 +118,7 @@ describe("readLockFile", () => {
 describe("getTargetLocales", () => {
   test("lists locales, sorted, except the base locale, the lock file and other files", async () => {
     await Promise.all(
-      ["fr.json", "en.json", "de.json", LOCK_FILE, "README.md"].map(name => writeFile(name, {})),
+      ["fr.json", "en.json", "de.json", LOCK_FILE, "README.md", "notes.json"].map(name => writeFile(name, {})),
     );
 
     const result = await getTargetLocales(localesDir);

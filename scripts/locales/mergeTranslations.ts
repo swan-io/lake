@@ -1,8 +1,19 @@
 import { Result } from "@bloodyowl/boxed";
-import path from "pathe";
 import pc from "picocolors";
-import { readLocaleFile, readMessagesFile, updateLockFile, writeJsonFile } from "./localeFiles";
-import { baseLocale, checkTranslation, getNextLocaleLock } from "./translations";
+import {
+  getLocalePath,
+  readLocaleFile,
+  readMessagesFile,
+  updateLockFile,
+  writeJsonFile,
+} from "./localeFiles";
+import {
+  baseLocale,
+  checkTranslation,
+  getNextLocaleLock,
+  isLocaleCode,
+  resolveInside,
+} from "./translations";
 
 /**
  * This script merges new translations into a locale file, used by the `/translate` Claude skill.
@@ -39,6 +50,16 @@ const main = async () => {
   if (locale === baseLocale) {
     return exitWithError(`Refusing to merge into the base locale (${baseLocale})`);
   }
+  if (!isLocaleCode(locale)) {
+    return exitWithError(`Invalid locale "${locale}"`);
+  }
+  if (!translationsFile.endsWith(".json")) {
+    return exitWithError(`The translations file must be a .json file: ${translationsFile}`);
+  }
+  // Locale files are only written inside the repo
+  if (resolveInside(process.cwd(), localesDir).isError()) {
+    return exitWithError(`The locales directory must be inside ${process.cwd()}: ${localesDir}`);
+  }
 
   const files = Result.all([
     await readLocaleFile(localesDir, baseLocale),
@@ -66,7 +87,10 @@ const main = async () => {
   }
 
   const mergedJson = { ...targetJson, ...translations };
-  const writeResult = await writeJsonFile(path.join(localesDir, `${locale}.json`), mergedJson);
+  const writeResult = await getLocalePath(localesDir, locale).match({
+    Ok: localePath => writeJsonFile(localePath, mergedJson),
+    Error: error => Promise.resolve(Result.Error<void, Error>(error)),
+  });
 
   if (writeResult.isError()) {
     return exitWithError(writeResult.getError().message);

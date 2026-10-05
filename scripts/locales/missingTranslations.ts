@@ -1,7 +1,7 @@
 import { Option } from "@bloodyowl/boxed";
 import pc from "picocolors";
 import { getTargetLocales, readLocaleFile, readLockFile } from "./localeFiles";
-import { baseLocale, getMessagesToTranslate } from "./translations";
+import { baseLocale, getMessagesToTranslate, resolveInside } from "./translations";
 
 /**
  * This script lists the translations to do in each locales directory, used by the `/translate` Claude skill.
@@ -76,6 +76,10 @@ const main = async () => {
   const messagesByDirectory: Record<string, Record<string, Record<string, string>>> = {};
 
   for (const localesDir of localesDirs) {
+    if (resolveInside(process.cwd(), localesDir).isError()) {
+      exitWithError(new Error(`The locales directory must be inside ${process.cwd()}: ${localesDir}`));
+    }
+
     (await getDirectoryMessages(localesDir)).match({
       Some: messages => {
         messagesByDirectory[localesDir] = messages;

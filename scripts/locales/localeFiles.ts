@@ -5,27 +5,32 @@ import path from "pathe";
 import { match } from "ts-pattern";
 import {
   baseLocale,
+  isLocaleCode,
   isRecordOfString,
   isTranslationsLock,
   LOCK_FILE,
+  resolveInside,
   sortRecord,
   type TranslationsLock,
 } from "./translations";
 
 /**
  * File system helpers shared by `missingTranslations.ts` and `mergeTranslations.ts`
+ * Paths are resolved before any file system call, and files of a locales directory are kept inside it
  */
 
 /**
  * Read a file from disk, None if it doesn't exist
  */
 const readFile = async (filePath: string): Promise<Result<Option<string>, Error>> => {
+  const resolvedPath = path.resolve(filePath);
+
   try {
-    return Result.Ok(Option.Some(await fs.readFile(filePath, "utf-8")));
+    return Result.Ok(Option.Some(await fs.readFile(resolvedPath, "utf-8")));
   } catch (error) {
     return match(error)
       .with({ code: "ENOENT" }, () => Result.Ok(Option.None<string>()))
-      .otherwise(() => Result.Error(new Error(`Failed to read file ${filePath}`)));
+      .otherwise(() => Result.Error(new Error(`Failed to read file ${resolvedPath}`)));
   }
 };
 
@@ -55,11 +60,22 @@ export const readMessagesFile = async (
     }),
   );
 
+/**
+ * Get the path of a locale file, checking the locale is a locale code (so it can't point outside the directory)
+ */
+export const getLocalePath = (localesDir: string, locale: string): Result<string, Error> =>
+  isLocaleCode(locale)
+    ? resolveInside(localesDir, `${locale}.json`)
+    : Result.Error(new Error(`Invalid locale "${locale}"`));
+
 export const readLocaleFile = (
   localesDir: string,
   locale: string,
 ): Promise<Result<Record<string, string>, Error>> =>
-  readMessagesFile(path.join(localesDir, `${locale}.json`));
+  getLocalePath(localesDir, locale).match({
+    Ok: localePath => readMessagesFile(localePath),
+    Error: error => Promise.resolve(Result.Error(error)),
+  });
 
 /**
  * Read the lock file of a locales directory, None if the directory doesn't use one
@@ -67,7 +83,7 @@ export const readLocaleFile = (
 export const readLockFile = async (
   localesDir: string,
 ): Promise<Result<Option<TranslationsLock>, Error>> => {
-  const lockPath = path.join(localesDir, LOCK_FILE);
+  const lockPath = path.resolve(localesDir, LOCK_FILE);
 
   return (await readFile(lockPath)).flatMap(content =>
     content.match({
@@ -78,22 +94,23 @@ export const readLockFile = async (
 };
 
 /**
- * List locales of a directory, except the base locale (and the lock file)
+ * List locales of a directory, except the base locale (and the lock file or any file which isn't a locale)
  */
 export const getTargetLocales = async (localesDir: string): Promise<Result<string[], Error>> => {
+  const resolvedDir = path.resolve(localesDir);
+
   try {
-    const files = await fs.readdir(localesDir);
+    const files = await fs.readdir(resolvedDir);
 
     return Result.Ok(
       files
         .filter(file => file.endsWith(".json") && file !== LOCK_FILE)
         .map(file => path.basename(file, ".json"))
-        .filter(locale => locale !== baseLocale)
+        .filter(locale => locale !== baseLocale && isLocaleCode(locale))
         .toSorted(),
     );
-  } catch (error) {
-    console.error(error);
-    return Result.Error(new Error(`Failed to read locales directory ${localesDir}`));
+  } catch {
+    return Result.Error(new Error(`Failed to read locales directory ${resolvedDir}`));
   }
 };
 
@@ -104,12 +121,13 @@ export const writeJsonFile = async (
   filePath: string,
   json: Record<string, unknown>,
 ): Promise<Result<void, Error>> => {
+  const resolvedPath = path.resolve(filePath);
+
   try {
-    await fs.writeFile(filePath, JSON.stringify(sortRecord(json), null, 2) + os.EOL, "utf-8");
+    await fs.writeFile(resolvedPath, JSON.stringify(sortRecord(json), null, 2) + os.EOL, "utf-8");
     return Result.Ok(undefined);
-  } catch (error) {
-    console.error(error);
-    return Result.Error(new Error(`Failed to write file ${filePath}`));
+  } catch {
+    return Result.Error(new Error(`Failed to write file ${resolvedPath}`));
   }
 };
 
@@ -124,7 +142,7 @@ const withLockFileMutex = async <T>(
   localesDir: string,
   run: () => Promise<Result<T, Error>>,
 ): Promise<Result<T, Error>> => {
-  const mutexPath = path.join(localesDir, `${LOCK_FILE}.mutex`);
+  const mutexPath = path.resolve(localesDir, `${LOCK_FILE}.mutex`);
 
   for (let retry = 0; retry < MUTEX_MAX_RETRIES; retry++) {
     try {
@@ -165,7 +183,7 @@ export const updateLockFile = (
     return lock.value.match({
       Some: async lock => {
         const nextLock = { ...lock, [locale]: getNextLocaleLock(lock[locale] ?? {}) };
-        const writeResult = await writeJsonFile(path.join(localesDir, LOCK_FILE), nextLock);
+        const writeResult = await writeJsonFile(path.resolve(localesDir, LOCK_FILE), nextLock);
         return writeResult.map(() => Option.Some(undefined));
       },
       None: async () => Result.Ok(Option.None<void>()),
