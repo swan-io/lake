@@ -59,11 +59,22 @@ export const sortRecord = <T>(record: Record<string, T>): Record<string, T> =>
     .toSorted()
     .reduce<Record<string, T>>((acc, key) => ({ ...acc, [key]: record[key] as T }), {});
 
+const MAX_LOCALE_CODE_LENGTH = 35;
+
 /**
  * Locale codes as used in locale file names: `fr`, `pt-BR`, `zh-Hant`…
  * Checked before using a locale in a file path, so it can't point outside its directory
+ * (split on `-` and checked part by part: no nested regex quantifier, so no ReDoS)
  */
-export const isLocaleCode = (value: string): boolean => /^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(value);
+export const isLocaleCode = (value: string): boolean => {
+  const [language = "", ...subtags] = value.split("-");
+
+  return (
+    value.length <= MAX_LOCALE_CODE_LENGTH &&
+    /^[a-z]{2,3}$/.test(language) &&
+    subtags.every(subtag => /^[A-Za-z0-9]{2,8}$/.test(subtag))
+  );
+};
 
 /**
  * Resolve a path from a root directory, and make sure it stays inside it (no `../` escape)

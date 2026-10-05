@@ -49,6 +49,10 @@ describe("isLocaleCode", () => {
   test("rejects anything which could point outside a directory, or isn't a locale", () => {
     expect(["", "../fr", "fr/../../x", "/etc/passwd", "fr.json", "FR", "translations.lock", "notes"].some(isLocaleCode)).toBe(false);
   });
+
+  test("rejects empty subtags and overly long codes", () => {
+    expect(["fr-", "-fr", "fr--BR", `en${"-abcd".repeat(10)}`].some(isLocaleCode)).toBe(false);
+  });
 });
 
 describe("resolveInside", () => {
