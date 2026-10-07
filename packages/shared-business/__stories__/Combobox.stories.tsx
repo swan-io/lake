@@ -1,5 +1,5 @@
-import { Meta } from "@storybook/react";
 import { AsyncData, Future, Result } from "@bloodyowl/boxed";
+import { Meta } from "@storybook/react";
 import { Box } from "@swan-io/lake/src/components/Box";
 import { LakeCombobox, LakeComboboxProps } from "@swan-io/lake/src/components/LakeCombobox";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";

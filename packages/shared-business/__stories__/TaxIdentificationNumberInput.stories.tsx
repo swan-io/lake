@@ -1,14 +1,31 @@
 import { Meta } from "@storybook/react";
+import { Box } from "@swan-io/lake/src/components/Box";
+import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TaxIdentificationNumberInput } from "../src/components/TaxIdentificationNumberInput";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
-  input: {
-    maxWidth: 400,
+  grid: {
+    gap: 24,
+  },
+  column: {
+    flex: 1,
+  },
+  columnHeader: {
+    marginBottom: 8,
   },
 });
+
+const COUNTRIES = [
+  { country: "DEU", label: "Germany" },
+  { country: "ESP", label: "Spain" },
+  { country: "ITA", label: "Italy" },
+  { country: "FRA", label: "France" },
+  { country: "BEL", label: "Belgium" },
+  { country: "NLD", label: "Netherlands" },
+] as const;
 
 export default {
   title: "Onboarding/TaxIdentificationNumber",
@@ -19,68 +36,38 @@ export const TaxIdentificationNumber = () => {
   const [value, setValue] = useState("");
 
   return (
-    <StoryBlock title="Variations">
-      <View style={styles.input}>
-        <StoryPart title="German company tax ID">
-          <TaxIdentificationNumberInput
-            required={true}
-            country={"DEU"}
-            isCompany={true}
-            valid={false}
-            error={undefined}
-            value={value}
-            onChange={event => setValue(event)}
-          />
-        </StoryPart>
+    <StoryBlock title="Tax identification number: Individual vs Company">
+      {COUNTRIES.map(({ country, label }) => (
+        <StoryPart key={country} title={label}>
+          <Box direction="row" style={styles.grid}>
+            <View style={styles.column}>
+              <LakeText style={styles.columnHeader}>Individual</LakeText>
+              <TaxIdentificationNumberInput
+                required={true}
+                country={country}
+                isCompany={false}
+                valid={false}
+                error={undefined}
+                value={value}
+                onChange={setValue}
+              />
+            </View>
 
-        <StoryPart title="German individual tax ID">
-          <TaxIdentificationNumberInput
-            required={true}
-            country={"DEU"}
-            isCompany={false}
-            valid={false}
-            error={undefined}
-            value={value}
-            onChange={event => setValue(event)}
-          />
+            <View style={styles.column}>
+              <LakeText style={styles.columnHeader}>Company</LakeText>
+              <TaxIdentificationNumberInput
+                required={true}
+                country={country}
+                isCompany={true}
+                valid={false}
+                error={undefined}
+                value={value}
+                onChange={setValue}
+              />
+            </View>
+          </Box>
         </StoryPart>
-
-        <StoryPart title="Spanish tax ID">
-          <TaxIdentificationNumberInput
-            required={true}
-            country={"ESP"}
-            isCompany={true}
-            valid={false}
-            error={undefined}
-            value={value}
-            onChange={event => setValue(event)}
-          />
-        </StoryPart>
-
-        <StoryPart title="Italian tax ID">
-          <TaxIdentificationNumberInput
-            required={true}
-            country={"ITA"}
-            isCompany={true}
-            valid={false}
-            error={undefined}
-            value={value}
-            onChange={event => setValue(event)}
-          />
-        </StoryPart>
-
-        <StoryPart title="French company tax ID">
-          <TaxIdentificationNumberInput
-            required={true}
-            country={"FRA"}
-            isCompany={true}
-            valid={false}
-            error={undefined}
-            value={value}
-            onChange={event => setValue(event)}
-          />
-        </StoryPart>
-      </View>
+      ))}
     </StoryBlock>
   );
 };

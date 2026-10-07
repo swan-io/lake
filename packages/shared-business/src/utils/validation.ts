@@ -290,9 +290,15 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
 
 export const getTaxNumberLabel = (isCompany: boolean, country: CompanyCountryCCA3) =>
   match({ isCompany, lang: locale.language, country })
-    .with({ isCompany: true, lang: "de" }, () => "Steuer-Nummer")
-    .with({ country: "NLD" }, () => "RSIN")
-    .otherwise(() => t("taxIdentificationNumber.label"));
+    .with({ isCompany: true, country: "NLD" }, () => "RSIN")
+    .with({ isCompany: false, country: "NLD" }, () =>
+      t("taxIdentificationNumber.personal.label.NLD"),
+    )
+    .with({ isCompany: false, country: "BEL" }, () =>
+      t("taxIdentificationNumber.personal.label.BEL"),
+    )
+    .with({ isCompany: true }, () => t("taxIdentificationNumber.company.label"))
+    .otherwise(() => t("taxIdentificationNumber.personal.label"));
 
 export const getIndividualTaxNumberPlaceholder = (
   country: IndividualCountryCCA3 | CompanyCountryCCA3,
