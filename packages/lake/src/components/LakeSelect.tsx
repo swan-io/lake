@@ -33,7 +33,7 @@ import {
 } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
 import { useMergeRefs } from "../hooks/useMergeRefs";
-import { getFocusableElements } from "../utils/a11y";
+import { getFocusableElements, getLabelId } from "../utils/a11y";
 import { setHighlightApi } from "../utils/highlights";
 import { isNotNullish, isNullishOrEmpty } from "../utils/nullish";
 import { Box } from "./Box";
@@ -368,6 +368,7 @@ export const LakeSelect = <V, T extends Item<V> = Item<V>>({
       <Pressable
         id={id}
         ref={mergedRef}
+        aria-labelledby={id != null ? `${getLabelId(id)} ${id}` : undefined}
         aria-haspopup="listbox"
         role="button"
         aria-expanded={visible}

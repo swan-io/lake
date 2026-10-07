@@ -10,6 +10,7 @@ import {
 import { match } from "ts-pattern";
 import { commonStyles } from "../constants/commonStyles";
 import { ColorVariants, colors, fonts, spacings, texts } from "../constants/design";
+import { getLabelId } from "../utils/a11y";
 import { isNotNullish } from "../utils/nullish";
 import { Box } from "./Box";
 import { LakeText } from "./LakeText";
@@ -58,7 +59,7 @@ type Props = {
 };
 
 const Label = (
-  props: TextProps & { htmlFor: string; onClick: (event: React.MouseEvent) => void },
+  props: TextProps & { id: string; htmlFor: string; onClick: (event: React.MouseEvent) => void },
 ) => {
   return unstable_createElement("label", props);
 };
@@ -113,6 +114,7 @@ export const LakeLabel = ({
             {isFormLabel ? (
               <Box shrink={1}>
                 <Label
+                  id={getLabelId(id)}
                   onClick={onClick}
                   htmlFor={id}
                   style={[styles.label, readOnly && { color: readOnlyColor }]}
