@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { backgroundColor, ColorVariants, colors, radii, shadows, texts } from "../constants/design";
 import { useBoolean } from "../hooks/useBoolean";
+import { getLabelId } from "../utils/a11y";
 import { groupBy } from "../utils/array";
 import { isNotNullish, isNotNullishOrEmpty } from "../utils/nullish";
 import { safeSplitAround } from "../utils/string";
@@ -311,6 +312,7 @@ export const MultiSelect = <Value,>({
       <Pressable
         id={id}
         ref={inputRef}
+        aria-labelledby={id != null ? `${getLabelId(id)} ${id}` : undefined}
         role="button"
         aria-haspopup="listbox"
         aria-expanded={visible}

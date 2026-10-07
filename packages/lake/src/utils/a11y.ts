@@ -22,3 +22,7 @@ export const getFocusableElements = (
     includeRoot && rootNode.matches(FOCUSABLE_SELECTOR) ? [rootNode as HTMLElement] : []
   ).concat(Array.from(rootNode.querySelectorAll(FOCUSABLE_SELECTOR)));
 };
+
+// `<label for>` doesn't apply to elements that aren't labelable (like a `div` with `role="button"`),
+// so LakeLabel also gives its label this id for fields to reference with `aria-labelledby`
+export const getLabelId = (fieldId: string): string => `${fieldId}-label`;
