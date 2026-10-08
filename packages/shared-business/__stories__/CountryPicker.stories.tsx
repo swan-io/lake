@@ -24,6 +24,7 @@ export default {
 } as Meta<typeof CountryPicker>;
 
 type EditableProps = {
+  label?: string;
   initialValue?: CountryCCA3;
   countries?: CountryCCA3[];
   placeholder?: string;
@@ -33,6 +34,7 @@ type EditableProps = {
 };
 
 const Editable = ({
+  label = "Country or territory",
   initialValue,
   countries = allCountries,
   placeholder,
@@ -45,7 +47,7 @@ const Editable = ({
   return (
     <View style={styles.container}>
       <LakeLabel
-        label="Country"
+        label={label}
         readOnly={readOnly}
         render={id => (
           <CountryPicker
@@ -67,7 +69,7 @@ const Editable = ({
 export const Variations = () => (
   <StoryBlock title="CountryPicker variations">
     <StoryPart title="Empty with placeholder">
-      <Editable placeholder="Select a country" />
+      <Editable placeholder="Select a country or territory" />
     </StoryPart>
 
     <StoryPart title="Initial value: France">
@@ -75,23 +77,23 @@ export const Variations = () => (
     </StoryPart>
 
     <StoryPart title="Sovereign countries only (no territories)">
-      <Editable placeholder="Select a country" countries={sovereignCountries} />
+      <Editable label="Country" placeholder="Select a country" countries={sovereignCountries} />
     </StoryPart>
 
     <StoryPart title="Individual countries">
-      <Editable initialValue="FRA" countries={[...individualCountries]} />
+      <Editable label="Country" initialValue="FRA" countries={[...individualCountries]} />
     </StoryPart>
 
     <StoryPart title="Company countries">
-      <Editable initialValue="FRA" countries={[...companyCountries]} />
+      <Editable label="Country" initialValue="FRA" countries={[...companyCountries]} />
     </StoryPart>
 
     <StoryPart title="Restricted list (6 countries only)">
-      <Editable countries={FEW_COUNTRIES} placeholder="Select a country" />
+      <Editable label="Country" countries={FEW_COUNTRIES} placeholder="Select a country" />
     </StoryPart>
 
     <StoryPart title="Error">
-      <Editable placeholder="Select a country" error="Required" />
+      <Editable placeholder="Select a country or territory" error="Required" />
     </StoryPart>
 
     <StoryPart title="Disabled">
