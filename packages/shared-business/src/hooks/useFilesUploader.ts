@@ -60,7 +60,9 @@ export const useFilesUploader = <UploadInput, UploadOutput, GenerateUploadError,
           const onProgress = (progress: number) => {
             setFiles(files =>
               files.map(file => {
-                if (file.id !== id) {
+                // A late progress report (upload is faster than fake progress bar)
+                // must not revert a file that already finished uploading
+                if (file.id !== id || file.statusInfo.status !== "Uploading") {
                   return file;
                 }
                 return {
