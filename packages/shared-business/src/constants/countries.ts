@@ -885,6 +885,14 @@ const readonlyCountries = [
     isNationality: true,
   },
   {
+    name: "Nauru",
+    cca2: "NR",
+    cca3: "NRU",
+    idd: "674",
+    flag: "🇳🇷",
+    isNationality: true,
+  },
+  {
     name: "Nederland",
     cca2: "NL",
     cca3: "NLD",
@@ -2051,6 +2059,11 @@ export type CompanyWithUboCountryCCA3 = (typeof companyWithUboCountries)[number]
 
 export const allCountries = countries.map(country => country.cca3);
 export const france = countriesByCCA3["FRA"];
+
+// Territories (Martinique, Réunion, Puerto Rico, Greenland…) are the entries that aren't
+// nationalities, same rule as the backend country list
+export const isTerritoryCCA3 = (cca3: CountryCCA3): boolean => !countriesByCCA3[cca3].isNationality;
+export const sovereignCountries = allCountries.filter(cca3 => !isTerritoryCCA3(cca3));
 
 const blockedPhoneCountries: CountryCCA3[] = ["CUB", "SYR", "IRN", "PRK", "RUS"];
 export const phoneCountries = allCountries.filter(cca3 => !blockedPhoneCountries.includes(cca3));
