@@ -2065,6 +2065,26 @@ export const france = countriesByCCA3["FRA"];
 export const isTerritoryCCA3 = (cca3: CountryCCA3): boolean => !countriesByCCA3[cca3].isNationality;
 export const sovereignCountries = allCountries.filter(cca3 => !isTerritoryCCA3(cca3));
 
+// France and its overseas territories, same list as the backend (@swan-io/geo-items frenchTerritoriesCodes)
+export const frenchTerritories: CountryCCA3[] = [
+  "FRA",
+  "ATF",
+  "BLM",
+  "GLP",
+  "GUF",
+  "MAF",
+  "MTQ",
+  "MYT",
+  "NCL",
+  "PYF",
+  "REU",
+  "SPM",
+  "WLF",
+];
+
+export const isFrenchTerritoryCCA3 = (value: unknown): value is CountryCCA3 =>
+  frenchTerritories.includes(value as CountryCCA3);
+
 const blockedPhoneCountries: CountryCCA3[] = ["CUB", "SYR", "IRN", "PRK", "RUS"];
 export const phoneCountries = allCountries.filter(cca3 => !blockedPhoneCountries.includes(cca3));
 
