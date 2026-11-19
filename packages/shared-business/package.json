@@ -39,6 +39,7 @@
     "@swan-io/use-form": "^4.0.0",
     "dayjs": "^1.11.21",
     "iban": "^0.0.14",
+    "libphonenumber-js": "^1.13.15",
     "react-atomic-state": "^2.1.0",
     "react-dropzone": "^17.0.0",
     "rifm": "^0.12.1",
