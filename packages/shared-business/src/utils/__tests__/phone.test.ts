@@ -213,9 +213,9 @@ describe("prefixPhoneNumber turns a national number into an E.164 number", () =>
   });
 
   it("reads a value as typed after the dialling prefix when its other reading is a Bonaire number", () => {
-    expect(prefixPhoneNumber(curacao, "3181234")).toEqual({
+    expect(prefixPhoneNumber(curacao, "7201234")).toEqual({
       valid: true,
-      e164: "+59993181234",
+      e164: "+59997201234",
     });
   });
 
