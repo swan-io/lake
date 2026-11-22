@@ -457,7 +457,10 @@ const LineItem = <Value,>({
   const tint100 = colors[color][100];
 
   const tokens = useMemo(
-    () => (disabled || cleanFilter === "" ? label : safeSplitAround(label, cleanFilter)),
+    () =>
+      disabled || cleanFilter === ""
+        ? label
+        : safeSplitAround(label, cleanFilter, { ignoreCase: true }),
     [label, disabled, cleanFilter],
   );
 

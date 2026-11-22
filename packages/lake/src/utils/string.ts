@@ -1,16 +1,31 @@
 import { Option } from "@bloodyowl/boxed";
 
-export const safeSplitAround = (string: string, expression: string) => {
+export const safeSplitAround = (
+  string: string,
+  expression: string,
+  { ignoreCase = false }: { ignoreCase?: boolean } = {},
+) => {
+  // An empty expression would match at `index` forever
+  if (expression === "") {
+    return string === "" ? [] : [string];
+  }
+
+  // Search a lowercased copy and slice the original, unless lowercasing changes the
+  // length (e.g. "İ"), which would shift the indexes
+  const caseInsensitive = ignoreCase && string.toLowerCase().length === string.length;
+  const haystack = caseInsensitive ? string.toLowerCase() : string;
+  const needle = caseInsensitive ? expression.toLowerCase() : expression;
+
   let index = 0;
   const splitString: string[] = [];
   while (index < string.length) {
-    const nextIndexOfExpression = string.indexOf(expression, index);
+    const nextIndexOfExpression = haystack.indexOf(needle, index);
     if (nextIndexOfExpression === -1) {
       splitString.push(string.slice(index));
       return splitString;
     }
     if (nextIndexOfExpression > index) {
-      const endIndex = nextIndexOfExpression + expression.length;
+      const endIndex = nextIndexOfExpression + needle.length;
       splitString.push(
         string.slice(index, nextIndexOfExpression),
         string.slice(nextIndexOfExpression, endIndex),
@@ -19,7 +34,7 @@ export const safeSplitAround = (string: string, expression: string) => {
       continue;
     }
     if (nextIndexOfExpression === index) {
-      const endIndex = nextIndexOfExpression + expression.length;
+      const endIndex = nextIndexOfExpression + needle.length;
       splitString.push(string.slice(nextIndexOfExpression, endIndex));
       index = endIndex;
       continue;
