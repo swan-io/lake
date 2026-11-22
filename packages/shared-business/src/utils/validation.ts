@@ -272,15 +272,16 @@ export const validateBirthdate = (value: ExtractedDate | undefined) => {
   }
   const date = dayjs.utc(formatExtractedDate(value), "YYYY-MM-DD", true);
 
+  // Checked first: a future date is also less than 4 years ago
+  if (date.isValid() && date.isAfter(dayjs.utc().add(1, "day"))) {
+    return t("validation.birthdateCannotBeFuture");
+  }
+
   const isBirthdateOver150years = date.isBefore(dayjs.utc().subtract(100, "years"));
   const isBirthdateWithin4years = date.isAfter(dayjs.utc().subtract(4, "years"));
 
   if (!date.isValid() || isBirthdateOver150years || isBirthdateWithin4years) {
     return t("validation.invalidBirthDate");
-  }
-
-  if (date.isAfter(dayjs.utc().add(1, "day"))) {
-    return t("validation.birthdateCannotBeFuture");
   }
 };
 
