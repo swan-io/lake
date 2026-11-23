@@ -52,7 +52,7 @@ Business-domain components that depend on `@swan-io/lake`. Source in `src/`:
 
 **Pattern matching**: Use `ts-pattern` for branching on discriminated unions instead of if/else chains.
 
-**Boxed types**: `@swan-io/boxed` provides `Option`, `Result`, and `AsyncData` — prefer these over `null`/`undefined`/thrown errors where they're already used.
+**Boxed types**: `@bloodyowl/boxed` provides `Option`, `Result`, and `AsyncData` — prefer these over `null`/`undefined`/thrown errors where they're already used.
 
 **Forms**: `@swan-io/use-form` for form state; `rifm` for input masks.
 

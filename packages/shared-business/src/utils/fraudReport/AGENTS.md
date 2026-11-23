@@ -51,4 +51,4 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Data access through props and callbacks: `components/SupportingDocumentCollection.tsx`.
 - Stories: `__stories__/SupportingDocumentCollection.stories.tsx` and `__stories__/_StoriesComponents.tsx`.
 - Unit tests for pure logic: `utils/__tests__/validation.test.ts`.
-- Branch on unions with `ts-pattern`. Use Boxed (`Option`, `Result`, `AsyncData`, `Future`) over null checks and thrown errors.
+- Branch on unions with `ts-pattern`. Use Boxed from `@bloodyowl/boxed` (`Option`, `Result`, `AsyncData`, `Future`) over null checks and thrown errors.
