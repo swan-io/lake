@@ -25,7 +25,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Lake never owns a GraphQL client, a token or a route. The app passes data access in through `FraudReportApi`, like `SupportingDocumentCollection` takes `generateUpload` and `uploadFile`.
 - Types in `types.ts` mirror the partner GraphQL schema. Input types match the schema field for field. `FraudReportCase` flattens objects to IDs (`accountId`, `victimAccountMembershipId`) and names `reportedTransactions` `transactions`. Empty values are `null` (empty lists are `[]`), enums are string unions and rejections keep their GraphQL `__typename`. The app maps its generated types onto them in its adapter, so a schema change breaks the app build in the adapter, not in Lake.
 - Every adapter call returns `Future<Result<Value, FraudReportApiError<Rejection>>>`. An adapter maps a payload whose `__typename` ends with `Rejection` to `{ kind: "rejection" }`, and everything else (client errors, GraphQL errors) to `{ kind: "error" }`.
-- `update` follows the API: a field left out keeps the stored value, `null` clears it. `transactionIds` can be left out, never cleared.
+- `update` follows the API: a field left out keeps the stored value, `null` clears it. `transactionIds` can be left out, never cleared. A group that is sent (`fraudDetails`, `fraudCardDetails`, `fraudTransferDetails`) replaces the stored group whole: a field left out of it is cleared.
 - `FraudReportCase.transactions` lists only the transactions the caller can view, each with its rail. During a session, take the rails from the user's current selection; read `transactions` only when resuming a case.
 - Build `transactionIds` for `update` from the user's selection, never from `FraudReportCase.transactions`: hidden transactions would be dropped from the case. Leave it out when the selection didn't change.
 - `getCase` returns `None` for a case that doesn't exist or that the caller can't read. `findDrafts` returns the account's drafts that include one of the given transactions, newest first.
@@ -39,6 +39,15 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - The transaction picker shows only the victim's cards, filtered on the client from the card's account membership.
 - `victimAccountMembershipId` is sent only on transfer-only cases. `fraudCardDetails` is sent only with card transactions, `fraudTransferDetails` only with transfers.
 - Analytics: `FraudReport` emits flow events through an `onEvent` prop, with no personal data (no names or free text). Lake doesn't know which analytics tool the app uses.
+
+## Form and validation
+
+- `FraudReportFormValues` (`toInput.ts`) holds what the user entered, as API values (enums, `YYYY-MM-DD` dates). Build inputs only with `toDraftInput` and `toUpdateInput`.
+- `toUpdateInput` takes the saved case and the transaction IDs last sent (the user's selection, not the case's `transactions`). It leaves `transactionIds` out when the selection is the same.
+- The form has no "actions taken" field yet. `fraudTransferDetails` is never sent, so the stored one stays. `toUpdateInput` sends back the saved case's `hasFiledPoliceComplaint` and `hasContactedMerchant`.
+- Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
+- A date is in the future when it is after today in UTC.
+- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported.
 
 ## Stubs
 
