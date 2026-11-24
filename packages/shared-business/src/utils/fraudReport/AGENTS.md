@@ -16,7 +16,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - `utils/fraudReport/`: types, adapter interface, fake adapter, and the pure logic (validation, form ↔ input conversion, prefill, rejection → step mapping).
 - `hooks/useFraudReportFlow.ts`: the flow (draft → update → submit or cancel, step moves, rejection routing). It talks only to the adapter.
 - `components/FraudReport/`: the screens and the `FraudReport` component.
-- `__stories__/FraudReport.stories.tsx`: every step and state, on the fake adapter.
+- `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
 - `utils/__tests__/fraudReport.<file>.test.ts`: unit tests.
 - Strings: `locales/`, keys prefixed `fraudReport.`.
 
@@ -48,6 +48,13 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
 - A date is in the future when it is after today in UTC.
 - Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported.
+
+## Screens
+
+- Every step from Victim to the submitted screen renders inside `FraudReportLayout` (`components/FraudReport/FraudReportLayout.tsx`), which draws the stepper. The intro has no stepper.
+- The stepper has no links and takes no URL. Give the layout the active step and the Details sub-steps the report goes through, the active one included: Details shows one bar per sub-step, and a single bar when the list is empty.
+- A step that leads to another ends with `FraudReportFooter` for Previous and Continue. Leave `onPrevious` out on the first step.
+- The stepper and the footer use the current color, which the app sets.
 
 ## Stubs
 
