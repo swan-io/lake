@@ -9,8 +9,8 @@ import { StyleSheet } from "react-native";
 import {
   FraudReportFooter,
   FraudReportLayout,
-  FraudReportLayoutStep,
 } from "../src/components/FraudReport/FraudReportLayout";
+import { FraudReportLayoutStep } from "../src/utils/fraudReport/stepper";
 import { FraudReportDetailsStep, fraudReportDetailsSteps } from "../src/utils/fraudReport/types";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
