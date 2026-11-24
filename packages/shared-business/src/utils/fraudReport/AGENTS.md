@@ -13,7 +13,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 
 ## Where things go
 
-- `utils/fraudReport/`: types, adapter interface, fake adapter, and the pure logic (validation, form ↔ input conversion, prefill, rejection → step mapping).
+- `utils/fraudReport/`: types, adapter interface, fake adapter, and the pure logic (validation, form ↔ input conversion, prefill, rejection → step mapping, stepper).
 - `hooks/useFraudReportFlow.ts`: the flow (draft → update → submit or cancel, step moves, rejection routing). It talks only to the adapter.
 - `components/FraudReport/`: the screens and the `FraudReport` component.
 - `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
@@ -51,9 +51,10 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 
 ## Screens
 
-- Every step from Victim to the submitted screen renders inside `FraudReportLayout` (`components/FraudReport/FraudReportLayout.tsx`), which draws the stepper. The intro has no stepper.
-- The stepper has no links and takes no URL. Give the layout the active step and the Details sub-steps the report goes through, the active one included: Details shows one bar per sub-step, and a single bar when the list is empty.
-- A step that leads to another ends with `FraudReportFooter` for Previous and Continue. Leave `onPrevious` out on the first step.
+- Every step from Victim to the submitted screen renders inside `FraudReportLayout` (`components/FraudReport/FraudReportLayout.tsx`). The intro has no stepper. Fraud report steps aren't links: don't give them a URL.
+- Give the layout the active step and the Details sub-steps the report goes through, in any order. The active one can be left out.
+- Change the step, bar and progress mapping in `getFraudReportStepper` (`stepper.ts`), not in the layout.
+- A step that leads to another ends with `FraudReportFooter`, rendered inside `FraudReportLayout`, for Previous and Continue. Leave `onPrevious` out on the first step.
 - The stepper and the footer use the current color, which the app sets.
 
 ## Stubs
