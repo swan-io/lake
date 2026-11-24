@@ -4,6 +4,7 @@ import { CSSProperties, ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { match, P } from "ts-pattern";
 import { colors } from "../constants/design";
+import { isNullish } from "../utils/nullish";
 import { Grid } from "./Grid";
 import { LakeText } from "./LakeText";
 import { Space } from "./Space";
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 4,
     borderRadius: 2,
-    backgroundColor: colors.gray[100],
+    backgroundColor: colors.gray[200],
     overflow: "hidden",
     transformOrigin: "bottom",
     transform: "scaleY(0.5)",
@@ -62,14 +63,14 @@ const stylesMobile = StyleSheet.create({
 });
 
 type StepLinkProps = {
-  to: string;
+  to?: string;
   disabled: boolean;
   style?: CSSProperties;
   children: ReactNode;
 };
 
 const StepLink = ({ to, disabled, style, children }: StepLinkProps) => {
-  return disabled ? (
+  return disabled || isNullish(to) ? (
     <span style={style}>{children}</span>
   ) : (
     <Link to={to} style={style}>
@@ -81,7 +82,7 @@ const StepLink = ({ to, disabled, style, children }: StepLinkProps) => {
 export type Step = {
   id: string;
   label: string;
-  url: string;
+  url?: string;
   hasErrors?: boolean;
 };
 
@@ -105,7 +106,12 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
   const activeStepIndex = stepIds.indexOf(activeStepId);
 
   return (
-    <Grid numColumns={steps.length} horizontalSpace={12} style={[styles.container, style]}>
+    <Grid
+      role="list"
+      numColumns={steps.length}
+      horizontalSpace={12}
+      style={[styles.container, style]}
+    >
       {steps.map((step, index) => {
         const stepNumber = index + 1;
         const currentId = match(step)
@@ -135,7 +141,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
 
         const stepUrl = match(step)
           .with({ id: P.string }, ({ url }) => url)
-          .with({ children: P.array(P.any) }, ({ children }) => children[0]?.url ?? "")
+          .with({ children: P.array(P.any) }, ({ children }) => children[0]?.url)
           .exhaustive();
 
         const subSteps = match(step)
@@ -144,42 +150,44 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
           .exhaustive();
 
         return (
-          <StepLink key={currentId} to={stepUrl} disabled={!isDone} style={linkStyle}>
-            <LakeText
-              variant={isActive ? "medium" : "regular"}
-              color={
-                hasErrors && (isDone || isActive)
-                  ? colors.negative[500]
-                  : isActive || isDone
-                    ? colors.current[500]
-                    : colors.gray[300]
-              }
-            >
-              {stepNumber}. {step.label}
-            </LakeText>
+          <View key={currentId} role="listitem" aria-current={isActive ? "step" : undefined}>
+            <StepLink to={stepUrl} disabled={!isDone} style={linkStyle}>
+              <LakeText
+                variant={isActive ? "medium" : "regular"}
+                color={
+                  hasErrors && (isDone || isActive)
+                    ? colors.negative[500]
+                    : isActive || isDone
+                      ? colors.current[500]
+                      : colors.gray[500]
+                }
+              >
+                {stepNumber}. {step.label}
+              </LakeText>
 
-            <Space height={12} />
+              <Space height={12} />
 
-            <Grid numColumns={subSteps.length} horizontalSpace={12}>
-              {subSteps.map(subStep => {
-                const isActive = subStep.id === activeStepId;
-                const isDone = stepIds.indexOf(subStep.id) < activeStepIndex;
-                const hasErrors = subStep.hasErrors === true;
+              <Grid numColumns={subSteps.length} horizontalSpace={12}>
+                {subSteps.map(subStep => {
+                  const isActive = subStep.id === activeStepId;
+                  const isDone = stepIds.indexOf(subStep.id) < activeStepIndex;
+                  const hasErrors = subStep.hasErrors === true;
 
-                return (
-                  <View key={subStep.id} style={[styles.bar, isActive && styles.barActive]}>
-                    <View
-                      style={[
-                        styles.progressBar,
-                        (isActive || isDone) && styles.progressBarDone,
-                        hasErrors && styles.progressBarError,
-                      ]}
-                    />
-                  </View>
-                );
-              })}
-            </Grid>
-          </StepLink>
+                  return (
+                    <View key={subStep.id} style={[styles.bar, isActive && styles.barActive]}>
+                      <View
+                        style={[
+                          styles.progressBar,
+                          (isActive || isDone) && styles.progressBarDone,
+                          hasErrors && styles.progressBarError,
+                        ]}
+                      />
+                    </View>
+                  );
+                })}
+              </Grid>
+            </StepLink>
+          </View>
         );
       })}
     </Grid>
