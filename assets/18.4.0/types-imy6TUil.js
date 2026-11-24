@@ -1,0 +1,2 @@
+import{i as e}from"./preload-helper-CCSz8wUY.js";var t,n,r=e((()=>{t=[`Intro`,`Victim`,`Transactions`,`Incident`,`Details`,`Documents`,`Submitted`],n=[`Card`,`Transfer`,`Fraudster`]}));export{t as n,r,n as t};
+//# sourceMappingURL=types-imy6TUil.js.map
