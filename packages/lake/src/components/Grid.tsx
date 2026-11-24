@@ -1,5 +1,5 @@
 import { Children, ReactNode } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle, WebRole } from "react-native";
 import { isNullish } from "../utils/nullish";
 import { SpacingValue } from "./Space";
 
@@ -19,6 +19,7 @@ type Props = {
   horizontalSpace?: SpacingValue;
   itemWrapperStyle?: StyleProp<ViewStyle>;
   numColumns?: number;
+  role?: WebRole;
   style?: StyleProp<ViewStyle>;
   verticalSpace?: SpacingValue;
 };
@@ -28,10 +29,12 @@ export const Grid = ({
   horizontalSpace,
   itemWrapperStyle,
   numColumns = 1,
+  role,
   style,
   verticalSpace,
 }: Props) => (
   <View
+    role={role}
     style={[
       styles.base,
       style,
