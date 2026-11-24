@@ -19,6 +19,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
 - `utils/__tests__/fraudReport.<file>.test.ts`: unit tests.
 - Strings: `locales/`, keys prefixed `fraudReport.`.
+- Rejection messages: `rejection.<__typename>` keys, shown with `translateError(error.rejection)`. Passing the whole `FraudReportApiError` shows the generic error. `fraudReport.types.test.ts` checks that every rejection in `types.ts` has one.
 
 ## Adapter contract
 
