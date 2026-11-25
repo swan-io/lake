@@ -294,18 +294,17 @@ describe("API calls", () => {
 });
 
 describe("victim", () => {
-  test("exposes the victim for the URL until the draft exists, then the case ID", () => {
+  test("exposes the victim only in the values, and the case ID once the draft exists", () => {
     const flow = setup();
     flow.next();
     flow.next({ victimAccountMembershipId: "member-2" });
 
-    expect(flow.result.current.victimAccountMembershipId.toUndefined()).toBe("member-2");
     expect(flow.result.current.disputeCaseId.isNone()).toBe(true);
 
     flow.next({ transactions: [transfer] });
 
-    expect(flow.result.current.victimAccountMembershipId.isNone()).toBe(true);
     expect(flow.result.current.disputeCaseId.isSome()).toBe(true);
+    expect(flow.result.current).not.toHaveProperty("victimAccountMembershipId");
   });
 
   test("keeps the victim once the draft exists", () => {
@@ -314,7 +313,7 @@ describe("victim", () => {
     flow.previous();
     flow.previous();
     expect(flow.result.current.step).toBe("Victim");
-    expect(flow.result.current.victimAccountMembershipId.isNone()).toBe(true);
+    expect(flow.result.current.values.victimAccountMembershipId).toBe("member-2");
 
     flow.next({ victimAccountMembershipId: "member-1" });
     flow.next({ transactions: [transfer] });

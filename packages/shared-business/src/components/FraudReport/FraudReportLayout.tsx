@@ -12,8 +12,14 @@ import {
   FraudReportStepperStep,
   getFraudReportStepper,
 } from "../../utils/fraudReport/stepper";
+import type { FraudReportFormValues } from "../../utils/fraudReport/toInput";
 import { FraudReportDetailsStep } from "../../utils/fraudReport/types";
 import { t } from "../../utils/i18n";
+
+export type FraudReportStepProps<K extends keyof FraudReportFormValues> = {
+  values: Pick<FraudReportFormValues, K>;
+  onNext: (values: Pick<FraudReportFormValues, K>) => void;
+};
 
 const styles = StyleSheet.create({
   root: {

@@ -39,7 +39,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Details goes through the Card sub-step when the selection has a card transaction, Transfer when it has a transfer, and Fraudster when `reportedReason` is `Manipulated`, in the order of `fraudReportDetailsSteps`. Take the sub-steps from `getDetailsSteps` (`stepper.ts`), in the flow and in the inputs. While Fraudster isn't among them, send the fraudster answers as `null`.
 - Nothing is saved before the transactions are picked: the first draft needs at least one transaction ID. The transactions step's Next drafts the case, or updates it once it exists. The incident's and each Details sub-step's Next sends one update. The documents step's Next submits the case. Going back never calls the API.
 - A step moves on with `next(values)`, passing only its own fields. On a rejection or an error, the flow stays on the step and exposes it as `error`, until the user presses Next or Previous again. While a call is pending, Next and Previous do nothing. Nothing moves from the submitted step.
-- Once the draft exists, the victim can't change: the flow ignores a new one, and exposes the case ID instead of the victim.
+- Once the draft exists, the victim can't change: the flow ignores a new one. The flow exposes the victim only in `values`, and the case ID as `disputeCaseId` once the draft exists.
 - The transaction picker shows only the victim's cards, filtered on the client from the card's account membership.
 - `victimAccountMembershipId` is sent only on transfer-only cases. `fraudCardDetails` is sent only with card transactions, `fraudTransferDetails` only with transfers.
 - Analytics: `FraudReport` emits flow events through an `onEvent` prop, with no personal data (no names or free text). Lake doesn't know which analytics tool the app uses.
@@ -62,7 +62,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - A step that leads to another ends with `FraudReportFooter`, rendered inside `FraudReportLayout`, for Previous and Continue. Leave `onPrevious` out on the first step.
 - The stepper and the footer use the current color, which the app sets.
 - A step reads whether the layout is small with `useFraudReportSmallLayout()` and doesn't measure it again.
-- A step takes the user's previous answer as a prop and starts from it. It never shows or sends a value that is no longer among its options.
+- A step's props include `FraudReportStepProps<K>` (`FraudReportLayout.tsx`), `K` being the form fields it owns: it starts from `values` and calls `onNext` with the same fields, so `FraudReport` wires it with `values={flow.values}` and `onNext={flow.next}`. Fields it reads but doesn't own come as separate props. It never shows or sends a value that is no longer among its options.
 - The victim step takes the account memberships to pick from and the current one as props. The current one is `None` for an operator, who picks from every listed member. The app decides which memberships are listed.
 
 ## Stubs
