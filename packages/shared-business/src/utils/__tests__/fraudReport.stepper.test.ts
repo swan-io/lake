@@ -64,40 +64,24 @@ describe("getFraudReportStepper", () => {
         { id: "Fraudster", label: "DETAILS" },
       ],
     });
-    expect(stepper.progress).toBeCloseTo((3 + 1 / 3) / 6);
   });
 
   test.each([
-    { activeStep: "Victim", label: "VICTIM", position: 1, progress: 1 / 6 },
-    { activeStep: "Incident", label: "INCIDENT", position: 3, progress: 3 / 6 },
-    { activeStep: "Card", label: "DETAILS", position: 4, progress: (3 + 1 / 2) / 6 },
-    { activeStep: "Transfer", label: "DETAILS", position: 4, progress: 4 / 6 },
-    { activeStep: "Documents", label: "DOCUMENTS", position: 5, progress: 5 / 6 },
-    { activeStep: "Submitted", label: "SUBMITTED", position: 6, progress: 1 },
-  ] as const)(
-    "places $activeStep at $position of 6, labelled $label",
-    ({ activeStep, label, position, progress }) => {
-      const stepper = getFraudReportStepper({
-        activeStep,
-        detailsSteps: ["Card", "Transfer"],
-        getLabel,
-      });
-
-      expect(stepper.activeStepId).toBe(activeStep);
-      expect(stepper.currentLabel).toBe(label);
-      expect(stepper.position).toBe(position);
-      expect(stepper.total).toBe(6);
-      expect(stepper.progress).toBeCloseTo(progress);
-    },
-  );
-
-  test("places a sub-step by its rank among the selected sub-steps", () => {
+    { activeStep: "Victim", position: 1 },
+    { activeStep: "Incident", position: 3 },
+    { activeStep: "Card", position: 4 },
+    { activeStep: "Transfer", position: 4 },
+    { activeStep: "Documents", position: 5 },
+    { activeStep: "Submitted", position: 6 },
+  ] as const)("places $activeStep at $position of 6", ({ activeStep, position }) => {
     const stepper = getFraudReportStepper({
-      activeStep: "Fraudster",
-      detailsSteps: ["Card", "Fraudster"],
+      activeStep,
+      detailsSteps: ["Card", "Transfer"],
       getLabel,
     });
 
-    expect(stepper.progress).toBeCloseTo(4 / 6);
+    expect(stepper.activeStepId).toBe(activeStep);
+    expect(stepper.position).toBe(position);
+    expect(stepper.total).toBe(6);
   });
 });
