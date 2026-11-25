@@ -234,7 +234,7 @@ export const MobileStepper = ({ steps, activeStepId, countLabel }: MobileStepper
             {label}
           </LakeText>
           <LakeText variant="smallRegular" color={colors.gray[500]}>
-            {countLabel ?? `${number} of ${total}`}
+            {countLabel ?? `${number}/${total}`}
           </LakeText>
           <View style={stylesMobile.progress}>
             <View style={[stylesMobile.progressBar, { width: progress }]} />
