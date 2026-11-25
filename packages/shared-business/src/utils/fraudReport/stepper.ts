@@ -30,21 +30,11 @@ export const getFraudReportStepper = ({
     step => step === activeStep || detailsSteps.includes(step),
   );
 
-  const current = match(activeStep)
-    .returnType<{ step: FraudReportStepperStep; subStepIndex: number; subStepCount: number }>()
-    .with("Card", "Transfer", "Fraudster", step => ({
-      step: "Details",
-      subStepIndex: subSteps.indexOf(step),
-      subStepCount: subSteps.length,
-    }))
-    .with("Victim", "Transactions", "Incident", "Documents", "Submitted", step => ({
-      step,
-      subStepIndex: 0,
-      subStepCount: 1,
-    }))
+  const currentStep = match(activeStep)
+    .returnType<FraudReportStepperStep>()
+    .with("Card", "Transfer", "Fraudster", () => "Details")
+    .with("Victim", "Transactions", "Incident", "Documents", "Submitted", step => step)
     .exhaustive();
-
-  const index = stepperSteps.indexOf(current.step);
 
   return {
     steps: stepperSteps.map(
@@ -54,9 +44,7 @@ export const getFraudReportStepper = ({
           : { id: step, label: getLabel(step) },
     ),
     activeStepId: activeStep,
-    currentLabel: getLabel(current.step),
-    position: index + 1,
+    position: stepperSteps.indexOf(currentStep) + 1,
     total: stepperSteps.length,
-    progress: (index + (current.subStepIndex + 1) / current.subStepCount) / stepperSteps.length,
   };
 };
