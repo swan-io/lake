@@ -1,6 +1,7 @@
 import { Option } from "@bloodyowl/boxed";
 import { match, P } from "ts-pattern";
 import { getCaseRail } from "./rail";
+import { getDetailsSteps } from "./stepper";
 import type {
   DraftFraudDisputeCaseInput,
   FraudCardDetailsInput,
@@ -40,8 +41,10 @@ type SavedDetails = Pick<FraudReportCase, "fraudDetails" | "fraudCardDetails">;
 const toFraudDetails = (
   values: FraudReportFormValues,
   savedDetails?: SavedDetails,
-): Option<FraudDetailsInput> =>
-  Option.allFromDict({
+): Option<FraudDetailsInput> => {
+  const hasFraudster = getDetailsSteps(values).includes("Fraudster");
+
+  return Option.allFromDict({
     reportedReason: Option.fromNullable(values.reportedReason),
     reportedTypology: Option.fromNullable(values.reportedTypology),
     description: toFilled(values.description),
@@ -49,10 +52,13 @@ const toFraudDetails = (
     ...required,
     discoveredAt: toFilled(values.discoveredAt).toNull(),
     discoveryDetails: toFilled(values.discoveryDetails).toNull(),
-    fraudsterChannels: toFilledList(values.fraudsterChannels).toNull(),
-    sharedInformationWithFraudster: toFilledList(values.sharedInformationWithFraudster).toNull(),
+    fraudsterChannels: hasFraudster ? toFilledList(values.fraudsterChannels).toNull() : null,
+    sharedInformationWithFraudster: hasFraudster
+      ? toFilledList(values.sharedInformationWithFraudster).toNull()
+      : null,
     hasFiledPoliceComplaint: savedDetails?.fraudDetails?.hasFiledPoliceComplaint ?? null,
   }));
+};
 
 const toFraudCardDetails = (
   values: FraudReportFormValues,
@@ -92,7 +98,8 @@ const toDetails = (values: FraudReportFormValues, savedDetails?: SavedDetails) =
     .exhaustive();
 };
 
-const toTransactionIds = (values: FraudReportFormValues) => values.transactions.map(({ id }) => id);
+export const toTransactionIds = (values: FraudReportFormValues) =>
+  values.transactions.map(({ id }) => id);
 
 const isSameSelection = (transactionIds: string[], savedTransactionIds: string[]) => {
   const savedIds = new Set(savedTransactionIds);

@@ -1,8 +1,11 @@
 import { TopLevelStep } from "@swan-io/lake/src/components/LakeStepper";
 import { match } from "ts-pattern";
+import { getCaseRail } from "./rail";
 import {
+  FraudReason,
   FraudReportDetailsStep,
   FraudReportStep,
+  FraudReportTransaction,
   fraudReportDetailsSteps,
   fraudReportSteps,
 } from "./types";
@@ -16,6 +19,24 @@ export type FraudReportLayoutStep =
 const stepperSteps = fraudReportSteps.filter(
   (step): step is FraudReportStepperStep => step !== "Intro",
 );
+
+export const getDetailsSteps = ({
+  transactions,
+  reportedReason,
+}: {
+  transactions: Pick<FraudReportTransaction, "rail">[];
+  reportedReason?: FraudReason;
+}) => {
+  const caseRail = getCaseRail(transactions).toUndefined();
+
+  return fraudReportDetailsSteps.filter(step =>
+    match(step)
+      .with("Card", () => caseRail === "CardOnly" || caseRail === "Mixed")
+      .with("Transfer", () => caseRail === "TransferOnly" || caseRail === "Mixed")
+      .with("Fraudster", () => reportedReason === "Manipulated")
+      .exhaustive(),
+  );
+};
 
 export const getFraudReportStepper = ({
   activeStep,

@@ -496,6 +496,21 @@ describe("toUpdateInput", () => {
     ).not.toHaveProperty("fraudTransferDetails");
   });
 
+  test("clears the fraudster answers once no fraudster convinced the user", () => {
+    expect(
+      toUpdateInput({
+        savedCase,
+        values: { ...filled, reportedReason: "Unauthorized", transactions: [card1] },
+        savedTransactionIds: ["card-1"],
+      }).fraudDetails,
+    ).toStrictEqual({
+      ...fraudDetails,
+      reportedReason: "Unauthorized",
+      fraudsterChannels: null,
+      sharedInformationWithFraudster: null,
+    });
+  });
+
   test("leaves the transaction IDs out when the selection didn't change", () => {
     expect(
       toUpdateInput({

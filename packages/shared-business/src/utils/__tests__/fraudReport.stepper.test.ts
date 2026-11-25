@@ -1,7 +1,37 @@
 import { describe, expect, test } from "vitest";
-import { getFraudReportStepper } from "../fraudReport/stepper";
+import { getDetailsSteps, getFraudReportStepper } from "../fraudReport/stepper";
 
 const getLabel = (step: string) => step.toUpperCase();
+
+const card = { rail: "Card" } as const;
+const transfer = { rail: "Transfer" } as const;
+
+describe("getDetailsSteps", () => {
+  test.each([
+    { name: "nothing selected", transactions: [], reportedReason: undefined, steps: [] },
+    { name: "a card", transactions: [card], reportedReason: "Unauthorized", steps: ["Card"] },
+    {
+      name: "a transfer",
+      transactions: [transfer],
+      reportedReason: "Unauthorized",
+      steps: ["Transfer"],
+    },
+    {
+      name: "a transfer, with a fraudster",
+      transactions: [transfer],
+      reportedReason: "Manipulated",
+      steps: ["Transfer", "Fraudster"],
+    },
+    {
+      name: "a transfer and a card, with a fraudster",
+      transactions: [transfer, card],
+      reportedReason: "Manipulated",
+      steps: ["Card", "Transfer", "Fraudster"],
+    },
+  ] as const)("goes through $steps for $name", ({ transactions, reportedReason, steps }) => {
+    expect(getDetailsSteps({ transactions: [...transactions], reportedReason })).toEqual(steps);
+  });
+});
 
 describe("getFraudReportStepper", () => {
   test("lists the six steps, with one bar per Details sub-step", () => {

@@ -36,7 +36,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 ## Flow rules
 
 - Victim first, then transactions, then the incident, details and documents.
-- Details goes through the Card sub-step when the selection has a card transaction, Transfer when it has a transfer, and Fraudster when `reportedReason` is `Manipulated`, in the order of `fraudReportDetailsSteps`.
+- Details goes through the Card sub-step when the selection has a card transaction, Transfer when it has a transfer, and Fraudster when `reportedReason` is `Manipulated`, in the order of `fraudReportDetailsSteps`. Take the sub-steps from `getDetailsSteps` (`stepper.ts`), in the flow and in the inputs. While Fraudster isn't among them, send the fraudster answers as `null`.
 - Nothing is saved before the transactions are picked: the first draft needs at least one transaction ID. The transactions step's Next drafts the case, or updates it once it exists. The incident's and each Details sub-step's Next sends one update. The documents step's Next submits the case. Going back never calls the API.
 - A step moves on with `next(values)`, passing only its own fields. On a rejection or an error, the flow stays on the step and exposes it as `error`, until the user presses Next or Previous again. While a call is pending, Next and Previous do nothing. Nothing moves from the submitted step.
 - Once the draft exists, the victim can't change: the flow ignores a new one, and exposes the case ID instead of the victim.
