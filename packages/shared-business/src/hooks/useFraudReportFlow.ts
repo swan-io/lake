@@ -139,9 +139,6 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
     step: state.step,
     detailsSteps: getDetailsSteps(state.values),
     values: state.values,
-    victimAccountMembershipId: state.savedCase.isNone()
-      ? Option.fromUndefined(state.values.victimAccountMembershipId)
-      : Option.None<string>(),
     disputeCaseId: state.savedCase.map(({ id }) => id),
     saving: state.saving,
     error: state.error,
