@@ -13,7 +13,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 
 ## Where things go
 
-- `utils/fraudReport/`: types, adapter interface, fake adapter, and the pure logic (validation, form ↔ input conversion, prefill, rejection → step mapping, stepper).
+- `utils/fraudReport/`: types, adapter interface, fake adapter, and the pure logic (validation, form ↔ input conversion, prefill, rejection → step mapping, stepper). A screen's own logic (its starting state, its options, what Continue sends) goes in `utils/fraudReport/<screen>.ts`, like `victim.ts`, so it can be unit-tested.
 - `hooks/useFraudReportFlow.ts`: the flow (draft → update → submit or cancel, step moves, rejection routing). It talks only to the adapter.
 - `components/FraudReport/`: the screens and the `FraudReport` component.
 - `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
@@ -60,6 +60,9 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Change the step, bar and progress mapping in `getFraudReportStepper` (`stepper.ts`), not in the layout.
 - A step that leads to another ends with `FraudReportFooter`, rendered inside `FraudReportLayout`, for Previous and Continue. Leave `onPrevious` out on the first step.
 - The stepper and the footer use the current color, which the app sets.
+- A step reads whether the layout is small with `useFraudReportSmallLayout()` and doesn't measure it again.
+- A step takes the user's previous answer as a prop and starts from it. It never shows or sends a value that is no longer among its options.
+- The victim step takes the account memberships to pick from and the current one as props. The current one is `None` for an operator, who picks from every listed member. The app decides which memberships are listed.
 
 ## Stubs
 
