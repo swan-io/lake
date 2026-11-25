@@ -263,12 +263,14 @@ export const InformationTooltip = ({
   placement = "center",
   icon = "info-regular",
   iconSize = 24,
+  focusable = false,
 }: {
   ref?: Ref<TooltipRef>;
   text: string;
   placement?: Props["placement"];
   icon?: IconName;
   iconSize?: number;
+  focusable?: boolean;
 }) => (
   <LakeTooltip
     ref={ref}
@@ -278,7 +280,12 @@ export const InformationTooltip = ({
     width={300}
     content={text}
   >
-    <View style={styles.info}>
+    <View
+      style={styles.info}
+      role={focusable ? "img" : undefined}
+      tabIndex={focusable ? 0 : undefined}
+      aria-label={focusable ? text : undefined}
+    >
       <Icon name={icon} size={iconSize} color={colors.gray[900]} />
     </View>
   </LakeTooltip>
