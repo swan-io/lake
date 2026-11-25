@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
 
 const SmallLayoutContext = createContext(false);
 
+export const useFraudReportSmallLayout = () => useContext(SmallLayoutContext);
+
 const getStepLabel = (step: FraudReportStepperStep) =>
   match(step)
     .with("Victim", () => t("fraudReport.step.victim"))
@@ -97,7 +99,7 @@ type FooterProps = {
 };
 
 export const FraudReportFooter = ({ onPrevious, onNext, loading, nextDisabled }: FooterProps) => {
-  const small = useContext(SmallLayoutContext);
+  const small = useFraudReportSmallLayout();
 
   return (
     <>
