@@ -17,7 +17,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - `hooks/useFraudReportFlow.ts`: the flow (draft → update → submit or cancel, step moves, rejection routing). It talks only to the adapter.
 - `components/FraudReport/`: the screens and the `FraudReport` component.
 - `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
-- `utils/__tests__/fraudReport.<file>.test.ts`: unit tests.
+- `utils/__tests__/fraudReport.<file>.test.ts`: unit tests of `utils/fraudReport/`. The flow hook's tests: `hooks/__tests__/useFraudReportFlow.test.ts`, on the fake adapter.
 - Strings: `locales/`, keys prefixed `fraudReport.`.
 - Rejection messages: `rejection.<__typename>` keys, shown with `translateError(error.rejection)`. Passing the whole `FraudReportApiError` shows the generic error. `fraudReport.types.test.ts` checks that every rejection in `types.ts` has one.
 
@@ -36,7 +36,10 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 ## Flow rules
 
 - Victim first, then transactions, then the incident, details and documents.
-- Nothing is saved before the transactions are picked: the first draft needs at least one transaction ID. Each later step sends one update.
+- Details goes through the Card sub-step when the selection has a card transaction, Transfer when it has a transfer, and Fraudster when `reportedReason` is `Manipulated`, in the order of `fraudReportDetailsSteps`.
+- Nothing is saved before the transactions are picked: the first draft needs at least one transaction ID. The transactions step's Next drafts the case, or updates it once it exists. The incident's and each Details sub-step's Next sends one update. The documents step's Next submits the case. Going back never calls the API.
+- A step moves on with `next(values)`, passing only its own fields. On a rejection or an error, the flow stays on the step and exposes it as `error`, until the user presses Next or Previous again. While a call is pending, Next and Previous do nothing. Nothing moves from the submitted step.
+- Once the draft exists, the victim can't change: the flow ignores a new one, and exposes the case ID instead of the victim.
 - The transaction picker shows only the victim's cards, filtered on the client from the card's account membership.
 - `victimAccountMembershipId` is sent only on transfer-only cases. `fraudCardDetails` is sent only with card transactions, `fraudTransferDetails` only with transfers.
 - Analytics: `FraudReport` emits flow events through an `onEvent` prop, with no personal data (no names or free text). Lake doesn't know which analytics tool the app uses.
