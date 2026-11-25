@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 4,
     borderRadius: 2,
-    backgroundColor: colors.gray[200],
+    backgroundColor: colors.gray[100],
     overflow: "hidden",
     transformOrigin: "bottom",
     transform: "scaleY(0.5)",
@@ -194,7 +194,11 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
   );
 };
 
-export const MobileStepper = ({ steps, activeStepId }: Props) => {
+type MobileStepperProps = Props & {
+  countLabel?: string;
+};
+
+export const MobileStepper = ({ steps, activeStepId, countLabel }: MobileStepperProps) => {
   const total = steps.length;
 
   const currentStep = Option.fromNullable(
@@ -229,8 +233,8 @@ export const MobileStepper = ({ steps, activeStepId }: Props) => {
           >
             {label}
           </LakeText>
-          <LakeText variant="smallRegular" color={colors.gray[300]}>
-            {number} of {total}
+          <LakeText variant="smallRegular" color={colors.gray[500]}>
+            {countLabel ?? `${number} of ${total}`}
           </LakeText>
           <View style={stylesMobile.progress}>
             <View style={[stylesMobile.progressBar, { width: progress }]} />
