@@ -14,6 +14,7 @@ import type {
   FraudReportTransaction,
 } from "../../utils/fraudReport/types";
 import {
+  DRAFT_LOOKUP_TIMEOUT_MS,
   FraudReportFlowApi,
   FraudReportResumeFrom,
   useFraudReportFlow,
@@ -1060,22 +1061,53 @@ describe("resume", () => {
     expect(flow.result.current.disputeCaseId.toUndefined()).not.toBe(disputeCaseId);
   });
 
-  test("starts over without waiting for the old draft's cancel", () => {
+  test("waits for the old draft's cancel before starting over", () => {
     const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
     const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
     vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(Future.make(() => {}));
 
     flow.startOver();
+    flow.next();
+    flow.resume();
 
-    expect(getOfferedId(flow)).toBeUndefined();
-    expect(flow.result.current.saving).toBe(false);
+    expect(flow.result.current.saving).toBe(true);
+    expect(getOfferedId(flow)).toBe(disputeCaseId);
+    expect(flow.result.current.step).toBe("Intro");
   });
 
-  test("starts over even when the old draft can't be canceled", () => {
+  test("keeps the offer and exposes the error when the old draft can't be canceled, then retries", () => {
+    const error = new Error("Network error");
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(
+      Future.value(Result.Error({ kind: "error" as const, error })),
+    );
+
+    flow.startOver();
+
+    expect(getOfferedId(flow)).toBe(disputeCaseId);
+    expect(flow.result.current.error.toUndefined()).toEqual({ kind: "error", error });
+    expect(flow.result.current.saving).toBe(false);
+    expect(flow.result.current.step).toBe("Intro");
+
+    flow.startOver();
+
+    expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test("starts over when the old draft is no longer a draft", () => {
     const earlier = leaveDraft();
     const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
     vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(
-      Future.value(Result.Error({ kind: "error" as const, error: new Error("Network error") })),
+      rejected({
+        __typename: "DisputeCaseNotFoundRejection",
+        disputeCaseId: "case-1",
+        message: "",
+      }),
     );
 
     flow.startOver();
@@ -1083,6 +1115,28 @@ describe("resume", () => {
     expect(getOfferedId(flow)).toBeUndefined();
     expect(flow.result.current.error.isNone()).toBe(true);
     expect(flow.result.current.step).toBe("Intro");
+  });
+
+  test("starts a new report when looking for drafts takes too long", () => {
+    vi.useFakeTimers();
+    const { fake } = setup();
+    const stop = vi.fn();
+    vi.spyOn(fake, "findDrafts").mockReturnValueOnce(Future.make(() => stop));
+    const flow = setup({}, { fake, resumeFrom: fromCard });
+
+    act(() => {
+      vi.advanceTimersByTime(DRAFT_LOOKUP_TIMEOUT_MS - 1);
+    });
+    expect(flow.result.current.resumable.isLoading()).toBe(true);
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    flow.next();
+
+    expect(stop).toHaveBeenCalledTimes(1);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.step).toBe("Victim");
   });
 
   test("starts a new report when the drafts can't be read", () => {

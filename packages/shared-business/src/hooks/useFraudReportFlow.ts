@@ -60,6 +60,8 @@ const closeOffer = (resumable: State["resumable"]) =>
 
 const getDraft = (state: State) => state.resumable.toOption().flatMap(draft => draft);
 
+export const DRAFT_LOOKUP_TIMEOUT_MS = 5000;
+
 const isFinalStep = (step: FraudReportFlowStep) => step === "Submitted" || step === "Rejected";
 
 const getErrorChange = (
@@ -128,17 +130,29 @@ export const useFraudReportFlow = ({
 
     const request = api.findDrafts(resumeFrom);
 
-    request.onResolve(result => {
-      // Not finding drafts must not stop a report: it starts as a new one
-      const draft = result.toOption().flatMap(drafts => Option.fromUndefined(drafts[0]));
-
+    const endLookup = (draft: Option<FraudReportCase>) => {
       setState(current => ({
         ...current,
         resumable: current.resumable.isLoading() ? AsyncData.Done(draft) : current.resumable,
       }));
+    };
+
+    // Next on the intro waits for the lookup: a call that never answers must not block the report
+    const timeout = setTimeout(() => {
+      request.cancel();
+      endLookup(Option.None());
+    }, DRAFT_LOOKUP_TIMEOUT_MS);
+
+    request.onResolve(result => {
+      clearTimeout(timeout);
+      // Not finding drafts must not stop a report: it starts as a new one
+      endLookup(result.toOption().flatMap(drafts => Option.fromUndefined(drafts[0])));
     });
 
-    return () => request.cancel();
+    return () => {
+      clearTimeout(timeout);
+      request.cancel();
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -305,11 +319,27 @@ export const useFraudReportFlow = ({
       return;
     }
 
+    // Kept, the old draft would be offered again on the same transactions
     getDraft(state).tapSome(({ id }) => {
-      // Kept, the old draft would be offered again on the same transactions. A failed cancel
-      // only leaves it to expire, so the new report doesn't wait for the answer.
-      api.cancel({ disputeCaseId: id });
-      setState(current => ({ ...current, resumable: closeOffer(current.resumable) }));
+      pending.current = true;
+      setState(current => ({ ...current, saving: true, error: Option.None() }));
+
+      api.cancel({ disputeCaseId: id }).onResolve(result => {
+        setState(current => ({
+          ...current,
+          saving: false,
+          ...result.match<Partial<State>>({
+            Ok: () => ({ resumable: closeOffer(current.resumable) }),
+            Error: error =>
+              match(error)
+                .returnType<Partial<State>>()
+                // The case is no longer a draft: there's nothing left to discard or resume
+                .with({ kind: "rejection" }, () => ({ resumable: closeOffer(current.resumable) }))
+                .with({ kind: "error" }, () => ({ error: Option.Some(error) }))
+                .exhaustive(),
+          }),
+        }));
+      });
     });
   }, [api, state]);
 
