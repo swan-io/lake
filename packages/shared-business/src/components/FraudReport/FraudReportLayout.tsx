@@ -1,37 +1,29 @@
-import { Box } from "@swan-io/lake/src/components/Box";
-import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
-import { LakeStepper } from "@swan-io/lake/src/components/LakeStepper";
-import { LakeText } from "@swan-io/lake/src/components/LakeText";
+import { LakeButton, LakeButtonGroup } from "@swan-io/lake/src/components/LakeButton";
+import { LakeStepper, MobileStepper } from "@swan-io/lake/src/components/LakeStepper";
 import { ResponsiveContainer } from "@swan-io/lake/src/components/ResponsiveContainer";
 import { Space } from "@swan-io/lake/src/components/Space";
-import { breakpoints, colors } from "@swan-io/lake/src/constants/design";
+import { breakpoints } from "@swan-io/lake/src/constants/design";
 import { isNotNullish } from "@swan-io/lake/src/utils/nullish";
 import { createContext, ReactNode, useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { match } from "ts-pattern";
 import {
   FraudReportLayoutStep,
   FraudReportStepperStep,
   getFraudReportStepper,
 } from "../../utils/fraudReport/stepper";
+import type { FraudReportFormValues } from "../../utils/fraudReport/toInput";
 import { FraudReportDetailsStep } from "../../utils/fraudReport/types";
 import { t } from "../../utils/i18n";
+
+export type FraudReportStepProps<K extends keyof FraudReportFormValues> = {
+  values: Pick<FraudReportFormValues, K>;
+  onNext: (values: Pick<FraudReportFormValues, K>) => void;
+};
 
 const styles = StyleSheet.create({
   root: {
     alignSelf: "stretch",
-  },
-  progress: {
-    height: 3,
-    borderRadius: 10,
-    backgroundColor: colors.gray[100],
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: 10,
-    backgroundColor: colors.current[500],
-    transitionDuration: "300ms",
-    transitionProperty: "width",
   },
 });
 
@@ -63,21 +55,7 @@ export const FraudReportLayout = ({ activeStep, detailsSteps, children }: Props)
       {({ small }) => (
         <SmallLayoutContext.Provider value={small}>
           {small ? (
-            <View>
-              <LakeText variant="smallMedium" color={colors.current[500]}>
-                {stepper.currentLabel}
-              </LakeText>
-
-              <LakeText variant="smallRegular" color={colors.gray[500]}>
-                {t("fraudReport.stepCount", { current: stepper.position, total: stepper.total })}
-              </LakeText>
-
-              <Space height={12} />
-
-              <View style={styles.progress}>
-                <View style={[styles.progressFill, { width: `${stepper.progress * 100}%` }]} />
-              </View>
-            </View>
+            <MobileStepper steps={stepper.steps} activeStepId={stepper.activeStepId} />
           ) : (
             <LakeStepper steps={stepper.steps} activeStepId={stepper.activeStepId} />
           )}
@@ -103,17 +81,13 @@ export const FraudReportFooter = ({ onPrevious, onNext, loading, nextDisabled }:
 
   return (
     <>
-      <Space height={small ? 24 : 32} />
+      <Space height={small ? 8 : 16} />
 
-      <Box direction="row">
+      <LakeButtonGroup paddingBottom={0}>
         {isNotNullish(onPrevious) ? (
-          <>
-            <LakeButton mode="secondary" color="gray" disabled={loading} onPress={onPrevious}>
-              {t("common.previous")}
-            </LakeButton>
-
-            <Space width={12} />
-          </>
+          <LakeButton mode="secondary" color="gray" disabled={loading} onPress={onPrevious}>
+            {t("common.previous")}
+          </LakeButton>
         ) : null}
 
         <LakeButton
@@ -125,7 +99,7 @@ export const FraudReportFooter = ({ onPrevious, onNext, loading, nextDisabled }:
         >
           {t("fraudReport.continue")}
         </LakeButton>
-      </Box>
+      </LakeButtonGroup>
     </>
   );
 };

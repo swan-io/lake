@@ -1,8 +1,11 @@
 import { TopLevelStep } from "@swan-io/lake/src/components/LakeStepper";
 import { match } from "ts-pattern";
+import { getCaseRail } from "./rail";
 import {
+  FraudReason,
   FraudReportDetailsStep,
   FraudReportStep,
+  FraudReportTransaction,
   fraudReportDetailsSteps,
   fraudReportSteps,
 } from "./types";
@@ -17,6 +20,24 @@ const stepperSteps = fraudReportSteps.filter(
   (step): step is FraudReportStepperStep => step !== "Intro",
 );
 
+export const getDetailsSteps = ({
+  transactions,
+  reportedReason,
+}: {
+  transactions: Pick<FraudReportTransaction, "rail">[];
+  reportedReason?: FraudReason;
+}) => {
+  const caseRail = getCaseRail(transactions).toUndefined();
+
+  return fraudReportDetailsSteps.filter(step =>
+    match(step)
+      .with("Card", () => caseRail === "CardOnly" || caseRail === "Mixed")
+      .with("Transfer", () => caseRail === "TransferOnly" || caseRail === "Mixed")
+      .with("Fraudster", () => reportedReason === "Manipulated")
+      .exhaustive(),
+  );
+};
+
 export const getFraudReportStepper = ({
   activeStep,
   detailsSteps,
@@ -30,22 +51,6 @@ export const getFraudReportStepper = ({
     step => step === activeStep || detailsSteps.includes(step),
   );
 
-  const current = match(activeStep)
-    .returnType<{ step: FraudReportStepperStep; subStepIndex: number; subStepCount: number }>()
-    .with("Card", "Transfer", "Fraudster", step => ({
-      step: "Details",
-      subStepIndex: subSteps.indexOf(step),
-      subStepCount: subSteps.length,
-    }))
-    .with("Victim", "Transactions", "Incident", "Documents", "Submitted", step => ({
-      step,
-      subStepIndex: 0,
-      subStepCount: 1,
-    }))
-    .exhaustive();
-
-  const index = stepperSteps.indexOf(current.step);
-
   return {
     steps: stepperSteps.map(
       (step): TopLevelStep =>
@@ -54,9 +59,5 @@ export const getFraudReportStepper = ({
           : { id: step, label: getLabel(step) },
     ),
     activeStepId: activeStep,
-    currentLabel: getLabel(current.step),
-    position: index + 1,
-    total: stepperSteps.length,
-    progress: (index + (current.subStepIndex + 1) / current.subStepCount) / stepperSteps.length,
   };
 };

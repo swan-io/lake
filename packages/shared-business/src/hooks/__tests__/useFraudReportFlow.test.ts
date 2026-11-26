@@ -111,49 +111,27 @@ describe("step moves", () => {
     ]);
   });
 
-  test.each([
-    {
-      name: "a card-only case",
-      transactions: [card],
-      reportedReason: "Unauthorized",
-      detailsSteps: ["Card"],
-    },
-    {
-      name: "a transfer-only case",
-      transactions: [transfer],
-      reportedReason: "Unauthorized",
-      detailsSteps: ["Transfer"],
-    },
-    {
-      name: "a mixed case where a fraudster convinced the user",
-      transactions: [transfer, card],
-      reportedReason: "Manipulated",
-      detailsSteps: ["Card", "Transfer", "Fraudster"],
-    },
-  ] as const)(
-    "goes through $detailsSteps on $name, both ways",
-    ({ transactions, reportedReason, detailsSteps }) => {
-      const flow = setup();
-      startReport(flow, { victim: "member-2", transactions: [...transactions] });
-      flow.next({ ...incident, reportedReason });
+  test("goes through every Details sub-step of the report, both ways", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-2", transactions: [transfer, card] });
+    flow.next({ ...incident, reportedReason: "Manipulated" });
 
-      const forward = [];
-      for (let index = 0; index < 4 && flow.result.current.step !== "Documents"; index++) {
-        forward.push(flow.result.current.step);
-        flow.next();
-      }
+    const forward = [];
+    for (let index = 0; index < 4 && flow.result.current.step !== "Documents"; index++) {
+      forward.push(flow.result.current.step);
+      flow.next();
+    }
 
-      const backward = [];
-      for (let index = 0; index < 4 && flow.result.current.step !== "Incident"; index++) {
-        flow.previous();
-        backward.push(flow.result.current.step);
-      }
+    const backward = [];
+    for (let index = 0; index < 4 && flow.result.current.step !== "Incident"; index++) {
+      flow.previous();
+      backward.push(flow.result.current.step);
+    }
 
-      expect(forward).toEqual(detailsSteps);
-      expect(backward).toEqual([...[...detailsSteps].reverse(), "Incident"]);
-      expect(flow.result.current.detailsSteps).toEqual(detailsSteps);
-    },
-  );
+    expect(forward).toEqual(["Card", "Transfer", "Fraudster"]);
+    expect(backward).toEqual(["Fraudster", "Transfer", "Card", "Incident"]);
+    expect(flow.result.current.detailsSteps).toEqual(["Card", "Transfer", "Fraudster"]);
+  });
 
   test("goes back one step at a time without calling the API", () => {
     const flow = setup();
@@ -261,12 +239,16 @@ describe("API calls", () => {
     expect(flow.result.current.step).toBe("Transactions");
 
     const nextWhileSaving = flow.result.current.next;
+    const previousWhileSaving = flow.result.current.previous;
     act(() => vi.advanceTimersByTime(100));
     expect(flow.result.current.saving).toBe(false);
     expect(flow.result.current.step).toBe("Incident");
 
     act(() => nextWhileSaving({ transactions: [card] }));
     expect(flow.callNames()).toEqual(["draft"]);
+
+    act(() => previousWhileSaving());
+    expect(flow.result.current.step).toBe("Incident");
   });
 
   test("ignores a Next called after a call ends but before the hook re-renders", () => {
@@ -280,6 +262,20 @@ describe("API calls", () => {
     });
 
     expect(flow.callNames()).toEqual(["draft"]);
+  });
+
+  test("ignores a Previous called right after Next, before the hook re-renders", () => {
+    vi.useFakeTimers();
+    const flow = setup({ delay: 100 });
+    flow.next();
+    flow.next({ victimAccountMembershipId: "member-1" });
+
+    act(() => {
+      flow.result.current.next({ transactions: [card] });
+      flow.result.current.previous();
+    });
+
+    expect(flow.result.current.step).toBe("Transactions");
   });
 
   test("ignores a second Next called before the first one re-renders", () => {
@@ -298,18 +294,17 @@ describe("API calls", () => {
 });
 
 describe("victim", () => {
-  test("exposes the victim for the URL until the draft exists, then the case ID", () => {
+  test("exposes the victim only in the values, and the case ID once the draft exists", () => {
     const flow = setup();
     flow.next();
     flow.next({ victimAccountMembershipId: "member-2" });
 
-    expect(flow.result.current.victimAccountMembershipId.toUndefined()).toBe("member-2");
     expect(flow.result.current.disputeCaseId.isNone()).toBe(true);
 
     flow.next({ transactions: [transfer] });
 
-    expect(flow.result.current.victimAccountMembershipId.isNone()).toBe(true);
     expect(flow.result.current.disputeCaseId.isSome()).toBe(true);
+    expect(flow.result.current).not.toHaveProperty("victimAccountMembershipId");
   });
 
   test("keeps the victim once the draft exists", () => {
@@ -318,7 +313,7 @@ describe("victim", () => {
     flow.previous();
     flow.previous();
     expect(flow.result.current.step).toBe("Victim");
-    expect(flow.result.current.victimAccountMembershipId.isNone()).toBe(true);
+    expect(flow.result.current.values.victimAccountMembershipId).toBe("member-2");
 
     flow.next({ victimAccountMembershipId: "member-1" });
     flow.next({ transactions: [transfer] });

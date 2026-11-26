@@ -4,7 +4,7 @@ import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { noop } from "@swan-io/lake/src/utils/function";
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import { StyleSheet } from "react-native";
 import { FraudReportLayout } from "../src/components/FraudReport/FraudReportLayout";
 import { VictimStep } from "../src/components/FraudReport/VictimStep";
@@ -40,13 +40,13 @@ const Step = ({
 }: {
   currentAccountMembership: Option<FraudReportAccountMembership>;
   victimAccountMembershipId?: string;
-  onNext?: (victimAccountMembershipId: string) => void;
+  onNext?: ComponentProps<typeof VictimStep>["onNext"];
 }) => (
   <FraudReportLayout activeStep="Victim" detailsSteps={[]}>
     <VictimStep
       currentAccountMembership={currentAccountMembership}
       accountMemberships={accountMemberships}
-      victimAccountMembershipId={victimAccountMembershipId}
+      values={{ victimAccountMembershipId }}
       onNext={onNext}
     />
   </FraudReportLayout>
@@ -63,7 +63,10 @@ const InteractivePart = ({
 
   return (
     <StoryPart title={title}>
-      <Step currentAccountMembership={currentAccountMembership} onNext={setSent} />
+      <Step
+        currentAccountMembership={currentAccountMembership}
+        onNext={values => setSent(JSON.stringify(values))}
+      />
       <Space height={16} />
       <LakeText>onNext: {sent ?? "not called"}</LakeText>
     </StoryPart>

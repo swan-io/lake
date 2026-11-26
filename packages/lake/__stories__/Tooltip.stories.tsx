@@ -89,6 +89,15 @@ export const InfoTooltip = () => {
         </Box>
       </StoryPart>
 
+      <StoryPart title="Focusable, with an accessible name">
+        <Box direction="row" justifyContent="center">
+          <InformationTooltip
+            text="Information tooltip that keyboard users can reach"
+            focusable={true}
+          />
+        </Box>
+      </StoryPart>
+
       <StoryPart title="With custom icon">
         <Box direction="row" justifyContent="center">
           <InformationTooltip

@@ -6,12 +6,17 @@ import type {
   FraudReportApiError,
   FraudReportApiResult,
 } from "../utils/fraudReport/api";
-import type { FraudReportLayoutStep } from "../utils/fraudReport/stepper";
-import { FraudReportFormValues, toDraftInput, toUpdateInput } from "../utils/fraudReport/toInput";
+import { FraudReportLayoutStep, getDetailsSteps } from "../utils/fraudReport/stepper";
+import {
+  FraudReportFormValues,
+  toDraftInput,
+  toTransactionIds,
+  toUpdateInput,
+} from "../utils/fraudReport/toInput";
 import {
   FraudReportCase,
   FraudReportRejection,
-  fraudReportDetailsSteps,
+  fraudReportSteps,
 } from "../utils/fraudReport/types";
 
 export type FraudReportFlowApi = Pick<FraudReportApi, "draft" | "update" | "submit">;
@@ -38,24 +43,10 @@ const initialState: State = {
   error: Option.None(),
 };
 
-const getDetailsSteps = ({ transactions, reportedReason }: FraudReportFormValues) =>
-  fraudReportDetailsSteps.filter(step =>
-    match(step)
-      .with("Card", () => transactions.some(({ rail }) => rail === "Card"))
-      .with("Transfer", () => transactions.some(({ rail }) => rail === "Transfer"))
-      .with("Fraudster", () => reportedReason === "Manipulated")
-      .exhaustive(),
+const getSteps = (values: FraudReportFormValues) =>
+  fraudReportSteps.flatMap((step): FraudReportFlowStep[] =>
+    step === "Details" ? getDetailsSteps(values) : [step],
   );
-
-const getSteps = (values: FraudReportFormValues): FraudReportFlowStep[] => [
-  "Intro",
-  "Victim",
-  "Transactions",
-  "Incident",
-  ...getDetailsSteps(values),
-  "Documents",
-  "Submitted",
-];
 
 export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
   const [state, setState] = useState(initialState);
@@ -79,7 +70,7 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
 
       const steps = getSteps(values);
       const nextStep = Option.fromUndefined(steps[steps.indexOf(state.step) + 1]).getOr(state.step);
-      const transactionIds = values.transactions.map(({ id }) => id);
+      const transactionIds = toTransactionIds(values);
 
       const request = match(state.step)
         .returnType<Option<FraudReportApiResult<FraudReportCase, FraudReportRejection>>>()
@@ -148,9 +139,6 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
     step: state.step,
     detailsSteps: getDetailsSteps(state.values),
     values: state.values,
-    victimAccountMembershipId: state.savedCase.isNone()
-      ? Option.fromUndefined(state.values.victimAccountMembershipId)
-      : Option.None<string>(),
     disputeCaseId: state.savedCase.map(({ id }) => id),
     saving: state.saving,
     error: state.error,

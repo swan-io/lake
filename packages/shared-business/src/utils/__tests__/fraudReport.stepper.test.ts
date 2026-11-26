@@ -1,7 +1,37 @@
 import { describe, expect, test } from "vitest";
-import { getFraudReportStepper } from "../fraudReport/stepper";
+import { getDetailsSteps, getFraudReportStepper } from "../fraudReport/stepper";
 
 const getLabel = (step: string) => step.toUpperCase();
+
+const card = { rail: "Card" } as const;
+const transfer = { rail: "Transfer" } as const;
+
+describe("getDetailsSteps", () => {
+  test.each([
+    { name: "nothing selected", transactions: [], reportedReason: undefined, steps: [] },
+    { name: "a card", transactions: [card], reportedReason: "Unauthorized", steps: ["Card"] },
+    {
+      name: "a transfer",
+      transactions: [transfer],
+      reportedReason: "Unauthorized",
+      steps: ["Transfer"],
+    },
+    {
+      name: "a transfer, with a fraudster",
+      transactions: [transfer],
+      reportedReason: "Manipulated",
+      steps: ["Transfer", "Fraudster"],
+    },
+    {
+      name: "a transfer and a card, with a fraudster",
+      transactions: [transfer, card],
+      reportedReason: "Manipulated",
+      steps: ["Card", "Transfer", "Fraudster"],
+    },
+  ] as const)("goes through $steps for $name", ({ transactions, reportedReason, steps }) => {
+    expect(getDetailsSteps({ transactions: [...transactions], reportedReason })).toEqual(steps);
+  });
+});
 
 describe("getFraudReportStepper", () => {
   test("lists the six steps, with one bar per Details sub-step", () => {
@@ -64,40 +94,22 @@ describe("getFraudReportStepper", () => {
         { id: "Fraudster", label: "DETAILS" },
       ],
     });
-    expect(stepper.progress).toBeCloseTo((3 + 1 / 3) / 6);
   });
 
   test.each([
-    { activeStep: "Victim", label: "VICTIM", position: 1, progress: 1 / 6 },
-    { activeStep: "Incident", label: "INCIDENT", position: 3, progress: 3 / 6 },
-    { activeStep: "Card", label: "DETAILS", position: 4, progress: (3 + 1 / 2) / 6 },
-    { activeStep: "Transfer", label: "DETAILS", position: 4, progress: 4 / 6 },
-    { activeStep: "Documents", label: "DOCUMENTS", position: 5, progress: 5 / 6 },
-    { activeStep: "Submitted", label: "SUBMITTED", position: 6, progress: 1 },
-  ] as const)(
-    "places $activeStep at $position of 6, labelled $label",
-    ({ activeStep, label, position, progress }) => {
-      const stepper = getFraudReportStepper({
-        activeStep,
-        detailsSteps: ["Card", "Transfer"],
-        getLabel,
-      });
-
-      expect(stepper.activeStepId).toBe(activeStep);
-      expect(stepper.currentLabel).toBe(label);
-      expect(stepper.position).toBe(position);
-      expect(stepper.total).toBe(6);
-      expect(stepper.progress).toBeCloseTo(progress);
-    },
-  );
-
-  test("places a sub-step by its rank among the selected sub-steps", () => {
+    { activeStep: "Victim" },
+    { activeStep: "Incident" },
+    { activeStep: "Card" },
+    { activeStep: "Transfer" },
+    { activeStep: "Documents" },
+    { activeStep: "Submitted" },
+  ] as const)("makes $activeStep the active step", ({ activeStep }) => {
     const stepper = getFraudReportStepper({
-      activeStep: "Fraudster",
-      detailsSteps: ["Card", "Fraudster"],
+      activeStep,
+      detailsSteps: ["Card", "Transfer"],
       getLabel,
     });
 
-    expect(stepper.progress).toBeCloseTo(4 / 6);
+    expect(stepper.activeStepId).toBe(activeStep);
   });
 });

@@ -1,10 +1,9 @@
 import { Option } from "@bloodyowl/boxed";
 import { Box } from "@swan-io/lake/src/components/Box";
-import { Icon } from "@swan-io/lake/src/components/Icon";
 import { LakeLabel } from "@swan-io/lake/src/components/LakeLabel";
 import { LakeSelect } from "@swan-io/lake/src/components/LakeSelect";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
-import { LakeTooltip } from "@swan-io/lake/src/components/LakeTooltip";
+import { InformationTooltip } from "@swan-io/lake/src/components/LakeTooltip";
 import { RadioGroup } from "@swan-io/lake/src/components/RadioGroup";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Tile } from "@swan-io/lake/src/components/Tile";
@@ -20,7 +19,11 @@ import {
   VictimAnswer,
 } from "../../utils/fraudReport/victim";
 import { formatNestedMessage, t } from "../../utils/i18n";
-import { FraudReportFooter, useFraudReportSmallLayout } from "./FraudReportLayout";
+import {
+  FraudReportFooter,
+  FraudReportStepProps,
+  useFraudReportSmallLayout,
+} from "./FraudReportLayout";
 
 const styles = StyleSheet.create({
   column: {
@@ -29,23 +32,24 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
+type Props = FraudReportStepProps<"victimAccountMembershipId"> & {
   currentAccountMembership: Option<FraudReportAccountMembership>;
   accountMemberships: FraudReportAccountMembership[];
-  victimAccountMembershipId?: string;
-  onNext: (victimAccountMembershipId: string) => void;
 };
 
 export const VictimStep = ({
   currentAccountMembership,
   accountMemberships,
-  victimAccountMembershipId,
+  values,
   onNext,
 }: Props) => {
   const small = useFraudReportSmallLayout();
 
   const [choice, setChoice] = useState(() =>
-    getInitialVictimChoice({ currentAccountMembership, victimAccountMembershipId }),
+    getInitialVictimChoice({
+      currentAccountMembership,
+      victimAccountMembershipId: values.victimAccountMembershipId,
+    }),
   );
 
   const selectedId = getSelectedAccountMembershipId({
@@ -61,8 +65,8 @@ export const VictimStep = ({
   });
 
   const answerItems: { name: string; value: VictimAnswer }[] = [
-    { name: t("fraudReport.victim.yes"), value: "Myself" },
-    { name: t("fraudReport.victim.no"), value: "SomeoneElse" },
+    { name: t("common.yes"), value: "Myself" },
+    { name: t("common.no"), value: "SomeoneElse" },
   ];
 
   const memberItems = getOtherAccountMemberships({
@@ -75,20 +79,7 @@ export const VictimStep = ({
       label={t("fraudReport.victim.memberLabel")}
       help={
         small || currentAccountMembership.isNone() ? undefined : (
-          <LakeTooltip
-            content={t("fraudReport.victim.memberHelp")}
-            togglableOnFocus={true}
-            placement="right"
-            maxWidth={184}
-          >
-            <Icon
-              name="question-circle-regular"
-              size={20}
-              color={colors.gray[600]}
-              tabIndex={0}
-              aria-label={t("fraudReport.victim.memberHelp")}
-            />
-          </LakeTooltip>
+          <InformationTooltip text={t("fraudReport.victim.memberHelp")} focusable={true} />
         )
       }
       render={id => (
@@ -106,12 +97,7 @@ export const VictimStep = ({
 
   return (
     <>
-      <Tile
-        title={t("fraudReport.victim.title")}
-        description={t("fraudReport.victim.description")}
-        paddingVertical={small ? 24 : 32}
-        paddingHorizontal={small ? 24 : 32}
-      >
+      <Tile title={t("fraudReport.victim.title")} description={t("fraudReport.victim.description")}>
         {currentAccountMembership.match({
           None: () => memberPicker,
           Some: current => (
@@ -147,8 +133,6 @@ export const VictimStep = ({
                         ),
                       })}
                     </LakeText>
-
-                    <Space height={small ? 16 : 24} />
                   </>
                 ) : null}
               </View>
@@ -164,7 +148,12 @@ export const VictimStep = ({
         })}
       </Tile>
 
-      <FraudReportFooter nextDisabled={victim.isNone()} onNext={() => victim.tapSome(onNext)} />
+      <FraudReportFooter
+        nextDisabled={victim.isNone()}
+        onNext={() =>
+          victim.tapSome(victimAccountMembershipId => onNext({ victimAccountMembershipId }))
+        }
+      />
     </>
   );
 };
