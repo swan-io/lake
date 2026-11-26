@@ -1,5 +1,5 @@
 import { Option } from "@bloodyowl/boxed";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import type {
   FraudReportApi,
@@ -83,6 +83,19 @@ export const useFraudReportFlow = ({
 }) => {
   const [state, setState] = useState(initialState);
   const pending = useRef(false);
+  const mounted = useRef(false);
+  const onExitRef = useRef(onExit);
+
+  useLayoutEffect(() => {
+    onExitRef.current = onExit;
+  });
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     pending.current = state.saving;
@@ -176,9 +189,12 @@ export const useFraudReportFlow = ({
       return;
     }
 
+    // A cancel that ends after the user left must not take them away from where they went
     const exit = () => {
-      setState(initialState);
-      onExit();
+      if (mounted.current) {
+        setState(initialState);
+        onExitRef.current();
+      }
     };
 
     // The report is over: leave, and let any draft left behind expire
@@ -206,7 +222,7 @@ export const useFraudReportFlow = ({
         });
       },
     });
-  }, [api, onExit, state]);
+  }, [api, state]);
 
   return {
     step: state.step,

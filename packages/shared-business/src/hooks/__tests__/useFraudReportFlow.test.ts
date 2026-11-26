@@ -8,7 +8,11 @@ import {
   FakeTransaction,
 } from "../../utils/fraudReport/fakeApi";
 import type { FraudReportFormValues } from "../../utils/fraudReport/toInput";
-import type { FraudReportRejection, FraudReportTransaction } from "../../utils/fraudReport/types";
+import type {
+  FraudReportCase,
+  FraudReportRejection,
+  FraudReportTransaction,
+} from "../../utils/fraudReport/types";
 import { FraudReportFlowApi, useFraudReportFlow } from "../useFraudReportFlow";
 
 const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
@@ -64,13 +68,14 @@ const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
   };
 
   const onExit = vi.fn();
-  const { result } = renderHook(() => useFraudReportFlow({ api, onExit }));
+  const { result, unmount } = renderHook(() => useFraudReportFlow({ api, onExit }));
 
   return {
     result,
     fake,
     calls,
     onExit,
+    unmount,
     callNames: () => calls.map(({ name }) => name),
     next: (values?: Partial<FraudReportFormValues>) => act(() => result.current.next(values)),
     previous: () => act(() => result.current.previous()),
@@ -885,6 +890,24 @@ describe("cancel", () => {
     flow.cancel();
 
     expect(flow.callNames()).toEqual(["draft", "update"]);
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test("doesn't leave when the cancel ends after the flow is gone", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    let resolve: (value: Result<FraudReportCase, never>) => void = () => {};
+    vi.spyOn(flow.fake, "cancel").mockReturnValueOnce(
+      Future.make(resolver => {
+        resolve = resolver;
+      }),
+    );
+
+    flow.cancel();
+    flow.unmount();
+    resolve(Result.Ok({} as FraudReportCase));
+
+    expect(flow.callNames()).toEqual(["draft", "cancel"]);
     expect(flow.onExit).not.toHaveBeenCalled();
   });
 
