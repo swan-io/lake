@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { LakeButton } from "@swan-io/lake/src/components/LakeButton";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
@@ -6,6 +6,7 @@ import { WithPartnerAccentColor } from "@swan-io/lake/src/components/WithPartner
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { expect, fn, within } from "storybook/test";
 import { Except } from "type-fest";
 import { BirthdatePicker } from "../src/components/BirthdatePicker";
 import {
@@ -162,4 +163,26 @@ export const Inline = () => {
       </StoryBlock>
     </WithPartnerAccentColor>
   );
+};
+
+export const InlineEmptied: StoryObj<typeof BirthdatePicker> = {
+  args: { label: "Birthdate", value: undefined, onValueChange: fn() },
+  parameters: { a11y: { test: "off" } },
+  render: args => (
+    <WithPartnerAccentColor color="#0F6FDE">
+      <BirthdatePicker {...args} />
+    </WithPartnerAccentColor>
+  ),
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.type(canvas.getByPlaceholderText("Day"), "21");
+    await userEvent.click(canvas.getByRole("button", { name: "Month" }));
+    await userEvent.click(within(document.body).getByRole("option", { name: "October" }));
+    await userEvent.type(canvas.getByPlaceholderText("Year"), "1990");
+    await userEvent.clear(canvas.getByPlaceholderText("Day"));
+    await userEvent.clear(canvas.getByPlaceholderText("Year"));
+    await userEvent.tab();
+
+    await expect(await canvas.findByText("Please enter a valid birth date.")).toBeVisible();
+    await expect(args.onValueChange).toHaveBeenLastCalledWith(undefined);
+  },
 };

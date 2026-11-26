@@ -98,14 +98,16 @@ export const InlineDatePicker = ({
   const { Field, validateField } = useForm({
     date: {
       initialValue: isNotNullish(value) ? extractDate(value) : undefined,
-      sanitize: date =>
-        isNotNullish(date)
-          ? {
-              day: date.day.trim(),
-              month: date.month.trim(),
-              year: date.year.trim(),
-            }
-          : undefined,
+      sanitize: date => {
+        if (isNullish(date)) {
+          return undefined;
+        }
+
+        const day = date.day.trim();
+        const year = date.year.trim();
+
+        return day === "" && year === "" ? undefined : { day, month: date.month.trim(), year };
+      },
       strategy: "onSubmit",
       validate: date => {
         const errorMessage = validate(date);

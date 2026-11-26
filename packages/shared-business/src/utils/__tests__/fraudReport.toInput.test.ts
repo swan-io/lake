@@ -14,6 +14,7 @@ import {
   validateDiscoveryDetails,
   validateExternalReference,
   validateNotInFuture,
+  validateSelected,
   validateSharedInformation,
   validateTransactionIds,
 } from "../fraudReport/validation";
@@ -115,6 +116,16 @@ describe("validateTransactionIds", () => {
   test("accepts unique transaction IDs", () => {
     expect(validateTransactionIds(["card-1"])).toBeUndefined();
     expect(validateTransactionIds(["card-1", "transfer-1"])).toBeUndefined();
+  });
+});
+
+describe("validateSelected", () => {
+  test("requires a value", () => {
+    expect(validateSelected(undefined)).toBe("Required");
+  });
+
+  test("accepts a selected value", () => {
+    expect(validateSelected("Manipulated")).toBeUndefined();
   });
 });
 
