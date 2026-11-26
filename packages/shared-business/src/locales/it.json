@@ -148,7 +148,7 @@
   "fraudReport.continue": "Continua",
   "fraudReport.intro.description": "Ci indichi quali transazioni non ha autorizzato. Sia il più preciso possibile, il nostro team esamina ogni dettaglio.",
   "fraudReport.intro.falseInformation": "Fornire informazioni false è punibile per legge.",
-  "fraudReport.intro.rule.deadline": "Completi e invii questa segnalazione entro <bold>30 giorni</bold>.",
+  "fraudReport.intro.rule.deadline": "Ha fino a <bold>30 giorni</bold> per completare e inviare questa segnalazione.",
   "fraudReport.intro.rule.oneVictim": "Può segnalare solo <bold>una vittima</bold> per segnalazione.",
   "fraudReport.intro.rule.policeReport": "Una <bold>denuncia alla polizia</bold> supporta la sua richiesta. La carichi in questo modulo.",
   "fraudReport.intro.rule.refund": "Solo le transazioni delle ultime <bold>8 settimane</bold> possono essere rimborsate.",

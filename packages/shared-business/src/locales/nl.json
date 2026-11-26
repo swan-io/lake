@@ -148,7 +148,7 @@
   "fraudReport.continue": "Doorgaan",
   "fraudReport.intro.description": "Laat ons weten welke transacties je niet hebt goedgekeurd. Wees zo nauwkeurig mogelijk, ons team bekijkt elk detail.",
   "fraudReport.intro.falseInformation": "Het verstrekken van valse informatie is strafbaar.",
-  "fraudReport.intro.rule.deadline": "Vul deze melding binnen <bold>30 dagen</bold> in en verstuur ze.",
+  "fraudReport.intro.rule.deadline": "Je hebt maximaal <bold>30 dagen</bold> om deze melding in te vullen en te versturen.",
   "fraudReport.intro.rule.oneVictim": "Je kunt maar <bold>één slachtoffer</bold> per melding melden.",
   "fraudReport.intro.rule.policeReport": "Een <bold>proces-verbaal van aangifte</bold> ondersteunt je claim. Upload het in dit formulier.",
   "fraudReport.intro.rule.refund": "Alleen transacties van de afgelopen <bold>8 weken</bold> komen in aanmerking voor terugbetaling.",

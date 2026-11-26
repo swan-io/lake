@@ -148,7 +148,7 @@
   "fraudReport.continue": "Continuer",
   "fraudReport.intro.description": "Indiquez-nous les transactions que vous n'avez pas autorisées. Soyez aussi précis que possible : notre équipe examine chaque détail.",
   "fraudReport.intro.falseInformation": "Fournir de fausses informations est puni par la loi.",
-  "fraudReport.intro.rule.deadline": "Complétez et envoyez ce signalement sous <bold>30 jours</bold>.",
+  "fraudReport.intro.rule.deadline": "Vous disposez de <bold>30 jours</bold> maximum pour compléter et envoyer ce signalement.",
   "fraudReport.intro.rule.oneVictim": "Vous ne pouvez signaler <bold>qu'une seule victime</bold> par signalement.",
   "fraudReport.intro.rule.policeReport": "Un <bold>dépôt de plainte</bold> appuie votre demande. Ajoutez-le dans ce formulaire.",
   "fraudReport.intro.rule.refund": "Seules les transactions des <bold>8 dernières semaines</bold> peuvent être remboursées.",
