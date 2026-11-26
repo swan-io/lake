@@ -177,3 +177,41 @@ export const Previous: StoryObj<typeof IncidentStep> = {
     await expect(canvas.queryByText("Tell us what happened.")).toBeNull();
   },
 };
+
+export const EmptiedDate: StoryObj<typeof IncidentStep> = {
+  args: { values: { ...answers, discoveredAt: undefined }, onNext: fn(), onPrevious: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.type(canvas.getByPlaceholderText("Day"), "21");
+    await userEvent.click(canvas.getByRole("button", { name: "Month" }));
+    await userEvent.click(within(document.body).getByRole("option", { name: "October" }));
+    await userEvent.type(canvas.getByPlaceholderText("Year"), "2026");
+    await userEvent.clear(canvas.getByPlaceholderText("Day"));
+
+    await expect(await canvas.findByText("Enter a valid date.")).toBeVisible();
+
+    await userEvent.clear(canvas.getByPlaceholderText("Year"));
+
+    await waitFor(() => expect(canvas.queryByText("Enter a valid date.")).toBeNull());
+
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => expect(args.onNext).toHaveBeenCalledTimes(1));
+    await expect(args.onNext).toHaveBeenCalledWith({ ...answers, discoveredAt: undefined });
+  },
+};
+
+export const ClearedSavedDate: StoryObj<typeof IncidentStep> = {
+  args: { values: answers, onNext: fn(), onPrevious: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.clear(canvas.getByPlaceholderText("Day"));
+    await userEvent.clear(canvas.getByPlaceholderText("Year"));
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => expect(args.onNext).toHaveBeenCalledTimes(1));
+    await expect(args.onNext).toHaveBeenCalledWith({ ...answers, discoveredAt: undefined });
+  },
+};
