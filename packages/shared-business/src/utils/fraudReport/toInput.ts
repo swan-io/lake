@@ -30,10 +30,10 @@ export type FraudReportFormValues = {
   externalReference?: string;
 };
 
-const toFilled = (value: string | undefined) =>
+export const toFilled = (value: string | undefined) =>
   Option.fromNullable(value).filter(item => item.trim() !== "");
 
-const toFilledList = <T>(values: T[] | undefined) =>
+export const toFilledList = <T>(values: T[] | undefined) =>
   Option.fromNullable(values).filter(items => items.length > 0);
 
 type SavedDetails = Pick<FraudReportCase, "fraudDetails" | "fraudCardDetails">;

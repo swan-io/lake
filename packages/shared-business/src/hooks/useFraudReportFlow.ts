@@ -1,4 +1,4 @@
-import { Option } from "@bloodyowl/boxed";
+import { AsyncData, Option } from "@bloodyowl/boxed";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import type {
@@ -6,7 +6,9 @@ import type {
   FraudReportApiError,
   FraudReportApiResult,
 } from "../utils/fraudReport/api";
+import { toFormValues } from "../utils/fraudReport/prefill";
 import { getRejectionStep } from "../utils/fraudReport/rejections";
+import { getResumeStep } from "../utils/fraudReport/resume";
 import { FraudReportLayoutStep, getDetailsSteps } from "../utils/fraudReport/stepper";
 import {
   FraudReportFormValues,
@@ -20,7 +22,13 @@ import {
   fraudReportSteps,
 } from "../utils/fraudReport/types";
 
-export type FraudReportFlowApi = Pick<FraudReportApi, "draft" | "update" | "submit" | "cancel">;
+export type FraudReportFlowApi = Pick<
+  FraudReportApi,
+  "draft" | "update" | "submit" | "cancel" | "findDrafts"
+>;
+
+// The transactions the report starts from, when the user opened it from one of them
+export type FraudReportResumeFrom = { accountId: string; transactionIds: string[] };
 
 export type FraudReportFlowStep = "Intro" | FraudReportLayoutStep | "Rejected";
 
@@ -33,6 +41,7 @@ type State = {
   savedTransactionIds: string[];
   saving: boolean;
   error: Option<FlowError>;
+  resumable: AsyncData<Option<FraudReportCase>>;
 };
 
 const initialState: State = {
@@ -42,7 +51,14 @@ const initialState: State = {
   savedTransactionIds: [],
   saving: false,
   error: Option.None(),
+  resumable: AsyncData.NotAsked(),
 };
+
+// Keeps "no lookup" and "looking" as they are, so only an offer turns into "nothing to offer"
+const closeOffer = (resumable: State["resumable"]) =>
+  resumable.map(() => Option.None<FraudReportCase>());
+
+const getDraft = (state: State) => state.resumable.toOption().flatMap(draft => draft);
 
 const isFinalStep = (step: FraudReportFlowStep) => step === "Submitted" || step === "Rejected";
 
@@ -77,14 +93,20 @@ const getSteps = (values: FraudReportFormValues) =>
 export const useFraudReportFlow = ({
   api,
   onExit,
+  resumeFrom,
 }: {
   api: FraudReportFlowApi;
   onExit: () => void;
+  resumeFrom?: FraudReportResumeFrom;
 }) => {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(() =>
+    resumeFrom == null ? initialState : { ...initialState, resumable: AsyncData.Loading() },
+  );
   const pending = useRef(false);
   const mounted = useRef(false);
   const onExitRef = useRef(onExit);
+  // The drafts are looked up once, at start: a later api or resumeFrom doesn't start another lookup
+  const startRef = useRef({ api, resumeFrom });
 
   useLayoutEffect(() => {
     onExitRef.current = onExit;
@@ -97,13 +119,40 @@ export const useFraudReportFlow = ({
     };
   }, []);
 
+  useEffect(() => {
+    const { api, resumeFrom } = startRef.current;
+
+    if (resumeFrom == null) {
+      return;
+    }
+
+    const request = api.findDrafts(resumeFrom);
+
+    request.onResolve(result => {
+      // Not finding drafts must not stop a report: it starts as a new one
+      const draft = result.toOption().flatMap(drafts => Option.fromUndefined(drafts[0]));
+
+      setState(current => ({
+        ...current,
+        resumable: current.resumable.isLoading() ? AsyncData.Done(draft) : current.resumable,
+      }));
+    });
+
+    return () => request.cancel();
+  }, []);
+
   useLayoutEffect(() => {
     pending.current = state.saving;
   }, [state]);
 
   const next = useCallback(
     (input: Partial<FraudReportFormValues> = {}) => {
-      if (pending.current || state.saving || isFinalStep(state.step)) {
+      if (
+        pending.current ||
+        state.saving ||
+        isFinalStep(state.step) ||
+        (state.step === "Intro" && state.resumable.isLoading())
+      ) {
         return;
       }
 
@@ -140,7 +189,14 @@ export const useFraudReportFlow = ({
 
       request.match({
         None: () => {
-          setState(current => ({ ...current, values, step: nextStep, error: Option.None() }));
+          setState(current => ({
+            ...current,
+            values,
+            step: nextStep,
+            error: Option.None(),
+            // Starting the report closes the offer: the draft stays, to expire or be found again
+            resumable: closeOffer(current.resumable),
+          }));
         },
         Some: future => {
           pending.current = true;
@@ -224,6 +280,39 @@ export const useFraudReportFlow = ({
     });
   }, [api, state]);
 
+  const resume = useCallback(() => {
+    if (pending.current || state.saving || state.step !== "Intro") {
+      return;
+    }
+
+    getDraft(state).tapSome(savedCase => {
+      const values = toFormValues(savedCase);
+
+      setState(current => ({
+        ...current,
+        step: getResumeStep(values),
+        values,
+        savedCase: Option.Some(savedCase),
+        savedTransactionIds: toTransactionIds(values),
+        error: Option.None(),
+        resumable: closeOffer(current.resumable),
+      }));
+    });
+  }, [state]);
+
+  const startOver = useCallback(() => {
+    if (pending.current || state.saving || state.step !== "Intro") {
+      return;
+    }
+
+    getDraft(state).tapSome(({ id }) => {
+      // Kept, the old draft would be offered again on the same transactions. A failed cancel
+      // only leaves it to expire, so the new report doesn't wait for the answer.
+      api.cancel({ disputeCaseId: id });
+      setState(current => ({ ...current, resumable: closeOffer(current.resumable) }));
+    });
+  }, [api, state]);
+
   return {
     step: state.step,
     detailsSteps: getDetailsSteps(state.values),
@@ -234,5 +323,8 @@ export const useFraudReportFlow = ({
     next,
     previous,
     cancel,
+    resumable: state.resumable,
+    resume,
+    startOver,
   };
 };
