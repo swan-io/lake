@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { noop } from "@swan-io/lake/src/utils/function";
 import { ComponentProps } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { expect, fn, waitFor, within } from "storybook/test";
 import { FraudReportLayout } from "../src/components/FraudReport/FraudReportLayout";
 import { IncidentStep } from "../src/components/FraudReport/IncidentStep";
@@ -30,47 +30,77 @@ const answers: Props["values"] = {
   discoveredAt: "2026-10-21",
 };
 
+const invalidAnswers: Props["values"] = {
+  ...answers,
+  description: "a".repeat(DESCRIPTION_MAX_LENGTH + 1),
+  discoveredAt: "2999-01-01",
+};
+
 const Step = ({ values = {}, loading, onNext = noop, onPrevious = noop }: Partial<Props>) => (
   <FraudReportLayout activeStep="Incident" detailsSteps={[]}>
     <IncidentStep values={values} loading={loading} onNext={onNext} onPrevious={onPrevious} />
   </FraudReportLayout>
 );
 
-export const States = () => (
-  <WithCurrentColor variant="live">
-    <StoryBlock title="Incident step" description={["What happened during the fraud"]}>
-      <StoryPart title="No answer yet">
-        <Step />
-      </StoryPart>
+export const States: StoryObj<typeof IncidentStep> = {
+  render: () => (
+    <WithCurrentColor variant="live">
+      <StoryBlock title="Incident step" description={["What happened during the fraud"]}>
+        <StoryPart title="Missing answers">
+          <View testID="missingAnswers">
+            <Step />
+          </View>
+        </StoryPart>
 
-      <StoryPart title="Tricked into paying">
-        <Step values={answers} />
-      </StoryPart>
+        <StoryPart title="Invalid answers">
+          <View testID="invalidAnswers">
+            <Step values={invalidAnswers} />
+          </View>
+        </StoryPart>
 
-      <StoryPart title="Not tricked, no date">
-        <Step
-          values={{
-            reportedReason: "Unauthorized",
-            reportedTypology: "Other",
-            description: "I don't recognize this card payment.",
-          }}
-        />
-      </StoryPart>
+        <StoryPart title="No answer yet">
+          <Step />
+        </StoryPart>
 
-      <StoryPart title="Saving">
-        <Step values={answers} loading={true} />
-      </StoryPart>
+        <StoryPart title="Tricked into paying">
+          <Step values={answers} />
+        </StoryPart>
 
-      <StoryPart title="No answer yet, mobile" style={styles.mobile}>
-        <Step />
-      </StoryPart>
+        <StoryPart title="Not tricked, no date">
+          <Step
+            values={{
+              reportedReason: "Unauthorized",
+              reportedTypology: "Other",
+              description: "I don't recognize this card payment.",
+            }}
+          />
+        </StoryPart>
 
-      <StoryPart title="Tricked into paying, mobile" style={styles.mobile}>
-        <Step values={answers} />
-      </StoryPart>
-    </StoryBlock>
-  </WithCurrentColor>
-);
+        <StoryPart title="Saving">
+          <Step values={answers} loading={true} />
+        </StoryPart>
+
+        <StoryPart title="No answer yet, mobile" style={styles.mobile}>
+          <Step />
+        </StoryPart>
+
+        <StoryPart title="Tricked into paying, mobile" style={styles.mobile}>
+          <Step values={answers} />
+        </StoryPart>
+      </StoryBlock>
+    </WithCurrentColor>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    for (const testId of ["missingAnswers", "invalidAnswers"]) {
+      await userEvent.click(
+        within(canvas.getByTestId(testId)).getByRole("button", { name: "Continue" }),
+      );
+    }
+
+    await canvas.findByText("Select Yes or No.");
+    await canvas.findByText("Keep this under 2,000 characters.");
+  },
+};
 
 const render = (args: Props) => (
   <WithCurrentColor variant="live">
@@ -80,6 +110,7 @@ const render = (args: Props) => (
 
 export const MissingAnswers: StoryObj<typeof IncidentStep> = {
   args: { values: {}, onNext: fn(), onPrevious: fn() },
+  parameters: { a11y: { test: "off" } },
   render,
   play: async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
@@ -92,15 +123,8 @@ export const MissingAnswers: StoryObj<typeof IncidentStep> = {
 };
 
 export const InvalidAnswers: StoryObj<typeof IncidentStep> = {
-  args: {
-    values: {
-      ...answers,
-      description: "a".repeat(DESCRIPTION_MAX_LENGTH + 1),
-      discoveredAt: "2999-01-01",
-    },
-    onNext: fn(),
-    onPrevious: fn(),
-  },
+  args: { values: invalidAnswers, onNext: fn(), onPrevious: fn() },
+  parameters: { a11y: { test: "off" } },
   render,
   play: async ({ args, canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
