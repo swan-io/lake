@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Incidente",
   "fraudReport.step.transactions": "Transazioni",
   "fraudReport.step.victim": "Vittima",
-  "fraudReport.stepCount": "Passaggio {current} di {total}",
   "fraudReport.victim.description": "Scelga la vittima dei pagamenti fraudolenti. Può segnalare solo una vittima alla volta.",
   "fraudReport.victim.forYourself": "Sta segnalando una frode a proprio nome?",
   "fraudReport.victim.memberHelp": "Solo un membro che possa gestire le adesioni al conto può fare una segnalazione per conto di un'altra persona.",

@@ -55,14 +55,7 @@ export const FraudReportLayout = ({ activeStep, detailsSteps, children }: Props)
       {({ small }) => (
         <SmallLayoutContext.Provider value={small}>
           {small ? (
-            <MobileStepper
-              steps={stepper.steps}
-              activeStepId={stepper.activeStepId}
-              countLabel={t("fraudReport.stepCount", {
-                current: stepper.position,
-                total: stepper.total,
-              })}
-            />
+            <MobileStepper steps={stepper.steps} activeStepId={stepper.activeStepId} />
           ) : (
             <LakeStepper steps={stepper.steps} activeStepId={stepper.activeStepId} />
           )}

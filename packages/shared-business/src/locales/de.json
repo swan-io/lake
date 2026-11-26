@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Vorfall",
   "fraudReport.step.transactions": "Transaktionen",
   "fraudReport.step.victim": "Opfer",
-  "fraudReport.stepCount": "Schritt {current} von {total}",
   "fraudReport.victim.description": "Wählen Sie das Opfer der betrügerischen Zahlungen aus. Sie können jeweils nur ein Opfer melden.",
   "fraudReport.victim.forYourself": "Melden Sie einen Betrug für sich selbst?",
   "fraudReport.victim.memberHelp": "Nur ein Mitglied, das die Mitgliedschaften verwalten darf, kann eine Meldung für eine andere Person machen.",

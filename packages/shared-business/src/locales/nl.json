@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Incident",
   "fraudReport.step.transactions": "Transacties",
   "fraudReport.step.victim": "Slachtoffer",
-  "fraudReport.stepCount": "Stap {current} van {total}",
   "fraudReport.victim.description": "Kies het slachtoffer van de frauduleuze betalingen. Je kunt maar één slachtoffer tegelijk melden.",
   "fraudReport.victim.forYourself": "Meld je fraude voor jezelf?",
   "fraudReport.victim.memberHelp": "Alleen een lid dat de lidmaatschappen kan beheren, kan een melding doen namens iemand anders.",

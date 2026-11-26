@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Incident",
   "fraudReport.step.transactions": "Transactions",
   "fraudReport.step.victim": "Victim",
-  "fraudReport.stepCount": "Step {current} of {total}",
   "fraudReport.victim.description": "Choose the victim of the fraudulent payments. You can only report one victim at a time.",
   "fraudReport.victim.forYourself": "Are you reporting fraud for yourself?",
   "fraudReport.victim.memberHelp": "Only a member who can manage the memberships can report on behalf of someone else.",

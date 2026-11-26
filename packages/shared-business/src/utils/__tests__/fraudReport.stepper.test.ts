@@ -97,13 +97,13 @@ describe("getFraudReportStepper", () => {
   });
 
   test.each([
-    { activeStep: "Victim", position: 1 },
-    { activeStep: "Incident", position: 3 },
-    { activeStep: "Card", position: 4 },
-    { activeStep: "Transfer", position: 4 },
-    { activeStep: "Documents", position: 5 },
-    { activeStep: "Submitted", position: 6 },
-  ] as const)("places $activeStep at $position of 6", ({ activeStep, position }) => {
+    { activeStep: "Victim" },
+    { activeStep: "Incident" },
+    { activeStep: "Card" },
+    { activeStep: "Transfer" },
+    { activeStep: "Documents" },
+    { activeStep: "Submitted" },
+  ] as const)("makes $activeStep the active step", ({ activeStep }) => {
     const stepper = getFraudReportStepper({
       activeStep,
       detailsSteps: ["Card", "Transfer"],
@@ -111,7 +111,5 @@ describe("getFraudReportStepper", () => {
     });
 
     expect(stepper.activeStepId).toBe(activeStep);
-    expect(stepper.position).toBe(position);
-    expect(stepper.total).toBe(6);
   });
 });

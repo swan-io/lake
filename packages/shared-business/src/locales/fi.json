@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Tapaus",
   "fraudReport.step.transactions": "Tapahtumat",
   "fraudReport.step.victim": "Uhri",
-  "fraudReport.stepCount": "Vaihe {current}/{total}",
   "fraudReport.victim.description": "Valitse vilpillisten maksujen uhri. Voit ilmoittaa vain yhden uhrin kerrallaan.",
   "fraudReport.victim.forYourself": "Ilmoitatko petoksesta itsesi puolesta?",
   "fraudReport.victim.memberHelp": "Vain jäsen, joka voi hallita jäsenyyksiä, voi tehdä ilmoituksen toisen henkilön puolesta.",

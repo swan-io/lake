@@ -154,7 +154,6 @@
   "fraudReport.step.incident": "Incidente",
   "fraudReport.step.transactions": "Transações",
   "fraudReport.step.victim": "Vítima",
-  "fraudReport.stepCount": "Passo {current} de {total}",
   "fraudReport.victim.description": "Escolha a vítima dos pagamentos fraudulentos. Só pode comunicar a fraude de uma vítima de cada vez.",
   "fraudReport.victim.forYourself": "Está a comunicar uma fraude em nome próprio?",
   "fraudReport.victim.memberHelp": "Só um membro que possa gerir as associações da conta pode fazer uma comunicação em nome de outra pessoa.",

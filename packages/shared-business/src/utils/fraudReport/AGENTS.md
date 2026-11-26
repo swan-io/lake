@@ -59,7 +59,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 
 - Every step from Victim to the submitted screen renders inside `FraudReportLayout` (`components/FraudReport/FraudReportLayout.tsx`). The intro has no stepper. Fraud report steps aren't links: don't give them a URL.
 - Give the layout the active step and the Details sub-steps the report goes through, in any order. The active one can be left out.
-- Change the steps, the sub-step bars and the step count in `getFraudReportStepper` (`stepper.ts`), not in the layout.
+- Change the steps and the sub-step bars in `getFraudReportStepper` (`stepper.ts`), not in the layout.
 - Use Lake's components as they are, set only through their props. Don't override their styles, or copy them, to match a Figma frame: when a frame and the design system differ, the design system wins.
 - A step that leads to another ends with `FraudReportFooter`, rendered inside `FraudReportLayout`, for Previous and Continue. Leave `onPrevious` out on the first step.
 - The stepper and the footer use the current color, which the app sets.

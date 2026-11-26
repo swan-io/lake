@@ -194,11 +194,7 @@ export const LakeStepper = ({ steps, activeStepId, style }: Props) => {
   );
 };
 
-type MobileStepperProps = Props & {
-  countLabel?: string;
-};
-
-export const MobileStepper = ({ steps, activeStepId, countLabel }: MobileStepperProps) => {
+export const MobileStepper = ({ steps, activeStepId }: Props) => {
   const total = steps.length;
 
   const currentStep = Option.fromNullable(
@@ -234,7 +230,7 @@ export const MobileStepper = ({ steps, activeStepId, countLabel }: MobileStepper
             {label}
           </LakeText>
           <LakeText variant="smallRegular" color={colors.gray[500]}>
-            {countLabel ?? `${number}/${total}`}
+            {number}/{total}
           </LakeText>
           <View style={stylesMobile.progress}>
             <View style={[stylesMobile.progressBar, { width: progress }]} />
