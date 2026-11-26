@@ -22,6 +22,8 @@ import type {
   FraudDetails,
   FraudDetailsInput,
   FraudReportCase,
+  FraudReportRail,
+  FraudReportTransaction,
   SubmitDisputeCaseRejection,
   UpdateDraftFraudDisputeCaseInput,
   UpdateDraftFraudDisputeCaseRejection,
@@ -31,12 +33,30 @@ import type {
 // API's order, so the flow can be exercised without a backend. Input format checks (dates in
 // the future, string formats, `None` with other values) are left to the client-side validators.
 
+type FakeTransactionDetails = Partial<
+  Pick<FraudReportTransaction, "type" | "executionDate" | "counterparty" | "amount">
+>;
+
 export type FakeTransaction = {
   id: string;
   accountId: string;
   notReportableReason?: DisputeCaseTransactionNotReportableReason;
   reportingWindowEndsAt?: string;
-} & ({ rail: "Card"; cardholderAccountMembershipId: string } | { rail: "Transfer" });
+} & FakeTransactionDetails &
+  ({ rail: "Card"; cardholderAccountMembershipId: string } | { rail: "Transfer" });
+
+export const createFakeTransaction = (
+  id: string,
+  rail: FraudReportRail,
+  details: FakeTransactionDetails = {},
+): FraudReportTransaction => ({
+  id,
+  rail,
+  type: details.type ?? (rail === "Card" ? "CardOutDebit" : "SepaCreditTransferOut"),
+  executionDate: details.executionDate ?? "2026-11-04T10:00:00.000Z",
+  counterparty: details.counterparty ?? "REWE",
+  amount: details.amount ?? { value: "10.00", currency: "EUR" },
+});
 
 export type FakeAccountMembership = { id: string; accountId: string };
 
@@ -358,7 +378,9 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
       id: existing?.id ?? crypto.randomUUID(),
       accountId,
       statusInfo: { status: "Draft", expiresAt: new Date(expiresAt).toISOString() },
-      transactions: transactions.map(({ id, rail }) => ({ id, rail })),
+      transactions: transactions.map(({ id, rail, type, executionDate, counterparty, amount }) =>
+        createFakeTransaction(id, rail, { type, executionDate, counterparty, amount }),
+      ),
       fraudDetails:
         input.fraudDetails === undefined
           ? (existing?.fraudDetails ?? null)

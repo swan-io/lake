@@ -3,6 +3,7 @@ import { describe, expect, expectTypeOf, test } from "vitest";
 import type { FraudReportApi, FraudReportApiError } from "../fraudReport/api";
 import {
   createFakeFraudReportApi,
+  createFakeTransaction,
   FakeFraudReportApiConfig,
   FakeTransaction,
 } from "../fraudReport/fakeApi";
@@ -415,12 +416,12 @@ describe("submit and cancel rejections", () => {
     const notReportableCase = {
       ...seeded,
       id: "case-1",
-      transactions: [{ id: "transfer-3", rail: "Transfer" as const }],
+      transactions: [createFakeTransaction("transfer-3", "Transfer")],
     };
     const outsideCase = {
       ...seeded,
       id: "case-2",
-      transactions: [{ id: "transfer-4", rail: "Transfer" as const }],
+      transactions: [createFakeTransaction("transfer-4", "Transfer")],
     };
     const api = createApi({ cases: [notReportableCase, outsideCase] });
 
@@ -521,7 +522,7 @@ describe("check order", () => {
     const outsideAndReported = {
       ...seeded,
       id: "case-1",
-      transactions: [{ id: "transfer-4", rail: "Transfer" as const }],
+      transactions: [createFakeTransaction("transfer-4", "Transfer")],
     };
     const api = createApi({
       cases: [outsideAndReported, { ...seeded, id: "case-2" }],
@@ -541,7 +542,7 @@ describe("check order", () => {
   test("submit: DisputeCaseTransactionsNotFoundRejection when a transaction can no longer be reported", async () => {
     const seeded = await draft(createApi(), { transactionIds: ["transfer-1"], fraudDetails });
     const api = createApi({
-      cases: [{ ...seeded, transactions: [{ id: "gone", rail: "Transfer" }] }],
+      cases: [{ ...seeded, transactions: [createFakeTransaction("gone", "Transfer")] }],
     });
     expect(getRejection(await api.submit({ disputeCaseId: seeded.id }))).toMatchObject({
       __typename: "DisputeCaseTransactionsNotFoundRejection",
@@ -604,8 +605,8 @@ describe("details and victim after a transaction change", () => {
       fraudCardDetails: { isLostOrStolen: true },
     });
     expect(created.transactions).toEqual([
-      { id: "card-1", rail: "Card" },
-      { id: "transfer-1", rail: "Transfer" },
+      createFakeTransaction("card-1", "Card"),
+      createFakeTransaction("transfer-1", "Transfer"),
     ]);
     const updated = getOk(
       await api.update({ disputeCaseId: created.id, transactionIds: ["transfer-1"] }),
@@ -680,16 +681,16 @@ describe("more precedence", () => {
           ...seeded,
           id: "case-1",
           transactions: [
-            { id: "gone", rail: "Transfer" },
-            { id: "transfer-3", rail: "Transfer" },
+            createFakeTransaction("gone", "Transfer"),
+            createFakeTransaction("transfer-3", "Transfer"),
           ],
         },
         {
           ...seeded,
           id: "case-2",
           transactions: [
-            { id: "transfer-3", rail: "Transfer" },
-            { id: "transfer-4", rail: "Transfer" },
+            createFakeTransaction("transfer-3", "Transfer"),
+            createFakeTransaction("transfer-4", "Transfer"),
           ],
         },
       ],

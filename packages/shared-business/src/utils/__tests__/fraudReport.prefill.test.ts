@@ -1,15 +1,11 @@
 import { describe, expect, test } from "vitest";
+import { createFakeTransaction } from "../fraudReport/fakeApi";
 import { toFormValues } from "../fraudReport/prefill";
 import { toUpdateInput } from "../fraudReport/toInput";
-import type {
-  FraudCardDetails,
-  FraudDetails,
-  FraudReportCase,
-  FraudReportTransaction,
-} from "../fraudReport/types";
+import type { FraudCardDetails, FraudDetails, FraudReportCase } from "../fraudReport/types";
 
-const card1: FraudReportTransaction = { id: "card-1", rail: "Card" };
-const transfer1: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
+const card1 = createFakeTransaction("card-1", "Card");
+const transfer1 = createFakeTransaction("transfer-1", "Transfer");
 
 const fraudDetails: FraudDetails = {
   reportedReason: "Manipulated",
