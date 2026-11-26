@@ -5,9 +5,10 @@ import type { FraudReportApi } from "../../utils/fraudReport/api";
 import {
   createFakeFraudReportApi,
   FakeFraudReportApiConfig,
+  FakeTransaction,
 } from "../../utils/fraudReport/fakeApi";
 import type { FraudReportFormValues } from "../../utils/fraudReport/toInput";
-import type { FraudReportTransaction } from "../../utils/fraudReport/types";
+import type { FraudReportRejection, FraudReportTransaction } from "../../utils/fraudReport/types";
 import { FraudReportFlowApi, useFraudReportFlow } from "../useFraudReportFlow";
 
 const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
@@ -21,17 +22,19 @@ const incident: Partial<FraudReportFormValues> = {
 
 type Call = { name: keyof FraudReportFlowApi; input: unknown };
 
+const seededTransactions = (): FakeTransaction[] => [
+  {
+    id: "card-1",
+    accountId: "account-1",
+    rail: "Card",
+    cardholderAccountMembershipId: "member-1",
+  },
+  { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+];
+
 const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
   const fake: FraudReportApi = createFakeFraudReportApi({
-    transactions: [
-      {
-        id: "card-1",
-        accountId: "account-1",
-        rail: "Card",
-        cardholderAccountMembershipId: "member-1",
-      },
-      { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
-    ],
+    transactions: seededTransactions(),
     accountMemberships: [
       { id: "member-1", accountId: "account-1" },
       { id: "member-2", accountId: "account-1" },
@@ -338,7 +341,7 @@ describe("victim", () => {
   });
 });
 
-describe("submit and errors", () => {
+describe("submit", () => {
   test("submits on the documents step and keeps the case ID for the submitted step", () => {
     const flow = setup();
     startReport(flow, { victim: "member-1", transactions: [card] });
@@ -356,39 +359,326 @@ describe("submit and errors", () => {
     expect(flow.result.current.step).toBe("Submitted");
     expect(flow.callNames()).toEqual(["draft", "update", "update", "submit"]);
   });
+});
 
-  test("stays on the step and exposes a rejection, until a Next succeeds", () => {
+const rejected = <Rejection extends FraudReportRejection>(rejection: Rejection) =>
+  Future.value(Result.Error({ kind: "rejection" as const, rejection }));
+
+const expectRejection = (flow: Flow, rejection: Partial<FraudReportRejection>) => {
+  expect(flow.result.current.error.toUndefined()).toEqual({
+    kind: "rejection",
+    rejection: expect.objectContaining(rejection),
+  });
+};
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+describe("rejections", () => {
+  test.each<{
+    name: string;
+    transactions: FakeTransaction[];
+    selection: FraudReportTransaction[];
+    fixedSelection: FraudReportTransaction[];
+    rejection: Partial<FraudReportRejection>;
+  }>([
+    {
+      name: "a transaction isn't found",
+      transactions: seededTransactions(),
+      selection: [{ id: "unknown", rail: "Card" }],
+      fixedSelection: [card],
+      rejection: { __typename: "DisputeCaseTransactionsNotFoundRejection" },
+    },
+    {
+      name: "the selection has too many transactions",
+      transactions: seededTransactions(),
+      selection: Array.from({ length: 101 }, (_, index) => ({ id: `card-${index}`, rail: "Card" })),
+      fixedSelection: [card],
+      rejection: {
+        __typename: "DisputeCaseTransactionsLimitExceededRejection",
+        maxTransactionCount: 100,
+      },
+    },
+    {
+      name: "a transaction can't be reported",
+      transactions: [
+        {
+          id: "card-1",
+          accountId: "account-1",
+          rail: "Card",
+          cardholderAccountMembershipId: "member-1",
+          notReportableReason: "TransactionTypeNotReportable",
+        },
+        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+      ],
+      selection: [card],
+      fixedSelection: [transfer],
+      rejection: { __typename: "DisputeCaseTransactionsNotReportableRejection" },
+    },
+    {
+      name: "the transactions belong to several accounts",
+      transactions: [
+        ...seededTransactions(),
+        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+      ],
+      selection: [transfer, { id: "transfer-2", rail: "Transfer" }],
+      fixedSelection: [transfer],
+      rejection: { __typename: "DisputeCaseMultipleAccountsRejection" },
+    },
+    {
+      name: "the cards belong to several cardholders",
+      transactions: [
+        ...seededTransactions(),
+        {
+          id: "card-2",
+          accountId: "account-1",
+          rail: "Card",
+          cardholderAccountMembershipId: "member-2",
+        },
+      ],
+      selection: [card, { id: "card-2", rail: "Card" }],
+      fixedSelection: [card],
+      rejection: { __typename: "DisputeCaseMultipleCardHoldersRejection" },
+    },
+  ])(
+    "keeps the user on the transactions step when $name, until a fixed selection is sent",
+    ({ transactions, selection, fixedSelection, rejection }) => {
+      const flow = setup({ transactions });
+      startReport(flow, { victim: "member-2", transactions: selection });
+
+      expect(flow.result.current.step).toBe("Transactions");
+      expectRejection(flow, rejection);
+      expect(flow.result.current.values.transactions).toEqual(selection);
+
+      flow.next({ transactions: fixedSelection });
+
+      expect(flow.result.current.step).toBe("Incident");
+      expect(flow.result.current.error.isNone()).toBe(true);
+    },
+  );
+
+  test("goes back to the victim step when the victim isn't found before the draft", () => {
     const flow = setup();
-    startReport(flow, { victim: "member-1", transactions: [{ id: "unknown", rail: "Card" }] });
+    startReport(flow, { victim: "member-unknown", transactions: [transfer] });
 
-    expect(flow.result.current.step).toBe("Transactions");
-    expect(flow.result.current.error.toUndefined()).toEqual({
-      kind: "rejection",
-      rejection: expect.objectContaining({
-        __typename: "DisputeCaseTransactionsNotFoundRejection",
-      }),
+    expect(flow.result.current.step).toBe("Victim");
+    expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });
+    expect(flow.result.current.values).toEqual({
+      victimAccountMembershipId: "member-unknown",
+      transactions: [transfer],
     });
 
-    flow.next({ transactions: [card] });
+    flow.next({ victimAccountMembershipId: "member-2" });
+    flow.next({ transactions: [transfer] });
 
     expect(flow.result.current.step).toBe("Incident");
     expect(flow.result.current.error.isNone()).toBe(true);
   });
 
-  test("stays on the documents step when the submit is rejected", () => {
+  test("goes back to the transactions step when a transaction can no longer be reported", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    vi.spyOn(flow.fake, "update").mockReturnValueOnce(
+      rejected({
+        __typename: "DisputeCaseTransactionsNotReportableRejection",
+        message: "Some transactions can't be reported",
+        transactions: [{ transactionId: "card-1", reason: "TransactionStatusNotReportable" }],
+      }),
+    );
+
+    flow.next(incident);
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expectRejection(flow, { __typename: "DisputeCaseTransactionsNotReportableRejection" });
+    expect(flow.result.current.values).toMatchObject(incident);
+  });
+
+  test("goes back to the transactions step when details don't apply to the selection", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    vi.spyOn(flow.fake, "update").mockReturnValueOnce(
+      rejected({
+        __typename: "DisputeCaseDetailsNotApplicableRejection",
+        message: "Some details don't apply to this case",
+        fields: [{ path: ["fraudCardDetails"] }],
+      }),
+    );
+
+    flow.next(incident);
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expectRejection(flow, { __typename: "DisputeCaseDetailsNotApplicableRejection" });
+  });
+
+  test("goes back to the incident step when the submitted case is incomplete", () => {
     const flow = setup();
     startReport(flow, { victim: "member-1", transactions: [card] });
     flow.next();
     flow.next();
     flow.next();
 
-    expect(flow.result.current.step).toBe("Documents");
-    expect(flow.result.current.error.toUndefined()).toEqual({
-      kind: "rejection",
-      rejection: expect.objectContaining({ __typename: "DisputeCaseIncompleteRejection" }),
+    expect(flow.callNames().at(-1)).toBe("submit");
+    expect(flow.result.current.step).toBe("Incident");
+    expectRejection(flow, {
+      __typename: "DisputeCaseIncompleteRejection",
+      missingFields: [{ path: ["fraudDetails"] }],
+    });
+
+    flow.next(incident);
+    expect(flow.result.current.step).toBe("Card");
+    expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test.each([
+    { reportedReason: "Manipulated", detailsSteps: ["Card", "Fraudster"], step: "Fraudster" },
+    { reportedReason: "Unauthorized", detailsSteps: ["Card"], step: "Incident" },
+  ] as const)(
+    "sends missing fraudster answers to $step when the report goes through $detailsSteps",
+    ({ reportedReason, detailsSteps, step }) => {
+      const flow = setup();
+      startReport(flow, { victim: "member-1", transactions: [card] });
+      flow.next({ ...incident, reportedReason });
+      for (const detailsStep of detailsSteps) {
+        expect(flow.result.current.step).toBe(detailsStep);
+        flow.next();
+      }
+      expect(flow.result.current.step).toBe("Documents");
+      vi.spyOn(flow.fake, "submit").mockReturnValueOnce(
+        rejected({
+          __typename: "DisputeCaseIncompleteRejection",
+          message: "The case is incomplete",
+          missingFields: [{ path: ["fraudDetails", "fraudsterChannels"] }],
+        }),
+      );
+
+      flow.next();
+
+      expect(flow.result.current.step).toBe(step);
+      expectRejection(flow, { __typename: "DisputeCaseIncompleteRejection" });
+    },
+  );
+
+  test("goes to the submitted step, with no error, when the case was submitted elsewhere", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    const disputeCaseId = flow.result.current.disputeCaseId.getOr("");
+    act(() => {
+      flow.fake.submit({ disputeCaseId });
+    });
+
+    flow.next({ isLostOrStolen: true });
+
+    expect(flow.callNames().at(-1)).toBe("update");
+    expect(flow.result.current.step).toBe("Submitted");
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.result.current.disputeCaseId.toUndefined()).toBe(disputeCaseId);
+  });
+
+  test.each<{
+    name: string;
+    config?: Partial<FakeFraudReportApiConfig>;
+    run: (flow: Flow) => void;
+    rejection: Partial<FraudReportRejection>;
+  }>([
+    {
+      name: "a transaction is outside its reporting window",
+      config: {
+        transactions: [
+          {
+            id: "transfer-1",
+            accountId: "account-1",
+            rail: "Transfer",
+            reportingWindowEndsAt: "2020-01-01T00:00:00.000Z",
+          },
+        ],
+      },
+      run: flow => startReport(flow, { victim: "member-2", transactions: [transfer] }),
+      rejection: { __typename: "DisputeCaseTransactionsOutsideReportingWindowRejection" },
+    },
+    {
+      name: "a transaction is already reported",
+      config: { alreadyReported: [{ transactionId: "card-1", disputeCaseId: null }] },
+      run: flow => {
+        startReport(flow, { victim: "member-1", transactions: [card] });
+        flow.next(incident);
+        flow.next();
+        flow.next();
+      },
+      rejection: { __typename: "DisputeCaseTransactionsAlreadyReportedRejection" },
+    },
+    {
+      name: "the victim isn't found once the draft exists",
+      config: {
+        transactions: [
+          ...seededTransactions(),
+          { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+        ],
+      },
+      run: flow => {
+        startReport(flow, { victim: "member-2", transactions: [transfer] });
+        flow.previous();
+        flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
+      },
+      rejection: { __typename: "AccountMembershipNotFoundRejection" },
+    },
+    {
+      name: "the case isn't found",
+      run: flow => {
+        startReport(flow, { victim: "member-1", transactions: [card] });
+        vi.spyOn(flow.fake, "update").mockReturnValueOnce(
+          rejected({
+            __typename: "DisputeCaseNotFoundRejection",
+            message: "Dispute case not found",
+            disputeCaseId: flow.result.current.disputeCaseId.getOr(""),
+          }),
+        );
+        flow.next(incident);
+      },
+      rejection: { __typename: "DisputeCaseNotFoundRejection" },
+    },
+  ])("ends the report on the rejected step when $name", ({ config, run, rejection }) => {
+    const flow = setup(config);
+    run(flow);
+
+    expect(flow.result.current.step).toBe("Rejected");
+    expectRejection(flow, rejection);
+  });
+
+  test("ends the report on the rejected step when the draft expired", () => {
+    let date = new Date("2026-11-26T10:00:00.000Z");
+    const flow = setup({ now: () => date });
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    date = new Date(date.getTime() + 31 * DAY_MS);
+
+    flow.next(incident);
+
+    expect(flow.result.current.step).toBe("Rejected");
+    expectRejection(flow, {
+      __typename: "DisputeCaseWrongStatusRejection",
+      currentStatus: "Expired",
     });
   });
 
+  test("stays on the rejected step with the values and the rejection, calling nothing", () => {
+    const flow = setup({ alreadyReported: [{ transactionId: "card-1", disputeCaseId: null }] });
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    flow.next();
+    flow.next();
+    const { values, error } = flow.result.current;
+    const callsBefore = flow.callNames();
+
+    flow.previous();
+    flow.next({ transactions: [transfer] });
+
+    expect(flow.result.current.step).toBe("Rejected");
+    expect(flow.result.current.values).toEqual(values);
+    expect(flow.result.current.error).toEqual(error);
+    expect(flow.callNames()).toEqual(callsBefore);
+  });
+});
+
+describe("errors", () => {
   test("stays on the step and exposes an error, cleared when going back", () => {
     const error = new Error("Network error");
     const flow = setup();
@@ -403,5 +693,44 @@ describe("submit and errors", () => {
 
     flow.previous();
     expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test.each([
+    { name: "a network error", error: new Error("Network error") },
+    { name: "a FORBIDDEN error", error: new Error("FORBIDDEN") },
+  ])("stays on the step and keeps the form on $name, then retries on Next", ({ error }) => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    vi.spyOn(flow.fake, "update").mockReturnValueOnce(
+      Future.value(Result.Error({ kind: "error" as const, error })),
+    );
+
+    flow.next({ isLostOrStolen: true });
+
+    expect(flow.result.current.step).toBe("Card");
+    expect(flow.result.current.error.toUndefined()).toEqual({ kind: "error", error });
+    expect(flow.result.current.values).toMatchObject({ ...incident, isLostOrStolen: true });
+
+    flow.next({ isLostOrStolen: true });
+
+    expect(flow.result.current.step).toBe("Documents");
+    expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test("stays on the step and keeps the form on a BAD_USER_INPUT error, then retries on Next", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, card] });
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expect(flow.result.current.error.toUndefined()).toEqual({
+      kind: "error",
+      error: expect.objectContaining({ message: expect.stringContaining("BAD_USER_INPUT") }),
+    });
+    expect(flow.result.current.values.transactions).toEqual([card, card]);
+
+    flow.next({ transactions: [card] });
+
+    expect(flow.result.current.step).toBe("Incident");
   });
 });

@@ -6,6 +6,7 @@ import type {
   FraudReportApiError,
   FraudReportApiResult,
 } from "../utils/fraudReport/api";
+import { getRejectionStep } from "../utils/fraudReport/rejections";
 import { FraudReportLayoutStep, getDetailsSteps } from "../utils/fraudReport/stepper";
 import {
   FraudReportFormValues,
@@ -21,7 +22,7 @@ import {
 
 export type FraudReportFlowApi = Pick<FraudReportApi, "draft" | "update" | "submit">;
 
-export type FraudReportFlowStep = "Intro" | FraudReportLayoutStep;
+export type FraudReportFlowStep = "Intro" | FraudReportLayoutStep | "Rejected";
 
 type FlowError = FraudReportApiError<FraudReportRejection>;
 
@@ -43,6 +44,8 @@ const initialState: State = {
   error: Option.None(),
 };
 
+const isFinalStep = (step: FraudReportFlowStep) => step === "Submitted" || step === "Rejected";
+
 const getSteps = (values: FraudReportFormValues) =>
   fraudReportSteps.flatMap((step): FraudReportFlowStep[] =>
     step === "Details" ? getDetailsSteps(values) : [step],
@@ -58,7 +61,7 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
 
   const next = useCallback(
     (input: Partial<FraudReportFormValues> = {}) => {
-      if (pending.current || state.saving || state.step === "Submitted") {
+      if (pending.current || state.saving || isFinalStep(state.step)) {
         return;
       }
 
@@ -113,7 +116,24 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
                 }));
               },
               Error: error => {
-                setState(current => ({ ...current, saving: false, error: Option.Some(error) }));
+                const step = match(error)
+                  .returnType<FraudReportFlowStep>()
+                  .with({ kind: "rejection" }, ({ rejection }) =>
+                    getRejectionStep(rejection, {
+                      hasDraft: state.savedCase.isSome(),
+                      detailsSteps: getDetailsSteps(values),
+                    }),
+                  )
+                  .with({ kind: "error" }, () => state.step)
+                  .exhaustive();
+
+                setState(current => ({
+                  ...current,
+                  saving: false,
+                  step,
+                  // Submitted elsewhere: the report reached Swan, so there's nothing to show
+                  error: step === "Submitted" ? Option.None() : Option.Some(error),
+                }));
               },
             });
           });
@@ -124,7 +144,7 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
   );
 
   const previous = useCallback(() => {
-    if (pending.current || state.saving || state.step === "Submitted") {
+    if (pending.current || state.saving || isFinalStep(state.step)) {
       return;
     }
 
