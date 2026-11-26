@@ -359,24 +359,6 @@ describe("submit", () => {
     expect(flow.result.current.step).toBe("Submitted");
     expect(flow.callNames()).toEqual(["draft", "update", "update", "submit"]);
   });
-
-  test("stays on the step and exposes a rejection, until a Next succeeds", () => {
-    const flow = setup();
-    startReport(flow, { victim: "member-1", transactions: [{ id: "unknown", rail: "Card" }] });
-
-    expect(flow.result.current.step).toBe("Transactions");
-    expect(flow.result.current.error.toUndefined()).toEqual({
-      kind: "rejection",
-      rejection: expect.objectContaining({
-        __typename: "DisputeCaseTransactionsNotFoundRejection",
-      }),
-    });
-
-    flow.next({ transactions: [card] });
-
-    expect(flow.result.current.step).toBe("Incident");
-    expect(flow.result.current.error.isNone()).toBe(true);
-  });
 });
 
 const rejected = <Rejection extends FraudReportRejection>(rejection: Rejection) =>
@@ -396,18 +378,21 @@ describe("rejections", () => {
     name: string;
     transactions: FakeTransaction[];
     selection: FraudReportTransaction[];
+    fixedSelection: FraudReportTransaction[];
     rejection: Partial<FraudReportRejection>;
   }>([
     {
       name: "a transaction isn't found",
       transactions: seededTransactions(),
       selection: [{ id: "unknown", rail: "Card" }],
+      fixedSelection: [card],
       rejection: { __typename: "DisputeCaseTransactionsNotFoundRejection" },
     },
     {
       name: "the selection has too many transactions",
       transactions: seededTransactions(),
       selection: Array.from({ length: 101 }, (_, index) => ({ id: `card-${index}`, rail: "Card" })),
+      fixedSelection: [card],
       rejection: {
         __typename: "DisputeCaseTransactionsLimitExceededRejection",
         maxTransactionCount: 100,
@@ -423,8 +408,10 @@ describe("rejections", () => {
           cardholderAccountMembershipId: "member-1",
           notReportableReason: "TransactionTypeNotReportable",
         },
+        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
       ],
       selection: [card],
+      fixedSelection: [transfer],
       rejection: { __typename: "DisputeCaseTransactionsNotReportableRejection" },
     },
     {
@@ -434,6 +421,7 @@ describe("rejections", () => {
         { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
       ],
       selection: [transfer, { id: "transfer-2", rail: "Transfer" }],
+      fixedSelection: [transfer],
       rejection: { __typename: "DisputeCaseMultipleAccountsRejection" },
     },
     {
@@ -448,17 +436,23 @@ describe("rejections", () => {
         },
       ],
       selection: [card, { id: "card-2", rail: "Card" }],
+      fixedSelection: [card],
       rejection: { __typename: "DisputeCaseMultipleCardHoldersRejection" },
     },
   ])(
-    "keeps the user on the transactions step when $name",
-    ({ transactions, selection, rejection }) => {
+    "keeps the user on the transactions step when $name, until a fixed selection is sent",
+    ({ transactions, selection, fixedSelection, rejection }) => {
       const flow = setup({ transactions });
       startReport(flow, { victim: "member-2", transactions: selection });
 
       expect(flow.result.current.step).toBe("Transactions");
       expectRejection(flow, rejection);
       expect(flow.result.current.values.transactions).toEqual(selection);
+
+      flow.next({ transactions: fixedSelection });
+
+      expect(flow.result.current.step).toBe("Incident");
+      expect(flow.result.current.error.isNone()).toBe(true);
     },
   );
 
@@ -481,13 +475,15 @@ describe("rejections", () => {
   });
 
   test("goes back to the transactions step when a transaction can no longer be reported", () => {
-    const transactions = seededTransactions();
-    const flow = setup({ transactions });
+    const flow = setup();
     startReport(flow, { victim: "member-1", transactions: [card] });
-    const [seededCard] = transactions;
-    if (seededCard != null) {
-      seededCard.notReportableReason = "TransactionStatusNotReportable";
-    }
+    vi.spyOn(flow.fake, "update").mockReturnValueOnce(
+      rejected({
+        __typename: "DisputeCaseTransactionsNotReportableRejection",
+        message: "Some transactions can't be reported",
+        transactions: [{ transactionId: "card-1", reason: "TransactionStatusNotReportable" }],
+      }),
+    );
 
     flow.next(incident);
 
@@ -541,10 +537,11 @@ describe("rejections", () => {
       const flow = setup();
       startReport(flow, { victim: "member-1", transactions: [card] });
       flow.next({ ...incident, reportedReason });
-      for (let index = 0; index < 4 && flow.result.current.step !== "Documents"; index++) {
+      for (const detailsStep of detailsSteps) {
+        expect(flow.result.current.step).toBe(detailsStep);
         flow.next();
       }
-      expect(flow.result.current.detailsSteps).toEqual(detailsSteps);
+      expect(flow.result.current.step).toBe("Documents");
       vi.spyOn(flow.fake, "submit").mockReturnValueOnce(
         rejected({
           __typename: "DisputeCaseIncompleteRejection",
