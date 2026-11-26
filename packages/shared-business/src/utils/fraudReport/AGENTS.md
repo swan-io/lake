@@ -18,6 +18,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - `components/FraudReport/`: the screens and the `FraudReport` component.
 - `__stories__/FraudReport.stories.tsx`: the whole flow, on the fake adapter. Each screen also has its own `__stories__/FraudReport<Screen>.stories.tsx`, with every state.
 - `utils/__tests__/fraudReport.<file>.test.ts`: unit tests of `utils/fraudReport/`. The flow hook's tests: `hooks/__tests__/useFraudReportFlow.test.ts`, on the fake adapter.
+- A screen's own interactions (a button calling its prop) are tested with a `play` function in its story, run by `pnpm test-a11y`. Turn the a11y check off on that story when another story of the screen already runs it.
 - Strings: `locales/`, keys prefixed `fraudReport.`.
 - Rejection messages: `rejection.<__typename>` keys, shown with `translateError(error.rejection)`. Passing the whole `FraudReportApiError` shows the generic error. `fraudReport.types.test.ts` checks that every rejection in `types.ts` has one.
 

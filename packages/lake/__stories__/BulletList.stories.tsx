@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { BulletList } from "../src/components/BulletList";
+import { LakeText } from "../src/components/LakeText";
 import { colors } from "../src/constants/design";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -28,6 +29,21 @@ export const Default = () => {
         <BulletList
           variant="smallRegular"
           items={["Legal representative details required", "Supporting documents required"]}
+        />
+      </StoryPart>
+
+      <StoryPart title="Rich text items">
+        <BulletList
+          items={[
+            <>
+              Report up to{" "}
+              <LakeText variant="medium" color={colors.gray[700]}>
+                100 transactions
+              </LakeText>{" "}
+              at a time.
+            </>,
+            "Plain text items still work.",
+          ]}
         />
       </StoryPart>
 

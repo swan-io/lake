@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { colors } from "../constants/design";
 import { Box } from "./Box";
@@ -11,7 +12,8 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
-  items: string[];
+  // Each item renders inside a LakeText: pass inline content only (strings, nested LakeText)
+  items: ReactNode[];
   color?: string;
   variant?: TextVariant;
   style?: StyleProp<ViewStyle>;
