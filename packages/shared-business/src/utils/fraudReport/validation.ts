@@ -27,6 +27,10 @@ export const validateTransactionIds: FraudReportValidator<string[]> = transactio
   }
 };
 
+export const validateSelected = <T>(
+  value: T | undefined,
+): FraudReportValidationError | undefined => (value == null ? "Required" : undefined);
+
 export const validateNotInFuture: FraudReportValidator<string | undefined> = value => {
   if (value == null || value === "") {
     return;
