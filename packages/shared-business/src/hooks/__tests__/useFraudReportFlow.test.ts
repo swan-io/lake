@@ -8,7 +8,11 @@ import {
   FakeTransaction,
 } from "../../utils/fraudReport/fakeApi";
 import type { FraudReportFormValues } from "../../utils/fraudReport/toInput";
-import type { FraudReportRejection, FraudReportTransaction } from "../../utils/fraudReport/types";
+import type {
+  FraudReportCase,
+  FraudReportRejection,
+  FraudReportTransaction,
+} from "../../utils/fraudReport/types";
 import { FraudReportFlowApi, useFraudReportFlow } from "../useFraudReportFlow";
 
 const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
@@ -57,17 +61,25 @@ const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
       calls.push({ name: "submit", input });
       return fake.submit(input);
     },
+    cancel: input => {
+      calls.push({ name: "cancel", input });
+      return fake.cancel(input);
+    },
   };
 
-  const { result } = renderHook(() => useFraudReportFlow({ api }));
+  const onExit = vi.fn();
+  const { result, unmount } = renderHook(() => useFraudReportFlow({ api, onExit }));
 
   return {
     result,
     fake,
     calls,
+    onExit,
+    unmount,
     callNames: () => calls.map(({ name }) => name),
     next: (values?: Partial<FraudReportFormValues>) => act(() => result.current.next(values)),
     previous: () => act(() => result.current.previous()),
+    cancel: () => act(() => result.current.cancel()),
   };
 };
 
@@ -732,5 +744,217 @@ describe("errors", () => {
     flow.next({ transactions: [card] });
 
     expect(flow.result.current.step).toBe("Incident");
+  });
+});
+
+const expectReset = (flow: Flow) => {
+  expect(flow.result.current).toMatchObject({ step: "Intro", values: { transactions: [] } });
+  expect(flow.result.current.disputeCaseId.isNone()).toBe(true);
+  expect(flow.result.current.error.isNone()).toBe(true);
+};
+
+const getStatus = (flow: Flow, disputeCaseId = "") => {
+  let status: string | undefined;
+  flow.fake.getCase({ disputeCaseId }).onResolve(result => {
+    status = result
+      .toOption()
+      .flatMap(item => item)
+      .toUndefined()?.statusInfo.status;
+  });
+  return status;
+};
+
+describe("cancel", () => {
+  test("leaves without calling the API before the draft exists", () => {
+    const flow = setup();
+    flow.next();
+    flow.next({ victimAccountMembershipId: "member-1" });
+
+    flow.cancel();
+
+    expect(flow.callNames()).toEqual([]);
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
+  });
+
+  test("cancels the draft through the adapter, then leaves", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    const disputeCaseId = flow.result.current.disputeCaseId.toUndefined();
+
+    flow.cancel();
+
+    expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
+    expect(flow.calls.at(-1)).toEqual({ name: "cancel", input: { disputeCaseId } });
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
+    expect(flow.result.current.saving).toBe(false);
+  });
+
+  test("leaves when the draft was already canceled", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.result.current.disputeCaseId.tapSome(disputeCaseId => {
+      flow.fake.cancel({ disputeCaseId });
+    });
+
+    flow.cancel();
+
+    expect(flow.callNames()).toEqual(["draft", "cancel"]);
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
+  });
+
+  test("moves to the submitted step without an error when the case was submitted elsewhere", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    flow.result.current.disputeCaseId.tapSome(disputeCaseId => {
+      flow.fake.submit({ disputeCaseId });
+    });
+
+    flow.cancel();
+
+    expect(flow.result.current.step).toBe("Submitted");
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test("ends the report on the rejected step when the draft expired", () => {
+    let date = new Date("2026-11-26T10:00:00.000Z");
+    const flow = setup({ now: () => date });
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    date = new Date(date.getTime() + 31 * DAY_MS);
+
+    flow.cancel();
+
+    expect(flow.result.current.step).toBe("Rejected");
+    expectRejection(flow, {
+      __typename: "DisputeCaseWrongStatusRejection",
+      currentStatus: "Expired",
+    });
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test("ends the report on the rejected step when the case isn't found", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    vi.spyOn(flow.fake, "cancel").mockReturnValueOnce(
+      rejected({
+        __typename: "DisputeCaseNotFoundRejection",
+        disputeCaseId: "case-1",
+        message: "",
+      }),
+    );
+
+    flow.cancel();
+
+    expect(flow.result.current.step).toBe("Rejected");
+    expectRejection(flow, { __typename: "DisputeCaseNotFoundRejection" });
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    { name: "a network error", error: new Error("Network error") },
+    { name: "a FORBIDDEN error", error: new Error("FORBIDDEN") },
+  ])("stays on the step and keeps the form on $name, then retries", ({ error }) => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    const disputeCaseId = flow.result.current.disputeCaseId.toUndefined();
+    vi.spyOn(flow.fake, "cancel").mockReturnValueOnce(
+      Future.value(Result.Error({ kind: "error" as const, error })),
+    );
+
+    flow.cancel();
+
+    expect(flow.result.current.step).toBe("Card");
+    expect(flow.result.current.error.toUndefined()).toEqual({ kind: "error", error });
+    expect(flow.result.current.values).toMatchObject(incident);
+    expect(flow.onExit).not.toHaveBeenCalled();
+
+    flow.cancel();
+
+    expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+  });
+
+  test("does nothing while a call is pending", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    vi.spyOn(flow.fake, "update").mockReturnValueOnce(Future.make(() => {}));
+    flow.next(incident);
+
+    flow.cancel();
+
+    expect(flow.callNames()).toEqual(["draft", "update"]);
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test("doesn't leave when the cancel ends after the flow is gone", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    let resolve: (value: Result<FraudReportCase, never>) => void = () => {};
+    vi.spyOn(flow.fake, "cancel").mockReturnValueOnce(
+      Future.make(resolver => {
+        resolve = resolver;
+      }),
+    );
+
+    flow.cancel();
+    flow.unmount();
+    resolve(Result.Ok({} as FraudReportCase));
+
+    expect(flow.callNames()).toEqual(["draft", "cancel"]);
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test("clears the last error and does nothing else while a cancel is pending", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    vi.spyOn(flow.fake, "cancel")
+      .mockReturnValueOnce(
+        Future.value(Result.Error({ kind: "error" as const, error: new Error("Network error") })),
+      )
+      .mockReturnValueOnce(Future.make(() => {}));
+    flow.cancel();
+
+    flow.cancel();
+    flow.cancel();
+    flow.next(incident);
+
+    expect(flow.callNames()).toEqual(["draft", "cancel", "cancel"]);
+    expect(flow.result.current.saving).toBe(true);
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.onExit).not.toHaveBeenCalled();
+  });
+
+  test.each([
+    {
+      name: "submitted",
+      config: {},
+      step: "Submitted",
+    },
+    {
+      name: "rejected",
+      config: { alreadyReported: [{ transactionId: "card-1", disputeCaseId: null }] },
+      step: "Rejected",
+    },
+  ])("leaves the $name step without calling the API", ({ config, step }) => {
+    const flow = setup(config);
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.next(incident);
+    flow.next({ isLostOrStolen: true });
+    flow.next();
+    expect(flow.result.current.step).toBe(step);
+    const callsBefore = flow.callNames();
+
+    flow.cancel();
+
+    expect(flow.callNames()).toEqual(callsBefore);
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
   });
 });

@@ -1,5 +1,5 @@
 import { Option } from "@bloodyowl/boxed";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import type {
   FraudReportApi,
@@ -20,7 +20,7 @@ import {
   fraudReportSteps,
 } from "../utils/fraudReport/types";
 
-export type FraudReportFlowApi = Pick<FraudReportApi, "draft" | "update" | "submit">;
+export type FraudReportFlowApi = Pick<FraudReportApi, "draft" | "update" | "submit" | "cancel">;
 
 export type FraudReportFlowStep = "Intro" | FraudReportLayoutStep | "Rejected";
 
@@ -46,14 +46,56 @@ const initialState: State = {
 
 const isFinalStep = (step: FraudReportFlowStep) => step === "Submitted" || step === "Rejected";
 
+const getErrorChange = (
+  state: State,
+  values: FraudReportFormValues,
+  error: FlowError,
+): Pick<State, "step" | "error"> => {
+  const step = match(error)
+    .returnType<FraudReportFlowStep>()
+    .with({ kind: "rejection" }, ({ rejection }) =>
+      getRejectionStep(rejection, {
+        hasDraft: state.savedCase.isSome(),
+        detailsSteps: getDetailsSteps(values),
+      }),
+    )
+    .with({ kind: "error" }, () => state.step)
+    .exhaustive();
+
+  return {
+    step,
+    // Submitted elsewhere: the report reached Swan, so there's nothing to show
+    error: step === "Submitted" ? Option.None() : Option.Some(error),
+  };
+};
+
 const getSteps = (values: FraudReportFormValues) =>
   fraudReportSteps.flatMap((step): FraudReportFlowStep[] =>
     step === "Details" ? getDetailsSteps(values) : [step],
   );
 
-export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
+export const useFraudReportFlow = ({
+  api,
+  onExit,
+}: {
+  api: FraudReportFlowApi;
+  onExit: () => void;
+}) => {
   const [state, setState] = useState(initialState);
   const pending = useRef(false);
+  const mounted = useRef(false);
+  const onExitRef = useRef(onExit);
+
+  useLayoutEffect(() => {
+    onExitRef.current = onExit;
+  });
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     pending.current = state.saving;
@@ -116,23 +158,10 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
                 }));
               },
               Error: error => {
-                const step = match(error)
-                  .returnType<FraudReportFlowStep>()
-                  .with({ kind: "rejection" }, ({ rejection }) =>
-                    getRejectionStep(rejection, {
-                      hasDraft: state.savedCase.isSome(),
-                      detailsSteps: getDetailsSteps(values),
-                    }),
-                  )
-                  .with({ kind: "error" }, () => state.step)
-                  .exhaustive();
-
                 setState(current => ({
                   ...current,
                   saving: false,
-                  step,
-                  // Submitted elsewhere: the report reached Swan, so there's nothing to show
-                  error: step === "Submitted" ? Option.None() : Option.Some(error),
+                  ...getErrorChange(state, values, error),
                 }));
               },
             });
@@ -155,6 +184,46 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
     });
   }, [state]);
 
+  const cancel = useCallback(() => {
+    if (pending.current || state.saving) {
+      return;
+    }
+
+    // A cancel that ends after the user left must not take them away from where they went
+    const exit = () => {
+      if (mounted.current) {
+        setState(initialState);
+        onExitRef.current();
+      }
+    };
+
+    // The report is over: leave, and let any draft left behind expire
+    const disputeCaseId = isFinalStep(state.step)
+      ? Option.None<string>()
+      : state.savedCase.map(({ id }) => id);
+
+    disputeCaseId.match({
+      None: exit,
+      Some: disputeCaseId => {
+        pending.current = true;
+        setState(current => ({ ...current, saving: true, error: Option.None() }));
+
+        api.cancel({ disputeCaseId }).onResolve(result => {
+          result.match({
+            Ok: exit,
+            Error: error => {
+              setState(current => ({
+                ...current,
+                saving: false,
+                ...getErrorChange(state, state.values, error),
+              }));
+            },
+          });
+        });
+      },
+    });
+  }, [api, state]);
+
   return {
     step: state.step,
     detailsSteps: getDetailsSteps(state.values),
@@ -164,5 +233,6 @@ export const useFraudReportFlow = ({ api }: { api: FraudReportFlowApi }) => {
     error: state.error,
     next,
     previous,
+    cancel,
   };
 };
