@@ -176,23 +176,25 @@ export const useFraudReportFlow = ({
       return;
     }
 
+    const exit = () => {
+      setState(initialState);
+      onExit();
+    };
+
     // The report is over: leave, and let any draft left behind expire
     const disputeCaseId = isFinalStep(state.step)
       ? Option.None<string>()
       : state.savedCase.map(({ id }) => id);
 
     disputeCaseId.match({
-      None: onExit,
+      None: exit,
       Some: disputeCaseId => {
         pending.current = true;
         setState(current => ({ ...current, saving: true, error: Option.None() }));
 
         api.cancel({ disputeCaseId }).onResolve(result => {
           result.match({
-            Ok: () => {
-              setState(initialState);
-              onExit();
-            },
+            Ok: exit,
             Error: error => {
               setState(current => ({
                 ...current,

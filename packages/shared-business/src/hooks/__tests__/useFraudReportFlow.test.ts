@@ -742,6 +742,12 @@ describe("errors", () => {
   });
 });
 
+const expectReset = (flow: Flow) => {
+  expect(flow.result.current).toMatchObject({ step: "Intro", values: { transactions: [] } });
+  expect(flow.result.current.disputeCaseId.isNone()).toBe(true);
+  expect(flow.result.current.error.isNone()).toBe(true);
+};
+
 const getStatus = (flow: Flow, disputeCaseId = "") => {
   let status: string | undefined;
   flow.fake.getCase({ disputeCaseId }).onResolve(result => {
@@ -763,6 +769,7 @@ describe("cancel", () => {
 
     expect(flow.callNames()).toEqual([]);
     expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
   });
 
   test("cancels the draft through the adapter, then leaves", () => {
@@ -776,8 +783,7 @@ describe("cancel", () => {
     expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
     expect(flow.calls.at(-1)).toEqual({ name: "cancel", input: { disputeCaseId } });
     expect(flow.onExit).toHaveBeenCalledTimes(1);
-    expect(flow.result.current).toMatchObject({ step: "Intro", values: { transactions: [] } });
-    expect(flow.result.current.disputeCaseId.isNone()).toBe(true);
+    expectReset(flow);
     expect(flow.result.current.saving).toBe(false);
   });
 
@@ -792,6 +798,7 @@ describe("cancel", () => {
 
     expect(flow.callNames()).toEqual(["draft", "cancel"]);
     expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
   });
 
   test("moves to the submitted step without an error when the case was submitted elsewhere", () => {
@@ -925,5 +932,6 @@ describe("cancel", () => {
 
     expect(flow.callNames()).toEqual(callsBefore);
     expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expectReset(flow);
   });
 });
