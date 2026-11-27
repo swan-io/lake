@@ -1,4 +1,4 @@
-import { Lazy, Result } from "@bloodyowl/boxed";
+import { Lazy, Option, Result } from "@bloodyowl/boxed";
 import { isNullish } from "@swan-io/lake/src/utils/nullish";
 import {
   E164Number,
@@ -6,11 +6,56 @@ import {
   isSupportedCountry,
   parsePhoneNumberWithError,
 } from "libphonenumber-js";
-import { Country, getCountryByCCA2, isCountryCCA2 } from "../constants/countries";
-import { getMostLikelyUserCountry } from "./localization";
+import {
+  Country,
+  CountryCCA3,
+  france,
+  getCountryByCCA2,
+  getCountryByCCA3,
+  isCountryCCA2,
+  phoneMarketCountries,
+} from "../constants/countries";
+
+const phoneMarketByLanguage: Partial<Record<string, CountryCCA3>> = {
+  fr: "FRA",
+  de: "DEU",
+  es: "ESP",
+  it: "ITA",
+  nl: "NLD",
+  pt: "PRT",
+};
+
+// A region that is one of our markets wins (nl-BE → Belgium), otherwise the language decides
+// (de-AT → Germany). Belgium has no language of its own, so only its region leads to it
+const getPhoneMarket = (languageTag: string): Option<Country> =>
+  Result.fromExecution(() => new Intl.Locale(languageTag))
+    .toOption()
+    .flatMap(({ language, region }) =>
+      Option.fromNullable(region)
+        .filter(isCountryCCA2)
+        .map(getCountryByCCA2)
+        .filter(country => phoneMarketCountries.includes(country.cca3))
+        .orElse(Option.fromNullable(phoneMarketByLanguage[language]).map(getCountryByCCA3)),
+    );
+
+// Swan operates in a handful of markets, most users being in France: preselect the first
+// market matching the browser languages, France otherwise
+export const getDefaultPhoneCountry = (
+  languages: readonly string[] = navigator.languages,
+): Country => {
+  for (const languageTag of languages) {
+    const market = getPhoneMarket(languageTag);
+
+    if (market.isSome()) {
+      return market.get();
+    }
+  }
+
+  return france;
+};
 
 export const parsePhoneNumber = (value?: string): { country: Country; nationalNumber: string } => {
-  const fallback = Lazy(() => ({ country: getMostLikelyUserCountry(), nationalNumber: "" }));
+  const fallback = Lazy(() => ({ country: getDefaultPhoneCountry(), nationalNumber: "" }));
 
   if (isNullish(value) || value.trim() === "") {
     return fallback.get();

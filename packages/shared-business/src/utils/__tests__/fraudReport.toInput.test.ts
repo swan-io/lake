@@ -1,15 +1,10 @@
 import { Option, Result } from "@bloodyowl/boxed";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { createFakeFraudReportApi } from "../fraudReport/fakeApi";
+import { createFakeFraudReportApi, createFakeTransaction } from "../fraudReport/fakeApi";
 import { toFormValues } from "../fraudReport/prefill";
 import { getCaseRail, getTransactionRail } from "../fraudReport/rail";
 import { FraudReportFormValues, toDraftInput, toUpdateInput } from "../fraudReport/toInput";
-import type {
-  FraudCardDetails,
-  FraudDetails,
-  FraudReportCase,
-  FraudReportTransaction,
-} from "../fraudReport/types";
+import type { FraudCardDetails, FraudDetails, FraudReportCase } from "../fraudReport/types";
 import {
   validateDescription,
   validateDiscoveryDetails,
@@ -20,10 +15,10 @@ import {
   validateTransactionIds,
 } from "../fraudReport/validation";
 
-const card1: FraudReportTransaction = { id: "card-1", rail: "Card" };
-const card2: FraudReportTransaction = { id: "card-2", rail: "Card" };
-const transfer1: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
-const transfer2: FraudReportTransaction = { id: "transfer-2", rail: "Transfer" };
+const card1 = createFakeTransaction("card-1", "CardOutDebit");
+const card2 = createFakeTransaction("card-2", "CardOutDebit");
+const transfer1 = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
+const transfer2 = createFakeTransaction("transfer-2", "SepaCreditTransferOut");
 
 const DESCRIPTION_REGEX = /^(?=[\s\S]*\S)[\s\S]{1,2000}$/;
 const DISCOVERY_DETAILS_REGEX = /^(?=[\s\S]*\S)[\s\S]{1,1000}$/;
@@ -644,10 +639,10 @@ describe("inputs sent to the API", () => {
         {
           id: "card-1",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-2",
         },
-        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+        { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
       ],
       accountMemberships: [
         { id: "member-1", accountId: "account-1" },
