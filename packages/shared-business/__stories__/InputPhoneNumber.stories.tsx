@@ -6,6 +6,7 @@ import { useForm } from "@swan-io/use-form";
 import { StyleSheet, View } from "react-native";
 import { InputPhoneNumber } from "../src/components/InputPhoneNumber";
 import { Country, getCountryByCCA3 } from "../src/constants/countries";
+import { getDefaultPhoneCountry } from "../src/utils/phone";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
 const styles = StyleSheet.create({
@@ -98,6 +99,13 @@ export const Variations = () => (
   <StoryBlock title="InputPhoneNumber variations">
     <StoryPart title="Default (France)">
       <PhoneNumberForm />
+    </StoryPart>
+
+    <StoryPart title="Default from the browser language">
+      <PhoneNumberForm
+        initialCountry={getDefaultPhoneCountry()}
+        help={`Browser languages: ${navigator.languages.join(", ")}`}
+      />
     </StoryPart>
 
     <StoryPart title="With initial value">
