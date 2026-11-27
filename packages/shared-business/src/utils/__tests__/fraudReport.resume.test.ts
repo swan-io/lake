@@ -48,8 +48,21 @@ describe("getResumeStep", () => {
   });
 
   test.each<{ name: string; values: Partial<FraudReportFormValues> }>([
-    { name: "no channel", values: { sharedInformationWithFraudster: ["None"] } },
-    { name: "nothing shared", values: { fraudsterChannels: ["Phone"] } },
+    { name: "only the shared information", values: { sharedInformationWithFraudster: ["None"] } },
+    { name: "only the channels", values: { fraudsterChannels: ["Phone"] } },
+  ])("skips the fraudster sub-step answered with $name", ({ values }) => {
+    expect(
+      getResumeStep({
+        transactions: [transfer],
+        ...incident,
+        reportedReason: "Manipulated",
+        ...values,
+      }),
+    ).toBe("Documents");
+  });
+
+  test.each<{ name: string; values: Partial<FraudReportFormValues> }>([
+    { name: "no answer", values: {} },
     { name: "empty lists", values: { fraudsterChannels: [], sharedInformationWithFraudster: [] } },
   ])("opens the fraudster sub-step with $name", ({ values }) => {
     expect(

@@ -19,7 +19,7 @@ const isDetailsStepAnswered = (step: FraudReportDetailsStep, values: FraudReport
     .with(
       "Fraudster",
       () =>
-        toFilledList(values.fraudsterChannels).isSome() &&
+        toFilledList(values.fraudsterChannels).isSome() ||
         toFilledList(values.sharedInformationWithFraudster).isSome(),
     )
     .exhaustive();
