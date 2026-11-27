@@ -1,11 +1,13 @@
 import { Option } from "@bloodyowl/boxed";
 import { describe, expect, test } from "vitest";
+import { createFakeTransaction } from "../fraudReport/fakeApi";
 import {
   FraudReportAccountMembership,
   getInitialVictimChoice,
   getOtherAccountMemberships,
   getSelectedAccountMembershipId,
   getVictimAccountMembershipId,
+  getVictimChange,
   VictimAnswer,
 } from "../fraudReport/victim";
 
@@ -186,5 +188,40 @@ describe("getVictimAccountMembershipId", () => {
         choice: choiceOf(undefined, selectedId),
       }).toUndefined(),
     ).toBe(victim);
+  });
+});
+
+describe("getVictimChange", () => {
+  const card = createFakeTransaction("card-1", "CardOutDebit");
+  const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
+
+  test("removes the card transactions when the victim changes", () => {
+    expect(
+      getVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: "member-1",
+        victimAccountMembershipId: "member-2",
+      }),
+    ).toEqual({ changed: true, removed: [card], kept: [transfer] });
+  });
+
+  test("removes nothing when the victim stays the same", () => {
+    expect(
+      getVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: "member-1",
+        victimAccountMembershipId: "member-1",
+      }),
+    ).toEqual({ changed: false, removed: [], kept: [card, transfer] });
+  });
+
+  test("removes the card transactions when the previous victim isn't known", () => {
+    expect(
+      getVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: undefined,
+        victimAccountMembershipId: "member-2",
+      }),
+    ).toEqual({ changed: true, removed: [card], kept: [transfer] });
   });
 });

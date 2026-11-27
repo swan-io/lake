@@ -1,7 +1,8 @@
 import { Option } from "@bloodyowl/boxed";
 import { match } from "ts-pattern";
+import type { FraudReportTransaction } from "./types";
 
-export type FraudReportAccountMembership = { id: string; name: string };
+export type FraudReportAccountMembership = { id: string; name: string; phoneNumber?: string };
 
 export type VictimAnswer = "Myself" | "SomeoneElse";
 
@@ -83,4 +84,24 @@ export const getVictimAccountMembershipId = ({
           .exhaustive(),
       ),
   });
+};
+
+export const getVictimChange = ({
+  transactions,
+  previousVictimAccountMembershipId,
+  victimAccountMembershipId,
+}: {
+  transactions: FraudReportTransaction[];
+  previousVictimAccountMembershipId: string | undefined;
+  victimAccountMembershipId: string | undefined;
+}) => {
+  const changed =
+    victimAccountMembershipId != null &&
+    previousVictimAccountMembershipId !== victimAccountMembershipId;
+
+  return {
+    changed,
+    removed: changed ? transactions.filter(({ rail }) => rail === "Card") : [],
+    kept: changed ? transactions.filter(({ rail }) => rail !== "Card") : transactions,
+  };
 };

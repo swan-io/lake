@@ -21,6 +21,7 @@ import {
   FraudReportRejection,
   fraudReportSteps,
 } from "../utils/fraudReport/types";
+import { getVictimChange } from "../utils/fraudReport/victim";
 
 export type FraudReportFlowApi = Pick<
   FraudReportApi,
@@ -73,7 +74,6 @@ const getErrorChange = (
     .returnType<FraudReportFlowStep>()
     .with({ kind: "rejection" }, ({ rejection }) =>
       getRejectionStep(rejection, {
-        hasDraft: state.savedCase.isSome(),
         detailsSteps: getDetailsSteps(values),
       }),
     )
@@ -170,11 +170,21 @@ export const useFraudReportFlow = ({
         return;
       }
 
-      const { victimAccountMembershipId: _, ...inputWithoutVictim } = input;
-      const values: FraudReportFormValues = {
-        ...state.values,
-        ...(state.savedCase.isNone() ? input : inputWithoutVictim),
-      };
+      const merged: FraudReportFormValues = { ...state.values, ...input };
+      const { changed, kept } = getVictimChange({
+        transactions: merged.transactions,
+        previousVictimAccountMembershipId: state.values.victimAccountMembershipId,
+        victimAccountMembershipId: input.victimAccountMembershipId,
+      });
+
+      const values: FraudReportFormValues = changed
+        ? {
+            ...merged,
+            transactions: kept,
+            isLostOrStolen: undefined,
+            lostOrStolenNoticedAt: undefined,
+          }
+        : merged;
 
       const steps = getSteps(values);
       const nextStep = Option.fromUndefined(steps[steps.indexOf(state.step) + 1]).getOr(state.step);

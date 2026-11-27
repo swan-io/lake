@@ -110,6 +110,13 @@ const startReport = (
   flow.next({ transactions });
 };
 
+const goBackTo = (flow: Flow, step: string) => {
+  for (let index = 0; index < 10 && flow.result.current.step !== step; index++) {
+    flow.previous();
+  }
+  expect(flow.result.current.step).toBe(step);
+};
+
 afterEach(() => {
   vi.useRealTimers();
 });
@@ -338,22 +345,84 @@ describe("victim", () => {
     expect(flow.result.current).not.toHaveProperty("victimAccountMembershipId");
   });
 
-  test("keeps the victim once the draft exists", () => {
+  test("changes the victim once the draft exists, without the previous victim's card transactions", () => {
     const flow = setup();
-    startReport(flow, { victim: "member-2", transactions: [transfer] });
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
     flow.previous();
     flow.previous();
     expect(flow.result.current.step).toBe("Victim");
-    expect(flow.result.current.values.victimAccountMembershipId).toBe("member-2");
 
-    flow.next({ victimAccountMembershipId: "member-1" });
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expect(flow.result.current.values.victimAccountMembershipId).toBe("member-2");
+    expect(flow.result.current.values.transactions).toEqual([transfer]);
+    expect(flow.callNames()).toEqual(["draft"]);
+
     flow.next({ transactions: [transfer] });
 
-    expect(flow.result.current.values.victimAccountMembershipId).toBe("member-2");
+    expect(flow.result.current.error.isNone()).toBe(true);
     expect(flow.calls.at(-1)).toEqual({
       name: "update",
-      input: expect.objectContaining({ victimAccountMembershipId: "member-2" }),
+      input: expect.objectContaining({
+        transactionIds: ["transfer-1"],
+        victimAccountMembershipId: "member-2",
+      }),
     });
+  });
+
+  test("leaves no transaction selected when the previous victim only had card transactions", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    flow.previous();
+    flow.previous();
+
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expect(flow.result.current.values.transactions).toEqual([]);
+    expect(flow.callNames()).toEqual(["draft"]);
+  });
+
+  test("clears the previous victim's card answers when the victim changes", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
+    flow.next(incident);
+    flow.next({ isLostOrStolen: true, lostOrStolenNoticedAt: "2026-11-01" });
+    goBackTo(flow, "Victim");
+
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.values).toMatchObject(incident);
+    expect(flow.result.current.values.isLostOrStolen).toBeUndefined();
+    expect(flow.result.current.values.lostOrStolenNoticedAt).toBeUndefined();
+  });
+
+  test("clears the previous victim's card answers when the victim changes with only transfers selected", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
+    flow.next(incident);
+    flow.next({ isLostOrStolen: true, lostOrStolenNoticedAt: "2026-11-01" });
+    goBackTo(flow, "Transactions");
+    flow.next({ transactions: [transfer] });
+    goBackTo(flow, "Victim");
+
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.values.transactions).toEqual([transfer]);
+    expect(flow.result.current.values.isLostOrStolen).toBeUndefined();
+    expect(flow.result.current.values.lostOrStolenNoticedAt).toBeUndefined();
+  });
+
+  test("keeps the selection when the victim stays the same", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
+    flow.previous();
+    flow.previous();
+
+    flow.next({ victimAccountMembershipId: "member-1" });
+
+    expect(flow.result.current.values.transactions).toEqual([card, transfer]);
   });
 
   test("sends the victim on a transfer-only case", () => {
@@ -637,21 +706,6 @@ describe("rejections", () => {
       rejection: { __typename: "DisputeCaseTransactionsAlreadyReportedRejection" },
     },
     {
-      name: "the victim isn't found once the draft exists",
-      config: {
-        transactions: [
-          ...seededTransactions(),
-          { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
-        ],
-      },
-      run: flow => {
-        startReport(flow, { victim: "member-2", transactions: [transfer] });
-        flow.previous();
-        flow.next({ transactions: [createFakeTransaction("transfer-2", "SepaCreditTransferOut")] });
-      },
-      rejection: { __typename: "AccountMembershipNotFoundRejection" },
-    },
-    {
       name: "the case isn't found",
       run: flow => {
         startReport(flow, { victim: "member-1", transactions: [card] });
@@ -672,6 +726,21 @@ describe("rejections", () => {
 
     expect(flow.result.current.step).toBe("Rejected");
     expectRejection(flow, rejection);
+  });
+
+  test("goes back to the victim step when the victim isn't found once the draft exists", () => {
+    const flow = setup({
+      transactions: [
+        ...seededTransactions(),
+        { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
+      ],
+    });
+    startReport(flow, { victim: "member-2", transactions: [transfer] });
+    flow.previous();
+    flow.next({ transactions: [createFakeTransaction("transfer-2", "SepaCreditTransferOut")] });
+
+    expect(flow.result.current.step).toBe("Victim");
+    expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });
   });
 
   test("ends the report on the rejected step when the draft expired", () => {
