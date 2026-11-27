@@ -1,0 +1,6 @@
+import{i as e}from"./preload-helper-CCSz8wUY.js";import{J as t,ht as n,o as r,s as i,vt as a}from"./ScrollView-ChBvlOEV.js";import{n as o,r as s,t as c}from"./_StoriesComponents-YlLPzTrC.js";import{n as l,r as u}from"./types-imy6TUil.js";var d,f,p,m;e((()=>{i(),a(),u(),s(),d=t(),f={title:`Fraud report/FraudReport`},p=()=>(0,d.jsx)(c,{title:`Fraud report`,description:[`Report fraudulent transactions to Swan`],children:(0,d.jsx)(o,{title:`Steps`,children:(0,d.jsx)(r,{color:n.gray[900],children:l.join(` → `)})})}),p.__docgenInfo={description:``,methods:[],displayName:`Steps`},p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`() => <StoryBlock title="Fraud report" description={["Report fraudulent transactions to Swan"]}>
+    <StoryPart title="Steps">
+      <LakeText color={colors.gray[900]}>{fraudReportSteps.join(" → ")}</LakeText>
+    </StoryPart>
+  </StoryBlock>`,...p.parameters?.docs?.source}}},m=[`Steps`]}))();export{p as Steps,m as __namedExportsOrder,f as default};
+//# sourceMappingURL=FraudReport.stories-BMSwdKzY.js.map
