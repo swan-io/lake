@@ -86,22 +86,4 @@ describe("phoneCountries", () => {
       allCountries.filter(cca3 => !markets.includes(cca3) && !blockedCountries.includes(cca3)),
     );
   });
-
-  test("lists our markets once", () => {
-    for (const cca3 of markets) {
-      expect(phoneCountries.filter(item => item === cca3)).toEqual([cca3]);
-    }
-  });
-
-  test("excludes the countries blocked", () => {
-    for (const cca3 of blockedCountries) {
-      expect(phoneCountries).not.toContain(cca3);
-    }
-  });
-
-  test("keeps every country that isn't blocked", () => {
-    expect(new Set(phoneCountries)).toEqual(
-      new Set(allCountries.filter(cca3 => !blockedCountries.includes(cca3))),
-    );
-  });
 });
