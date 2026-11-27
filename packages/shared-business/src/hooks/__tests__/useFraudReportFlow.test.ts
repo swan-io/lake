@@ -711,12 +711,12 @@ describe("rejections", () => {
     const flow = setup({
       transactions: [
         ...seededTransactions(),
-        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+        { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
       ],
     });
     startReport(flow, { victim: "member-2", transactions: [transfer] });
     flow.previous();
-    flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
+    flow.next({ transactions: [createFakeTransaction("transfer-2", "SepaCreditTransferOut")] });
 
     expect(flow.result.current.step).toBe("Victim");
     expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });

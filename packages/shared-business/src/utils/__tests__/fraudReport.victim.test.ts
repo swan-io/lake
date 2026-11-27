@@ -1,5 +1,6 @@
 import { Option } from "@bloodyowl/boxed";
 import { describe, expect, test } from "vitest";
+import { createFakeTransaction } from "../fraudReport/fakeApi";
 import {
   FraudReportAccountMembership,
   getInitialVictimChoice,
@@ -191,8 +192,8 @@ describe("getVictimAccountMembershipId", () => {
 });
 
 describe("getVictimChange", () => {
-  const card = { id: "card-1", rail: "Card" } as const;
-  const transfer = { id: "transfer-1", rail: "Transfer" } as const;
+  const card = createFakeTransaction("card-1", "CardOutDebit");
+  const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
   test("removes the card transactions when the victim changes", () => {
     expect(

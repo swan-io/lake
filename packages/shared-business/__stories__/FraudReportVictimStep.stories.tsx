@@ -9,7 +9,7 @@ import { StyleSheet } from "react-native";
 import { expect, fn, waitFor, within } from "storybook/test";
 import { FraudReportLayout } from "../src/components/FraudReport/FraudReportLayout";
 import { VictimStep } from "../src/components/FraudReport/VictimStep";
-import type { FraudReportTransaction } from "../src/utils/fraudReport/types";
+import { createFakeTransaction } from "../src/utils/fraudReport/fakeApi";
 import { FraudReportAccountMembership } from "../src/utils/fraudReport/victim";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -133,8 +133,8 @@ export const States = () => (
 
 type Props = ComponentProps<typeof VictimStep>;
 
-const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
-const transfer: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
+const card = createFakeTransaction("card-1", "CardOutDebit");
+const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
 const render = (args: Props) => (
   <WithCurrentColor variant="live">
