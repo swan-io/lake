@@ -182,20 +182,6 @@ export const ChangeVictim: StoryObj<typeof VictimStep> = {
   },
 };
 
-export const ChangeVictimWarning: StoryObj<typeof VictimStep> = {
-  args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
-  parameters: { a11y: { test: "off" } },
-  render,
-  play: async ({ args, canvas, userEvent }) => {
-    await pickNicolas({ canvas, userEvent });
-
-    await expect(
-      await within(document.body).findByRole("heading", { name: "Change the victim?" }),
-    ).toBeVisible();
-    await expect(args.onNext).not.toHaveBeenCalled();
-  },
-};
-
 export const CancelVictimChange: StoryObj<typeof VictimStep> = {
   args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
   parameters: { a11y: { test: "off" } },
@@ -266,5 +252,10 @@ export const SearchMembers: StoryObj<typeof VictimStep> = {
 
     await waitFor(() => expect(list.queryByRole("option", { name: /Nicolas Saison/ })).toBeNull());
     await expect(list.getByRole("option", { name: "Ada Lovelace" })).toBeVisible();
+
+    await userEvent.clear(list.getByPlaceholderText("Search for a member"));
+    await userEvent.type(list.getByPlaceholderText("Search for a member"), "+33 6 98 76 54 32");
+
+    await expect(await list.findByRole("option", { name: /Nicolas Saison/ })).toBeVisible();
   },
 };

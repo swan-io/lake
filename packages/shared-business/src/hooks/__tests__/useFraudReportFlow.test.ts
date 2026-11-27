@@ -376,6 +376,22 @@ describe("victim", () => {
     expect(flow.callNames()).toEqual(["draft"]);
   });
 
+  test("clears the previous victim's card answers when the victim changes", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
+    flow.next(incident);
+    flow.next({ isLostOrStolen: true, lostOrStolenNoticedAt: "2026-11-01" });
+    while (flow.result.current.step !== "Victim") {
+      flow.previous();
+    }
+
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.values).toMatchObject(incident);
+    expect(flow.result.current.values.isLostOrStolen).toBeUndefined();
+    expect(flow.result.current.values.lostOrStolenNoticedAt).toBeUndefined();
+  });
+
   test("keeps the selection when the victim stays the same", () => {
     const flow = setup();
     startReport(flow, { victim: "member-1", transactions: [card, transfer] });

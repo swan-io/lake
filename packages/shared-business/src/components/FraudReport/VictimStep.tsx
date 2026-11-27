@@ -79,7 +79,12 @@ export const VictimStep = ({
   const memberItems = getOtherAccountMemberships({
     currentAccountMembership,
     accountMemberships,
-  }).map(({ id, name, phoneNumber }) => ({ name, value: id, phoneNumber }));
+  }).map(({ id, name, phoneNumber }) => ({
+    name,
+    value: id,
+    phoneNumber,
+    searchTerms: isNullishOrEmpty(phoneNumber) ? undefined : [phoneNumber],
+  }));
 
   const memberPicker = (
     <LakeLabel
@@ -95,9 +100,11 @@ export const VictimStep = ({
           items={memberItems}
           hasSearch={true}
           searchPlaceholder={t("fraudReport.victim.searchMember")}
-          renderItem={item => (
+          renderItem={(item, isSelected) => (
             <Box direction="column">
-              <LakeText color={colors.gray[900]}>{item.name}</LakeText>
+              <LakeText color={isSelected ? colors.gray[800] : colors.gray[900]} numberOfLines={1}>
+                {item.name}
+              </LakeText>
 
               {isNullishOrEmpty(item.phoneNumber) ? null : (
                 <LakeText variant="smallRegular" color={colors.gray[600]}>
