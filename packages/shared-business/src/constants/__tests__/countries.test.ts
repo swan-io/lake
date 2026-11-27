@@ -5,6 +5,7 @@ import {
   isFrenchTerritoryCCA3,
   isTerritoryCCA3,
   nationalities,
+  phoneCountries,
   sovereignCountries,
 } from "../countries";
 
@@ -47,5 +48,60 @@ describe("frenchTerritories", () => {
 
   test("is a subset of allCountries", () => {
     expect(frenchTerritories.every(cca3 => allCountries.includes(cca3))).toBe(true);
+  });
+});
+
+describe("phoneCountries", () => {
+  const markets = ["FRA", "DEU", "ESP", "ITA", "NLD", "BEL", "PRT"];
+
+  const blockedCountries = [
+    "BDI",
+    "BLR",
+    "CUB",
+    "GNB",
+    "IRQ",
+    "IRN",
+    "PRK",
+    "LBN",
+    "LBY",
+    "MLI",
+    "MMR",
+    "NGA",
+    "RUS",
+    "SDN",
+    "SOM",
+    "SSD",
+    "SYR",
+    "TUR",
+    "VEN",
+    "YEM",
+  ];
+
+  test("lists our markets first", () => {
+    expect(phoneCountries.slice(0, markets.length)).toEqual(markets);
+  });
+
+  test("lists the other countries after our markets, in alphabetical order", () => {
+    expect(phoneCountries.slice(markets.length)).toEqual(
+      allCountries.filter(cca3 => !markets.includes(cca3) && !blockedCountries.includes(cca3)),
+    );
+  });
+
+  test("lists our markets once", () => {
+    for (const cca3 of markets) {
+      expect(phoneCountries.filter(item => item === cca3)).toEqual([cca3]);
+    }
+  });
+
+  test("excludes the countries blocked", () => {
+    for (const cca3 of blockedCountries) {
+      expect(phoneCountries).not.toContain(cca3);
+    }
+  });
+
+  test("keeps every country that isn't blocked", () => {
+    expect(new Set(phoneCountries)).toEqual(
+      new Set(allCountries.filter(cca3 => !blockedCountries.includes(cca3))),
+    );
   });
 });
