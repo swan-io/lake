@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import type { FraudReportApi } from "../../utils/fraudReport/api";
 import {
   createFakeFraudReportApi,
+  createFakeTransaction,
   FakeFraudReportApiConfig,
   FakeTransaction,
 } from "../../utils/fraudReport/fakeApi";
@@ -20,8 +21,8 @@ import {
   useFraudReportFlow,
 } from "../useFraudReportFlow";
 
-const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
-const transfer: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
+const card = createFakeTransaction("card-1", "CardOutDebit");
+const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
 const incident: Partial<FraudReportFormValues> = {
   reportedReason: "Unauthorized",
@@ -35,10 +36,10 @@ const seededTransactions = (): FakeTransaction[] => [
   {
     id: "card-1",
     accountId: "account-1",
-    rail: "Card",
+    type: "CardOutDebit",
     cardholderAccountMembershipId: "member-1",
   },
-  { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+  { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
 ];
 
 const setup = (
@@ -459,14 +460,16 @@ describe("rejections", () => {
     {
       name: "a transaction isn't found",
       transactions: seededTransactions(),
-      selection: [{ id: "unknown", rail: "Card" }],
+      selection: [createFakeTransaction("unknown", "CardOutDebit")],
       fixedSelection: [card],
       rejection: { __typename: "DisputeCaseTransactionsNotFoundRejection" },
     },
     {
       name: "the selection has too many transactions",
       transactions: seededTransactions(),
-      selection: Array.from({ length: 101 }, (_, index) => ({ id: `card-${index}`, rail: "Card" })),
+      selection: Array.from({ length: 101 }, (_, index) =>
+        createFakeTransaction(`card-${index}`, "CardOutDebit"),
+      ),
       fixedSelection: [card],
       rejection: {
         __typename: "DisputeCaseTransactionsLimitExceededRejection",
@@ -479,11 +482,11 @@ describe("rejections", () => {
         {
           id: "card-1",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-1",
           notReportableReason: "TransactionTypeNotReportable",
         },
-        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+        { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
       ],
       selection: [card],
       fixedSelection: [transfer],
@@ -493,9 +496,9 @@ describe("rejections", () => {
       name: "the transactions belong to several accounts",
       transactions: [
         ...seededTransactions(),
-        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+        { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
       ],
-      selection: [transfer, { id: "transfer-2", rail: "Transfer" }],
+      selection: [transfer, createFakeTransaction("transfer-2", "SepaCreditTransferOut")],
       fixedSelection: [transfer],
       rejection: { __typename: "DisputeCaseMultipleAccountsRejection" },
     },
@@ -506,11 +509,11 @@ describe("rejections", () => {
         {
           id: "card-2",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-2",
         },
       ],
-      selection: [card, { id: "card-2", rail: "Card" }],
+      selection: [card, createFakeTransaction("card-2", "CardOutDebit")],
       fixedSelection: [card],
       rejection: { __typename: "DisputeCaseMultipleCardHoldersRejection" },
     },
@@ -662,7 +665,7 @@ describe("rejections", () => {
           {
             id: "transfer-1",
             accountId: "account-1",
-            rail: "Transfer",
+            type: "SepaCreditTransferOut",
             reportingWindowEndsAt: "2020-01-01T00:00:00.000Z",
           },
         ],

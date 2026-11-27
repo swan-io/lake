@@ -28,7 +28,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Types in `types.ts` mirror the partner GraphQL schema. Input types match the schema field for field. `FraudReportCase` flattens objects to IDs (`accountId`, `victimAccountMembershipId`) and names `reportedTransactions` `transactions`. Empty values are `null` (empty lists are `[]`), enums are string unions and rejections keep their GraphQL `__typename`. The app maps its generated types onto them in its adapter, so a schema change breaks the app build in the adapter, not in Lake.
 - Every adapter call returns `Future<Result<Value, FraudReportApiError<Rejection>>>`. An adapter maps a payload whose `__typename` ends with `Rejection` to `{ kind: "rejection" }`, and everything else (client errors, GraphQL errors) to `{ kind: "error" }`.
 - `update` follows the API: a field left out keeps the stored value, `null` clears it. `transactionIds` can be left out, never cleared. A group that is sent (`fraudDetails`, `fraudCardDetails`, `fraudTransferDetails`) replaces the stored group whole: a field left out of it is cleared.
-- `FraudReportCase.transactions` lists only the transactions the caller can view, each with its rail. During a session, take the rails from the user's current selection; read `transactions` only when resuming a case.
+- `FraudReportCase.transactions` lists only the transactions the caller can view, each with its rail and what the transactions step shows (type, execution date, counterparty, amount). During a session, take the rails from the user's current selection; read `transactions` only when resuming a case.
 - Build `transactionIds` for `update` from the user's selection, never from `FraudReportCase.transactions`: hidden transactions would be dropped from the case. Leave it out when the selection didn't change.
 - `getCase` returns `None` for a case that doesn't exist or that the caller can't read. `findDrafts` returns the account's drafts that include one of the given transactions, newest first.
 - Until the API ships them: every adapter call maps the case with `transactions: []` (no `reportedTransactions` yet), `findDrafts` returns `[]`, `cancel` returns `{ kind: "error" }`, and uploads can't send the dispute case document purposes.
@@ -56,7 +56,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - The form has no "actions taken" field yet. `fraudTransferDetails` is never sent, so the stored one stays. `toUpdateInput` sends back the saved case's `hasFiledPoliceComplaint` and `hasContactedMerchant`.
 - Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
 - A date is in the future when it is after today in UTC.
-- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported.
+- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported. An adapter sets a `FraudReportTransaction`'s `rail` this way, never separately from its `type`. The fake adapter's seeds and `createFakeTransaction` take a `type` and derive the rail from it.
 
 ## Screens
 
@@ -69,10 +69,12 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - A step reads whether the layout is small with `useFraudReportSmallLayout()` and doesn't measure it again.
 - A step's props include `FraudReportStepProps<K>` (`FraudReportLayout.tsx`), `K` being the form fields it owns: it starts from `values` and calls `onNext` with the same fields, so `FraudReport` wires it with `values={flow.values}` and `onNext={flow.next}`. Fields it reads but doesn't own come as separate props. It never shows or sends a value that is no longer among its options.
 - The victim step takes the account memberships to pick from, the current one and the selected transactions as props. A membership can carry a phone number, which the app passes ready to display; it is shown under the name. The current one is `None` for an operator, who picks from every listed member. The app decides which memberships are listed.
+- A selected transaction carries what the transactions step shows: the picker returns whole rows, and a resumed case gets them from `reportedTransactions`. Compute the total with `getTransactionsTotal` (`transactions.ts`). It counts in cents, so it assumes amounts with two decimals, and shows the first transaction's currency: mixed currencies are pending Product.
+- The transactions step renders the picker through its `renderPicker` prop. The picker gets the current selection and confirms the whole new selection; closing it changes nothing.
 
 ## Stubs
 
-- `fakeApi.ts` is the only stub. It runs the API's checks in the API's order on seeded transactions and account memberships. Use it in stories and tests. Never ship it in an app.
+- `fakeApi.ts` is the only stub. It runs the API's checks in the API's order on seeded transactions and account memberships. Use it in stories and tests. Never ship it in an app. Build transaction rows for stories and tests with `createFakeTransaction`.
 - The fake doesn't run the input format checks (dates in the future, string formats, `None` with other values): the client-side validators own them.
 - When the API changes, update `types.ts`, then the fake adapter, then the tests.
 
