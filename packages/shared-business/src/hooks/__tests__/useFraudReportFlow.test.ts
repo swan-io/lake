@@ -31,10 +31,10 @@ const seededTransactions = (): FakeTransaction[] => [
   {
     id: "card-1",
     accountId: "account-1",
-    rail: "Card",
+    type: "CardOutDebit",
     cardholderAccountMembershipId: "member-1",
   },
-  { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+  { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
 ];
 
 const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
@@ -419,11 +419,11 @@ describe("rejections", () => {
         {
           id: "card-1",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-1",
           notReportableReason: "TransactionTypeNotReportable",
         },
-        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+        { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
       ],
       selection: [card],
       fixedSelection: [transfer],
@@ -433,7 +433,7 @@ describe("rejections", () => {
       name: "the transactions belong to several accounts",
       transactions: [
         ...seededTransactions(),
-        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+        { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
       ],
       selection: [transfer, createFakeTransaction("transfer-2", "SepaCreditTransferOut")],
       fixedSelection: [transfer],
@@ -446,7 +446,7 @@ describe("rejections", () => {
         {
           id: "card-2",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-2",
         },
       ],
@@ -602,7 +602,7 @@ describe("rejections", () => {
           {
             id: "transfer-1",
             accountId: "account-1",
-            rail: "Transfer",
+            type: "SepaCreditTransferOut",
             reportingWindowEndsAt: "2020-01-01T00:00:00.000Z",
           },
         ],
@@ -626,7 +626,7 @@ describe("rejections", () => {
       config: {
         transactions: [
           ...seededTransactions(),
-          { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
+          { id: "transfer-2", accountId: "account-2", type: "SepaCreditTransferOut" },
         ],
       },
       run: flow => {

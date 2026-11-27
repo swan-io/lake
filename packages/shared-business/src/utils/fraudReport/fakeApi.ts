@@ -4,7 +4,6 @@ import { match } from "ts-pattern";
 import type { UploadOutput } from "../../components/SupportingDocumentCollection";
 import type { UploadOutputWithId } from "../../hooks/useFilesUploader";
 import type { FraudReportApi, FraudReportApiError } from "./api";
-import { getTransactionRail } from "./rail";
 import type {
   AccountMembershipNotFoundRejection,
   DisputeCaseDetailsNotApplicableRejection,
@@ -23,6 +22,7 @@ import type {
   FraudDetails,
   FraudDetailsInput,
   FraudReportCase,
+  FraudReportRail,
   FraudReportTransaction,
   FraudReportTransactionType,
   SubmitDisputeCaseRejection,
@@ -44,7 +44,23 @@ export type FakeTransaction = {
   notReportableReason?: DisputeCaseTransactionNotReportableReason;
   reportingWindowEndsAt?: string;
 } & FakeTransactionDetails &
-  ({ rail: "Card"; cardholderAccountMembershipId: string } | { rail: "Transfer" });
+  (
+    | { type: "CardOutDebit"; cardholderAccountMembershipId: string }
+    | { type: Exclude<FraudReportTransactionType, "CardOutDebit"> }
+  );
+
+const getRail = (type: FraudReportTransactionType) =>
+  match(type)
+    .returnType<FraudReportRail>()
+    .with("CardOutDebit", () => "Card")
+    .with(
+      "SepaCreditTransferOut",
+      "SepaInstantCreditTransferOut",
+      "InternationalCreditTransferOut",
+      "InternalCreditTransferOut",
+      () => "Transfer",
+    )
+    .exhaustive();
 
 export const createFakeTransaction = (
   id: string,
@@ -52,7 +68,7 @@ export const createFakeTransaction = (
   details: FakeTransactionDetails = {},
 ): FraudReportTransaction => ({
   id,
-  rail: getTransactionRail(type).getOr("Transfer"),
+  rail: getRail(type),
   type,
   executionDate: details.executionDate ?? "2026-11-04T10:00:00.000Z",
   counterparty: details.counterparty ?? `Merchant ${id}`,
@@ -139,7 +155,7 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
   const getIds = (item: FraudReportCase) => item.transactions.map(({ id }) => id);
 
   const getCardholder = (ids: string[]) =>
-    getTransactions(ids).flatMap(item => (item.rail === "Card" ? [item] : []))[0]
+    getTransactions(ids).flatMap(item => (item.type === "CardOutDebit" ? [item] : []))[0]
       ?.cardholderAccountMembershipId ?? null;
 
   const cases = new Map<string, StoredCase>(
@@ -238,7 +254,7 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
   ): Option<DisputeCaseMultipleCardHoldersRejection> => {
     const accountMembershipIds = unique(
       getTransactions(ids).flatMap(item =>
-        item.rail === "Card" ? [item.cardholderAccountMembershipId] : [],
+        item.type === "CardOutDebit" ? [item.cardholderAccountMembershipId] : [],
       ),
     );
     return accountMembershipIds.length > 1
@@ -291,8 +307,8 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
   ): Result<StoredCase, ApiError<DraftFraudDisputeCaseRejection>> => {
     const transactionIds = input.transactionIds ?? (existing != null ? getIds(existing) : []);
     const transactions = getTransactions(transactionIds);
-    const hasCard = transactions.some(item => item.rail === "Card");
-    const hasTransfer = transactions.some(item => item.rail === "Transfer");
+    const hasCard = transactions.some(item => getRail(item.type) === "Card");
+    const hasTransfer = transactions.some(item => getRail(item.type) === "Transfer");
     const accountId = transactions[0]?.accountId ?? existing?.accountId ?? "";
     const sentVictim = input.victimAccountMembershipId;
 
@@ -379,12 +395,8 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
       id: existing?.id ?? crypto.randomUUID(),
       accountId,
       statusInfo: { status: "Draft", expiresAt: new Date(expiresAt).toISOString() },
-      transactions: transactions.map(({ id, rail, executionDate, counterparty, amount }) =>
-        createFakeTransaction(id, rail === "Card" ? "CardOutDebit" : "SepaCreditTransferOut", {
-          executionDate,
-          counterparty,
-          amount,
-        }),
+      transactions: transactions.map(({ id, type, executionDate, counterparty, amount }) =>
+        createFakeTransaction(id, type, { executionDate, counterparty, amount }),
       ),
       fraudDetails:
         input.fraudDetails === undefined

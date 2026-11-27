@@ -601,10 +601,10 @@ describe("inputs sent to the API", () => {
         {
           id: "card-1",
           accountId: "account-1",
-          rail: "Card",
+          type: "CardOutDebit",
           cardholderAccountMembershipId: "member-2",
         },
-        { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
+        { id: "transfer-1", accountId: "account-1", type: "SepaCreditTransferOut" },
       ],
       accountMemberships: [
         { id: "member-1", accountId: "account-1" },

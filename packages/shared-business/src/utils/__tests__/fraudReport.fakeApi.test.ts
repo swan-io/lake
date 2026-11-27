@@ -19,7 +19,7 @@ const NOW = new Date("2026-11-20T10:00:00.000Z");
 const card1: FakeTransaction = {
   id: "card-1",
   accountId: "account-1",
-  rail: "Card",
+  type: "CardOutDebit",
   cardholderAccountMembershipId: "member-1",
 };
 const card2: FakeTransaction = { ...card1, id: "card-2" };
@@ -28,7 +28,11 @@ const cardOtherHolder: FakeTransaction = {
   id: "card-3",
   cardholderAccountMembershipId: "member-2",
 };
-const transfer1: FakeTransaction = { id: "transfer-1", accountId: "account-1", rail: "Transfer" };
+const transfer1: FakeTransaction = {
+  id: "transfer-1",
+  accountId: "account-1",
+  type: "SepaCreditTransferOut",
+};
 const transferOtherAccount: FakeTransaction = {
   ...transfer1,
   id: "transfer-2",
@@ -125,6 +129,23 @@ describe("contract types", () => {
   test("draft requires transactionIds only", () => {
     expectTypeOf<{ transactionIds: string[] }>().toExtend<DraftFraudDisputeCaseInput>();
     expectTypeOf<{ fraudDetails: FraudDetailsInput }>().not.toExtend<DraftFraudDisputeCaseInput>();
+  });
+});
+
+describe("seeded transactions", () => {
+  test("keep their type on the case", async () => {
+    const api = createFakeFraudReportApi({
+      transactions: [
+        { id: "instant-1", accountId: "account-1", type: "SepaInstantCreditTransferOut" },
+      ],
+      accountMemberships: [],
+    });
+
+    const created = await draft(api, { transactionIds: ["instant-1"] });
+
+    expect(created.transactions).toMatchObject([
+      { id: "instant-1", rail: "Transfer", type: "SepaInstantCreditTransferOut" },
+    ]);
   });
 });
 

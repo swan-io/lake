@@ -193,7 +193,7 @@ export const TransactionsStep = ({ values, onNext, onPrevious, loading, renderPi
     const index = transactions.findIndex(item => item.id === id);
     const next = transactions[index + 1] ?? transactions[index - 1];
     setFocusAfterRemove({ id: next?.id ?? null });
-    setTransactions(current => current.filter(item => item.id !== id));
+    setTransactions(transactions.filter(item => item.id !== id));
   };
 
   const total = getTransactionsTotal(transactions);

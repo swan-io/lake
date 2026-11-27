@@ -55,7 +55,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - The form has no "actions taken" field yet. `fraudTransferDetails` is never sent, so the stored one stays. `toUpdateInput` sends back the saved case's `hasFiledPoliceComplaint` and `hasContactedMerchant`.
 - Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
 - A date is in the future when it is after today in UTC.
-- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported. An adapter and `createFakeTransaction` set a `FraudReportTransaction`'s `rail` this way, never separately from its `type`.
+- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported. An adapter sets a `FraudReportTransaction`'s `rail` this way, never separately from its `type`. The fake adapter's seeds and `createFakeTransaction` take a `type` and derive the rail from it.
 
 ## Screens
 
