@@ -122,7 +122,21 @@ export type DisputeCaseStatusInfo =
 
 export type FraudReportRail = "Card" | "Transfer";
 
-export type FraudReportTransaction = { id: string; rail: FraudReportRail };
+export type FraudReportTransactionType =
+  | "CardOutDebit"
+  | "SepaCreditTransferOut"
+  | "SepaInstantCreditTransferOut"
+  | "InternationalCreditTransferOut"
+  | "InternalCreditTransferOut";
+
+export type FraudReportTransaction = {
+  id: string;
+  rail: FraudReportRail;
+  type: FraudReportTransactionType;
+  executionDate: string;
+  counterparty: string;
+  amount: { value: string; currency: string };
+};
 
 export type FraudReportCase = {
   id: string;
