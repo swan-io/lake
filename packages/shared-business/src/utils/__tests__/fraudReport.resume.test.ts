@@ -17,6 +17,16 @@ describe("getResumeStep", () => {
     expect(getResumeStep({ transactions: [], ...incident })).toBe("Transactions");
   });
 
+  test("opens the transactions step when the draft doesn't hold every start transaction", () => {
+    const values: FraudReportFormValues = { transactions: [card], ...incident };
+
+    expect(getResumeStep(values, ["card-1", "transfer-1"])).toBe("Transactions");
+    expect(getResumeStep(values, ["card-1"])).toBe("Card");
+    expect(getResumeStep({ ...values, transactions: [card, transfer] }, ["transfer-1"])).toBe(
+      "Card",
+    );
+  });
+
   test.each<{ name: string; values: Partial<FraudReportFormValues> }>([
     { name: "no answer", values: {} },
     { name: "no reason", values: { ...incident, reportedReason: undefined } },

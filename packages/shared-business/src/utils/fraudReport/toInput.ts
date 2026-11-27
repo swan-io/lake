@@ -38,17 +38,21 @@ export const toFilledList = <T>(values: T[] | undefined) =>
 
 type SavedDetails = Pick<FraudReportCase, "fraudDetails" | "fraudCardDetails">;
 
+// The incident answers `fraudDetails` can't be sent without
+export const toRequiredFraudDetails = (values: FraudReportFormValues) =>
+  Option.allFromDict({
+    reportedReason: Option.fromNullable(values.reportedReason),
+    reportedTypology: Option.fromNullable(values.reportedTypology),
+    description: toFilled(values.description),
+  });
+
 const toFraudDetails = (
   values: FraudReportFormValues,
   savedDetails?: SavedDetails,
 ): Option<FraudDetailsInput> => {
   const hasFraudster = getDetailsSteps(values).includes("Fraudster");
 
-  return Option.allFromDict({
-    reportedReason: Option.fromNullable(values.reportedReason),
-    reportedTypology: Option.fromNullable(values.reportedTypology),
-    description: toFilled(values.description),
-  }).map(required => ({
+  return toRequiredFraudDetails(values).map(required => ({
     ...required,
     discoveredAt: toFilled(values.discoveredAt).toNull(),
     discoveryDetails: toFilled(values.discoveryDetails).toNull(),

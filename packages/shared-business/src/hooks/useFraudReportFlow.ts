@@ -304,7 +304,7 @@ export const useFraudReportFlow = ({
 
       setState(current => ({
         ...current,
-        step: getResumeStep(values),
+        step: getResumeStep(values, startRef.current.resumeFrom?.transactionIds),
         values,
         savedCase: Option.Some(savedCase),
         savedTransactionIds: toTransactionIds(values),
@@ -320,25 +320,37 @@ export const useFraudReportFlow = ({
     }
 
     // Kept, the old draft would be offered again on the same transactions
-    getDraft(state).tapSome(({ id }) => {
+    getDraft(state).tapSome(draft => {
       pending.current = true;
       setState(current => ({ ...current, saving: true, error: Option.None() }));
 
-      api.cancel({ disputeCaseId: id }).onResolve(result => {
-        setState(current => ({
-          ...current,
-          saving: false,
-          ...result.match<Partial<State>>({
-            Ok: () => ({ resumable: closeOffer(current.resumable) }),
-            Error: error =>
-              match(error)
-                .returnType<Partial<State>>()
-                // The case is no longer a draft: there's nothing left to discard or resume
-                .with({ kind: "rejection" }, () => ({ resumable: closeOffer(current.resumable) }))
-                .with({ kind: "error" }, () => ({ error: Option.Some(error) }))
-                .exhaustive(),
-          }),
-        }));
+      api.cancel({ disputeCaseId: draft.id }).onResolve(result => {
+        setState(current => {
+          const closed = { resumable: closeOffer(current.resumable) };
+
+          return {
+            ...current,
+            saving: false,
+            ...result.match<Partial<State>>({
+              Ok: () => closed,
+              Error: error => {
+                const change = getErrorChange(state, state.values, error);
+
+                return match(error)
+                  .returnType<Partial<State>>()
+                  .with({ kind: "rejection" }, () =>
+                    change.step === "Submitted"
+                      ? // Submitted elsewhere: a new report on these transactions would be rejected
+                        { ...change, ...closed, savedCase: Option.Some(draft) }
+                      : // Canceled, expired or gone: there's nothing left to discard or resume
+                        closed,
+                  )
+                  .with({ kind: "error" }, () => ({ error: Option.Some(error) }))
+                  .exhaustive();
+              },
+            }),
+          };
+        });
       });
     });
   }, [api, state]);

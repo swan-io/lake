@@ -1032,6 +1032,30 @@ describe("resume", () => {
     expect(flow.result.current.step).toBe("Documents");
   });
 
+  test("resumes on the transactions step when the draft doesn't hold every start transaction", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup(
+      {},
+      {
+        fake: earlier.fake,
+        resumeFrom: { accountId: "account-1", transactionIds: ["card-1", "transfer-1"] },
+      },
+    );
+
+    flow.resume();
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expect(flow.result.current.values).toMatchObject({ transactions: [card], ...incident });
+
+    flow.next({ transactions: [card, transfer] });
+
+    expect(flow.calls.at(-1)).toMatchObject({
+      name: "update",
+      input: { disputeCaseId, transactionIds: ["card-1", "transfer-1"] },
+    });
+  });
+
   test("offers the latest draft when there are several", () => {
     const fake = leaveDraft().fake;
     const later = setup({}, { fake });
@@ -1115,6 +1139,23 @@ describe("resume", () => {
     expect(getOfferedId(flow)).toBeUndefined();
     expect(flow.result.current.error.isNone()).toBe(true);
     expect(flow.result.current.step).toBe("Intro");
+  });
+
+  test("goes to the submitted step, with no error, when the old draft was submitted elsewhere", () => {
+    const earlier = leaveDraft();
+    earlier.next({ isLostOrStolen: true });
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    earlier.next();
+    expect(getStatus(flow, disputeCaseId)).toBe("Submitted");
+
+    flow.startOver();
+
+    expect(flow.result.current.step).toBe("Submitted");
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.result.current.disputeCaseId.toUndefined()).toBe(disputeCaseId);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.saving).toBe(false);
   });
 
   test("starts a new report when looking for drafts takes too long", () => {
