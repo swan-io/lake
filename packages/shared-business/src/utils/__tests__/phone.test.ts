@@ -1,7 +1,11 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { france, getCountryByCCA2, getCountryByCCA3 } from "../../constants/countries";
-import { getMostLikelyUserCountry } from "../localization";
-import { maskPhoneNumber, parsePhoneNumber, prefixPhoneNumber } from "../phone";
+import {
+  getDefaultPhoneCountry,
+  maskPhoneNumber,
+  parsePhoneNumber,
+  prefixPhoneNumber,
+} from "../phone";
 
 const gambia = getCountryByCCA2("GM");
 const jamaica = getCountryByCCA2("JM");
@@ -60,8 +64,12 @@ describe("parsePhoneNumber splits an international number into its country and n
   });
 });
 
-describe("parsePhoneNumber falls back to the most likely user country and an empty national number", () => {
-  const fallback = { country: getMostLikelyUserCountry(), nationalNumber: "" };
+describe("parsePhoneNumber falls back to the default phone country and an empty national number", () => {
+  const fallback = { country: france, nationalNumber: "" };
+
+  beforeEach(() => {
+    vi.stubGlobal("navigator", { languages: ["en-GB"] });
+  });
 
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -106,6 +114,76 @@ describe("parsePhoneNumber falls back to the most likely user country and an emp
       country: getCountryByCCA2("DE"),
       nationalNumber: "",
     });
+  });
+});
+
+describe("getDefaultPhoneCountry picks one of our markets from the browser languages", () => {
+  const germany = getCountryByCCA2("DE");
+  const belgium = getCountryByCCA2("BE");
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it.each([[["en"]], [["en-GB"]], [["en-US"]], [["ja-JP"]], [[]]])(
+    "falls back to France for %j",
+    languages => {
+      expect(getDefaultPhoneCountry(languages)).toEqual(france);
+    },
+  );
+
+  it.each([
+    ["fr", "FR"],
+    ["de", "DE"],
+    ["es", "ES"],
+    ["it", "IT"],
+    ["nl", "NL"],
+    ["pt", "PT"],
+  ] as const)("maps the %s language to its country", (language, cca2) => {
+    expect(getDefaultPhoneCountry([language])).toEqual(getCountryByCCA2(cca2));
+  });
+
+  it.each([
+    ["nl-BE", "BE"],
+    ["fr-BE", "BE"],
+    ["en-BE", "BE"],
+    ["en-DE", "DE"],
+    ["es-PT", "PT"],
+  ] as const)("uses the region of %s when it is one of our markets", (language, cca2) => {
+    expect(getDefaultPhoneCountry([language])).toEqual(getCountryByCCA2(cca2));
+  });
+
+  it.each([
+    ["de-AT", "DE"],
+    ["fr-CA", "FR"],
+    ["pt-BR", "PT"],
+  ] as const)(
+    "uses the language of %s when its region isn't one of our markets",
+    (language, cca2) => {
+      expect(getDefaultPhoneCountry([language])).toEqual(getCountryByCCA2(cca2));
+    },
+  );
+
+  it("keeps the browser's order of preference", () => {
+    expect(getDefaultPhoneCountry(["de-DE", "fr-FR"])).toEqual(germany);
+    expect(getDefaultPhoneCountry(["de", "nl-BE"])).toEqual(germany);
+  });
+
+  it("skips languages that don't match one of our markets", () => {
+    expect(getDefaultPhoneCountry(["en-US", "nl-BE"])).toEqual(belgium);
+  });
+
+  it("matches the language and region case-insensitively", () => {
+    expect(getDefaultPhoneCountry(["NL-be"])).toEqual(belgium);
+  });
+
+  it("skips invalid language tags", () => {
+    expect(getDefaultPhoneCountry(["not a tag", "de"])).toEqual(germany);
+  });
+
+  it("reads the browser languages by default", () => {
+    vi.stubGlobal("navigator", { languages: ["it-IT"] });
+    expect(getDefaultPhoneCountry()).toEqual(getCountryByCCA2("IT"));
   });
 });
 
