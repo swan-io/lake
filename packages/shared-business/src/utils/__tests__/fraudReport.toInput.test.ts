@@ -1,6 +1,7 @@
 import { Option, Result } from "@bloodyowl/boxed";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { createFakeFraudReportApi, createFakeTransaction } from "../fraudReport/fakeApi";
+import { toFormValues } from "../fraudReport/prefill";
 import { getCaseRail, getTransactionRail } from "../fraudReport/rail";
 import { FraudReportFormValues, toDraftInput, toUpdateInput } from "../fraudReport/toInput";
 import type { FraudCardDetails, FraudDetails, FraudReportCase } from "../fraudReport/types";
@@ -416,6 +417,22 @@ describe("toDraftInput", () => {
     ).not.toHaveProperty("fraudCardDetails");
   });
 
+  test("sends the actions taken from the form", () => {
+    const input = toDraftInput({
+      ...incident,
+      hasFiledPoliceComplaint: true,
+      hasContactedMerchant: true,
+      transactions: [card1],
+    });
+
+    expect(input.fraudDetails?.hasFiledPoliceComplaint).toBe(true);
+    expect(input.fraudCardDetails).toStrictEqual({
+      isLostOrStolen: null,
+      lostOrStolenNoticedAt: null,
+      hasContactedMerchant: true,
+    });
+  });
+
   test("sends null for the card detail left empty", () => {
     expect(
       toDraftInput({ isLostOrStolen: false, transactions: [card1] }).fraudCardDetails,
@@ -441,13 +458,13 @@ describe("toDraftInput", () => {
 });
 
 describe("toUpdateInput", () => {
-  const savedCase = { id: "case-1", fraudDetails: null, fraudCardDetails: null };
+  const savedCase = { id: "case-1" };
   const disputeCaseId = savedCase.id;
 
   test("sends the card details and no victim on a card-only case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [card1, card2] },
         savedTransactionIds: ["card-1"],
       }),
@@ -463,7 +480,7 @@ describe("toUpdateInput", () => {
   test("sends the victim and no card details on a transfer-only case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1] },
         savedTransactionIds: ["transfer-1", "card-1"],
       }),
@@ -479,7 +496,7 @@ describe("toUpdateInput", () => {
   test("sends the card details and no victim on a mixed case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1, card1] },
         savedTransactionIds: ["transfer-1"],
       }),
@@ -495,7 +512,7 @@ describe("toUpdateInput", () => {
   test("never sends transfer details", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1] },
         savedTransactionIds: [],
       }),
@@ -505,7 +522,7 @@ describe("toUpdateInput", () => {
   test("clears the fraudster answers once no fraudster convinced the user", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, reportedReason: "Unauthorized", transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }).fraudDetails,
@@ -520,11 +537,15 @@ describe("toUpdateInput", () => {
   test("leaves the transaction IDs out when the selection didn't change", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...incident, transactions: [card1, transfer1] },
         savedTransactionIds: ["transfer-1", "card-1"],
       }),
-    ).toStrictEqual({ disputeCaseId, fraudDetails: expect.any(Object) });
+    ).toStrictEqual({
+      disputeCaseId,
+      fraudDetails: expect.any(Object),
+      fraudCardDetails: expect.any(Object),
+    });
   });
 
   test.each([
@@ -534,26 +555,47 @@ describe("toUpdateInput", () => {
     ["a transaction is there twice", [card1, card1], ["card-1", "card-2"]],
   ])("sends the whole selection when %s", (_, transactions, savedTransactionIds) => {
     expect(
-      toUpdateInput({ savedCase, values: { transactions }, savedTransactionIds }),
-    ).toStrictEqual({ disputeCaseId, transactionIds: transactions.map(({ id }) => id) });
+      toUpdateInput({ disputeCaseId: savedCase.id, values: { transactions }, savedTransactionIds }),
+    ).toStrictEqual({
+      disputeCaseId,
+      transactionIds: transactions.map(({ id }) => id),
+      fraudCardDetails: expect.any(Object),
+    });
   });
 
   test("leaves every group out when nothing is filled", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
+        values: { transactions: [transfer1] },
+        savedTransactionIds: ["transfer-1"],
+      }),
+    ).toStrictEqual({ disputeCaseId });
+  });
+
+  test("sends the card details even when empty, so removed answers are cleared", () => {
+    expect(
+      toUpdateInput({
+        disputeCaseId: savedCase.id,
         values: { transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }),
-    ).toStrictEqual({ disputeCaseId });
+    ).toStrictEqual({
+      disputeCaseId,
+      fraudCardDetails: {
+        isLostOrStolen: null,
+        lostOrStolenNoticedAt: null,
+        hasContactedMerchant: null,
+      },
+    });
   });
 
   test("clears the external reference when it was emptied", () => {
     expect(
       toUpdateInput({
-        savedCase,
-        values: { externalReference: "", transactions: [card1] },
-        savedTransactionIds: ["card-1"],
+        disputeCaseId: savedCase.id,
+        values: { externalReference: "", transactions: [transfer1] },
+        savedTransactionIds: ["transfer-1"],
       }),
     ).toStrictEqual({ disputeCaseId, externalReference: null });
   });
@@ -561,7 +603,7 @@ describe("toUpdateInput", () => {
   test("keeps the stored external reference when the form has none", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...incident, transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }),
@@ -571,26 +613,22 @@ describe("toUpdateInput", () => {
   test("holds the card details and the victim back while no transaction is selected", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [] },
         savedTransactionIds: [],
       }),
     ).toStrictEqual({ disputeCaseId, fraudDetails, externalReference: "REF-42" });
   });
 
-  test("sends back the actions taken saved on the case, which the form doesn't hold", () => {
+  test("sends the actions taken from the form", () => {
     const input = toUpdateInput({
-      savedCase: {
-        id: "case-1",
-        fraudDetails: { ...fraudDetails, hasFiledPoliceComplaint: true },
-        fraudCardDetails: { ...fraudCardDetails, hasContactedMerchant: false },
-      },
-      values: { ...filled, transactions: [card1] },
+      disputeCaseId: savedCase.id,
+      values: { ...filled, hasContactedMerchant: true, transactions: [card1] },
       savedTransactionIds: ["card-1"],
     });
 
-    expect(input.fraudDetails?.hasFiledPoliceComplaint).toBe(true);
-    expect(input.fraudCardDetails?.hasContactedMerchant).toBe(false);
+    expect(input.fraudDetails?.hasFiledPoliceComplaint).toBeNull();
+    expect(input.fraudCardDetails?.hasContactedMerchant).toBe(true);
   });
 });
 
@@ -654,7 +692,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...filled, transactions: [transfer1] },
           savedTransactionIds: ["card-1"],
         }),
@@ -675,7 +713,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...filled, transactions: [card1] },
           savedTransactionIds: ["transfer-1"],
         }),
@@ -687,7 +725,29 @@ describe("inputs sent to the API", () => {
     expect(updated.victimAccountMembershipId).toBe("member-2");
   });
 
-  test("an update keeps the actions taken that another client stored on the draft", async () => {
+  test("an update clears an action the user removed", async () => {
+    const api = createApi();
+    const savedCase = getCase(
+      await api.draft({
+        transactionIds: ["card-1"],
+        fraudCardDetails: { hasContactedMerchant: true },
+      }),
+    );
+
+    const updated = getCase(
+      await api.update(
+        toUpdateInput({
+          disputeCaseId: savedCase.id,
+          values: { ...toFormValues(savedCase), hasContactedMerchant: undefined },
+          savedTransactionIds: ["card-1"],
+        }),
+      ),
+    );
+
+    expect(updated.fraudCardDetails?.hasContactedMerchant).toBeNull();
+  });
+
+  test("an update keeps the details another client stored on a resumed draft", async () => {
     const api = createApi();
     const savedCase = getCase(
       await api.draft({
@@ -701,8 +761,8 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
-          values: { ...filled, transactions: [card1, transfer1] },
+          disputeCaseId: savedCase.id,
+          values: { ...toFormValues(savedCase), ...filled, transactions: [card1, transfer1] },
           savedTransactionIds: ["card-1", "transfer-1"],
         }),
       ),

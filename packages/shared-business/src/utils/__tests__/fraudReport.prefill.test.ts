@@ -53,7 +53,7 @@ const fullDraft = draft({
 
 const roundTrip = (savedCase: FraudReportCase) =>
   toUpdateInput({
-    savedCase,
+    disputeCaseId: savedCase.id,
     values: toFormValues(savedCase),
     savedTransactionIds: savedCase.transactions.map(({ id }) => id),
   });
@@ -70,8 +70,10 @@ describe("toFormValues", () => {
       discoveryDetails: "My bank app showed a payment I didn't make",
       fraudsterChannels: ["Phone"],
       sharedInformationWithFraudster: ["VerificationCode"],
+      hasFiledPoliceComplaint: true,
       isLostOrStolen: true,
       lostOrStolenNoticedAt: "2026-11-19",
+      hasContactedMerchant: false,
       externalReference: "ref-42",
     });
   });

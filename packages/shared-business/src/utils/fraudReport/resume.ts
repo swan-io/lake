@@ -13,7 +13,13 @@ export type FraudReportResumeStep = Exclude<FraudReportLayoutStep, "Victim" | "S
 
 const isDetailsStepAnswered = (step: FraudReportDetailsStep, values: FraudReportFormValues) =>
   match(step)
-    .with("Card", () => values.isLostOrStolen != null)
+    .with(
+      "Card",
+      () =>
+        values.isLostOrStolen != null ||
+        values.hasContactedMerchant != null ||
+        values.hasFiledPoliceComplaint != null,
+    )
     // The transfer sub-step has no form field yet
     .with("Transfer", () => true)
     .with(

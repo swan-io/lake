@@ -7,7 +7,6 @@ import type {
   FraudCardDetailsInput,
   FraudDetailsInput,
   FraudReason,
-  FraudReportCase,
   FraudReportTransaction,
   FraudsterChannel,
   FraudTypology,
@@ -25,8 +24,10 @@ export type FraudReportFormValues = {
   discoveryDetails?: string;
   fraudsterChannels?: FraudsterChannel[];
   sharedInformationWithFraudster?: SharedInformationWithFraudster[];
+  hasFiledPoliceComplaint?: boolean;
   isLostOrStolen?: boolean;
   lostOrStolenNoticedAt?: string;
+  hasContactedMerchant?: boolean;
   externalReference?: string;
 };
 
@@ -36,8 +37,6 @@ export const toFilled = (value: string | undefined) =>
 export const toFilledList = <T>(values: T[] | undefined) =>
   Option.fromNullable(values).filter(items => items.length > 0);
 
-type SavedDetails = Pick<FraudReportCase, "fraudDetails" | "fraudCardDetails">;
-
 // The incident answers `fraudDetails` can't be sent without
 export const toRequiredFraudDetails = (values: FraudReportFormValues) =>
   Option.allFromDict({
@@ -46,10 +45,7 @@ export const toRequiredFraudDetails = (values: FraudReportFormValues) =>
     description: toFilled(values.description),
   });
 
-const toFraudDetails = (
-  values: FraudReportFormValues,
-  savedDetails?: SavedDetails,
-): Option<FraudDetailsInput> => {
+const toFraudDetails = (values: FraudReportFormValues): Option<FraudDetailsInput> => {
   const hasFraudster = getDetailsSteps(values).includes("Fraudster");
 
   return toRequiredFraudDetails(values).map(required => ({
@@ -60,35 +56,34 @@ const toFraudDetails = (
     sharedInformationWithFraudster: hasFraudster
       ? toFilledList(values.sharedInformationWithFraudster).toNull()
       : null,
-    hasFiledPoliceComplaint: savedDetails?.fraudDetails?.hasFiledPoliceComplaint ?? null,
+    hasFiledPoliceComplaint: values.hasFiledPoliceComplaint ?? null,
   }));
 };
 
 const toFraudCardDetails = (
   values: FraudReportFormValues,
-  savedDetails?: SavedDetails,
+  { sendEmpty }: { sendEmpty: boolean },
 ): Option<FraudCardDetailsInput> => {
-  const isLostOrStolen = Option.fromNullable(values.isLostOrStolen);
-  const lostOrStolenNoticedAt = toFilled(values.lostOrStolenNoticedAt);
+  const details = {
+    isLostOrStolen: values.isLostOrStolen ?? null,
+    lostOrStolenNoticedAt: toFilled(values.lostOrStolenNoticedAt).toNull(),
+    hasContactedMerchant: values.hasContactedMerchant ?? null,
+  };
 
-  return isLostOrStolen.isNone() && lostOrStolenNoticedAt.isNone()
-    ? Option.None()
-    : Option.Some({
-        isLostOrStolen: isLostOrStolen.toNull(),
-        lostOrStolenNoticedAt: lostOrStolenNoticedAt.toNull(),
-        hasContactedMerchant: savedDetails?.fraudCardDetails?.hasContactedMerchant ?? null,
-      });
+  return sendEmpty || Object.values(details).some(value => value !== null)
+    ? Option.Some(details)
+    : Option.None();
 };
 
-const toDetails = (values: FraudReportFormValues, savedDetails?: SavedDetails) => {
-  const fraudDetails = toFraudDetails(values, savedDetails)
+const toDetails = (values: FraudReportFormValues, { isUpdate }: { isUpdate: boolean }) => {
+  const fraudDetails = toFraudDetails(values)
     .map(value => ({ fraudDetails: value }))
     .toUndefined();
 
   return match(getCaseRail(values.transactions))
     .with(Option.P.Some(P.union("CardOnly", "Mixed")), () => ({
       ...fraudDetails,
-      ...toFraudCardDetails(values, savedDetails)
+      ...toFraudCardDetails(values, { sendEmpty: isUpdate })
         .map(value => ({ fraudCardDetails: value }))
         .toUndefined(),
     }))
@@ -114,27 +109,27 @@ const isSameSelection = (transactionIds: string[], savedTransactionIds: string[]
 
 export const toDraftInput = (values: FraudReportFormValues): DraftFraudDisputeCaseInput => ({
   transactionIds: toTransactionIds(values),
-  ...toDetails(values),
+  ...toDetails(values, { isUpdate: false }),
   ...match(values.externalReference)
     .with(P.union(undefined, ""), () => undefined)
     .otherwise(externalReference => ({ externalReference })),
 });
 
 export const toUpdateInput = ({
-  savedCase,
+  disputeCaseId,
   values,
   savedTransactionIds,
 }: {
-  savedCase: Pick<FraudReportCase, "id" | "fraudDetails" | "fraudCardDetails">;
+  disputeCaseId: string;
   values: FraudReportFormValues;
   savedTransactionIds: string[];
 }): UpdateDraftFraudDisputeCaseInput => {
   const transactionIds = toTransactionIds(values);
 
   return {
-    disputeCaseId: savedCase.id,
+    disputeCaseId,
     ...(isSameSelection(transactionIds, savedTransactionIds) ? undefined : { transactionIds }),
-    ...toDetails(values, savedCase),
+    ...toDetails(values, { isUpdate: true }),
     ...match(values.externalReference)
       .with(undefined, () => undefined)
       .with("", () => ({ externalReference: null }))
