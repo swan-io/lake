@@ -100,31 +100,22 @@ const incomplete = (...paths: string[][]): DisputeCaseIncompleteRejection => ({
   missingFields: paths.map(path => ({ path })),
 });
 
-const beforeDraft: FraudReportRejectionContext = {
-  hasDraft: false,
+const context: FraudReportRejectionContext = {
   detailsSteps: fraudReportDetailsSteps,
 };
 
-const afterDraft: FraudReportRejectionContext = { ...beforeDraft, hasDraft: true };
-
 describe("getRejectionStep", () => {
   test.each(Object.values(rejections))("maps $__typename", rejection => {
-    expect(getRejectionStep(rejection, beforeDraft)).toBe(expectedSteps[rejection.__typename]);
+    expect(getRejectionStep(rejection, context)).toBe(expectedSteps[rejection.__typename]);
   });
 
   test("shows the submitted screen when the case was submitted elsewhere", () => {
     expect(
       getRejectionStep(
         { ...rejections.DisputeCaseWrongStatusRejection, currentStatus: "Submitted" },
-        afterDraft,
+        context,
       ),
     ).toBe("Submitted");
-  });
-
-  test("rejects the report when the victim isn't found once the draft exists", () => {
-    expect(getRejectionStep(rejections.AccountMembershipNotFoundRejection, afterDraft)).toBe(
-      "Rejected",
-    );
   });
 });
 
@@ -144,14 +135,14 @@ describe("getRejectionStep: incomplete", () => {
     [["fraudCardDetails", "isLostOrStolen"], "Card"],
     [["fraudCardDetails", "lostOrStolenNoticedAt"], "Card"],
   ])("sends a missing %j to %s", (path, step) => {
-    expect(getRejectionStep(incomplete(path), beforeDraft)).toBe(step);
+    expect(getRejectionStep(incomplete(path), context)).toBe(step);
   });
 
   test("sends several missing fields to the earliest step", () => {
     expect(
       getRejectionStep(
         incomplete(["fraudCardDetails"], ["transactionIds"], ["fraudDetails", "fraudsterChannels"]),
-        afterDraft,
+        context,
       ),
     ).toBe("Transactions");
   });
@@ -159,7 +150,7 @@ describe("getRejectionStep: incomplete", () => {
   test("picks the earliest step after moving fields out of missing sub-steps", () => {
     expect(
       getRejectionStep(incomplete(["fraudCardDetails"], ["fraudDetails", "fraudsterChannels"]), {
-        ...afterDraft,
+        ...context,
         detailsSteps: ["Card"],
       }),
     ).toBe("Incident");
@@ -168,26 +159,16 @@ describe("getRejectionStep: incomplete", () => {
   test("ignores fields the form can't fix when another one can be fixed", () => {
     expect(
       getRejectionStep(
-        incomplete(
-          ["victimAccountMembershipId"],
-          ["fraudCardDetails"],
-          ["fraudDetails", "hasFiledPoliceComplaint"],
-        ),
-        afterDraft,
+        incomplete(["fraudCardDetails"], ["fraudDetails", "hasFiledPoliceComplaint"]),
+        context,
       ),
     ).toBe("Card");
-  });
-
-  test("rejects the report when the victim is missing once the draft exists", () => {
-    expect(getRejectionStep(incomplete(["victimAccountMembershipId"]), afterDraft)).toBe(
-      "Rejected",
-    );
   });
 
   test("sends fraudster fields to the incident when the flow has no fraudster sub-step", () => {
     expect(
       getRejectionStep(incomplete(["fraudDetails", "fraudsterChannels"]), {
-        ...afterDraft,
+        ...context,
         detailsSteps: ["Card"],
       }),
     ).toBe("Incident");
@@ -196,7 +177,7 @@ describe("getRejectionStep: incomplete", () => {
   test("sends card fields to the transactions when the flow has no card sub-step", () => {
     expect(
       getRejectionStep(incomplete(["fraudCardDetails"]), {
-        ...afterDraft,
+        ...context,
         detailsSteps: ["Transfer"],
       }),
     ).toBe("Transactions");
@@ -210,10 +191,10 @@ describe("getRejectionStep: incomplete", () => {
     [["externalReference"]],
     [["unknownField"]],
   ])("rejects the report when only %j is missing", path => {
-    expect(getRejectionStep(incomplete(path), afterDraft)).toBe("Rejected");
+    expect(getRejectionStep(incomplete(path), context)).toBe("Rejected");
   });
 
   test("rejects the report when no missing field is given", () => {
-    expect(getRejectionStep(incomplete(), afterDraft)).toBe("Rejected");
+    expect(getRejectionStep(incomplete(), context)).toBe("Rejected");
   });
 });

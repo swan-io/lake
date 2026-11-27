@@ -21,6 +21,7 @@ import {
   FraudReportRejection,
   fraudReportSteps,
 } from "../utils/fraudReport/types";
+import { getTransactionsRemovedByVictimChange } from "../utils/fraudReport/victim";
 
 export type FraudReportFlowApi = Pick<
   FraudReportApi,
@@ -73,7 +74,6 @@ const getErrorChange = (
     .returnType<FraudReportFlowStep>()
     .with({ kind: "rejection" }, ({ rejection }) =>
       getRejectionStep(rejection, {
-        hasDraft: state.savedCase.isSome(),
         detailsSteps: getDetailsSteps(values),
       }),
     )
@@ -170,10 +170,16 @@ export const useFraudReportFlow = ({
         return;
       }
 
-      const { victimAccountMembershipId: _, ...inputWithoutVictim } = input;
+      const merged: FraudReportFormValues = { ...state.values, ...input };
+      const removedTransactions = getTransactionsRemovedByVictimChange({
+        transactions: merged.transactions,
+        previousVictimAccountMembershipId: state.values.victimAccountMembershipId,
+        victimAccountMembershipId: input.victimAccountMembershipId,
+      });
+
       const values: FraudReportFormValues = {
-        ...state.values,
-        ...(state.savedCase.isNone() ? input : inputWithoutVictim),
+        ...merged,
+        transactions: merged.transactions.filter(item => !removedTransactions.includes(item)),
       };
 
       const steps = getSteps(values);

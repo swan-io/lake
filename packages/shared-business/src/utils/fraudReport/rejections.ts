@@ -13,7 +13,6 @@ type FixingStep = Exclude<FraudReportLayoutStep, "Submitted" | "Documents">;
 export type FraudReportRejectionStep = FixingStep | "Submitted" | "Rejected";
 
 export type FraudReportRejectionContext = {
-  hasDraft: boolean;
   // The Details sub-steps the user's flow goes through
   detailsSteps: readonly FraudReportDetailsStep[];
 };
@@ -24,10 +23,6 @@ const fixingSteps: FixingStep[] = [
   "Incident",
   ...fraudReportDetailsSteps,
 ];
-
-// Once the draft exists, the flow keeps the victim: going back to Victim can't fix it
-const getVictimStep = ({ hasDraft }: FraudReportRejectionContext): Option<FixingStep> =>
-  hasDraft ? Option.None() : Option.Some("Victim");
 
 // A sub-step missing from the flow is fixed where the choice that adds it is made
 const getDetailsStep = (
@@ -49,7 +44,7 @@ const getFieldStep = (
 ): Option<FixingStep> =>
   match(path)
     .returnType<Option<FixingStep>>()
-    .with(["victimAccountMembershipId"], () => getVictimStep(context))
+    .with(["victimAccountMembershipId"], () => Option.Some("Victim"))
     .with(["transactionIds"], () => Option.Some("Transactions"))
     .with(["fraudDetails", P.union("fraudsterChannels", "sharedInformationWithFraudster")], () =>
       Option.Some(getDetailsStep("Fraudster", context)),
@@ -89,11 +84,7 @@ export const getRejectionStep = (
 ): FraudReportRejectionStep =>
   match(rejection)
     .returnType<FraudReportRejectionStep>()
-    .with({ __typename: "AccountMembershipNotFoundRejection" }, () =>
-      getVictimStep(context)
-        .map((step): FraudReportRejectionStep => step)
-        .getOr("Rejected"),
-    )
+    .with({ __typename: "AccountMembershipNotFoundRejection" }, () => "Victim")
     .with(
       {
         __typename: P.union(

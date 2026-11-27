@@ -5,6 +5,7 @@ import {
   getInitialVictimChoice,
   getOtherAccountMemberships,
   getSelectedAccountMembershipId,
+  getTransactionsRemovedByVictimChange,
   getVictimAccountMembershipId,
   VictimAnswer,
 } from "../fraudReport/victim";
@@ -186,5 +187,40 @@ describe("getVictimAccountMembershipId", () => {
         choice: choiceOf(undefined, selectedId),
       }).toUndefined(),
     ).toBe(victim);
+  });
+});
+
+describe("getTransactionsRemovedByVictimChange", () => {
+  const card = { id: "card-1", rail: "Card" } as const;
+  const transfer = { id: "transfer-1", rail: "Transfer" } as const;
+
+  test("removes the card transactions when the victim changes", () => {
+    expect(
+      getTransactionsRemovedByVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: "member-1",
+        victimAccountMembershipId: "member-2",
+      }),
+    ).toEqual([card]);
+  });
+
+  test("removes nothing when the victim stays the same", () => {
+    expect(
+      getTransactionsRemovedByVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: "member-1",
+        victimAccountMembershipId: "member-1",
+      }),
+    ).toEqual([]);
+  });
+
+  test("removes the card transactions when the previous victim isn't known", () => {
+    expect(
+      getTransactionsRemovedByVictimChange({
+        transactions: [card, transfer],
+        previousVictimAccountMembershipId: undefined,
+        victimAccountMembershipId: "member-2",
+      }),
+    ).toEqual([card]);
   });
 });
