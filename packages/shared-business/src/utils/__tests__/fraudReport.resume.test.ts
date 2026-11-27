@@ -36,11 +36,17 @@ describe("getResumeStep", () => {
     expect(getResumeStep({ transactions: [card], ...values })).toBe("Incident");
   });
 
-  test("opens the card sub-step until lost or stolen is answered", () => {
+  test("opens the card sub-step until one of its answers is given", () => {
     expect(getResumeStep({ transactions: [card], ...incident })).toBe("Card");
     expect(getResumeStep({ transactions: [card], ...incident, isLostOrStolen: false })).toBe(
       "Documents",
     );
+    expect(getResumeStep({ transactions: [card], ...incident, hasContactedMerchant: true })).toBe(
+      "Documents",
+    );
+    expect(
+      getResumeStep({ transactions: [card], ...incident, hasFiledPoliceComplaint: true }),
+    ).toBe("Documents");
   });
 
   test("skips the transfer sub-step, which has no answer to give", () => {

@@ -24,7 +24,9 @@ export const toFormValues = ({
   discoveryDetails: fraudDetails?.discoveryDetails ?? undefined,
   fraudsterChannels: fraudDetails?.fraudsterChannels,
   sharedInformationWithFraudster: fraudDetails?.sharedInformationWithFraudster,
+  hasFiledPoliceComplaint: fraudDetails?.hasFiledPoliceComplaint ?? undefined,
   isLostOrStolen: fraudCardDetails?.isLostOrStolen ?? undefined,
   lostOrStolenNoticedAt: fraudCardDetails?.lostOrStolenNoticedAt ?? undefined,
+  hasContactedMerchant: fraudCardDetails?.hasContactedMerchant ?? undefined,
   externalReference: externalReference ?? undefined,
 });

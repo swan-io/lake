@@ -74,8 +74,10 @@ describe("toFormValues", () => {
       discoveryDetails: "My bank app showed a payment I didn't make",
       fraudsterChannels: ["Phone"],
       sharedInformationWithFraudster: ["VerificationCode"],
+      hasFiledPoliceComplaint: true,
       isLostOrStolen: true,
       lostOrStolenNoticedAt: "2026-11-19",
+      hasContactedMerchant: false,
       externalReference: "ref-42",
     });
   });
