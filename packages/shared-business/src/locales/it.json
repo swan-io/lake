@@ -187,6 +187,7 @@
   "fraudReport.step.victim": "Vittima",
   "fraudReport.victim.changeConfirm": "Cambia vittima",
   "fraudReport.victim.changeMessage": "Le transazioni con carta che ha selezionato appartengono alla vittima precedente e verranno rimosse da questa segnalazione. I bonifici restano selezionati.",
+  "fraudReport.victim.changeMessageCardsOnly": "Le transazioni con carta che ha selezionato appartengono alla vittima precedente e verranno rimosse da questa segnalazione.",
   "fraudReport.victim.changeTitle": "Cambiare vittima?",
   "fraudReport.victim.description": "Scelga la vittima dei pagamenti fraudolenti. Può segnalare solo una vittima alla volta.",
   "fraudReport.victim.forYourself": "Sta segnalando una frode a proprio nome?",

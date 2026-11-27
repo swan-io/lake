@@ -182,6 +182,24 @@ export const ChangeVictim: StoryObj<typeof VictimStep> = {
   },
 };
 
+export const ChangeVictimCardsOnly: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [card], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ canvas, userEvent }) => {
+    await pickNicolas({ canvas, userEvent });
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+
+    const modal = within(document.body);
+    await expect(
+      await modal.findByText(
+        "The card transactions you selected belong to the previous victim and will be removed from this report.",
+      ),
+    ).toBeVisible();
+    await expect(modal.queryByText(/Transfers stay selected/)).toBeNull();
+  },
+};
+
 export const CancelVictimChange: StoryObj<typeof VictimStep> = {
   args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
   parameters: { a11y: { test: "off" } },

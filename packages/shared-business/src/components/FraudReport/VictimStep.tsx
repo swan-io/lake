@@ -201,7 +201,11 @@ export const VictimStep = ({
         icon="warning-regular"
         color="warning"
         title={t("fraudReport.victim.changeTitle")}
-        message={t("fraudReport.victim.changeMessage")}
+        message={
+          transactions.some(({ rail }) => rail === "Transfer")
+            ? t("fraudReport.victim.changeMessage")
+            : t("fraudReport.victim.changeMessageCardsOnly")
+        }
         confirmText={t("fraudReport.victim.changeConfirm")}
         onCancel={() => {
           setConfirmVisible(false);

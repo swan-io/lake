@@ -187,6 +187,7 @@
   "fraudReport.step.victim": "Victim",
   "fraudReport.victim.changeConfirm": "Change victim",
   "fraudReport.victim.changeMessage": "The card transactions you selected belong to the previous victim and will be removed from this report. Transfers stay selected.",
+  "fraudReport.victim.changeMessageCardsOnly": "The card transactions you selected belong to the previous victim and will be removed from this report.",
   "fraudReport.victim.changeTitle": "Change the victim?",
   "fraudReport.victim.description": "Choose the victim of the fraudulent payments. You can only report one victim at a time.",
   "fraudReport.victim.forYourself": "Are you reporting fraud for yourself?",

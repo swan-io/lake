@@ -187,6 +187,7 @@
   "fraudReport.step.victim": "Vítima",
   "fraudReport.victim.changeConfirm": "Mudar de vítima",
   "fraudReport.victim.changeMessage": "As transações com cartão que selecionou pertencem à vítima anterior e serão removidas desta comunicação. As transferências continuam selecionadas.",
+  "fraudReport.victim.changeMessageCardsOnly": "As transações com cartão que selecionou pertencem à vítima anterior e serão removidas desta comunicação.",
   "fraudReport.victim.changeTitle": "Mudar de vítima?",
   "fraudReport.victim.description": "Escolha a vítima dos pagamentos fraudulentos. Só pode comunicar a fraude de uma vítima de cada vez.",
   "fraudReport.victim.forYourself": "Está a comunicar uma fraude em nome próprio?",
