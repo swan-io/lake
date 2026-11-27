@@ -48,11 +48,9 @@ export const sortedIndexOf = <T>(array: T[], value: T) => {
 
     const item = array[searchIndex];
 
+    // Only `startIndex` is left to check (`Math.round(0.5)` moves `searchIndex` to `endIndex`)
     if (searchIndex === endIndex || searchIndex === startIndex) {
-      if (item === value) {
-        return startIndex;
-      }
-      return -1;
+      return array[startIndex] === value ? startIndex : -1;
     }
 
     if (item === value) {

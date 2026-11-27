@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { describe, expect, test } from "vitest";
+import { t } from "../i18n";
 import {
   getCompanyTaxNumberHelp,
   getCompanyTaxNumberPlaceholder,
@@ -8,6 +10,7 @@ import {
   isValidUsaTaxNumber,
   sanitizeDecimal,
   validateArrayRequired,
+  validateBirthdate,
   validateBooleanRequired,
   validateBooleanTypeRequired,
   validateCompanyTaxNumber,
@@ -490,5 +493,35 @@ describe("sanitizeDecimal", () => {
 
   test("returns unchanged string when no spaces or commas", () => {
     expect(sanitizeDecimal("1234.56")).toBe("1234.56");
+  });
+});
+
+describe("validateBirthdate", () => {
+  const toExtractedDate = (date: dayjs.Dayjs) => ({
+    day: date.format("DD"),
+    month: date.format("MM"),
+    year: date.format("YYYY"),
+  });
+
+  test("accepts a birthdate in the allowed range", () => {
+    expect(validateBirthdate(toExtractedDate(dayjs.utc().subtract(30, "years")))).toBeUndefined();
+  });
+
+  test("rejects a birthdate in the future with a dedicated message", () => {
+    expect(validateBirthdate(toExtractedDate(dayjs.utc().add(2, "years")))).toBe(
+      t("validation.birthdateCannotBeFuture"),
+    );
+  });
+
+  test("rejects a birthdate less than 4 years ago", () => {
+    expect(validateBirthdate(toExtractedDate(dayjs.utc().subtract(2, "years")))).toBe(
+      t("validation.invalidBirthDate"),
+    );
+  });
+
+  test("rejects a date that doesn't exist", () => {
+    expect(validateBirthdate({ day: "31", month: "02", year: "1990" })).toBe(
+      t("validation.invalidBirthDate"),
+    );
   });
 });

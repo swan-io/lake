@@ -1,5 +1,15 @@
 import { afterEach } from "vitest";
 
+// `.storybook/preview-body.html` adds `#full-page-layer-root` next to `#storybook-root`, but the
+// Vitest browser runner doesn't load the preview body. FullViewportLayer and RightPanel look the
+// element up when their module is imported, so without it their stories crash with "Target
+// container is not a DOM element" and never get audited.
+if (document.querySelector("#full-page-layer-root") == null) {
+  const fullPageLayerRoot = document.createElement("div");
+  fullPageLayerRoot.id = "full-page-layer-root";
+  document.body.append(fullPageLayerRoot);
+}
+
 // Storybook only copies its reports to `task.meta` when a story passes, so a story failing on
 // a11y violations would leave nothing for the reporter. We copy a trimmed-down version of the
 // axe results ourselves, whatever the test outcome, for `scripts/tests/a11yReporter.ts`.

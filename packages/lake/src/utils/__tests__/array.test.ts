@@ -138,6 +138,21 @@ describe("sortedIndexOf", () => {
       ),
     ).toEqual(-1);
   });
+  test("should find the first item", () => {
+    expect(sortedIndexOf([5], 5)).toEqual(0);
+    expect(sortedIndexOf([1, 2, 3], 1)).toEqual(0);
+    expect(sortedIndexOf(["a", "b", "c"], "a")).toEqual(0);
+  });
+  test("should return the same index as indexOf for every value", () => {
+    for (let length = 0; length <= 64; length++) {
+      // Even numbers only, so that odd values are missing from the array
+      const array = Array.from({ length }, (_, index) => index * 2);
+
+      for (let value = -1; value <= length * 2; value++) {
+        expect(sortedIndexOf(array, value)).toEqual(array.indexOf(value));
+      }
+    }
+  });
 });
 
 describe("groupBy", () => {

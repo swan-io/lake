@@ -7,7 +7,7 @@ import { colors, invariantColors, spacings } from "@swan-io/lake/src/constants/d
 import { isNotNullish, isNotNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import dayjs from "dayjs";
 import { printFormat } from "iban";
-import { CSSProperties } from "react";
+import { CSSProperties, Fragment } from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { match } from "ts-pattern";
 import { CountryCCA3, getCountryName } from "../constants/countries";
@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     fontWeight: "400",
+  },
+  subtitleDate: {
+    fontWeight: "600",
   },
   closingBalanceLabel: {
     fontSize: 15,
@@ -277,7 +280,12 @@ export const CreditStatementV1 = ({
       <Box direction="row" justifyContent="spaceBetween">
         <Box direction="column" justifyContent="end">
           <LakeText style={styles.subtitle} color={colors.gray[900]}>
-            {t("creditStatement.date", {
+            {formatNestedMessage("creditStatement.date", {
+              span: chunk => (
+                <LakeText style={[styles.subtitle, styles.subtitleDate]} color={colors.gray[900]}>
+                  {chunk}
+                </LakeText>
+              ),
               openingDate: dayjs(openingDate).format(locale.dateFormat),
               closingDate: dayjs(closingDate).format(locale.dateFormat),
             })}
@@ -323,8 +331,8 @@ export const CreditStatementV1 = ({
             counterparty,
             maskedPan,
           }) => (
-            <>
-              <Box direction="row" key={transactionId}>
+            <Fragment key={transactionId}>
+              <Box direction="row">
                 <LakeText style={[styles.smallText, { width: "15%" }]} color={colors.gray[700]}>
                   {dayjs(transactionDate).format(locale.dateFormat)}
                 </LakeText>
@@ -352,7 +360,7 @@ export const CreditStatementV1 = ({
                 </LakeText>
               </Box>
               <Space height={8} />
-            </>
+            </Fragment>
           ),
         )}
 
