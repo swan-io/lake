@@ -13,7 +13,12 @@ import type {
   FraudReportRejection,
   FraudReportTransaction,
 } from "../../utils/fraudReport/types";
-import { FraudReportFlowApi, useFraudReportFlow } from "../useFraudReportFlow";
+import {
+  DRAFT_LOOKUP_TIMEOUT_MS,
+  FraudReportFlowApi,
+  FraudReportResumeFrom,
+  useFraudReportFlow,
+} from "../useFraudReportFlow";
 
 const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
 const transfer: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
@@ -36,16 +41,20 @@ const seededTransactions = (): FakeTransaction[] => [
   { id: "transfer-1", accountId: "account-1", rail: "Transfer" },
 ];
 
-const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
-  const fake: FraudReportApi = createFakeFraudReportApi({
-    transactions: seededTransactions(),
-    accountMemberships: [
-      { id: "member-1", accountId: "account-1" },
-      { id: "member-2", accountId: "account-1" },
-    ],
-    ...config,
-  });
-
+const setup = (
+  config: Partial<FakeFraudReportApiConfig> = {},
+  {
+    fake = createFakeFraudReportApi({
+      transactions: seededTransactions(),
+      accountMemberships: [
+        { id: "member-1", accountId: "account-1" },
+        { id: "member-2", accountId: "account-1" },
+      ],
+      ...config,
+    }),
+    resumeFrom,
+  }: { fake?: FraudReportApi; resumeFrom?: FraudReportResumeFrom } = {},
+) => {
   const calls: Call[] = [];
 
   const api: FraudReportFlowApi = {
@@ -65,10 +74,14 @@ const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
       calls.push({ name: "cancel", input });
       return fake.cancel(input);
     },
+    findDrafts: input => {
+      calls.push({ name: "findDrafts", input });
+      return fake.findDrafts(input);
+    },
   };
 
   const onExit = vi.fn();
-  const { result, unmount } = renderHook(() => useFraudReportFlow({ api, onExit }));
+  const { result, unmount } = renderHook(() => useFraudReportFlow({ api, onExit, resumeFrom }));
 
   return {
     result,
@@ -80,6 +93,8 @@ const setup = (config: Partial<FakeFraudReportApiConfig> = {}) => {
     next: (values?: Partial<FraudReportFormValues>) => act(() => result.current.next(values)),
     previous: () => act(() => result.current.previous()),
     cancel: () => act(() => result.current.cancel()),
+    resume: () => act(() => result.current.resume()),
+    startOver: () => act(() => result.current.startOver()),
   };
 };
 
@@ -956,5 +971,291 @@ describe("cancel", () => {
     expect(flow.callNames()).toEqual(callsBefore);
     expect(flow.onExit).toHaveBeenCalledTimes(1);
     expectReset(flow);
+  });
+});
+
+const getOfferedId = (flow: Flow) =>
+  flow.result.current.resumable
+    .toOption()
+    .flatMap(draft => draft)
+    .map(({ id }) => id)
+    .toUndefined();
+
+const fromCard: FraudReportResumeFrom = { accountId: "account-1", transactionIds: ["card-1"] };
+
+// A draft left by an earlier visit, with the incident answered
+const leaveDraft = () => {
+  const earlier = setup();
+  startReport(earlier, { victim: "member-1", transactions: [card] });
+  earlier.next(incident);
+  return earlier;
+};
+
+describe("resume", () => {
+  test("starts a new report without looking for drafts when it isn't opened from a transaction", () => {
+    const flow = setup();
+
+    expect(flow.result.current.resumable.isNotAsked()).toBe(true);
+    expect(flow.callNames()).toEqual([]);
+
+    flow.next();
+
+    expect(flow.result.current.resumable.isNotAsked()).toBe(true);
+  });
+
+  test("starts a new report when the transactions have no draft", () => {
+    const flow = setup({}, { resumeFrom: fromCard });
+
+    expect(flow.calls).toEqual([{ name: "findDrafts", input: fromCard }]);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.step).toBe("Intro");
+  });
+
+  test("offers the draft and resumes it, prefilled, on its first unanswered step", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+
+    expect(getOfferedId(flow)).toBe(disputeCaseId);
+
+    flow.resume();
+
+    expect(flow.result.current.step).toBe("Card");
+    expect(flow.result.current.values).toMatchObject({ transactions: [card], ...incident });
+    expect(flow.result.current.disputeCaseId.toUndefined()).toBe(disputeCaseId);
+    expect(getOfferedId(flow)).toBeUndefined();
+
+    flow.next({ isLostOrStolen: true });
+
+    expect(flow.callNames()).toEqual(["findDrafts", "update"]);
+    expect(flow.calls.at(-1)?.input).not.toHaveProperty("transactionIds");
+    expect(flow.result.current.step).toBe("Documents");
+  });
+
+  test("resumes on the transactions step when the draft doesn't hold every start transaction", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup(
+      {},
+      {
+        fake: earlier.fake,
+        resumeFrom: { accountId: "account-1", transactionIds: ["card-1", "transfer-1"] },
+      },
+    );
+
+    flow.resume();
+
+    expect(flow.result.current.step).toBe("Transactions");
+    expect(flow.result.current.values).toMatchObject({ transactions: [card], ...incident });
+
+    flow.next({ transactions: [card, transfer] });
+
+    expect(flow.calls.at(-1)).toMatchObject({
+      name: "update",
+      input: { disputeCaseId, transactionIds: ["card-1", "transfer-1"] },
+    });
+  });
+
+  test("offers the latest draft when there are several", () => {
+    const fake = leaveDraft().fake;
+    const later = setup({}, { fake });
+    startReport(later, { victim: "member-1", transactions: [card] });
+    const latestId = later.result.current.disputeCaseId.toUndefined();
+
+    const flow = setup({}, { fake, resumeFrom: fromCard });
+
+    expect(getOfferedId(flow)).toBe(latestId);
+  });
+
+  test("starts over: cancels the old draft and starts a new report", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+
+    flow.startOver();
+
+    expect(flow.calls.at(-1)).toEqual({ name: "cancel", input: { disputeCaseId } });
+    expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.step).toBe("Intro");
+
+    startReport(flow, { victim: "member-1", transactions: [card] });
+
+    expect(flow.callNames()).toEqual(["findDrafts", "cancel", "draft"]);
+    expect(flow.result.current.disputeCaseId.toUndefined()).not.toBe(disputeCaseId);
+  });
+
+  test("waits for the old draft's cancel before starting over", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(Future.make(() => {}));
+
+    flow.startOver();
+    flow.next();
+    flow.resume();
+
+    expect(flow.result.current.saving).toBe(true);
+    expect(getOfferedId(flow)).toBe(disputeCaseId);
+    expect(flow.result.current.step).toBe("Intro");
+  });
+
+  test("keeps the offer and exposes the error when the old draft can't be canceled, then retries", () => {
+    const error = new Error("Network error");
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(
+      Future.value(Result.Error({ kind: "error" as const, error })),
+    );
+
+    flow.startOver();
+
+    expect(getOfferedId(flow)).toBe(disputeCaseId);
+    expect(flow.result.current.error.toUndefined()).toEqual({ kind: "error", error });
+    expect(flow.result.current.saving).toBe(false);
+    expect(flow.result.current.step).toBe("Intro");
+
+    flow.startOver();
+
+    expect(getStatus(flow, disputeCaseId)).toBe("Canceled");
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test("starts over when the old draft is no longer a draft", () => {
+    const earlier = leaveDraft();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    vi.spyOn(earlier.fake, "cancel").mockReturnValueOnce(
+      rejected({
+        __typename: "DisputeCaseNotFoundRejection",
+        disputeCaseId: "case-1",
+        message: "",
+      }),
+    );
+
+    flow.startOver();
+
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.result.current.step).toBe("Intro");
+  });
+
+  test("goes to the submitted step, with no error, when the old draft was submitted elsewhere", () => {
+    const earlier = leaveDraft();
+    earlier.next({ isLostOrStolen: true });
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+    earlier.next();
+    expect(getStatus(flow, disputeCaseId)).toBe("Submitted");
+
+    flow.startOver();
+
+    expect(flow.result.current.step).toBe("Submitted");
+    expect(flow.result.current.error.isNone()).toBe(true);
+    expect(flow.result.current.disputeCaseId.toUndefined()).toBe(disputeCaseId);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.saving).toBe(false);
+  });
+
+  test("starts a new report when looking for drafts takes too long", () => {
+    vi.useFakeTimers();
+    const { fake } = setup();
+    const stop = vi.fn();
+    vi.spyOn(fake, "findDrafts").mockReturnValueOnce(Future.make(() => stop));
+    const flow = setup({}, { fake, resumeFrom: fromCard });
+
+    act(() => {
+      vi.advanceTimersByTime(DRAFT_LOOKUP_TIMEOUT_MS - 1);
+    });
+    expect(flow.result.current.resumable.isLoading()).toBe(true);
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    flow.next();
+
+    expect(stop).toHaveBeenCalledTimes(1);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.step).toBe("Victim");
+  });
+
+  test("starts a new report when the drafts can't be read", () => {
+    const { fake } = setup();
+    vi.spyOn(fake, "findDrafts").mockReturnValueOnce(
+      Future.value(Result.Error({ kind: "error" as const, error: new Error("Network error") })),
+    );
+    const flow = setup({}, { fake, resumeFrom: fromCard });
+
+    expect(flow.result.current.resumable.isDone()).toBe(true);
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.error.isNone()).toBe(true);
+  });
+
+  test("waits on the intro while it looks for drafts", () => {
+    const earlier = leaveDraft();
+    let resolve: (value: Result<FraudReportCase[], never>) => void = () => {};
+    vi.spyOn(earlier.fake, "findDrafts").mockReturnValueOnce(
+      Future.make(resolver => {
+        resolve = resolver;
+      }),
+    );
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+
+    flow.next();
+    expect(flow.result.current.resumable.isLoading()).toBe(true);
+    expect(flow.result.current.step).toBe("Intro");
+
+    act(() => {
+      resolve(Result.Ok([{ id: "found" } as FraudReportCase]));
+    });
+
+    expect(getOfferedId(flow)).toBe("found");
+  });
+
+  test("closes the offer when the report starts, keeping the old draft", () => {
+    const earlier = leaveDraft();
+    const disputeCaseId = earlier.result.current.disputeCaseId.toUndefined();
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+
+    startReport(flow, { victim: "member-1", transactions: [card] });
+    const newId = flow.result.current.disputeCaseId.toUndefined();
+    flow.resume();
+    flow.startOver();
+
+    expect(getOfferedId(flow)).toBeUndefined();
+    expect(flow.result.current.disputeCaseId.toUndefined()).toBe(newId);
+    expect(flow.callNames()).toEqual(["findDrafts", "draft"]);
+    expect(getStatus(flow, disputeCaseId)).toBe("Draft");
+  });
+
+  test("doesn't offer a draft found after the user left", () => {
+    const earlier = leaveDraft();
+    let resolve: (value: Result<FraudReportCase[], never>) => void = () => {};
+    vi.spyOn(earlier.fake, "findDrafts").mockReturnValueOnce(
+      Future.make(resolver => {
+        resolve = resolver;
+      }),
+    );
+    const flow = setup({}, { fake: earlier.fake, resumeFrom: fromCard });
+
+    flow.cancel();
+    act(() => {
+      resolve(Result.Ok([{ id: "late" } as FraudReportCase]));
+    });
+
+    expect(flow.onExit).toHaveBeenCalledTimes(1);
+    expect(getOfferedId(flow)).toBeUndefined();
+  });
+
+  test("stops looking for drafts when the flow is gone", () => {
+    const { fake } = setup();
+    const stop = vi.fn();
+    vi.spyOn(fake, "findDrafts").mockReturnValueOnce(Future.make(() => stop));
+    const flow = setup({}, { fake, resumeFrom: fromCard });
+
+    flow.unmount();
+
+    expect(stop).toHaveBeenCalledTimes(1);
   });
 });
