@@ -190,7 +190,7 @@ export const useFraudReportFlow = ({
               Some: savedCase =>
                 api.update(
                   toUpdateInput({
-                    savedCase,
+                    disputeCaseId: savedCase.id,
                     values,
                     savedTransactionIds: state.savedTransactionIds,
                   }),

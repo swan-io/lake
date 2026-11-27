@@ -7,7 +7,6 @@ import type {
   FraudCardDetailsInput,
   FraudDetailsInput,
   FraudReason,
-  FraudReportCase,
   FraudReportTransaction,
   FraudsterChannel,
   FraudTypology,
@@ -117,18 +116,18 @@ export const toDraftInput = (values: FraudReportFormValues): DraftFraudDisputeCa
 });
 
 export const toUpdateInput = ({
-  savedCase,
+  disputeCaseId,
   values,
   savedTransactionIds,
 }: {
-  savedCase: Pick<FraudReportCase, "id">;
+  disputeCaseId: string;
   values: FraudReportFormValues;
   savedTransactionIds: string[];
 }): UpdateDraftFraudDisputeCaseInput => {
   const transactionIds = toTransactionIds(values);
 
   return {
-    disputeCaseId: savedCase.id,
+    disputeCaseId,
     ...(isSameSelection(transactionIds, savedTransactionIds) ? undefined : { transactionIds }),
     ...toDetails(values, { isUpdate: true }),
     ...match(values.externalReference)

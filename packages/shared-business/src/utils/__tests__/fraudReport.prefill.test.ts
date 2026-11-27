@@ -57,7 +57,7 @@ const fullDraft = draft({
 
 const roundTrip = (savedCase: FraudReportCase) =>
   toUpdateInput({
-    savedCase,
+    disputeCaseId: savedCase.id,
     values: toFormValues(savedCase),
     savedTransactionIds: savedCase.transactions.map(({ id }) => id),
   });

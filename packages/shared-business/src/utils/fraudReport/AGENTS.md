@@ -51,7 +51,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 ## Form and validation
 
 - `FraudReportFormValues` (`toInput.ts`) holds what the user entered, as API values (enums, `YYYY-MM-DD` dates). Build inputs only with `toDraftInput` and `toUpdateInput`.
-- `toUpdateInput` takes the saved case's ID and the transaction IDs last sent (the user's selection, not the case's `transactions`). It leaves `transactionIds` out when the selection is the same.
+- `toUpdateInput` takes the saved case's ID as `disputeCaseId` and the transaction IDs last sent (the user's selection, not the case's `transactions`). It leaves `transactionIds` out when the selection is the same.
 - `toFormValues` (`prefill.ts`) fills the form from a resumed draft. A victim the caller can't see stays out, so the update keeps the stored one. Its `transactions` are only the ones the caller can view, and the rail comes from them: until the API says whether some are hidden, a resumed case can show the wrong Details sub-steps, send a victim the API rejects, or drop hidden transactions when the selection changes.
 - The card sub-step's "actions taken" are form values: Merchant is `hasContactedMerchant`, Police is `hasFiledPoliceComplaint`. Continue on the card sub-step sends a selected action as `true`, an unselected one as `null`. `toFormValues` fills both from a resumed draft. `fraudTransferDetails` is never sent yet, so the stored one stays.
 - On the card sub-step, the noticed date shows only when the card was lost or stolen, and is cleared otherwise. An update on a case with card transactions always sends `fraudCardDetails`, with `null` for each empty answer, so a removed answer is cleared.

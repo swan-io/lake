@@ -469,7 +469,7 @@ describe("toUpdateInput", () => {
   test("sends the card details and no victim on a card-only case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [card1, card2] },
         savedTransactionIds: ["card-1"],
       }),
@@ -485,7 +485,7 @@ describe("toUpdateInput", () => {
   test("sends the victim and no card details on a transfer-only case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1] },
         savedTransactionIds: ["transfer-1", "card-1"],
       }),
@@ -501,7 +501,7 @@ describe("toUpdateInput", () => {
   test("sends the card details and no victim on a mixed case", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1, card1] },
         savedTransactionIds: ["transfer-1"],
       }),
@@ -517,7 +517,7 @@ describe("toUpdateInput", () => {
   test("never sends transfer details", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [transfer1] },
         savedTransactionIds: [],
       }),
@@ -527,7 +527,7 @@ describe("toUpdateInput", () => {
   test("clears the fraudster answers once no fraudster convinced the user", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, reportedReason: "Unauthorized", transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }).fraudDetails,
@@ -542,7 +542,7 @@ describe("toUpdateInput", () => {
   test("leaves the transaction IDs out when the selection didn't change", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...incident, transactions: [card1, transfer1] },
         savedTransactionIds: ["transfer-1", "card-1"],
       }),
@@ -560,7 +560,7 @@ describe("toUpdateInput", () => {
     ["a transaction is there twice", [card1, card1], ["card-1", "card-2"]],
   ])("sends the whole selection when %s", (_, transactions, savedTransactionIds) => {
     expect(
-      toUpdateInput({ savedCase, values: { transactions }, savedTransactionIds }),
+      toUpdateInput({ disputeCaseId: savedCase.id, values: { transactions }, savedTransactionIds }),
     ).toStrictEqual({
       disputeCaseId,
       transactionIds: transactions.map(({ id }) => id),
@@ -571,7 +571,7 @@ describe("toUpdateInput", () => {
   test("leaves every group out when nothing is filled", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { transactions: [transfer1] },
         savedTransactionIds: ["transfer-1"],
       }),
@@ -581,7 +581,7 @@ describe("toUpdateInput", () => {
   test("sends the card details even when empty, so removed answers are cleared", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }),
@@ -598,7 +598,7 @@ describe("toUpdateInput", () => {
   test("clears the external reference when it was emptied", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { externalReference: "", transactions: [transfer1] },
         savedTransactionIds: ["transfer-1"],
       }),
@@ -608,7 +608,7 @@ describe("toUpdateInput", () => {
   test("keeps the stored external reference when the form has none", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...incident, transactions: [card1] },
         savedTransactionIds: ["card-1"],
       }),
@@ -618,7 +618,7 @@ describe("toUpdateInput", () => {
   test("holds the card details and the victim back while no transaction is selected", () => {
     expect(
       toUpdateInput({
-        savedCase,
+        disputeCaseId: savedCase.id,
         values: { ...filled, transactions: [] },
         savedTransactionIds: [],
       }),
@@ -627,7 +627,7 @@ describe("toUpdateInput", () => {
 
   test("sends the actions taken from the form", () => {
     const input = toUpdateInput({
-      savedCase,
+      disputeCaseId: savedCase.id,
       values: { ...filled, hasContactedMerchant: true, transactions: [card1] },
       savedTransactionIds: ["card-1"],
     });
@@ -697,7 +697,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...filled, transactions: [transfer1] },
           savedTransactionIds: ["card-1"],
         }),
@@ -718,7 +718,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...filled, transactions: [card1] },
           savedTransactionIds: ["transfer-1"],
         }),
@@ -742,7 +742,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...toFormValues(savedCase), hasContactedMerchant: undefined },
           savedTransactionIds: ["card-1"],
         }),
@@ -766,7 +766,7 @@ describe("inputs sent to the API", () => {
     const updated = getCase(
       await api.update(
         toUpdateInput({
-          savedCase,
+          disputeCaseId: savedCase.id,
           values: { ...toFormValues(savedCase), ...filled, transactions: [card1, transfer1] },
           savedTransactionIds: ["card-1", "transfer-1"],
         }),
