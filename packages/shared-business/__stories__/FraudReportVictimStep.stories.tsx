@@ -1,13 +1,15 @@
 import { Option } from "@bloodyowl/boxed";
-import { Meta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { LakeText } from "@swan-io/lake/src/components/LakeText";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { WithCurrentColor } from "@swan-io/lake/src/components/WithCurrentColor";
 import { noop } from "@swan-io/lake/src/utils/function";
 import { ComponentProps, useState } from "react";
 import { StyleSheet } from "react-native";
+import { expect, fn, waitFor, within } from "storybook/test";
 import { FraudReportLayout } from "../src/components/FraudReport/FraudReportLayout";
 import { VictimStep } from "../src/components/FraudReport/VictimStep";
+import type { FraudReportTransaction } from "../src/utils/fraudReport/types";
 import { FraudReportAccountMembership } from "../src/utils/fraudReport/victim";
 import { StoryBlock, StoryPart } from "./_StoriesComponents";
 
@@ -22,11 +24,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const julia: FraudReportAccountMembership = { id: "member-1", name: "Julia Fox" };
+const julia: FraudReportAccountMembership = {
+  id: "member-1",
+  name: "Julia Fox",
+  phoneNumber: "+33 6 12 34 56 78",
+};
 
 const accountMemberships: FraudReportAccountMembership[] = [
   julia,
-  { id: "member-2", name: "Nicolas Saison" },
+  { id: "member-2", name: "Nicolas Saison", phoneNumber: "+33 6 98 76 54 32" },
   { id: "member-3", name: "Ada Lovelace" },
 ];
 
@@ -46,6 +52,7 @@ const Step = ({
     <VictimStep
       currentAccountMembership={currentAccountMembership}
       accountMemberships={accountMemberships}
+      transactions={[]}
       values={{ victimAccountMembershipId }}
       onNext={onNext}
     />
@@ -123,3 +130,141 @@ export const States = () => (
     </StoryBlock>
   </WithCurrentColor>
 );
+
+type Props = ComponentProps<typeof VictimStep>;
+
+const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
+const transfer: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
+
+const render = (args: Props) => (
+  <WithCurrentColor variant="live">
+    <FraudReportLayout activeStep="Victim" detailsSteps={[]}>
+      <VictimStep {...args} />
+    </FraudReportLayout>
+  </WithCurrentColor>
+);
+
+const reportedForJulia = {
+  currentAccountMembership: asMember,
+  accountMemberships,
+  values: { victimAccountMembershipId: "member-1" },
+};
+
+const pickNicolas = async ({
+  canvas,
+  userEvent,
+}: {
+  canvas: ReturnType<typeof within>;
+  userEvent: { click: (element: Element) => Promise<void> };
+}) => {
+  await userEvent.click(canvas.getByText("No"));
+  await userEvent.click(
+    await canvas.findByRole("button", { name: /For whom are you reporting for\?/ }),
+  );
+  await userEvent.click(within(document.body).getByRole("option", { name: /Nicolas Saison/ }));
+  await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+};
+
+export const ChangeVictim: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await pickNicolas({ canvas, userEvent });
+
+    const modal = within(document.body);
+    await expect(await modal.findByText("Change the victim?")).toBeVisible();
+    await expect(args.onNext).not.toHaveBeenCalled();
+
+    await userEvent.click(modal.getByRole("button", { name: "Change victim" }));
+
+    await expect(args.onNext).toHaveBeenCalledWith({ victimAccountMembershipId: "member-2" });
+  },
+};
+
+export const ChangeVictimWarning: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await pickNicolas({ canvas, userEvent });
+
+    await expect(
+      await within(document.body).findByRole("heading", { name: "Change the victim?" }),
+    ).toBeVisible();
+    await expect(args.onNext).not.toHaveBeenCalled();
+  },
+};
+
+export const CancelVictimChange: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await pickNicolas({ canvas, userEvent });
+
+    const modal = within(document.body);
+    await userEvent.click(await modal.findByRole("button", { name: "Cancel" }));
+
+    await waitFor(() =>
+      expect(modal.queryByRole("heading", { name: "Change the victim?" })).toBeNull(),
+    );
+    await expect(await canvas.findByText("Julia Fox")).toBeVisible();
+    await expect(args.onNext).not.toHaveBeenCalled();
+  },
+};
+
+export const ChangeVictimWithoutCards: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [transfer], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await pickNicolas({ canvas, userEvent });
+
+    await expect(args.onNext).toHaveBeenCalledWith({ victimAccountMembershipId: "member-2" });
+    await expect(within(document.body).queryByText("Change the victim?")).toBeNull();
+  },
+};
+
+export const KeepVictim: StoryObj<typeof VictimStep> = {
+  args: { ...reportedForJulia, transactions: [card, transfer], onNext: fn() },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ args, canvas, userEvent }) => {
+    await userEvent.click(canvas.getByText("No"));
+    await userEvent.click(
+      await canvas.findByRole("button", { name: /For whom are you reporting for\?/ }),
+    );
+    await userEvent.click(within(document.body).getByRole("option", { name: /Nicolas Saison/ }));
+    await userEvent.click(canvas.getByText("Yes"));
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+
+    await expect(args.onNext).toHaveBeenCalledWith({ victimAccountMembershipId: "member-1" });
+    await expect(within(document.body).queryByText("Change the victim?")).toBeNull();
+  },
+};
+
+export const SearchMembers: StoryObj<typeof VictimStep> = {
+  args: {
+    currentAccountMembership: asOperator,
+    accountMemberships,
+    transactions: [],
+    values: {},
+    onNext: fn(),
+  },
+  parameters: { a11y: { test: "off" } },
+  render,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(
+      await canvas.findByRole("button", { name: /For whom are you reporting for\?/ }),
+    );
+
+    const list = within(document.body);
+    await expect(await list.findByText("+33 6 98 76 54 32")).toBeVisible();
+
+    await userEvent.type(list.getByPlaceholderText("Search for a member"), "Ada");
+
+    await waitFor(() => expect(list.queryByRole("option", { name: /Nicolas Saison/ })).toBeNull());
+    await expect(list.getByRole("option", { name: "Ada Lovelace" })).toBeVisible();
+  },
+};

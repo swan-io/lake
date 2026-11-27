@@ -8,17 +8,21 @@ import { RadioGroup } from "@swan-io/lake/src/components/RadioGroup";
 import { Space } from "@swan-io/lake/src/components/Space";
 import { Tile } from "@swan-io/lake/src/components/Tile";
 import { colors } from "@swan-io/lake/src/constants/design";
+import { isNullishOrEmpty } from "@swan-io/lake/src/utils/nullish";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import type { FraudReportTransaction } from "../../utils/fraudReport/types";
 import {
   FraudReportAccountMembership,
   getInitialVictimChoice,
   getOtherAccountMemberships,
   getSelectedAccountMembershipId,
+  getTransactionsRemovedByVictimChange,
   getVictimAccountMembershipId,
   VictimAnswer,
 } from "../../utils/fraudReport/victim";
 import { formatNestedMessage, t } from "../../utils/i18n";
+import { ConfirmModal } from "../ConfirmModal";
 import {
   FraudReportFooter,
   FraudReportStepProps,
@@ -33,6 +37,7 @@ const styles = StyleSheet.create({
 });
 
 type Props = FraudReportStepProps<"victimAccountMembershipId"> & {
+  transactions: FraudReportTransaction[];
   currentAccountMembership: Option<FraudReportAccountMembership>;
   accountMemberships: FraudReportAccountMembership[];
 };
@@ -40,10 +45,12 @@ type Props = FraudReportStepProps<"victimAccountMembershipId"> & {
 export const VictimStep = ({
   currentAccountMembership,
   accountMemberships,
+  transactions,
   values,
   onNext,
 }: Props) => {
   const small = useFraudReportSmallLayout();
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   const [choice, setChoice] = useState(() =>
     getInitialVictimChoice({
@@ -72,7 +79,7 @@ export const VictimStep = ({
   const memberItems = getOtherAccountMemberships({
     currentAccountMembership,
     accountMemberships,
-  }).map(({ id, name }) => ({ name, value: id }));
+  }).map(({ id, name, phoneNumber }) => ({ name, value: id, phoneNumber }));
 
   const memberPicker = (
     <LakeLabel
@@ -86,6 +93,19 @@ export const VictimStep = ({
         <LakeSelect
           id={id}
           items={memberItems}
+          hasSearch={true}
+          searchPlaceholder={t("fraudReport.victim.searchMember")}
+          renderItem={item => (
+            <Box direction="column">
+              <LakeText color={colors.gray[900]}>{item.name}</LakeText>
+
+              {isNullishOrEmpty(item.phoneNumber) ? null : (
+                <LakeText variant="smallRegular" color={colors.gray[600]}>
+                  {item.phoneNumber}
+                </LakeText>
+              )}
+            </Box>
+          )}
           value={selectedId.toUndefined()}
           onValueChange={value =>
             setChoice(previous => ({ ...previous, selectedId: Option.Some(value) }))
@@ -151,8 +171,42 @@ export const VictimStep = ({
       <FraudReportFooter
         nextDisabled={victim.isNone()}
         onNext={() =>
-          victim.tapSome(victimAccountMembershipId => onNext({ victimAccountMembershipId }))
+          victim.tapSome(victimAccountMembershipId => {
+            const removedTransactions = getTransactionsRemovedByVictimChange({
+              transactions,
+              previousVictimAccountMembershipId: values.victimAccountMembershipId,
+              victimAccountMembershipId,
+            });
+
+            if (removedTransactions.length > 0) {
+              setConfirmVisible(true);
+            } else {
+              onNext({ victimAccountMembershipId });
+            }
+          })
         }
+      />
+
+      <ConfirmModal
+        visible={confirmVisible}
+        icon="warning-regular"
+        color="warning"
+        title={t("fraudReport.victim.changeTitle")}
+        message={t("fraudReport.victim.changeMessage")}
+        confirmText={t("fraudReport.victim.changeConfirm")}
+        onCancel={() => {
+          setConfirmVisible(false);
+          setChoice(
+            getInitialVictimChoice({
+              currentAccountMembership,
+              victimAccountMembershipId: values.victimAccountMembershipId,
+            }),
+          );
+        }}
+        onConfirm={() => {
+          setConfirmVisible(false);
+          victim.tapSome(victimAccountMembershipId => onNext({ victimAccountMembershipId }));
+        }}
       />
     </>
   );
