@@ -100,6 +100,7 @@ export const getVictimChange = ({
     previousVictimAccountMembershipId !== victimAccountMembershipId;
 
   return {
+    changed,
     removed: changed ? transactions.filter(({ rail }) => rail === "Card") : [],
     kept: changed ? transactions.filter(({ rail }) => rail !== "Card") : transactions,
   };

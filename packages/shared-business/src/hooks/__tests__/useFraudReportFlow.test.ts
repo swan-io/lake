@@ -110,6 +110,13 @@ const startReport = (
   flow.next({ transactions });
 };
 
+const goBackTo = (flow: Flow, step: string) => {
+  for (let index = 0; index < 10 && flow.result.current.step !== step; index++) {
+    flow.previous();
+  }
+  expect(flow.result.current.step).toBe(step);
+};
+
 afterEach(() => {
   vi.useRealTimers();
 });
@@ -382,13 +389,27 @@ describe("victim", () => {
     startReport(flow, { victim: "member-1", transactions: [card, transfer] });
     flow.next(incident);
     flow.next({ isLostOrStolen: true, lostOrStolenNoticedAt: "2026-11-01" });
-    while (flow.result.current.step !== "Victim") {
-      flow.previous();
-    }
+    goBackTo(flow, "Victim");
 
     flow.next({ victimAccountMembershipId: "member-2" });
 
     expect(flow.result.current.values).toMatchObject(incident);
+    expect(flow.result.current.values.isLostOrStolen).toBeUndefined();
+    expect(flow.result.current.values.lostOrStolenNoticedAt).toBeUndefined();
+  });
+
+  test("clears the previous victim's card answers when the victim changes with only transfers selected", () => {
+    const flow = setup();
+    startReport(flow, { victim: "member-1", transactions: [card, transfer] });
+    flow.next(incident);
+    flow.next({ isLostOrStolen: true, lostOrStolenNoticedAt: "2026-11-01" });
+    goBackTo(flow, "Transactions");
+    flow.next({ transactions: [transfer] });
+    goBackTo(flow, "Victim");
+
+    flow.next({ victimAccountMembershipId: "member-2" });
+
+    expect(flow.result.current.values.transactions).toEqual([transfer]);
     expect(flow.result.current.values.isLostOrStolen).toBeUndefined();
     expect(flow.result.current.values.lostOrStolenNoticedAt).toBeUndefined();
   });

@@ -174,6 +174,11 @@ export const ChangeVictim: StoryObj<typeof VictimStep> = {
 
     const modal = within(document.body);
     await expect(await modal.findByText("Change the victim?")).toBeVisible();
+    await expect(
+      modal.getByText(
+        "The card transactions you selected belong to the previous victim and will be removed from this report. Transfers stay selected.",
+      ),
+    ).toBeVisible();
     await expect(args.onNext).not.toHaveBeenCalled();
 
     await userEvent.click(modal.getByRole("button", { name: "Change victim" }));

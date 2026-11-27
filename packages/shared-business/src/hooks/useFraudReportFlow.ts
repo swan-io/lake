@@ -171,21 +171,20 @@ export const useFraudReportFlow = ({
       }
 
       const merged: FraudReportFormValues = { ...state.values, ...input };
-      const { removed, kept } = getVictimChange({
+      const { changed, kept } = getVictimChange({
         transactions: merged.transactions,
         previousVictimAccountMembershipId: state.values.victimAccountMembershipId,
         victimAccountMembershipId: input.victimAccountMembershipId,
       });
 
-      const values: FraudReportFormValues =
-        removed.length > 0
-          ? {
-              ...merged,
-              transactions: kept,
-              isLostOrStolen: undefined,
-              lostOrStolenNoticedAt: undefined,
-            }
-          : merged;
+      const values: FraudReportFormValues = changed
+        ? {
+            ...merged,
+            transactions: kept,
+            isLostOrStolen: undefined,
+            lostOrStolenNoticedAt: undefined,
+          }
+        : merged;
 
       const steps = getSteps(values);
       const nextStep = Option.fromUndefined(steps[steps.indexOf(state.step) + 1]).getOr(state.step);

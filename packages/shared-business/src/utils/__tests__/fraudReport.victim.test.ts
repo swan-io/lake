@@ -202,7 +202,7 @@ describe("getVictimChange", () => {
         previousVictimAccountMembershipId: "member-1",
         victimAccountMembershipId: "member-2",
       }),
-    ).toEqual({ removed: [card], kept: [transfer] });
+    ).toEqual({ changed: true, removed: [card], kept: [transfer] });
   });
 
   test("removes nothing when the victim stays the same", () => {
@@ -212,7 +212,7 @@ describe("getVictimChange", () => {
         previousVictimAccountMembershipId: "member-1",
         victimAccountMembershipId: "member-1",
       }),
-    ).toEqual({ removed: [], kept: [card, transfer] });
+    ).toEqual({ changed: false, removed: [], kept: [card, transfer] });
   });
 
   test("removes the card transactions when the previous victim isn't known", () => {
@@ -222,6 +222,6 @@ describe("getVictimChange", () => {
         previousVictimAccountMembershipId: undefined,
         victimAccountMembershipId: "member-2",
       }),
-    ).toEqual({ removed: [card], kept: [transfer] });
+    ).toEqual({ changed: true, removed: [card], kept: [transfer] });
   });
 });

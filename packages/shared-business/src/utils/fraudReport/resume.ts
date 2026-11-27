@@ -24,7 +24,7 @@ const isDetailsStepAnswered = (step: FraudReportDetailsStep, values: FraudReport
     )
     .exhaustive();
 
-// The victim can't change once the draft exists, so a resumed report never opens on it
+// The victim is picked before the draft exists, so a resumed report never opens on it
 export const getResumeStep = (
   values: FraudReportFormValues,
   // The transactions the report was opened from
