@@ -55,7 +55,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - The form has no "actions taken" field yet. `fraudTransferDetails` is never sent, so the stored one stays. `toUpdateInput` sends back the saved case's `hasFiledPoliceComplaint` and `hasContactedMerchant`.
 - Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
 - A date is in the future when it is after today in UTC.
-- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported.
+- Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported. An adapter and `createFakeTransaction` set a `FraudReportTransaction`'s `rail` this way, never separately from its `type`.
 
 ## Screens
 
@@ -68,7 +68,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - A step reads whether the layout is small with `useFraudReportSmallLayout()` and doesn't measure it again.
 - A step's props include `FraudReportStepProps<K>` (`FraudReportLayout.tsx`), `K` being the form fields it owns: it starts from `values` and calls `onNext` with the same fields, so `FraudReport` wires it with `values={flow.values}` and `onNext={flow.next}`. Fields it reads but doesn't own come as separate props. It never shows or sends a value that is no longer among its options.
 - The victim step takes the account memberships to pick from and the current one as props. The current one is `None` for an operator, who picks from every listed member. The app decides which memberships are listed.
-- A selected transaction carries what the transactions step shows: the picker returns whole rows, and a resumed case gets them from `reportedTransactions`. Compute the total with `getTransactionsTotal` (`transactions.ts`).
+- A selected transaction carries what the transactions step shows: the picker returns whole rows, and a resumed case gets them from `reportedTransactions`. Compute the total with `getTransactionsTotal` (`transactions.ts`). It counts in cents, so it assumes amounts with two decimals, and shows the first transaction's currency: mixed currencies are pending Product.
 - The transactions step renders the picker through its `renderPicker` prop. The picker gets the current selection and confirms the whole new selection; closing it changes nothing.
 
 ## Stubs

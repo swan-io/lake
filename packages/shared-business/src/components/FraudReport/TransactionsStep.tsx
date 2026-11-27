@@ -9,7 +9,8 @@ import { Tag } from "@swan-io/lake/src/components/Tag";
 import { Tile, TileFullWidthContent } from "@swan-io/lake/src/components/Tile";
 import { backgroundColor, colors } from "@swan-io/lake/src/constants/design";
 import dayjs from "dayjs";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { View } from "react-native";
 import { match } from "ts-pattern";
 import {
   getTransactionsTotal,
@@ -42,6 +43,7 @@ type Props = FraudReportStepProps<"transactions"> & {
 type ExtraInfo = {
   disabled: boolean;
   onRemove: (id: string) => void;
+  setRemoveButton: (id: string, element: View | null) => void;
 };
 
 const getPaymentMethodLabel = (type: FraudReportTransactionType) =>
@@ -78,9 +80,10 @@ const removeColumn: ColumnConfig<FraudReportTransaction, ExtraInfo> = {
   width: 56,
   title: "",
   renderTitle: () => null,
-  renderCell: ({ item, extraInfo: { disabled, onRemove } }) => (
+  renderCell: ({ item, extraInfo: { disabled, onRemove, setRemoveButton } }) => (
     <Cell align="right">
       <LakeButton
+        ref={element => setRemoveButton(item.id, element)}
         mode="tertiary"
         size="small"
         color="negative"
@@ -171,12 +174,34 @@ export const TransactionsStep = ({ values, onNext, onPrevious, loading, renderPi
   const small = useFraudReportSmallLayout();
   const [transactions, setTransactions] = useState(values.transactions);
   const [pickerVisible, setPickerVisible] = useState(false);
+  const removeButtons = useRef(new Map<string, View>());
+  const selectButtonRef = useRef<View>(null);
+  const [focusAfterRemove, setFocusAfterRemove] = useState<{ id: string | null }>();
+
+  useEffect(() => {
+    if (focusAfterRemove !== undefined) {
+      const element =
+        focusAfterRemove.id === null
+          ? selectButtonRef.current
+          : removeButtons.current.get(focusAfterRemove.id);
+
+      (element as unknown as HTMLElement | null | undefined)?.focus();
+    }
+  }, [focusAfterRemove]);
+
+  const removeTransaction = (id: string) => {
+    const index = transactions.findIndex(item => item.id === id);
+    const next = transactions[index + 1] ?? transactions[index - 1];
+    setFocusAfterRemove({ id: next?.id ?? null });
+    setTransactions(current => current.filter(item => item.id !== id));
+  };
 
   const total = getTransactionsTotal(transactions);
   const empty = transactions.length === 0;
 
   const selectButton = (
     <LakeButton
+      ref={selectButtonRef}
       size={small ? "large" : "small"}
       grow={small}
       mode="secondary"
@@ -218,7 +243,8 @@ export const TransactionsStep = ({ values, onNext, onPrevious, loading, renderPi
       <Tile
         title={
           <>
-            {t("fraudReport.transactions.listTitle")} <Space width={8} />
+            {t("fraudReport.transactions.listTitle")}
+            <Space width={8} />
             <Tag color={empty ? "negative" : "gray"}>{String(transactions.length)}</Tag>
           </>
         }
@@ -238,7 +264,14 @@ export const TransactionsStep = ({ values, onNext, onPrevious, loading, renderPi
               keyExtractor={({ id }) => id}
               extraInfo={{
                 disabled: loading === true,
-                onRemove: id => setTransactions(current => current.filter(item => item.id !== id)),
+                onRemove: removeTransaction,
+                setRemoveButton: (id, element) => {
+                  if (element === null) {
+                    removeButtons.current.delete(id);
+                  } else {
+                    removeButtons.current.set(id, element);
+                  }
+                },
               }}
               columns={columns}
               smallColumns={smallColumns}

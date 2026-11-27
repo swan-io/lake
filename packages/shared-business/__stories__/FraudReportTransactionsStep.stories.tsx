@@ -28,27 +28,33 @@ const styles = StyleSheet.create({
 
 type Props = ComponentProps<typeof TransactionsStep>;
 
-const rewe = createFakeTransaction("abe8df9b-1877-46ac-8535-ed01d88be739", "Card", {
+const rewe = createFakeTransaction("abe8df9b-1877-46ac-8535-ed01d88be739", "CardOutDebit", {
   executionDate: "2026-11-04T09:12:00.000Z",
   counterparty: "REWE",
   amount: { value: "3010.99", currency: "EUR" },
 });
 
-const edeka = createFakeTransaction("1de6ae7d-d05e-4dc0-8ed8-7c98c9849d69", "Transfer", {
-  type: "SepaCreditTransferOut",
-  executionDate: "2026-05-27T14:30:00.000Z",
-  counterparty: "Edeka",
-  amount: { value: "657.75", currency: "EUR" },
-});
+const edeka = createFakeTransaction(
+  "1de6ae7d-d05e-4dc0-8ed8-7c98c9849d69",
+  "SepaCreditTransferOut",
+  {
+    executionDate: "2026-05-27T14:30:00.000Z",
+    counterparty: "Edeka",
+    amount: { value: "657.75", currency: "EUR" },
+  },
+);
 
-const ikea = createFakeTransaction("79a640cb-6223-423c-8321-4192f73f668b", "Transfer", {
-  type: "SepaInstantCreditTransferOut",
-  executionDate: "2026-07-26T08:05:00.000Z",
-  counterparty: "IKEA",
-  amount: { value: "8506.00", currency: "EUR" },
-});
+const ikea = createFakeTransaction(
+  "79a640cb-6223-423c-8321-4192f73f668b",
+  "SepaInstantCreditTransferOut",
+  {
+    executionDate: "2026-07-26T08:05:00.000Z",
+    counterparty: "IKEA",
+    amount: { value: "8506.00", currency: "EUR" },
+  },
+);
 
-const lidl = createFakeTransaction("c3f1a2b4-5d6e-4f70-8a9b-0c1d2e3f4a5b", "Card", {
+const lidl = createFakeTransaction("c3f1a2b4-5d6e-4f70-8a9b-0c1d2e3f4a5b", "CardOutDebit", {
   executionDate: "2026-10-12T17:45:00.000Z",
   counterparty: "Lidl",
   amount: { value: "9434.69", currency: "EUR" },
@@ -152,6 +158,11 @@ export const RemoveTransaction: StoryObj<typeof TransactionsStep> = {
     );
 
     await waitFor(() => expect(canvas.queryByText("IKEA")).toBeNull());
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("button", { name: "Remove Edeka, €657.75, 27/05/2026" }),
+      ).toHaveFocus(),
+    );
     await expect(await canvas.findByText("€3,668.74")).toBeVisible();
     await expect(canvas.getAllByText("2")).toHaveLength(2);
 
@@ -172,6 +183,9 @@ export const RemoveLastTransaction: StoryObj<typeof TransactionsStep> = {
     );
 
     await expect(await canvas.findByText("No transactions")).toBeVisible();
+    await waitFor(() =>
+      expect(canvas.getByRole("button", { name: "Select transactions" })).toHaveFocus(),
+    );
     await expect(canvas.getByText("Select at least one transaction to continue.")).toBeVisible();
     await expect(canvas.getByRole("button", { name: "Continue" })).toHaveAttribute(
       "aria-disabled",

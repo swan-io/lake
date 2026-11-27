@@ -90,6 +90,21 @@ const getOk = <T>(result: Result<T, unknown>): T =>
 const draft = async (api: FraudReportApi, input: DraftFraudDisputeCaseInput) =>
   getOk(await api.draft(input));
 
+describe("createFakeTransaction", () => {
+  test("takes the rail from the transaction type", () => {
+    expect(createFakeTransaction("card-1", "CardOutDebit").rail).toBe("Card");
+    expect(createFakeTransaction("transfer-1", "SepaInstantCreditTransferOut").rail).toBe(
+      "Transfer",
+    );
+  });
+
+  test("gives each transaction its own default counterparty", () => {
+    expect(createFakeTransaction("card-1", "CardOutDebit").counterparty).not.toBe(
+      createFakeTransaction("card-2", "CardOutDebit").counterparty,
+    );
+  });
+});
+
 describe("contract types", () => {
   test("the fake adapter implements FraudReportApi", () => {
     expectTypeOf(createApi()).toExtend<FraudReportApi>();
@@ -416,12 +431,12 @@ describe("submit and cancel rejections", () => {
     const notReportableCase = {
       ...seeded,
       id: "case-1",
-      transactions: [createFakeTransaction("transfer-3", "Transfer")],
+      transactions: [createFakeTransaction("transfer-3", "SepaCreditTransferOut")],
     };
     const outsideCase = {
       ...seeded,
       id: "case-2",
-      transactions: [createFakeTransaction("transfer-4", "Transfer")],
+      transactions: [createFakeTransaction("transfer-4", "SepaCreditTransferOut")],
     };
     const api = createApi({ cases: [notReportableCase, outsideCase] });
 
@@ -522,7 +537,7 @@ describe("check order", () => {
     const outsideAndReported = {
       ...seeded,
       id: "case-1",
-      transactions: [createFakeTransaction("transfer-4", "Transfer")],
+      transactions: [createFakeTransaction("transfer-4", "SepaCreditTransferOut")],
     };
     const api = createApi({
       cases: [outsideAndReported, { ...seeded, id: "case-2" }],
@@ -542,7 +557,9 @@ describe("check order", () => {
   test("submit: DisputeCaseTransactionsNotFoundRejection when a transaction can no longer be reported", async () => {
     const seeded = await draft(createApi(), { transactionIds: ["transfer-1"], fraudDetails });
     const api = createApi({
-      cases: [{ ...seeded, transactions: [createFakeTransaction("gone", "Transfer")] }],
+      cases: [
+        { ...seeded, transactions: [createFakeTransaction("gone", "SepaCreditTransferOut")] },
+      ],
     });
     expect(getRejection(await api.submit({ disputeCaseId: seeded.id }))).toMatchObject({
       __typename: "DisputeCaseTransactionsNotFoundRejection",
@@ -605,8 +622,8 @@ describe("details and victim after a transaction change", () => {
       fraudCardDetails: { isLostOrStolen: true },
     });
     expect(created.transactions).toEqual([
-      createFakeTransaction("card-1", "Card"),
-      createFakeTransaction("transfer-1", "Transfer"),
+      createFakeTransaction("card-1", "CardOutDebit"),
+      createFakeTransaction("transfer-1", "SepaCreditTransferOut"),
     ]);
     const updated = getOk(
       await api.update({ disputeCaseId: created.id, transactionIds: ["transfer-1"] }),
@@ -681,16 +698,16 @@ describe("more precedence", () => {
           ...seeded,
           id: "case-1",
           transactions: [
-            createFakeTransaction("gone", "Transfer"),
-            createFakeTransaction("transfer-3", "Transfer"),
+            createFakeTransaction("gone", "SepaCreditTransferOut"),
+            createFakeTransaction("transfer-3", "SepaCreditTransferOut"),
           ],
         },
         {
           ...seeded,
           id: "case-2",
           transactions: [
-            createFakeTransaction("transfer-3", "Transfer"),
-            createFakeTransaction("transfer-4", "Transfer"),
+            createFakeTransaction("transfer-3", "SepaCreditTransferOut"),
+            createFakeTransaction("transfer-4", "SepaCreditTransferOut"),
           ],
         },
       ],

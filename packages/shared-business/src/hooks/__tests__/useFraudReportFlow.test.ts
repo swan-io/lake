@@ -16,8 +16,8 @@ import type {
 } from "../../utils/fraudReport/types";
 import { FraudReportFlowApi, useFraudReportFlow } from "../useFraudReportFlow";
 
-const card = createFakeTransaction("card-1", "Card");
-const transfer = createFakeTransaction("transfer-1", "Transfer");
+const card = createFakeTransaction("card-1", "CardOutDebit");
+const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
 const incident: Partial<FraudReportFormValues> = {
   reportedReason: "Unauthorized",
@@ -397,7 +397,7 @@ describe("rejections", () => {
     {
       name: "a transaction isn't found",
       transactions: seededTransactions(),
-      selection: [createFakeTransaction("unknown", "Card")],
+      selection: [createFakeTransaction("unknown", "CardOutDebit")],
       fixedSelection: [card],
       rejection: { __typename: "DisputeCaseTransactionsNotFoundRejection" },
     },
@@ -405,7 +405,7 @@ describe("rejections", () => {
       name: "the selection has too many transactions",
       transactions: seededTransactions(),
       selection: Array.from({ length: 101 }, (_, index) =>
-        createFakeTransaction(`card-${index}`, "Card"),
+        createFakeTransaction(`card-${index}`, "CardOutDebit"),
       ),
       fixedSelection: [card],
       rejection: {
@@ -435,7 +435,7 @@ describe("rejections", () => {
         ...seededTransactions(),
         { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
       ],
-      selection: [transfer, createFakeTransaction("transfer-2", "Transfer")],
+      selection: [transfer, createFakeTransaction("transfer-2", "SepaCreditTransferOut")],
       fixedSelection: [transfer],
       rejection: { __typename: "DisputeCaseMultipleAccountsRejection" },
     },
@@ -450,7 +450,7 @@ describe("rejections", () => {
           cardholderAccountMembershipId: "member-2",
         },
       ],
-      selection: [card, createFakeTransaction("card-2", "Card")],
+      selection: [card, createFakeTransaction("card-2", "CardOutDebit")],
       fixedSelection: [card],
       rejection: { __typename: "DisputeCaseMultipleCardHoldersRejection" },
     },
@@ -632,7 +632,7 @@ describe("rejections", () => {
       run: flow => {
         startReport(flow, { victim: "member-2", transactions: [transfer] });
         flow.previous();
-        flow.next({ transactions: [createFakeTransaction("transfer-2", "Transfer")] });
+        flow.next({ transactions: [createFakeTransaction("transfer-2", "SepaCreditTransferOut")] });
       },
       rejection: { __typename: "AccountMembershipNotFoundRejection" },
     },

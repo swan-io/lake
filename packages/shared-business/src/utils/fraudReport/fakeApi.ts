@@ -4,6 +4,7 @@ import { match } from "ts-pattern";
 import type { UploadOutput } from "../../components/SupportingDocumentCollection";
 import type { UploadOutputWithId } from "../../hooks/useFilesUploader";
 import type { FraudReportApi, FraudReportApiError } from "./api";
+import { getTransactionRail } from "./rail";
 import type {
   AccountMembershipNotFoundRejection,
   DisputeCaseDetailsNotApplicableRejection,
@@ -22,8 +23,8 @@ import type {
   FraudDetails,
   FraudDetailsInput,
   FraudReportCase,
-  FraudReportRail,
   FraudReportTransaction,
+  FraudReportTransactionType,
   SubmitDisputeCaseRejection,
   UpdateDraftFraudDisputeCaseInput,
   UpdateDraftFraudDisputeCaseRejection,
@@ -34,7 +35,7 @@ import type {
 // the future, string formats, `None` with other values) are left to the client-side validators.
 
 type FakeTransactionDetails = Partial<
-  Pick<FraudReportTransaction, "type" | "executionDate" | "counterparty" | "amount">
+  Pick<FraudReportTransaction, "executionDate" | "counterparty" | "amount">
 >;
 
 export type FakeTransaction = {
@@ -47,14 +48,14 @@ export type FakeTransaction = {
 
 export const createFakeTransaction = (
   id: string,
-  rail: FraudReportRail,
+  type: FraudReportTransactionType,
   details: FakeTransactionDetails = {},
 ): FraudReportTransaction => ({
   id,
-  rail,
-  type: details.type ?? (rail === "Card" ? "CardOutDebit" : "SepaCreditTransferOut"),
+  rail: getTransactionRail(type).getOr("Transfer"),
+  type,
   executionDate: details.executionDate ?? "2026-11-04T10:00:00.000Z",
-  counterparty: details.counterparty ?? "REWE",
+  counterparty: details.counterparty ?? `Merchant ${id}`,
   amount: details.amount ?? { value: "10.00", currency: "EUR" },
 });
 
@@ -378,8 +379,12 @@ export const createFakeFraudReportApi = (config: FakeFraudReportApiConfig): Frau
       id: existing?.id ?? crypto.randomUUID(),
       accountId,
       statusInfo: { status: "Draft", expiresAt: new Date(expiresAt).toISOString() },
-      transactions: transactions.map(({ id, rail, type, executionDate, counterparty, amount }) =>
-        createFakeTransaction(id, rail, { type, executionDate, counterparty, amount }),
+      transactions: transactions.map(({ id, rail, executionDate, counterparty, amount }) =>
+        createFakeTransaction(id, rail === "Card" ? "CardOutDebit" : "SepaCreditTransferOut", {
+          executionDate,
+          counterparty,
+          amount,
+        }),
       ),
       fraudDetails:
         input.fraudDetails === undefined

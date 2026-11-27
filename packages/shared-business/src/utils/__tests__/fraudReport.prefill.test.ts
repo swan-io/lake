@@ -4,8 +4,8 @@ import { toFormValues } from "../fraudReport/prefill";
 import { toUpdateInput } from "../fraudReport/toInput";
 import type { FraudCardDetails, FraudDetails, FraudReportCase } from "../fraudReport/types";
 
-const card1 = createFakeTransaction("card-1", "Card");
-const transfer1 = createFakeTransaction("transfer-1", "Transfer");
+const card1 = createFakeTransaction("card-1", "CardOutDebit");
+const transfer1 = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
 const fraudDetails: FraudDetails = {
   reportedReason: "Manipulated",

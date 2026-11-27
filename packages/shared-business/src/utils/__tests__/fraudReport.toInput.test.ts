@@ -14,10 +14,10 @@ import {
   validateTransactionIds,
 } from "../fraudReport/validation";
 
-const card1 = createFakeTransaction("card-1", "Card");
-const card2 = createFakeTransaction("card-2", "Card");
-const transfer1 = createFakeTransaction("transfer-1", "Transfer");
-const transfer2 = createFakeTransaction("transfer-2", "Transfer");
+const card1 = createFakeTransaction("card-1", "CardOutDebit");
+const card2 = createFakeTransaction("card-2", "CardOutDebit");
+const transfer1 = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
+const transfer2 = createFakeTransaction("transfer-2", "SepaCreditTransferOut");
 
 const DESCRIPTION_REGEX = /^(?=[\s\S]*\S)[\s\S]{1,2000}$/;
 const DISCOVERY_DETAILS_REGEX = /^(?=[\s\S]*\S)[\s\S]{1,1000}$/;
