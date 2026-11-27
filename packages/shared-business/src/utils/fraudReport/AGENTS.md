@@ -57,6 +57,7 @@ Rules for code in the fraud report feature: reporting fraudulent transactions to
 - Validators (`validation.ts`) return a `FraudReportValidationError` code, never text. Each screen maps the codes to its own strings.
 - A date is in the future when it is after today in UTC.
 - Get a transaction's rail from its type with `getTransactionRail` (`rail.ts`). A type with no rail can't be reported.
+- On the fraudster sub-step, "Did you share…?" No sends `sharedInformationWithFraudster: ["None"]`, Yes sends the items picked, and no answer, or Yes with nothing picked, leaves it empty (`fraudster.ts`). `None` is never offered in the list, so it can't be mixed with other values. The sub-step counts as answered on resume when either of its lists is filled.
 
 ## Screens
 
