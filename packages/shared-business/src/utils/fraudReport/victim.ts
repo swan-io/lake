@@ -86,7 +86,7 @@ export const getVictimAccountMembershipId = ({
   });
 };
 
-export const getTransactionsRemovedByVictimChange = ({
+export const getVictimChange = ({
   transactions,
   previousVictimAccountMembershipId,
   victimAccountMembershipId,
@@ -94,8 +94,13 @@ export const getTransactionsRemovedByVictimChange = ({
   transactions: FraudReportTransaction[];
   previousVictimAccountMembershipId: string | undefined;
   victimAccountMembershipId: string | undefined;
-}) =>
-  victimAccountMembershipId == null ||
-  previousVictimAccountMembershipId === victimAccountMembershipId
-    ? []
-    : transactions.filter(({ rail }) => rail === "Card");
+}) => {
+  const changed =
+    victimAccountMembershipId != null &&
+    previousVictimAccountMembershipId !== victimAccountMembershipId;
+
+  return {
+    removed: changed ? transactions.filter(({ rail }) => rail === "Card") : [],
+    kept: changed ? transactions.filter(({ rail }) => rail !== "Card") : transactions,
+  };
+};

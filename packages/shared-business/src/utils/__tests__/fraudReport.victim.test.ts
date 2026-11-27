@@ -5,8 +5,8 @@ import {
   getInitialVictimChoice,
   getOtherAccountMemberships,
   getSelectedAccountMembershipId,
-  getTransactionsRemovedByVictimChange,
   getVictimAccountMembershipId,
+  getVictimChange,
   VictimAnswer,
 } from "../fraudReport/victim";
 
@@ -190,37 +190,37 @@ describe("getVictimAccountMembershipId", () => {
   });
 });
 
-describe("getTransactionsRemovedByVictimChange", () => {
+describe("getVictimChange", () => {
   const card = { id: "card-1", rail: "Card" } as const;
   const transfer = { id: "transfer-1", rail: "Transfer" } as const;
 
   test("removes the card transactions when the victim changes", () => {
     expect(
-      getTransactionsRemovedByVictimChange({
+      getVictimChange({
         transactions: [card, transfer],
         previousVictimAccountMembershipId: "member-1",
         victimAccountMembershipId: "member-2",
       }),
-    ).toEqual([card]);
+    ).toEqual({ removed: [card], kept: [transfer] });
   });
 
   test("removes nothing when the victim stays the same", () => {
     expect(
-      getTransactionsRemovedByVictimChange({
+      getVictimChange({
         transactions: [card, transfer],
         previousVictimAccountMembershipId: "member-1",
         victimAccountMembershipId: "member-1",
       }),
-    ).toEqual([]);
+    ).toEqual({ removed: [], kept: [card, transfer] });
   });
 
   test("removes the card transactions when the previous victim isn't known", () => {
     expect(
-      getTransactionsRemovedByVictimChange({
+      getVictimChange({
         transactions: [card, transfer],
         previousVictimAccountMembershipId: undefined,
         victimAccountMembershipId: "member-2",
       }),
-    ).toEqual([card]);
+    ).toEqual({ removed: [card], kept: [transfer] });
   });
 });

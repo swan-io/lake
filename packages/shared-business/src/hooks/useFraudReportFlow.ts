@@ -21,7 +21,7 @@ import {
   FraudReportRejection,
   fraudReportSteps,
 } from "../utils/fraudReport/types";
-import { getTransactionsRemovedByVictimChange } from "../utils/fraudReport/victim";
+import { getVictimChange } from "../utils/fraudReport/victim";
 
 export type FraudReportFlowApi = Pick<
   FraudReportApi,
@@ -43,6 +43,7 @@ type State = {
   saving: boolean;
   error: Option<FlowError>;
   resumable: AsyncData<Option<FraudReportCase>>;
+  rejectedVictimAccountMembershipId: string | undefined;
 };
 
 const initialState: State = {
@@ -53,6 +54,7 @@ const initialState: State = {
   saving: false,
   error: Option.None(),
   resumable: AsyncData.NotAsked(),
+  rejectedVictimAccountMembershipId: undefined,
 };
 
 // Keeps "no lookup" and "looking" as they are, so only an offer turns into "nothing to offer"
@@ -69,19 +71,29 @@ const getErrorChange = (
   state: State,
   values: FraudReportFormValues,
   error: FlowError,
-): Pick<State, "step" | "error"> => {
+): Pick<State, "step" | "error" | "rejectedVictimAccountMembershipId"> => {
   const step = match(error)
     .returnType<FraudReportFlowStep>()
     .with({ kind: "rejection" }, ({ rejection }) =>
       getRejectionStep(rejection, {
         detailsSteps: getDetailsSteps(values),
+        victimRejectedBefore:
+          state.rejectedVictimAccountMembershipId !== undefined &&
+          state.rejectedVictimAccountMembershipId === values.victimAccountMembershipId,
       }),
     )
     .with({ kind: "error" }, () => state.step)
     .exhaustive();
 
+  const victimRejected =
+    error.kind === "rejection" &&
+    error.rejection.__typename === "AccountMembershipNotFoundRejection";
+
   return {
     step,
+    rejectedVictimAccountMembershipId: victimRejected
+      ? values.victimAccountMembershipId
+      : state.rejectedVictimAccountMembershipId,
     // Submitted elsewhere: the report reached Swan, so there's nothing to show
     error: step === "Submitted" ? Option.None() : Option.Some(error),
   };
@@ -171,17 +183,17 @@ export const useFraudReportFlow = ({
       }
 
       const merged: FraudReportFormValues = { ...state.values, ...input };
-      const removedTransactions = getTransactionsRemovedByVictimChange({
+      const { removed, kept } = getVictimChange({
         transactions: merged.transactions,
         previousVictimAccountMembershipId: state.values.victimAccountMembershipId,
         victimAccountMembershipId: input.victimAccountMembershipId,
       });
 
       const values: FraudReportFormValues =
-        removedTransactions.length > 0
+        removed.length > 0
           ? {
               ...merged,
-              transactions: merged.transactions.filter(item => !removedTransactions.includes(item)),
+              transactions: kept,
               isLostOrStolen: undefined,
               lostOrStolenNoticedAt: undefined,
             }

@@ -15,6 +15,7 @@ export type FraudReportRejectionStep = FixingStep | "Submitted" | "Rejected";
 export type FraudReportRejectionContext = {
   // The Details sub-steps the user's flow goes through
   detailsSteps: readonly FraudReportDetailsStep[];
+  victimRejectedBefore: boolean;
 };
 
 const fixingSteps: FixingStep[] = [
@@ -84,7 +85,9 @@ export const getRejectionStep = (
 ): FraudReportRejectionStep =>
   match(rejection)
     .returnType<FraudReportRejectionStep>()
-    .with({ __typename: "AccountMembershipNotFoundRejection" }, () => "Victim")
+    .with({ __typename: "AccountMembershipNotFoundRejection" }, () =>
+      context.victimRejectedBefore ? "Rejected" : "Victim",
+    )
     .with(
       {
         __typename: P.union(

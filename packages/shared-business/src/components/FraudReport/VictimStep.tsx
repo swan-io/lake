@@ -17,8 +17,8 @@ import {
   getInitialVictimChoice,
   getOtherAccountMemberships,
   getSelectedAccountMembershipId,
-  getTransactionsRemovedByVictimChange,
   getVictimAccountMembershipId,
+  getVictimChange,
   VictimAnswer,
 } from "../../utils/fraudReport/victim";
 import { formatNestedMessage, t } from "../../utils/i18n";
@@ -83,7 +83,9 @@ export const VictimStep = ({
     name,
     value: id,
     phoneNumber,
-    searchTerms: isNullishOrEmpty(phoneNumber) ? undefined : [phoneNumber],
+    searchTerms: isNullishOrEmpty(phoneNumber)
+      ? undefined
+      : [phoneNumber, phoneNumber.replace(/\s/g, "")],
   }));
 
   const memberPicker = (
@@ -179,13 +181,13 @@ export const VictimStep = ({
         nextDisabled={victim.isNone()}
         onNext={() =>
           victim.tapSome(victimAccountMembershipId => {
-            const removedTransactions = getTransactionsRemovedByVictimChange({
+            const { removed } = getVictimChange({
               transactions,
               previousVictimAccountMembershipId: values.victimAccountMembershipId,
               victimAccountMembershipId,
             });
 
-            if (removedTransactions.length > 0) {
+            if (removed.length > 0) {
               setConfirmVisible(true);
             } else {
               onNext({ victimAccountMembershipId });

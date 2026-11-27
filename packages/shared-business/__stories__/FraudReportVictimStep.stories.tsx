@@ -162,7 +162,6 @@ const pickNicolas = async ({
     await canvas.findByRole("button", { name: /For whom are you reporting for\?/ }),
   );
   await userEvent.click(within(document.body).getByRole("option", { name: /Nicolas Saison/ }));
-  await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
 };
 
 export const ChangeVictim: StoryObj<typeof VictimStep> = {
@@ -171,6 +170,7 @@ export const ChangeVictim: StoryObj<typeof VictimStep> = {
   render,
   play: async ({ args, canvas, userEvent }) => {
     await pickNicolas({ canvas, userEvent });
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
 
     const modal = within(document.body);
     await expect(await modal.findByText("Change the victim?")).toBeVisible();
@@ -188,6 +188,7 @@ export const CancelVictimChange: StoryObj<typeof VictimStep> = {
   render,
   play: async ({ args, canvas, userEvent }) => {
     await pickNicolas({ canvas, userEvent });
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
 
     const modal = within(document.body);
     await userEvent.click(await modal.findByRole("button", { name: "Cancel" }));
@@ -206,6 +207,7 @@ export const ChangeVictimWithoutCards: StoryObj<typeof VictimStep> = {
   render,
   play: async ({ args, canvas, userEvent }) => {
     await pickNicolas({ canvas, userEvent });
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
 
     await expect(args.onNext).toHaveBeenCalledWith({ victimAccountMembershipId: "member-2" });
     await expect(within(document.body).queryByText("Change the victim?")).toBeNull();
@@ -217,11 +219,7 @@ export const KeepVictim: StoryObj<typeof VictimStep> = {
   parameters: { a11y: { test: "off" } },
   render,
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByText("No"));
-    await userEvent.click(
-      await canvas.findByRole("button", { name: /For whom are you reporting for\?/ }),
-    );
-    await userEvent.click(within(document.body).getByRole("option", { name: /Nicolas Saison/ }));
+    await pickNicolas({ canvas, userEvent });
     await userEvent.click(canvas.getByText("Yes"));
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
 
@@ -255,6 +253,11 @@ export const SearchMembers: StoryObj<typeof VictimStep> = {
 
     await userEvent.clear(list.getByPlaceholderText("Search for a member"));
     await userEvent.type(list.getByPlaceholderText("Search for a member"), "+33 6 98 76 54 32");
+
+    await expect(await list.findByRole("option", { name: /Nicolas Saison/ })).toBeVisible();
+
+    await userEvent.clear(list.getByPlaceholderText("Search for a member"));
+    await userEvent.type(list.getByPlaceholderText("Search for a member"), "+33698765432");
 
     await expect(await list.findByRole("option", { name: /Nicolas Saison/ })).toBeVisible();
   },
