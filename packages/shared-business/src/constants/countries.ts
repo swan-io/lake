@@ -2085,8 +2085,46 @@ export const frenchTerritories: CountryCCA3[] = [
 export const isFrenchTerritoryCCA3 = (value: unknown): value is CountryCCA3 =>
   frenchTerritories.includes(value as CountryCCA3);
 
-const blockedPhoneCountries: CountryCCA3[] = ["CUB", "SYR", "IRN", "PRK", "RUS"];
-export const phoneCountries = allCountries.filter(cca3 => !blockedPhoneCountries.includes(cca3));
+// Swan's markets: listed first in the phone country picker
+export const phoneMarketCountries: CountryCCA3[] = [
+  "FRA",
+  "DEU",
+  "ESP",
+  "ITA",
+  "NLD",
+  "BEL",
+  "PRT",
+];
+
+const blockedPhoneCountries: CountryCCA3[] = [
+  "BDI",
+  "BLR",
+  "CUB",
+  "GNB",
+  "IRN",
+  "IRQ",
+  "LBN",
+  "LBY",
+  "MLI",
+  "MMR",
+  "NGA",
+  "PRK",
+  "RUS",
+  "SDN",
+  "SOM",
+  "SSD",
+  "SYR",
+  "TUR",
+  "VEN",
+  "YEM",
+];
+
+export const phoneCountries: CountryCCA3[] = [
+  ...phoneMarketCountries,
+  ...allCountries.filter(
+    cca3 => !phoneMarketCountries.includes(cca3) && !blockedPhoneCountries.includes(cca3),
+  ),
+];
 
 export const individualCountries = [
   "AUT",

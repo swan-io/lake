@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
+import { createFakeTransaction } from "../fraudReport/fakeApi";
 import { getResumeStep } from "../fraudReport/resume";
 import type { FraudReportFormValues } from "../fraudReport/toInput";
-import type { FraudReportTransaction } from "../fraudReport/types";
 
-const card: FraudReportTransaction = { id: "card-1", rail: "Card" };
-const transfer: FraudReportTransaction = { id: "transfer-1", rail: "Transfer" };
+const card = createFakeTransaction("card-1", "CardOutDebit");
+const transfer = createFakeTransaction("transfer-1", "SepaCreditTransferOut");
 
 const incident: Partial<FraudReportFormValues> = {
   reportedReason: "Unauthorized",
