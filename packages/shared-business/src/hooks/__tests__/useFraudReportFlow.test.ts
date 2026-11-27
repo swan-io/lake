@@ -719,43 +719,6 @@ describe("rejections", () => {
     expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });
   });
 
-  test("ends the report when the same victim is rejected again", () => {
-    const flow = setup({
-      transactions: [
-        ...seededTransactions(),
-        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
-      ],
-    });
-    startReport(flow, { victim: "member-2", transactions: [transfer] });
-    flow.previous();
-    flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
-    expect(flow.result.current.step).toBe("Victim");
-
-    flow.next({ victimAccountMembershipId: "member-2" });
-    flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
-
-    expect(flow.result.current.step).toBe("Rejected");
-    expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });
-  });
-
-  test("goes back to the victim step when another victim is rejected", () => {
-    const flow = setup({
-      transactions: [
-        ...seededTransactions(),
-        { id: "transfer-2", accountId: "account-2", rail: "Transfer" },
-      ],
-    });
-    startReport(flow, { victim: "member-2", transactions: [transfer] });
-    flow.previous();
-    flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
-
-    flow.next({ victimAccountMembershipId: "member-1" });
-    flow.next({ transactions: [{ id: "transfer-2", rail: "Transfer" }] });
-
-    expect(flow.result.current.step).toBe("Victim");
-    expectRejection(flow, { __typename: "AccountMembershipNotFoundRejection" });
-  });
-
   test("ends the report on the rejected step when the draft expired", () => {
     let date = new Date("2026-11-26T10:00:00.000Z");
     const flow = setup({ now: () => date });

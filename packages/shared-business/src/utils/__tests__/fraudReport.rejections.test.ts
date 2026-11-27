@@ -102,21 +102,11 @@ const incomplete = (...paths: string[][]): DisputeCaseIncompleteRejection => ({
 
 const context: FraudReportRejectionContext = {
   detailsSteps: fraudReportDetailsSteps,
-  victimRejectedBefore: false,
 };
 
 describe("getRejectionStep", () => {
   test.each(Object.values(rejections))("maps $__typename", rejection => {
     expect(getRejectionStep(rejection, context)).toBe(expectedSteps[rejection.__typename]);
-  });
-
-  test("ends the report when the same victim is rejected again", () => {
-    expect(
-      getRejectionStep(rejections.AccountMembershipNotFoundRejection, {
-        ...context,
-        victimRejectedBefore: true,
-      }),
-    ).toBe("Rejected");
   });
 
   test("shows the submitted screen when the case was submitted elsewhere", () => {

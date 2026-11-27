@@ -43,7 +43,6 @@ type State = {
   saving: boolean;
   error: Option<FlowError>;
   resumable: AsyncData<Option<FraudReportCase>>;
-  rejectedVictimAccountMembershipId: string | undefined;
 };
 
 const initialState: State = {
@@ -54,7 +53,6 @@ const initialState: State = {
   saving: false,
   error: Option.None(),
   resumable: AsyncData.NotAsked(),
-  rejectedVictimAccountMembershipId: undefined,
 };
 
 // Keeps "no lookup" and "looking" as they are, so only an offer turns into "nothing to offer"
@@ -71,29 +69,19 @@ const getErrorChange = (
   state: State,
   values: FraudReportFormValues,
   error: FlowError,
-): Pick<State, "step" | "error" | "rejectedVictimAccountMembershipId"> => {
+): Pick<State, "step" | "error"> => {
   const step = match(error)
     .returnType<FraudReportFlowStep>()
     .with({ kind: "rejection" }, ({ rejection }) =>
       getRejectionStep(rejection, {
         detailsSteps: getDetailsSteps(values),
-        victimRejectedBefore:
-          state.rejectedVictimAccountMembershipId !== undefined &&
-          state.rejectedVictimAccountMembershipId === values.victimAccountMembershipId,
       }),
     )
     .with({ kind: "error" }, () => state.step)
     .exhaustive();
 
-  const victimRejected =
-    error.kind === "rejection" &&
-    error.rejection.__typename === "AccountMembershipNotFoundRejection";
-
   return {
     step,
-    rejectedVictimAccountMembershipId: victimRejected
-      ? values.victimAccountMembershipId
-      : state.rejectedVictimAccountMembershipId,
     // Submitted elsewhere: the report reached Swan, so there's nothing to show
     error: step === "Submitted" ? Option.None() : Option.Some(error),
   };
